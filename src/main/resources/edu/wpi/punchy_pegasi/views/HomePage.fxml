@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #F1F1F1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="TOP_CENTER" layoutX="218.0" layoutY="129.0" prefHeight="400.0" prefWidth="600.0" spacing="30.0" style="-fx-background-color: #F1F1F1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 25;">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <Button mnemonicParsing="false" text="Conference Room Reservation Request" wrapText="true" />
+                  <Button mnemonicParsing="false" text="Meal Delivery Request" wrapText="true" />
+                  <Button mnemonicParsing="false" text="Flower Delivery Request" wrapText="true" />
+                  <Button mnemonicParsing="false" text="Furniture Delivery Request" wrapText="true" />
+                  <Button mnemonicParsing="false" text="Office Supplies Purchase and Delivery Request" wrapText="true" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 25;">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <Button mnemonicParsing="false" text="Signage Map" wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="80.0" top="80.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>
