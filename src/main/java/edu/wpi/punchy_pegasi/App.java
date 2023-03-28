@@ -1,7 +1,7 @@
-package edu.wpi.teamname;
+package edu.wpi.punchy_pegasi;
 
-import edu.wpi.teamname.navigation.Navigation;
-import edu.wpi.teamname.navigation.Screen;
+import edu.wpi.punchy_pegasi.navigation.Navigation;
+import edu.wpi.punchy_pegasi.navigation.Screen;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
