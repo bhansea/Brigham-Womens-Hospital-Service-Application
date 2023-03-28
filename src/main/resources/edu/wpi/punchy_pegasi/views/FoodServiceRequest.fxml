@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.FoodServiceRequestController">
+   <left>
+      <VBox prefHeight="200.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #D9D9D9;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label alignment="TOP_LEFT" contentDisplay="CENTER" text="Meal Name" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets left="100.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children></HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="800.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="80.0" prefWidth="100.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 30;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" text="Meal Service Request" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="200.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 30;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="1.) Select From Available Meals">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ffffff; -fx-background-radius: 30;" />
+               </children></VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #D9D9D9;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="2.) Select Temperature Type">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <RadioButton mnemonicParsing="false" text="RadioButton" />
+                           </children>
+                        </HBox>
+                     </children></VBox>
+               </children></VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #D9D9D9;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="3.) Select Additional Items">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ffffff;" />
+               </children></VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #D9D9D9;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="4.) Fill in Any Dietary Restrictions">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <TextField prefHeight="40.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                  </VBox>
+               </children></VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+   <right>
+      <VBox prefHeight="200.0" prefWidth="600.0" spacing="40.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="700.0" prefWidth="400.0" style="-fx-background-color: #012D5A;" VBox.vgrow="ALWAYS">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Patient Name" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField alignment="TOP_CENTER" promptText="Enter patient name">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="TOP_LEFT" text="Room Name" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField alignment="TOP_CENTER" promptText="Enter room number">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </TextField>
+                     </children></HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Additional Notes" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <TextField alignment="CENTER" promptText="Enter room number">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </TextField>
+                     </children></HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #012D5A;" VBox.vgrow="ALWAYS">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Total:" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label text="\$0.00" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #00C876;">
+                     <children>
+                        <MFXButton text="Submit" textFill="WHITE">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </MFXButton>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="40.0" right="40.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </right>
+</BorderPane>
