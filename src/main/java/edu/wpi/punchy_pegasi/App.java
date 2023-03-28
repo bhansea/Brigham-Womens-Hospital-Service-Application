@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi;
 
+import edu.wpi.punchy_pegasi.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.navigation.Navigation;
 import edu.wpi.punchy_pegasi.navigation.Screen;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class App extends Application {
 
   @Setter @Getter private static Stage primaryStage;
-  @Setter @Getter private static BorderPane rootPane;
+  @Setter @Getter private static BorderPane viewPane;
 
   @Override
   public void init() {
@@ -31,7 +32,12 @@ public class App extends Application {
     final FXMLLoader loader = new FXMLLoader(App.class.getResource("views/Root.fxml"));
     final BorderPane root = loader.load();
 
-    App.rootPane = root;
+    final var layoutLoader = new FXMLLoader(App.class.getResource("views/Layout.fxml"));
+    final BorderPane loadedLayout = layoutLoader.load();
+    final LayoutController layoutController = layoutLoader.getController();
+
+    root.setCenter(loadedLayout);
+    App.viewPane = layoutController.getViewPane();
 
     final Scene scene = new Scene(root);
     primaryStage.setScene(scene);
