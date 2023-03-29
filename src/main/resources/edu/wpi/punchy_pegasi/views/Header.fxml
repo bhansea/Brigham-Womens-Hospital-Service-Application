@@ -8,9 +8,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import com.jfoenix.controls.JFXClippedPane?>
 <BorderPane style="-fx-background-color: #012D5A;" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.HeaderController"
             fx:id="headerRoot">

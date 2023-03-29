@@ -6,8 +6,11 @@ import lombok.Getter;
 
 public class LayoutController {
 
-  @FXML @Getter BorderPane ViewPane;
+    @FXML
+    @Getter
+    BorderPane ViewPane;
 
-  @FXML
-  public void initialize() {}
+    @FXML
+    public void initialize() {
+    }
 }

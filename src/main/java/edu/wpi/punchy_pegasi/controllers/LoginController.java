@@ -10,15 +10,20 @@ import javafx.scene.control.Label;
 
 public class LoginController {
 
-  @FXML private Button logInButton;
-  @FXML private Label usernameBox;
-  @FXML private MFXPasswordField passwordBox;
+    @FXML
+    private Button logInButton;
+    @FXML
+    private Label usernameBox;
+    @FXML
+    private MFXPasswordField passwordBox;
 
-  public void logIn(ActionEvent event) {
-    Navigation.navigate(Screen.HOME);
-  }
+    public void logIn(ActionEvent event) {
+        Navigation.navigate(Screen.HOME);
+    }
 
-  public void usernameEnter(ActionEvent event) {}
+    public void usernameEnter(ActionEvent event) {
+    }
 
-  public void passwordEnter(ActionEvent event) {}
+    public void passwordEnter(ActionEvent event) {
+    }
 }
