@@ -39,7 +39,7 @@ public class App extends Application {
     root.setCenter(loadedLayout);
     App.viewPane = layoutController.getViewPane();
 
-    final Scene scene = new Scene(root);
+    final Scene scene = new Scene(root, 1280, 720);
     primaryStage.setScene(scene);
     primaryStage.show();
 

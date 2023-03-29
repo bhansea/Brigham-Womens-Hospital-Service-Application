@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="1200.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.LoginController">
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.LoginController">
 <!--    <top>-->
 <!--        <HBox fx:id="Header" prefHeight="300.0" prefWidth="1920.0" style="-fx-background-color: #012D5A;" BorderPane.alignment="CENTER">-->
 <!--            <BorderPane.margin>-->
@@ -17,7 +17,7 @@
 <!--        </HBox>-->
 <!--    </top>-->
    <center>
-          <VBox prefWidth="1720.0" BorderPane.alignment="CENTER">
+          <VBox BorderPane.alignment="CENTER">
               <children>
             <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                <children>
