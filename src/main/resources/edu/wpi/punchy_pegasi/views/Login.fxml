@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -9,53 +8,54 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="1079.0" prefHeight="1200.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.LoginController">
-    <top>
-        <HBox fx:id="Header" prefHeight="300.0" prefWidth="1920.0" style="-fx-background-color: #012D5A;" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
-        </HBox>
-    </top>
+<BorderPane prefHeight="1200.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.LoginController">
+<!--    <top>-->
+<!--        <HBox fx:id="Header" prefHeight="300.0" prefWidth="1920.0" style="-fx-background-color: #012D5A;" BorderPane.alignment="CENTER">-->
+<!--            <BorderPane.margin>-->
+<!--                <Insets />-->
+<!--            </BorderPane.margin>-->
+<!--        </HBox>-->
+<!--    </top>-->
    <center>
-          <VBox prefHeight="950.0" prefWidth="350.0" BorderPane.alignment="CENTER">
+          <VBox prefWidth="1720.0" BorderPane.alignment="CENTER">
               <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <MFXPasswordField fx:id="usernameEnter" floatingText="Username" hideCharacter="" maxHeight="50.0" maxWidth="350.0" minHeight="0.0" onAction="#passwordEnter" prefHeight="50.0" prefWidth="350.0" showPassword="true" style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                     <textFill>
-                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716" />
-                     </textFill>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </MFXPasswordField>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <MFXPasswordField fx:id="usernameEnter" floatingText="Username" hideCharacter="" maxHeight="50.0" maxWidth="350.0" minHeight="0.0" onAction="#passwordEnter" prefHeight="50.0" prefWidth="350.0" showPassword="true" style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                           <textFill>
+                              <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716" />
+                           </textFill>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </MFXPasswordField>
+                     </children>
+                  </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0" maxWidth="350.0" minHeight="0.0" onAction="#passwordEnter" prefHeight="50.0" prefWidth="350.0" style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                                    <textFill>
+                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716" />
+                                    </textFill>
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </MFXPasswordField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Button fx:id="logInButton" mnemonicParsing="false" onAction="#logIn" prefHeight="50.0" prefWidth="350.0" style="-fx-background-color: #012D5A; -fx-text-fill: #ffffff; -fx-background-radius: 25;" text="Log in">
+                                    <font>
+                                        <Font name="Palatino Linotype" size="39.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
                </children>
-               <VBox.margin>
-                  <Insets top="250.0" />
-               </VBox.margin>
-            </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                      <children>
-                          <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0" maxWidth="350.0" minHeight="0.0" onAction="#passwordEnter" prefHeight="50.0" prefWidth="350.0" style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                              <textFill>
-                                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716" />
-                              </textFill>
-                              <font>
-                                  <Font size="24.0" />
-                              </font>
-                          </MFXPasswordField>
-                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                      <children>
-                          <Button fx:id="logInButton" mnemonicParsing="false" onAction="#logIn" prefHeight="50.0" prefWidth="350.0" style="-fx-background-color: #012D5A; -fx-text-fill: #ffffff; -fx-background-radius: 25;" text="Log in">
-                              <font>
-                                  <Font name="Palatino Linotype" size="39.0" />
-                              </font>
-                          </Button>
-                      </children>
-                  </HBox>
+            </VBox>
               </children>
           </VBox>
    </center>
@@ -65,7 +65,4 @@
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
    </right>
-   <bottom>
-      <HBox prefHeight="188.0" prefWidth="1920.0" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>
