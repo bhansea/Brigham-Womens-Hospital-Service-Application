@@ -27,6 +27,7 @@ public class FoodServiceRequestController {
   @FXML CheckBox glass;
   @FXML MFXComboBox<String> mealDropdown;
 
+  @FXML
   public void initialize() {
     ObservableList<String> mealList =
         FXCollections.observableArrayList(
@@ -34,6 +35,7 @@ public class FoodServiceRequestController {
     mealDropdown.setItems(mealList);
   }
 
+  @FXML
   public void submitEntry() {
     String tempType = "";
     ArrayList<String> extras = new ArrayList<String>();

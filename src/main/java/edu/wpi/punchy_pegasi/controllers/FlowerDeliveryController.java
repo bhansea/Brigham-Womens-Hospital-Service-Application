@@ -27,7 +27,6 @@ public class FlowerDeliveryController {
 
     this.submitButton.setOnAction(
         event -> {
-
           FlowerDeliveryRequestEntry requestEntry =
               new FlowerDeliveryRequestEntry(
                   patientNameField.getText(),
