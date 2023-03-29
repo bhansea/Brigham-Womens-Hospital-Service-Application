@@ -1,7 +1,7 @@
-package edu.wpi.punchy_pegasi;
+package edu.wpi.teamname;
 
-import edu.wpi.punchy_pegasi.navigation.Navigation;
-import edu.wpi.punchy_pegasi.navigation.Screen;
+import edu.wpi.teamname.navigation.Navigation;
+import edu.wpi.teamname.navigation.Screen;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +37,7 @@ public class App extends Application {
     primaryStage.setScene(scene);
     primaryStage.show();
 
-    Navigation.navigate(Screen.FOOD_SERVICE_REQUEST);
+    Navigation.navigate(Screen.HOME);
   }
 
   @Override
