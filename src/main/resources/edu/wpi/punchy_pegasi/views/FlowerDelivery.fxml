@@ -80,7 +80,7 @@
                             <children>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <RadioButton fx:id="flowerSizeSelector" mnemonicParsing="false" text="Small">
+                                        <RadioButton fx:id="small" mnemonicParsing="false" text="Small">
                                             <font>
                                                 <Font size="30.0"/>
                                             </font>
@@ -92,25 +92,21 @@
                                 </HBox>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <RadioButton mnemonicParsing="false" text="Medium">
+                                        <RadioButton fx:id="medium" mnemonicParsing="false" text="Medium"
+                                                     toggleGroup="$flowerSizeGroup">
                                             <font>
                                                 <Font size="30.0"/>
                                             </font>
-                                            <toggleGroup>
-                                                <fx:reference source="flowerSizeGroup"/>
-                                            </toggleGroup>
                                         </RadioButton>
                                     </children>
                                 </HBox>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <RadioButton mnemonicParsing="false" text="Large">
+                                        <RadioButton fx:id="large" mnemonicParsing="false" text="Large"
+                                                     toggleGroup="$flowerSizeGroup">
                                             <font>
                                                 <Font size="30.0"/>
                                             </font>
-                                            <toggleGroup>
-                                                <fx:reference source="flowerSizeGroup"/>
-                                            </toggleGroup>
                                         </RadioButton>
                                     </children>
                                 </HBox>
@@ -229,7 +225,8 @@
                             </VBox.margin>
                         </HBox>
                         <MFXButton fx:id="submitButton" alignment="CENTER" maxWidth="350.0" minWidth="300.0"
-                                   style="-fx-background-color: #03fc5e;" text="Submit" textFill="WHITE">
+                                   onAction="#submitEntry" style="-fx-background-color: green;" text="Submit"
+                                   textFill="WHITE">
                             <font>
                                 <Font size="40.0"/>
                             </font>
@@ -250,8 +247,7 @@
             <children>
                 <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <!--                  TODO: add image to imageView-->
-                        <Image url="../../../../assets/flower-bouquet.png"/>
+                        <Image url="@../../../../assets/flower-bouquet.png"/>
                     </image>
                 </ImageView>
                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
