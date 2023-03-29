@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9c9c9" height="60.0" layoutX="178.0" layoutY="135.0" stroke="#c9c9c9" strokeLineCap="ROUND" strokeType="INSIDE" width="243.0" />
+      <ImageView fx:id="headerPic" fitHeight="184.0" fitWidth="500.0" layoutX="101.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@surgery_banner.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="headerLogo" fitHeight="184.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Brigham_logo.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="-2.0" layoutY="141.0" prefHeight="187.0" prefWidth="601.0">
+         <children>
+            <BorderPane>
+               <top>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Map" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Text>
+               </top>
+            </BorderPane>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;-- Information Desk" translateX="20.0" wrappingWidth="242.63882398605347">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ear, Nose, and Throat Department --&gt;" translateX="175.0">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;-- Emergency Room" translateX="20.0" wrappingWidth="245.44366455078125">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ultrasound Labs --&gt;" translateX="370.0">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Restrooms --&gt;" translateX="430.0">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+         </children>
+      </VBox>
+      <Button fx:id="homeButton" layoutX="248.0" layoutY="348.0" mnemonicParsing="false" text="Home">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
