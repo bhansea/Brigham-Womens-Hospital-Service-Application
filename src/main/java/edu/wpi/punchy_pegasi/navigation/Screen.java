@@ -6,6 +6,7 @@ public enum Screen {
 
   FLOWERDELIVERY_REQUEST("views/FlowerDelivery.fxml"),
   SERVICE_REQUEST("views/ServiceRequest.fxml"),
+  FOOD_SERVICE_REQUEST("views/FoodServiceRequest.fxml"),
 
   LOGIN("views/Login.fxml");
 
