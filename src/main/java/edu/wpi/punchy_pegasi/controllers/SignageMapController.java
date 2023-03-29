@@ -5,7 +5,7 @@ import edu.wpi.punchy_pegasi.navigation.Screen;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 
-public class SignageMap {
+public class SignageMapController {
 
   @FXML MFXButton homeButton;
 
