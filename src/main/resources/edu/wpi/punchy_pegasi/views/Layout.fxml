@@ -8,8 +8,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.wpi.punchy_pegasi.controllers.LayoutController"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="edu.wpi.punchy_pegasi.controllers.LayoutController">
     <top>
         <fx:include source="Header.fxml"/>
     </top>

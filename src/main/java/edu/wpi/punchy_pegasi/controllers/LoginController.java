@@ -10,8 +10,6 @@ import javafx.scene.control.Label;
 
 public class LoginController {
 
-  // @FXML Button ClickButton; // fx:ID of the button in the ExampleFXML
-
   @FXML private Button logInButton;
   @FXML private Label usernameBox;
   @FXML private MFXPasswordField passwordBox;
