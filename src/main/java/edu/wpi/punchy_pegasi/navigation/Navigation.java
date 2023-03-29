@@ -13,7 +13,7 @@ public class Navigation {
       final var resource = App.class.getResource(filename);
       final FXMLLoader loader = new FXMLLoader(resource);
 
-      App.getRootPane().setCenter(loader.load());
+      App.getViewPane().setCenter(loader.load());
     } catch (IOException | NullPointerException e) {
       e.printStackTrace();
     }
