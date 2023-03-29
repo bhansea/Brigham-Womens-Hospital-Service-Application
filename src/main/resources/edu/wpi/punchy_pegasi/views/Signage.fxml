@@ -10,7 +10,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.SignageMapController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9c9c9" height="60.0" layoutX="178.0" layoutY="135.0" stroke="#c9c9c9" strokeLineCap="ROUND" strokeType="INSIDE" width="243.0" />
       <ImageView fx:id="headerPic" fitHeight="184.0" fitWidth="500.0" layoutX="101.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
@@ -61,10 +62,10 @@
             </Text>
          </children>
       </VBox>
-      <Button fx:id="homeButton" layoutX="248.0" layoutY="348.0" mnemonicParsing="false" text="Home">
+      <MFXButton fx:id="homeButton" layoutX="248.0" layoutY="348.0" mnemonicParsing="false" text="Home">
          <font>
             <Font size="25.0" />
          </font>
-      </Button>
+      </MFXButton>
    </children>
 </AnchorPane>

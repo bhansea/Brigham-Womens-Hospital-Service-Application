@@ -24,7 +24,6 @@ public class HomePageController {
         event -> Navigation.navigate(Screen.HOME)); // Change to Screen.NameOfFurniturePage
     officeSuppliesButton.setOnMouseClicked(
         event -> Navigation.navigate(Screen.HOME)); // Change to Screen.NameOfOfficeSuppliesPage
-    signageMapButton.setOnMouseClicked(
-        event -> Navigation.navigate(Screen.HOME)); // Change to Screen.NameOfSignageMapPage
+    signageMapButton.setOnMouseClicked(event -> Navigation.navigate(Screen.SIGNAGE));
   }
 }
