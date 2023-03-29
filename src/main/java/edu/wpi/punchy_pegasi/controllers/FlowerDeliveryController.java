@@ -24,9 +24,12 @@ public class FlowerDeliveryController {
     javafx.scene.control.TextField roomNumberField;
     @FXML
     javafx.scene.control.TextField additionalNotesField;
-    @FXML RadioButton small;
-    @FXML RadioButton medium;
-    @FXML RadioButton large;
+    @FXML
+    RadioButton small;
+    @FXML
+    RadioButton medium;
+    @FXML
+    RadioButton large;
 
     FlowerDeliveryRequestEntry requestEntry;
 
