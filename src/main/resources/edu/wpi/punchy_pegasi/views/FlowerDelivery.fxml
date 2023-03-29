@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.ToggleGroup?>
+<BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: F1F1F1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.controllers.FlowerDeliveryController">
+   <center>
+      <VBox alignment="CENTER" maxWidth="700.0" prefHeight="200.0" prefWidth="650.0" spacing="25.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="200.0">
+               <children>
+                  <Label text="Flower Title Text">
+                     <font>
+                        <Font size="50.0" />
+                     </font>
+                  </Label>
+                  <Label text="\$0.00">
+                     <font>
+                        <Font size="50.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="650.0" spacing="25.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" style="-fx-background-color: #D9D9D9;" text="1.) Pick Flower Type">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="25.0" />
+                     </padding>
+                  </Label>
+                  <MFXComboBox prefHeight="75.0" prefWidth="500.0" style="-fx-background-color: #D9D9D9;" fx:id="flowerTypeComboBox" >
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin></MFXComboBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="300.0" prefWidth="650.0" spacing="30.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Label maxWidth="1.7976931348623157E308" style="-fx-background-color: #D9D9D9;" text="2.) Pick Flower Size">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                     <padding>
+                        <Insets left="25.0" />
+                     </padding>
+                  </Label>
+                  <RadioButton mnemonicParsing="false" text="Small" fx:id="flowerSizeSelector">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="flowerSizeGroup"/>
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="Medium" >
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                     <toggleGroup>
+                        <fx:reference source="flowerSizeGroup"/>
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="Large">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                     <toggleGroup>
+                        <fx:reference source="flowerSizeGroup"/>
+                     </toggleGroup>
+                  </RadioButton>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="650.0" spacing="30.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Label maxWidth="1.7976931348623157E308" style="-fx-background-color: #D9D9D9;" text="3.) Flower Amount">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="25.0" />
+                     </padding>
+                  </Label>
+                  <TextField maxWidth="500.0" prefHeight="75.0" prefWidth="50.0" style="-fx-background-color: #D9D9D9;" fx:id="flowerAmountField">
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
+                  </TextField>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+   <right>
+      <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="500.0" spacing="25.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets right="25.0" />
+         </BorderPane.margin>
+         <children>
+            <VBox alignment="CENTER" prefHeight="800.0" prefWidth="100.0" style="-fx-background-color: #012D5A;">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <children>
+                  <Label text="Patient Name" textFill="WHITE">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <TextField maxWidth="400.0" prefHeight="75.0" prefWidth="50.0" style="-fx-background-color: #D9D9D9;" fx:id="patientNameField"/>
+                  <Label text="Room Number" textFill="WHITE">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <TextField maxWidth="400.0" prefHeight="75.0" prefWidth="50.0" style="-fx-background-color: #D9D9D9;" fx:id="roomNumberField"/>
+                  <Label text="Additional Notes" textFill="WHITE">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <TextField maxWidth="400.0" prefHeight="400.0" prefWidth="50.0" style="-fx-background-color: #D9D9D9;" fx:id="additionalNotesField"/>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #012D5A;">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="250.0">
+                     <children>
+                        <Label text="Total" textFill="WHITE">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <Label text="\$0.00" textFill="WHITE">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="25.0" top="25.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <MFXButton alignment="CENTER" prefWidth="350.0" style="-fx-background-color: #03fc5e;" text="Submit" textFill="WHITE" fx:id="submitButton">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </MFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="25.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </right>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="650.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+<!--                  TODO: add image to imageView-->
+                  <Image url="" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label alignment="CENTER" maxWidth="500.0" text="FLOWER Description">
+                     <font>
+                        <Font size="50.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets top="25.0" />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="25.0" />
+         </padding>
+      </VBox>
+   </left>
+</BorderPane>
