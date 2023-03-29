@@ -11,5 +11,13 @@ public class FoodServiceRequestEntry {
   private String roomName;
   private String additionalNotes;
 
-  public FoodServiceRequestEntry() {}
+  public FoodServiceRequestEntry(String patientName, String roomName, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions) {
+    this.foodSelection = foodSelection;
+    this.tempType = tempType;
+    this.additionalItems = additionalItems;
+    this.dietaryRestrictions = dietaryRestrictions;
+    this.patientName = patientName;
+    this.roomName = roomName;
+    this.additionalNotes = additionalNotes;
+  }
 }

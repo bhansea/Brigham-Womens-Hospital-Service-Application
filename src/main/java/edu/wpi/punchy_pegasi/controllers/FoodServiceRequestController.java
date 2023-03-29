@@ -55,14 +55,15 @@ public class FoodServiceRequestController {
       extras.add("glass");
     }
 
-    //    entry =
-    //        new FoodServiceRequestEntry(
-    //            patientName.getText(),
-    //            roomNumber.getText(),
-    //            additionalNotes.getText(),
-    //            tempType,
-    //            extras,
-    //            dietaryRestrictions.getText());
+    entry =
+        new FoodServiceRequestEntry(
+            patientName.getText(),
+            roomNumber.getText(),
+            additionalNotes.getText(),
+            mealDropdown.getSelectedItem(),
+            tempType,
+            extras,
+            dietaryRestrictions.getText());
 
     Navigation.navigate(Screen.HOME);
   }
