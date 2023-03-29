@@ -11,6 +11,9 @@ public class SignageMapController {
 
   @FXML
   public void initialize() {
-    homeButton.setOnMouseClicked(event -> Navigation.navigate(Screen.HOME));
+    homeButton.setOnMouseClicked(
+        event -> {
+          Navigation.navigate(Screen.HOME);
+        });
   }
 }

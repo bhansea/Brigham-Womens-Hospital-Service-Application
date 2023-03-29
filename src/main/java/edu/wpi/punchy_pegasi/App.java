@@ -43,7 +43,7 @@ public class App extends Application {
     primaryStage.setScene(scene);
     primaryStage.show();
 
-    Navigation.navigate(Screen.FOOD_SERVICE_REQUEST);
+    Navigation.navigate(Screen.LOGIN);
   }
 
   @Override
