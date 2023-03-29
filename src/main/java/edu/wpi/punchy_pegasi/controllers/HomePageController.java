@@ -2,17 +2,17 @@ package edu.wpi.punchy_pegasi.controllers;
 
 import edu.wpi.punchy_pegasi.navigation.Navigation;
 import edu.wpi.punchy_pegasi.navigation.Screen;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 public class HomePageController {
 
-  @FXML MFXButton conferenceRoomButton;
-  @FXML MFXButton mealButton;
-  @FXML MFXButton flowerButton;
-  @FXML MFXButton furnitureButton;
-  @FXML MFXButton officeSuppliesButton;
-  @FXML MFXButton signageMapButton;
+  @FXML Button conferenceRoomButton;
+  @FXML Button mealButton;
+  @FXML Button flowerButton;
+  @FXML Button furnitureButton;
+  @FXML Button officeSuppliesButton;
+  @FXML Button signageMapButton;
 
   @FXML
   public void initialize() {
