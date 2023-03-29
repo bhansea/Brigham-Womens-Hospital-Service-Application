@@ -4,6 +4,7 @@ public enum Screen {
   ROOT("views/Root.fxml"),
   HOME("views/Home.fxml"),
   SERVICE_REQUEST("views/ServiceRequest.fxml"),
+  FOOD_SERVICE_REQUEST("views/FoodServiceRequest.fxml"),
 
   LOGIN("views/Login.fxml");
 
