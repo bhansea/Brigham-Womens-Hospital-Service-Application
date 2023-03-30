@@ -25,28 +25,62 @@ public class FlowerDeliveryController {
     @FXML
     javafx.scene.control.TextField additionalNotesField;
     @FXML
-    RadioButton flowerSizeSelector;
+    RadioButton small;
+    @FXML
+    RadioButton medium;
+    @FXML
+    RadioButton large;
+
+    FlowerDeliveryRequestEntry requestEntry;
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         ObservableList<String> flowerTypesList =
                 FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
         flowerTypeComboBox.setItems(flowerTypesList);
+    }
 
-        this.submitButton.setOnAction(
-                event -> {
-                    FlowerDeliveryRequestEntry requestEntry =
-                            new FlowerDeliveryRequestEntry(
-                                    patientNameField.getText(),
-                                    additionalNotesField.getText(),
-                                    flowerSizeSelector.getToggleGroup().getSelectedToggle().toString(),
-                                    roomNumberField.getText(),
-                                    flowerAmountField.getText(),
-                                    flowerTypeComboBox.getSelectedItem());
+    @FXML
+    public void submitEntry() {
+        String name;
+        String notes;
+        String room;
+        String flowerAmount;
+        String size = "";
 
-                    Navigation.navigate(Screen.HOME);
-                    // requestEntry.printFlowerReq(); Prints out to console
-                });
+        if (small.isSelected()) {
+            size = "Small";
+        } else if (medium.isSelected()) {
+            size = "Medium";
+        } else if (large.isSelected()) {
+            size = "Large";
+        }
+
+        try {
+            name = patientNameField.getText();
+        } catch (NullPointerException e) {
+            name = "";
+        }
+        try {
+            room = roomNumberField.getText();
+        } catch (NullPointerException e) {
+            room = "";
+        }
+        try {
+            notes = additionalNotesField.getText();
+        } catch (NullPointerException e) {
+            notes = "";
+        }
+        try {
+            flowerAmount = flowerAmountField.getText();
+        } catch (NullPointerException e) {
+            flowerAmount = "";
+        }
+
+
+        requestEntry = new FlowerDeliveryRequestEntry(name, notes, size, room, flowerAmount, flowerTypeComboBox.getSelectedItem());
+
+        Navigation.navigate(Screen.HOME);
     }
 }

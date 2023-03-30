@@ -6,8 +6,8 @@ public class FlowerDeliveryRequestEntry {
     private final String additionalNotes;
     private final String flowerSize;
     private final String flowerType;
-    private final int roomNumber;
-    private final int flowerAmount;
+    private final String roomNumber;
+    private final String flowerAmount;
 
     public FlowerDeliveryRequestEntry(
             String patientName,
@@ -19,49 +19,11 @@ public class FlowerDeliveryRequestEntry {
         this.patientName = patientName;
         this.additionalNotes = additionalNotes;
         this.flowerSize = flowerSize;
-        this.roomNumber = Integer.parseInt(roomNumber);
-        this.flowerAmount = Integer.parseInt(flowerAmount);
+        this.roomNumber = roomNumber;
+        this.flowerAmount = flowerAmount;
         this.flowerType = flowerType;
     }
 
-    public FlowerDeliveryRequestEntry(
-            String patientName,
-            String flowerSize,
-            String roomNumber,
-            String flowerAmount,
-            String flowerType) {
-        this.patientName = patientName;
-        this.additionalNotes = "";
-        this.flowerSize = flowerSize;
-        this.roomNumber = Integer.parseInt(roomNumber);
-        this.flowerAmount = Integer.parseInt(flowerAmount);
-        this.flowerType = flowerType;
-    }
-
-    public FlowerDeliveryRequestEntry(
-            String patientName,
-            String additionalNotes,
-            String flowerSize,
-            int roomNumber,
-            int flowerAmount,
-            String flowerType) {
-        this.patientName = patientName;
-        this.additionalNotes = additionalNotes;
-        this.flowerSize = flowerSize;
-        this.roomNumber = (roomNumber);
-        this.flowerAmount = (flowerAmount);
-        this.flowerType = flowerType;
-    }
-
-    public FlowerDeliveryRequestEntry(
-            String patientName, String flowerSize, int roomNumber, int flowerAmount, String flowerType) {
-        this.patientName = patientName;
-        this.additionalNotes = "";
-        this.flowerSize = flowerSize;
-        this.roomNumber = (roomNumber);
-        this.flowerAmount = (flowerAmount);
-        this.flowerType = flowerType;
-    }
 
     public void printFlowerReq() {
         System.out.println("Patient Name: " + patientName);
