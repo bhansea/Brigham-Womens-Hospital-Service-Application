@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.navigation.Screen;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -14,20 +15,45 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
 @Slf4j
 public class App extends Application {
-
+    @Getter
+    private static App singleton;
     @Setter
     @Getter
     private static Stage primaryStage;
-    @Setter
     @Getter
+    @Setter
     private static BorderPane viewPane;
+
+    @Getter
+    private static Screen currentScreen;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+
+    public static void exit() {
+        Platform.exit();
+    }
+
+    public void setCurrentScreen(Screen value) {
+        support.firePropertyChange("page", currentScreen, value);
+        currentScreen = value;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
+    }
 
     @Override
     public void init() {
+        singleton = this;
         log.info("Starting Up");
     }
 

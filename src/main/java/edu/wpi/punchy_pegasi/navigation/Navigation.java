@@ -14,6 +14,7 @@ public class Navigation {
             final FXMLLoader loader = new FXMLLoader(resource);
 
             App.getViewPane().setCenter(loader.load());
+            App.getSingleton().setCurrentScreen(screen);
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }

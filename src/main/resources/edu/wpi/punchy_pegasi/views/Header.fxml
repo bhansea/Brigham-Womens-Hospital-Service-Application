@@ -15,7 +15,18 @@
         <VBox alignment="CENTER_RIGHT">
             <children>
                 <Button mnemonicParsing="false" onAction="#toHome"
-                        style="-fx-background-color: #012D5A;" text="HOME" textFill="#f1f1f1">
+                        style="-fx-background-color: #012D5A;" text="HOME" textFill="#f1f1f1" fx:id="homeButton"
+                        visible="false">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                    <font>
+                        <Font size="21.0"/>
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#exit"
+                        style="-fx-background-color: #012D5A;" text="EXIT" textFill="#f1f1f1" fx:id="exitButton"
+                        visible="false">
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                     </padding>
