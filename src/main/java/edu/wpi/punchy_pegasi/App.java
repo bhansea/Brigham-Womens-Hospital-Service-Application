@@ -3,6 +3,8 @@ package edu.wpi.punchy_pegasi;
 import edu.wpi.punchy_pegasi.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.navigation.Navigation;
 import edu.wpi.punchy_pegasi.navigation.Screen;
+import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
+import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -49,6 +51,7 @@ public class App extends Application {
         primaryStage.show();
 
         Navigation.navigate(Screen.LOGIN);
+        MFXThemeManager.addOn(scene, Themes.DEFAULT);
     }
 
     @Override
