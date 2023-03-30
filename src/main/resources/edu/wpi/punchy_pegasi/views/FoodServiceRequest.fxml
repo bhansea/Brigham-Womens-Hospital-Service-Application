@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -236,13 +235,13 @@
                                 <Insets top="10.0"/>
                             </VBox.margin>
                         </HBox>
-                        <MFXButton fx:id="submit" onAction="#submitEntry" rippleColor="WHITE"
-                                   style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit"
-                                   textAlignment="CENTER" textFill="WHITE">
+                        <Button fx:id="submit" onAction="#submitEntry"
+                                style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit"
+                                textAlignment="CENTER" textFill="WHITE">
                             <font>
                                 <Font size="36.0"/>
                             </font>
-                        </MFXButton>
+                        </Button>
                     </children>
                     <VBox.margin>
                         <Insets/>

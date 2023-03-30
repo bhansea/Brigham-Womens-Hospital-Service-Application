@@ -224,13 +224,13 @@
                                 <Insets left="25.0" top="25.0"/>
                             </VBox.margin>
                         </HBox>
-                        <MFXButton fx:id="submitButton" alignment="CENTER" maxWidth="350.0" minWidth="300.0"
+                        <Button fx:id="submitButton" alignment="CENTER" maxWidth="350.0" minWidth="300.0"
                                    onAction="#submitEntry" style="-fx-background-color: green;" text="Submit"
                                    textFill="WHITE">
                             <font>
-                                <Font size="40.0"/>
+                                <Font size="36.0"/>
                             </font>
-                        </MFXButton>
+                        </Button>
                     </children>
                     <VBox.margin>
                         <Insets/>
