@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.controllers;
+package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;

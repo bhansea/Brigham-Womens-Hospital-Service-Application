@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi;
+package edu.wpi.punchy_pegasi.frontend;
 
 import java.util.List;
 

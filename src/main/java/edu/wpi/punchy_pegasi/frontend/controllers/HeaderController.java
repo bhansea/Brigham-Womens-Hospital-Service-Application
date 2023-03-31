@@ -1,8 +1,8 @@
-package edu.wpi.punchy_pegasi.controllers;
+package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.navigation.Navigation;
-import edu.wpi.punchy_pegasi.navigation.Screen;
+import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
+import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import javafx.beans.binding.ObjectBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

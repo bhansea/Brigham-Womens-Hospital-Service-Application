@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.navigation;
+package edu.wpi.punchy_pegasi.frontend.navigation;
 
 public enum Screen {
     ROOT("views/Root.fxml"),

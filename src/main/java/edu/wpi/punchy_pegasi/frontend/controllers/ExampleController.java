@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.controllers;
+package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

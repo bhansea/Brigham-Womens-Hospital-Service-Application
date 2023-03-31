@@ -1,8 +1,8 @@
-package edu.wpi.punchy_pegasi;
+package edu.wpi.punchy_pegasi.frontend;
 
-import edu.wpi.punchy_pegasi.controllers.LayoutController;
-import edu.wpi.punchy_pegasi.navigation.Navigation;
-import edu.wpi.punchy_pegasi.navigation.Screen;
+import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
+import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
+import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;

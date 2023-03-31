@@ -9,7 +9,7 @@
 <?import javafx.scene.text.*?>
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wpi.punchy_pegasi.controllers.FoodServiceRequestController">
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.FoodServiceRequestController">
     <center>
         <VBox spacing="30.0">
             <children>
@@ -262,7 +262,7 @@
                 <ImageView fitHeight="350.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true"
                            VBox.vgrow="ALWAYS">
                     <image>
-                        <Image url="@../../../../assets/foodImage.jpg"/>
+                        <Image url="@../../../../../assets/foodImage.jpg"/>
                     </image>
                 </ImageView>
                 <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">

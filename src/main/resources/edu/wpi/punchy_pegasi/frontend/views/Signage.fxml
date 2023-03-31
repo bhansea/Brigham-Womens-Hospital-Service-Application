@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wpi.punchy_pegasi.controllers.SignageMapController">
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SignageMapController">
     <top>
         <BorderPane style="-fx-background-color: #c9c9c9">
             <center>

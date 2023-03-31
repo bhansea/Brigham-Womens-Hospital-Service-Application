@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi;
+package edu.wpi.punchy_pegasi.frontend;
 
 public class Main {
 

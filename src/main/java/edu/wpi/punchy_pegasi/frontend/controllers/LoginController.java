@@ -1,7 +1,7 @@
-package edu.wpi.punchy_pegasi.controllers;
+package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.navigation.Navigation;
-import edu.wpi.punchy_pegasi.navigation.Screen;
+import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
+import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
