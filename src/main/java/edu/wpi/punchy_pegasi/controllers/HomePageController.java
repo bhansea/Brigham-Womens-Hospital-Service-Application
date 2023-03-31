@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.navigation.Navigation;
 import edu.wpi.punchy_pegasi.navigation.Screen;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 public class HomePageController {
 
@@ -22,14 +23,30 @@ public class HomePageController {
 
     @FXML
     public void initialize() {
-        conferenceRoomButton.setOnMouseClicked(
-                event -> Navigation.navigate(Screen.HOME)); // Change to Screen.NameOfConferencePage
-        mealButton.setOnMouseClicked(event -> Navigation.navigate(Screen.FOOD_SERVICE_REQUEST));
-        flowerButton.setOnMouseClicked(event -> Navigation.navigate(Screen.FLOWERDELIVERY_REQUEST));
-        furnitureButton.setOnMouseClicked(
-                event -> Navigation.navigate(Screen.HOME)); // Change to Screen.NameOfFurniturePage
-        officeSuppliesButton.setOnMouseClicked(
-                event -> Navigation.navigate(Screen.HOME)); // Change to Screen.NameOfOfficeSuppliesPage
-        signageMapButton.setOnMouseClicked(event -> Navigation.navigate(Screen.SIGNAGE));
+//
+    }
+
+    public void conferenceRoomClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.HOME);
+    }
+
+    public void mealButtonClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.FOOD_SERVICE_REQUEST);
+    }
+
+    public void flowerButtonClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.FLOWERDELIVERY_REQUEST);
+    }
+
+    public void furnitureButtonClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.HOME);
+    }
+
+    public void officeSuppliesClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.HOME);
+    }
+
+    public void signageButtonClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.SIGNAGE);
     }
 }
