@@ -43,7 +43,7 @@
                         </Label>
                         <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXComboBox fx:id="mealDropdown" prefWidth="350.0" style="-fx-alignment: center;" />
+                                <MFXComboBox fx:id="mealDropdown" onAction="#validateEntry" prefWidth="350.0" style="-fx-alignment: center;" />
                             </children>
                         </VBox>
                     </children>
@@ -60,7 +60,7 @@
                         </Label>
                         <HBox alignment="CENTER" spacing="100.0" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                             <children>
-                                <RadioButton fx:id="hot" mnemonicParsing="false" text="Hot">
+                                <RadioButton fx:id="hot" mnemonicParsing="false" onAction="#validateEntry" text="Hot">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
@@ -68,12 +68,12 @@
                                         <ToggleGroup fx:id="temp" />
                                     </toggleGroup>
                                 </RadioButton>
-                                <RadioButton fx:id="warm" mnemonicParsing="false" text="Warm" toggleGroup="$temp">
+                                <RadioButton fx:id="warm" mnemonicParsing="false" onAction="#validateEntry" text="Warm" toggleGroup="$temp">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </RadioButton>
-                                <RadioButton fx:id="cold" mnemonicParsing="false" text="Cold" toggleGroup="$temp">
+                                <RadioButton fx:id="cold" mnemonicParsing="false" onAction="#validateEntry" text="Cold" toggleGroup="$temp">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
@@ -131,7 +131,7 @@
                         </Label>
                         <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                             <children>
-                                <TextField fx:id="dietaryRestrictions" alignment="CENTER" promptText="Food Allergies, Gluten Free, etc." style="-fx-background-color: #D9D9D9;">
+                                <TextField fx:id="dietaryRestrictions" alignment="CENTER" onKeyReleased="#validateEntry" promptText="Food Allergies, Gluten Free, etc." style="-fx-background-color: #D9D9D9;">
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
@@ -167,7 +167,7 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <TextField fx:id="patientName" alignment="TOP_CENTER" promptText="Enter patient name">
+                                <TextField fx:id="patientName" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter patient name">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
@@ -181,27 +181,41 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <TextField fx:id="roomNumber" alignment="TOP_CENTER" promptText="Enter room number">
+                                <TextField fx:id="roomNumber" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter room number">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </TextField>
                             </children>
                         </HBox>
-                        <Label text="Additional Notes" textFill="WHITE">
+                        <Label text="Staff Assignment" textFill="WHITE">
                             <font>
                                 <Font size="24.0" />
                             </font>
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <TextField fx:id="additionalNotes" alignment="CENTER" promptText="Additional Messages">
+                                <TextField fx:id="staffAssignment" alignment="CENTER" onKeyReleased="#validateEntry" promptText="Assign staff member">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </TextField>
                             </children>
                         </HBox>
+                  <Label text="Additional Notes" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <TextField fx:id="additionalNotes" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Additional Notes">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
                     </children>
                     <VBox.margin>
                         <Insets />

@@ -48,20 +48,12 @@ public class FoodServiceRequestController {
                 FXCollections.observableArrayList(
                         "Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
+        submit.setDisable(true);
     }
 
     @FXML
     public void submitEntry() {
-        String tempType = "";
         ArrayList<String> extras = new ArrayList<String>();
-        if (hot.isSelected()) {
-            tempType = "hot";
-        } else if (warm.isSelected()) {
-            tempType = "warm";
-        } else if (cold.isSelected()) {
-            tempType = "cold";
-        }
-
         if (utensils.isSelected()) {
             extras.add("utensils");
         }
@@ -74,12 +66,33 @@ public class FoodServiceRequestController {
 
         entry =
                 new FoodServiceRequestEntry(
-                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), tempType, extras, dietaryRestrictions.getText());
+                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
         Navigation.navigate(Screen.HOME);
     }
 
     @FXML
+    public void validateEntry() {
+        boolean validate = patientName.getText().isBlank()
+                || patientName.getText().isBlank()
+                || roomNumber.getText().isBlank()
+                || additionalNotes.getText().isBlank()
+                || dietaryRestrictions.getText().isBlank()
+                || temp.getSelectedToggle() == null
+                || mealDropdown.getSelectedItem() == null;
+        submit.setDisable(validate);
+    }
+    @FXML
     public void clearEntry() {
-
+        mealDropdown.clear();
+        patientName.clear();
+        roomNumber.clear();
+        additionalNotes.clear();
+        dietaryRestrictions.clear();
+        napkins.setSelected(false);
+        utensils.setSelected(false);
+        glass.setSelected(false);
+        hot.setSelected(false);
+        warm.setSelected(false);
+        cold.setSelected(false);
     }
 }
