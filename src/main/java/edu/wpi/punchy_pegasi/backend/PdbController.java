@@ -128,31 +128,31 @@ public class PdbController {
     }
 
     public void importTable(String path, String tableName) throws DatabaseException {
-        try {
-            insertfromCSV(path, tableName);
-            log.info("Imported table successfully");
-            try {
-                syncNodes();
-                syncEdges();
-            } catch (DatabaseException e) {
-//                log.error("Failed to sync nodes/edges:", e);
-                throw new DatabaseException("Failed to sync nodes/edges");
-            }
-        } catch (SQLException | IOException e) {
-            log.error("Failed to import table:", e);
-            if(e instanceof  IOException) {
-                throw new DatabaseException("Failed to open selected file");
-            }
-            else if(e instanceof SQLException){
-                if(e.getMessage().contains("violates unique constraint")) {
-                    throw new DatabaseException("One or more nodes in csv already exist");
-                }
-                else if(Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
-                    throw new DatabaseException("CSV headers do not match table headers");
-                }
-            }
-            throw new DatabaseException("Table does not exist, CSV has incorrect headers");
-        }
+//        try {
+//            insertfromCSV(path, tableName);
+//            log.info("Imported table successfully");
+//            try {
+//                syncNodes();
+//                syncEdges();
+//            } catch (DatabaseException e) {
+////                log.error("Failed to sync nodes/edges:", e);
+//                throw new DatabaseException("Failed to sync nodes/edges");
+//            }
+//        } catch (SQLException | IOException e) {
+//            log.error("Failed to import table:", e);
+//            if(e instanceof  IOException) {
+//                throw new DatabaseException("Failed to open selected file");
+//            }
+//            else if(e instanceof SQLException){
+//                if(e.getMessage().contains("violates unique constraint")) {
+//                    throw new DatabaseException("One or more nodes in csv already exist");
+//                }
+//                else if(Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
+//                    throw new DatabaseException("CSV headers do not match table headers");
+//                }
+//            }
+//            throw new DatabaseException("Table does not exist, CSV has incorrect headers");
+//        }
     }
 
     private int insertfromCSV(String path, String tableName) throws IOException, SQLException {
@@ -200,7 +200,7 @@ public class PdbController {
     }
 
     // read csv file and insert into database
-//    public void insertNode(Node node) throws SQLException {
+    public void insertNode(Node node) throws SQLException {
 //        try {
 //            var statement = connection.createStatement();
 //            var ret = statement.execute("INSERT INTO teamp.Nodes VALUES (" +
@@ -217,10 +217,10 @@ public class PdbController {
 //            log.error("Failed to insert node", e);
 //            throw (e);
 //        }
-//    }
-//
-//    // parse csv file and insert into database
-//    public void insertEdge(Edge edge) throws SQLException {
+    }
+
+    // parse csv file and insert into database
+    public void insertEdge(Edge edge) throws SQLException {
 //        try {
 //            var statement = connection.createStatement();
 //            var ret = statement.execute("INSERT INTO teamp.Edges VALUES (" +
@@ -232,10 +232,10 @@ public class PdbController {
 //            log.error("Failed to insert edge", e);
 //            throw (e);
 //        }
-//    }
+    }
 //
-//    // delete node from database
-//    public void deleteNode(String nodeID) throws SQLException {
+    // delete node from database
+    public void deleteNode(String nodeID) throws SQLException {
 //        try {
 //            var statement = connection.createStatement();
 //            var ret = statement.execute("DELETE FROM teamp.Nodes WHERE nodeID = '" + nodeID + "';");
@@ -244,10 +244,10 @@ public class PdbController {
 //            log.error("Failed to delete node", e);
 //            throw (e);
 //        }
-//    }
+    }
 //
-//    // delete edge from database
-//    public void deleteEdge(String edgeID) throws SQLException {
+    // delete edge from database
+    public void deleteEdge(String edgeID) throws SQLException {
 //        try {
 //            var statement = connection.createStatement();
 //            var ret = statement.execute("DELETE FROM teamp.Edges WHERE edgeID = '" + edgeID + "';");
@@ -256,9 +256,9 @@ public class PdbController {
 //            log.error("Failed to delete edge", e);
 //            throw (e);
 //        }
-//    }
+    }
 //
-//    private void updateNode(String nodeID, String column, String value) throws SQLException{
+    private void updateNode(String nodeID, String column, String value) throws SQLException{
 //        try{
 //            var statement = connection.createStatement();
 //            statement.executeUpdate("UPDATE teamp.Nodes SET " + column + " = " + value + " WHERE nodeID = '" + nodeID + "';");
@@ -266,9 +266,9 @@ public class PdbController {
 //            log.error("Failed to update node", e);
 //            throw (e);
 //        }
-//    }
-//
-//    private void updateEdge(String edgeID, String column, String value) throws SQLException{
+    }
+
+    private void updateEdge(String edgeID, String column, String value) throws SQLException{
 //        try{
 //            var statement = connection.createStatement();
 //            var ret = statement.execute("UPDATE teamp.Edges SET " + column + " = " + value + " WHERE edgeID = '" + edgeID + "';");
@@ -276,9 +276,9 @@ public class PdbController {
 //            log.error("Failed to update edge");
 //            throw (e);
 //        }
-//    }
+    }
 //
-//    public void updateNodeName(String nodeID, String longName, String shortName) throws DatabaseException {
+    public void updateNodeName(String nodeID, String longName, String shortName) throws DatabaseException {
 //        Node newNode = NodeMap.get(nodeID);
 //        try {
 //            updateNode(nodeID, "longname", longName);
@@ -290,9 +290,9 @@ public class PdbController {
 //            log.error("Unable to update node", e);
 //            throw new DatabaseException("Unable to update node");
 //        }
-//    }
-//
-//    public void updateNodeCoordinate(String nodeID, String xcoord, String ycoord) throws DatabaseException {
+    }
+
+    public void updateNodeCoordinate(String nodeID, String xcoord, String ycoord) throws DatabaseException {
 //        Node newNode = NodeMap.get(nodeID);
 //        try {
 //            updateNode(nodeID, "xcoord", xcoord);
@@ -304,8 +304,8 @@ public class PdbController {
 //            log.error("Unable to update node", e);
 //            throw new DatabaseException("Unable to update node");
 //        }
-//    }
-//
+    }
+
 //    public List<Node> syncNodes() throws DatabaseException {
 //        try {
 //            var statement = connection.createStatement();
@@ -330,7 +330,7 @@ public class PdbController {
 //            throw new DatabaseException("Failed to get nodes");
 //        }
 //    }
-//
+
 //    public List<Edge> syncEdges() throws DatabaseException {
 //        try {
 //            var statement = connection.createStatement();
