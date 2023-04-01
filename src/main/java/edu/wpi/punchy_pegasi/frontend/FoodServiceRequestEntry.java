@@ -10,10 +10,12 @@ public class FoodServiceRequestEntry {
     private final String patientName;
     private final String roomName;
     private final String additionalNotes;
+    private final String staffAssignment;
 
     public FoodServiceRequestEntry(
             String patientName,
             String roomName,
+            String staffAssignment,
             String additionalNotes,
             String foodSelection,
             String tempType,
@@ -25,6 +27,7 @@ public class FoodServiceRequestEntry {
         this.dietaryRestrictions = dietaryRestrictions;
         this.patientName = patientName;
         this.roomName = roomName;
+        this.staffAssignment = staffAssignment;
         this.additionalNotes = additionalNotes;
     }
 }

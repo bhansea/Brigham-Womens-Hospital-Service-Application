@@ -13,34 +13,20 @@ import java.util.ArrayList;
 
 public class FoodServiceRequestController {
     FoodServiceRequestEntry entry;
-
-    @FXML
-    TextField dietaryRestrictions;
-    @FXML
-    TextField patientName;
-    @FXML
-    TextField roomNumber;
-    @FXML
-    TextField additionalNotes;
-    @FXML
-    RadioButton hot;
-    @FXML
-    RadioButton warm;
-    @FXML
-    RadioButton cold;
-    @FXML
-    CheckBox utensils;
-    @FXML
-    CheckBox napkins;
-    @FXML
-    CheckBox glass;
-    @FXML
-    MFXComboBox<String> mealDropdown;
-    @FXML
-    Button submit;
-
-    @FXML
-    ToggleGroup temp;
+    @FXML TextField dietaryRestrictions;
+    @FXML TextField patientName;
+    @FXML TextField roomNumber;
+    @FXML TextField additionalNotes;
+    @FXML TextField staffAssignment;
+    @FXML RadioButton hot;
+    @FXML RadioButton warm;
+    @FXML RadioButton cold;
+    @FXML CheckBox utensils;
+    @FXML CheckBox napkins;
+    @FXML CheckBox glass;
+    @FXML MFXComboBox<String> mealDropdown;
+    @FXML Button submit;
+    @FXML ToggleGroup temp;
 
     @FXML
     public void initialize() {
@@ -66,7 +52,7 @@ public class FoodServiceRequestController {
 
         entry =
                 new FoodServiceRequestEntry(
-                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
+                        patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
         Navigation.navigate(Screen.HOME);
     }
 
@@ -75,6 +61,7 @@ public class FoodServiceRequestController {
         boolean validate = patientName.getText().isBlank()
                 || patientName.getText().isBlank()
                 || roomNumber.getText().isBlank()
+                || staffAssignment.getText().isBlank()
                 || additionalNotes.getText().isBlank()
                 || dietaryRestrictions.getText().isBlank()
                 || temp.getSelectedToggle() == null
@@ -86,6 +73,7 @@ public class FoodServiceRequestController {
         mealDropdown.clear();
         patientName.clear();
         roomNumber.clear();
+        staffAssignment.clear();
         additionalNotes.clear();
         dietaryRestrictions.clear();
         napkins.setSelected(false);
