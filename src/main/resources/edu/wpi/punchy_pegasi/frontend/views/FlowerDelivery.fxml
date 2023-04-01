@@ -14,197 +14,190 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: F1F1F1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.FlowerDeliveryController">
+<BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.FlowerDeliveryController">
     <center>
-        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+        <VBox spacing="30.0">
             <children>
-                <HBox>
-                    <children>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <VBox alignment="CENTER_LEFT">
-                                    <children>
-                                        <Label alignment="CENTER" text="Flower Title Text">
-                                            <font>
-                                                <Font size="50.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER_RIGHT">
-                                    <children>
-                                        <Label alignment="CENTER" text="\$0.00">
-                                            <font>
-                                                <Font size="50.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                    </children>
-                </HBox>
-                <VBox style="-fx-background-color: #FFFFFF;">
-                    <children>
-                        <Label alignment="TOP_LEFT" style="-fx-background-color: #D9D9D9;" text="1.) Pick Flower Type">
-                            <font>
-                                <Font size="40.0" />
-                            </font>
-                        </Label>
-                        <MFXComboBox fx:id="flowerTypeComboBox" alignment="TOP_CENTER" promptText="Select Flower Type" style="-fx-background-color: #D9D9D9;">
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                            <font>
-                                <Font size="30.0" />
-                            </font>
-                        </MFXComboBox>
-                    </children>
-                </VBox>
-                <VBox style="-fx-background-color: #FFFFFF;">
-                    <children>
-                        <Label style="-fx-background-color: #D9D9D9;" text="2.) Pick Flower Size">
-                            <font>
-                                <Font size="40.0" />
-                            </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                        </Label>
-                        <VBox>
-                            <children>
-                                <HBox>
-                                    <children>
-                                        <RadioButton fx:id="small" mnemonicParsing="false" text="Small">
-                                            <font>
-                                                <Font size="30.0" />
-                                            </font>
-                                            <toggleGroup>
-                                                <ToggleGroup fx:id="flowerSizeGroup" />
-                                            </toggleGroup>
-                                        </RadioButton>
-                                    </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                                </HBox>
-                                <HBox>
-                                    <children>
-                                        <RadioButton fx:id="medium" mnemonicParsing="false" text="Medium" toggleGroup="$flowerSizeGroup">
-                                            <font>
-                                                <Font size="30.0" />
-                                            </font>
-                                        </RadioButton>
-                                    </children>
-                                </HBox>
-                                <HBox>
-                                    <children>
-                                        <RadioButton fx:id="large" mnemonicParsing="false" text="Large" toggleGroup="$flowerSizeGroup">
-                                            <font>
-                                                <Font size="30.0" />
-                                            </font>
-                                        </RadioButton>
-                                    </children>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                        </VBox>
-                    </children>
+                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
-                </VBox>
-                <VBox style="-fx-background-color: #FFFFFF;">
                     <children>
-                        <Label style="-fx-background-color: #D9D9D9;" text="3.) Flower Amount">
+                        <Label text="Flower Service Request">
                             <font>
-                                <Font size="40.0" />
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="1.) Pick Flower Type">
+                            <font>
+                                <Font size="24.0" />
                             </font>
                             <VBox.margin>
-                                <Insets />
+                                <Insets left="10.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="flowerAmountField" alignment="CENTER" promptText="Enter Flower Amount" style="-fx-background-color: #D9D9D9;">
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
+                        <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <MFXComboBox fx:id="flowerTypeComboBox" floatingText="Select Flower Type" prefWidth="350.0" style="-fx-alignment: center;" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="2.) Pick Flower Size">
                             <font>
-                                <Font size="30.0" />
+                                <Font size="24.0" />
                             </font>
-                        </TextField>
+                            <VBox.margin>
+                                <Insets left="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="50.0" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <RadioButton fx:id="small" mnemonicParsing="false" text="Small">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="flowerSizeGroup" />
+                           </toggleGroup>
+                                </RadioButton>
+                                <RadioButton fx:id="medium" mnemonicParsing="false" text="Medium" toggleGroup="$flowerSizeGroup">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </RadioButton>
+                                <RadioButton fx:id="large" mnemonicParsing="false" text="Large" toggleGroup="$flowerSizeGroup">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </RadioButton>
+                            </children>
+                            <padding>
+                                <Insets left="20.0" right="20.0" />
+                            </padding>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="3.) Flower Amount">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <TextField fx:id="flowerAmountField" alignment="CENTER" promptText="Enter Flower Amount" style="-fx-background-color: #D9D9D9;">
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </TextField>
+                            </children>
+                            <padding>
+                                <Insets left="20.0" right="20.0" />
+                            </padding>
+                        </VBox>
                     </children>
                 </VBox>
             </children>
             <BorderPane.margin>
-                <Insets />
+                <Insets bottom="20.0" top="20.0" />
             </BorderPane.margin>
         </VBox>
     </center>
     <right>
-        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
+        <VBox spacing="40.0" BorderPane.alignment="CENTER">
             <children>
-                <VBox alignment="CENTER" style="-fx-background-color: #012D5A;">
-                    <VBox.margin>
+                <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                    <opaqueInsets>
                         <Insets />
-                    </VBox.margin>
+                    </opaqueInsets>
                     <children>
                         <Label text="Patient Name" textFill="WHITE">
                             <font>
-                                <Font size="40.0" />
+                                <Font size="24.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="patientNameField" alignment="CENTER" promptText="Enter Patient Name" style="-fx-background-color: #D9D9D9;">
-                            <font>
-                                <Font size="30.0" />
-                            </font>
-                        </TextField>
-                        <Label text="Room Number" textFill="WHITE">
-                            <font>
-                                <Font size="40.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="roomNumberField" alignment="CENTER" promptText="Enter Room Number" style="-fx-background-color: #D9D9D9;">
-                            <font>
-                                <Font size="30.0" />
-                            </font>
-                        </TextField>
-                        <Label text="Additional Notes" textFill="WHITE">
-                            <font>
-                                <Font size="40.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="additionalNotesField" alignment="TOP_CENTER" promptText="Enter Additional Notes" style="-fx-background-color: #D9D9D9;">
-                            <font>
-                                <Font size="30.0" />
-                            </font>
-                        </TextField>
-                    </children>
-                </VBox>
-                <VBox alignment="CENTER" style="-fx-background-color: #012D5A;">
-                    <children>
                         <HBox alignment="CENTER">
                             <children>
-                                <Label text="Total" textFill="WHITE">
+                                <TextField fx:id="patientNameField" alignment="TOP_CENTER" promptText="Enter patient name">
                                     <font>
-                                        <Font size="40.0" />
+                                        <Font size="24.0" />
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <Label alignment="TOP_LEFT" text="Room Number" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <TextField fx:id="roomNumberField" alignment="TOP_CENTER" promptText="Enter room number">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <Label text="Additional Notes" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <TextField fx:id="additionalNotesField" alignment="CENTER" promptText="Additional Messages">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </VBox>
+                <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <children>
+                        <HBox alignment="TOP_CENTER" spacing="150.0">
+                            <children>
+                                <Label text="Total:" textFill="WHITE">
+                                    <font>
+                                        <Font size="24.0" />
                                     </font>
                                 </Label>
                                 <Label text="\$0.00" textFill="WHITE">
                                     <font>
-                                        <Font size="40.0" />
+                                        <Font size="24.0" />
                                     </font>
                                 </Label>
                             </children>
                             <VBox.margin>
-                                <Insets />
+                                <Insets top="10.0" />
                             </VBox.margin>
                         </HBox>
-                        <Button fx:id="submitButton" alignment="CENTER" onAction="#submitEntry" style="-fx-background-color: green;" text="Submit" textFill="WHITE">
+                        <Button fx:id="submitButton" onAction="#submitEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="WHITE">
                             <font>
                                 <Font size="36.0" />
                             </font>
@@ -213,23 +206,29 @@
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                    </padding>
                 </VBox>
             </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
         </VBox>
     </right>
     <left>
-        <VBox BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="350.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                     <image>
                         <Image url="@../../../../../assets/flower-bouquet.png" />
                     </image>
                 </ImageView>
-                <VBox alignment="CENTER">
+                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
                     <children>
-                        <Label alignment="CENTER" text="Flower Description">
+                        <Label text="Flower Description">
                             <font>
-                                <Font size="50.0" />
+                                <Font size="24.0" />
                             </font>
                         </Label>
                     </children>
@@ -238,6 +237,9 @@
             <BorderPane.margin>
                 <Insets />
             </BorderPane.margin>
+            <padding>
+                <Insets left="20.0" right="20.0" />
+            </padding>
         </VBox>
     </left>
 </BorderPane>
