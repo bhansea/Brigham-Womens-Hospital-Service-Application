@@ -35,6 +35,8 @@ dependencies {
             'net.kurobako:gesturefx:0.7.1',
             'org.controlsfx:controlsfx:11.1.2',
 
+            'org.javatuples:javatuples:1.2',
+
             'org.slf4j:slf4j-api:2.0.5',
             'org.slf4j:slf4j-simple:2.0.5',
             'com.oracle.database.jdbc:ucp:21.9.0.0',

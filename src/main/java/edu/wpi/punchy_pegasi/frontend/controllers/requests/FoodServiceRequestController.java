@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.frontend.controllers;
+package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
@@ -10,20 +10,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
 
-public class FoodServiceRequestController {
-    FoodServiceRequestEntry entry;
-
+public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> {
     @FXML
     TextField dietaryRestrictions;
-    @FXML
-    TextField patientName;
-    @FXML
-    TextField roomNumber;
-    @FXML
-    TextField additionalNotes;
     @FXML
     RadioButton hot;
     @FXML
@@ -39,8 +32,12 @@ public class FoodServiceRequestController {
     @FXML
     MFXComboBox<String> mealDropdown;
 
+    public static BorderPane create() {
+        return RequestController.create(new FoodServiceRequestController(), "views/FoodServiceRequest.fxml");
+    }
+
     @FXML
-    public void initialize() {
+    public void init() {
         ObservableList<String> mealList =
                 FXCollections.observableArrayList(
                         "Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
@@ -68,36 +65,19 @@ public class FoodServiceRequestController {
         if (glass.isSelected()) {
             extras.add("glass");
         }
-
-        String name;
-        String room;
-        String notes;
         String restrictions;
-
-        try {
-            name = patientName.getText();
-        } catch (NullPointerException e) {
-            name = "";
-        }
-        try {
-            room = roomNumber.getText();
-        } catch (NullPointerException e) {
-            room = "";
-        }
-        try {
-            notes = additionalNotes.getText();
-        } catch (NullPointerException e) {
-            notes = "";
-        }
         try {
             restrictions = dietaryRestrictions.getText();
         } catch (NullPointerException e) {
             restrictions = "";
         }
 
-        entry =
+        //makes sure shared fields aren't empty
+        if (this.checkSumbit())
+            return;
+        requestEntry =
                 new FoodServiceRequestEntry(
-                        name, room, notes, mealDropdown.getSelectedItem(), tempType, extras, restrictions);
+                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), tempType, extras, restrictions);
         Navigation.navigate(Screen.HOME);
     }
 }
