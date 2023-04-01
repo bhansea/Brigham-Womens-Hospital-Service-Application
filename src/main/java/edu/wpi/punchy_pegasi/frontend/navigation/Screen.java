@@ -9,6 +9,7 @@ public enum Screen {
     SIGNAGE("views/Signage.fxml"),
     FOOD_SERVICE_REQUEST("views/FoodServiceRequest.fxml"),
     MAP_PAGE("views/MapPage.fxml"),
+    CONFERENCE("views/ConferenceRoomRequest.fxml"),
     LOGIN("views/Login.fxml");
 
     private final String filename;
