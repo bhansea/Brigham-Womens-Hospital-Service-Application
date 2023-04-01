@@ -3,10 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-
-import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 public class HomePageController {
 
@@ -39,5 +36,7 @@ public class HomePageController {
         Navigation.navigate(Screen.SIGNAGE);
     }
 
-    public void mapButtonClick(MouseEvent mouseEvent) {Navigation.navigate(Screen.MAP_PAGE);}
+    public void mapButtonClick(MouseEvent mouseEvent) {
+        Navigation.navigate(Screen.MAP_PAGE);
+    }
 }

@@ -2,32 +2,24 @@ package edu.wpi.punchy_pegasi.frontend;
 
 import java.util.List;
 
-public class FoodServiceRequestEntry {
+public class FoodServiceRequestEntry extends RequestEntry {
     private final String foodSelection;
     private final String tempType;
     private final List<String> additionalItems;
     private final String dietaryRestrictions;
-    private final String patientName;
-    private final String roomName;
-    private final String additionalNotes;
-    private final String staffAssignment;
 
     public FoodServiceRequestEntry(
             String patientName,
             String roomName,
-            String staffAssignment,
             String additionalNotes,
             String foodSelection,
             String tempType,
             List<String> additionalItems,
             String dietaryRestrictions) {
+        super(patientName, roomName, additionalNotes);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
         this.dietaryRestrictions = dietaryRestrictions;
-        this.patientName = patientName;
-        this.roomName = roomName;
-        this.staffAssignment = staffAssignment;
-        this.additionalNotes = additionalNotes;
     }
 }

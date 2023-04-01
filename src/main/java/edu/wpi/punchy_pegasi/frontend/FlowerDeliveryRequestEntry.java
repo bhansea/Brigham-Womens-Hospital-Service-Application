@@ -1,12 +1,8 @@
 package edu.wpi.punchy_pegasi.frontend;
 
-public class FlowerDeliveryRequestEntry {
-
-    private final String patientName;
-    private final String additionalNotes;
+public class FlowerDeliveryRequestEntry extends RequestEntry {
     private final String flowerSize;
     private final String flowerType;
-    private final String roomNumber;
     private final String flowerAmount;
 
     public FlowerDeliveryRequestEntry(
@@ -16,10 +12,8 @@ public class FlowerDeliveryRequestEntry {
             String roomNumber,
             String flowerAmount,
             String flowerType) {
-        this.patientName = patientName;
-        this.additionalNotes = additionalNotes;
+        super(patientName, roomNumber, additionalNotes);
         this.flowerSize = flowerSize;
-        this.roomNumber = roomNumber;
         this.flowerAmount = flowerAmount;
         this.flowerType = flowerType;
     }
