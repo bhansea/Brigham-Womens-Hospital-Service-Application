@@ -21,11 +21,13 @@ public class PdbController {
             super(e);
         }
     }
-    private Connection connection;
-    private Map<String, Node> NodeMap = new HashMap<>();
-    private Map<String, Edge> EdgeMap = new HashMap<>();
+    private static Connection connection;
+    private static String url;
+    private static String username;
+    private static String password;
 
-    public PdbController(String url, String username, String password) {
+
+    private PdbController(String url, String username, String password) {
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
@@ -33,23 +35,33 @@ public class PdbController {
         }
     }
 
-    public Node getNode(String nodeID) throws DatabaseException{
-        Node node = NodeMap.get(nodeID);
-        if(node == null) {
-            throw new DatabaseException("nodeID does not exist");
+    static private PdbController singleton;
+    static public PdbController getSingleton(){
+        if(singleton!=null){
+            return singleton;
         } else {
-            return node;
+            singleton = new PdbController(url, username, password);
+            return singleton;
         }
     }
 
-    public Edge getEdge(String edgeID) throws DatabaseException{
-        Edge edge = EdgeMap.get(edgeID);
-        if(edge == null) {
-            throw new DatabaseException("edgeID does not exist");
-        } else {
-            return edge;
-        }
-    }
+//    public Node getNode(String nodeID) throws DatabaseException{
+//        Node node = NodeMap.get(nodeID);
+//        if(node == null) {
+//            throw new DatabaseException("nodeID does not exist");
+//        } else {
+//            return node;
+//        }
+//    }
+
+//    public Edge getEdge(String edgeID) throws DatabaseException{
+//        Edge edge = EdgeMap.get(edgeID);
+//        if(edge == null) {
+//            throw new DatabaseException("edgeID does not exist");
+//        } else {
+//            return edge;
+//        }
+//    }
 
     public void initTableByType(TableType tableType, String tableName) throws DatabaseException {
         try {
@@ -72,18 +84,32 @@ public class PdbController {
                         "xcoord int, " +
                         "ycoord int, " +
                         "floor varchar, " +
-                        "building varchar, " +
-                        "nodeType varchar, " +
-                        "longName varchar, " +
-                        "shortName varchar);");
+                        "building varchar);");
             }
             case EDGES -> {
                 var ret2 = statement.execute("CREATE TABLE IF NOT EXISTS " +
                         tableName +
                         "(" +
-                        "edgeID varchar PRIMARY KEY, " +
                         "startNode varchar, " +
                         "endNode varchar);");
+            }
+            case MOVES -> {
+                var ret2 = statement.execute("CREATE TABLE IF NOT EXISTS " +
+                        tableName +
+                        "(" +
+                        "nodeID int, " +
+                        "longName varchar" +
+                        "date varchar" +
+                        ");");
+            }
+            case LOCATIONNAMES -> {
+                var ret2 = statement.execute("CREATE TABLE IF NOT EXISTS " +
+                        tableName +
+                        "(" +
+                        "longName varchar " +
+                        "shortName varchar" +
+                        "nodeType varchar" +
+                        ");");
             }
         }
     }
@@ -174,157 +200,157 @@ public class PdbController {
     }
 
     // read csv file and insert into database
-    public void insertNode(Node node) throws SQLException {
-        try {
-            var statement = connection.createStatement();
-            var ret = statement.execute("INSERT INTO teamp.Nodes VALUES (" +
-                    "'" + node.nodeID + "', " +
-                    node.xcoord + ", " +
-                    node.ycoord + ", " +
-                    "'" + node.floor + "', " +
-                    "'" + node.building + "', " +
-                    "'" + node.nodeType + "', " +
-                    "'" + node.longName + "', " +
-                    "'" + node.shortName + "');");
-            NodeMap.put(node.nodeID,node);
-        } catch (SQLException e) {
-            log.error("Failed to insert node", e);
-            throw (e);
-        }
-    }
-
-    // parse csv file and insert into database
-    public void insertEdge(Edge edge) throws SQLException {
-        try {
-            var statement = connection.createStatement();
-            var ret = statement.execute("INSERT INTO teamp.Edges VALUES (" +
-                    "'" + edge.edgeID + "', " +
-                    "'" + edge.startNode + "', " +
-                    "'" + edge.endNode + "');");
-            EdgeMap.put(edge.edgeID, edge);
-        } catch (SQLException e) {
-            log.error("Failed to insert edge", e);
-            throw (e);
-        }
-    }
-
-    // delete node from database
-    public void deleteNode(String nodeID) throws SQLException {
-        try {
-            var statement = connection.createStatement();
-            var ret = statement.execute("DELETE FROM teamp.Nodes WHERE nodeID = '" + nodeID + "';");
-            NodeMap.remove(nodeID);
-        } catch (SQLException e) {
-            log.error("Failed to delete node", e);
-            throw (e);
-        }
-    }
-
-    // delete edge from database
-    public void deleteEdge(String edgeID) throws SQLException {
-        try {
-            var statement = connection.createStatement();
-            var ret = statement.execute("DELETE FROM teamp.Edges WHERE edgeID = '" + edgeID + "';");
-            EdgeMap.remove(edgeID);
-        } catch (SQLException e) {
-            log.error("Failed to delete edge", e);
-            throw (e);
-        }
-    }
-
-    private void updateNode(String nodeID, String column, String value) throws SQLException{
-        try{
-            var statement = connection.createStatement();
-            statement.executeUpdate("UPDATE teamp.Nodes SET " + column + " = " + value + " WHERE nodeID = '" + nodeID + "';");
-        } catch (SQLException e) {
-            log.error("Failed to update node", e);
-            throw (e);
-        }
-    }
-
-    private void updateEdge(String edgeID, String column, String value) throws SQLException{
-        try{
-            var statement = connection.createStatement();
-            var ret = statement.execute("UPDATE teamp.Edges SET " + column + " = " + value + " WHERE edgeID = '" + edgeID + "';");
-        } catch (SQLException e) {
-            log.error("Failed to update edge");
-            throw (e);
-        }
-    }
-
-    public void updateNodeName(String nodeID, String longName, String shortName) throws DatabaseException {
-        Node newNode = NodeMap.get(nodeID);
-        try {
-            updateNode(nodeID, "longname", longName);
-            newNode.longName = longName.substring(1,longName.length()-1);
-            updateNode(nodeID, "shortname", shortName);
-            newNode.shortName = shortName.substring(1,shortName.length()-1);
-            NodeMap.put(nodeID, newNode);
-        } catch (SQLException e) {
-            log.error("Unable to update node", e);
-            throw new DatabaseException("Unable to update node");
-        }
-    }
-
-    public void updateNodeCoordinate(String nodeID, String xcoord, String ycoord) throws DatabaseException {
-        Node newNode = NodeMap.get(nodeID);
-        try {
-            updateNode(nodeID, "xcoord", xcoord);
-            newNode.xcoord = Integer.parseInt(xcoord);
-            updateNode(nodeID, "ycoord", ycoord);
-            newNode.ycoord = Integer.parseInt(ycoord);
-            NodeMap.put(nodeID, newNode);
-        } catch (SQLException e) {
-            log.error("Unable to update node", e);
-            throw new DatabaseException("Unable to update node");
-        }
-    }
-
-    public List<Node> syncNodes() throws DatabaseException {
-        try {
-            var statement = connection.createStatement();
-            var result = statement.executeQuery("SELECT * FROM nodes");
-            var nodes = new ArrayList<Node>();
-            while (result.next()) {
-                var nodeID = result.getString("nodeID");
-                var xcoord = result.getInt("xcoord");
-                var ycoord = result.getInt("ycoord");
-                var floor = result.getString("floor");
-                var nodeType = Node.NodeType.CONF;// Node.NodeType.valueOf(result.getString("nodeType"));
-                var building = result.getString("building");
-                var longName = result.getString("longName");
-                var shortName = result.getString("shortName");
-                var node = new Node(nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName);
-                nodes.add(node);
-                NodeMap.put(nodeID, node);
-            }
-            return nodes;
-        } catch (SQLException e) {
-            log.error("Failed to get node", e);
-            throw new DatabaseException("Failed to get nodes");
-        }
-    }
-
-    public List<Edge> syncEdges() throws DatabaseException {
-        try {
-            var statement = connection.createStatement();
-            var result = statement.executeQuery("SELECT * FROM edges");
-            var edges = new ArrayList<Edge>();
-            while (result.next()) {
-                var edgeID = result.getString("edgeID");
-                var startNode = result.getString("startNode");
-                var endNode = result.getString("endNode");
-                var edge = new Edge(edgeID, startNode, endNode);
-                EdgeMap.put(edgeID, edge);
-            }
-            return edges;
-        } catch (SQLException e) {
-            log.error("Failed to get node", e);
-            throw new DatabaseException("Failed to get edges");
-        }
-    }
+//    public void insertNode(Node node) throws SQLException {
+//        try {
+//            var statement = connection.createStatement();
+//            var ret = statement.execute("INSERT INTO teamp.Nodes VALUES (" +
+//                    "'" + node.getNodeID() + "', " +
+//                    node.getXcoord() + ", " +
+//                    node.getYcoord() + ", " +
+//                    "'" + node.getFloor() + "', " +
+//                    "'" + node.getBuilding() + "', " +
+//                    "'" + node.nodeType + "', " +
+//                    "'" + node.longName + "', " +
+//                    "'" + node.shortName + "');");
+//            NodeMap.put(node.nodeID,node);
+//        } catch (SQLException e) {
+//            log.error("Failed to insert node", e);
+//            throw (e);
+//        }
+//    }
+//
+//    // parse csv file and insert into database
+//    public void insertEdge(Edge edge) throws SQLException {
+//        try {
+//            var statement = connection.createStatement();
+//            var ret = statement.execute("INSERT INTO teamp.Edges VALUES (" +
+//                    "'" + edge.edgeID + "', " +
+//                    "'" + edge.startNode + "', " +
+//                    "'" + edge.endNode + "');");
+//            EdgeMap.put(edge.edgeID, edge);
+//        } catch (SQLException e) {
+//            log.error("Failed to insert edge", e);
+//            throw (e);
+//        }
+//    }
+//
+//    // delete node from database
+//    public void deleteNode(String nodeID) throws SQLException {
+//        try {
+//            var statement = connection.createStatement();
+//            var ret = statement.execute("DELETE FROM teamp.Nodes WHERE nodeID = '" + nodeID + "';");
+//            NodeMap.remove(nodeID);
+//        } catch (SQLException e) {
+//            log.error("Failed to delete node", e);
+//            throw (e);
+//        }
+//    }
+//
+//    // delete edge from database
+//    public void deleteEdge(String edgeID) throws SQLException {
+//        try {
+//            var statement = connection.createStatement();
+//            var ret = statement.execute("DELETE FROM teamp.Edges WHERE edgeID = '" + edgeID + "';");
+//            EdgeMap.remove(edgeID);
+//        } catch (SQLException e) {
+//            log.error("Failed to delete edge", e);
+//            throw (e);
+//        }
+//    }
+//
+//    private void updateNode(String nodeID, String column, String value) throws SQLException{
+//        try{
+//            var statement = connection.createStatement();
+//            statement.executeUpdate("UPDATE teamp.Nodes SET " + column + " = " + value + " WHERE nodeID = '" + nodeID + "';");
+//        } catch (SQLException e) {
+//            log.error("Failed to update node", e);
+//            throw (e);
+//        }
+//    }
+//
+//    private void updateEdge(String edgeID, String column, String value) throws SQLException{
+//        try{
+//            var statement = connection.createStatement();
+//            var ret = statement.execute("UPDATE teamp.Edges SET " + column + " = " + value + " WHERE edgeID = '" + edgeID + "';");
+//        } catch (SQLException e) {
+//            log.error("Failed to update edge");
+//            throw (e);
+//        }
+//    }
+//
+//    public void updateNodeName(String nodeID, String longName, String shortName) throws DatabaseException {
+//        Node newNode = NodeMap.get(nodeID);
+//        try {
+//            updateNode(nodeID, "longname", longName);
+//            newNode.longName = longName.substring(1,longName.length()-1);
+//            updateNode(nodeID, "shortname", shortName);
+//            newNode.shortName = shortName.substring(1,shortName.length()-1);
+//            NodeMap.put(nodeID, newNode);
+//        } catch (SQLException e) {
+//            log.error("Unable to update node", e);
+//            throw new DatabaseException("Unable to update node");
+//        }
+//    }
+//
+//    public void updateNodeCoordinate(String nodeID, String xcoord, String ycoord) throws DatabaseException {
+//        Node newNode = NodeMap.get(nodeID);
+//        try {
+//            updateNode(nodeID, "xcoord", xcoord);
+//            newNode.xcoord = Integer.parseInt(xcoord);
+//            updateNode(nodeID, "ycoord", ycoord);
+//            newNode.ycoord = Integer.parseInt(ycoord);
+//            NodeMap.put(nodeID, newNode);
+//        } catch (SQLException e) {
+//            log.error("Unable to update node", e);
+//            throw new DatabaseException("Unable to update node");
+//        }
+//    }
+//
+//    public List<Node> syncNodes() throws DatabaseException {
+//        try {
+//            var statement = connection.createStatement();
+//            var result = statement.executeQuery("SELECT * FROM nodes");
+//            var nodes = new ArrayList<Node>();
+//            while (result.next()) {
+//                var nodeID = result.getString("nodeID");
+//                var xcoord = result.getInt("xcoord");
+//                var ycoord = result.getInt("ycoord");
+//                var floor = result.getString("floor");
+//                var nodeType = Node.NodeType.CONF;// Node.NodeType.valueOf(result.getString("nodeType"));
+//                var building = result.getString("building");
+//                var longName = result.getString("longName");
+//                var shortName = result.getString("shortName");
+//                var node = new Node(nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName);
+//                nodes.add(node);
+//                NodeMap.put(nodeID, node);
+//            }
+//            return nodes;
+//        } catch (SQLException e) {
+//            log.error("Failed to get node", e);
+//            throw new DatabaseException("Failed to get nodes");
+//        }
+//    }
+//
+//    public List<Edge> syncEdges() throws DatabaseException {
+//        try {
+//            var statement = connection.createStatement();
+//            var result = statement.executeQuery("SELECT * FROM edges");
+//            var edges = new ArrayList<Edge>();
+//            while (result.next()) {
+//                var edgeID = result.getString("edgeID");
+//                var startNode = result.getString("startNode");
+//                var endNode = result.getString("endNode");
+//                var edge = new Edge(edgeID, startNode, endNode);
+//                EdgeMap.put(edgeID, edge);
+//            }
+//            return edges;
+//        } catch (SQLException e) {
+//            log.error("Failed to get node", e);
+//            throw new DatabaseException("Failed to get edges");
+//        }
+//    }
 
     public enum TableType {
-        NODES, EDGES
+        NODES, EDGES, MOVES, LOCATIONNAMES
     }
 }

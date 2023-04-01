@@ -1,16 +1,15 @@
 package edu.wpi.punchy_pegasi.backend;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.lang.Long;
 
 
 public class NodeDaoImpl implements IDao<Node, Long> {
-    private HashMap <Long, Node> nodes;
-
+    private HashMap<Long, Node> nodes;
+    private PdbController dbController = PdbController.getSingleton();
     public NodeDaoImpl() {
-        nodes = new HashMap <Long, Node>();
+        nodes = new HashMap<Long, Node>();
     }
 
     @Override
@@ -19,22 +18,32 @@ public class NodeDaoImpl implements IDao<Node, Long> {
     }
 
     @Override
-    public List<Node> getAll() {
-        return null;
+    public Map<Long, Node> getAll() {
+        return nodes;
     }
 
     @Override
     public void save(Node node) {
-
+        this.nodes.put(node.getNodeID(), node);
     }
 
     @Override
-    public void update(Node node, String[] params) {
-
+    public void update(Long key, Object[] params) {
+        Node node = nodes.get(key);
+        if (params.length != 5) {
+            //TODO: throw error
+        } else {
+            node.setNodeID(((Long)params[0]));
+            node.setXcoord(((Integer)params[1]).intValue());
+            node.setYcoord(((Integer)params[2]).intValue());
+            node.setFloor(params[3].toString());
+            node.setBuilding((params[4]).toString());
+            nodes.put(key, node);
+        }
     }
 
     @Override
-    public void delete(Node node) {
-
+    public void delete(Long key) {
+        nodes.remove(key);
     }
 }
