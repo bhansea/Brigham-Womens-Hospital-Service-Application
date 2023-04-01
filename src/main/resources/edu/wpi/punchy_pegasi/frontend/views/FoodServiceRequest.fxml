@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.FoodServiceRequestController">
+            xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="30.0">
             <children>
@@ -153,109 +152,6 @@
             </BorderPane.margin>
         </VBox>
     </center>
-    <right>
-        <VBox spacing="40.0" BorderPane.alignment="CENTER">
-            <children>
-                <VBox alignment="TOP_CENTER" spacing="20.0"
-                      style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <children>
-                        <Label text="Patient Name" textFill="WHITE">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </Label>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <TextField alignment="TOP_CENTER" promptText="Enter patient name">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <Label alignment="TOP_LEFT" text="Room Number" textFill="WHITE">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </Label>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <TextField alignment="TOP_CENTER" promptText="Enter room number">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <Label text="Additional Notes" textFill="WHITE">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </Label>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <TextField alignment="CENTER" promptText="Additional Messages">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                    </padding>
-                </VBox>
-                <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;"
-                      VBox.vgrow="ALWAYS">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <children>
-                        <HBox alignment="TOP_CENTER" spacing="150.0">
-                            <children>
-                                <Label text="Total:" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </Label>
-                                <Label text="\$0.00" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </Label>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0"/>
-                            </VBox.margin>
-                        </HBox>
-                        <Button fx:id="submit" onAction="#submitEntry"
-                                style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit"
-                                textAlignment="CENTER" textFill="WHITE">
-                            <font>
-                                <Font size="36.0"/>
-                            </font>
-                        </Button>
-                    </children>
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0"/>
-                    </padding>
-                </VBox>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-            </padding>
-        </VBox>
-    </right>
     <left>
         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
