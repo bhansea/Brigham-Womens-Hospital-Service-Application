@@ -12,21 +12,24 @@ import java.util.function.Supplier;
 
 @Slf4j
 public enum Screen {
-    ROOT("views/Root.fxml"),
-    HOME("views/HomePage.fxml"),
-    FLOWERDELIVERY_REQUEST(FlowerDeliveryRequestController::create),
-    SERVICE_REQUEST("views/ServiceRequest.fxml"),
-    SIGNAGE("views/Signage.fxml"),
-    FOOD_SERVICE_REQUEST(FoodServiceRequestController::create),
-    MAP_PAGE("views/MapPage.fxml"),
-    LOGIN("views/Login.fxml");
+    ROOT("Root", "views/Root.fxml"),
+    HOME("Home", "views/HomePage.fxml"),
+    FLOWERDELIVERY_REQUEST("Flower Delivery Request", FlowerDeliveryRequestController::create),
+    SERVICE_REQUEST("Service Request", "views/ServiceRequest.fxml"),
+    SIGNAGE("Signage", "views/Signage.fxml"),
+    FOOD_SERVICE_REQUEST("Food Service Request", FoodServiceRequestController::create),
+    MAP_PAGE("Map", "views/MapPage.fxml"),
+    LOGIN("Login", "views/Login.fxml");
     private final Supplier<? extends Parent> supplier;
+    private final String readable;
 
-    Screen(Supplier<? extends Parent> supplier) {
+    Screen(String readable, Supplier<? extends Parent> supplier) {
         this.supplier = supplier;
+        this.readable = readable;
     }
 
-    Screen(String path) {
+    Screen(String readable, String path) {
+        this.readable = readable;
         this.supplier = new Supplier<Parent>() {
             @Override
             public Parent get() {
@@ -44,5 +47,8 @@ public enum Screen {
 
     public Supplier<? extends Parent> getSupplier() {
         return supplier;
+    }
+    public String getReadable() {
+        return readable;
     }
 }
