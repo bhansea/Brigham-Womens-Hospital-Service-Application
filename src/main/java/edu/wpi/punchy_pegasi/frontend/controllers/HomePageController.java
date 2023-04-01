@@ -6,20 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
-public class HomePageController {
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
-    @FXML
-    Button conferenceRoomButton;
-    @FXML
-    Button mealButton;
-    @FXML
-    Button flowerButton;
-    @FXML
-    Button furnitureButton;
-    @FXML
-    Button officeSuppliesButton;
-    @FXML
-    Button signageMapButton;
+public class HomePageController {
 
     @FXML
     public void initialize() {
@@ -49,4 +38,6 @@ public class HomePageController {
     public void signageButtonClick(MouseEvent mouseEvent) {
         Navigation.navigate(Screen.SIGNAGE);
     }
+
+    public void mapButtonClick(MouseEvent mouseEvent) {Navigation.navigate(Screen.MAP_PAGE);}
 }
