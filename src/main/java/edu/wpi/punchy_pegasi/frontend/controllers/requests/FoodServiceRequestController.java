@@ -71,7 +71,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
         entry =
                 new FoodServiceRequestEntry(
-                        patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
+                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
         Navigation.navigate(Screen.HOME);
     }
 
