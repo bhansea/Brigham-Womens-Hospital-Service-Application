@@ -48,6 +48,7 @@ public enum Screen {
     public Supplier<? extends Parent> getSupplier() {
         return supplier;
     }
+
     public String getReadable() {
         return readable;
     }

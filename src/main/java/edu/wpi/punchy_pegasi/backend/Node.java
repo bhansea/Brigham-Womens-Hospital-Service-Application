@@ -7,6 +7,7 @@ import lombok.Data;
 public class Node implements INode {
     private int xcoord;
     private int ycoord;
+
     @Override
     public String getId() {
         return null;
