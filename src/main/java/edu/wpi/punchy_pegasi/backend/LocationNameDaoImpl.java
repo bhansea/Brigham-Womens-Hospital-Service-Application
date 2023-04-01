@@ -27,20 +27,22 @@ public class LocationNameDaoImpl implements IDao<LocationName, String> {
     }
 
     @Override
-    public void update(String key, Object[] params) {
-        LocationName lName = locationNames.get(key);
+    public void update(LocationName lName, Object[] params) {
+        var key = lName.getLongName();  // TODO: is long name the primary key?
+        LocationName newLocName = locationNames.get(key);
         if (params.length != 3) {
             //TODO: throw error
         } else {
-            lName.setLongName(params[0].toString());
-            lName.setShortName(params[1].toString());
-            lName.setNodeType((LocationName.NodeType) params[2]);
-            locationNames.put(key, lName);
+            newLocName.setLongName(params[0].toString());
+            newLocName.setShortName(params[1].toString());
+            newLocName.setNodeType((LocationName.NodeType) params[2]);
+            locationNames.put(key, newLocName);
         }
     }
 
     @Override
-    public void delete(String key) {
+    public void delete(LocationName locationName) {
+        var key = locationName.getLongName();  // TODO: is long name the primary key?
         locationNames.remove(key);
     }
 

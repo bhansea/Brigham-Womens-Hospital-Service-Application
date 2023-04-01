@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.backend;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.lang.Long;
@@ -27,21 +26,23 @@ public class MoveDaoImpl implements IDao<Move, Long> {
     }
 
     @Override
-    public void update(Long key, Object[] params) {
-        Move move = moves.get(key);
+    public void update(Move move, Object[] params) {
+        var key = move.getUuid();
+        Move newMove = moves.get(key);
         if (params.length != 4) {
             //TODO: throw error
         } else {
-            move.setUuid((Long) params[0]);
-            move.setNodeID((Long) params[1]);
-            move.setLongName(params[2].toString());
-            move.setDate(params[3].toString());
-            moves.put(key, move);
+            newMove.setUuid((Long) params[0]);
+            newMove.setNodeID((Long) params[1]);
+            newMove.setLongName(params[2].toString());
+            newMove.setDate(params[3].toString());
+            moves.put(key, newMove);
         }
     }
 
     @Override
-    public void delete(Long key) {
+    public void delete(Move move) {
+        var key = move.getUuid();
         moves.remove(key);
     }
 }

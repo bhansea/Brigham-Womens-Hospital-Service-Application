@@ -7,11 +7,11 @@ import java.util.List;
 public interface IDao<T, K> {
     Optional<T> get(K k);
 
-    Map<K, T> getAll();
+    Map<K, T> getAll();  // TODO: return List or Map?
 
     void save(T t);
 
-    void update(K k, Object[] params);
+    void update(T t, Object[] params);
 
-    void delete(K k);
+    void delete(T t);
 }

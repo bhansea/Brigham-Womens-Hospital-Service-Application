@@ -8,6 +8,7 @@ import java.util.Optional;
 public class EdgeDaoImpl implements IDao<Edge, Long> {
     private HashMap<Long, Edge> edges;
     private PdbController dbController = PdbController.getSingleton();
+
     public EdgeDaoImpl() {
         edges = new HashMap<Long, Edge>();
     }
@@ -28,19 +29,21 @@ public class EdgeDaoImpl implements IDao<Edge, Long> {
     }
 
     @Override
-    public void update(Long key, Object[] params) {
-        Edge edge = edges.get(key);
+    public void update(Edge edge, Object[] params) {
+        var key = edge.getUuid();
+        Edge newEdge = edges.get(key);
         if (params.length != 2) {
             //TODO: throw error
         } else {
-            edge.setStartNode(params[0].toString());
-            edge.setEndNode(params[1].toString());
-            edges.put(key, edge);
+            newEdge.setStartNode(params[0].toString());
+            newEdge.setEndNode(params[1].toString());
+            edges.put(key, newEdge);
         }
     }
 
     @Override
-    public void delete(Long key) {
+    public void delete(Edge edge) {
+        var key = edge.getUuid();
         edges.remove(key);
     }
 }

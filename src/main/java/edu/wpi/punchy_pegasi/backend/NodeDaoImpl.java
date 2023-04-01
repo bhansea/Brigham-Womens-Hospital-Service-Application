@@ -28,22 +28,24 @@ public class NodeDaoImpl implements IDao<Node, Long> {
     }
 
     @Override
-    public void update(Long key, Object[] params) {
-        Node node = nodes.get(key);
+    public void update(Node node, Object[] params) {
+        var key = node.getNodeID();
+        Node newNode = nodes.get(key);
         if (params.length != 5) {
             //TODO: throw error
         } else {
-            node.setNodeID(((Long)params[0]));
-            node.setXcoord(((Integer)params[1]).intValue());
-            node.setYcoord(((Integer)params[2]).intValue());
-            node.setFloor(params[3].toString());
-            node.setBuilding((params[4]).toString());
+            newNode.setNodeID(((Long)params[0]));
+            newNode.setXcoord(((Integer)params[1]).intValue());
+            newNode.setYcoord(((Integer)params[2]).intValue());
+            newNode.setFloor(params[3].toString());
+            newNode.setBuilding((params[4]).toString());
             nodes.put(key, node);
         }
     }
 
     @Override
-    public void delete(Long key) {
+    public void delete(Node node) {
+        var key = node.getNodeID();
         nodes.remove(key);
     }
 }
