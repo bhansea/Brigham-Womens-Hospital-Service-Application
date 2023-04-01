@@ -7,9 +7,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.util.ArrayList;
 
@@ -38,6 +36,11 @@ public class FoodServiceRequestController {
     CheckBox glass;
     @FXML
     MFXComboBox<String> mealDropdown;
+    @FXML
+    Button submit;
+
+    @FXML
+    ToggleGroup temp;
 
     @FXML
     public void initialize() {
@@ -54,7 +57,7 @@ public class FoodServiceRequestController {
         if (hot.isSelected()) {
             tempType = "hot";
         } else if (warm.isSelected()) {
-            tempType = "cold";
+            tempType = "warm";
         } else if (cold.isSelected()) {
             tempType = "cold";
         }
@@ -69,35 +72,14 @@ public class FoodServiceRequestController {
             extras.add("glass");
         }
 
-        String name;
-        String room;
-        String notes;
-        String restrictions;
-
-        try {
-            name = patientName.getText();
-        } catch (NullPointerException e) {
-            name = "";
-        }
-        try {
-            room = roomNumber.getText();
-        } catch (NullPointerException e) {
-            room = "";
-        }
-        try {
-            notes = additionalNotes.getText();
-        } catch (NullPointerException e) {
-            notes = "";
-        }
-        try {
-            restrictions = dietaryRestrictions.getText();
-        } catch (NullPointerException e) {
-            restrictions = "";
-        }
-
         entry =
                 new FoodServiceRequestEntry(
-                        name, room, notes, mealDropdown.getSelectedItem(), tempType, extras, restrictions);
+                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), tempType, extras, dietaryRestrictions.getText());
         Navigation.navigate(Screen.HOME);
+    }
+
+    @FXML
+    public void clearEntry() {
+
     }
 }

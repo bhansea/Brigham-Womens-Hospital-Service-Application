@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 
+import java.awt.*;
+
 public class FlowerDeliveryController {
 
     @FXML
@@ -17,13 +19,13 @@ public class FlowerDeliveryController {
     @FXML
     MFXComboBox<String> flowerTypeComboBox;
     @FXML
-    javafx.scene.control.TextField flowerAmountField;
+    TextField flowerAmountField;
     @FXML
-    javafx.scene.control.TextField patientNameField;
+    TextField patientNameField;
     @FXML
-    javafx.scene.control.TextField roomNumberField;
+    TextField roomNumberField;
     @FXML
-    javafx.scene.control.TextField additionalNotesField;
+    TextField additionalNotesField;
     @FXML
     RadioButton small;
     @FXML
@@ -43,10 +45,6 @@ public class FlowerDeliveryController {
 
     @FXML
     public void submitEntry() {
-        String name;
-        String notes;
-        String room;
-        String flowerAmount;
         String size = "";
 
         if (small.isSelected()) {
@@ -57,29 +55,7 @@ public class FlowerDeliveryController {
             size = "Large";
         }
 
-        try {
-            name = patientNameField.getText();
-        } catch (NullPointerException e) {
-            name = "";
-        }
-        try {
-            room = roomNumberField.getText();
-        } catch (NullPointerException e) {
-            room = "";
-        }
-        try {
-            notes = additionalNotesField.getText();
-        } catch (NullPointerException e) {
-            notes = "";
-        }
-        try {
-            flowerAmount = flowerAmountField.getText();
-        } catch (NullPointerException e) {
-            flowerAmount = "";
-        }
-
-
-        requestEntry = new FlowerDeliveryRequestEntry(name, notes, size, room, flowerAmount, flowerTypeComboBox.getSelectedItem());
+        requestEntry = new FlowerDeliveryRequestEntry(patientNameField.getText(), additionalNotesField.getText(), size, roomNumberField.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
 
         Navigation.navigate(Screen.HOME);
     }
