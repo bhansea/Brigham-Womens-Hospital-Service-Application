@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <BorderPane style="-fx-background-color: #012D5A;" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HeaderController"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HeaderController"
             fx:id="headerRoot">
     <bottom>
         <VBox alignment="CENTER_RIGHT">
@@ -38,7 +39,7 @@
         </VBox>
     </bottom>
     <center>
-        <GridPane style="-fx-background-color: #f1f1f1;" fx:id="headerGrid">
+        <GridPane style="-fx-background-color: #222;" fx:id="headerGrid">
             <VBox GridPane.columnIndex="0" fx:id="imageContainer" prefWidth="300">
                 <Pane fx:id="clipper">
                     <ImageView fx:id="bannerImage" preserveRatio="true">
