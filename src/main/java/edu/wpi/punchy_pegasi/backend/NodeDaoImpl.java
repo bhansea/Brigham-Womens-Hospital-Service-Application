@@ -14,12 +14,10 @@ import static edu.wpi.punchy_pegasi.backend.PdbController.TableType.*;
 
 @Slf4j
 public class NodeDaoImpl implements IDao<Node, Long> {
-    private final HashMap<Long, Node> nodes;
     private final PdbController dbController = App.getSingleton().getPdb();
+    private final String[] fields = new String[]{"nodeID", "xcoord", "ycoord", "floor", "building"};
 
-    public NodeDaoImpl() {
-        nodes = new HashMap<Long, Node>();
-    }
+    public NodeDaoImpl() {}
 
     @Override
     public Optional<Node> get(Long key) {
@@ -35,34 +33,47 @@ public class NodeDaoImpl implements IDao<Node, Long> {
 
     @Override
     public Map<Long, Node> getAll() {
-        
-        return nodes;
-    }
-
-    @Override
-    public void save(Node node) {
-        this.nodes.put(node.getNodeID(), node);
-    }
-
-    @Override
-    public void update(Node node, Object[] params) {
-        var key = node.getNodeID();
-        Node newNode = nodes.get(key);
-        if (params.length != 5) {
-            //TODO: throw error
-        } else {
-            newNode.setNodeID(((Long) params[0]));
-            newNode.setXcoord(((Integer) params[1]).intValue());
-            newNode.setYcoord(((Integer) params[2]).intValue());
-            newNode.setFloor(params[3].toString());
-            newNode.setBuilding((params[4]).toString());
-            nodes.put(key, node);
+        Map<Long, Node> nodesMap = new HashMap<>();
+        try {
+            ResultSet nodes = dbController.searchQuery(NODES);
+            while (nodes.next()){
+                Node node = new Node(nodes.getLong("nodeID"), nodes.getInt("xcoord"), nodes.getInt("ycoord"), nodes.getString("floor"), nodes.getString("building"));
+                nodesMap.put(nodes.getLong("nodeID"), node);
+            }
+            return nodesMap;
+        } catch (PdbController.DatabaseException | SQLException e){
+            log.error(e.getMessage());
+            return nodesMap;
         }
     }
 
     @Override
+    public void save(Node node) {
+        try {
+            Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
+            dbController.insertQuery(NODES, fields, values);
+        } catch(PdbController.DatabaseException e){
+            log.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void update(Node node, Object[] params) {
+        try {
+            dbController.updateQuery(NODES, fields, params);
+        } catch (PdbController.DatabaseException e){
+            log.error(e.getMessage());
+        }
+
+    }
+
+    @Override
     public void delete(Node node) {
-        var key = node.getNodeID();
-        nodes.remove(key);
+        try {
+            long key = node.getNodeID();
+            dbController.deleteQuery(NODES, "nodeID", key);
+        } catch (PdbController.DatabaseException e){
+            log.error(e.getMessage());
+        }
     }
 }
