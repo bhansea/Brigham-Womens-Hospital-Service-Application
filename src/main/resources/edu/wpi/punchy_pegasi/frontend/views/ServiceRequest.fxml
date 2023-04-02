@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.scene.layout.StackPane?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-<StackPane fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.ServiceRequestController" maxHeight="-Infinity"
-           maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
-           xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <MFXButton fx:id="backButton" text="Back">
-            <font>
-                <Font name="Nunito Sans Regular" size="16.0"/>
-            </font>
-        </MFXButton>
-    </children>
-</StackPane>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <MFXTextField fx:id="servSearchBar" floatMode="ABOVE" promptText="Search..." style="-fx-background-color: #f1f1f1;" BorderPane.alignment="CENTER">
+         <textFill>
+            <Color opacity="0.9900000095367432" />
+         </textFill>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </MFXTextField>
+   </center>
+</BorderPane>
