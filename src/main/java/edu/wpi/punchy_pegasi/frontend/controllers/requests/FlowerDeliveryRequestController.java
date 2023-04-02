@@ -8,13 +8,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
     @FXML
     MFXComboBox<String> flowerTypeComboBox;
     @FXML
-    javafx.scene.control.TextField flowerAmountField;
+    TextField flowerAmountField;
+    @FXML
+    TextField patientNameField;
+    @FXML
+    TextField roomNumberField;
+    @FXML
+    TextField additionalNotesField;
     @FXML
     RadioButton small;
     @FXML
@@ -56,6 +63,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
 
         if (this.checkSumbit()) return;
         requestEntry = new FlowerDeliveryRequestEntry(name, notes, size, room, flowerAmount, flowerTypeComboBox.getSelectedItem());
+        requestEntry = new FlowerDeliveryRequestEntry(patientNameField.getText(), additionalNotesField.getText(), size, roomNumberField.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
 
         Navigation.navigate(Screen.HOME);
     }
