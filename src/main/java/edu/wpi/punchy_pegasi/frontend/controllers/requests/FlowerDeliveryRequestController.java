@@ -17,12 +17,6 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     TextField flowerAmountField;
     @FXML
-    TextField patientNameField;
-    @FXML
-    TextField roomNumberField;
-    @FXML
-    TextField additionalNotesField;
-    @FXML
     RadioButton small;
     @FXML
     RadioButton medium;
@@ -61,9 +55,9 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
             flowerAmount = "";
         }
 
-        if (this.checkSumbit()) return;
+        if (this.validateGeneric()) return;
         requestEntry = new FlowerDeliveryRequestEntry(name, notes, size, room, flowerAmount, flowerTypeComboBox.getSelectedItem());
-        requestEntry = new FlowerDeliveryRequestEntry(patientNameField.getText(), additionalNotesField.getText(), size, roomNumberField.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), additionalNotes.getText(), size, roomNumber.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
 
         Navigation.navigate(Screen.HOME);
     }
