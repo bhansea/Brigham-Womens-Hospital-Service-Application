@@ -19,27 +19,9 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     TextField dietaryRestrictions;
     @FXML
-    TextField patientName;
-    @FXML
-    TextField roomNumber;
-    @FXML
-    TextField additionalNotes;
-    @FXML
-    RadioButton hot;
-    @FXML
-    RadioButton warm;
-    @FXML
-    RadioButton cold;
-    @FXML
-    CheckBox utensils;
-    @FXML
-    CheckBox napkins;
-    @FXML
-    CheckBox glass;
+    CheckBox utensils, napkins, glass;
     @FXML
     MFXComboBox<String> mealDropdown;
-    @FXML
-    Button submit;
     @FXML
     ToggleGroup temp;
 
@@ -68,12 +50,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         if (glass.isSelected()) {
             extras.add("glass");
         }
-        String restrictions;
-        try {
-            restrictions = dietaryRestrictions.getText();
-        } catch (NullPointerException e) {
-            restrictions = "";
-        }
 
         //makes sure shared fields aren't empty
         requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
@@ -87,7 +63,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void validateEntry() {
-        boolean validate = validateGeneric() || dietaryRestrictions.getText().isBlank() || temp.getSelectedToggle() == null || mealDropdown.getSelectedItem() == null;
+        boolean validate = validateGeneric() || temp.getSelectedToggle() == null || mealDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 
@@ -99,9 +75,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         napkins.setSelected(false);
         utensils.setSelected(false);
         glass.setSelected(false);
-        hot.setSelected(false);
-        warm.setSelected(false);
-        cold.setSelected(false);
+        temp.selectToggle(null);
     }
 
     @Override

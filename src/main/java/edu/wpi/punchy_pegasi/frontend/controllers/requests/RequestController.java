@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.frontend.RequestEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ public abstract class RequestController<T extends RequestEntry> {
     protected TextField roomNumber;
     @FXML
     protected TextField additionalNotes;
+    @FXML
+    protected Button submit;
 
     public static BorderPane create(RequestController controller, String path) {
         final var genericResource = App.class.getResource("components/Request.fxml");
@@ -78,7 +81,7 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (patientName.getText().isBlank() || roomNumber.getText().isBlank() || additionalNotes.getText().isBlank());
+        return (patientName.getText().isBlank() || roomNumber.getText().isBlank());
     }
 
     protected void clearGeneric() {

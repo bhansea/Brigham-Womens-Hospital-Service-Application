@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
@@ -17,11 +18,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     TextField flowerAmountField;
     @FXML
-    RadioButton small;
-    @FXML
-    RadioButton medium;
-    @FXML
-    RadioButton large;
+    ToggleGroup flowerSizeGroup;
 
     public static BorderPane create() {
         var controller = new FlowerDeliveryRequestController();
@@ -32,33 +29,26 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void init() {
         ObservableList<String> flowerTypesList = FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
         flowerTypeComboBox.setItems(flowerTypesList);
+        submit.setDisable(true);
     }
 
     @FXML
     public void submitEntry() {
-        String name = "", notes = "", room = "";
-        String flowerAmount;
-        String size = "";
-
-        if (small.isSelected()) {
-            size = "Small";
-        } else if (medium.isSelected()) {
-            size = "Medium";
-        } else if (large.isSelected()) {
-            size = "Large";
-        }
-
-
-        try {
-            flowerAmount = flowerAmountField.getText();
-        } catch (NullPointerException e) {
-            flowerAmount = "";
-        }
-
-        if (this.validateGeneric()) return;
-        requestEntry = new FlowerDeliveryRequestEntry(name, notes, size, room, flowerAmount, flowerTypeComboBox.getSelectedItem());
-        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), additionalNotes.getText(), size, roomNumber.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
-
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), roomNumber.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
         Navigation.navigate(Screen.HOME);
+    }
+
+    @FXML
+    public void validateEntry() {
+        boolean validate = validateGeneric() || flowerAmountField.getText().isBlank() || flowerSizeGroup.getSelectedToggle() == null || flowerTypeComboBox.getSelectedItem() == null;
+        submit.setDisable(validate);
+    }
+
+    @FXML
+    public void clearEntry() {
+        clearGeneric();
+        flowerAmountField.clear();
+        flowerTypeComboBox.clear();
+        flowerSizeGroup.selectToggle(null);
     }
 }
