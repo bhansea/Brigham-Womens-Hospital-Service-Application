@@ -23,5 +23,4 @@ public class Node implements INode {
     public String getId() {
         return null;
     }
-
 }
