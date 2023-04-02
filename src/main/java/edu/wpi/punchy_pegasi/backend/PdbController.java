@@ -163,8 +163,11 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
-            var query = "SELECT * FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
-            query += getFieldValueString(fields, values, " AND ");
+            var query = "SELECT * FROM teamp." + tableType.name().toLowerCase();
+            if(fields.length > 0){
+                query += " WHERE ";
+                query += getFieldValueString(fields, values, " AND ");
+            }
             query += ";";
             return statement.executeQuery(query);
         } catch (SQLException e) {
@@ -173,14 +176,7 @@ public class PdbController {
         }
     }
     public ResultSet searchQuery(TableType tableType) throws DatabaseException {
-        try {
-            var statement = connection.createStatement();
-            var query = "SELECT * FROM teamp." + tableType.name().toLowerCase() + ";";
-            return statement.executeQuery(query);
-        } catch (SQLException e) {
-            log.error("Failed to search node", e);
-            throw new DatabaseException("SQL error");
-        }
+        return searchQuery(tableType, new String[]{}, new Object[]{});
     }
 
     /**
