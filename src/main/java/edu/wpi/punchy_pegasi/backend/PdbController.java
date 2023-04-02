@@ -250,7 +250,7 @@ public class PdbController {
             sb.append("),");
         }
         sb.setLength(sb.length() - 1);
-        sb.append(";");
+        sb.append("ON CONFLICT DO NOTHING;");
         var statement = connection.createStatement();
         return statement.executeUpdate(sb.toString());
     }
