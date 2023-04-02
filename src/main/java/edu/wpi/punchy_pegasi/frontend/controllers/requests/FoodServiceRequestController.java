@@ -7,30 +7,41 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
 
 public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> {
     FoodServiceRequestEntry entry;
-    @FXML TextField dietaryRestrictions;
-    @FXML TextField patientName;
-    @FXML TextField roomNumber;
-    @FXML TextField additionalNotes;
-    @FXML TextField staffAssignment;
-    @FXML RadioButton hot;
-    @FXML RadioButton warm;
-    @FXML RadioButton cold;
-    @FXML CheckBox utensils;
-    @FXML CheckBox napkins;
-    @FXML CheckBox glass;
-    @FXML MFXComboBox<String> mealDropdown;
-    @FXML Button submit;
-    @FXML ToggleGroup temp;
+    @FXML
+    TextField dietaryRestrictions;
+    @FXML
+    TextField patientName;
+    @FXML
+    TextField roomNumber;
+    @FXML
+    TextField additionalNotes;
+    @FXML
+    TextField staffAssignment;
+    @FXML
+    RadioButton hot;
+    @FXML
+    RadioButton warm;
+    @FXML
+    RadioButton cold;
+    @FXML
+    CheckBox utensils;
+    @FXML
+    CheckBox napkins;
+    @FXML
+    CheckBox glass;
+    @FXML
+    MFXComboBox<String> mealDropdown;
+    @FXML
+    Button submit;
+    @FXML
+    ToggleGroup temp;
 
     public static BorderPane create() {
         return RequestController.create(new FoodServiceRequestController(), "views/FoodServiceRequest.fxml");
@@ -69,9 +80,9 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
             return;
         requestEntry =
 
-        entry =
-                new FoodServiceRequestEntry(
-                        patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
+                entry =
+                        new FoodServiceRequestEntry(
+                                patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
         Navigation.navigate(Screen.HOME);
     }
 
@@ -87,6 +98,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 || mealDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
+
     @FXML
     public void clearEntry() {
         mealDropdown.clear();
