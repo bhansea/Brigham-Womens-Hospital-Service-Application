@@ -1,10 +1,9 @@
 package edu.wpi.punchy_pegasi.backend;
+
 import edu.wpi.punchy_pegasi.backend.pathfinding.INode;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter@Setter@Data
+@Data
 public class Node implements INode {
     private long nodeID;
     private int xcoord;
@@ -24,5 +23,4 @@ public class Node implements INode {
     public String getId() {
         return null;
     }
-
 }

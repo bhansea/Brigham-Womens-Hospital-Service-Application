@@ -23,16 +23,17 @@ import java.io.IOException;
 public class App extends Application {
     @Getter
     private static App singleton;
-    @Setter
-    @Getter
-    private static Stage primaryStage;
-    @Getter
-    @Setter
-    private static BorderPane viewPane;
-
-    @Getter
-    private static Screen currentScreen;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    @Setter
+    @Getter
+    private Stage primaryStage;
+    @Getter
+    @Setter
+    private BorderPane viewPane;
+    @Getter
+    private Screen currentScreen;
+    @Getter
+    private Scene scene;
 
     public static void exit() {
         Platform.exit();
@@ -57,26 +58,26 @@ public class App extends Application {
         log.info("Starting Up");
     }
 
+    public static void loadStylesheet(String resourcePath) {
+        App.singleton.scene.getStylesheets().add(App.class.getResource(resourcePath).toExternalForm());
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         /* primaryStage is generally only used if one of your components require the stage to display */
-        App.primaryStage = primaryStage;
-
-        final FXMLLoader loader = new FXMLLoader(App.class.getResource("views/Root.fxml"));
-        final BorderPane root = loader.load();
+        App.singleton.primaryStage = primaryStage;
 
         final var layoutLoader = new FXMLLoader(App.class.getResource("views/Layout.fxml"));
         final BorderPane loadedLayout = layoutLoader.load();
         final LayoutController layoutController = layoutLoader.getController();
 
-        root.setCenter(loadedLayout);
-        App.viewPane = layoutController.getViewPane();
+        App.singleton.viewPane = layoutController.getViewPane();
 
-        final Scene scene = new Scene(root, 1280, 720);
+        scene = new Scene(loadedLayout, 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Navigation.navigate(Screen.LOGIN);
+        Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
     }
 
