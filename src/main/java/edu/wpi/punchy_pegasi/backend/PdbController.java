@@ -1,6 +1,8 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
+import edu.wpi.punchy_pegasi.frontend.FlowerDeliveryRequestEntry;
+import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -24,6 +27,22 @@ public class PdbController {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
             log.error("Failed to connect to db :", e);
+        }
+    }
+
+    private static String objectToPsqlString(Object o) {
+        return objectToPsqlString(o, true);
+    }
+
+    private static String objectToPsqlString(Object o, boolean first) {
+        if (o instanceof String) {
+            return "'" + o + "'";
+        } else if (o instanceof List<?>) {
+            return (first ? "ARRAY" : "") + "[" + String.join(", ", ((List<?>) o).stream().map(v -> objectToPsqlString(v, false)).toList()) + "]";
+        } else if (o instanceof Object[]) {
+            return (first ? "ARRAY" : "") + "[" + String.join(", ", Arrays.stream((Object[]) o).map(v -> objectToPsqlString(v, false)).toList()) + "]";
+        } else {
+            return o.toString();
         }
     }
 
@@ -39,6 +58,7 @@ public class PdbController {
 
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
+        statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
         var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase();
         switch (tableType) {
             case NODES -> {
@@ -53,13 +73,40 @@ public class PdbController {
             case LOCATIONNAMES -> {
                 var ret2 = statement.execute(query + "(" + "longName varchar, " + "shortName varchar, " + "nodeType varchar" + ");");
             }
+            case FOODREQUESTS -> {
+                var ret2 = statement.execute(query + "(" +
+                        "serviceID uuid NOT NULL DEFAULT uuid_generate_v4()," + // if pass null, psql will generate a uuid
+                        "patientName varchar(100)," +
+                        "roomNumber varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "foodSelection varchar(100)," +
+                        "tempType varchar(50)," +
+                        "additionalItems varchar(100) ARRAY," +
+                        "dietaryRestrictions varchar(1000)," +
+                        "PRIMARY KEY (serviceID)" +
+                        ");");
+            }
+            case FLOWERREQUESTS -> {
+                var ret2 = statement.execute(query + "(" +
+                        "serviceID uuid NOT NULL DEFAULT uuid_generate_v4()," + // if pass null, psql will generate a uuid
+                        "patientName varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "flowerSize varchar(100)," +
+                        "roomNumber varchar(100)," +
+                        "flowerAmount varchar(100)," +
+                        "flowerType varchar(100)," +
+                        "PRIMARY KEY (serviceID)" +
+                        ");");
+            }
+
+
         }
     }
 
     private String getFieldValueString(String[] fields, Object[] values, String delimiter) {
         String query = "";
         for (int i = 0; i < fields.length; i++) {
-            query += fields[i] + " = " + values[i];
+            query += fields[i] + " = " + objectToPsqlString(values[i]);
             if (i != fields.length - 1) query += delimiter;
         }
         return query;
@@ -105,7 +152,7 @@ public class PdbController {
             var query = "INSERT INTO teamp." + tableType.name().toLowerCase() + " (";
             query += String.join(", ", fields);
             query += ") VALUES (";
-            query += String.join(", ", Arrays.stream(values).map(Object::toString).toList());
+            query += String.join(", ", Arrays.stream(values).map(PdbController::objectToPsqlString).toList());
             query += ");";
             return statement.executeUpdate(query);
         } catch (SQLException e) {
@@ -271,7 +318,15 @@ public class PdbController {
     }
 
     public enum TableType {
-        NODES(Node.class), EDGES(Edge.class), MOVES(Move.class), LOCATIONNAMES(LocationName.class);
+        NODES(Node.class),
+        EDGES(Edge.class),
+        MOVES(Move.class),
+        LOCATIONNAMES(LocationName.class),
+
+        FOODREQUESTS(FoodServiceRequestEntry.class),
+
+        FLOWERREQUESTS(FlowerDeliveryRequestEntry.class);
+
         @Getter
         private final Class clazz;
 

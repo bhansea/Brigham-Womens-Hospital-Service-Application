@@ -1,12 +1,17 @@
 package edu.wpi.punchy_pegasi.frontend;
 
-import java.util.List;
+import lombok.Data;
+import lombok.Getter;
 
+import java.util.List;
+@Getter
 public class FoodServiceRequestEntry extends RequestEntry {
+
     private final String foodSelection;
     private final String tempType;
     private final List<String> additionalItems;
     private final String dietaryRestrictions;
+
 
     public FoodServiceRequestEntry(
             String patientName,
