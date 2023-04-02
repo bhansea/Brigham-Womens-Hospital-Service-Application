@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
 <?import net.kurobako.gesturefx.GesturePane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-
-<BorderPane fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.MapPageController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.MapPageController">
    <center>
-      <GesturePane fx:id="gesturePane" scrollMode="ZOOM" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
-      </GesturePane>
+      <VBox >
+         <padding>
+            <Insets topRightBottomLeft="20.0"/>
+         </padding>
+         <GridPane VBox.vgrow="ALWAYS"
+                   style="-fx-border-color: black; -fx-border-style: solid inside; -fx-border-width: 3; -fx-border-radius: 3">
+            <GesturePane style="-fx-background-color: #D9D9D9" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"
+                         GridPane.vgrow="ALWAYS" fx:id="gesturePane" maxScale="1.0" minScale="0.1"
+                         BorderPane.alignment="CENTER"/>
+         </GridPane>
+      </VBox>
    </center>
+   <top>
+      <HBox fx:id="buttonContainer" alignment="CENTER" HBox.hgrow="ALWAYS" spacing="25.0" BorderPane.alignment="CENTER">
+         <children>
+
+         </children>
+      </HBox>
+   </top>
 </BorderPane>
