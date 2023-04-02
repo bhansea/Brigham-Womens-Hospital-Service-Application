@@ -2,11 +2,17 @@ package edu.wpi.punchy_pegasi.backend;
 
 import edu.wpi.punchy_pegasi.frontend.App;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static edu.wpi.punchy_pegasi.backend.PdbController.TableType.*;
 
+@Slf4j
 public class NodeDaoImpl implements IDao<Node, Long> {
     private final HashMap<Long, Node> nodes;
     private final PdbController dbController = App.getSingleton().getPdb();
@@ -17,11 +23,19 @@ public class NodeDaoImpl implements IDao<Node, Long> {
 
     @Override
     public Optional<Node> get(Long key) {
-        return Optional.ofNullable(nodes.get(key));
+        try {
+            ResultSet nodes = dbController.searchQuery(NODES, "nodeID", key);
+            Node node = new Node(nodes.getLong("nodeID"), nodes.getInt("xcoord"), nodes.getInt("ycoord"), nodes.getString("floor"), nodes.getString("building"));
+            return Optional.ofNullable(node);
+        } catch (PdbController.DatabaseException | SQLException e){
+            log.error(e.getMessage());
+            return Optional.empty();
+        }
     }
 
     @Override
     public Map<Long, Node> getAll() {
+        
         return nodes;
     }
 
