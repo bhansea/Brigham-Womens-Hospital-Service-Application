@@ -2,15 +2,31 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.ServiceRequestController">
    <center>
       <HBox prefHeight="374.0" prefWidth="363.0" BorderPane.alignment="CENTER">
          <children>
-            <MFXTextField fx:id="servSearchBar" floatMode="ABOVE" onKeyPressed="#showReq" promptText="Search for service requests..." />
-            <MFXButton style="-fx-background-color: green;" text="Submit" />
+            <StackPane>
+               <children>
+                  <MFXTextField fx:id="servSearchBar" floatMode="ABOVE" onKeyPressed="#showReq" prefHeight="30.0" prefWidth="198.0" promptText="Search for service requests..." />
+               </children>
+               <padding>
+                  <Insets left="150.0" />
+               </padding>
+            </StackPane>
+            <StackPane>
+               <children>
+                  <MFXButton prefHeight="26.0" prefWidth="75.0" style="-fx-background-color: green;" text="Submit" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </StackPane>
          </children>
       </HBox>
    </center>
