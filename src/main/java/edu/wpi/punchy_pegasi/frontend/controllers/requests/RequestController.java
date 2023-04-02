@@ -24,6 +24,8 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected TextField roomNumber;
     @FXML
+    protected TextField staffAssignment;
+    @FXML
     protected TextField additionalNotes;
     @FXML
     protected Button submit;
@@ -81,12 +83,13 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (patientName.getText().isBlank() || roomNumber.getText().isBlank());
+        return (patientName.getText().isBlank() || roomNumber.getText().isBlank() || staffAssignment.getText().isBlank());
     }
 
     protected void clearGeneric() {
         patientName.clear();
         roomNumber.clear();
+        staffAssignment.clear();
         additionalNotes.clear();
     }
 }

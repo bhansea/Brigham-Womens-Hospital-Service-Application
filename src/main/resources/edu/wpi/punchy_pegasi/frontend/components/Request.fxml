@@ -48,6 +48,20 @@
                                 </TextField>
                             </children>
                         </HBox>
+                  <Label text="Staff Assignment" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <TextField fx:id="staffAssignment" alignment="CENTER" onKeyReleased="#validateEntry" promptText="Assign Staff Member">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
                         <Label text="Additional Notes" textFill="WHITE">
                             <font>
                                 <Font size="24.0" />

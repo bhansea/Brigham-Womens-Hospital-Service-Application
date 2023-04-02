@@ -34,7 +34,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
 
     @FXML
     public void submitEntry() {
-        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), roomNumber.getText(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
         Navigation.navigate(Screen.HOME);
     }
 
