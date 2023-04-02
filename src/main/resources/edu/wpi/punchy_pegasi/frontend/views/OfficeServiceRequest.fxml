@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -8,6 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.OfficeServiceRequestController">
     <center>
@@ -18,16 +20,16 @@
                         <Insets />
                     </VBox.margin>
                     <children>
-                        <Label text="Office Supply Service Request">
+                        <Label minWidth="475.0" text="Office Supply Service Request">
                             <font>
                                 <Font size="36.0" />
                             </font>
                         </Label>
                     </children>
                 </VBox>
-                <VBox prefWidth="242.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label text="Enter Office Supplies to Request">
+                        <Label minWidth="350.0" text="Enter Office Supplies to Request">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -35,7 +37,10 @@
                                 <Insets left="10.0" />
                             </VBox.margin>
                         </Label>
-                  <TextField promptText="Enter supplies" />
+                  <TextField fx:id="officeRequest" prefWidth="475.0" promptText="Enter supplies">
+                     <font>
+                        <Font size="15.0" />
+                     </font></TextField>
                     </children>
                 </VBox>
             </children>
@@ -59,7 +64,10 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                        <TextField fx:id="employeeName" promptText="Enter employee name" />
+                        <TextField fx:id="employeeName" promptText="Enter employee name">
+                           <font>
+                              <Font size="15.0" />
+                           </font></TextField>
                             </children>
                         </HBox>
                         <Label alignment="TOP_LEFT" text="Room Number" textFill="WHITE">
@@ -69,7 +77,10 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                        <TextField fx:id="roomNum" promptText="Enter room number" />
+                        <TextField fx:id="roomNum" promptText="Enter room number">
+                           <font>
+                              <Font size="15.0" />
+                           </font></TextField>
                             </children>
                         </HBox>
                         <Label text="Additional Notes" textFill="WHITE">
@@ -98,19 +109,19 @@
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
-                    <children>
-                        <Button fx:id="submit" onAction="#submitEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="WHITE">
-                            <font>
-                                <Font size="36.0" />
-                            </font>
-                        </Button>
-                    </children>
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
                     </padding>
+               <children>
+                  <MFXButton fx:id="submit" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="#fdfafa" translateY="10.0">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </MFXButton>
+               </children>
                 </VBox>
             </children>
             <padding>
@@ -121,16 +132,17 @@
     <left>
         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
-                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
-                    <children>
-                  <Label text="Office Supplies" />
-                    </children>
-                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" />
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../assets/officeSuppliesPic.png" />
                </image>
             </ImageView>
+            <Label style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" text="Office Supplies">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
             </children>
             <BorderPane.margin>
                 <Insets />
