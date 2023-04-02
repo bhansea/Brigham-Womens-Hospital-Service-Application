@@ -1,13 +1,12 @@
 package edu.wpi.punchy_pegasi.backend;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class EdgeDaoImpl implements IDao<Edge, Long> {
-    private HashMap<Long, Edge> edges;
-    private PdbController dbController = PdbController.getSingleton();
+    private final HashMap<Long, Edge> edges;
+    private final PdbController dbController = PdbController.getSingleton();
 
     public EdgeDaoImpl() {
         edges = new HashMap<Long, Edge>();

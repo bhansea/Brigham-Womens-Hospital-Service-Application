@@ -10,9 +10,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> {
+public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> implements PropertyChangeListener {
     FoodServiceRequestEntry entry;
     @FXML
     TextField dietaryRestrictions;
@@ -22,8 +24,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     TextField roomNumber;
     @FXML
     TextField additionalNotes;
-    @FXML
-    TextField staffAssignment;
     @FXML
     RadioButton hot;
     @FXML
@@ -44,16 +44,16 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     ToggleGroup temp;
 
     public static BorderPane create() {
+        var cont = new FoodServiceRequestController();
         return RequestController.create(new FoodServiceRequestController(), "views/FoodServiceRequest.fxml");
     }
 
     @FXML
     public void init() {
-        ObservableList<String> mealList =
-                FXCollections.observableArrayList(
-                        "Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
+        ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
         submit.setDisable(true);
+        this.addPropertyChangeListener(this);
     }
 
     @FXML
@@ -76,36 +76,25 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         }
 
         //makes sure shared fields aren't empty
-        if (this.checkSumbit())
-            return;
-        requestEntry =
-
-                entry =
-                        new FoodServiceRequestEntry(
-                                patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
         Navigation.navigate(Screen.HOME);
+    }
+
+    @Override
+    protected void fieldChanged(String id, Object oldValue, Object newValue) {
+        validateEntry();
     }
 
     @FXML
     public void validateEntry() {
-        boolean validate = patientName.getText().isBlank()
-                || patientName.getText().isBlank()
-                || roomNumber.getText().isBlank()
-                || staffAssignment.getText().isBlank()
-                || additionalNotes.getText().isBlank()
-                || dietaryRestrictions.getText().isBlank()
-                || temp.getSelectedToggle() == null
-                || mealDropdown.getSelectedItem() == null;
+        boolean validate = validateGeneric() || dietaryRestrictions.getText().isBlank() || temp.getSelectedToggle() == null || mealDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 
     @FXML
     public void clearEntry() {
+        clearGeneric();
         mealDropdown.clear();
-        patientName.clear();
-        roomNumber.clear();
-        staffAssignment.clear();
-        additionalNotes.clear();
         dietaryRestrictions.clear();
         napkins.setSelected(false);
         utensils.setSelected(false);
@@ -113,5 +102,10 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         hot.setSelected(false);
         warm.setSelected(false);
         cold.setSelected(false);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().endsWith("TextChanged")) validateEntry();
     }
 }

@@ -5,8 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocationNameDaoImpl implements IDao<LocationName, String> {
-    private HashMap<String, LocationName> locationNames;
-    private PdbController dbController = PdbController.getSingleton();
+    private final HashMap<String, LocationName> locationNames;
+    private final PdbController dbController = PdbController.getSingleton();
+
     public LocationNameDaoImpl() {
         this.locationNames = new HashMap<>();
     }

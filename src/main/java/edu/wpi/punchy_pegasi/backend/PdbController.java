@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 @Slf4j
 public class PdbController {
@@ -21,6 +20,7 @@ public class PdbController {
             super(e);
         }
     }
+
     private static Connection connection;
     private static String url;
     private static String username;
@@ -36,8 +36,9 @@ public class PdbController {
     }
 
     static private PdbController singleton;
-    static public PdbController getSingleton(){
-        if(singleton!=null){
+
+    static public PdbController getSingleton() {
+        if (singleton != null) {
             return singleton;
         } else {
             singleton = new PdbController(url, username, password);
@@ -120,9 +121,9 @@ public class PdbController {
             log.info("Exported table successfully");
         } catch (SQLException | IOException e) {
             log.error("Failed to export table:", e);
-            if(e instanceof  IOException)
+            if (e instanceof IOException)
                 throw new DatabaseException("Failed to open selected file");
-            else if(e instanceof SQLException)
+            else if (e instanceof SQLException)
                 throw new DatabaseException("Table does not exist");
         }
     }
@@ -233,7 +234,8 @@ public class PdbController {
 //            throw (e);
 //        }
     }
-//
+
+    //
     // delete node from database
     public void deleteNode(String nodeID) throws SQLException {
 //        try {
@@ -245,7 +247,8 @@ public class PdbController {
 //            throw (e);
 //        }
     }
-//
+
+    //
     // delete edge from database
     public void deleteEdge(String edgeID) throws SQLException {
 //        try {
@@ -257,8 +260,9 @@ public class PdbController {
 //            throw (e);
 //        }
     }
-//
-    private void updateNode(String nodeID, String column, String value) throws SQLException{
+
+    //
+    private void updateNode(String nodeID, String column, String value) throws SQLException {
 //        try{
 //            var statement = connection.createStatement();
 //            statement.executeUpdate("UPDATE teamp.Nodes SET " + column + " = " + value + " WHERE nodeID = '" + nodeID + "';");
@@ -268,7 +272,7 @@ public class PdbController {
 //        }
     }
 
-    private void updateEdge(String edgeID, String column, String value) throws SQLException{
+    private void updateEdge(String edgeID, String column, String value) throws SQLException {
 //        try{
 //            var statement = connection.createStatement();
 //            var ret = statement.execute("UPDATE teamp.Edges SET " + column + " = " + value + " WHERE edgeID = '" + edgeID + "';");
@@ -277,7 +281,8 @@ public class PdbController {
 //            throw (e);
 //        }
     }
-//
+
+    //
     public void updateNodeName(String nodeID, String longName, String shortName) throws DatabaseException {
 //        Node newNode = NodeMap.get(nodeID);
 //        try {

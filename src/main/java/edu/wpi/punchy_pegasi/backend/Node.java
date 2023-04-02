@@ -11,7 +11,7 @@ public class Node implements INode {
     private String floor;
     private String building;
 
-    public Node(long nodeID, int xcoord, int ycoord, String floor, String building){
+    public Node(long nodeID, int xcoord, int ycoord, String floor, String building) {
         this.nodeID = nodeID;
         this.xcoord = xcoord;
         this.ycoord = ycoord;
