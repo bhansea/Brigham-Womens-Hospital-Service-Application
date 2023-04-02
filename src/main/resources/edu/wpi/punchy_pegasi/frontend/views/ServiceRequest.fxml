@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f1f1f1;"
-            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.ServiceRequestController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.ServiceRequestController">
    <center>
-      <StackPane prefHeight="342.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="374.0" prefWidth="363.0" BorderPane.alignment="CENTER">
          <children>
-            <MFXTextField fx:id="servSearchBar" floatMode="ABOVE" onKeyPressed="#showReq" prefHeight="30.0" prefWidth="366.0" promptText="Search for service requests..." />
+            <MFXTextField fx:id="servSearchBar" floatMode="ABOVE" onKeyPressed="#showReq" promptText="Search for service requests..." />
+            <MFXButton style="-fx-background-color: green;" text="Submit" />
          </children>
-      </StackPane>
+      </HBox>
    </center>
 </BorderPane>
