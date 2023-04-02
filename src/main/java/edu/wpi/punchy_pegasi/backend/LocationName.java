@@ -1,15 +1,14 @@
 package edu.wpi.punchy_pegasi.backend;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
+@Data
 public class LocationName {
     private String longName;
     private String shortName;
     private NodeType nodeType;
 
-    public LocationName(String longName, String shortName, NodeType nodeType){
+    public LocationName(String longName, String shortName, NodeType nodeType) {
         this.longName = longName;
         this.shortName = shortName;
         this.nodeType = nodeType;

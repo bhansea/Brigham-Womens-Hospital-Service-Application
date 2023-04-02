@@ -27,7 +27,7 @@ public class Palgo<T extends INode> {
         while (!queue.isEmpty()) {
             var current = queue.poll();
             for (var adjNode : graph.getConnections(current.getCurrent())) {
-                if(allNodes.containsKey(adjNode))
+                if (allNodes.containsKey(adjNode))
                     continue;
                 var nextNode = new RouteNode<>(adjNode);
                 nextNode.setPrevious(current.getCurrent());

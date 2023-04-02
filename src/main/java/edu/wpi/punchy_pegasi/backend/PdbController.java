@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.backend;
 
 
 import lombok.Cleanup;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -10,21 +11,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 @Slf4j
 public class PdbController {
-    public class DatabaseException extends Exception {
-        public DatabaseException(String e) {
-            super(e);
-        }
-    }
     private static Connection connection;
     private static String url;
     private static String username;
     private static String password;
+    static private PdbController singleton;
 
 
     private PdbController(String url, String username, String password) {
@@ -35,9 +32,8 @@ public class PdbController {
         }
     }
 
-    static private PdbController singleton;
-    static public PdbController getSingleton(){
-        if(singleton!=null){
+    static public PdbController getSingleton() {
+        if (singleton != null) {
             return singleton;
         } else {
             singleton = new PdbController(url, username, password);
@@ -45,27 +41,9 @@ public class PdbController {
         }
     }
 
-//    public Node getNode(String nodeID) throws DatabaseException{
-//        Node node = NodeMap.get(nodeID);
-//        if(node == null) {
-//            throw new DatabaseException("nodeID does not exist");
-//        } else {
-//            return node;
-//        }
-//    }
-
-//    public Edge getEdge(String edgeID) throws DatabaseException{
-//        Edge edge = EdgeMap.get(edgeID);
-//        if(edge == null) {
-//            throw new DatabaseException("edgeID does not exist");
-//        } else {
-//            return edge;
-//        }
-//    }
-
-    public void initTableByType(TableType tableType, String tableName) throws DatabaseException {
+    public void initTableByType(TableType tableType) throws DatabaseException {
         try {
-            initTable(tableType, tableName);
+            initTable(tableType);
             System.out.println("Table initialized");
         } catch (SQLException e) {
             log.error("Failed to Initialize table", e);
@@ -73,45 +51,152 @@ public class PdbController {
         }
     }
 
-    private void initTable(TableType tableType, String tableName) throws SQLException {
+    private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
+        var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase();
         switch (tableType) {
             case NODES -> {
-                var ret = statement.execute("CREATE TABLE IF NOT EXISTS " +
-                        tableName +
-                        "(" +
-                        "nodeID varchar PRIMARY KEY, " +
-                        "xcoord int, " +
-                        "ycoord int, " +
-                        "floor varchar, " +
-                        "building varchar);");
+                var ret = statement.execute(query + "(" + "nodeID varchar PRIMARY KEY, " + "xcoord int, " + "ycoord int, " + "floor varchar, " + "building varchar);");
             }
             case EDGES -> {
-                var ret2 = statement.execute("CREATE TABLE IF NOT EXISTS " +
-                        tableName +
-                        "(" +
-                        "startNode varchar, " +
-                        "endNode varchar);");
+                var ret2 = statement.execute(query + "(" + "startNode varchar, " + "endNode varchar);");
             }
             case MOVES -> {
-                var ret2 = statement.execute("CREATE TABLE IF NOT EXISTS " +
-                        tableName +
-                        "(" +
-                        "nodeID int, " +
-                        "longName varchar" +
-                        "date varchar" +
-                        ");");
+                var ret2 = statement.execute(query + "(" + "nodeID int, " + "longName varchar" + "date varchar" + ");");
             }
             case LOCATIONNAMES -> {
-                var ret2 = statement.execute("CREATE TABLE IF NOT EXISTS " +
-                        tableName +
-                        "(" +
-                        "longName varchar " +
-                        "shortName varchar" +
-                        "nodeType varchar" +
-                        ");");
+                var ret2 = statement.execute(query + "(" + "longName varchar " + "shortName varchar" + "nodeType varchar" + ");");
             }
         }
+    }
+
+    private String getFieldValueString(String[] fields, Object[] values, String delimiter) {
+        String query = "";
+        for (int i = 0; i < fields.length; i++) {
+            query += fields[i] + " = " + values[i];
+            if (i != fields.length - 1) query += delimiter;
+        }
+        return query;
+    }
+
+    /**
+     * Updates all entries in tableType table where the entries fields[0] value matches object[0]
+     *
+     * @param tableType
+     * @param fields
+     * @param values
+     * @return The number of rows updated
+     * @throws DatabaseException
+     */
+    public int updateQuery(TableType tableType, String[] fields, Object[] values) throws DatabaseException {
+        if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
+        try {
+            var statement = connection.createStatement();
+            var query = "UPDATE teamp." + tableType.name().toLowerCase() + " SET ";
+            getFieldValueString(fields, values, ", ");
+            query += " WHERE " + fields[0] + " = " + values[0];
+            var ret = statement.executeUpdate(query);
+            return ret;
+        } catch (SQLException e) {
+            log.error("Failed to update node", e);
+            throw new DatabaseException("SQL error");
+        }
+    }
+
+    /**
+     * Inserts a new entry into the tableType table
+     *
+     * @param tableType
+     * @param fields
+     * @param values
+     * @return The number of rows inserted
+     * @throws DatabaseException
+     */
+    public int insertQuery(TableType tableType, String[] fields, Object[] values) throws DatabaseException {
+        if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
+        try {
+            var statement = connection.createStatement();
+            var query = "INSERT INTO teamp." + tableType.name().toLowerCase() + " (";
+            query += String.join(", ", fields);
+            query += ") VALUES (";
+            query += String.join(", ", Arrays.stream(values).map(Object::toString).toList());
+            query += ");";
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            log.error("Failed to insert node", e);
+            throw new DatabaseException("SQL er ror");
+        }
+    }
+
+    /**
+     * Deletes all entries in tableType table whose fields match the given values
+     *
+     * @param tableType
+     * @param field
+     * @param value
+     * @return The number of rows deleted
+     * @throws DatabaseException
+     */
+    public int deleteQuery(TableType tableType, String[] field, Object[] value) throws DatabaseException {
+        if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
+        try {
+            var statement = connection.createStatement();
+            var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
+            query += getFieldValueString(field, value, " AND ");
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            log.error("Failed to delete node", e);
+            throw new DatabaseException("SQL error");
+        }
+    }
+
+    /**
+     * Deletes all entries in tableType table whose value for "field" matches the given value
+     *
+     * @param tableType
+     * @param field
+     * @param value
+     * @return The number of rows deleted
+     * @throws DatabaseException
+     */
+    public int deleteQuery(TableType tableType, String field, Object value) throws DatabaseException {
+        return deleteQuery(tableType, new String[]{field}, new Object[]{value});
+    }
+
+    /**
+     * Searches for all entries in tableType table whose fields match the given values
+     *
+     * @param tableType
+     * @param fields
+     * @param values
+     * @return A list of all matching entries
+     * @throws DatabaseException
+     */
+    public ResultSet searchQuery(TableType tableType, String[] fields, Object[] values) throws DatabaseException {
+        if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
+        try {
+            var statement = connection.createStatement();
+            var query = "SELECT * FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
+            query += getFieldValueString(fields, values, " AND ");
+            query += ";";
+            return statement.executeQuery(query);
+        } catch (SQLException e) {
+            log.error("Failed to search node", e);
+            throw new DatabaseException("SQL error");
+        }
+    }
+
+    /**
+     * Searches for all entries in tableType table whose value for "field" matches the given value
+     *
+     * @param tableType
+     * @param field
+     * @param value
+     * @return A list of all matching entries
+     * @throws DatabaseException
+     */
+    public ResultSet searchQuery(TableType tableType, String field, Object value) throws DatabaseException {
+        return searchQuery(tableType, new String[]{field}, new Object[]{value});
     }
 
     public void exportTable(String path, String tableName) throws DatabaseException {
@@ -120,10 +205,8 @@ public class PdbController {
             log.info("Exported table successfully");
         } catch (SQLException | IOException e) {
             log.error("Failed to export table:", e);
-            if(e instanceof  IOException)
-                throw new DatabaseException("Failed to open selected file");
-            else if(e instanceof SQLException)
-                throw new DatabaseException("Table does not exist");
+            if (e instanceof IOException) throw new DatabaseException("Failed to open selected file");
+            else if (e instanceof SQLException) throw new DatabaseException("Table does not exist");
         }
     }
 
@@ -161,8 +244,7 @@ public class PdbController {
         reader = new BufferedReader(new FileReader(path));
 
         var sb = new StringBuilder();
-        sb.append("INSERT INTO ").append(tableName)
-                .append("(").append(reader.readLine()).append(") VALUES ");
+        sb.append("INSERT INTO ").append(tableName).append("(").append(reader.readLine()).append(") VALUES ");
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -199,158 +281,19 @@ public class PdbController {
         }
     }
 
-    // read csv file and insert into database
-    public void insertNode(Node node) throws SQLException {
-//        try {
-//            var statement = connection.createStatement();
-//            var ret = statement.execute("INSERT INTO teamp.Nodes VALUES (" +
-//                    "'" + node.getNodeID() + "', " +
-//                    node.getXcoord() + ", " +
-//                    node.getYcoord() + ", " +
-//                    "'" + node.getFloor() + "', " +
-//                    "'" + node.getBuilding() + "', " +
-//                    "'" + node.nodeType + "', " +
-//                    "'" + node.longName + "', " +
-//                    "'" + node.shortName + "');");
-//            NodeMap.put(node.nodeID,node);
-//        } catch (SQLException e) {
-//            log.error("Failed to insert node", e);
-//            throw (e);
-//        }
-    }
-
-    // parse csv file and insert into database
-    public void insertEdge(Edge edge) throws SQLException {
-//        try {
-//            var statement = connection.createStatement();
-//            var ret = statement.execute("INSERT INTO teamp.Edges VALUES (" +
-//                    "'" + edge.edgeID + "', " +
-//                    "'" + edge.startNode + "', " +
-//                    "'" + edge.endNode + "');");
-//            EdgeMap.put(edge.edgeID, edge);
-//        } catch (SQLException e) {
-//            log.error("Failed to insert edge", e);
-//            throw (e);
-//        }
-    }
-//
-    // delete node from database
-    public void deleteNode(String nodeID) throws SQLException {
-//        try {
-//            var statement = connection.createStatement();
-//            var ret = statement.execute("DELETE FROM teamp.Nodes WHERE nodeID = '" + nodeID + "';");
-//            NodeMap.remove(nodeID);
-//        } catch (SQLException e) {
-//            log.error("Failed to delete node", e);
-//            throw (e);
-//        }
-    }
-//
-    // delete edge from database
-    public void deleteEdge(String edgeID) throws SQLException {
-//        try {
-//            var statement = connection.createStatement();
-//            var ret = statement.execute("DELETE FROM teamp.Edges WHERE edgeID = '" + edgeID + "';");
-//            EdgeMap.remove(edgeID);
-//        } catch (SQLException e) {
-//            log.error("Failed to delete edge", e);
-//            throw (e);
-//        }
-    }
-//
-    private void updateNode(String nodeID, String column, String value) throws SQLException{
-//        try{
-//            var statement = connection.createStatement();
-//            statement.executeUpdate("UPDATE teamp.Nodes SET " + column + " = " + value + " WHERE nodeID = '" + nodeID + "';");
-//        } catch (SQLException e) {
-//            log.error("Failed to update node", e);
-//            throw (e);
-//        }
-    }
-
-    private void updateEdge(String edgeID, String column, String value) throws SQLException{
-//        try{
-//            var statement = connection.createStatement();
-//            var ret = statement.execute("UPDATE teamp.Edges SET " + column + " = " + value + " WHERE edgeID = '" + edgeID + "';");
-//        } catch (SQLException e) {
-//            log.error("Failed to update edge");
-//            throw (e);
-//        }
-    }
-//
-    public void updateNodeName(String nodeID, String longName, String shortName) throws DatabaseException {
-//        Node newNode = NodeMap.get(nodeID);
-//        try {
-//            updateNode(nodeID, "longname", longName);
-//            newNode.longName = longName.substring(1,longName.length()-1);
-//            updateNode(nodeID, "shortname", shortName);
-//            newNode.shortName = shortName.substring(1,shortName.length()-1);
-//            NodeMap.put(nodeID, newNode);
-//        } catch (SQLException e) {
-//            log.error("Unable to update node", e);
-//            throw new DatabaseException("Unable to update node");
-//        }
-    }
-
-    public void updateNodeCoordinate(String nodeID, String xcoord, String ycoord) throws DatabaseException {
-//        Node newNode = NodeMap.get(nodeID);
-//        try {
-//            updateNode(nodeID, "xcoord", xcoord);
-//            newNode.xcoord = Integer.parseInt(xcoord);
-//            updateNode(nodeID, "ycoord", ycoord);
-//            newNode.ycoord = Integer.parseInt(ycoord);
-//            NodeMap.put(nodeID, newNode);
-//        } catch (SQLException e) {
-//            log.error("Unable to update node", e);
-//            throw new DatabaseException("Unable to update node");
-//        }
-    }
-
-//    public List<Node> syncNodes() throws DatabaseException {
-//        try {
-//            var statement = connection.createStatement();
-//            var result = statement.executeQuery("SELECT * FROM nodes");
-//            var nodes = new ArrayList<Node>();
-//            while (result.next()) {
-//                var nodeID = result.getString("nodeID");
-//                var xcoord = result.getInt("xcoord");
-//                var ycoord = result.getInt("ycoord");
-//                var floor = result.getString("floor");
-//                var nodeType = Node.NodeType.CONF;// Node.NodeType.valueOf(result.getString("nodeType"));
-//                var building = result.getString("building");
-//                var longName = result.getString("longName");
-//                var shortName = result.getString("shortName");
-//                var node = new Node(nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName);
-//                nodes.add(node);
-//                NodeMap.put(nodeID, node);
-//            }
-//            return nodes;
-//        } catch (SQLException e) {
-//            log.error("Failed to get node", e);
-//            throw new DatabaseException("Failed to get nodes");
-//        }
-//    }
-
-//    public List<Edge> syncEdges() throws DatabaseException {
-//        try {
-//            var statement = connection.createStatement();
-//            var result = statement.executeQuery("SELECT * FROM edges");
-//            var edges = new ArrayList<Edge>();
-//            while (result.next()) {
-//                var edgeID = result.getString("edgeID");
-//                var startNode = result.getString("startNode");
-//                var endNode = result.getString("endNode");
-//                var edge = new Edge(edgeID, startNode, endNode);
-//                EdgeMap.put(edgeID, edge);
-//            }
-//            return edges;
-//        } catch (SQLException e) {
-//            log.error("Failed to get node", e);
-//            throw new DatabaseException("Failed to get edges");
-//        }
-//    }
-
     public enum TableType {
-        NODES, EDGES, MOVES, LOCATIONNAMES
+        NODES(Node.class), EDGES(Edge.class), MOVES(Move.class), LOCATIONNAMES(LocationName.class);
+        @Getter
+        private final Class clazz;
+
+        TableType(Class clazz) {
+            this.clazz = clazz;
+        }
+    }
+
+    public class DatabaseException extends Exception {
+        public DatabaseException(String e) {
+            super(e);
+        }
     }
 }

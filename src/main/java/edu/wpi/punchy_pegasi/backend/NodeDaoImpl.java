@@ -6,8 +6,9 @@ import java.util.Optional;
 
 
 public class NodeDaoImpl implements IDao<Node, Long> {
-    private HashMap<Long, Node> nodes;
-    private PdbController dbController = PdbController.getSingleton();
+    private final HashMap<Long, Node> nodes;
+    private final PdbController dbController = PdbController.getSingleton();
+
     public NodeDaoImpl() {
         nodes = new HashMap<Long, Node>();
     }
@@ -34,9 +35,9 @@ public class NodeDaoImpl implements IDao<Node, Long> {
         if (params.length != 5) {
             //TODO: throw error
         } else {
-            newNode.setNodeID(((Long)params[0]));
-            newNode.setXcoord(((Integer)params[1]).intValue());
-            newNode.setYcoord(((Integer)params[2]).intValue());
+            newNode.setNodeID(((Long) params[0]));
+            newNode.setXcoord(((Integer) params[1]).intValue());
+            newNode.setYcoord(((Integer) params[2]).intValue());
             newNode.setFloor(params[3].toString());
             newNode.setBuilding((params[4]).toString());
             nodes.put(key, node);
