@@ -67,21 +67,17 @@ public class App extends Application {
         /* primaryStage is generally only used if one of your components require the stage to display */
         App.singleton.primaryStage = primaryStage;
 
-        final FXMLLoader loader = new FXMLLoader(App.class.getResource("views/Root.fxml"));
-        final BorderPane root = loader.load();
-
         final var layoutLoader = new FXMLLoader(App.class.getResource("views/Layout.fxml"));
         final BorderPane loadedLayout = layoutLoader.load();
         final LayoutController layoutController = layoutLoader.getController();
 
-        root.setCenter(loadedLayout);
         App.singleton.viewPane = layoutController.getViewPane();
 
-        scene = new Scene(root, 1280, 720);
+        scene = new Scene(loadedLayout, 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Navigation.navigate(Screen.LOGIN);
+        Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
     }
 
