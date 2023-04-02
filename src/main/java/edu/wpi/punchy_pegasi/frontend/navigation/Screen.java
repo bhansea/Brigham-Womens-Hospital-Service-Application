@@ -24,12 +24,12 @@ public enum Screen {
     private final String readable;
 
     Screen(String readable, Supplier<? extends Parent> supplier) {
+        this.readable = readable.toUpperCase();
         this.supplier = supplier;
-        this.readable = readable;
     }
 
     Screen(String readable, String path) {
-        this.readable = readable;
+        this.readable = readable.toUpperCase();
         this.supplier = new Supplier<Parent>() {
             @Override
             public Parent get() {

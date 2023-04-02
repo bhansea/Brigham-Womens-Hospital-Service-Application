@@ -1,0 +1,54 @@
+.link-parent {
+    -fx-background-color: #012D5A;
+    -fx-background-radius: 3;
+    -fx-cursor: pointer;
+    -fx-alignment: center;
+}
+
+.link-parent:hover {
+    -fx-background-color: white;
+    -fx-border-color: #012D5A;
+    -fx-border-width: 7;
+    -fx-border-style: solid outside;
+    -fx-border-radius: 1;
+}
+
+.link-parent:hover .link-arrow {
+    -fx-background-color: black;
+}
+
+.link-parent:hover .link-button {
+    -fx-text-fill: black;
+}
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-content-display: center;
+}
+
+.link-arrow-border {
+    -fx-alignment: center;
+    -fx-border-color: #f6bd38;
+    -fx-border-radius: 3;
+    -fx-border-width: 2;
+    -size: 24;
+    -fx-min-height: -size;
+    -fx-max-height: -size;
+    -fx-min-width: -size;
+    -fx-max-width: -size;
+}
+
+.link-arrow {
+    -fx-background-color: white;
+    -height: 17.147;
+    -fx-min-height: -height;
+    -fx-max-height: -height;
+    -width: 9.5869;
+    -fx-min-width: -width;
+    -fx-max-width: -width;
+    -fx-scale-x: .6;
+    -fx-scale-y: .6;
+}

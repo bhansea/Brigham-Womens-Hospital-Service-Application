@@ -2,38 +2,39 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 <fx:root type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          onMouseClicked="#onMouseClick"
-         maxHeight="100.0" maxWidth="1.7976931348623157E308"
-         style="-fx-background-color: #012D5A; -fx-background-radius: 6;" alignment="CENTER">
+         maxHeight="44" minHeight="44"
+         styleClass="link-parent">
     <padding>
         <Insets right="10"/>
     </padding>
     <children>
         <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <children>
-                <Button alignment="CENTER" contentDisplay="CENTER"
-                        onMouseClicked="#onMouseClick"
-                        mnemonicParsing="false"
-                        style="-fx-background-color: transparent;"
-                        textFill="WHITE"
-                        wrapText="true" fx:id="button"/>
+                <Button onMouseClicked="#onMouseClick" fx:id="button" styleClass="link-button">
+                    <font>
+                        <Font size="15"/>
+                    </font>
+                </Button>
             </children>
         </VBox>
-        <HBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0"
-              minWidth="15.0" style="-fx-border-color: #f6bd38;">
-            <children>
-                <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </Label>
-            </children>
+        <HBox styleClass="link-arrow-border">
+            <Region styleClass="link-arrow">
+                <shape>
+                    <SVGPath>
+                        <content>
+                            M 8.574 7.56 1.013 0 0 1.013 7.56 8.574 0 16.134 1.013 17.147 8.574 9.587 9.587 8.574 8.574
+                            7.56z
+                        </content>
+                    </SVGPath>
+                </shape>
+            </Region>
         </HBox>
     </children>
 </fx:root>

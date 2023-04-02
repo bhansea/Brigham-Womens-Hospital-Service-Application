@@ -8,12 +8,12 @@
             xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <top>
-        <Label text="Home" BorderPane.alignment="CENTER">
+        <Label text="WHAT CAN WE HELP YOU WITH?" BorderPane.alignment="CENTER">
             <font>
-                <Font size="26.0"/>
+                <Font size="24.0"/>
             </font>
             <padding>
-                <Insets bottom="10.0" top="10.0"/>
+                <Insets topRightBottomLeft="10"/>
             </padding>
         </Label>
     </top>

@@ -22,6 +22,7 @@ public class LinkControl extends HBox {
     private Runnable onClick;
 
     public LinkControl() {
+        App.loadStylesheet("css/Link.css");
         FXMLLoader loader = new FXMLLoader(App.class.getResource("components/Link.fxml"));
         loader.setRoot(this);
         loader.setController(this);
