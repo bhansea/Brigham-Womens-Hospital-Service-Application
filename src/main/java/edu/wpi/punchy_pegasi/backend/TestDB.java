@@ -13,7 +13,16 @@ public class TestDB {
             pdb.importTable(PdbController.TableType.MOVES, "C:\\Documents\\p2\\Move.csv");
             pdb.importTable(PdbController.TableType.LOCATIONNAMES, "C:\\Documents\\p2\\LocationName.csv");
 
-        } catch (Exception e) {
+        } catch (PdbController.DatabaseException e) {
+            log.error(e.getMessage());
+        }
+
+        try {
+            pdb.exportTable("C:\\Documents\\p2\\export\\Node.csv", PdbController.TableType.NODES);
+            pdb.exportTable("C:\\Documents\\p2\\export\\Edge.csv", PdbController.TableType.EDGES);
+            pdb.exportTable("C:\\Documents\\p2\\export\\Move.csv", PdbController.TableType.MOVES);
+            pdb.exportTable("C:\\Documents\\p2\\export\\LocationName.csv", PdbController.TableType.LOCATIONNAMES);
+        } catch (PdbController.DatabaseException e) {
             log.error(e.getMessage());
         }
     }

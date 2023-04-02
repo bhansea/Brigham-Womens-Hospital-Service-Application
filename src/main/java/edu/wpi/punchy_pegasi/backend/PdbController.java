@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
-import lombok.Cleanup;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -164,7 +163,7 @@ public class PdbController {
         try {
             var statement = connection.createStatement();
             var query = "SELECT * FROM teamp." + tableType.name().toLowerCase();
-            if(fields.length > 0){
+            if (fields.length > 0) {
                 query += " WHERE ";
                 query += getFieldValueString(fields, values, " AND ");
             }
@@ -175,6 +174,7 @@ public class PdbController {
             throw new DatabaseException("SQL error");
         }
     }
+
     public ResultSet searchQuery(TableType tableType) throws DatabaseException {
         return searchQuery(tableType, new String[]{}, new Object[]{});
     }
@@ -192,9 +192,9 @@ public class PdbController {
         return searchQuery(tableType, new String[]{field}, new Object[]{value});
     }
 
-    public void exportTable(String path, String tableName) throws DatabaseException {
+    public void exportTable(String path, TableType tableType) throws DatabaseException {
         try {
-            exportToCSV(path, tableName);
+            exportToCSV(path, tableType);
             log.info("Exported table successfully");
         } catch (SQLException | IOException e) {
             log.error("Failed to export table:", e);
@@ -215,14 +215,12 @@ public class PdbController {
 
         } catch (SQLException | IOException e) {
             log.error("Failed to import table:", e);
-            if(e instanceof  IOException) {
+            if (e instanceof IOException) {
                 throw new DatabaseException("Failed to open selected file");
-            }
-            else if(e instanceof SQLException){
-                if(e.getMessage().contains("violates unique constraint")) {
+            } else if (e instanceof SQLException) {
+                if (e.getMessage().contains("violates unique constraint")) {
                     throw new DatabaseException("One or more nodes in csv already exist");
-                }
-                else if(Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
+                } else if (Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
                     throw new DatabaseException("CSV headers do not match table headers");
                 }
             }
@@ -255,20 +253,19 @@ public class PdbController {
         return statement.executeUpdate(sb.toString());
     }
 
-    private void exportToCSV(String path, String tableName) throws SQLException, IOException {
-        var statement = connection.createStatement();
-        var result = statement.executeQuery("SELECT * FROM " + tableName + ";");
-        var metaData = result.getMetaData();
-        var headerCount = metaData.getColumnCount();
-        @Cleanup var fw = new FileWriter(path);
-        for (int i = 1; i <= headerCount; i++) {
-            fw.append(metaData.getColumnName(i));
-            fw.append(i < headerCount ? ',' : '\n');
-        }
-        while (result.next()) {
+    private void exportToCSV(String path, TableType tableType) throws SQLException, DatabaseException, IOException {
+        try (var result = searchQuery(tableType); var fw = new FileWriter(path)) {
+            var metaData = result.getMetaData();
+            var headerCount = metaData.getColumnCount();
             for (int i = 1; i <= headerCount; i++) {
-                fw.append(result.getString(i));
-                fw.append(i <= headerCount - 1 ? ',' : '\n');
+                fw.append(metaData.getColumnName(i));
+                fw.append(i < headerCount ? ',' : '\n');
+            }
+            while (result.next()) {
+                for (int i = 1; i <= headerCount; i++) {
+                    fw.append(result.getString(i));
+                    fw.append(i <= headerCount - 1 ? ',' : '\n');
+                }
             }
         }
     }
