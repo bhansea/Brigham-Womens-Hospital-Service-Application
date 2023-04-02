@@ -25,7 +25,8 @@ public class App extends Application {
     @Getter
     private static App singleton;
     @Getter
-    private PdbController pdb = new PdbController("", "", "");
+    private PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
+            "teamp", "teamp130");
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Setter
     @Getter
@@ -81,6 +82,8 @@ public class App extends Application {
 
         Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
+
+//        pdb.importTable();
     }
 
     @Override

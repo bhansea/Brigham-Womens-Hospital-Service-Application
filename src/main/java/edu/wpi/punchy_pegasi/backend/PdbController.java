@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class PdbController {
@@ -171,6 +172,16 @@ public class PdbController {
             throw new DatabaseException("SQL error");
         }
     }
+    public ResultSet searchQuery(TableType tableType) throws DatabaseException {
+        try {
+            var statement = connection.createStatement();
+            var query = "SELECT * FROM teamp." + tableType.name().toLowerCase() + ";";
+            return statement.executeQuery(query);
+        } catch (SQLException e) {
+            log.error("Failed to search node", e);
+            throw new DatabaseException("SQL error");
+        }
+    }
 
     /**
      * Searches for all entries in tableType table whose value for "field" matches the given value
@@ -197,31 +208,25 @@ public class PdbController {
     }
 
     public void importTable(String path, String tableName) throws DatabaseException {
-//        try {
-//            insertfromCSV(path, tableName);
-//            log.info("Imported table successfully");
-//            try {
-//                syncNodes();
-//                syncEdges();
-//            } catch (DatabaseException e) {
-////                log.error("Failed to sync nodes/edges:", e);
-//                throw new DatabaseException("Failed to sync nodes/edges");
-//            }
-//        } catch (SQLException | IOException e) {
-//            log.error("Failed to import table:", e);
-//            if(e instanceof  IOException) {
-//                throw new DatabaseException("Failed to open selected file");
-//            }
-//            else if(e instanceof SQLException){
-//                if(e.getMessage().contains("violates unique constraint")) {
-//                    throw new DatabaseException("One or more nodes in csv already exist");
-//                }
-//                else if(Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
-//                    throw new DatabaseException("CSV headers do not match table headers");
-//                }
-//            }
-//            throw new DatabaseException("Table does not exist, CSV has incorrect headers");
-//        }
+        try {
+            insertfromCSV(path, tableName);
+            log.info("Imported table successfully");
+
+        } catch (SQLException | IOException e) {
+            log.error("Failed to import table:", e);
+            if(e instanceof  IOException) {
+                throw new DatabaseException("Failed to open selected file");
+            }
+            else if(e instanceof SQLException){
+                if(e.getMessage().contains("violates unique constraint")) {
+                    throw new DatabaseException("One or more nodes in csv already exist");
+                }
+                else if(Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
+                    throw new DatabaseException("CSV headers do not match table headers");
+                }
+            }
+            throw new DatabaseException("Table does not exist, CSV has incorrect headers");
+        }
     }
 
     private int insertfromCSV(String path, String tableName) throws IOException, SQLException {
