@@ -49,10 +49,10 @@ public class PdbController {
                 var ret2 = statement.execute(query + "(" + "startNode varchar, " + "endNode varchar);");
             }
             case MOVES -> {
-                var ret2 = statement.execute(query + "(" + "nodeID int, " + "longName varchar" + "date varchar" + ");");
+                var ret2 = statement.execute(query + "(" + "nodeID int, " + "longName varchar, " + "date varchar" + ");");
             }
             case LOCATIONNAMES -> {
-                var ret2 = statement.execute(query + "(" + "longName varchar " + "shortName varchar" + "nodeType varchar" + ");");
+                var ret2 = statement.execute(query + "(" + "longName varchar, " + "shortName varchar, " + "nodeType varchar" + ");");
             }
         }
     }
@@ -203,9 +203,14 @@ public class PdbController {
         }
     }
 
-    public void importTable(String path, String tableName) throws DatabaseException {
+    public void importTable(TableType tableType, String path) throws DatabaseException {
         try {
-            insertfromCSV(path, tableName);
+            initTableByType(tableType);
+        } catch (DatabaseException e) {
+            log.error("Failed to initialize table:", e);
+        }
+        try {
+            insertfromCSV(path, tableType);
             log.info("Imported table successfully");
 
         } catch (SQLException | IOException e) {
@@ -225,13 +230,13 @@ public class PdbController {
         }
     }
 
-    private int insertfromCSV(String path, String tableName) throws IOException, SQLException {
+    private int insertfromCSV(String path, TableType tableType) throws IOException, SQLException {
         // read the file one line at a time
         BufferedReader reader;
         reader = new BufferedReader(new FileReader(path));
 
         var sb = new StringBuilder();
-        sb.append("INSERT INTO ").append(tableName).append("(").append(reader.readLine()).append(") VALUES ");
+        sb.append("INSERT INTO ").append(tableType.name().toLowerCase()).append("(").append(reader.readLine()).append(") VALUES ");
 
         String line;
         while ((line = reader.readLine()) != null) {

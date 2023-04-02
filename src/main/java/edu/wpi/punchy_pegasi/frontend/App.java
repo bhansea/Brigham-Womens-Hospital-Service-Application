@@ -83,7 +83,12 @@ public class App extends Application {
         Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
 
-//        pdb.importTable();
+        try {
+            // TODO: specify table type
+//            pdb.importTable("C:\\Documents\\p2\\Nodes.csv", "nodes");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override
