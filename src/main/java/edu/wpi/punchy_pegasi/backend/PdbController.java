@@ -17,27 +17,13 @@ import java.util.Arrays;
 
 @Slf4j
 public class PdbController {
-    private static Connection connection;
-    private static String url;
-    private static String username;
-    private static String password;
-    static private PdbController singleton;
+    private Connection connection;
 
-
-    private PdbController(String url, String username, String password) {
+    public PdbController(String url, String username, String password) {
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
             log.error("Failed to connect to db :", e);
-        }
-    }
-
-    static public PdbController getSingleton() {
-        if (singleton != null) {
-            return singleton;
-        } else {
-            singleton = new PdbController(url, username, password);
-            return singleton;
         }
     }
 

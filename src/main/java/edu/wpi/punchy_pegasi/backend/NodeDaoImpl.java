@@ -1,5 +1,7 @@
 package edu.wpi.punchy_pegasi.backend;
 
+import edu.wpi.punchy_pegasi.frontend.App;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -7,7 +9,7 @@ import java.util.Optional;
 
 public class NodeDaoImpl implements IDao<Node, Long> {
     private final HashMap<Long, Node> nodes;
-    private final PdbController dbController = PdbController.getSingleton();
+    private final PdbController dbController = App.getSingleton().getPdb();
 
     public NodeDaoImpl() {
         nodes = new HashMap<Long, Node>();

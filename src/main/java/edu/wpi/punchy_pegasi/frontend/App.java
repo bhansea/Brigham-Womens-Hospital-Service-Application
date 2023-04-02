@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend;
 
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
@@ -23,6 +24,8 @@ import java.io.IOException;
 public class App extends Application {
     @Getter
     private static App singleton;
+    @Getter
+    private PdbController pdb = new PdbController("", "", "");
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Setter
     @Getter
@@ -34,7 +37,6 @@ public class App extends Application {
     private Screen currentScreen;
     @Getter
     private Scene scene;
-
     public static void exit() {
         Platform.exit();
     }

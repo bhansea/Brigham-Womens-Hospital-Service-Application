@@ -1,12 +1,14 @@
 package edu.wpi.punchy_pegasi.backend;
 
+import edu.wpi.punchy_pegasi.frontend.App;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class MoveDaoImpl implements IDao<Move, Long> {
     private final HashMap<Long, Move> moves;
-    private final PdbController dbController = PdbController.getSingleton();
+    private final PdbController dbController = App.getSingleton().getPdb();
 
     public MoveDaoImpl() {
         moves = new HashMap<Long, Move>();

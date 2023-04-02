@@ -1,12 +1,14 @@
 package edu.wpi.punchy_pegasi.backend;
 
+import edu.wpi.punchy_pegasi.frontend.App;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class LocationNameDaoImpl implements IDao<LocationName, String> {
     private final HashMap<String, LocationName> locationNames;
-    private final PdbController dbController = PdbController.getSingleton();
+    private final PdbController dbController = App.getSingleton().getPdb();
 
     public LocationNameDaoImpl() {
         this.locationNames = new HashMap<>();
