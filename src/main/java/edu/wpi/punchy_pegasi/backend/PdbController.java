@@ -100,7 +100,9 @@ public class PdbController {
                         // if pass null, psql will generate a uuid
                         "patientName varchar(100)," +
                         "roomNumber varchar(100)," +
+                        "staffAssignment varchar(100)," +
                         "additionalNotes varchar(1000)," +
+                        "status varchar(50)," +
                         "foodSelection varchar(100)," +
                         "tempType varchar(50)," +
                         "additionalItems varchar(100) ARRAY," +
@@ -114,9 +116,11 @@ public class PdbController {
                         "serviceID uuid DEFAULT uuid_generate_v4()," +
                         // if pass null, psql will generate a uuid
                         "patientName varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "flowerSize varchar(100)," +
                         "roomNumber varchar(100)," +
+                        "staffAssignment varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "status varchar(50)," +
+                        "flowerSize varchar(100)," +
                         "flowerAmount varchar(100)," +
                         "flowerType varchar(100)," +
                         "PRIMARY KEY (serviceID)" +
