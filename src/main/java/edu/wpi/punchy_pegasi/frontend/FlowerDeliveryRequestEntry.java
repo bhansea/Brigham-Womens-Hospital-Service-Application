@@ -10,12 +10,13 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
 
     public FlowerDeliveryRequestEntry(
             String patientName,
+            String roomNumber,
+            String staffAssignment,
             String additionalNotes,
             String flowerSize,
-            String roomNumber,
             String flowerAmount,
             String flowerType) {
-        super(patientName, roomNumber, additionalNotes);
+        super(patientName, roomNumber, staffAssignment, additionalNotes);
         this.flowerSize = flowerSize;
         this.flowerAmount = flowerAmount;
         this.flowerType = flowerType;
