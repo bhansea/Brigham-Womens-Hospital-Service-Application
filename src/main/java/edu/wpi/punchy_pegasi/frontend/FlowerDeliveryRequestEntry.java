@@ -1,9 +1,30 @@
 package edu.wpi.punchy_pegasi.frontend;
 
+import lombok.Getter;
+
+import java.util.UUID;
+
+@Getter
 public class FlowerDeliveryRequestEntry extends RequestEntry {
     private final String flowerSize;
     private final String flowerType;
     private final String flowerAmount;
+
+    public FlowerDeliveryRequestEntry(
+            UUID serviceID,
+            String patientName,
+            String roomNumber,
+            String staffAssignment,
+            String additionalNotes,
+            Status status,
+            String flowerSize,
+            String flowerAmount,
+            String flowerType) {
+        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes, status);
+        this.flowerSize = flowerSize;
+        this.flowerAmount = flowerAmount;
+        this.flowerType = flowerType;
+    }
 
     public FlowerDeliveryRequestEntry(
             String patientName,
@@ -13,10 +34,15 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
             String flowerSize,
             String flowerAmount,
             String flowerType) {
-        super(patientName, roomNumber, staffAssignment, additionalNotes);
-        this.flowerSize = flowerSize;
-        this.flowerAmount = flowerAmount;
-        this.flowerType = flowerType;
+        this(UUID.randomUUID(),
+                patientName,
+                roomNumber,
+                staffAssignment,
+                additionalNotes,
+                Status.PROCESSING,
+                flowerSize,
+                flowerAmount,
+                flowerType);
     }
 
 
