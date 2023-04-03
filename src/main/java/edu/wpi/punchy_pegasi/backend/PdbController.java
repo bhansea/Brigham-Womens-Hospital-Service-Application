@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -36,7 +37,7 @@ public class PdbController {
     }
 
     private static String objectToPsqlString(Object o, boolean first) {
-        if (o instanceof String) {
+        if (o instanceof String || o instanceof UUID || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {
             return (first ? "ARRAY" : "") + "[" + String.join(", ", ((List<?>) o).stream().map(v -> objectToPsqlString(v, false)).toList()) + "]";
@@ -63,20 +64,40 @@ public class PdbController {
         var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase();
         switch (tableType) {
             case NODES -> {
-                var ret = statement.execute(query + "(" + "nodeID varchar PRIMARY KEY, " + "xcoord int, " + "ycoord int, " + "floor varchar, " + "building varchar);");
+                var ret = statement.execute(query + "(" +
+                        "nodeID varchar PRIMARY KEY, " +
+                        "xcoord int, " +
+                        "ycoord int, " +
+                        "floor varchar, " +
+                        "building varchar);");
             }
             case EDGES -> {
-                var ret2 = statement.execute(query + "(" + "startNode varchar, " + "endNode varchar);");
+                var ret2 = statement.execute(query + "(" +
+                        "uuid bigint," +
+                        "startNode varchar, " +
+                        "endNode varchar);");
             }
             case MOVES -> {
-                var ret2 = statement.execute(query + "(" + "nodeID int, " + "longName varchar, " + "date varchar" + ");");
+                var ret2 = statement.execute(query +
+                        "(" +
+                        "nodeID bigint, " +
+                        "longName varchar, " +
+                        "date varchar" +
+                        ");");
             }
             case LOCATIONNAMES -> {
-                var ret2 = statement.execute(query + "(" + "longName varchar, " + "shortName varchar, " + "nodeType varchar" + ");");
+                var ret2 = statement.execute(query + "(" +
+                        "uuid uuid DEFAULT uuid_generate_v4()," +
+                        // if pass null, psql will generate a uuid
+                        "longName varchar, " +
+                        "shortName varchar, " +
+                        "nodeType varchar" +
+                        ");");
             }
             case FOODREQUESTS -> {
                 var ret2 = statement.execute(query + "(" +
-                        "serviceID uuid NOT NULL DEFAULT uuid_generate_v4()," + // if pass null, psql will generate a uuid
+                        "serviceID uuid DEFAULT uuid_generate_v4()," +
+                        // if pass null, psql will generate a uuid
                         "patientName varchar(100)," +
                         "roomNumber varchar(100)," +
                         "additionalNotes varchar(1000)," +
@@ -88,8 +109,10 @@ public class PdbController {
                         ");");
             }
             case FLOWERREQUESTS -> {
-                var ret2 = statement.execute(query + "(" +
-                        "serviceID uuid NOT NULL DEFAULT uuid_generate_v4()," + // if pass null, psql will generate a uuid
+                var ret2 = statement.execute(query +
+                        "(" +
+                        "serviceID uuid DEFAULT uuid_generate_v4()," +
+                        // if pass null, psql will generate a uuid
                         "patientName varchar(100)," +
                         "additionalNotes varchar(1000)," +
                         "flowerSize varchar(100)," +
@@ -107,7 +130,8 @@ public class PdbController {
     private String getFieldValueString(String[] fields, Object[] values, String delimiter) {
         String query = "";
         for (int i = 0; i < fields.length; i++) {
-            query += fields[i] + " = " + objectToPsqlString(values[i]);
+            query += fields[i] +
+                        " = " + objectToPsqlString(values[i]);
             if (i != fields.length - 1) query += delimiter;
         }
         return query;
@@ -157,7 +181,7 @@ public class PdbController {
             query += ");";
             return statement.executeUpdate(query);
         } catch (SQLException e) {
-            log.error("Failed to insert node", e);
+            log.error("Failed to insert row", e);
             throw new DatabaseException("SQL er ror");
         }
     }

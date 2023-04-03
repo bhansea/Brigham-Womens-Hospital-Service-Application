@@ -9,7 +9,7 @@ public class Move {
     private String longName;
     private String date;
 
-    Move(long uuid, long nodeID, String longName, String date) {
+    public Move(long uuid, long nodeID, String longName, String date) {
         this.uuid = uuid;
         this.nodeID = nodeID;
         this.longName = longName;

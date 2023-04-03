@@ -1,33 +1,64 @@
 package edu.wpi.punchy_pegasi.backend.generated;
-
 import edu.wpi.punchy_pegasi.backend.IDao;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.backend.TestDB;
+import java.util.Arrays;
+import edu.wpi.punchy_pegasi.backend.TestDB;
+
+import edu.wpi.punchy_pegasi.frontend.App;
 import edu.wpi.punchy_pegasi.frontend.FlowerDeliveryRequestEntry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryRequestEntry, String> {
 
-    private final PdbController dbController = TestDB.getSingleton().getPdb();
-
     static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "serviceID", "patientName", "roomNumber", "additionalNotes"};
+    private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
     public Optional<FlowerDeliveryRequestEntry> get(String key) {
-        try (var rs = dbController.searchQuery(PdbController.TableType.FLOWERREQUESTS, fields[0], key)) {
+        try (var rs = dbController.searchQuery(PdbController.TableType.FLOWERREQUESTS, "serviceID", key)) {
+            rs.next();
+            FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("patientName"),
+                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    (java.lang.String)rs.getObject("flowerSize"),
+                    (java.lang.String)rs.getObject("flowerAmount"),
+                    (java.lang.String)rs.getObject("flowerType"));
+            return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     @Override
     public Map<String, FlowerDeliveryRequestEntry> getAll() {
-        return null;
+        var map = new HashMap<String, FlowerDeliveryRequestEntry>();
+        try (var rs = dbController.searchQuery(PdbController.TableType.FLOWERREQUESTS)) {
+            while (rs.next()) {
+                FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("patientName"),
+                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    (java.lang.String)rs.getObject("flowerSize"),
+                    (java.lang.String)rs.getObject("flowerAmount"),
+                    (java.lang.String)rs.getObject("flowerType"));
+                if (req != null)
+                    map.put(String.valueOf(req.getServiceID()), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override
@@ -43,11 +74,15 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryReq
 
     @Override
     public void update(FlowerDeliveryRequestEntry foodServiceRequestEntry, Object[] params) {
-
+        // What does this even mean?
     }
 
     @Override
     public void delete(FlowerDeliveryRequestEntry foodServiceRequestEntry) {
-
+        try {
+            dbController.deleteQuery(PdbController.TableType.FLOWERREQUESTS, "serviceID", String.valueOf(foodServiceRequestEntry.getServiceID()));
+        } catch (PdbController.DatabaseException e) {
+            log.error("Error deleting", e);
+        }
     }
 }
