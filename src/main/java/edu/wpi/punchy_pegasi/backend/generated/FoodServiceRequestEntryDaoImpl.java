@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEntry, String> {
 
-    static String[] fields = {"foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "serviceID", "patientName", "roomNumber", "additionalNotes"};
+    static String[] fields = {"foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
@@ -28,7 +28,9 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEn
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.frontend.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
                     Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
@@ -49,7 +51,9 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEn
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.frontend.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
                     Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
@@ -65,7 +69,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEn
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getAdditionalNotes()};
+        Object[] values = {foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus()};
         try {
             dbController.insertQuery(PdbController.TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

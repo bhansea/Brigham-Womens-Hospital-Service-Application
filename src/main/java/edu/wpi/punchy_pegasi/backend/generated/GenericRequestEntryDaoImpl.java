@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, String> {
 
-    static String[] fields = {"serviceID", "patientName", "roomNumber", "additionalNotes"};
+    static String[] fields = {"serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
@@ -28,7 +28,9 @@ public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, Str
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("additionalNotes"));
+                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.frontend.RequestEntry.Status.valueOf((String)rs.getObject("status")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -45,7 +47,9 @@ public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, Str
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("additionalNotes"));
+                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.frontend.RequestEntry.Status.valueOf((String)rs.getObject("status")));
                 if (req != null)
                     map.put(String.valueOf(req.getServiceID()), req);
             }
@@ -57,7 +61,7 @@ public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, Str
 
     @Override
     public void save(GenericRequestEntry genericRequestEntry) {
-        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getPatientName(), genericRequestEntry.getRoomNumber(), genericRequestEntry.getAdditionalNotes()};
+        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getPatientName(), genericRequestEntry.getRoomNumber(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
         try {
             dbController.insertQuery(PdbController.TableType.GENERIC, fields, values);
         } catch (PdbController.DatabaseException e) {

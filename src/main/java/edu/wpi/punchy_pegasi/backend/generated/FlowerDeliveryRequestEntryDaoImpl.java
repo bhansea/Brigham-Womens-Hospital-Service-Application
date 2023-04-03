@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryRequestEntry, String> {
 
-    static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "serviceID", "patientName", "roomNumber", "additionalNotes"};
+    static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
@@ -28,7 +28,9 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryReq
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.frontend.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
                     (java.lang.String)rs.getObject("flowerAmount"),
                     (java.lang.String)rs.getObject("flowerType"));
@@ -48,7 +50,9 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryReq
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.frontend.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
                     (java.lang.String)rs.getObject("flowerAmount"),
                     (java.lang.String)rs.getObject("flowerType"));
@@ -63,7 +67,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryReq
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getPatientName(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getAdditionalNotes()};
+        Object[] values = {flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getPatientName(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus()};
         try {
             dbController.insertQuery(PdbController.TableType.FLOWERREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

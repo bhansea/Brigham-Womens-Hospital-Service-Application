@@ -16,10 +16,11 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
             String roomNumber,
             String staffAssignment,
             String additionalNotes,
+            Status status,
             String flowerSize,
             String flowerAmount,
             String flowerType) {
-        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes);
+        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes, status);
         this.flowerSize = flowerSize;
         this.flowerAmount = flowerAmount;
         this.flowerType = flowerType;
@@ -36,9 +37,10 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
         this(UUID.randomUUID(),
                 patientName,
                 roomNumber,
+                staffAssignment,
                 additionalNotes,
+                Status.PROCESSING,
                 flowerSize,
-                roomNumber,
                 flowerAmount,
                 flowerType);
     }

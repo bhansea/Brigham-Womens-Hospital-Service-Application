@@ -39,7 +39,8 @@ public class TestDB {
             // same thing but for FlowerDeliveryServiceRequest
             singleton.pdb.initTableByType(PdbController.TableType.FOODREQUESTS);
             var FoodServiceRequestEntryDAO = new FoodServiceRequestEntryDaoImpl();
-            FoodServiceRequestEntryDAO.save(new FoodServiceRequestEntry(UUID.randomUUID(),
+            FoodServiceRequestEntryDAO.save(new FoodServiceRequestEntry(
+                    "test",
                     "test",
                     "test",
                     "test",

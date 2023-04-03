@@ -10,13 +10,16 @@ public class GenericRequestEntry extends RequestEntry {
             UUID serviceID,
             String patientName,
             String roomNumber,
-            String additionalNotes) {
-        super(serviceID, patientName, roomNumber, additionalNotes);
+            String staffAssignment,
+            String additionalNotes,
+            Status status) {
+        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes, status);
     }
     public GenericRequestEntry(
             String patientName,
             String roomNumber,
+            String staffAssignment,
             String additionalNotes) {
-        super(UUID.randomUUID(), patientName, roomNumber, additionalNotes);
+        super(UUID.randomUUID(), patientName, roomNumber, staffAssignment, additionalNotes, Status.PROCESSING);
     }
 }
