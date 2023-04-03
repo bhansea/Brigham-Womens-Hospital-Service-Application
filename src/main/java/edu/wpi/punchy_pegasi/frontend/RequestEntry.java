@@ -2,7 +2,6 @@ package edu.wpi.punchy_pegasi.frontend;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
 
 import java.util.UUID;
 
@@ -12,5 +11,13 @@ public class RequestEntry {
     protected final UUID serviceID;
     protected final String patientName;
     protected final String roomNumber;
+    protected final String staffAssignment;
     protected final String additionalNotes;
+    protected final Status status;
+
+    public enum Status {
+        NONE,
+        PROCESSING,
+        DONE
+    }
 }

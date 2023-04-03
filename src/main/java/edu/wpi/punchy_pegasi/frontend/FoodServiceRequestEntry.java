@@ -17,13 +17,16 @@ public class FoodServiceRequestEntry extends RequestEntry {
     public FoodServiceRequestEntry(
             String patientName,
             String roomNumber,
+            String staffAssignment,
             String additionalNotes,
             String foodSelection,
             String tempType,
             List<String> additionalItems,
             String dietaryRestrictions) {
-        this(UUID.randomUUID(), patientName,
+        this(UUID.randomUUID(),
+                patientName,
                 roomNumber,
+                staffAssignment,
                 additionalNotes,
                 foodSelection,
                 tempType,
@@ -35,12 +38,13 @@ public class FoodServiceRequestEntry extends RequestEntry {
             UUID serviceID,
             String patientName,
             String roomNumber,
+            String staffAssignment,
             String additionalNotes,
             String foodSelection,
             String tempType,
             List<String> additionalItems,
             String dietaryRestrictions) {
-        super(serviceID, patientName, roomNumber, additionalNotes);
+        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
