@@ -25,7 +25,7 @@ public class App extends Application {
     @Getter
     private static App singleton;
     @Getter
-    private PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
+    private final PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
             "teamp", "teamp130");
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Setter
@@ -38,6 +38,7 @@ public class App extends Application {
     private Screen currentScreen;
     @Getter
     private Scene scene;
+
     public static void exit() {
         Platform.exit();
     }

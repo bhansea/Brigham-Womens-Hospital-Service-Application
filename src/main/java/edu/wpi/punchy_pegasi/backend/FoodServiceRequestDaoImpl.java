@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.backend;
 
-import edu.wpi.punchy_pegasi.frontend.App;
 import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
 import lombok.extern.slf4j.Slf4j;
 

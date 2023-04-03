@@ -1,5 +1,8 @@
 package edu.wpi.punchy_pegasi.frontend;
 
+import lombok.Getter;
+
+@Getter
 public class FlowerDeliveryRequestEntry extends RequestEntry {
     private final String flowerSize;
     private final String flowerType;

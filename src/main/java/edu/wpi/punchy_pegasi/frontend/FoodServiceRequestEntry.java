@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend;
 
-import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
+
 @Getter
 public class FoodServiceRequestEntry extends RequestEntry {
 

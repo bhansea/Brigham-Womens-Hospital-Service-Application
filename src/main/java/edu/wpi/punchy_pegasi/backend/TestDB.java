@@ -4,18 +4,20 @@ import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class TestDB {
     public static TestDB singleton = new TestDB();
+
     public static TestDB getSingleton() {
         return singleton;
     }
+
     @Getter
     PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
-        "teamp", "teamp130");
+            "teamp", "teamp130");
+
     public static void main(String[] args) {
         try {
             singleton.pdb.initTableByType(PdbController.TableType.FOODREQUESTS);

@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.backend;
 
 import edu.wpi.punchy_pegasi.frontend.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
+import edu.wpi.punchy_pegasi.frontend.GenericRequestEntry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -322,7 +323,7 @@ public class PdbController {
         EDGES(Edge.class),
         MOVES(Move.class),
         LOCATIONNAMES(LocationName.class),
-
+        GENERIC(GenericRequestEntry.class),
         FOODREQUESTS(FoodServiceRequestEntry.class),
 
         FLOWERREQUESTS(FlowerDeliveryRequestEntry.class);

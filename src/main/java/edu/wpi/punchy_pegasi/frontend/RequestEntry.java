@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend;
 
 import lombok.Data;
-import lombok.Value;
 
 import java.util.UUID;
 
