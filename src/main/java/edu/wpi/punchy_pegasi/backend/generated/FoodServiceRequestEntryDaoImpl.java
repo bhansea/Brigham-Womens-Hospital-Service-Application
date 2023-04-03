@@ -3,7 +3,6 @@ import edu.wpi.punchy_pegasi.backend.IDao;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.backend.TestDB;
 import java.util.Arrays;
-import edu.wpi.punchy_pegasi.backend.TestDB;
 
 import edu.wpi.punchy_pegasi.frontend.App;
 import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
@@ -18,7 +17,9 @@ import java.util.Optional;
 public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEntry, String> {
 
     static String[] fields = {"foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
-    private final PdbController dbController = App.getSingleton().getPdb();
+
+    // TODO: change this to App.getSingleton().getPdb() when not testing
+    private final PdbController dbController = TestDB.getSingleton().getPdb();
 
     @Override
     public Optional<FoodServiceRequestEntry> get(String key) {
