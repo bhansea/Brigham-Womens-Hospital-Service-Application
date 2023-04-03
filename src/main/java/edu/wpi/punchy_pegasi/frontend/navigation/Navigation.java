@@ -7,7 +7,7 @@ public class Navigation {
     public static void navigate(final Screen screen) {
         try {
             Parent p = screen.getSupplier().get();
-            App.getViewPane().setCenter(p);
+            App.getSingleton().getViewPane().setCenter(p);
             App.getSingleton().setCurrentScreen(screen);
         } catch (NullPointerException e) {
             e.printStackTrace();

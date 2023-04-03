@@ -11,12 +11,13 @@ public class FoodServiceRequestEntry extends RequestEntry {
     public FoodServiceRequestEntry(
             String patientName,
             String roomName,
+            String staffAssignment,
             String additionalNotes,
             String foodSelection,
             String tempType,
             List<String> additionalItems,
             String dietaryRestrictions) {
-        super(patientName, roomName, additionalNotes);
+        super(patientName, roomName, staffAssignment, additionalNotes);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;

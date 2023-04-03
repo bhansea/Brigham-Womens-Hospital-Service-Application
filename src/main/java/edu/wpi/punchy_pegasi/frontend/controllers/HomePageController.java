@@ -13,7 +13,7 @@ public class HomePageController {
     }
 
     public void conferenceRoomClick(MouseEvent mouseEvent) {
-        Navigation.navigate(Screen.CONFERENCE);
+        Navigation.navigate(Screen.HOME);
     }
 
     public void mealButtonClick(MouseEvent mouseEvent) {

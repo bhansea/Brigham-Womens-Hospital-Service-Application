@@ -39,7 +39,7 @@
         </VBox>
     </bottom>
     <center>
-        <GridPane style="-fx-background-color: #f1f1f1;" fx:id="headerGrid">
+        <GridPane style="-fx-background-color: #222;" fx:id="headerGrid">
             <VBox GridPane.columnIndex="0" fx:id="imageContainer" prefWidth="300">
                 <Pane fx:id="clipper">
                     <ImageView fx:id="bannerImage" preserveRatio="true">
