@@ -88,9 +88,7 @@ public class PdbController {
             }
             case LOCATIONNAMES -> {
                 var ret2 = statement.execute(query + "(" +
-                        "uuid uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "longName varchar, " +
+                        "longName varchar PRIMARY KEY, " +
                         "shortName varchar, " +
                         "nodeType varchar" +
                         ");");
