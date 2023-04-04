@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.navigation;
 import edu.wpi.punchy_pegasi.frontend.App;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.FlowerDeliveryRequestController;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.FoodServiceRequestController;
+import edu.wpi.punchy_pegasi.frontend.controllers.requests.OfficeServiceRequestController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ public enum Screen {
     FLOWERDELIVERY_REQUEST("Flower Delivery Request", FlowerDeliveryRequestController::create),
     SERVICE_REQUEST("Service Request", "views/ServiceRequest.fxml"),
     SIGNAGE("Signage", "views/Signage.fxml"),
+    OFFICE_SERVICE_REQUEST("Request office supplied", OfficeServiceRequestController::create),
     FOOD_SERVICE_REQUEST("Food Service Request", FoodServiceRequestController::create),
     MAP_PAGE("Map", "views/MapPage.fxml"),
     LOGIN("Login", "views/Login.fxml");
