@@ -5,13 +5,49 @@ import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+
 
 public class ServiceRequestController {
 
     @FXML
     MFXTextField servSearchBar;
+
     @FXML
-    void showReq(){
+    MFXButton submit;
+
+   // @FXML MFXButton back;
+    @Getter @Setter
+    private ArrayList<String> requests = new ArrayList<>(); //store requests in list to search through
+
+
+    @FXML
+
+    String showReq(){
+        String temp = "";
+        int i = 0;
+        if(submit.isPressed()){
+            temp = servSearchBar.getText();
+            for(i = 0; i < requests.size(); i++){
+                if(temp.matches(requests.get(i))){
+                    return requests.get(i);
+                }
+                else{
+                    throw new RuntimeException("No such request found.");
+                }
+            }
+        }
+
+        //match case
+        //throw error if no request found
+        //display request
+        //display back button/somehow reset the search bar for a new search?
+
+        return temp;
+
 
     }
 
