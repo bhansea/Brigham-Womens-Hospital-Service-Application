@@ -17,7 +17,7 @@ import java.util.Optional;
 public class LocationNameDaoImpl implements IDao<LocationName, String> {
 
     private static final String[] fields = {"longName", "shortName", "nodeType"};
-    private final PdbController dbController = TestDB.getSingleton().getPdb();
+    private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
     public Optional<LocationName> get(String key) {

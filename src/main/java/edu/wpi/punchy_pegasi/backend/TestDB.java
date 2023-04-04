@@ -19,7 +19,7 @@ import java.util.Optional;
 public class TestDB {
 
     @Getter
-    private static TestDB singleton = new TestDB();
+    private static final TestDB singleton = new TestDB();
     @Getter
 //    PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
 //            "teamp", "teamp130");
