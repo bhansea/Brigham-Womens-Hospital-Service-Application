@@ -1,10 +1,8 @@
 package edu.wpi.punchy_pegasi.backend;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class Edge {
     private long uuid;
     private String startNode;

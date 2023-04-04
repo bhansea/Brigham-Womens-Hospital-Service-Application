@@ -47,6 +47,9 @@ dependencies {
             'de.mkammerer:argon2-jvm:2.11',
             'com.github.hervegirod:fxsvgimage:1.1',
             'net.java.dev.jna:jna:5.12.1',
+            'org.ow2.asm:asm:9.5',
+            'org.ow2.asm:asm-tree:9.5'
+
     )
 
     String javaFxVersion = "19"
