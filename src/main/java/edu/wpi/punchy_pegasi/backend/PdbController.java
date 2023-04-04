@@ -65,17 +65,21 @@ public class PdbController {
         switch (tableType) {
             case NODES -> {
                 var ret = statement.execute(query + "(" +
-                        "nodeID varchar PRIMARY KEY, " +
+                        "nodeID bigint PRIMARY KEY, " +
                         "xcoord int, " +
                         "ycoord int, " +
                         "floor varchar, " +
                         "building varchar);");
             }
             case EDGES -> {
+                statement.execute("DROP SEQUENCE IF EXISTS table_name_id_seq;");
+                statement.execute("CREATE SEQUENCE table_name_id_seq;");
                 var ret2 = statement.execute(query + "(" +
-                        "uuid bigint," +
+                        "uuid bigint DEFAULT nextval('table_name_id_seq')," +
                         "startNode varchar, " +
                         "endNode varchar);");
+                statement.execute("ALTER SEQUENCE table_name_id_seq OWNED BY edges.uuid;");
+
             }
             case MOVES -> {
                 var ret2 = statement.execute(query +
@@ -100,7 +104,9 @@ public class PdbController {
                         // if pass null, psql will generate a uuid
                         "patientName varchar(100)," +
                         "roomNumber varchar(100)," +
+                        "staffAssignment varchar(100)," +
                         "additionalNotes varchar(1000)," +
+                        "status varchar(50)," +
                         "foodSelection varchar(100)," +
                         "tempType varchar(50)," +
                         "additionalItems varchar(100) ARRAY," +
@@ -114,9 +120,11 @@ public class PdbController {
                         "serviceID uuid DEFAULT uuid_generate_v4()," +
                         // if pass null, psql will generate a uuid
                         "patientName varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "flowerSize varchar(100)," +
                         "roomNumber varchar(100)," +
+                        "staffAssignment varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "status varchar(50)," +
+                        "flowerSize varchar(100)," +
                         "flowerAmount varchar(100)," +
                         "flowerType varchar(100)," +
                         "PRIMARY KEY (serviceID)" +

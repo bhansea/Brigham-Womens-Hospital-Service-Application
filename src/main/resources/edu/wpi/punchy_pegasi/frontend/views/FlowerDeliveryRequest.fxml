@@ -41,7 +41,7 @@
                         </Label>
                         <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXComboBox fx:id="flowerTypeComboBox" floatingText="Select Flower Type" onAction="#validateEntry" prefWidth="350.0" style="-fx-alignment: center;" />
+                                <MFXComboBox fx:id="flowerTypeComboBox" floatingText="Select Flower Type" onAction="#updateLabelEntry" prefWidth="350.0" style="-fx-alignment: center;" />
                             </children>
                         </VBox>
                     </children>
@@ -126,7 +126,7 @@
                 </ImageView>
                 <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
                     <children>
-                        <Label text="Flower Description">
+                        <Label fx:id="flowerName" text="Flower Description">
                             <font>
                                 <Font size="24.0" />
                             </font>

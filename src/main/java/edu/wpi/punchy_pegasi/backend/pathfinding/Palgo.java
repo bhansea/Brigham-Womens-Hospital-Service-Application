@@ -5,12 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 @Slf4j
-public class Palgo<T extends INode> {
-    private final Graph<T> graph;
+public class Palgo<K, T extends INode> {
+    private final Graph<K, T> graph;
     private final IHeuristic<T> nextNodeScorer;
     private final IHeuristic<T> targetScorer;
 
-    public Palgo(Graph<T> graph, IHeuristic<T> nextNodeScorer, IHeuristic<T> targetScorer) {
+    public Palgo(Graph<K, T> graph, IHeuristic<T> nextNodeScorer, IHeuristic<T> targetScorer) {
         this.graph = graph;
         this.nextNodeScorer = nextNodeScorer;
         this.targetScorer = targetScorer;
