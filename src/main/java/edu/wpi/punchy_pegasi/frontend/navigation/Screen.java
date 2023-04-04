@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.navigation;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.FlowerDeliveryRequestController;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.FoodServiceRequestController;
+import edu.wpi.punchy_pegasi.frontend.controllers.requests.OfficeServiceRequestController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +14,13 @@ import java.util.function.Function;
 @Slf4j
 public enum Screen {
     HOME("Home", "frontend/views/HomePage.fxml"),
+    SIGNAGE("Signage", "frontend/views/Signage.fxml"),
+    MAP_PAGE("Map", "frontend/views/MapPage.fxml"),
+    LOGIN("Login", "frontend/views/Login.fxml"),
     FLOWER_DELIVERY_REQUEST("Flower Delivery Request", "frontend/requests/FlowerDeliveryRequest.fxml", FlowerDeliveryRequestController::create),
     DISPLAY_SERVICE_REQUESTS("Service Request", "frontend/requests/ServiceRequest.fxml"),
-    SIGNAGE("Signage", "frontend/views/Signage.fxml"),
-    OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeSuppliesServiceRequest.fxml", OfficeServiceRequestController::create),
-    FOOD_SERVICE_REQUEST("Food Service Request", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create),
-    MAP_PAGE("Map", "frontend/views/MapPage.fxml"),
-    LOGIN("Login", "frontend/views/Login.fxml");
+    OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeServiceRequest.fxml", OfficeServiceRequestController::create),
+    FOOD_SERVICE_REQUEST("Food Service Request", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create);
     private final Function<String, ? extends Parent> createFunction;
     private final String path;
     private final String readable;

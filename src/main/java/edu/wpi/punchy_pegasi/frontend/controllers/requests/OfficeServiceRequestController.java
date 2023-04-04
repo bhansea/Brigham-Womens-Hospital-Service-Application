@@ -1,28 +1,23 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.OfficeServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
     @FXML
     TextField officeRequest;
 
-    public static BorderPane create() {
-        var cont = new OfficeServiceRequestController();
-        return RequestController.create(new OfficeServiceRequestController(), "views/OfficeServiceRequest.fxml");
+    public static BorderPane create(String path) {
+        return RequestController.create(new OfficeServiceRequestController(), path);
     }
+
     @FXML
     @Override
     public void init() {

@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.frontend;
+package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
 
