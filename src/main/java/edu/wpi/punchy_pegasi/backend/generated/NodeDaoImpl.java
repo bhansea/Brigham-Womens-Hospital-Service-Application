@@ -1,12 +1,9 @@
 package edu.wpi.punchy_pegasi.backend.generated;
-import edu.wpi.punchy_pegasi.backend.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.backend.TestDB;
-import java.util.Arrays;
-import edu.wpi.punchy_pegasi.backend.TestDB;
 
-import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.backend.IDao;
 import edu.wpi.punchy_pegasi.backend.Node;
+import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.frontend.App;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -25,11 +22,11 @@ public class NodeDaoImpl implements IDao<Node, String> {
         try (var rs = dbController.searchQuery(PdbController.TableType.NODES, "nodeID", key)) {
             rs.next();
             Node req = new Node(
-                    (long)rs.getObject("nodeID"),
-                    (int)rs.getObject("xcoord"),
-                    (int)rs.getObject("ycoord"),
-                    (java.lang.String)rs.getObject("floor"),
-                    (java.lang.String)rs.getObject("building"));
+                    (java.lang.Long) rs.getObject("nodeID"),
+                    (java.lang.Integer) rs.getObject("xcoord"),
+                    (java.lang.Integer) rs.getObject("ycoord"),
+                    (java.lang.String) rs.getObject("floor"),
+                    (java.lang.String) rs.getObject("building"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -43,11 +40,11 @@ public class NodeDaoImpl implements IDao<Node, String> {
         try (var rs = dbController.searchQuery(PdbController.TableType.NODES)) {
             while (rs.next()) {
                 Node req = new Node(
-                    (long)rs.getObject("nodeID"),
-                    (int)rs.getObject("xcoord"),
-                    (int)rs.getObject("ycoord"),
-                    (java.lang.String)rs.getObject("floor"),
-                    (java.lang.String)rs.getObject("building"));
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.Integer) rs.getObject("xcoord"),
+                        (java.lang.Integer) rs.getObject("ycoord"),
+                        (java.lang.String) rs.getObject("floor"),
+                        (java.lang.String) rs.getObject("building"));
                 if (req != null)
                     map.put(String.valueOf(req.getNodeID()), req);
             }

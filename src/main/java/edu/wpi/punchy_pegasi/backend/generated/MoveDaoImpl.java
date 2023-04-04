@@ -1,12 +1,9 @@
 package edu.wpi.punchy_pegasi.backend.generated;
-import edu.wpi.punchy_pegasi.backend.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.backend.TestDB;
-import java.util.Arrays;
-import edu.wpi.punchy_pegasi.backend.TestDB;
 
-import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.backend.IDao;
 import edu.wpi.punchy_pegasi.backend.Move;
+import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.frontend.App;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -25,10 +22,10 @@ public class MoveDaoImpl implements IDao<Move, String> {
         try (var rs = dbController.searchQuery(PdbController.TableType.MOVES, "uuid", key)) {
             rs.next();
             Move req = new Move(
-                    (long)rs.getObject("uuid"),
-                    (long)rs.getObject("nodeID"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("date"));
+                    (java.lang.Long) rs.getObject("uuid"),
+                    (java.lang.Long) rs.getObject("nodeID"),
+                    (java.lang.String) rs.getObject("longName"),
+                    (java.lang.String) rs.getObject("date"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -42,10 +39,10 @@ public class MoveDaoImpl implements IDao<Move, String> {
         try (var rs = dbController.searchQuery(PdbController.TableType.MOVES)) {
             while (rs.next()) {
                 Move req = new Move(
-                    (long)rs.getObject("uuid"),
-                    (long)rs.getObject("nodeID"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("date"));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("date"));
                 if (req != null)
                     map.put(String.valueOf(req.getUuid()), req);
             }

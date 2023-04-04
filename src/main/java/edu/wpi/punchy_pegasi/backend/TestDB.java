@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import java.util.Optional;
 
 @Slf4j
 public class TestDB {
@@ -38,7 +39,9 @@ public class TestDB {
 
             // same thing but for FlowerDeliveryServiceRequest
             singleton.pdb.initTableByType(PdbController.TableType.FOODREQUESTS);
-            var FoodServiceRequestEntryDAO = new FoodServiceRequestEntryDaoImpl();
+            FoodServiceRequestEntryDaoImpl FoodServiceRequestEntryDAO = new FoodServiceRequestEntryDaoImpl();
+            Optional<FoodServiceRequestEntry> ret = FoodServiceRequestEntryDAO.get("11888e2b-0e84-4fd0-8ce5-0bdfbb098b2e");
+            System.out.println("Food Service Retrieved");
             FoodServiceRequestEntryDAO.save(new FoodServiceRequestEntry(
                     "test",
                     "test",
