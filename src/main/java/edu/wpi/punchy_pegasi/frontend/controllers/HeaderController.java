@@ -3,7 +3,10 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,13 +15,15 @@ import javafx.scene.control.Control;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import org.w3c.dom.events.MouseEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class HeaderController implements PropertyChangeListener {
     public StackPane headerStackpane;
-//    @FXML
+    @FXML HBox navButtonContainer;
+    //    @FXML
 //    private VBox imageContainer;
 //    @FXML
 //    private ImageView bannerImage;
@@ -43,7 +48,22 @@ public class HeaderController implements PropertyChangeListener {
 
     @FXML
     private void initialize() {
+
         App.getSingleton().addPropertyChangeListener(this);
+
+        for (var entry : Screen.values()) {
+            if (entry.name().toLowerCase().contains("flower")
+                || entry.name().toLowerCase().contains("office")
+                || entry.name().toLowerCase().contains(""))
+                continue;
+            Button button = new Button();
+            button.setText(entry.name());
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
+            button.setOnMouseClicked(e -> {
+                Navigation.navigate(entry);
+            });
+            navButtonContainer.getChildren().add(button);
+        }
     }
 
     @Override
