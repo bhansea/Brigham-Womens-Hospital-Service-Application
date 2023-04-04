@@ -1,12 +1,9 @@
 package edu.wpi.punchy_pegasi.backend.generated;
+
+import edu.wpi.punchy_pegasi.backend.Edge;
 import edu.wpi.punchy_pegasi.backend.IDao;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.backend.TestDB;
-import java.util.Arrays;
-import edu.wpi.punchy_pegasi.backend.TestDB;
-
 import edu.wpi.punchy_pegasi.frontend.App;
-import edu.wpi.punchy_pegasi.backend.Edge;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -25,9 +22,9 @@ public class EdgeDaoImpl implements IDao<Edge, String> {
         try (var rs = dbController.searchQuery(PdbController.TableType.EDGES, "uuid", key)) {
             rs.next();
             Edge req = new Edge(
-                    (long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                    (java.lang.Long) rs.getObject("uuid"),
+                    (java.lang.String) rs.getObject("startNode"),
+                    (java.lang.String) rs.getObject("endNode"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -41,9 +38,9 @@ public class EdgeDaoImpl implements IDao<Edge, String> {
         try (var rs = dbController.searchQuery(PdbController.TableType.EDGES)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    (long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.String) rs.getObject("startNode"),
+                        (java.lang.String) rs.getObject("endNode"));
                 if (req != null)
                     map.put(String.valueOf(req.getUuid()), req);
             }
