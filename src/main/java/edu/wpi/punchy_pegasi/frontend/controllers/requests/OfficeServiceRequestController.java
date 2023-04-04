@@ -24,7 +24,10 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         return RequestController.create(new OfficeServiceRequestController(), "views/OfficeServiceRequest.fxml");
     }
     @FXML
-    public void init() {}
+    @Override
+    public void init() {
+        validateEntry();
+    }
 
     @FXML
     public void submitEntry() {

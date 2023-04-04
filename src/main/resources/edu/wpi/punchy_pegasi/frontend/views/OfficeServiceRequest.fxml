@@ -35,7 +35,7 @@
                                 <Insets left="10.0"/>
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="officeRequest" prefWidth="475.0" promptText="Enter supplies">
+                        <TextField fx:id="officeRequest" prefWidth="475.0" promptText="Enter supplies" onKeyReleased="#validateEntry">
                             <font>
                                 <Font size="15.0"/>
                             </font>

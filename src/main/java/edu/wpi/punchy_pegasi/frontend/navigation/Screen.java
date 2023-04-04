@@ -18,7 +18,7 @@ public enum Screen {
     FLOWERDELIVERY_REQUEST("Flower Delivery Request", FlowerDeliveryRequestController::create),
     SERVICE_REQUEST("Service Request", "views/ServiceRequest.fxml"),
     SIGNAGE("Signage", "views/Signage.fxml"),
-    OFFICE_SERVICE_REQUEST("Request office supplied", OfficeServiceRequestController::create),
+    OFFICE_SERVICE_REQUEST("Request office supplies", OfficeServiceRequestController::create),
     FOOD_SERVICE_REQUEST("Food Service Request", FoodServiceRequestController::create),
     MAP_PAGE("Map", "views/MapPage.fxml"),
     DISPLAY_SERVICE_REQUESTS("Display Service Requests", "views/ServiceRequest.fxml"),
