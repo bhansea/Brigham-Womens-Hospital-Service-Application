@@ -28,11 +28,10 @@ public class ServiceRequestController {
 
     String showReq(){
         String temp = "";
-        int i = 0;
         if(submit.isPressed()){
             temp = servSearchBar.getText();
-            for(i = 0; i < requests.size(); i++){
-                if(temp.matches(requests.get(i))){
+            for(int i = 0; i < requests.size(); i++){ //does not loop because theres nothing in requests
+                if(temp.matches(requests.get(i))) {
                     return requests.get(i);
                 }
                 else{
