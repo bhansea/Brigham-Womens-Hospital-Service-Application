@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 
-public class ServiceRequestController extends RequestController {
+public class ServiceRequestController {
 
     @FXML
     MFXTextField servSearchBar;
@@ -19,23 +19,22 @@ public class ServiceRequestController extends RequestController {
     @FXML
     MFXButton submit;
 
-   // @FXML MFXButton back;
-    @Getter @Setter
+    // @FXML MFXButton back;
+    @Getter
+    @Setter
     private ArrayList<String> requests = new ArrayList<>(); //store requests in list to search through
 
 
     @FXML
-
-    String showReq(){
+    String showReq() {
         String temp = "";
-        if(submit.isPressed()){
+        if (submit.isPressed()) {
             temp = servSearchBar.getText();
-            for(int i = 0; i < requests.size(); i++){ //does not loop because theres nothing in requests so no size
-                                                      //so i++ is never used as well
-                if(temp.matches(requests.get(i))) {
+            for (int i = 0; i < requests.size(); i++) { //does not loop because theres nothing in requests so no size
+                //so i++ is never used as well
+                if (temp.matches(requests.get(i))) {
                     return requests.get(i);
-                }
-                else{
+                } else {
                     throw new RuntimeException("No such request found.");
                 }
             }
@@ -49,10 +48,5 @@ public class ServiceRequestController extends RequestController {
         return temp;
 
 
-    }
-
-    @FXML
-    public void initialize() {
-        backButton.setOnMouseClicked(event -> Navigation.navigate(Screen.HOME));
     }
 }
