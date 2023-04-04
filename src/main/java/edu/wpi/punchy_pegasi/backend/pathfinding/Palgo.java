@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.backend.pathfinding;
 
+import edu.wpi.punchy_pegasi.schema.INode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

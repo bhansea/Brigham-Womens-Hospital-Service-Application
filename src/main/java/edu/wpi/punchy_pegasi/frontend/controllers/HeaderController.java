@@ -1,6 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import javafx.beans.binding.ObjectBinding;
@@ -17,18 +17,19 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class HeaderController implements PropertyChangeListener {
-    @FXML
-    private VBox imageContainer;
-    @FXML
-    private ImageView bannerImage;
-    @FXML
-    private GridPane headerGrid;
+    public StackPane headerStackpane;
+//    @FXML
+//    private VBox imageContainer;
+//    @FXML
+//    private ImageView bannerImage;
+//    @FXML
+//    private GridPane headerGrid;
     @FXML
     private Button exitButton;
     @FXML
     private Button homeButton;
-    @FXML
-    private Pane clipper;
+//    @FXML
+//    private Pane clipper;
 
     @FXML
     private void toHome(ActionEvent event) {
@@ -36,36 +37,12 @@ public class HeaderController implements PropertyChangeListener {
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit() {
         App.exit();
     }
 
     @FXML
     private void initialize() {
-        // get second column to fill width
-        final var col = new ColumnConstraints(0, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
-        col.setHgrow(Priority.ALWAYS);
-        headerGrid.getRowConstraints().add(new RowConstraints(100));
-        headerGrid.getColumnConstraints().add(col);
-
-        var clipRect = new Rectangle(100, 100);
-        clipRect.widthProperty().bind(imageContainer.widthProperty());
-
-        clipper
-                .clipProperty()
-                .bind(
-                        new ObjectBinding<Node>() {
-                            {
-                                bind(clipper.widthProperty(), clipper.heightProperty());
-                            }
-
-                            @Override
-                            protected Node computeValue() {
-                                return new Rectangle(clipper.getWidth(), clipper.getHeight());
-                            }
-                        });
-        bannerImage.fitWidthProperty().bind(imageContainer.widthProperty());
-
         App.getSingleton().addPropertyChangeListener(this);
     }
 

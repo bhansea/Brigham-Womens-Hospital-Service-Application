@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.RequestEntry;
+import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -28,9 +27,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     Label mealName;
 
-    public static BorderPane create() {
-        var cont = new FoodServiceRequestController();
-        return RequestController.create(new FoodServiceRequestController(), "views/FoodServiceRequest.fxml");
+    public static BorderPane create(String path) {
+        return RequestController.create(new FoodServiceRequestController(), path);
     }
 
     @FXML

@@ -1,6 +1,6 @@
 package edu.wpi.punchy_pegasi.backend.pathfinding;
 
-import edu.wpi.punchy_pegasi.backend.Node;
+import edu.wpi.punchy_pegasi.schema.Node;
 
 public class CartesianHeuristic implements IHeuristic<Node> {
     @Override

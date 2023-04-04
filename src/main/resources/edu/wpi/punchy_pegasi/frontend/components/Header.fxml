@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane style="-fx-background-color: #012D5A;" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HeaderController"
+            stylesheets="@../css/HeaderBackground.css">
+    <bottom>
+        <VBox alignment="CENTER_RIGHT">
+            <children>
+                <Button mnemonicParsing="false" onAction="#toHome"
+                        style="-fx-background-color: #012D5A;" text="HOME" textFill="#f1f1f1"
+                        fx:id="homeButton"
+                        visible="false">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                    <font>
+                        <Font size="21.0"/>
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#exit"
+                        style="-fx-background-color: #012D5A;" text="EXIT" textFill="#f1f1f1"
+                        fx:id="exitButton"
+                        visible="false">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                    <font>
+                        <Font size="21.0"/>
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+    </bottom>
+    <center>
+        <StackPane>
+            <BorderPane styleClass="header-background-image"/>
+            <VBox styleClass="header-logo-overlay">
+                <ImageView fitHeight="100" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/BW-logo.png"/>
+                    </image>
+                </ImageView>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

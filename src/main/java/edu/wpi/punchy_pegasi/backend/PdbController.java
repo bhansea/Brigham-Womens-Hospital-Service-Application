@@ -1,10 +1,7 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
-import edu.wpi.punchy_pegasi.frontend.FlowerDeliveryRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.GenericRequestEntry;
-import lombok.Getter;
+import edu.wpi.punchy_pegasi.schema.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -347,24 +344,6 @@ public class PdbController {
                     fw.append(i <= headerCount - 1 ? ',' : '\n');
                 }
             }
-        }
-    }
-
-    public enum TableType {
-        NODES(Node.class),
-        EDGES(Edge.class),
-        MOVES(Move.class),
-        LOCATIONNAMES(LocationName.class),
-        GENERIC(GenericRequestEntry.class),
-        FOODREQUESTS(FoodServiceRequestEntry.class),
-
-        FLOWERREQUESTS(FlowerDeliveryRequestEntry.class);
-
-        @Getter
-        private final Class clazz;
-
-        TableType(Class clazz) {
-            this.clazz = clazz;
         }
     }
 
