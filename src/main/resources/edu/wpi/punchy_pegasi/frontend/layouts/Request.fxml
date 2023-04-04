@@ -27,7 +27,7 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <TextField fx:id="patientName" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter patient name">
+                                <TextField fx:id="patientName" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter Patient Name">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
@@ -41,7 +41,7 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <TextField fx:id="roomNumber" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter room number">
+                                <TextField fx:id="roomNumber" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter Room Number">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
@@ -55,7 +55,7 @@
                   </Label>
                   <HBox alignment="CENTER">
                      <children>
-                        <TextField fx:id="staffAssignment" alignment="CENTER" onKeyReleased="#validateEntry" promptText="Assign Staff Member">
+                        <TextField fx:id="staffAssignment" alignment="CENTER" onKeyReleased="#validateEntry" promptText="Enter Staff Member">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -69,7 +69,7 @@
                         </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <TextField fx:id="additionalNotes" alignment="CENTER" promptText="Additional Messages">
+                                <TextField fx:id="additionalNotes" alignment="CENTER" promptText="Additional Notes">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
