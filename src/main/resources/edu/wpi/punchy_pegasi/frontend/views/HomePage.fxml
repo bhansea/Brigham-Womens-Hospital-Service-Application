@@ -28,70 +28,13 @@
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                             </padding>
-                            <children>
-                            </children>
                         </VBox>
                         <VBox alignment="CENTER" spacing="10.0"
-                              style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
+                              style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;"
+                                fx:id="otherPages">
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                             </padding>
-                            <children>
-                                <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308"
-                                      onMouseClicked="#signageButtonClick"
-                                      style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                    <children>
-                                        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                            <children>
-                                                <Button alignment="CENTER" contentDisplay="CENTER"
-                                                        mnemonicParsing="false"
-                                                        style="-fx-background-color: transparent;" text="Signage Map"
-                                                        textFill="WHITE" wrapText="true"/>
-                                            </children>
-                                        </VBox>
-                                        <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0"
-                                              minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                            <children>
-                                                <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                    <font>
-                                                        <Font size="14.0"/>
-                                                    </font>
-                                                </Label>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                    <padding>
-                                        <Insets right="10.0"/>
-                                    </padding>
-                                </HBox>
-                                <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308"
-                                      onMouseClicked="#mapButtonClick"
-                                      style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                    <children>
-                                        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                            <children>
-                                                <Button alignment="CENTER" contentDisplay="CENTER"
-                                                        mnemonicParsing="false"
-                                                        style="-fx-background-color: transparent;" text="Map page"
-                                                        textFill="WHITE" wrapText="true"/>
-                                            </children>
-                                        </VBox>
-                                        <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0"
-                                              minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                            <children>
-                                                <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                    <font>
-                                                        <Font size="14.0"/>
-                                                    </font>
-                                                </Label>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                    <padding>
-                                        <Insets right="10.0"/>
-                                    </padding>
-                                </HBox>
-                            </children>
                             <VBox.margin>
                                 <Insets bottom="10.0"/>
                             </VBox.margin>

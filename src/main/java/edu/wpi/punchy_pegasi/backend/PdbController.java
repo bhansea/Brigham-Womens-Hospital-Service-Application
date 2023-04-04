@@ -65,17 +65,21 @@ public class PdbController {
         switch (tableType) {
             case NODES -> {
                 var ret = statement.execute(query + "(" +
-                        "nodeID varchar PRIMARY KEY, " +
+                        "nodeID bigint PRIMARY KEY, " +
                         "xcoord int, " +
                         "ycoord int, " +
                         "floor varchar, " +
                         "building varchar);");
             }
             case EDGES -> {
+                statement.execute("DROP SEQUENCE IF EXISTS table_name_id_seq;");
+                statement.execute("CREATE SEQUENCE table_name_id_seq;");
                 var ret2 = statement.execute(query + "(" +
-                        "uuid bigint," +
+                        "uuid bigint DEFAULT nextval('table_name_id_seq')," +
                         "startNode varchar, " +
                         "endNode varchar);");
+                statement.execute("ALTER SEQUENCE table_name_id_seq OWNED BY edges.uuid;");
+
             }
             case MOVES -> {
                 var ret2 = statement.execute(query +

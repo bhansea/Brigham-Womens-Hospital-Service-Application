@@ -42,7 +42,7 @@
                         </Label>
                         <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXComboBox fx:id="mealDropdown" onAction="#validateEntry" prefWidth="350.0" promptText="Select Meal" style="-fx-alignment: center;" />
+                                <MFXComboBox fx:id="mealDropdown" onAction="#updateLabelEntry" prefWidth="350.0" promptText="Select Meal" style="-fx-alignment: center;" />
                             </children>
                         </VBox>
                     </children>
@@ -161,7 +161,7 @@
                 </ImageView>
                 <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
                     <children>
-                        <Label text="Meal Name">
+                        <Label fx:id="mealName" text="Meal Name">
                             <font>
                                 <Font size="24.0" />
                             </font>
