@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend;
 
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
@@ -23,6 +24,9 @@ import java.io.IOException;
 public class App extends Application {
     @Getter
     private static App singleton;
+    @Getter
+    private final PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
+            "teamp", "teamp130");
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Setter
     @Getter
@@ -79,6 +83,13 @@ public class App extends Application {
 
         Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
+
+        try {
+            // TODO: specify table type
+//            pdb.importTable("C:\\Documents\\p2\\Nodes.csv", "nodes");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override
