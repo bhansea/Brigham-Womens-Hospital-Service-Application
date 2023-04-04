@@ -17,46 +17,50 @@ import java.util.Optional;
 
 @Slf4j
 public class TestDB {
-    public static TestDB singleton = new TestDB();
+
+    @Getter
+    private static TestDB singleton = new TestDB();
     @Getter
 //    PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
 //            "teamp", "teamp130");
     PdbController pdb = new PdbController("jdbc:postgresql://bruellcarlisle.dyndns.org:54321/softeng",
             "teamp", "teamp130");
 
-    public static TestDB getSingleton() {
-        return singleton;
-    }
 
     public static void main(String[] args) {
         try {
             singleton.pdb.initTableByType(TableType.LOCATIONNAMES);
             var LocationNameDAO = new LocationNameDaoImpl();
-            LocationNameDAO.save(new LocationName(UUID.randomUUID(), "test", "test", LocationName.NodeType.EXIT));
+            LocationNameDAO.save(new LocationName("lllllllong Name", "short name", LocationName.NodeType.EXIT));
+            LocationNameDAO.save(new LocationName("lllllllongg Name", "short name", LocationName.NodeType.DEPT));
             var locationNameMap = LocationNameDAO.getAll();
-
-            singleton.pdb.initTableByType(TableType.EDGES);
-            var EdgeDAO = new EdgeDaoImpl();
-            EdgeDAO.save(new Edge(new Random().nextLong(), "test", "test"));
-            var edgeMap = EdgeDAO.getAll();
-
-            // same thing but for FlowerDeliveryServiceRequest
-            singleton.pdb.initTableByType(TableType.FOODREQUESTS);
-            FoodServiceRequestEntryDaoImpl FoodServiceRequestEntryDAO = new FoodServiceRequestEntryDaoImpl();
-            Optional<FoodServiceRequestEntry> ret = FoodServiceRequestEntryDAO.get("11888e2b-0e84-4fd0-8ce5-0bdfbb098b2e");
-            System.out.println("Food Service Retrieved");
-            FoodServiceRequestEntryDAO.save(new FoodServiceRequestEntry(
-                    "test",
-                    "test",
-                    "test",
-                    "test",
-                    "test",
-                    "test",
-                    Arrays.asList("test", "test2"),
-                    "test"
-            ));
-            var foodServiceRequestEntryMap = FoodServiceRequestEntryDAO.getAll();
             System.out.println();
+//            singleton.pdb.initTableByType(TableType.EDGES);
+//            var EdgeDAO = new EdgeDaoImpl();
+//            EdgeDAO.save(new Edge(new Random().nextLong(), "test", "test"));
+//            var edgeMap = EdgeDAO.getAll();
+
+            // same thing but for FoodDeliveryServiceRequest
+//            singleton.pdb.initTableByType(TableType.FOODREQUESTS);
+//            FoodServiceRequestEntryDaoImpl FoodServiceRequestEntryDAO = new FoodServiceRequestEntryDaoImpl();
+
+            // test get
+//            Optional<FoodServiceRequestEntry> ret = FoodServiceRequestEntryDAO.get("11888e2b-0e84-4fd0-8ce5-0bdfbb098b2e");
+//            System.out.println("Food Service Retrieved");
+
+            // test save
+//            FoodServiceRequestEntryDAO.save(new FoodServiceRequestEntry(
+//                    "test",
+//                    "test",
+//                    "test",
+//                    "test",
+//                    "test",
+//                    "test",
+//                    Arrays.asList("test", "test2"),
+//                    "test"
+//            ));
+//            var foodServiceRequestEntryMap = FoodServiceRequestEntryDAO.getAll();
+//            System.out.println();
         } catch (PdbController.DatabaseException e) {
             log.error(e.getMessage());
         }
