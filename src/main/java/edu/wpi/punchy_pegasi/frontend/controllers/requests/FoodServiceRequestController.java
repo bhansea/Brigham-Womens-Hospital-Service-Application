@@ -8,10 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
 import java.beans.PropertyChangeEvent;
@@ -28,6 +25,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     MFXComboBox<String> mealDropdown;
     @FXML
     ToggleGroup temp;
+    @FXML
+    Label mealName;
 
     public static BorderPane create() {
         var cont = new FoodServiceRequestController();
@@ -40,6 +39,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         mealDropdown.setItems(mealList);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
+        //mealName.setText("");
     }
 
     @FXML
@@ -80,6 +80,12 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         utensils.setSelected(false);
         glass.setSelected(false);
         temp.selectToggle(null);
+    }
+
+    @FXML
+    public void updateLabelEntry() {
+        validateEntry();
+        mealName.setText(mealDropdown.getSelectedItem());
     }
 
     @Override
