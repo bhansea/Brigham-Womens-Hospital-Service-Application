@@ -8,193 +8,38 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
-    <top>
-        <Label text="Home" BorderPane.alignment="CENTER">
-            <font>
-                <Font size="26.0" />
-            </font>
-            <padding>
-                <Insets bottom="10.0" top="10.0" />
-            </padding>
-        </Label>
-    </top>
-   <center>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="25.0" HBox.hgrow="ALWAYS">
-               <children>
-                      <VBox alignment="TOP_CENTER" maxHeight="300.0" maxWidth="500.0" minHeight="200.0" minWidth="400.0" spacing="10.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                          <padding>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                          </padding>
-                          <children>
-                              <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#conferenceRoomClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                  <children>
-                                      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                          <children>
-                                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Conference Room Reservation Request" textFill="WHITE" wrapText="true" />
-                                          </children>
-                                      </VBox>
-                              <HBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                 <children>
-                                    <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                                  </children>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                              </HBox>
-                              <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#mealButtonClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                  <children>
-                                      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                          <children>
-                                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Meal Delivery Request" textFill="WHITE" wrapText="true">
-                                      </Button>
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                          <children>
-                                              <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                  <font>
-                                                      <Font size="14.0" />
-                                                  </font>
-                                              </Label>
-                                          </children>
-                              </VBox>
-                                  </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                              </HBox>
-                              <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#flowerButtonClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                  <children>
-                                      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                          <children>
-                                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Flower Delivery Request" textFill="WHITE" wrapText="true" />
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                          <children>
-                                              <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                  <font>
-                                                      <Font size="14.0" />
-                                                  </font>
-                                              </Label>
-                                          </children>
-                              </VBox>
-                                  </children>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                              </HBox>
-                              <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#furnitureButtonClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                  <children>
-                                      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                          <children>
-                                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Furniture Delivery Request" textFill="WHITE" wrapText="true" />
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                          <children>
-                                              <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                  <font>
-                                                      <Font size="14.0" />
-                                                  </font>
-                                              </Label>
-                                          </children>
-                              </VBox>
-                                  </children>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                              </HBox>
-                              <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#officeSuppliesClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                  <children>
-                                      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                          <children>
-                                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Office Supplies Purchase and Delivery Request" textFill="WHITE" wrapText="true" />
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                          <children>
-                                              <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                  <font>
-                                                      <Font size="14.0" />
-                                                  </font>
-                                              </Label>
-                                          </children>
-                              </VBox>
-                                  </children>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                              </HBox>
-                          </children>
-                      </VBox>
-                      <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" spacing="10.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
-                          <padding>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                          </padding>
-                          <children>
-                              <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#signageButtonClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                                  <children>
-                                      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                          <children>
-                                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Signage Map" textFill="WHITE" wrapText="true" />
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                          <children>
-                                              <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                                  <font>
-                                                      <Font size="14.0" />
-                                                  </font>
-                                              </Label>
-                                          </children>
-                                      </VBox>
-                                  </children>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                              </HBox>
-                        <HBox alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" onMouseClicked="#mapButtonClick" style="-fx-background-color: #012D5A; -fx-background-radius: 6;">
-                           <children>
-                              <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Map page" textFill="WHITE" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" maxHeight="10.0" maxWidth="15.0" minHeight="15.0" minWidth="15.0" style="-fx-border-color: #f6bd38;">
-                                 <children>
-                                    <Label alignment="TOP_CENTER" text="&gt;" textFill="WHITE">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                           </children>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                        </HBox>
-                          </children>
-                     <VBox.margin>
-                        <Insets bottom="10.0" />
-                     </VBox.margin>
-                      </VBox>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-   </center>
+<BorderPane styleClass="borderPane" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
+    <center>
+        <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+            <children>
+                <VBox alignment="CENTER" spacing="10.0">
+                    <children>
+                    <Label text="WHAT CAN WE HELP YOU WITH?">
+                        <font>
+                            <Font name="System Bold" size="24.0" />
+                        </font>
+                        <padding>
+                            <Insets topRightBottomLeft="10" />
+                        </padding>
+                    </Label>
+                        <VBox fx:id="serviceRequests" alignment="TOP_CENTER" spacing="10.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="10.0"
+                              style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;"
+                                fx:id="otherPages">
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </center>
 </BorderPane>

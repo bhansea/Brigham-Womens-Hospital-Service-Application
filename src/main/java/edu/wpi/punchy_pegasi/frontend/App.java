@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend;
 
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
@@ -23,19 +24,27 @@ import java.io.IOException;
 public class App extends Application {
     @Getter
     private static App singleton;
-    @Setter
-    @Getter
-    private static Stage primaryStage;
-    @Getter
-    @Setter
-    private static BorderPane viewPane;
-
-    @Getter
-    private static Screen currentScreen;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    @Getter
+    private final PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+//    private final PdbController pdb = new PdbController("jdbc:postgresql://bruellcarlisle.dyndns.org:54321/softeng", "teamp", "teamp130");
+    @Setter
+    @Getter
+    private Stage primaryStage;
+    @Getter
+    @Setter
+    private BorderPane viewPane;
+    @Getter
+    private Screen currentScreen;
+    @Getter
+    private Scene scene;
 
     public static void exit() {
         Platform.exit();
+    }
+
+    public static void loadStylesheet(String resourcePath) {
+        App.singleton.scene.getStylesheets().add(App.class.getResource(resourcePath).toExternalForm());
     }
 
     public void setCurrentScreen(Screen value) {
@@ -60,24 +69,27 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         /* primaryStage is generally only used if one of your components require the stage to display */
-        App.primaryStage = primaryStage;
-
-        final FXMLLoader loader = new FXMLLoader(App.class.getResource("views/Root.fxml"));
-        final BorderPane root = loader.load();
+        App.singleton.primaryStage = primaryStage;
 
         final var layoutLoader = new FXMLLoader(App.class.getResource("views/Layout.fxml"));
         final BorderPane loadedLayout = layoutLoader.load();
         final LayoutController layoutController = layoutLoader.getController();
 
-        root.setCenter(loadedLayout);
-        App.viewPane = layoutController.getViewPane();
+        App.singleton.viewPane = layoutController.getViewPane();
 
-        final Scene scene = new Scene(root, 1280, 720);
+        scene = new Scene(loadedLayout, 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Navigation.navigate(Screen.LOGIN);
+        Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
+
+//        try {
+//            pdb.importTable(PdbController.TableType.NODES, "/home/xyven/Downloads/Node.csv");
+//            pdb.importTable(PdbController.TableType.EDGES, "/home/xyven/Downloads/Edge.csv");
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//        }
     }
 
     @Override

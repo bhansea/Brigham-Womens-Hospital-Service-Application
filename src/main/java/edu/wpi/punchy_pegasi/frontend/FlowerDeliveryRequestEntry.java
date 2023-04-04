@@ -1,27 +1,48 @@
 package edu.wpi.punchy_pegasi.frontend;
 
-public class FlowerDeliveryRequestEntry {
+import lombok.Getter;
 
-    private final String patientName;
-    private final String additionalNotes;
+import java.util.UUID;
+
+@Getter
+public class FlowerDeliveryRequestEntry extends RequestEntry {
     private final String flowerSize;
     private final String flowerType;
-    private final String roomNumber;
     private final String flowerAmount;
 
     public FlowerDeliveryRequestEntry(
+            UUID serviceID,
             String patientName,
-            String additionalNotes,
-            String flowerSize,
             String roomNumber,
+            String staffAssignment,
+            String additionalNotes,
+            Status status,
+            String flowerSize,
             String flowerAmount,
             String flowerType) {
-        this.patientName = patientName;
-        this.additionalNotes = additionalNotes;
+        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes, status);
         this.flowerSize = flowerSize;
-        this.roomNumber = roomNumber;
         this.flowerAmount = flowerAmount;
         this.flowerType = flowerType;
+    }
+
+    public FlowerDeliveryRequestEntry(
+            String patientName,
+            String roomNumber,
+            String staffAssignment,
+            String additionalNotes,
+            String flowerSize,
+            String flowerAmount,
+            String flowerType) {
+        this(UUID.randomUUID(),
+                patientName,
+                roomNumber,
+                staffAssignment,
+                additionalNotes,
+                Status.PROCESSING,
+                flowerSize,
+                flowerAmount,
+                flowerType);
     }
 
 

@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.frontend.controllers;
+package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 
-public class ServiceRequestController {
+public class ServiceRequestController extends RequestController {
 
     @FXML
     MFXTextField servSearchBar;
@@ -53,6 +53,6 @@ public class ServiceRequestController {
 
     @FXML
     public void initialize() {
-        servSearchBar.setOnKeyPressed(event -> Navigation.navigate(Screen.HOME));
+        backButton.setOnMouseClicked(event -> Navigation.navigate(Screen.HOME));
     }
 }

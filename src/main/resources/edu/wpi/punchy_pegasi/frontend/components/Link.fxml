@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<fx:root type="javafx.scene.layout.HBox"
+         xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         onMouseClicked="#onMouseClick"
+         maxHeight="44" minHeight="44"
+         styleClass="link-parent">
+    <padding>
+        <Insets right="10"/>
+    </padding>
+    <children>
+        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <children>
+                <Button onMouseClicked="#onMouseClick" fx:id="button" styleClass="link-button">
+                    <font>
+                        <Font size="15"/>
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+        <HBox styleClass="link-arrow-border">
+            <Region styleClass="link-arrow">
+                <shape>
+                    <SVGPath>
+                        <content>
+                            M 8.574 7.56 1.013 0 0 1.013 7.56 8.574 0 16.134 1.013 17.147 8.574 9.587 9.587 8.574 8.574
+                            7.56z
+                        </content>
+                    </SVGPath>
+                </shape>
+            </Region>
+        </HBox>
+    </children>
+</fx:root>
