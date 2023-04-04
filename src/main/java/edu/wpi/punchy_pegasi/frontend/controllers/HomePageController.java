@@ -11,29 +11,39 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class HomePageController {
-    ObservableList<HBox> list;
     @FXML
     private VBox serviceRequests;
+    @FXML
+    private VBox otherPages;
 
     @FXML
     public void initialize() {
-        ObservableList<HBox> list = FXCollections.observableArrayList();
-        Bindings.bindContent(serviceRequests.getChildren(), list);
+        ObservableList<HBox> serviceRequestButtons = FXCollections.observableArrayList();
+        Bindings.bindContent(serviceRequests.getChildren(), serviceRequestButtons);
         for (var entry : Screen.values()) {
             if (!entry.name().toLowerCase().contains("request"))
                 continue;
             LinkControl linkControl = new LinkControl(entry.getReadable(), () -> {
                 Navigation.navigate(entry);
             });
-            list.add(linkControl);
+            serviceRequestButtons.add(linkControl);
+        }
+
+        ObservableList<HBox> otherPageButtons = FXCollections.observableArrayList();
+        Bindings.bindContent(otherPages.getChildren(), otherPageButtons);
+
+        for (var entry: Screen.values()) {
+            if (entry.name().toLowerCase().contains("request")
+                    || entry.name().toLowerCase().contains("root")
+                    || entry.name().toLowerCase().contains("home")
+                    || entry.name().toLowerCase().contains("login"))
+                continue;
+            LinkControl linkControl = new LinkControl(entry.getReadable(), () -> {
+                Navigation.navigate(entry);
+            });
+            otherPageButtons.add(linkControl);
         }
     }
 
-    public void signageButtonClick(MouseEvent mouseEvent) {
-        Navigation.navigate(Screen.SIGNAGE);
-    }
 
-    public void mapButtonClick(MouseEvent mouseEvent) {
-        Navigation.navigate(Screen.MAP_PAGE);
-    }
 }
