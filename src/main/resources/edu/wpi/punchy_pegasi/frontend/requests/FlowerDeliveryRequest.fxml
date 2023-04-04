@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
@@ -41,7 +41,7 @@
                         </Label>
                         <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                             <children>
-                                <MFXComboBox fx:id="flowerTypeComboBox" floatingText="Select Flower Type" onAction="#updateLabelEntry" prefWidth="350.0" style="-fx-alignment: center;" />
+                                <MFXComboBox fx:id="flowerTypeComboBox" onAction="#updateLabelEntry" prefWidth="350.0" promptText="Select Flower Type" style="-fx-alignment: center; -fx-font-size: 16;" />
                             </children>
                         </VBox>
                     </children>

@@ -1,5 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
+import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
@@ -37,7 +39,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         mealDropdown.setItems(mealList);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
-        //mealName.setText("");
     }
 
     @FXML
@@ -55,6 +56,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
         //makes sure shared fields aren't empty
         requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
+        FoodServiceRequestEntryDaoImpl request = new FoodServiceRequestEntryDaoImpl();
+        request.save(requestEntry);
         Navigation.navigate(Screen.HOME);
     }
 
