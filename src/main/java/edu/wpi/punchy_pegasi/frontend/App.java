@@ -24,10 +24,10 @@ import java.io.IOException;
 public class App extends Application {
     @Getter
     private static App singleton;
-    @Getter
-    private final PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
-            "teamp", "teamp130");
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    @Getter
+    private final PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+//    private final PdbController pdb = new PdbController("jdbc:postgresql://bruellcarlisle.dyndns.org:54321/softeng", "teamp", "teamp130");
     @Setter
     @Getter
     private Stage primaryStage;
@@ -41,6 +41,10 @@ public class App extends Application {
 
     public static void exit() {
         Platform.exit();
+    }
+
+    public static void loadStylesheet(String resourcePath) {
+        App.singleton.scene.getStylesheets().add(App.class.getResource(resourcePath).toExternalForm());
     }
 
     public void setCurrentScreen(Screen value) {
@@ -62,10 +66,6 @@ public class App extends Application {
         log.info("Starting Up");
     }
 
-    public static void loadStylesheet(String resourcePath) {
-        App.singleton.scene.getStylesheets().add(App.class.getResource(resourcePath).toExternalForm());
-    }
-
     @Override
     public void start(Stage primaryStage) throws IOException {
         /* primaryStage is generally only used if one of your components require the stage to display */
@@ -84,12 +84,12 @@ public class App extends Application {
         Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
 
-        try {
-            // TODO: specify table type
-//            pdb.importTable("C:\\Documents\\p2\\Nodes.csv", "nodes");
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+//        try {
+//            pdb.importTable(PdbController.TableType.NODES, "/home/xyven/Downloads/Node.csv");
+//            pdb.importTable(PdbController.TableType.EDGES, "/home/xyven/Downloads/Edge.csv");
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//        }
     }
 
     @Override

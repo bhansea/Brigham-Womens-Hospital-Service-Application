@@ -4,10 +4,10 @@ import org.javatuples.Pair;
 
 import java.util.*;
 
-public class Graph<T extends INode> {
+public class Graph<K, T extends INode> {
     private final Map<T, Set<T>> connections;
 
-    public Graph(Map<String, T> nodes, List<Pair<String, String>> connections) {
+    public Graph(Map<K, T> nodes, List<Pair<K, K>> connections) {
         this.connections = new HashMap<>();
         for (var node : nodes.values())
             this.connections.put(node, new HashSet<>());

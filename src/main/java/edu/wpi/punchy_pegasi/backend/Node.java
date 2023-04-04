@@ -5,13 +5,13 @@ import lombok.Data;
 
 @Data
 public class Node implements INode {
-    private long nodeID;
-    private int xcoord;
-    private int ycoord;
+    private Long nodeID;
+    private Integer xcoord;
+    private Integer ycoord;
     private String floor;
     private String building;
 
-    public Node(long nodeID, int xcoord, int ycoord, String floor, String building) {
+    public Node(Long nodeID, Integer xcoord, Integer ycoord, String floor, String building) {
         this.nodeID = nodeID;
         this.xcoord = xcoord;
         this.ycoord = ycoord;
