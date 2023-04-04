@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -19,6 +20,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     TextField flowerAmountField;
     @FXML
     ToggleGroup flowerSizeGroup;
+    @FXML
+    Label flowerName;
 
     public static BorderPane create() {
         var controller = new FlowerDeliveryRequestController();
@@ -50,5 +53,11 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         flowerAmountField.clear();
         flowerTypeComboBox.clear();
         flowerSizeGroup.selectToggle(null);
+    }
+
+    @FXML
+    public void updateLabelEntry() {
+        validateEntry();
+        flowerName.setText(flowerTypeComboBox.getSelectedItem());
     }
 }
