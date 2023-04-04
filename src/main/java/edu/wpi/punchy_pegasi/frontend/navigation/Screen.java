@@ -19,6 +19,7 @@ public enum Screen {
     SIGNAGE("Signage", "views/Signage.fxml"),
     FOOD_SERVICE_REQUEST("Food Service Request", FoodServiceRequestController::create),
     MAP_PAGE("Map", "views/MapPage.fxml"),
+    DISPLAY_SERVICE_REQUESTS("Display Service Requests", "views/ServiceRequest.fxml"),
     LOGIN("Login", "views/Login.fxml");
     private final Supplier<? extends Parent> supplier;
     private final String readable;
