@@ -54,10 +54,11 @@ public class HeaderController implements PropertyChangeListener {
         for (var entry : Screen.values()) {
             if (entry.name().toLowerCase().contains("flower")
                 || entry.name().toLowerCase().contains("office")
-                || entry.name().toLowerCase().contains(""))
+                || entry.name().toLowerCase().contains("food")
+                || entry.name().toLowerCase().contains("home"))
                 continue;
             Button button = new Button();
-            button.setText(entry.name());
+            button.setText(entry.getReadable());
             button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
             button.setOnMouseClicked(e -> {
                 Navigation.navigate(entry);
