@@ -17,7 +17,7 @@ BEGIN
     floor varchar,
     building varchar
     );
-    ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes;
+    ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes.uuid;
   END IF;
 END $$;
 """),
@@ -32,7 +32,7 @@ BEGIN
     startNode bigint,
     endNode bigint
     );
-    ALTER SEQUENCE edges_id_seq OWNED BY teamp.edges;
+    ALTER SEQUENCE edges_id_seq OWNED BY teamp.edges.uuid;
   END IF;
 END $$;
 """),
@@ -48,7 +48,7 @@ BEGIN
     longName varchar,
     date varchar
     );
-    ALTER SEQUENCE moves_id_seq OWNED BY teamp.moves;
+    ALTER SEQUENCE moves_id_seq OWNED BY teamp.moves.uuid;
   END IF;
 END $$;
 """),
@@ -64,7 +64,7 @@ BEGIN
     shortName varchar,
     nodeType varchar
     );
-    ALTER SEQUENCE locationnames_id_seq OWNED BY teamp.locationnames;
+    ALTER SEQUENCE locationnames_id_seq OWNED BY teamp.locationnames.uuid;
   END IF;
 END $$;
 """),
@@ -81,7 +81,7 @@ BEGIN
     additionalNotes varchar,
     status varchar
     );
-    ALTER SEQUENCE generic_id_seq OWNED BY teamp.generic;
+    ALTER SEQUENCE generic_id_seq OWNED BY teamp.generic.serviceID;
   END IF;
 END $$;
 """),
@@ -103,7 +103,7 @@ BEGIN
     dietaryRestrictions varchar,
     patientName varchar
     );
-    ALTER SEQUENCE foodrequests_id_seq OWNED BY teamp.foodrequests;
+    ALTER SEQUENCE foodrequests_id_seq OWNED BY teamp.foodrequests.serviceID;
   END IF;
 END $$;
 """),
@@ -124,7 +124,7 @@ BEGIN
     flowerAmount varchar,
     patientName varchar
     );
-    ALTER SEQUENCE flowerrequests_id_seq OWNED BY teamp.flowerrequests;
+    ALTER SEQUENCE flowerrequests_id_seq OWNED BY teamp.flowerrequests.serviceID;
   END IF;
 END $$;
 """),
@@ -143,7 +143,7 @@ BEGIN
     beginningTime varchar,
     endTime varchar
     );
-    ALTER SEQUENCE conferencerequests_id_seq OWNED BY teamp.conferencerequests;
+    ALTER SEQUENCE conferencerequests_id_seq OWNED BY teamp.conferencerequests.serviceID;
   END IF;
 END $$;
 """),
@@ -161,7 +161,7 @@ BEGIN
     status varchar,
     selectFurniture varchar ARRAY
     );
-    ALTER SEQUENCE furniturerequests_id_seq OWNED BY teamp.furniturerequests;
+    ALTER SEQUENCE furniturerequests_id_seq OWNED BY teamp.furniturerequests.serviceID;
   END IF;
 END $$;
 """),

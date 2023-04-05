@@ -57,7 +57,8 @@ public class PdbController {
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
-        statement.execute(tableType.getTableSQL());
+        var q = tableType.getTableSQL();
+        statement.execute(q);
     }
 
     private String getFieldValueString(String[] fields, Object[] values, String equator, String delimiter) {
