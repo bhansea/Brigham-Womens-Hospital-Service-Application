@@ -7,19 +7,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MoveDaoImplTest {
+class FurnitureRequestEntryDaoImplTest {
     PdbController pdbController;
 
     @BeforeAll
     void init(){
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
         try {
-            pdbController.initTableByType(TableType.MOVES);
+            pdbController.initTableByType(TableType.FOODREQUESTS);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
     }
-
     @Test
     void get() {
     }

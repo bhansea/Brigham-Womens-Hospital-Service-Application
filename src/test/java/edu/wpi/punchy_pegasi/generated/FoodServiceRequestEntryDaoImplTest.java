@@ -25,6 +25,10 @@ class FoodServiceRequestEntryDaoImplTest {
     }
 
     @Test
+    void testGet() {
+    }
+
+    @Test
     void getAll() {
     }
 
@@ -38,9 +42,5 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-    }
-
-    @Test
-    void testGetAll() {
     }
 }

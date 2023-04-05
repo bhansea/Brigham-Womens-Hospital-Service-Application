@@ -25,6 +25,10 @@ class EdgeDaoImplTest {
     }
 
     @Test
+    void testGet() {
+    }
+
+    @Test
     void getAll() {
     }
 
@@ -38,9 +42,5 @@ class EdgeDaoImplTest {
 
     @Test
     void delete() {
-    }
-
-    @Test
-    void testGetAll() {
     }
 }
