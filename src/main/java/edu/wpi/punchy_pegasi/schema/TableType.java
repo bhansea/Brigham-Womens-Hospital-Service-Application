@@ -20,13 +20,15 @@ public enum TableType {
             )"""),
     MOVES(Move.class, """
             (
+            uuid bigint PRIMARY KEY,
             nodeID bigint,
             longName varchar,
             date varchar
             )"""),
     LOCATIONNAMES(LocationName.class, """
             (
-            longName varchar PRIMARY KEY,
+            uuid bigint PRIMARY KEY,
+            longName varchar,
             shortName varchar,
             nodeType varchar
             )"""),

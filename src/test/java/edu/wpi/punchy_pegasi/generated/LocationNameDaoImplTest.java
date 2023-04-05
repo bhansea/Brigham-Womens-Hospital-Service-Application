@@ -1,15 +1,22 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class LocationNameDaoImplTest {
-    PdbController pdbController;
+    static PdbController pdbController;
+    static String[] fields;
 
     @BeforeAll
-    void init(){
+    static void init(){
+        fields = new String[]{"uuid", "longName", "shortName", "nodeType"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
         try {
             pdbController.initTableByType(TableType.LOCATIONNAMES);
@@ -20,6 +27,22 @@ class LocationNameDaoImplTest {
 
     @Test
     void get() {
+        var dao = new LocationNameDaoImpl(pdbController);
+        LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
+        try{
+            pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<LocationName> results = dao.get(location.getUuid());
+        LocationName daoresult = results.get();
+        assertEquals(daoresult,location);
+        try{
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
