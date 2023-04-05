@@ -12,6 +12,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final String tempType;
     private final List<String> additionalItems;
     private final String dietaryRestrictions;
+    private final String patientName;
+
 
 
     public FoodServiceRequestEntry(
@@ -46,10 +48,11 @@ public class FoodServiceRequestEntry extends RequestEntry {
             String tempType,
             List<String> additionalItems,
             String dietaryRestrictions) {
-        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes, status);
+        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
         this.dietaryRestrictions = dietaryRestrictions;
+        this.patientName = patientName;
     }
 }

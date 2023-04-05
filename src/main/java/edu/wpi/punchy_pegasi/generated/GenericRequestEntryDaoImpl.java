@@ -24,7 +24,6 @@ public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, Str
             rs.next();
             GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
@@ -43,7 +42,6 @@ public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, Str
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
@@ -59,7 +57,7 @@ public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, Str
 
     @Override
     public void save(GenericRequestEntry genericRequestEntry) {
-        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getPatientName(), genericRequestEntry.getRoomNumber(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
+        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getRoomNumber(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
         try {
             dbController.insertQuery(TableType.GENERIC, fields, values);
         } catch (PdbController.DatabaseException e) {

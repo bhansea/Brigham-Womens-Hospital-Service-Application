@@ -98,4 +98,38 @@ public abstract class RequestController<T extends RequestEntry> {
 
     @FXML
     protected abstract void validateEntry();
+
+    @FXML
+    protected void addTextField(TextField field) {
+        HBox hbox = new HBox();
+        Label label = new Label("Patient Name");
+        inputContainer.getChildren().add(0, hbox);
+        inputContainer.getChildren().add(0,label);
+        hbox.getChildren().add(0, field);
+        hbox.setAlignment(Pos.CENTER);
+        label.setFont(new Font(DEFAULT_FULLNAME, 24));
+        label.setAlignment(Pos.CENTER);
+        label.setTextFill(Color.color(1,1,1));
+        field.setPromptText("Enter Patient Name");
+        field.setAlignment(Pos.CENTER);
+        field.setFont(new Font(DEFAULT_FULLNAME, 24));
+        inputContainer.setPadding(new Insets(20,20,20,20));
+        hbox.setPadding(new Insets(0,0,0,0));
+    }
+
+    @FXML
+    protected void addTotal(Label price){
+        HBox hbox = new HBox();
+        Label total = new Label("Total:");
+        totalContainer.getChildren().add(0,hbox);
+        hbox.getChildren().add(0, total);
+        hbox.getChildren().add(1,price);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setPadding(new Insets(10,0,0,0));
+        price.setFont(new Font(DEFAULT_FULLNAME, 24));
+        total.setFont(new Font(DEFAULT_FULLNAME, 24));
+        total.setTextFill(Color.color(1,1,1));
+        price.setTextFill(Color.color(1,1,1));
+        hbox.setSpacing(150);
+    }
 }
