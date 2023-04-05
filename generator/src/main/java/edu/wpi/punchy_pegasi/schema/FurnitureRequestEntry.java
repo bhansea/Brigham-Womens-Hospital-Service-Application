@@ -1,9 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import lombok.Getter;
+
 import javax.swing.text.TableView;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class FurnitureRequestEntry extends RequestEntry{
 
     private final List<String> selectFurniture;

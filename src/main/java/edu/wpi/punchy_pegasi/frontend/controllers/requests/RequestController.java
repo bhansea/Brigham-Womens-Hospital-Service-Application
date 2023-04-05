@@ -3,7 +3,6 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -20,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.net.URL;
 
 import static com.sun.javafx.font.FontFactory.DEFAULT_FULLNAME;
-
 
 @Slf4j
 public abstract class RequestController<T extends RequestEntry> {
@@ -42,17 +41,10 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected VBox totalContainer;
 
-    public static BorderPane create(RequestController controller, String path) {
-        final var genericResource = App.class.getResource("frontend/layouts/Request.fxml");
-        FXMLLoader generic = new FXMLLoader(genericResource);
-        final var resource = App.class.getResource(path);
-        FXMLLoader loader = new FXMLLoader(resource);
-
-        generic.setController(controller);
-        loader.setController(controller);
+    public static BorderPane create(RequestController controller, URL path) {
         try {
-            Parent l = loader.load();
-            BorderPane g = generic.load();
+            Parent l = App.getSingleton().loadWithCache(path, controller);
+            BorderPane g = App.getSingleton().loadWithCache(App.class.getResource("frontend/layouts/Request.fxml"), controller);
             g.setCenter(l);
             return g;
         } catch (IOException e) {

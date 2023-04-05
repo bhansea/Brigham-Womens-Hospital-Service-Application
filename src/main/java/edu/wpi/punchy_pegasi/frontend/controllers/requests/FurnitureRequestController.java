@@ -6,16 +6,17 @@ import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.CheckComboBox;
+
+import java.net.URL;
 
 public class FurnitureRequestController extends RequestController<FurnitureRequestEntry> {
 
     @FXML
     CheckComboBox<String> selectFurniture;
 
-    public static BorderPane create(String path) {
+    public static BorderPane create(URL path) {
         return RequestController.create(new FurnitureRequestController(), path);
     }
 

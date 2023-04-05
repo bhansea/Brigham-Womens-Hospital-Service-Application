@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 public class GenericRequestEntryDaoImpl implements IDao<GenericRequestEntry, String> {
 
-    static String[] fields = {"serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override

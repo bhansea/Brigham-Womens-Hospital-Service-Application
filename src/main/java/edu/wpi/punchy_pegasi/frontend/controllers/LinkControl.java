@@ -3,7 +3,6 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
@@ -23,11 +22,8 @@ public class LinkControl extends HBox {
 
     public LinkControl() {
         App.loadStylesheet("frontend/css/Link.css");
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("frontend/components/Link.fxml"));
-        loader.setRoot(this);
-        loader.setController(this);
         try {
-            loader.load();
+            App.getSingleton().loadWithCache(App.class.getResource("frontend/components/Link.fxml"), this, this);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }

@@ -1,19 +1,10 @@
 package edu.wpi.punchy_pegasi.backend;
 
-import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
-import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
-import edu.wpi.punchy_pegasi.schema.Edge;
-import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
-import java.util.Optional;
 
 @Slf4j
 public class TestDB {
@@ -31,8 +22,8 @@ public class TestDB {
         try {
             singleton.pdb.initTableByType(TableType.LOCATIONNAMES);
             var LocationNameDAO = new LocationNameDaoImpl();
-            LocationNameDAO.save(new LocationName("lllllllong Name", "short name", LocationName.NodeType.EXIT));
-            LocationNameDAO.save(new LocationName("lllllllongg Name", "short name", LocationName.NodeType.DEPT));
+            LocationNameDAO.save(new LocationName(1L, "lllllllong Name", "short name", LocationName.NodeType.EXIT));
+            LocationNameDAO.save(new LocationName(2L, "lllllllongg Name", "short name", LocationName.NodeType.DEPT));
             var locationNameMap = LocationNameDAO.getAll();
             System.out.println();
 //            singleton.pdb.initTableByType(TableType.EDGES);
