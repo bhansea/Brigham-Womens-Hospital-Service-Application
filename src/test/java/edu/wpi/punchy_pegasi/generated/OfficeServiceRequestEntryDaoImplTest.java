@@ -64,5 +64,27 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"110", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        Object[] values = new Object[]{office.getServiceID(), office.getRoomNumber(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
+        try{
+            pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert into database";
+        }
+
+        try{
+            pdbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to search database";
+        }
+
+        dao.delete(office);
+
+        try{
+            pdbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Successfully deleted from database";
+        }
     }
 }

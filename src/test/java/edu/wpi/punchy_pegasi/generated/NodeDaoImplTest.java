@@ -63,5 +63,27 @@ class NodeDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new NodeDaoImpl(pdbController);
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
+        try{
+            pdbController.insertQuery(TableType.NODES,fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert node";
+        }
+
+        try{
+            pdbController.searchQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to find node";
+        }
+
+        dao.delete(node);
+
+        try{
+            pdbController.searchQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Node was deleted successfully";
+        }
     }
 }

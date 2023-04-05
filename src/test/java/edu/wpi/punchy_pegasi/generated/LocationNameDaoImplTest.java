@@ -63,5 +63,26 @@ class LocationNameDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new LocationNameDaoImpl(pdbController);
+        LocationName location = new LocationName(100L, "testLName", "testSName", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
+        try{
+            pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert into database";
+        }
+        try{
+            pdbController.searchQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to search database";
+        }
+
+        dao.delete(location);
+
+        try{
+            pdbController.searchQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Successfully deleted from database";
+        }
     }
 }

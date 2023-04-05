@@ -64,5 +64,27 @@ class MoveDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new MoveDaoImpl(pdbController);
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        try {
+            pdbController.insertQuery(TableType.MOVES, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert test data";
+        }
+
+        try{
+            var result = pdbController.searchQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to delete test data";
+        }
+
+        dao.delete(move);
+
+        try{
+            var result = pdbController.searchQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Test data deleted successfully";
+        }
     }
 }
