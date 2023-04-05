@@ -30,7 +30,7 @@ public class ServiceRequestController {
         String temp = "";
         if (submit.isPressed()) {
             temp = servSearchBar.getText();
-            for (int i = 0; i < requests.size(); i++) { //does not loop because theres nothing in requests so no size
+            for (int i = 0; i < requests.size(); i++) { //does not loop because there's nothing in requests so no size
                 //so i++ is never used as well
                 if (temp.matches(requests.get(i))) {
                     return requests.get(i);
