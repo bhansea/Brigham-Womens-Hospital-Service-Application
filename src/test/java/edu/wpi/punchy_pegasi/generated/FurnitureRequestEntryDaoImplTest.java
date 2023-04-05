@@ -17,12 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FurnitureRequestEntryDaoImplTest {
     static PdbController pdbController;
+    static FurnitureRequestEntryDaoImpl dao;
+
     static String[] fields;
 
     @BeforeAll
     static void init(){
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new FurnitureRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FURNITUREREQUESTS);
         } catch (PdbController.DatabaseException e) {
@@ -69,7 +72,6 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-        var dao = new FurnitureRequestEntryDaoImpl(pdbController);
         FurnitureRequestEntry furnitureRequest = new FurnitureRequestEntry(
                 UUID.randomUUID(),
                 "roomNum",

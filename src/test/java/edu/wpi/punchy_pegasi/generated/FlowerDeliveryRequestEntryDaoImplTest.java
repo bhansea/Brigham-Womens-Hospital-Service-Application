@@ -20,12 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 class FlowerDeliveryRequestEntryDaoImplTest {
     static PdbController pdbController;
+
+    static FlowerDeliveryRequestEntryDaoImpl dao;
     static String[] fields;
 
     @BeforeAll
     static void init(){
         fields = new String[]{"serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FLOWERREQUESTS);
         } catch (PdbController.DatabaseException e) {
@@ -73,8 +76,6 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-        var dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
-
         FlowerDeliveryRequestEntry flowerEntry =
                 new FlowerDeliveryRequestEntry(
                         UUID.randomUUID(),

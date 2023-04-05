@@ -14,12 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OfficeServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
+    static OfficeServiceRequestEntryDaoImpl dao;
     static String[] fields;
 
     @BeforeAll
     static void init(){
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.OFFICEREQUESTS);
         } catch (PdbController.DatabaseException e) {
@@ -64,7 +66,6 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-        var dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"110", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
         Object[] values = new Object[]{office.getServiceID(), office.getRoomNumber(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
         try{

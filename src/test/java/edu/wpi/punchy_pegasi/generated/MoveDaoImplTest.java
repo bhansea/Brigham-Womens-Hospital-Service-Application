@@ -13,12 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MoveDaoImplTest {
     static PdbController pdbController;
+    static MoveDaoImpl dao;
     static String[] fields;
 
     @BeforeAll
     static void init(){
         fields = new String[]{"uuid", "nodeID", "longName", "date"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new MoveDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.MOVES);
         } catch (PdbController.DatabaseException e) {
@@ -64,7 +66,6 @@ class MoveDaoImplTest {
 
     @Test
     void delete() {
-        var dao = new MoveDaoImpl(pdbController);
         Move move = new Move(100L, 1005L, "testLong", "testDate");
         Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
         try {

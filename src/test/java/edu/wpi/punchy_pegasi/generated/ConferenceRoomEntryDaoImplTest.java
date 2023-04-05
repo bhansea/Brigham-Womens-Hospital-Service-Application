@@ -21,10 +21,14 @@ class ConferenceRoomEntryDaoImplTest {
     static PdbController pdbController;
     static String[] fields;
 
+    static ConferenceRoomEntryDaoImpl dao;
+
+
     @BeforeAll
     static void init(){
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new ConferenceRoomEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.CONFERENCEREQUESTS);
         } catch (PdbController.DatabaseException e) {
@@ -58,6 +62,8 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void getAll() {
+
+
     }
 
     @Test
@@ -70,7 +76,6 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void delete() {
-        var dao = new ConferenceRoomEntryDaoImpl(pdbController);
         ConferenceRoomEntry conferenceRoom =
                 new ConferenceRoomEntry(
                         UUID.randomUUID(),

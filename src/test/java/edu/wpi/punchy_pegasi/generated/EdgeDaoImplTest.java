@@ -12,13 +12,16 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EdgeDaoImplTest {
+
     static PdbController pdbController;
+    static EdgeDaoImpl dao;
     static String[] fields;
 
     @BeforeAll
     static void init(){
         fields = new String[]{"uuid", "startNode", "endNode"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new EdgeDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.EDGES);
         } catch (PdbController.DatabaseException e) {

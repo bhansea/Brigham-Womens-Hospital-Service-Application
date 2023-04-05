@@ -16,12 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FoodServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
+    static FoodServiceRequestEntryDaoImpl dao;
     static String[] fields;
 
     @BeforeAll
     static void init() {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
         pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        dao = new FoodServiceRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FOODREQUESTS);
         } catch (PdbController.DatabaseException e) {
@@ -69,7 +71,6 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-        var dao = new FoodServiceRequestEntryDaoImpl(pdbController);
         FoodServiceRequestEntry foodRequest = new FoodServiceRequestEntry(
                 UUID.randomUUID(),
                 "123",
