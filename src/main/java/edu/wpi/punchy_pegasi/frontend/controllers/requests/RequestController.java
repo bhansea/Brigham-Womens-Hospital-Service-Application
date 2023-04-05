@@ -4,23 +4,31 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
+import static com.sun.javafx.font.FontFactory.DEFAULT_FULLNAME;
+
+
 @Slf4j
 public abstract class RequestController<T extends RequestEntry> {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @FXML
     protected T requestEntry;
-    @FXML
-    protected TextField patientName;
     @FXML
     protected TextField roomNumber;
     @FXML
@@ -29,6 +37,10 @@ public abstract class RequestController<T extends RequestEntry> {
     protected TextField additionalNotes;
     @FXML
     protected Button submit;
+    @FXML
+    protected VBox inputContainer;
+    @FXML
+    protected VBox totalContainer;
 
     public static BorderPane create(RequestController controller, String path) {
         final var genericResource = App.class.getResource("frontend/layouts/Request.fxml");
@@ -62,7 +74,7 @@ public abstract class RequestController<T extends RequestEntry> {
     }
 
     protected boolean isLoaded() {
-        return patientName != null;
+        return roomNumber != null;
     }
 
     // This is an alternative to the built-in propertyChange
@@ -72,7 +84,7 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
-        for (var node : new TextField[]{patientName, roomNumber, additionalNotes})
+        for (var node : new TextField[]{roomNumber, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);
                 fieldChanged(node.getId() + "TextChanged", oldText, newText);
@@ -83,11 +95,10 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (patientName.getText().isBlank() || roomNumber.getText().isBlank() || staffAssignment.getText().isBlank());
+        return (roomNumber.getText().isBlank() || staffAssignment.getText().isBlank());
     }
 
     protected void clearGeneric() {
-        patientName.clear();
         roomNumber.clear();
         staffAssignment.clear();
         additionalNotes.clear();
