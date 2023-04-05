@@ -1,26 +1,34 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
+import java.util.Arrays;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
-public class OfficeServiceRequestEntryDaoImpl implements IDao<OfficeServiceRequestEntry, String> {
+public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntryDaoImpl.Column> {
 
     static String[] fields = {"officeRequest", "employeeName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
-    private final PdbController dbController = App.getSingleton().getPdb();
+    private final PdbController dbController;
+
+    public OfficeServiceRequestEntryDaoImpl(PdbController dbController) {
+        this.dbController = dbController;
+    }
+
+    public OfficeServiceRequestEntryDaoImpl() {
+        this.dbController = App.getSingleton().getPdb();
+    }
 
     @Override
-    public Optional<OfficeServiceRequestEntry> get(String key) {
+    public Optional<OfficeServiceRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", key)) {
             rs.next();
             OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
@@ -39,8 +47,27 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<OfficeServiceReque
     }
 
     @Override
-    public Map<String, OfficeServiceRequestEntry> getAll() {
-        var map = new HashMap<String, OfficeServiceRequestEntry>();
+    public Optional<OfficeServiceRequestEntry> get(Column column, Object value) {
+        try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, column.name(), value)) {
+            rs.next();
+            OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
+            return Optional.ofNullable(req);
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Map<java.util.UUID, OfficeServiceRequestEntry> getAll() {
+        var map = new HashMap<java.util.UUID, OfficeServiceRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
@@ -52,7 +79,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<OfficeServiceReque
                     (java.lang.String)rs.getObject("officeRequest"),
                     (java.lang.String)rs.getObject("employeeName"));
                 if (req != null)
-                    map.put(String.valueOf(req.getServiceID()), req);
+                    map.put(req.getServiceID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -72,16 +99,37 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<OfficeServiceReque
     }
 
     @Override
-    public void update(OfficeServiceRequestEntry officeServiceRequestEntry, Object[] params) {
-        // What does this even mean?
+    public void update(OfficeServiceRequestEntry officeServiceRequestEntry, Column[] params) {
+        Object[] values = {officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName(), officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getRoomNumber(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus()};
+        List<Object> pruned = new ArrayList<>();
+        for(var column : params)
+            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+        try {
+            dbController.updateQuery(TableType.OFFICEREQUESTS, "serviceID", officeServiceRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+        } catch (PdbController.DatabaseException e) {
+            log.error("Error saving", e);
+        }
     }
 
     @Override
     public void delete(OfficeServiceRequestEntry officeServiceRequestEntry) {
         try {
-            dbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", String.valueOf(officeServiceRequestEntry.getServiceID()));
+            dbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", officeServiceRequestEntry.getServiceID());
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
+    }
+
+    @RequiredArgsConstructor
+    public enum Column {
+        OFFICE_REQUEST("officeRequest"),
+        EMPLOYEE_NAME("employeeName"),
+        SERVICE_ID("serviceID"),
+        ROOM_NUMBER("roomNumber"),
+        STAFF_ASSIGNMENT("staffAssignment"),
+        ADDITIONAL_NOTES("additionalNotes"),
+        STATUS("status");
+        @Getter
+        private final String colName;
     }
 }

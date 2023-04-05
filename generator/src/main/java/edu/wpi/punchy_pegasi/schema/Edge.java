@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Edge {
+    @SchemaID
     private Long uuid;
     private String startNode;
     private String endNode;

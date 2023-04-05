@@ -8,6 +8,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class LocationName {
+    @SchemaID
     private Long uuid;
     private String longName;
     private String shortName;
