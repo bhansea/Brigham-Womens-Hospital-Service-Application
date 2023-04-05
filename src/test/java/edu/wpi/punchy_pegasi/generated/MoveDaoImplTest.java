@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,6 +59,17 @@ class MoveDaoImplTest {
 
     @Test
     void save() {
+        var dao = new MoveDaoImpl(pdbController);
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        dao.save(move);
+        Optional<Move> results = dao.get(move.getUuid());
+        Move daoresult = results.get();
+        assertEquals(move, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

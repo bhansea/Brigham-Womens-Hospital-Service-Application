@@ -2,13 +2,15 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
-import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -38,7 +40,6 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void get() {
-        var dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
         FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getRoomNumber(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
         try {
@@ -62,12 +63,21 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
-
     }
 
     @Test
     void save() {
+        UUID uuid = UUID.randomUUID();
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        dao.save(fdre);
+        Optional<FlowerDeliveryRequestEntry> results = dao.get(uuid);
+        FlowerDeliveryRequestEntry daoresult = results.get();
+        assertEquals(fdre, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

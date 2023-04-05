@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -58,6 +59,18 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void save() {
+        var dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
+        UUID uuid = UUID.randomUUID();
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        dao.save(office);
+        Optional<OfficeServiceRequestEntry> results = dao.get(office.getServiceID());
+        OfficeServiceRequestEntry daoresult = results.get();
+        assertEquals(office, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

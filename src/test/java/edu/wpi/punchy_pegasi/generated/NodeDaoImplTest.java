@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
@@ -57,6 +58,17 @@ class NodeDaoImplTest {
 
     @Test
     void save() {
+        var dao = new NodeDaoImpl(pdbController);
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        dao.save(node);
+        Optional<Node> results = dao.get(node.getNodeID());
+        Node daoresult = results.get();
+        assertEquals(node, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

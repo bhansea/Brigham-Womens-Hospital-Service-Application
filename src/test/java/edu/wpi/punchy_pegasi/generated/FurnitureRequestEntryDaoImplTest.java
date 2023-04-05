@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -64,6 +65,20 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void save() {
+        var dao = new FurnitureRequestEntryDaoImpl(pdbController);
+        UUID uuid = UUID.randomUUID();
+        List<String> requestItems = new ArrayList<>();
+        requestItems.add("testItems");
+        FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        dao.save(fdre);
+        Optional<FurnitureRequestEntry> results = dao.get(uuid);
+        FurnitureRequestEntry daoresult = results.get();
+        assertEquals(fdre, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Edge;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,17 @@ class EdgeDaoImplTest {
 
     @Test
     void save() {
+        var dao = new EdgeDaoImpl(pdbController);
+        Edge edge = new Edge(100L, 1005L, 1006L);
+        dao.save(edge);
+        Optional<Edge> results = dao.get(edge.getUuid());
+        Edge daoresult = results.get();
+        assertEquals(edge, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

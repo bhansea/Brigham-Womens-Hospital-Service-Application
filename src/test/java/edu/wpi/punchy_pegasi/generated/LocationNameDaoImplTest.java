@@ -1,12 +1,17 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.LocationName;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -57,6 +62,18 @@ class LocationNameDaoImplTest {
 
     @Test
     void save() {
+        var dao = new LocationNameDaoImpl(pdbController);
+        Long uuid = 100L;
+        LocationName ln = new LocationName(uuid, "testName", "testName", LocationName.NodeType.HALL);
+        dao.save(ln);
+        Optional<LocationName> results = dao.get(ln.getUuid());
+        LocationName daoresult = results.get();
+        assertEquals(ln, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", ln.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

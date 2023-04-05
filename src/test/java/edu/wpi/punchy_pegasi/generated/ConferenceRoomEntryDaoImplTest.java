@@ -68,6 +68,18 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void save() {
+        var dao = new ConferenceRoomEntryDaoImpl(pdbController);
+        UUID uuid = UUID.randomUUID();
+        ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        dao.save(conference);
+        Optional<ConferenceRoomEntry> results = dao.get(uuid);
+        ConferenceRoomEntry daoresult = results.get();
+        assertEquals(conference, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

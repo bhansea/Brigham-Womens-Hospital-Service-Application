@@ -1,10 +1,12 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -63,6 +65,20 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void save() {
+        var dao = new FoodServiceRequestEntryDaoImpl(pdbController);
+        UUID uuid = UUID.randomUUID();
+        List<String> additionalItems = new ArrayList<>();
+        additionalItems.add("testItems");
+        FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        dao.save(fsre);
+        Optional<FoodServiceRequestEntry> results = dao.get(uuid);
+        FoodServiceRequestEntry daoresult = results.get();
+        assertEquals(fsre, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
