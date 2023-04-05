@@ -1,9 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.navigation;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.controllers.requests.FlowerDeliveryRequestController;
-import edu.wpi.punchy_pegasi.frontend.controllers.requests.FoodServiceRequestController;
-import edu.wpi.punchy_pegasi.frontend.controllers.requests.OfficeServiceRequestController;
+import edu.wpi.punchy_pegasi.frontend.controllers.requests.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,9 @@ public enum Screen {
     FLOWER_DELIVERY_REQUEST("Flower Delivery Request", "frontend/requests/FlowerDeliveryRequest.fxml", FlowerDeliveryRequestController::create),
     DISPLAY_SERVICE_REQUESTS("Service Request", "frontend/requests/ServiceRequest.fxml"),
     OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeServiceRequest.fxml", OfficeServiceRequestController::create),
-    FOOD_SERVICE_REQUEST("Food Service Request", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create);
+    FOOD_SERVICE_REQUEST("Food Service Request", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create),
+    CONFERENCE_ROOM_SERVICE_REQUEST("Conference Room Reserve Request", "frontend/requests/ConferenceRoomRequest.fxml", ConferenceRoomController::create),
+    FURNITURE_DELIVERY_SERVICE_REQUEST("Furniture Delivery Request", "frontend/requests/FurnitureDeliveryRequest.fxml", FurnitureRequestController::create);
     private final Function<String, ? extends Parent> createFunction;
     private final String path;
     private final String readable;
