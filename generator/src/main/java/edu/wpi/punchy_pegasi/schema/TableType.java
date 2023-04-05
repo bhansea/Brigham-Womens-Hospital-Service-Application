@@ -9,11 +9,9 @@ public enum TableType {
     LOCATIONNAMES(LocationName.class),
     GENERIC(GenericRequestEntry.class),
     FOODREQUESTS(FoodServiceRequestEntry.class),
-
     FLOWERREQUESTS(FlowerDeliveryRequestEntry.class),
     CONFERENCEREQUESTS(ConferenceRoomEntry.class),
-    // TODO: Change GenericRequestEntry to FurnitureRequestEntry once implemented
-    FURNITUREREQUESTS(GenericRequestEntry.class),
+    FURNITUREREQUESTS(FurnitureRequestEntry.class),
     OFFICEREQUESTS(OfficeServiceRequestEntry.class);
 
 

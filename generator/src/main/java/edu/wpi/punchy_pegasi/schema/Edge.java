@@ -1,17 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Edge {
-    @SchemaID
     private Long uuid;
-    private Long startNode;
-    private Long endNode;
-
-    public Edge(Long uuid, Long startNode, Long endNode) {
-        this.uuid = uuid;
-        this.startNode = startNode;
-        this.endNode = endNode;
-    }
+    private String startNode;
+    private String endNode;
 }
