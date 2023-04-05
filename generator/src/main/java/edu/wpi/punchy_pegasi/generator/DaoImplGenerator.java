@@ -39,7 +39,7 @@ public class DaoImplGenerator {
      * @return
      * @throws IOException
      */
-    public static List<String> getParameterNames(Constructor<?> constructor) throws IOException {
+    private static List<String> getParameterNames(Constructor<?> constructor) throws IOException {
         Class<?> declaringClass = constructor.getDeclaringClass();
         ClassLoader declaringClassLoader = declaringClass.getClassLoader();
 
@@ -81,15 +81,15 @@ public class DaoImplGenerator {
         return null;
     }
 
-    static String firstLower(String string) {
+    public static String firstLower(String string) {
         return string.substring(0, 1).toLowerCase() + string.substring(1);
     }
 
-    static String firstUpper(String string) {
+    public static String firstUpper(String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
-    static List<Field> getFieldsRecursively(Class<?> clazz) {
+    private static List<Field> getFieldsRecursively(Class<?> clazz) {
         //use getDeclaredFields() to get all fields in this class
         var fields = new java.util.ArrayList<>(Arrays.stream(clazz.getDeclaredFields()).toList());
         if (!clazz.getSuperclass().equals(Object.class)) fields.addAll(getFieldsRecursively(clazz.getSuperclass()));
@@ -131,16 +131,17 @@ public class DaoImplGenerator {
         str = str.replaceAll(regex, replacement).toLowerCase();
         return str;
     }
-    static String generateEnum(Class<?> clazz, List<Field> fields) {
+
+    private static String generateEnum(Class<?> clazz, List<Field> fields) {
         return
-"""
-    @RequiredArgsConstructor
-    public enum Field {
-""" + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
-;
-        @Getter
-        private final String colName;
-        public Object getValue(""" + clazz.getCanonicalName() + """
+                """
+                            @RequiredArgsConstructor
+                            public enum Field {
+                        """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
+                        ;
+                                @Getter
+                                private final String colName;
+                                public Object getValue(""" + clazz.getCanonicalName() + """
  ref){
             return ref.getFromField(this);
         }
@@ -152,8 +153,11 @@ public class DaoImplGenerator {
     }
 """;
     }
-
-    static void generateFrom(Class<?> clazz, TableType tt) throws IOException {
+    private static String generateConstructors(Class<?> clazz, List<Field> fields){
+        return
+                """
+                       
+                    """;
     }
 
     private static Class getClass(String className, String packageName) {
@@ -175,7 +179,7 @@ public class DaoImplGenerator {
                 .collect(Collectors.toSet()).stream().toList();
     }
 
-    private static void generateSchema(Class<?> clazz) throws IOException {
+    private static void generate(Class<?> clazz) throws IOException {
         var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", clazz.getSimpleName() + ".java");
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", clazz.getSimpleName() + ".java");
         var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
@@ -261,21 +265,9 @@ public class DaoImplGenerator {
         var classes = findAllClassesUsingClassLoader("edu.wpi.punchy_pegasi.generator.schema");
         for (var clazz : classes) {
             try {
-                generateSchema(clazz);
+                generate(clazz);
             } catch (Exception e){
                 System.out.println("Failed to generate shema for " + clazz.getCanonicalName());
-            }
-        }
-
-        // generate DaoImpls
-        var generatedFolder = new File("src/main/java/edu/wpi/punchy_pegasi/generated");
-        if (!generatedFolder.exists()) generatedFolder.mkdir();
-        for (var c : Arrays.stream(TableType.values()).filter(v -> v != TableType.GENERIC).toList()) {
-            try {
-                generateFrom(c.getClazz(), TableType.valueOf(c.name()));
-            } catch (Exception e) {
-                System.err.println("Failed to generate impl for: " + c.getClazz().getCanonicalName());
-                e.printStackTrace();
             }
         }
     }

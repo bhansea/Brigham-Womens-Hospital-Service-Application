@@ -57,7 +57,7 @@ public class PdbController {
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
-        var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase() + " " + tableType.getGenerateTableQuery() + ";";
+        var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase() + " " + tableType.getTableSQL() + ";";
         statement.executeQuery(query);
     }
 

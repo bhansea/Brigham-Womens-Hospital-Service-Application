@@ -36,6 +36,7 @@ dependencies {
             'org.controlsfx:controlsfx:11.1.2',
 
             'org.javatuples:javatuples:1.2',
+            'org.jetbrains:annotations:24.0.0',
 
             'org.slf4j:slf4j-api:2.0.5',
             'org.slf4j:slf4j-simple:2.0.5',
