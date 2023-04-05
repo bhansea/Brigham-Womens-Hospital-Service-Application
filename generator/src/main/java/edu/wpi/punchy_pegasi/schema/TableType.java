@@ -10,7 +10,12 @@ public enum TableType {
     GENERIC(GenericRequestEntry.class),
     FOODREQUESTS(FoodServiceRequestEntry.class),
 
-    FLOWERREQUESTS(FlowerDeliveryRequestEntry.class);
+    FLOWERREQUESTS(FlowerDeliveryRequestEntry.class),
+    CONFERENCEREQUESTS(ConferenceRoomEntry.class),
+    // TODO: Change GenericRequestEntry to FurnitureRequestEntry once implemented
+    FURNITUREREQUESTS(GenericRequestEntry.class),
+    OFFICEREQUESTS(OfficeServiceRequestEntry.class);
+
 
     @Getter
     private final Class<?> clazz;
