@@ -9,7 +9,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RequestEntry {
     protected final UUID serviceID;
-    protected final String patientName;
     protected final String roomNumber;
     protected final String staffAssignment;
     protected final String additionalNotes;
