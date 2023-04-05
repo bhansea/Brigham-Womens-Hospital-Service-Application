@@ -8,18 +8,16 @@ import java.util.UUID;
 public class GenericRequestEntry extends RequestEntry {
     public GenericRequestEntry(
             UUID serviceID,
-            String patientName,
             String roomNumber,
             String staffAssignment,
             String additionalNotes,
             Status status) {
-        super(serviceID, patientName, roomNumber, staffAssignment, additionalNotes, status);
+        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
     }
     public GenericRequestEntry(
-            String patientName,
             String roomNumber,
             String staffAssignment,
             String additionalNotes) {
-        super(UUID.randomUUID(), patientName, roomNumber, staffAssignment, additionalNotes, Status.PROCESSING);
+        super(UUID.randomUUID(),roomNumber, staffAssignment, additionalNotes, Status.PROCESSING);
     }
 }

@@ -87,7 +87,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     public void submitEntry() {
         requestEntry =
                 new ConferenceRoomEntry(
-                        null,
                         roomNumber.getText(),
                         staffAssignment.getText(),
                         additionalNotes.getText(),
