@@ -72,7 +72,6 @@ public enum TableType {
     CONFERENCEREQUESTS(ConferenceRoomEntry.class, """
             (
             serviceID uuid DEFAULT uuid_generate_v4(),
-            patientName varchar(100),
             roomNumber varchar(100),
             additionalNotes varchar(1000),
             staffAssignment varchar(100),
@@ -84,7 +83,6 @@ public enum TableType {
     FURNITUREREQUESTS(FurnitureRequestEntry.class, """
             (
             serviceID uuid DEFAULT uuid_generate_v4(),
-            patientName varchar(100),
             roomNumber varchar(100),
             staffAssignment varchar(100),
             additionalNotes varchar(1000),
@@ -96,7 +94,6 @@ public enum TableType {
     OFFICEREQUESTS(OfficeServiceRequestEntry.class, """
             (
             serviceID uuid DEFAULT uuid_generate_v4(),
-            patientName varchar(100),
             roomNumber varchar(100),
             staffAssignment varchar(100),
             additionalNotes varchar(1000),
