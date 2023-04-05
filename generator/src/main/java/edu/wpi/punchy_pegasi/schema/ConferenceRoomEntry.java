@@ -1,7 +1,11 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import lombok.Data;
+import lombok.Getter;
+
 import java.util.UUID;
 
+@Getter
 public class ConferenceRoomEntry extends RequestEntry {
 
     private final String beginningTime;

@@ -9,12 +9,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 
+import java.net.URL;
+
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
     @FXML
     MFXComboBox<String> beginningTime;
     @FXML
     MFXComboBox<String> endTime;
+
+
+    public static BorderPane create(URL path) {
+        return RequestController.create(new ConferenceRoomController(), path);
+    }
 
     private ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
             "2:00am", "2:30am",
@@ -40,11 +47,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
             "9:00pm", "9:30pm",
             "10:00pm", "10:30pm",
             "11:00pm", "11:30pm");
-
-
-    public static BorderPane create(String path) {
-        return RequestController.create(new ConferenceRoomController(), path);
-    }
 
     @FXML
     public void init() {

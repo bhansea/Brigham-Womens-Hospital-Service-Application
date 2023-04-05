@@ -1,10 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> implements PropertyChangeListener {
@@ -32,7 +32,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     TextField patientName = new TextField();
     Label price = new Label("$0.00");
 
-    public static BorderPane create(String path) {
+    public static BorderPane create(URL path) {
         return RequestController.create(new FoodServiceRequestController(), path);
     }
 

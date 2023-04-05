@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +13,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+
+import java.net.URL;
 
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
     @FXML
@@ -28,8 +29,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     TextField patientName = new TextField();
     Label price = new Label("$0.00");
 
-
-    public static BorderPane create(String path) {
+    public static BorderPane create(URL path) {
         return RequestController.create(new FlowerDeliveryRequestController(), path);
     }
 
