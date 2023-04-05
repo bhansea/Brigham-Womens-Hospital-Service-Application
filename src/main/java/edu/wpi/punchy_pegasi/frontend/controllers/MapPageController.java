@@ -1,12 +1,12 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.backend.Node;
-import edu.wpi.punchy_pegasi.backend.generated.EdgeDaoImpl;
-import edu.wpi.punchy_pegasi.backend.generated.NodeDaoImpl;
+import edu.wpi.punchy_pegasi.schema.Node;
+import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
+import edu.wpi.punchy_pegasi.generated.NodeDaoImpl;
 import edu.wpi.punchy_pegasi.backend.pathfinding.CartesianHeuristic;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Palgo;
-import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.App;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -28,12 +28,12 @@ public class MapPageController {
     @FXML
     GesturePane gesturePane;
     private Map<String, Floor> floors = new HashMap<>() {{
-        put("00", new Floor("../../../../assets/00_thegroundfloor.png", "Ground Floor", "00"));
-        put("L1", new Floor("../../../../assets/00_thelowerlevel1.png", "Lower Level 1", "L1"));
-        put("L2", new Floor("../../../../assets/00_thelowerlevel2.png", "Lower Level 2", "L2"));
-        put("1", new Floor("../../../../assets/01_thefirstfloor.png", "First Floor", "1"));
-        put("2", new Floor("../../../../assets/02_thesecondfloor.png", "Second Floor", "2"));
-        put("3", new Floor("../../../../assets/03_thethirdfloor.png", "Third Floor", "3"));
+        put("00", new Floor("frontend/assets/map/00_thegroundfloor.png", "Ground Floor", "00"));
+        put("L1", new Floor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
+        put("L2", new Floor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
+        put("1", new Floor("frontend/assets/map/01_thefirstfloor.png", "First Floor", "1"));
+        put("2", new Floor("frontend/assets/map/02_thesecondfloor.png", "Second Floor", "2"));
+        put("3", new Floor("frontend/assets/map/03_thethirdfloor.png", "Third Floor", "3"));
     }};
     private Floor currentFloor;
 

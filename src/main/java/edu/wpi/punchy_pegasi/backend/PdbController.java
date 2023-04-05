@@ -1,10 +1,7 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
-import edu.wpi.punchy_pegasi.frontend.FlowerDeliveryRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.GenericRequestEntry;
-import lombok.Getter;
+import edu.wpi.punchy_pegasi.schema.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -91,9 +88,7 @@ public class PdbController {
             }
             case LOCATIONNAMES -> {
                 var ret2 = statement.execute(query + "(" +
-                        "uuid uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "longName varchar, " +
+                        "longName varchar PRIMARY KEY, " +
                         "shortName varchar, " +
                         "nodeType varchar" +
                         ");");
@@ -347,24 +342,6 @@ public class PdbController {
                     fw.append(i <= headerCount - 1 ? ',' : '\n');
                 }
             }
-        }
-    }
-
-    public enum TableType {
-        NODES(Node.class),
-        EDGES(Edge.class),
-        MOVES(Move.class),
-        LOCATIONNAMES(LocationName.class),
-        GENERIC(GenericRequestEntry.class),
-        FOODREQUESTS(FoodServiceRequestEntry.class),
-
-        FLOWERREQUESTS(FlowerDeliveryRequestEntry.class);
-
-        @Getter
-        private final Class clazz;
-
-        TableType(Class clazz) {
-            this.clazz = clazz;
         }
     }
 

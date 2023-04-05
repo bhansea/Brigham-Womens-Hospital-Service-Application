@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.frontend.App;
-import edu.wpi.punchy_pegasi.frontend.RequestEntry;
+import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,7 +31,7 @@ public abstract class RequestController<T extends RequestEntry> {
     protected Button submit;
 
     public static BorderPane create(RequestController controller, String path) {
-        final var genericResource = App.class.getResource("components/Request.fxml");
+        final var genericResource = App.class.getResource("frontend/layouts/Request.fxml");
         FXMLLoader generic = new FXMLLoader(genericResource);
         final var resource = App.class.getResource(path);
         FXMLLoader loader = new FXMLLoader(resource);

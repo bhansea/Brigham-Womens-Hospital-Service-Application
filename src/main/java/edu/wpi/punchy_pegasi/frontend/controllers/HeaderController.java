@@ -1,9 +1,12 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,23 +15,26 @@ import javafx.scene.control.Control;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import org.w3c.dom.events.MouseEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class HeaderController implements PropertyChangeListener {
-    @FXML
-    private VBox imageContainer;
-    @FXML
-    private ImageView bannerImage;
-    @FXML
-    private GridPane headerGrid;
+    public StackPane headerStackpane;
+    @FXML HBox navButtonContainer;
+    //    @FXML
+//    private VBox imageContainer;
+//    @FXML
+//    private ImageView bannerImage;
+//    @FXML
+//    private GridPane headerGrid;
     @FXML
     private Button exitButton;
     @FXML
     private Button homeButton;
-    @FXML
-    private Pane clipper;
+//    @FXML
+//    private Pane clipper;
 
     @FXML
     private void toHome(ActionEvent event) {
@@ -36,37 +42,29 @@ public class HeaderController implements PropertyChangeListener {
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit() {
         App.exit();
     }
 
     @FXML
     private void initialize() {
-        // get second column to fill width
-        final var col = new ColumnConstraints(0, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
-        col.setHgrow(Priority.ALWAYS);
-        headerGrid.getRowConstraints().add(new RowConstraints(100));
-        headerGrid.getColumnConstraints().add(col);
-
-        var clipRect = new Rectangle(100, 100);
-        clipRect.widthProperty().bind(imageContainer.widthProperty());
-
-        clipper
-                .clipProperty()
-                .bind(
-                        new ObjectBinding<Node>() {
-                            {
-                                bind(clipper.widthProperty(), clipper.heightProperty());
-                            }
-
-                            @Override
-                            protected Node computeValue() {
-                                return new Rectangle(clipper.getWidth(), clipper.getHeight());
-                            }
-                        });
-        bannerImage.fitWidthProperty().bind(imageContainer.widthProperty());
 
         App.getSingleton().addPropertyChangeListener(this);
+
+        for (var entry : Screen.values()) {
+            if (entry.name().toLowerCase().contains("flower")
+                || entry.name().toLowerCase().contains("office")
+                || entry.name().toLowerCase().contains("food")
+                || entry.name().toLowerCase().contains("home"))
+                continue;
+            Button button = new Button();
+            button.setText(entry.getReadable());
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
+            button.setOnMouseClicked(e -> {
+                Navigation.navigate(entry);
+            });
+            navButtonContainer.getChildren().add(button);
+        }
     }
 
     @Override

@@ -3,10 +3,10 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'com.diffplug.gradle.spotless' version '3.27.1'
-    id "io.freefair.lombok" version "6.6.1"
+    id "io.freefair.lombok"
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
-mainClassName = 'edu.wpi.punchy_pegasi.frontend.Main'
+mainClassName = 'edu.wpi.punchy_pegasi.Main'
 
 repositories {
     mavenCentral()
@@ -47,10 +47,9 @@ dependencies {
             'de.mkammerer:argon2-jvm:2.11',
             'com.github.hervegirod:fxsvgimage:1.1',
             'net.java.dev.jna:jna:5.12.1',
-            'org.ow2.asm:asm:9.5',
-            'org.ow2.asm:asm-tree:9.5'
 
     )
+    implementation project(path: ':generator')
 
     String javaFxVersion = "19"
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'

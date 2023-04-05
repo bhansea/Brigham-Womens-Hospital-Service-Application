@@ -1,5 +1,5 @@
-.borderPane {
-    -fx-background-image: url("../../../../../assets/bwh-exterior-default.png");
+.home-background-image {
+    -fx-background-image: url("../assets/bwh-exterior-default.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover, auto;
 }

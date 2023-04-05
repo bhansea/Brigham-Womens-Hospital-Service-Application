@@ -1,6 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.frontend.App;
+import edu.wpi.punchy_pegasi.App;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +22,8 @@ public class LinkControl extends HBox {
     private Runnable onClick;
 
     public LinkControl() {
-        App.loadStylesheet("css/Link.css");
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("components/Link.fxml"));
+        App.loadStylesheet("frontend/css/Link.css");
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("frontend/components/Link.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

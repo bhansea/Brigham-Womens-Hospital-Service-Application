@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.backend;
 
-import edu.wpi.punchy_pegasi.frontend.FlowerDeliveryRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
+import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
+import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 
 
 public class Facade {

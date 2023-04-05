@@ -1,7 +1,8 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.frontend.FoodServiceRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.RequestEntry;
+import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -28,9 +29,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     Label mealName;
 
-    public static BorderPane create() {
-        var cont = new FoodServiceRequestController();
-        return RequestController.create(new FoodServiceRequestController(), "views/FoodServiceRequest.fxml");
+    public static BorderPane create(String path) {
+        return RequestController.create(new FoodServiceRequestController(), path);
     }
 
     @FXML
@@ -39,7 +39,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         mealDropdown.setItems(mealList);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
-        //mealName.setText("");
     }
 
     @FXML
@@ -57,6 +56,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
         //makes sure shared fields aren't empty
         requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), ((RadioButton) temp.getSelectedToggle()).getId(), extras, dietaryRestrictions.getText());
+        FoodServiceRequestEntryDaoImpl request = new FoodServiceRequestEntryDaoImpl();
+        request.save(requestEntry);
         Navigation.navigate(Screen.HOME);
     }
 

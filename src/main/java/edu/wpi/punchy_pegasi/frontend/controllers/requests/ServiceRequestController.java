@@ -24,7 +24,6 @@ public class ServiceRequestController {
     @Setter
     private ArrayList<String> requests = new ArrayList<>(); //store requests in list to search through
 
-
     @FXML
     String showReq() {
         String temp = "";
