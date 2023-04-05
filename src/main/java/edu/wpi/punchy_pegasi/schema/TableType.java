@@ -166,31 +166,24 @@ BEGIN
 END $$;
 """),
 
-    OFFICEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class, """
-DO $$
-BEGIN
-  IF to_regclass('teamp.officerequests') IS NULL THEN
-    CREATE SEQUENCE officerequests_id_seq;
-    CREATE TABLE teamp.officerequests
-    (
-    serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    roomNumber varchar,
-    staffAssignment varchar,
-    additionalNotes varchar,
-    status varchar,
-    officeRequest varchar,
-    employeeName varchar
-    );
-    ALTER SEQUENCE officerequests_id_seq OWNED BY teamp.officerequests;
-  END IF;
-END $$;
-""");
+    OFFICEREQUESTS(OfficeServiceRequestEntry.class, """
+            (
+            serviceID uuid DEFAULT uuid_generate_v4(),
+            patientName varchar(100),
+            roomNumber varchar(100),
+            staffAssignment varchar(100),
+            additionalNotes varchar(1000),
+            status varchar(50),
+            officeRequest varchar(100),
+            employeeName varchar(100),
+            PRIMARY KEY (serviceID)
+            )""");
     @Getter
     private final Class<?> clazz;
     @Getter
     private final String tableSQL;
 
-    TableType(Class<?> clazz, @Language(value = "SQL") String tableSQL) {
+    TableType(Class<?> clazz, @Language(value = "SQL", prefix = "CREATE TABLE IF NOT EXISTS teamp.table") String tableSQL) {
         this.clazz = clazz;
         this.tableSQL = tableSQL;
     }

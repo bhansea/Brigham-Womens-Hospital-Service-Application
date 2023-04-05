@@ -168,7 +168,7 @@ public class PdbController {
             var query = "SELECT * FROM teamp." + tableType.name().toLowerCase();
             if (fields.length > 0) {
                 query += " WHERE ";
-                query += getFieldValueString(fields, values, "LIKE", " AND ");
+                query += getFieldValueString(fields, values, "=", " AND ");
             }
             query += ";";
             return statement.executeQuery(query);
