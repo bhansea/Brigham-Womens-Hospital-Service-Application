@@ -10,7 +10,6 @@ import java.util.UUID;
 public class RequestEntry {
     @SchemaID
     protected final UUID serviceID;
-    protected final String patientName;
     protected final String roomNumber;
     protected final String staffAssignment;
     protected final String additionalNotes;

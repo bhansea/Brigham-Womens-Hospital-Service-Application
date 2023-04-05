@@ -29,6 +29,9 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     Label mealName;
 
+    TextField patientName = new TextField();
+    Label price = new Label("$0.00");
+
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
     }
@@ -37,6 +40,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     public void init() {
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
+        addTextField(patientName);
+        addTotal(price);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
     }
