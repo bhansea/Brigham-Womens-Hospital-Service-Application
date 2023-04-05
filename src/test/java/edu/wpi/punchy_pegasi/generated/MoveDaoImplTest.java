@@ -23,6 +23,10 @@ class MoveDaoImplTest {
     }
 
     @Test
+    void testGet() {
+    }
+
+    @Test
     void getAll() {
     }
 
@@ -36,9 +40,5 @@ class MoveDaoImplTest {
 
     @Test
     void delete() {
-    }
-
-    @Test
-    void testGetAll() {
     }
 }

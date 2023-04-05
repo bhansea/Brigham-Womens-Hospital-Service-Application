@@ -36,6 +36,10 @@ class FlowerDeliveryRequestEntryDaoImplTest {
     }
 
     @Test
+    void testGet() {
+    }
+
+    @Test
     void getAll() {
     }
 
@@ -49,9 +53,5 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-    }
-
-    @Test
-    void testGetAll() {
     }
 }
