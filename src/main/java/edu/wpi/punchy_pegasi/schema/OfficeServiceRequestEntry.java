@@ -24,13 +24,13 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     }
     @RequiredArgsConstructor
     public enum Field {
-        OFFICE_REQUEST("officeRequest"),
-        EMPLOYEE_NAME("employeeName"),
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        OFFICE_REQUEST("officeRequest"),
+        EMPLOYEE_NAME("employeeName");
         @Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
@@ -39,13 +39,13 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     }
     public Object getFromField(Field field) {
         return switch (field) {
-            case OFFICE_REQUEST -> getOfficeRequest();
-            case EMPLOYEE_NAME -> getEmployeeName();
             case SERVICE_ID -> getServiceID();
             case ROOM_NUMBER -> getRoomNumber();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case OFFICE_REQUEST -> getOfficeRequest();
+            case EMPLOYEE_NAME -> getEmployeeName();
         };
     }
 

@@ -17,10 +17,8 @@ import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 public class DaoImplGenerator {
@@ -92,7 +90,7 @@ public class DaoImplGenerator {
     private static List<Field> getFieldsRecursively(Class<?> clazz) {
         //use getDeclaredFields() to get all fields in this class
         var fields = new java.util.ArrayList<>(Arrays.stream(clazz.getDeclaredFields()).toList());
-        if (!clazz.getSuperclass().equals(Object.class)) fields.addAll(getFieldsRecursively(clazz.getSuperclass()));
+        if (!clazz.getSuperclass().equals(Object.class)) fields.addAll(0, getFieldsRecursively(clazz.getSuperclass()));
         //combine the 2 arrays
         return fields;
     }
@@ -153,11 +151,65 @@ public class DaoImplGenerator {
     }
 """;
     }
-    private static String generateConstructors(Class<?> clazz, List<Field> fields){
-        return
-                """
-                       
-                    """;
+
+    private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
+        put(Long.class, "bigint");
+        put(Integer.class, "int");
+        put(String.class, "varchar");
+        put(UUID.class, "uuid DEFAULT uuid_generate_v4()");
+        put(List.class, "varchar ARRAY");
+    }};
+
+    private static boolean fieldIsID(Field field){
+        return Arrays.stream(field.getAnnotations()).anyMatch(a -> a.annotationType() == SchemaID.class);
+    }
+
+    private static String generateTableInit(TableType tt){
+        var clazz = tt.getClazz();
+        var tableName = "teamp." + tt.name().toLowerCase();
+        var sequenceName = tt.name().toLowerCase() +"_id_seq";
+        var classFields = getFieldsRecursively(clazz).stream().map(f->{
+            var appendText = fieldIsID(f) ?
+                    f.getType() == Long.class ?
+                            " DEFAULT nextval('" + sequenceName + "') PRIMARY KEY"
+                            : " PRIMARY KEY"
+                    : "";
+            if(f.getType().isEnum())
+                return "" + f.getName() + " varchar" + appendText;
+            return "" + f.getName() + " " + classToPostgres.get(f.getType()) + appendText;
+        }).toList();
+        return String.format("""
+%s(%s.class, \"\"\" 
+DO $$
+BEGIN
+  IF to_regclass('%s') IS NULL THEN 
+    CREATE SEQUENCE %s;
+    CREATE TABLE %s
+    (
+    %s
+    );
+    ALTER SEQUENCE %s OWNED BY %s;
+  END IF;
+END $$;      
+\"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, tableName, String.join(",\n    ", classFields), sequenceName, tableName);
+//        return tt.name() + "(" + tt.getClazz().getCanonicalName() + """
+//.class, \"\"\"
+//DO $$
+//BEGIN
+//  IF to_regclass('""" + tableName +"""
+//') IS NULL THEN
+//    CREATE SEQUENCE edge_id_seq;
+//    CREATE TABLE teamp.edges
+//    (
+//    uuid bigint PRIMARY KEY,
+//    startNode varchar,
+//    endNode varchar
+//    );
+//    ALTER SEQUENCE edge_id_seq OWNED BY """ + tableName + """
+//;
+//  END IF;
+//END $$;
+//\"\"\")""";
     }
 
     private static Class getClass(String className, String packageName) {
@@ -188,6 +240,14 @@ public class DaoImplGenerator {
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
+        if(clazz == TableType.class){
+            for(var tt : TableType.values())
+                sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
+                        Matcher.quoteReplacement(generateTableInit(tt)));
+            Files.writeString(schemaDestPath, sourceFileText);
+            return;
+        }
+
         var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == clazz).findFirst();
         if(typeOptional.isEmpty()) {
             Files.writeString(schemaDestPath, sourceFileText);
@@ -200,10 +260,10 @@ public class DaoImplGenerator {
         var classText = firstLower(ClassText);
 
         var classFields = getFieldsRecursively(clazz);
-        var classFieldsText = classFields.stream().map(f -> f.getName()).toList();
+        var classFieldsText = classFields.stream().map(Field::getName).toList();
         var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
 
-        var idFields = classFields.stream().filter(f -> Arrays.stream(f.getAnnotations()).anyMatch(a -> a.annotationType() == SchemaID.class)).toList();
+        var idFields = classFields.stream().filter(DaoImplGenerator::fieldIsID).toList();
         if (idFields.size() < 1) {
             System.err.println("No id field found for " + clazz.getCanonicalName());
             return;
@@ -267,7 +327,7 @@ public class DaoImplGenerator {
             try {
                 generate(clazz);
             } catch (Exception e){
-                System.out.println("Failed to generate shema for " + clazz.getCanonicalName());
+                System.out.println("Failed to generate schema for " + clazz.getCanonicalName());
             }
         }
     }

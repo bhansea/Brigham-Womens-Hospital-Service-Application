@@ -26,13 +26,13 @@ public class ConferenceRoomEntry extends RequestEntry {
     }
     @RequiredArgsConstructor
     public enum Field {
-        BEGINNING_TIME("beginningTime"),
-        END_TIME("endTime"),
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        BEGINNING_TIME("beginningTime"),
+        END_TIME("endTime");
         @Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref){
@@ -41,13 +41,13 @@ public class ConferenceRoomEntry extends RequestEntry {
     }
     public Object getFromField(Field field) {
         return switch (field) {
-            case BEGINNING_TIME -> getBeginningTime();
-            case END_TIME -> getEndTime();
             case SERVICE_ID -> getServiceID();
             case ROOM_NUMBER -> getRoomNumber();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case BEGINNING_TIME -> getBeginningTime();
+            case END_TIME -> getEndTime();
         };
     }
 

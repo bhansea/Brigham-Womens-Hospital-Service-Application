@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, FurnitureRequestEntry, FurnitureRequestEntry.Field> {
 
-    static String[] fields = {"selectFurniture", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
     private final PdbController dbController;
 
     public FurnitureRequestEntryDaoImpl(PdbController dbController) {
@@ -87,7 +87,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
 
     @Override
     public void save(FurnitureRequestEntry furnitureRequestEntry) {
-        Object[] values = {furnitureRequestEntry.getSelectFurniture(), furnitureRequestEntry.getServiceID(), furnitureRequestEntry.getRoomNumber(), furnitureRequestEntry.getStaffAssignment(), furnitureRequestEntry.getAdditionalNotes(), furnitureRequestEntry.getStatus()};
+        Object[] values = {furnitureRequestEntry.getServiceID(), furnitureRequestEntry.getRoomNumber(), furnitureRequestEntry.getStaffAssignment(), furnitureRequestEntry.getAdditionalNotes(), furnitureRequestEntry.getStatus(), furnitureRequestEntry.getSelectFurniture()};
         try {
             dbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

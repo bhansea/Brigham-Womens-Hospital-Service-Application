@@ -32,7 +32,7 @@ public class PdbController {
         return objectToPsqlString(o, true);
     }
 
-    private static String objectToPsqlString(Object o, boolean first) {
+    public static String objectToPsqlString(Object o, boolean first) {
         if (o instanceof String || o instanceof UUID || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {
@@ -57,8 +57,7 @@ public class PdbController {
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
-        var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase() + " " + tableType.getTableSQL() + ";";
-        statement.executeQuery(query);
+        statement.executeQuery(tableType.getTableSQL());
     }
 
     private String getFieldValueString(String[] fields, Object[] values, String equator, String delimiter) {

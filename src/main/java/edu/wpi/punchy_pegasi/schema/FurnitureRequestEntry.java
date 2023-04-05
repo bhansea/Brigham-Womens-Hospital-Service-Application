@@ -25,12 +25,12 @@ public class FurnitureRequestEntry extends RequestEntry {
 
     @RequiredArgsConstructor
     public enum Field {
-        SELECT_FURNITURE("selectFurniture"),
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        SELECT_FURNITURE("selectFurniture");
         @Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref){
@@ -39,12 +39,12 @@ public class FurnitureRequestEntry extends RequestEntry {
     }
     public Object getFromField(Field field) {
         return switch (field) {
-            case SELECT_FURNITURE -> getSelectFurniture();
             case SERVICE_ID -> getServiceID();
             case ROOM_NUMBER -> getRoomNumber();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case SELECT_FURNITURE -> getSelectFurniture();
         };
     }
 

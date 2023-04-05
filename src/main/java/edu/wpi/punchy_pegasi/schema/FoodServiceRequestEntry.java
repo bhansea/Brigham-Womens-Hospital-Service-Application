@@ -36,16 +36,16 @@ public class FoodServiceRequestEntry extends RequestEntry {
     }
     @RequiredArgsConstructor
     public enum Field {
-        FOOD_SELECTION("foodSelection"),
-        TEMP_TYPE("tempType"),
-        ADDITIONAL_ITEMS("additionalItems"),
-        DIETARY_RESTRICTIONS("dietaryRestrictions"),
-        PATIENT_NAME("patientName"),
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        FOOD_SELECTION("foodSelection"),
+        TEMP_TYPE("tempType"),
+        ADDITIONAL_ITEMS("additionalItems"),
+        DIETARY_RESTRICTIONS("dietaryRestrictions"),
+        PATIENT_NAME("patientName");
         @Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
@@ -54,16 +54,16 @@ public class FoodServiceRequestEntry extends RequestEntry {
     }
     public Object getFromField(Field field) {
         return switch (field) {
-            case FOOD_SELECTION -> getFoodSelection();
-            case TEMP_TYPE -> getTempType();
-            case ADDITIONAL_ITEMS -> getAdditionalItems();
-            case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
-            case PATIENT_NAME -> getPatientName();
             case SERVICE_ID -> getServiceID();
             case ROOM_NUMBER -> getRoomNumber();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case FOOD_SELECTION -> getFoodSelection();
+            case TEMP_TYPE -> getTempType();
+            case ADDITIONAL_ITEMS -> getAdditionalItems();
+            case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
+            case PATIENT_NAME -> getPatientName();
         };
     }
 

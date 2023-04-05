@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, ConferenceRoomEntry, ConferenceRoomEntry.Field> {
 
-    static String[] fields = {"beginningTime", "endTime", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
     private final PdbController dbController;
 
     public ConferenceRoomEntryDaoImpl(PdbController dbController) {
@@ -90,7 +90,7 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
 
     @Override
     public void save(ConferenceRoomEntry conferenceRoomEntry) {
-        Object[] values = {conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime(), conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getRoomNumber(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus()};
+        Object[] values = {conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getRoomNumber(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus(), conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime()};
         try {
             dbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

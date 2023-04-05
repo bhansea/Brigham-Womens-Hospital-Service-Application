@@ -28,15 +28,15 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     }
     @RequiredArgsConstructor
     public enum Field {
-        FLOWER_SIZE("flowerSize"),
-        FLOWER_TYPE("flowerType"),
-        FLOWER_AMOUNT("flowerAmount"),
-        PATIENT_NAME("patientName"),
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        FLOWER_SIZE("flowerSize"),
+        FLOWER_TYPE("flowerType"),
+        FLOWER_AMOUNT("flowerAmount"),
+        PATIENT_NAME("patientName");
         @Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
@@ -45,15 +45,15 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     }
     public Object getFromField(Field field) {
         return switch (field) {
-            case FLOWER_SIZE -> getFlowerSize();
-            case FLOWER_TYPE -> getFlowerType();
-            case FLOWER_AMOUNT -> getFlowerAmount();
-            case PATIENT_NAME -> getPatientName();
             case SERVICE_ID -> getServiceID();
             case ROOM_NUMBER -> getRoomNumber();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case FLOWER_SIZE -> getFlowerSize();
+            case FLOWER_TYPE -> getFlowerType();
+            case FLOWER_AMOUNT -> getFlowerAmount();
+            case PATIENT_NAME -> getPatientName();
         };
     }
 

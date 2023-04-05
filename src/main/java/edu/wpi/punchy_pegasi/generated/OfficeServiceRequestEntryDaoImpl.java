@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field> {
 
-    static String[] fields = {"officeRequest", "employeeName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
     private final PdbController dbController;
 
     public OfficeServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -90,7 +90,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
 
     @Override
     public void save(OfficeServiceRequestEntry officeServiceRequestEntry) {
-        Object[] values = {officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName(), officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getRoomNumber(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus()};
+        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getRoomNumber(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName()};
         try {
             dbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

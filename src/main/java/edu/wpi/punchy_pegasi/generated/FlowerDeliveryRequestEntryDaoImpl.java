@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field> {
 
-    static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "patientName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerType", "flowerAmount", "patientName"};
     private final PdbController dbController;
 
     public FlowerDeliveryRequestEntryDaoImpl(PdbController dbController) {
@@ -96,7 +96,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName(), flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus()};
+        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
