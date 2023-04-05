@@ -13,27 +13,13 @@
     <center>
     </center>
     <right>
-        <VBox spacing="40.0" BorderPane.alignment="CENTER">
+        <VBox spacing="20.0" BorderPane.alignment="CENTER">
             <children>
-                <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                <VBox fx:id="inputContainer" alignment="TOP_CENTER" prefWidth="338.0" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
                     <children>
-                        <Label text="Patient Name" textFill="WHITE">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                        </Label>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <TextField fx:id="patientName" alignment="TOP_CENTER" onKeyReleased="#validateEntry" promptText="Enter Patient Name">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
                         <Label alignment="TOP_LEFT" text="Room Number" textFill="WHITE">
                             <font>
                                 <Font size="24.0" />
@@ -81,10 +67,10 @@
                         <Insets />
                     </VBox.margin>
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
                     </padding>
                 </VBox>
-                <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                <VBox fx:id="totalContainer" alignment="CENTER" spacing="20.0" style="-fx-background-color: #012D5A; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
@@ -92,34 +78,17 @@
                         <Insets />
                     </VBox.margin>
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                     </padding>
                <children>
-                        <HBox alignment="TOP_CENTER" spacing="150.0">
-                            <children>
-                                <Label text="Total:" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                </Label>
-                                <Label text="\$0.00" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                      <children>
-                        <Button fx:id="clear" onAction="#clearEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Clear" textAlignment="CENTER" textFill="WHITE">
+                        <Button fx:id="clear" onMouseClicked="#clearEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Clear" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Button>
-                              <Button fx:id="submit" onAction="#submitEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="submit" onMouseClicked="#submitEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="WHITE">
                                   <font>
                                       <Font size="24.0" />
                                   </font>

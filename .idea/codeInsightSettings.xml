@@ -3,6 +3,7 @@
   <component name="JavaProjectCodeInsightSettings">
     <excluded-names>
       <name>java.awt</name>
+      <name>javax.swing</name>
     </excluded-names>
   </component>
 </project>

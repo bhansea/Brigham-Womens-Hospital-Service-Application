@@ -1,10 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +29,9 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     Label mealName;
 
+    TextField patientName = new TextField();
+    Label price = new Label("$0.00");
+
     public static BorderPane create(URL path) {
         return RequestController.create(new FoodServiceRequestController(), path);
     }
@@ -38,6 +40,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     public void init() {
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
+        addTextField(patientName);
+        addTotal(price);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
     }

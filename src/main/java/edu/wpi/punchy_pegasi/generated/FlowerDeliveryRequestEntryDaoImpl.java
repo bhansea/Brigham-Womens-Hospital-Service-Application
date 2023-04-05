@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryRequestEntry, String> {
 
-    static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "patientName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
@@ -65,7 +65,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryReq
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getPatientName(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus()};
+        Object[] values = {flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName(), flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus()};
         try {
             dbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

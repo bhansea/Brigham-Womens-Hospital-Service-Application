@@ -1,14 +1,14 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEntry, String> {
 
-    static String[] fields = {"foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController = App.getSingleton().getPdb();
 
     @Override
@@ -68,7 +68,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<FoodServiceRequestEn
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus()};
+        Object[] values = {foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus()};
         try {
             dbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

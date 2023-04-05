@@ -26,6 +26,9 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     Label flowerName;
 
+    TextField patientName = new TextField();
+    Label price = new Label("$0.00");
+
     public static BorderPane create(URL path) {
         return RequestController.create(new FlowerDeliveryRequestController(), path);
     }
@@ -34,6 +37,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void init() {
         ObservableList<String> flowerTypesList = FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
         flowerTypeComboBox.setItems(flowerTypesList);
+        addTotal(price);
+        addTextField(patientName);
         submit.setDisable(true);
     }
 

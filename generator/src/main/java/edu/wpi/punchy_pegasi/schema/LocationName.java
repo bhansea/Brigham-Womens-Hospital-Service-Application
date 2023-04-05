@@ -1,22 +1,17 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
 public class LocationName {
-//    private UUID uuid;
+    private Long uuid;
     private String longName;
     private String shortName;
     private NodeType nodeType;
-
-    public LocationName(String longName, String shortName, NodeType nodeType) {
-//        this.uuid = uuid;
-        this.longName = longName;
-        this.shortName = shortName;
-        this.nodeType = nodeType;
-    }
 
 
     public enum NodeType {

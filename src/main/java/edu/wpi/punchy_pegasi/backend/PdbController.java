@@ -124,6 +124,50 @@ public class PdbController {
                         "PRIMARY KEY (serviceID)" +
                         ");");
             }
+            case CONFERENCEREQUESTS -> {
+                var ret2 = statement.execute(query +
+                        "(" +
+                        "serviceID uuid DEFAULT uuid_generate_v4()," +
+                        // if pass null, psql will generate a uuid
+                        "patientName varchar(100)," +
+                        "roomNumber varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "staffAssignment varchar(100)," +
+                        "status varchar(50)," +
+                        "beginningTime varchar(100)," +
+                        "endTime varchar(100)," +
+                        "PRIMARY KEY (serviceID)" +
+                        ");");
+            }
+            case FURNITUREREQUESTS -> {
+                var ret2 = statement.execute(query +
+                        "(" +
+                        "serviceID uuid DEFAULT uuid_generate_v4()," +
+                        // if pass null, psql will generate a uuid
+                        "patientName varchar(100)," +
+                        "roomNumber varchar(100)," +
+                        "staffAssignment varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "status varchar(50)," +
+                        "selectFurniture varchar(100) ARRAY," +
+                        "PRIMARY KEY (serviceID)" +
+                        ");");
+            }
+            case OFFICEREQUESTS -> {
+                var ret2 = statement.execute(query +
+                        "(" +
+                        "serviceID uuid DEFAULT uuid_generate_v4()," +
+                        // if pass null, psql will generate a uuid
+                        "patientName varchar(100)," +
+                        "roomNumber varchar(100)," +
+                        "staffAssignment varchar(100)," +
+                        "additionalNotes varchar(1000)," +
+                        "status varchar(50)," +
+                        "officeRequest varchar(100)," +
+                        "employeeName varchar(100)," +
+                        "PRIMARY KEY (serviceID)" +
+                        ");");
+            }
 
 
         }

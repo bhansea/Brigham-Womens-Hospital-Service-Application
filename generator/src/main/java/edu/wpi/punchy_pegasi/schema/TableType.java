@@ -9,8 +9,11 @@ public enum TableType {
     LOCATIONNAMES(LocationName.class),
     GENERIC(GenericRequestEntry.class),
     FOODREQUESTS(FoodServiceRequestEntry.class),
+    FLOWERREQUESTS(FlowerDeliveryRequestEntry.class),
+    CONFERENCEREQUESTS(ConferenceRoomEntry.class),
+    FURNITUREREQUESTS(FurnitureRequestEntry.class),
+    OFFICEREQUESTS(OfficeServiceRequestEntry.class);
 
-    FLOWERREQUESTS(FlowerDeliveryRequestEntry.class);
 
     @Getter
     private final Class<?> clazz;
