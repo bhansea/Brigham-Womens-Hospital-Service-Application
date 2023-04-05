@@ -15,8 +15,8 @@ public enum TableType {
     EDGES(Edge.class, """
             (
             uuid bigint PRIMARY KEY,
-            startNode varchar,
-            endNode varchar
+            startNode bigint,
+            endNode bigint
             )"""),
     MOVES(Move.class, """
             (
