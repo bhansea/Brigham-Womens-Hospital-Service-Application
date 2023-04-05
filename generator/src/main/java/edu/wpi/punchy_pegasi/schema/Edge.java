@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class Edge {
     private Long uuid;
-    private String startNode;
-    private String endNode;
+    private Long startNode;
+    private Long endNode;
 
-    public Edge(Long uuid, String startNode, String endNode) {
+    public Edge(Long uuid, Long startNode, Long endNode) {
         this.uuid = uuid;
         this.startNode = startNode;
         this.endNode = endNode;

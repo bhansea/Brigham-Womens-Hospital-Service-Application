@@ -1,9 +1,10 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +17,15 @@ import java.util.Optional;
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<FlowerDeliveryRequestEntry, String> {
 
     static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status"};
-    private final PdbController dbController = App.getSingleton().getPdb();
+    private final PdbController dbController;
+
+    public FlowerDeliveryRequestEntryDaoImpl(PdbController dbController) {
+        this.dbController = dbController;
+    }
+
+    public FlowerDeliveryRequestEntryDaoImpl() {
+        this.dbController = App.getSingleton().getPdb();
+    }
 
     @Override
     public Optional<FlowerDeliveryRequestEntry> get(String key) {

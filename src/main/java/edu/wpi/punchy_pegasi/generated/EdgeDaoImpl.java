@@ -1,9 +1,10 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.Edge;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +17,15 @@ import java.util.Optional;
 public class EdgeDaoImpl implements IDao<Edge, String> {
 
     static String[] fields = {"uuid", "startNode", "endNode"};
-    private final PdbController dbController = App.getSingleton().getPdb();
+    private final PdbController dbController;
+
+    public EdgeDaoImpl(PdbController dbController) {
+        this.dbController = dbController;
+    }
+
+    public EdgeDaoImpl() {
+        this.dbController = App.getSingleton().getPdb();
+    }
 
     @Override
     public Optional<Edge> get(String key) {
@@ -24,8 +33,8 @@ public class EdgeDaoImpl implements IDao<Edge, String> {
             rs.next();
             Edge req = new Edge(
                     (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -40,8 +49,8 @@ public class EdgeDaoImpl implements IDao<Edge, String> {
             while (rs.next()) {
                 Edge req = new Edge(
                     (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
                 if (req != null)
                     map.put(String.valueOf(req.getUuid()), req);
             }

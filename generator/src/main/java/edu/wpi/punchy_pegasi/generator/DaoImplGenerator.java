@@ -14,7 +14,9 @@ import org.objectweb.asm.tree.MethodNode;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -122,7 +124,7 @@ public class DaoImplGenerator {
         return constructor.toString();
     }
 
-    static void genereateFrom(Class<?> clazz, TableType tt) throws IOException {
+    static void genereateFrom(Class<?> clazz, TableType tt) throws IOException, URISyntaxException {
         var ClassText = clazz.getSimpleName();
         // set first letter lowercase
         var classText = firstLower(ClassText);
@@ -149,7 +151,6 @@ public class DaoImplGenerator {
 
 
         var fileName = "src/main/java/edu/wpi/punchy_pegasi/generated/" + ClassText + "DaoImpl.java";
-        var path = Path.of(DaoImplGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), fileName);
         // write text to file fileName.java
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
         writer.write(fileText);

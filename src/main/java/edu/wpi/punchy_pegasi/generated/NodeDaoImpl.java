@@ -1,9 +1,10 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.Node;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +17,15 @@ import java.util.Optional;
 public class NodeDaoImpl implements IDao<Node, String> {
 
     static String[] fields = {"nodeID", "xcoord", "ycoord", "floor", "building"};
-    private final PdbController dbController = App.getSingleton().getPdb();
+    private final PdbController dbController;
+
+    public NodeDaoImpl(PdbController dbController) {
+        this.dbController = dbController;
+    }
+
+    public NodeDaoImpl() {
+        this.dbController = App.getSingleton().getPdb();
+    }
 
     @Override
     public Optional<Node> get(String key) {
