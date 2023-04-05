@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
@@ -89,12 +90,20 @@ public class App extends Application {
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
         loadStylesheet("frontend/css/MFXColors.css");
 
-//        try {
-//            pdb.importTable(PdbController.TableType.NODES, "/home/xyven/Downloads/Node.csv");
-//            pdb.importTable(PdbController.TableType.EDGES, "/home/xyven/Downloads/Edge.csv");
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//        }
+        try {
+            pdb.initTableByType(TableType.NODES);
+            pdb.initTableByType(TableType.EDGES);
+            pdb.initTableByType(TableType.LOCATIONNAMES);
+            pdb.initTableByType(TableType.MOVES);
+            pdb.initTableByType(TableType.FOODREQUESTS);
+            pdb.initTableByType(TableType.FLOWERREQUESTS);
+            pdb.initTableByType(TableType.CONFERENCEREQUESTS);
+            pdb.initTableByType(TableType.FURNITUREREQUESTS);
+            pdb.initTableByType(TableType.OFFICEREQUESTS);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

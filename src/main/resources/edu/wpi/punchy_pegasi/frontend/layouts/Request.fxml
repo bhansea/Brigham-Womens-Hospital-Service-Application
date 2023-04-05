@@ -114,12 +114,12 @@
                         </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                      <children>
-                        <Button fx:id="clear" onAction="#clearEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Clear" textAlignment="CENTER" textFill="WHITE">
+                        <Button fx:id="clear" onMouseClicked="#clearEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Clear" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Button>
-                              <Button fx:id="submit" onAction="#submitEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="submit" onMouseClicked="#submitEntry" style="-fx-background-color: green; -fx-background-radius: 6;" text="Submit" textAlignment="CENTER" textFill="WHITE">
                                   <font>
                                       <Font size="24.0" />
                                   </font>

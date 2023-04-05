@@ -92,4 +92,10 @@ public abstract class RequestController<T extends RequestEntry> {
         staffAssignment.clear();
         additionalNotes.clear();
     }
+
+    @FXML
+    protected abstract void clearEntry();
+
+    @FXML
+    protected abstract void validateEntry();
 }
