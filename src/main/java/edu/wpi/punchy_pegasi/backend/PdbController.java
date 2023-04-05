@@ -58,7 +58,7 @@ public class PdbController {
         var statement = connection.createStatement();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
         var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase() + " " + tableType.getTableSQL() + ";";
-        statement.executeQuery(query);
+        statement.execute(query);
     }
 
     private String getFieldValueString(String[] fields, Object[] values, String equator, String delimiter) {
