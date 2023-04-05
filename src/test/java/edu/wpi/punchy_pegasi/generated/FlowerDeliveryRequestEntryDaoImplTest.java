@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +15,9 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 class FlowerDeliveryRequestEntryDaoImplTest {
     static PdbController pdbController;
     static String[] fields;
@@ -57,6 +59,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
+
     }
 
     @Test
@@ -69,5 +73,54 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
+
+        FlowerDeliveryRequestEntry flowerEntry =
+                new FlowerDeliveryRequestEntry(
+                        UUID.randomUUID(),
+                        "testPatient",
+                        "testRoomNum",
+                        "testStaff",
+                        "testNotes",
+                        RequestEntry.Status.PROCESSING,
+                        "testSmall",
+                        "test1",
+                        "testTulip"
+                );
+        var values = new Object[]{
+                flowerEntry.getServiceID(),
+                flowerEntry.getPatientName(),
+                flowerEntry.getRoomNumber(),
+                flowerEntry.getStaffAssignment(),
+                flowerEntry.getAdditionalNotes(),
+                flowerEntry.getStatus(),
+                flowerEntry.getFlowerSize(),
+                flowerEntry.getFlowerAmount(),
+                flowerEntry.getFlowerType()
+        };
+        try {
+            pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Unable to insert flower request";
+            log.error("Unable to insert flower request: ", e);
+        }
+
+        try {
+            ResultSet result = pdbController.searchQuery(TableType.FLOWERREQUESTS, "serviceID", flowerEntry.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Unable to find flower request";
+            throw new RuntimeException(e);
+        }
+
+        dao.delete(flowerEntry);
+
+        try {
+            ResultSet result = pdbController.searchQuery(TableType.FLOWERREQUESTS, "serviceID", flowerEntry.getServiceID());
+        } catch (PdbController.DatabaseException thrown) {
+            assert true : "Flower request was deleted";
+            assertTrue(thrown.getMessage().contentEquals("SQL error"));
+        }
+
+
     }
 }

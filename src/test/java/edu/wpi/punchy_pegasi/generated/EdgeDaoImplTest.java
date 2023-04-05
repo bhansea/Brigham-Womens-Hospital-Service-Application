@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EdgeDaoImplTest {
     static PdbController pdbController;
@@ -64,5 +64,37 @@ class EdgeDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new EdgeDaoImpl(pdbController);
+        long uuid = 1111;
+        long startNode = 2222;
+        long endNode = 3333;
+        Edge edge = new Edge(uuid, startNode, endNode);
+        var values = new Long[]{
+                edge.getUuid(),
+                edge.getStartNode(),
+                edge.getEndNode()
+        };
+        try {
+            pdbController.insertQuery(TableType.EDGES, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert edge";
+            throw new RuntimeException(e);
+        }
+
+        try {
+            pdbController.searchQuery(TableType.EDGES, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to find edge";
+            throw new RuntimeException(e);
+        }
+
+        dao.delete(edge);
+
+        try {
+            pdbController.searchQuery(TableType.EDGES, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Successfully deleted edge";
+        }
+
     }
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,5 +69,43 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new FurnitureRequestEntryDaoImpl(pdbController);
+        FurnitureRequestEntry furnitureRequest = new FurnitureRequestEntry(
+                UUID.randomUUID(),
+                "roomNum",
+                "staff",
+                "additionalNotes",
+                RequestEntry.Status.PROCESSING,
+                List.of("item1", "item2")
+        );
+
+        var values = new Object[] {
+                furnitureRequest.getServiceID(),
+                furnitureRequest.getRoomNumber(),
+                furnitureRequest.getStaffAssignment(),
+                furnitureRequest.getAdditionalNotes(),
+                furnitureRequest.getStatus(),
+                furnitureRequest.getSelectFurniture()
+        };
+
+        try {
+            pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert into database";
+        }
+
+        try {
+            pdbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequest.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to search database";
+        }
+
+        dao.delete(furnitureRequest);
+
+        try {
+            pdbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequest.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Successfully deleted from database";
+        }
     }
 }

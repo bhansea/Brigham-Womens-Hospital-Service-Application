@@ -2,17 +2,21 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
-import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
+
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.sql.ResultSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+@Slf4j
 class ConferenceRoomEntryDaoImplTest {
     static PdbController pdbController;
     static String[] fields;
@@ -66,5 +70,48 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void delete() {
+        var dao = new ConferenceRoomEntryDaoImpl(pdbController);
+        ConferenceRoomEntry conferenceRoom =
+                new ConferenceRoomEntry(
+                        UUID.randomUUID(),
+                        "testRoomNum",
+                        "testStaff",
+                        "testNotes",
+                        RequestEntry.Status.PROCESSING,
+                        "beginTime",
+                        "endTime");
+
+        var values = new Object[] {
+                conferenceRoom.getServiceID(),
+                conferenceRoom.getRoomNumber(),
+                conferenceRoom.getStaffAssignment(),
+                conferenceRoom.getAdditionalNotes(),
+                conferenceRoom.getStatus(),
+                conferenceRoom.getBeginningTime(),
+                conferenceRoom.getEndTime()
+        };
+
+        try {
+            pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to insert into database";
+            log.error("Failed to insert into database", e);
+        }
+
+        try {
+            ResultSet rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoom.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert false: "Failed to find the entry in the database";
+            log.error("Failed to find the entry in the database", e);
+        }
+
+        dao.delete(conferenceRoom);
+
+        try {
+            ResultSet rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoom.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert true: "Successfully deleted the entry from the database";
+            assertTrue(e.getMessage().contains("SQL error"));
+        }
     }
 }
