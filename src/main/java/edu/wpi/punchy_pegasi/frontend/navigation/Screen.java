@@ -16,7 +16,7 @@ public enum Screen {
     MAP_PAGE("Map", "frontend/views/MapPage.fxml"),
     LOGIN("Login", "frontend/views/Login.fxml"),
     FLOWER_DELIVERY_REQUEST("Flower Delivery Request", "frontend/requests/FlowerDeliveryRequest.fxml", FlowerDeliveryRequestController::create),
-    DISPLAY_SERVICE_REQUESTS("Service Request", "frontend/requests/ServiceRequest.fxml"),
+    ADMIN_PAGE("Admin Page", "frontend/requests/AdminPage.fxml"),
     OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeServiceRequest.fxml", OfficeServiceRequestController::create),
     FOOD_SERVICE_REQUEST("Food Service Request", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create),
     CONFERENCE_ROOM_SERVICE_REQUEST("Conference Room Reserve Request", "frontend/requests/ConferenceRoomRequest.fxml", ConferenceRoomController::create),
