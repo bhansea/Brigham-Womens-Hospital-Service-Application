@@ -39,4 +39,8 @@ class FoodServiceRequestEntryDaoImplTest {
     @Test
     void delete() {
     }
+
+    @Test
+    void testGetAll() {
+    }
 }

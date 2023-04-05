@@ -39,4 +39,8 @@ class LocationNameDaoImplTest {
     @Test
     void delete() {
     }
+
+    @Test
+    void testGetAll() {
+    }
 }

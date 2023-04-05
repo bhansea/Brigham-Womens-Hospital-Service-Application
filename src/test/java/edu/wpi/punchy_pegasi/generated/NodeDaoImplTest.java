@@ -39,4 +39,8 @@ class NodeDaoImplTest {
     @Test
     void delete() {
     }
+
+    @Test
+    void testGetAll() {
+    }
 }

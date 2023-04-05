@@ -39,4 +39,8 @@ class MoveDaoImplTest {
     @Test
     void delete() {
     }
+
+    @Test
+    void testGetAll() {
+    }
 }

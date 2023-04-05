@@ -39,4 +39,8 @@ class EdgeDaoImplTest {
     @Test
     void delete() {
     }
+
+    @Test
+    void testGetAll() {
+    }
 }
