@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Edge {
+    @SchemaID
     private Long uuid;
     private Long startNode;
     private Long endNode;

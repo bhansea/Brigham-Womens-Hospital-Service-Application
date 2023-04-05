@@ -31,8 +31,8 @@ public class TestDB {
         try {
             singleton.pdb.initTableByType(TableType.LOCATIONNAMES);
             var LocationNameDAO = new LocationNameDaoImpl();
-            LocationNameDAO.save(new LocationName("lllllllong Name", "short name", LocationName.NodeType.EXIT));
-            LocationNameDAO.save(new LocationName("lllllllongg Name", "short name", LocationName.NodeType.DEPT));
+            LocationNameDAO.save(new LocationName(1L,"lllllllong Name", "short name", LocationName.NodeType.EXIT));
+            LocationNameDAO.save(new LocationName(2L,"lllllllongg Name", "short name", LocationName.NodeType.DEPT));
             var locationNameMap = LocationNameDAO.getAll();
             System.out.println();
 //            singleton.pdb.initTableByType(TableType.EDGES);

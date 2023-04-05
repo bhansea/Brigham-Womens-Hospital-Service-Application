@@ -130,11 +130,10 @@ public class PdbController {
         }
     }
 
-    private String getFieldValueString(String[] fields, Object[] values, String delimiter) {
+    private String getFieldValueString(String[] fields, Object[] values, String equator, String delimiter) {
         String query = "";
         for (int i = 0; i < fields.length; i++) {
-            query += fields[i] +
-                        " = " + objectToPsqlString(values[i]);
+            query += fields[i] + " " + equator + " " + objectToPsqlString(values[i]);
             if (i != fields.length - 1) query += delimiter;
         }
         return query;
@@ -149,15 +148,14 @@ public class PdbController {
      * @return The number of rows updated
      * @throws DatabaseException
      */
-    public int updateQuery(TableType tableType, String[] fields, Object[] values) throws DatabaseException {
+    public int updateQuery(TableType tableType, String keyField, Object keyValue, String[] fields, Object[] values) throws DatabaseException {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
             var query = "UPDATE teamp." + tableType.name().toLowerCase() + " SET ";
-            getFieldValueString(fields, values, ", ");
-            query += " WHERE " + fields[0] + " = " + values[0];
-            var ret = statement.executeUpdate(query);
-            return ret;
+            getFieldValueString(fields, values, " = ", ", ");
+            query += " WHERE " + keyField + " = " + keyValue;
+            return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to update node", e);
             throw new DatabaseException("SQL error");
@@ -185,7 +183,7 @@ public class PdbController {
             return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to insert row", e);
-            throw new DatabaseException("SQL er ror");
+            throw new DatabaseException("SQL error");
         }
     }
 
@@ -203,7 +201,7 @@ public class PdbController {
         try {
             var statement = connection.createStatement();
             var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
-            query += getFieldValueString(field, value, " AND ");
+            query += getFieldValueString(field, value, "=", " AND ");
             return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to delete node", e);
@@ -240,7 +238,7 @@ public class PdbController {
             var query = "SELECT * FROM teamp." + tableType.name().toLowerCase();
             if (fields.length > 0) {
                 query += " WHERE ";
-                query += getFieldValueString(fields, values, " AND ");
+                query += getFieldValueString(fields, values, "LIKE", " AND ");
             }
             query += ";";
             return statement.executeQuery(query);

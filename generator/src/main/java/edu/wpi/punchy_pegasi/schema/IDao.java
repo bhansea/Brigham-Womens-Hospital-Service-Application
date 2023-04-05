@@ -3,14 +3,16 @@ package edu.wpi.punchy_pegasi.schema;
 import java.util.Map;
 import java.util.Optional;
 
-public interface IDao<T, K> {
+public interface IDao<K, T, C> {
     Optional<T> get(K k);
 
-    Map<K, T> getAll();  // TODO: return List or Map?
+    Optional<T> get(C column, Object value);
+
+    Map<K, T> getAll();
 
     void save(T t);
 
-    void update(T t, Object[] params);
+    void update(T t, C[] params);
 
     void delete(T t);
 }

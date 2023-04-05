@@ -8,6 +8,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class RequestEntry {
+    @SchemaID
     protected final UUID serviceID;
     protected final String patientName;
     protected final String roomNumber;
