@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
-import edu.wpi.punchy_pegasi.schema.*;
+import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class PdbController {
     private Connection connection;
-
     public PdbController(String url, String username, String password) {
         try {
             connection = DriverManager.getConnection(url, username, password);

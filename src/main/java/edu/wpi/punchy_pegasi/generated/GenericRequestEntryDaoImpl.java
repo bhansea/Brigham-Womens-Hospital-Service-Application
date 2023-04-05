@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 

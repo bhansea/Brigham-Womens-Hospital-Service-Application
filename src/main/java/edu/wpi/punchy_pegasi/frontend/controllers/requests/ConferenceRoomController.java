@@ -9,14 +9,16 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 
+import java.net.URL;
+
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
     @FXML MFXComboBox<String> beginningTime;
     @FXML MFXComboBox<String> endTime;
 
 
-    public static BorderPane create() {
-        return RequestController.create(new ConferenceRoomController(), "views/ConferenceRoomRequest.fxml");
+    public static BorderPane create(URL path) {
+        return RequestController.create(new ConferenceRoomController(), path);
     }
 
     @FXML

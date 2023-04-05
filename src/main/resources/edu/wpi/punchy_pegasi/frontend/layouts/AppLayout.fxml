@@ -10,7 +10,7 @@
         <fx:include source="../components/Header.fxml"/>
     </top>
     <center>
-        <ScrollPane fitToHeight="true" fitToWidth="true" prefWidth="600" prefHeight="400">
+        <ScrollPane fitToHeight="true" fitToWidth="true">
             <BorderPane fx:id="ViewPane"/>
         </ScrollPane>
     </center>

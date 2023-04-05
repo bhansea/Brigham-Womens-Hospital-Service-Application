@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> implements PropertyChangeListener {
@@ -29,7 +30,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     Label mealName;
 
-    public static BorderPane create(String path) {
+    public static BorderPane create(URL path) {
         return RequestController.create(new FoodServiceRequestController(), path);
     }
 

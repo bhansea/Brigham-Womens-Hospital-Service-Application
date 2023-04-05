@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.Objects;
+import java.net.URL;
 
 @Slf4j
 public class App extends Application {
@@ -69,14 +69,21 @@ public class App extends Application {
         log.info("Starting Up");
     }
 
+    @Getter
+    private FXMLLoader loader = new FXMLLoader();
+
+    @Override
+    public void stop() {
+        log.info("Shutting Down");
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         /* primaryStage is generally only used if one of your components require the stage to display */
         App.singleton.primaryStage = primaryStage;
 
-        final var layoutLoader = new FXMLLoader(App.class.getResource("frontend/layouts/AppLayout.fxml"));
-        final BorderPane loadedLayout = layoutLoader.load();
-        final LayoutController layoutController = layoutLoader.getController();
+        final BorderPane loadedLayout = loadWithCache(App.class.getResource("frontend/layouts/AppLayout.fxml"));
+        final LayoutController layoutController = loader.getController();
 
         App.singleton.viewPane = layoutController.getViewPane();
 
@@ -88,15 +95,26 @@ public class App extends Application {
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
 
 //        try {
-//            pdb.importTable(PdbController.TableType.NODES, "/home/xyven/Downloads/Node.csv");
-//            pdb.importTable(PdbController.TableType.EDGES, "/home/xyven/Downloads/Edge.csv");
+//            pdb.importTable(TableType.NODES, "/home/xyven/Downloads/Node.csv");
+//            pdb.importTable(TableType.EDGES, "/home/xyven/Downloads/Edge.csv");
 //        } catch (Exception e) {
 //            log.error(e.getMessage());
 //        }
     }
 
-    @Override
-    public void stop() {
-        log.info("Shutting Down");
+    public <T> T loadWithCache(URL url) throws IOException {
+        return loadWithCache(url, null, null);
+    }
+
+    public <T> T loadWithCache(URL url, Object controller) throws IOException {
+        return loadWithCache(url, null, controller);
+    }
+
+    public <T> T loadWithCache(URL url, Object root, Object controller) throws IOException {
+        loader = new FXMLLoader();
+        loader.setRoot(root);
+        loader.setController(controller);
+        loader.setLocation(url);
+        return loader.load();
     }
 }

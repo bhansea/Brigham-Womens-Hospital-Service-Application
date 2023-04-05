@@ -9,12 +9,13 @@ import javafx.scene.layout.BorderPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
     @FXML
     TextField officeRequest;
 
-    public static BorderPane create(String path) {
+    public static BorderPane create(URL path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
     }
 

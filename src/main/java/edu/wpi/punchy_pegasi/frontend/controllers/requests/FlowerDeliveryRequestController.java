@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 
+import java.net.URL;
+
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
     @FXML
     MFXComboBox<String> flowerTypeComboBox;
@@ -24,7 +26,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     Label flowerName;
 
-    public static BorderPane create(String path) {
+    public static BorderPane create(URL path) {
         return RequestController.create(new FlowerDeliveryRequestController(), path);
     }
 

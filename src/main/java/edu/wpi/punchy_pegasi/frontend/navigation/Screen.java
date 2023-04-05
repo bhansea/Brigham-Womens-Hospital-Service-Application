@@ -4,11 +4,11 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.FlowerDeliveryRequestController;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.FoodServiceRequestController;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.OfficeServiceRequestController;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.function.Function;
 
 @Slf4j
@@ -21,12 +21,12 @@ public enum Screen {
     DISPLAY_SERVICE_REQUESTS("Service Request", "frontend/requests/ServiceRequest.fxml"),
     OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeServiceRequest.fxml", OfficeServiceRequestController::create),
     FOOD_SERVICE_REQUEST("Food Service Request", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create);
-    private final Function<String, ? extends Parent> createFunction;
-    private final String path;
+    private final Function<URL, ? extends Parent> createFunction;
+    private final URL path;
     private final String readable;
 
-    Screen(String readable, String path, Function<String, ? extends Parent> createFunction) {
-        this.path = path;
+    Screen(String readable, String path, Function<URL, ? extends Parent> createFunction) {
+        this.path = App.class.getResource(path);
         this.readable = readable.toUpperCase();
         this.createFunction = createFunction;
     }
@@ -35,11 +35,9 @@ public enum Screen {
         this(readable, path, Screen::defaultCreate);
     }
 
-    private static Parent defaultCreate(String path) {
-        final var genericResource = App.class.getResource(path);
-        FXMLLoader generic = new FXMLLoader(genericResource);
+    private static Parent defaultCreate(URL path) {
         try {
-            return generic.load();
+            return App.getSingleton().loadWithCache(path);
         } catch (IOException e) {
             log.error("Error in screen", e);
             return null;
