@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Move;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class MoveDaoImpl implements IDao<java.lang.Long, Move, MoveDaoImpl.Column> {
+public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
 
     static String[] fields = {"uuid", "nodeID", "longName", "date"};
     private final PdbController dbController;
@@ -44,7 +45,7 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, MoveDaoImpl.Colum
     }
 
     @Override
-    public Optional<Move> get(Column column, Object value) {
+    public Optional<Move> get(Move.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.MOVES, column.name(), value)) {
             rs.next();
             Move req = new Move(
@@ -90,13 +91,9 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, MoveDaoImpl.Colum
     }
 
     @Override
-    public void update(Move move, Column[] params) {
-        Object[] values = {move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(Move move, Move.Field[] params) {
         try {
-            dbController.updateQuery(TableType.MOVES, "uuid", move.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.MOVES, "uuid", move.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(move)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -109,15 +106,5 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, MoveDaoImpl.Colum
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        UUID("uuid"),
-        NODE_ID("nodeID"),
-        LONG_NAME("longName"),
-        DATE("date");
-        @Getter
-        private final String colName;
     }
 }

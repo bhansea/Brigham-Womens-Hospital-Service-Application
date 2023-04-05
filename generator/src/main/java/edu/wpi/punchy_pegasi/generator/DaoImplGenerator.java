@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.generator;
 
-import edu.wpi.punchy_pegasi.schema.SchemaID;
-import edu.wpi.punchy_pegasi.schema.TableType;
+import edu.wpi.punchy_pegasi.generator.schema.TableType;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -15,10 +14,14 @@ import org.objectweb.asm.tree.MethodNode;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DaoImplGenerator {
 
@@ -128,18 +131,66 @@ public class DaoImplGenerator {
         str = str.replaceAll(regex, replacement).toLowerCase();
         return str;
     }
-    static String generateEnum(List<Field> fields) {
+    static String generateEnum(Class<?> clazz, List<Field> fields) {
         return
 """
-public enum Column {
+    @RequiredArgsConstructor
+    public enum Field {
 """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
 ;
         @Getter
         private final String colName;
-    }""";
+        public Object getValue(""" + clazz.getCanonicalName() + """
+ ref){
+            return ref.getFromField(this);
+        }
+    }
+    public Object getFromField(Field field) {
+        return switch (field) {
+""" + "            " + String.join("            ", fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
+        };
+    }
+""";
     }
 
     static void generateFrom(Class<?> clazz, TableType tt) throws IOException {
+    }
+
+    private static Class getClass(String className, String packageName) {
+        try {
+            return Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
+        } catch (ClassNotFoundException e) {
+            // handle the exception
+        }
+        return null;
+    }
+
+    public static List<Class> findAllClassesUsingClassLoader(String packageName) {
+        InputStream stream = ClassLoader.getSystemClassLoader()
+                .getResourceAsStream(packageName.replaceAll("[.]", "/"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        return reader.lines()
+                .filter(line -> line.endsWith(".class"))
+                .map(line -> getClass(line, packageName))
+                .collect(Collectors.toSet()).stream().toList();
+    }
+
+    private static void generateSchema(Class<?> clazz) throws IOException {
+        var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", clazz.getSimpleName() + ".java");
+        var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", clazz.getSimpleName() + ".java");
+        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
+        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", clazz.getSimpleName() + "DaoImpl.java");
+
+        var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
+                .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
+
+        var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == clazz).findFirst();
+        if(typeOptional.isEmpty()) {
+            Files.writeString(schemaDestPath, sourceFileText);
+            return;
+        }
+        var tt = typeOptional.get();
+
         var ClassText = clazz.getSimpleName();
         // set first letter lowercase
         var classText = firstLower(ClassText);
@@ -160,9 +211,25 @@ public enum Column {
         var idFieldText = idFields.get(0).getName();
         var idFieldType = idFields.get(0).getType().getCanonicalName();
 
-        //read template from GenericDaoImpl
-        var template = new BufferedReader(new FileReader("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java")).lines().toList().stream().reduce("", (a, b) -> a + "\n" + b);
-        var fileText = template.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator", "edu.wpi.punchy_pegasi.generated")
+
+        // gen schema
+        var schemaFileText = sourceFileText
+                .replaceAll("@SchemaID[.\n]*", "")
+                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "").trim();
+
+        var schemaLines = new ArrayList<>(schemaFileText.lines().toList());
+        schemaLines.add(3, "import lombok.Getter;\n");
+        schemaLines.add(4, "import lombok.RequiredArgsConstructor;\n");
+        schemaLines.add(schemaLines.size()-1, generateEnum(clazz, classFields));
+
+        schemaFileText = schemaLines.stream().reduce("", (a, b) -> a + "\n" + b)
+                .replaceAll("\\.generator\\.", ".").trim();
+
+        Files.writeString(schemaDestPath, schemaFileText);
+
+        // gen impl
+        var template = new String(Files.readAllBytes(daoImplSourcePath));
+        var implFileText = template.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator", "edu.wpi.punchy_pegasi.generated")
                 .replaceAll("GenericRequestEntry", ClassText).replaceAll("genericRequestEntry", classText)
                 .replaceAll("TableType\\.GENERIC", "TableType." + tt.name())
                 .replaceAll("/\\*fields\\*/", String.join(", ", classFieldsText.stream().map(v -> "\"" + v + "\"").toList()))
@@ -171,41 +238,39 @@ public enum Column {
                 .replaceAll("\"\"/\\*idField\\*/", "\"" + idFieldText + "\"")
                 .replaceAll("String/\\*idFieldType\\*/", idFieldType)
                 .replaceAll("\"(\\S+)\"/\\*getID\\*/", "$1.get" + firstUpper(idFieldText) + "()")
-                .replaceAll("public enum Column \\{[^\\}]*\\}", generateEnum(classFields)).trim();
+                .replaceAll("\\.generator\\.", ".").trim();
 
-        var lines = new java.util.ArrayList<>(fileText.lines().toList());
+        var lines = new java.util.ArrayList<>(implFileText.lines().toList());
         lines.add(5, "import java.util.Arrays;");
-        fileText = lines.stream().reduce("", (a, b) -> a + "\n" + b).trim();
-
-
-        var fileName = "src/main/java/edu/wpi/punchy_pegasi/generated/" + ClassText + "DaoImpl.java";
-        // write text to file fileName.java
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-        writer.write(fileText);
-        writer.close();
-    }
-
-    private static Class getClass(String className, String packageName) {
-        try {
-            return Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
-        } catch (ClassNotFoundException e) {
-            // handle the exception
-        }
-        return null;
+        lines.add(5, "import java.util.Arrays;");
+        implFileText = lines.stream().reduce("", (a, b) -> a + "\n" + b).trim();
+        Files.writeString(daoImplDestPath, implFileText);
     }
 
     /***
-     * Currently generates from the TableType enum, and supports any type which has one field with "id" anywhere
-     * in its name, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
+     * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
+     * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
      * parameter names which EXACTLY match the corresponding field names.
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
-        // create generated folder if it doesnt exist
+    public static void main(String[] args) throws IOException, URISyntaxException {
+        // generate schema
+        var schemaFolder = new File("src/main/java/edu/wpi/punchy_pegasi/schema");
+        if (!schemaFolder.exists()) schemaFolder.mkdir();
+        var classes = findAllClassesUsingClassLoader("edu.wpi.punchy_pegasi.generator.schema");
+        for (var clazz : classes) {
+            try {
+                generateSchema(clazz);
+            } catch (Exception e){
+                System.out.println("Failed to generate shema for " + clazz.getCanonicalName());
+            }
+        }
+
+        // generate DaoImpls
         var generatedFolder = new File("src/main/java/edu/wpi/punchy_pegasi/generated");
         if (!generatedFolder.exists()) generatedFolder.mkdir();
-        for (var c : Arrays.stream(TableType.values()).filter(v->v != TableType.GENERIC).toList()) {
+        for (var c : Arrays.stream(TableType.values()).filter(v -> v != TableType.GENERIC).toList()) {
             try {
                 generateFrom(c.getClazz(), TableType.valueOf(c.name()));
             } catch (Exception e) {

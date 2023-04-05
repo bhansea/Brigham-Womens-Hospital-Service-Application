@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, LocationNameDaoImpl.Column> {
+public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, LocationName.Field> {
 
     static String[] fields = {"uuid", "longName", "shortName", "nodeType"};
     private final PdbController dbController;
@@ -44,7 +45,7 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
     }
 
     @Override
-    public Optional<LocationName> get(Column column, Object value) {
+    public Optional<LocationName> get(LocationName.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, column.name(), value)) {
             rs.next();
             LocationName req = new LocationName(
@@ -90,13 +91,9 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
     }
 
     @Override
-    public void update(LocationName locationName, Column[] params) {
-        Object[] values = {locationName.getUuid(), locationName.getLongName(), locationName.getShortName(), locationName.getNodeType()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(LocationName locationName, LocationName.Field[] params) {
         try {
-            dbController.updateQuery(TableType.LOCATIONNAMES, "uuid", locationName.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.LOCATIONNAMES, "uuid", locationName.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(locationName)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -109,15 +106,5 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        UUID("uuid"),
-        LONG_NAME("longName"),
-        SHORT_NAME("shortName"),
-        NODE_TYPE("nodeType");
-        @Getter
-        private final String colName;
     }
 }

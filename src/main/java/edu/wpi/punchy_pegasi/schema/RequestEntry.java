@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import edu.wpi.punchy_pegasi.generator.SchemaID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

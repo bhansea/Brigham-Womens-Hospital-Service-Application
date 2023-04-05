@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntryDaoImpl.Column> {
+public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field> {
 
     static String[] fields = {"officeRequest", "employeeName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
@@ -47,7 +48,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
     }
 
     @Override
-    public Optional<OfficeServiceRequestEntry> get(Column column, Object value) {
+    public Optional<OfficeServiceRequestEntry> get(OfficeServiceRequestEntry.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, column.name(), value)) {
             rs.next();
             OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
@@ -99,13 +100,9 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
     }
 
     @Override
-    public void update(OfficeServiceRequestEntry officeServiceRequestEntry, Column[] params) {
-        Object[] values = {officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName(), officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getRoomNumber(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(OfficeServiceRequestEntry officeServiceRequestEntry, OfficeServiceRequestEntry.Field[] params) {
         try {
-            dbController.updateQuery(TableType.OFFICEREQUESTS, "serviceID", officeServiceRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.OFFICEREQUESTS, "serviceID", officeServiceRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(officeServiceRequestEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -118,18 +115,5 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        OFFICE_REQUEST("officeRequest"),
-        EMPLOYEE_NAME("employeeName"),
-        SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
-        @Getter
-        private final String colName;
     }
 }

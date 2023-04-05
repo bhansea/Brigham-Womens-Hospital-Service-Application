@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntryDaoImpl.Column> {
+public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntry.Field> {
 
     static String[] fields = {"foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
@@ -33,7 +34,6 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             rs.next();
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
@@ -41,7 +41,8 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
                     Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    (java.lang.String)rs.getObject("dietaryRestrictions"));
+                    (java.lang.String)rs.getObject("dietaryRestrictions"),
+                    (java.lang.String)rs.getObject("patientName"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -50,12 +51,11 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
     }
 
     @Override
-    public Optional<FoodServiceRequestEntry> get(Column column, Object value) {
+    public Optional<FoodServiceRequestEntry> get(FoodServiceRequestEntry.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS, column.name(), value)) {
             rs.next();
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
@@ -63,7 +63,8 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
                     Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    (java.lang.String)rs.getObject("dietaryRestrictions"));
+                    (java.lang.String)rs.getObject("dietaryRestrictions"),
+                    (java.lang.String)rs.getObject("patientName"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -78,7 +79,6 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("patientName"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
@@ -86,7 +86,8 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
                     Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    (java.lang.String)rs.getObject("dietaryRestrictions"));
+                    (java.lang.String)rs.getObject("dietaryRestrictions"),
+                    (java.lang.String)rs.getObject("patientName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -108,13 +109,9 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
     }
 
     @Override
-    public void update(FoodServiceRequestEntry foodServiceRequestEntry, Column[] params) {
-        Object[] values = {foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(FoodServiceRequestEntry foodServiceRequestEntry, FoodServiceRequestEntry.Field[] params) {
         try {
-            dbController.updateQuery(TableType.FOODREQUESTS, "serviceID", foodServiceRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.FOODREQUESTS, "serviceID", foodServiceRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(foodServiceRequestEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -127,21 +124,5 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        FOOD_SELECTION("foodSelection"),
-        TEMP_TYPE("tempType"),
-        ADDITIONAL_ITEMS("additionalItems"),
-        DIETARY_RESTRICTIONS("dietaryRestrictions"),
-        PATIENT_NAME("patientName"),
-        SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
-        @Getter
-        private final String colName;
     }
 }

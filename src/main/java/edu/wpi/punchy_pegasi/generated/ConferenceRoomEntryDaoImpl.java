@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, ConferenceRoomEntry, ConferenceRoomEntryDaoImpl.Column> {
+public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, ConferenceRoomEntry, ConferenceRoomEntry.Field> {
 
     static String[] fields = {"beginningTime", "endTime", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
@@ -34,8 +35,8 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
                     (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
                     (java.lang.String)rs.getObject("endTime"));
@@ -47,14 +48,14 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
     }
 
     @Override
-    public Optional<ConferenceRoomEntry> get(Column column, Object value) {
+    public Optional<ConferenceRoomEntry> get(ConferenceRoomEntry.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, column.name(), value)) {
             rs.next();
             ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
                     (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
                     (java.lang.String)rs.getObject("endTime"));
@@ -73,8 +74,8 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
                     (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
                     (java.lang.String)rs.getObject("endTime"));
@@ -99,13 +100,9 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
     }
 
     @Override
-    public void update(ConferenceRoomEntry conferenceRoomEntry, Column[] params) {
-        Object[] values = {conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime(), conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getRoomNumber(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(ConferenceRoomEntry conferenceRoomEntry, ConferenceRoomEntry.Field[] params) {
         try {
-            dbController.updateQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoomEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoomEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(conferenceRoomEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -118,18 +115,5 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        BEGINNING_TIME("beginningTime"),
-        END_TIME("endTime"),
-        SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
-        @Getter
-        private final String colName;
     }
 }

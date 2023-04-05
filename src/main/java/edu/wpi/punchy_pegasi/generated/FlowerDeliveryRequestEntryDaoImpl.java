@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntryDaoImpl.Column> {
+public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field> {
 
     static String[] fields = {"flowerSize", "flowerType", "flowerAmount", "patientName", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
@@ -49,7 +50,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
     }
 
     @Override
-    public Optional<FlowerDeliveryRequestEntry> get(Column column, Object value) {
+    public Optional<FlowerDeliveryRequestEntry> get(FlowerDeliveryRequestEntry.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS, column.name(), value)) {
             rs.next();
             FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
@@ -105,13 +106,9 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
     }
 
     @Override
-    public void update(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry, Column[] params) {
-        Object[] values = {flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName(), flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field[] params) {
         try {
-            dbController.updateQuery(TableType.FLOWERREQUESTS, "serviceID", flowerDeliveryRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.FLOWERREQUESTS, "serviceID", flowerDeliveryRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(flowerDeliveryRequestEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -124,20 +121,5 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        FLOWER_SIZE("flowerSize"),
-        FLOWER_TYPE("flowerType"),
-        FLOWER_AMOUNT("flowerAmount"),
-        PATIENT_NAME("patientName"),
-        SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
-        @Getter
-        private final String colName;
     }
 }

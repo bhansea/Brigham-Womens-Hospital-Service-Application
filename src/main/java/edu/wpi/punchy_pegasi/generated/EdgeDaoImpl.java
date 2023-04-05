@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, EdgeDaoImpl.Column> {
+public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
 
     static String[] fields = {"uuid", "startNode", "endNode"};
     private final PdbController dbController;
@@ -33,8 +34,8 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, EdgeDaoImpl.Colum
             rs.next();
             Edge req = new Edge(
                     (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -43,13 +44,13 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, EdgeDaoImpl.Colum
     }
 
     @Override
-    public Optional<Edge> get(Column column, Object value) {
+    public Optional<Edge> get(Edge.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.EDGES, column.name(), value)) {
             rs.next();
             Edge req = new Edge(
                     (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -64,8 +65,8 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, EdgeDaoImpl.Colum
             while (rs.next()) {
                 Edge req = new Edge(
                     (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("startNode"),
-                    (java.lang.String)rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -87,13 +88,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, EdgeDaoImpl.Colum
     }
 
     @Override
-    public void update(Edge edge, Column[] params) {
-        Object[] values = {edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(Edge edge, Edge.Field[] params) {
         try {
-            dbController.updateQuery(TableType.EDGES, "uuid", edge.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.EDGES, "uuid", edge.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(edge)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -106,14 +103,5 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, EdgeDaoImpl.Colum
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        UUID("uuid"),
-        START_NODE("startNode"),
-        END_NODE("endNode");
-        @Getter
-        private final String colName;
     }
 }

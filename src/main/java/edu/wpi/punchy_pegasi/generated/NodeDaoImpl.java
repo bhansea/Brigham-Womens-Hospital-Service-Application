@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Node;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class NodeDaoImpl implements IDao<java.lang.Long, Node, NodeDaoImpl.Column> {
+public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
 
     static String[] fields = {"nodeID", "xcoord", "ycoord", "floor", "building"};
     private final PdbController dbController;
@@ -45,7 +46,7 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, NodeDaoImpl.Colum
     }
 
     @Override
-    public Optional<Node> get(Column column, Object value) {
+    public Optional<Node> get(Node.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.NODES, column.name(), value)) {
             rs.next();
             Node req = new Node(
@@ -93,13 +94,9 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, NodeDaoImpl.Colum
     }
 
     @Override
-    public void update(Node node, Column[] params) {
-        Object[] values = {node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(Node node, Node.Field[] params) {
         try {
-            dbController.updateQuery(TableType.NODES, "nodeID", node.getNodeID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.NODES, "nodeID", node.getNodeID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(node)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -112,16 +109,5 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, NodeDaoImpl.Colum
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        NODE_ID("nodeID"),
-        XCOORD("xcoord"),
-        YCOORD("ycoord"),
-        FLOOR("floor"),
-        BUILDING("building");
-        @Getter
-        private final String colName;
     }
 }

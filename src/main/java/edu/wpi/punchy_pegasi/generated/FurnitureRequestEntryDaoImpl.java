@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import java.util.Arrays;
+import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, FurnitureRequestEntry, FurnitureRequestEntryDaoImpl.Column> {
+public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, FurnitureRequestEntry, FurnitureRequestEntry.Field> {
 
     static String[] fields = {"selectFurniture", "serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
@@ -46,7 +47,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
     }
 
     @Override
-    public Optional<FurnitureRequestEntry> get(Column column, Object value) {
+    public Optional<FurnitureRequestEntry> get(FurnitureRequestEntry.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, column.name(), value)) {
             rs.next();
             FurnitureRequestEntry req = new FurnitureRequestEntry(
@@ -96,13 +97,9 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
     }
 
     @Override
-    public void update(FurnitureRequestEntry furnitureRequestEntry, Column[] params) {
-        Object[] values = {furnitureRequestEntry.getSelectFurniture(), furnitureRequestEntry.getServiceID(), furnitureRequestEntry.getRoomNumber(), furnitureRequestEntry.getStaffAssignment(), furnitureRequestEntry.getAdditionalNotes(), furnitureRequestEntry.getStatus()};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(FurnitureRequestEntry furnitureRequestEntry, FurnitureRequestEntry.Field[] params) {
         try {
-            dbController.updateQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequestEntry.getServiceID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(furnitureRequestEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -115,17 +112,5 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        SELECT_FURNITURE("selectFurniture"),
-        SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
-        @Getter
-        private final String colName;
     }
 }

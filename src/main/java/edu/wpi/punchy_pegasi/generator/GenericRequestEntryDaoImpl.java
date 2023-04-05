@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, GenericRequestEntry, GenericRequestEntryDaoImpl.Column> {
+public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, GenericRequestEntry, GenericRequestEntry.Field> {
 
     static String[] fields = {/*fields*/};
     private final PdbController dbController;
@@ -39,7 +39,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public Optional<GenericRequestEntry> get(Column column, Object value) {
+    public Optional<GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
         try (var rs = dbController.searchQuery(TableType.GENERIC, column.name(), value)) {
             rs.next();
             GenericRequestEntry req/*fromResultSet*/ = null;
@@ -77,13 +77,9 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public void update(GenericRequestEntry genericRequestEntry, Column[] params) {
-        Object[] values = {/*getFields*/};
-        List<Object> pruned = new ArrayList<>();
-        for(var column : params)
-            pruned.add(values[Arrays.asList(Column.values()).indexOf(column)]);
+    public void update(GenericRequestEntry genericRequestEntry, GenericRequestEntry.Field[] params) {
         try {
-            dbController.updateQuery(TableType.GENERIC, ""/*idField*/, "genericRequestEntry"/*getID*/, (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), pruned.toArray());
+            dbController.updateQuery(TableType.GENERIC, ""/*idField*/, "genericRequestEntry"/*getID*/, (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(genericRequestEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -96,12 +92,5 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
-    }
-
-    @RequiredArgsConstructor
-    public enum Column {
-        ;
-        @Getter
-        private final String colName;
     }
 }
