@@ -8,11 +8,7 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,6 +56,65 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var values0 = new Object[] {
+                UUID.randomUUID(),
+                "0",
+                "staff0",
+                "additionalNotes0",
+                RequestEntry.Status.PROCESSING,
+                List.of("item1", "item2")
+        };
+        var values1 = new Object[] {
+                UUID.randomUUID(),
+                "1",
+                "staff1",
+                "additionalNotes1",
+                RequestEntry.Status.PROCESSING,
+                List.of("item1", "item2")
+        };
+        var values2 = new Object[] {
+                UUID.randomUUID(),
+                "2",
+                "staff2",
+                "additionalNotes2",
+                RequestEntry.Status.PROCESSING,
+                List.of("item1", "item2")
+        };
+
+        var valuesSet = new Object[][] {
+                values0,
+                values1,
+                values2
+        };
+        var refMap = new HashMap<UUID, FurnitureRequestEntry>();
+
+        for (Object[] objects : valuesSet) {
+            try {
+                pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, objects);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to insert into database";
+            }
+            var furnRequests = new FurnitureRequestEntry(
+                    (UUID) objects[0],
+                    (String) objects[1],
+                    (String) objects[2],
+                    (String) objects[3],
+                    (RequestEntry.Status) objects[4],
+                    (List<String>) objects[5]
+            );
+            refMap.put(furnRequests.getServiceID(), furnRequests);
+        }
+
+        Map<UUID, FurnitureRequestEntry> resultMap = dao.getAll();
+
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
+            } catch (PdbController.DatabaseException e) {
+                assert false: "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test

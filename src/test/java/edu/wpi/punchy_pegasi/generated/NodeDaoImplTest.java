@@ -7,6 +7,8 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,6 +55,31 @@ class NodeDaoImplTest {
 
     @Test
     void getAll() {
+        var values0 = new Object[]{100L, 500, 500, "L1", "testBuilding0"};
+        var values1 = new Object[]{101L, 501, 501, "L1", "testBuilding1"};
+        var values2 = new Object[]{102L, 502, 502, "L1", "testBuilding2"};
+        var valueSet = new Object[][]{values0, values1, values2};
+
+        var refMap = new HashMap<Long, Node>();
+        for (var values : valueSet) {
+            try {
+                pdbController.insertQuery(TableType.NODES, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+            var node = new Node((Long) values[0], (Integer) values[1], (Integer) values[2], (String) values[3], (String) values[4]);
+            refMap.put(node.getNodeID(), node);
+        }
+
+        Map<Long, Node> resultMap = dao.getAll();
+        for (var key : resultMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.NODES, "nodeID", key);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
