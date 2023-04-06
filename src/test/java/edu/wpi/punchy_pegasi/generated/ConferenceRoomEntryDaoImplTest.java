@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +41,6 @@ class ConferenceRoomEntryDaoImplTest {
     @Test
     void get() {
         ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-
         Object[] values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
         try{
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
@@ -59,6 +59,41 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void testGet() {
+        ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        ConferenceRoomEntry room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        Object[] values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
+        Object[] values2 = new Object[]{room2.getServiceID(), room2.getRoomNumber(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
+        try{
+            pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
+            pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values2);
+        } catch (PdbController.DatabaseException e){
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(ConferenceRoomEntry.Field.ROOM_NUMBER, "testRoom");
+        var map = new HashMap<java.util.UUID, ConferenceRoomEntry>();
+        try (var rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, ConferenceRoomEntry.Field.ROOM_NUMBER.getColName(), "testRoom")) {
+            while (rs.next()) {
+                ConferenceRoomEntry req = new ConferenceRoomEntry(
+                        (java.util.UUID)rs.getObject("serviceID"),
+                        (java.lang.String)rs.getObject("roomNumber"),
+                        (java.lang.String)rs.getObject("staffAssignment"),
+                        (java.lang.String)rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                        (java.lang.String)rs.getObject("beginningTime"),
+                        (java.lang.String)rs.getObject("endTime"));
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map, results);
+        try{
+            pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room.getServiceID());
+            pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room2.getServiceID());
+        } catch(PdbController.DatabaseException e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
