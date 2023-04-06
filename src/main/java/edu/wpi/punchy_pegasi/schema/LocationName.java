@@ -25,7 +25,8 @@ public class LocationName {
         CONF,
         EXIT,
         RETL,
-        SERV
+        SERV,
+        BATH
     }
     @RequiredArgsConstructor
     public enum Field {

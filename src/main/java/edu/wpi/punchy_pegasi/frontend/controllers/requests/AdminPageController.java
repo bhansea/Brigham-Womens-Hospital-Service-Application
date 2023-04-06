@@ -86,7 +86,7 @@ public class AdminPageController {
                 ("Flower", "Food", "Furniture", "Conference Room Reservation", "Office Supplies", "Node", "Edge", "Moves", "Location Names");
         displayTableTypeComboBox.setItems(displayTableTypeList);
 
-        initTables();
+        //initTables();
         // Table View stuff
 
         displayButton.setOnAction(e -> {

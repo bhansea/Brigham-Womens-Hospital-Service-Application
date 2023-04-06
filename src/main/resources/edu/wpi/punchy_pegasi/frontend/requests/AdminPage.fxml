@@ -70,19 +70,19 @@
                         </VBox>
                     </children>
                 </VBox>
-                <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS">
-                    <children>
-                        <MFXTableView prefHeight="500" fx:id="flowerServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="foodServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="furnitureServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="officeServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="conferenceRoomServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="nodeTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="locationTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="edgeTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="moveTable" VBox.vgrow="ALWAYS"/>
-                    </children>
-                </VBox>
+<!--                <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS">-->
+<!--                    <children>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="flowerServiceRequestTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="foodServiceRequestTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="furnitureServiceRequestTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="officeServiceRequestTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="conferenceRoomServiceRequestTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="nodeTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="locationTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="edgeTable" VBox.vgrow="ALWAYS"/>-->
+<!--                        <MFXTableView prefHeight="500" fx:id="moveTable" VBox.vgrow="ALWAYS"/>-->
+<!--                    </children>-->
+<!--                </VBox>-->
             </children>
             <BorderPane.margin>
                 <Insets left="25.0" top="50.0" bottom="50.0"/>
