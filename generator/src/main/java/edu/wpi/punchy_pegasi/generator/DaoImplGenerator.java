@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generator;
 
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
+import org.intellij.lang.annotations.Language;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -167,49 +168,44 @@ public class DaoImplGenerator {
     private static String generateTableInit(TableType tt){
         var clazz = tt.getClazz();
         var tableName = "teamp." + tt.name().toLowerCase();
-        var sequenceName = tt.name().toLowerCase() +"_id_seq";
-        var classFields = getFieldsRecursively(clazz).stream().map(f->{
+        var sequenceName = tt.name().toLowerCase() + "_id_seq";
+        var classFields = getFieldsRecursively(clazz);
+        var idField = classFields.stream().filter(DaoImplGenerator::fieldIsID).findFirst().get();
+        var tableColumns = classFields.stream().map(f -> {
             var appendText = fieldIsID(f) ?
                     f.getType() == Long.class ?
                             " DEFAULT nextval('" + sequenceName + "') PRIMARY KEY"
                             : " PRIMARY KEY"
                     : "";
-            if(f.getType().isEnum())
+            if (f.getType().isEnum())
                 return "" + f.getName() + " varchar" + appendText;
             return "" + f.getName() + " " + classToPostgres.get(f.getType()) + appendText;
         }).toList();
-        return String.format("""
-%s(%s.class, \"\"\" 
-DO $$
-BEGIN
-  IF to_regclass('%s') IS NULL THEN 
-    CREATE SEQUENCE %s;
-    CREATE TABLE %s
-    (
-    %s
-    );
-    ALTER SEQUENCE %s OWNED BY %s;
-  END IF;
-END $$;      
-\"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, tableName, String.join(",\n    ", classFields), sequenceName, tableName);
-//        return tt.name() + "(" + tt.getClazz().getCanonicalName() + """
-//.class, \"\"\"
-//DO $$
-//BEGIN
-//  IF to_regclass('""" + tableName +"""
-//') IS NULL THEN
-//    CREATE SEQUENCE edge_id_seq;
-//    CREATE TABLE teamp.edges
-//    (
-//    uuid bigint PRIMARY KEY,
-//    startNode varchar,
-//    endNode varchar
-//    );
-//    ALTER SEQUENCE edge_id_seq OWNED BY """ + tableName + """
-//;
-//  END IF;
-//END $$;
-//\"\"\")""";
+
+        if (idField.getType() == UUID.class)
+            return String.format("""
+                %s(%s.class, \"\"\"
+                CREATE TABLE IF NOT EXISTS %s 
+                (
+                  %s
+                );
+                \"\"\")
+                """, tt.name(), clazz.getCanonicalName(), tableName, String.join(",\n  ", tableColumns));
+        else
+            return String.format("""
+                    %s(%s.class, \"\"\" 
+                    DO $$
+                    BEGIN
+                      IF to_regclass('%s') IS NULL THEN 
+                        CREATE SEQUENCE %s;
+                        CREATE TABLE %s
+                        (
+                          %s
+                        );
+                        ALTER SEQUENCE %s OWNED BY %s;
+                      END IF;
+                    END $$;      
+                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, tableName, String.join(",\n      ", tableColumns), sequenceName, tableName + "." + idField.getName());
     }
 
     private static Class getClass(String className, String packageName) {

@@ -11,13 +11,13 @@ BEGIN
     CREATE SEQUENCE nodes_id_seq;
     CREATE TABLE teamp.nodes
     (
-    nodeID bigint DEFAULT nextval('nodes_id_seq') PRIMARY KEY,
-    xcoord int,
-    ycoord int,
-    floor varchar,
-    building varchar
+      nodeID bigint DEFAULT nextval('nodes_id_seq') PRIMARY KEY,
+      xcoord int,
+      ycoord int,
+      floor varchar,
+      building varchar
     );
-    ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes.uuid;
+    ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes.nodeID;
   END IF;
 END $$;
 """),
@@ -28,9 +28,9 @@ BEGIN
     CREATE SEQUENCE edges_id_seq;
     CREATE TABLE teamp.edges
     (
-    uuid bigint DEFAULT nextval('edges_id_seq') PRIMARY KEY,
-    startNode bigint,
-    endNode bigint
+      uuid bigint DEFAULT nextval('edges_id_seq') PRIMARY KEY,
+      startNode bigint,
+      endNode bigint
     );
     ALTER SEQUENCE edges_id_seq OWNED BY teamp.edges.uuid;
   END IF;
@@ -43,10 +43,10 @@ BEGIN
     CREATE SEQUENCE moves_id_seq;
     CREATE TABLE teamp.moves
     (
-    uuid bigint DEFAULT nextval('moves_id_seq') PRIMARY KEY,
-    nodeID bigint,
-    longName varchar,
-    date varchar
+      uuid bigint DEFAULT nextval('moves_id_seq') PRIMARY KEY,
+      nodeID bigint,
+      longName varchar,
+      date varchar
     );
     ALTER SEQUENCE moves_id_seq OWNED BY teamp.moves.uuid;
   END IF;
@@ -59,131 +59,102 @@ BEGIN
     CREATE SEQUENCE locationnames_id_seq;
     CREATE TABLE teamp.locationnames
     (
-    uuid bigint DEFAULT nextval('locationnames_id_seq') PRIMARY KEY,
-    longName varchar,
-    shortName varchar,
-    nodeType varchar
+      uuid bigint DEFAULT nextval('locationnames_id_seq') PRIMARY KEY,
+      longName varchar,
+      shortName varchar,
+      nodeType varchar
     );
     ALTER SEQUENCE locationnames_id_seq OWNED BY teamp.locationnames.uuid;
   END IF;
 END $$;
 """),
     GENERIC(edu.wpi.punchy_pegasi.generator.schema.GenericRequestEntry.class, """
-DO $$
-BEGIN
-  IF to_regclass('teamp.generic') IS NULL THEN
-    CREATE SEQUENCE generic_id_seq;
-    CREATE TABLE teamp.generic
-    (
-    serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    roomNumber varchar,
-    staffAssignment varchar,
-    additionalNotes varchar,
-    status varchar
-    );
-    ALTER SEQUENCE generic_id_seq OWNED BY teamp.generic.serviceID;
-  END IF;
-END $$;
-"""),
+CREATE TABLE IF NOT EXISTS teamp.generic
+(
+  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  roomNumber varchar,
+  staffAssignment varchar,
+  additionalNotes varchar,
+  status varchar
+);
+""")
+,
     FOODREQUESTS(edu.wpi.punchy_pegasi.generator.schema.FoodServiceRequestEntry.class, """
-DO $$
-BEGIN
-  IF to_regclass('teamp.foodrequests') IS NULL THEN
-    CREATE SEQUENCE foodrequests_id_seq;
-    CREATE TABLE teamp.foodrequests
-    (
-    serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    roomNumber varchar,
-    staffAssignment varchar,
-    additionalNotes varchar,
-    status varchar,
-    foodSelection varchar,
-    tempType varchar,
-    additionalItems varchar ARRAY,
-    dietaryRestrictions varchar,
-    patientName varchar
-    );
-    ALTER SEQUENCE foodrequests_id_seq OWNED BY teamp.foodrequests.serviceID;
-  END IF;
-END $$;
-"""),
+CREATE TABLE IF NOT EXISTS teamp.foodrequests
+(
+  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  roomNumber varchar,
+  staffAssignment varchar,
+  additionalNotes varchar,
+  status varchar,
+  foodSelection varchar,
+  tempType varchar,
+  additionalItems varchar ARRAY,
+  dietaryRestrictions varchar,
+  patientName varchar
+);
+""")
+,
     FLOWERREQUESTS(edu.wpi.punchy_pegasi.generator.schema.FlowerDeliveryRequestEntry.class, """
-DO $$
-BEGIN
-  IF to_regclass('teamp.flowerrequests') IS NULL THEN
-    CREATE SEQUENCE flowerrequests_id_seq;
-    CREATE TABLE teamp.flowerrequests
-    (
-    serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    roomNumber varchar,
-    staffAssignment varchar,
-    additionalNotes varchar,
-    status varchar,
-    flowerSize varchar,
-    flowerType varchar,
-    flowerAmount varchar,
-    patientName varchar
-    );
-    ALTER SEQUENCE flowerrequests_id_seq OWNED BY teamp.flowerrequests.serviceID;
-  END IF;
-END $$;
-"""),
+CREATE TABLE IF NOT EXISTS teamp.flowerrequests
+(
+  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  roomNumber varchar,
+  staffAssignment varchar,
+  additionalNotes varchar,
+  status varchar,
+  flowerSize varchar,
+  flowerType varchar,
+  flowerAmount varchar,
+  patientName varchar
+);
+""")
+,
     CONFERENCEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.ConferenceRoomEntry.class, """
-DO $$
-BEGIN
-  IF to_regclass('teamp.conferencerequests') IS NULL THEN
-    CREATE SEQUENCE conferencerequests_id_seq;
-    CREATE TABLE teamp.conferencerequests
-    (
-    serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    roomNumber varchar,
-    staffAssignment varchar,
-    additionalNotes varchar,
-    status varchar,
-    beginningTime varchar,
-    endTime varchar
-    );
-    ALTER SEQUENCE conferencerequests_id_seq OWNED BY teamp.conferencerequests.serviceID;
-  END IF;
-END $$;
-"""),
+CREATE TABLE IF NOT EXISTS teamp.conferencerequests
+(
+  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  roomNumber varchar,
+  staffAssignment varchar,
+  additionalNotes varchar,
+  status varchar,
+  beginningTime varchar,
+  endTime varchar
+);
+""")
+,
     FURNITUREREQUESTS(edu.wpi.punchy_pegasi.generator.schema.FurnitureRequestEntry.class, """
-DO $$
-BEGIN
-  IF to_regclass('teamp.furniturerequests') IS NULL THEN
-    CREATE SEQUENCE furniturerequests_id_seq;
-    CREATE TABLE teamp.furniturerequests
-    (
-    serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    roomNumber varchar,
-    staffAssignment varchar,
-    additionalNotes varchar,
-    status varchar,
-    selectFurniture varchar ARRAY
-    );
-    ALTER SEQUENCE furniturerequests_id_seq OWNED BY teamp.furniturerequests.serviceID;
-  END IF;
-END $$;
-"""),
+CREATE TABLE IF NOT EXISTS teamp.furniturerequests
+(
+  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  roomNumber varchar,
+  staffAssignment varchar,
+  additionalNotes varchar,
+  status varchar,
+  selectFurniture varchar ARRAY
+);
+""")
+,
 
-    OFFICEREQUESTS(OfficeServiceRequestEntry.class, """
-            (
-            serviceID uuid DEFAULT uuid_generate_v4(),
-            patientName varchar(100),
-            roomNumber varchar(100),
-            staffAssignment varchar(100),
-            additionalNotes varchar(1000),
-            status varchar(50),
-            officeRequest varchar(100),
-            employeeName varchar(100),
-            PRIMARY KEY (serviceID)
-            )""");
+    OFFICEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class, """
+CREATE TABLE IF NOT EXISTS teamp.officerequests
+(
+  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  roomNumber varchar,
+  staffAssignment varchar,
+  additionalNotes varchar,
+  status varchar,
+  officeRequest varchar,
+  employeeName varchar
+);
+""")
+;
     @Getter
     private final Class<?> clazz;
     @Getter
     private final String tableSQL;
 
-    TableType(Class<?> clazz, @Language(value = "SQL", prefix = "CREATE TABLE IF NOT EXISTS teamp.table") String tableSQL) {
+    TableType(Class<?> clazz, @Language(value = "SQL") String tableSQL) {
         this.clazz = clazz;
         this.tableSQL = tableSQL;
     }
