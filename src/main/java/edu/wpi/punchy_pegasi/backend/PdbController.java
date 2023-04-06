@@ -80,12 +80,12 @@ public class PdbController {
      * @throws DatabaseException
      */
     public int updateQuery(TableType tableType, String keyField, Object keyValue, String[] fields, Object[] values) throws DatabaseException {
-        if (fields.length != values.length || fields.length > 0) throw new DatabaseException("Fields and values must be the same length");
+        if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
             var query = "UPDATE teamp." + tableType.name().toLowerCase() + " SET ";
             query += getFieldValueString(fields, values, " = ", ", ");
-            query += " WHERE " + keyField + " = " + keyValue;
+            query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
             return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to update node", e);

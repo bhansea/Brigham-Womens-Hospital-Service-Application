@@ -87,8 +87,8 @@ class ConferenceRoomEntryDaoImplTest {
         ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
         dao.save(conference);
 
-        ConferenceRoomEntry updatedConference = new ConferenceRoomEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.DONE, "testBeginning", "testEnd");
-        ConferenceRoomEntry.Field[] fields = {ConferenceRoomEntry.Field.SERVICE_ID, ConferenceRoomEntry.Field.ROOM_NUMBER, ConferenceRoomEntry.Field.STATUS};
+        ConferenceRoomEntry updatedConference = new ConferenceRoomEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        ConferenceRoomEntry.Field[] fields = {ConferenceRoomEntry.Field.ROOM_NUMBER};
         dao.update(updatedConference, fields);
 
         Optional<ConferenceRoomEntry> results = dao.get(uuid);
