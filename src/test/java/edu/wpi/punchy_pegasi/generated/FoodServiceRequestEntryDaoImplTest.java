@@ -68,7 +68,7 @@ class FoodServiceRequestEntryDaoImplTest {
         }
         var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT,"testStaff");
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, "testStaff")) {
+        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, String.valueOf(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT), "testStaff")) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),
