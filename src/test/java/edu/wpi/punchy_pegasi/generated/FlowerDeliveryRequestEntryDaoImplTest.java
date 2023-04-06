@@ -82,6 +82,22 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void update() {
+        UUID uuid = UUID.randomUUID();
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        dao.save(fdre);
+
+        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test2", "testTulip");
+        FlowerDeliveryRequestEntry.Field[] fields = {FlowerDeliveryRequestEntry.Field.FLOWER_AMOUNT};
+        dao.update(updatedFdre, fields);
+
+        Optional<FlowerDeliveryRequestEntry> results = dao.get(uuid);
+        FlowerDeliveryRequestEntry daoresult = results.get();
+        assertEquals(updatedFdre, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

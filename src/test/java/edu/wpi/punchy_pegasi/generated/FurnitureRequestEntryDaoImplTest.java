@@ -82,6 +82,25 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void update() {
+        var dao = new FurnitureRequestEntryDaoImpl(pdbController);
+        UUID uuid = UUID.randomUUID();
+        List<String> requestItems = new ArrayList<>();
+        requestItems.add("testItems");
+        FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        dao.save(fdre);
+
+        FurnitureRequestEntry updatedFdre = new FurnitureRequestEntry(uuid, "testRoom", "testStaff", "updatedTestNotes", RequestEntry.Status.NONE, requestItems);
+        FurnitureRequestEntry.Field[] fields = {FurnitureRequestEntry.Field.ADDITIONAL_NOTES, FurnitureRequestEntry.Field.STATUS};
+        dao.update(updatedFdre, fields);
+
+        Optional<FurnitureRequestEntry> results = dao.get(uuid);
+        FurnitureRequestEntry daoresult = results.get();
+        assertEquals(updatedFdre, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

@@ -70,9 +70,14 @@ class FoodServiceRequestEntryDaoImplTest {
         additionalItems.add("testItems");
         FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
         dao.save(fsre);
+
+        FoodServiceRequestEntry updatedFsre = new FoodServiceRequestEntry(uuid, "testRoom", "updatedTestStaff", "testNotes", RequestEntry.Status.DONE, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, FoodServiceRequestEntry.Field.STATUS};
+        dao.update(updatedFsre, fields);
+
         Optional<FoodServiceRequestEntry> results = dao.get(uuid);
         FoodServiceRequestEntry daoresult = results.get();
-        assertEquals(fsre, daoresult);
+        assertEquals(updatedFsre, daoresult);
         try {
             pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {

@@ -72,6 +72,22 @@ class NodeDaoImplTest {
 
     @Test
     void update() {
+        var dao = new NodeDaoImpl(pdbController);
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        dao.save(node);
+
+        Node updatedNode = new Node(100L, 1500, 1500, "L2", "updatedTestBuilding");
+        Node.Field[] fields = {Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.FLOOR, Node.Field.BUILDING};
+        dao.update(updatedNode, fields);
+
+        Optional<Node> results = dao.get(node.getNodeID());
+        Node daoresult = results.get();
+        assertEquals(updatedNode, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

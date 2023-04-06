@@ -77,6 +77,23 @@ class LocationNameDaoImplTest {
 
     @Test
     void update() {
+        var dao = new LocationNameDaoImpl(pdbController);
+        Long uuid = 100L;
+        LocationName ln = new LocationName(uuid, "testName", "testName", LocationName.NodeType.HALL);
+        dao.save(ln);
+
+        LocationName updatedLn = new LocationName(uuid, "testName", "testName", LocationName.NodeType.DEPT);
+        LocationName.Field[] fields = {LocationName.Field.NODE_TYPE};
+        dao.update(updatedLn, fields);
+
+        Optional<LocationName> results = dao.get(ln.getUuid());
+        LocationName daoresult = results.get();
+        assertEquals(updatedLn, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", ln.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

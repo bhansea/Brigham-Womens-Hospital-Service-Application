@@ -83,6 +83,22 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void update() {
+        UUID uuid = UUID.randomUUID();
+        ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        dao.save(conference);
+
+        ConferenceRoomEntry updatedConference = new ConferenceRoomEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.DONE, "testBeginning", "testEnd");
+        ConferenceRoomEntry.Field[] fields = {ConferenceRoomEntry.Field.SERVICE_ID, ConferenceRoomEntry.Field.ROOM_NUMBER, ConferenceRoomEntry.Field.STATUS};
+        dao.update(updatedConference, fields);
+
+        Optional<ConferenceRoomEntry> results = dao.get(uuid);
+        ConferenceRoomEntry daoresult = results.get();
+        assertEquals(updatedConference, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

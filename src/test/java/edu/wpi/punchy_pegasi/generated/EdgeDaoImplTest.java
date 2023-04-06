@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -89,6 +90,21 @@ class EdgeDaoImplTest {
 
     @Test
     void update() {
+        Edge edge = new Edge(100L, 1005L, 1006L);
+        dao.save(edge);
+
+        Edge updatedEdge = new Edge(100L, 2005L, 2006L);
+        Edge.Field[] fields = {Edge.Field.START_NODE, Edge.Field.END_NODE};
+        dao.update(updatedEdge, fields);
+
+        Optional<Edge> results = dao.get(edge.getUuid());
+        Edge daoresult = results.get();
+        assertEquals(updatedEdge, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

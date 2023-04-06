@@ -61,9 +61,14 @@ class MoveDaoImplTest {
         var dao = new MoveDaoImpl(pdbController);
         Move move = new Move(100L, 1005L, "testLong", "testDate");
         dao.save(move);
+
+        Move updatedMove = new Move(100L, 1005L, "updatedTestLong", "updatedTestDate");
+        Move.Field[] fields = {Move.Field.LONG_NAME, Move.Field.DATE};
+        dao.update(updatedMove, fields);
+
         Optional<Move> results = dao.get(move.getUuid());
         Move daoresult = results.get();
-        assertEquals(move, daoresult);
+        assertEquals(updatedMove, daoresult);
         try {
             pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
         } catch (PdbController.DatabaseException e) {

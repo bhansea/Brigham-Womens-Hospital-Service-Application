@@ -58,7 +58,6 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void save() {
-        var dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
         UUID uuid = UUID.randomUUID();
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
         dao.save(office);
@@ -74,6 +73,22 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void update() {
+        UUID uuid = UUID.randomUUID();
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        dao.save(office);
+
+        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.DONE,"testOffices", "updatedTestName");
+        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.ROOM_NUMBER, OfficeServiceRequestEntry.Field.STATUS, OfficeServiceRequestEntry.Field.EMPLOYEE_NAME};
+        dao.update(updatedOffice, fields);
+
+        Optional<OfficeServiceRequestEntry> results = dao.get(office.getServiceID());
+        OfficeServiceRequestEntry daoresult = results.get();
+        assertEquals(updatedOffice, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
