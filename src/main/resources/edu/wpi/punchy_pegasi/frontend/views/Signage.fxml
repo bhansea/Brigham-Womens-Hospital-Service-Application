@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19">
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <top>
-        <BorderPane style="-fx-background-color: #c9c9c9">
+        <BorderPane style="-fx-background-color: #c9c9c9; -fx-background-radius: 6;">
             <center>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Map"
-                      BorderPane.alignment="CENTER">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Map" BorderPane.alignment="CENTER">
                     <font>
-                        <Font size="40.0"/>
+                        <Font size="40.0" />
                     </font>
                 </Text>
             </center>
         </BorderPane>
     </top>
-    <center>
-        <VBox alignment="CENTER">
-            <VBox maxWidth="665">
-                <children>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;-- Information Desk" translateX="20.0"
-                          wrappingWidth="242.63882398605347">
-                        <font>
-                            <Font size="25.0"/>
-                        </font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ear, Nose, and Throat Department --&gt;"
-                          translateX="175.0">
-                        <font>
-                            <Font size="25.0"/>
-                        </font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;-- Emergency Room" translateX="20.0"
-                          wrappingWidth="245.44366455078125">
-                        <font>
-                            <Font size="25.0"/>
-                        </font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ultrasound Labs --&gt;" translateX="370.0">
-                        <font>
-                            <Font size="25.0"/>
-                        </font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Restrooms --&gt;" translateX="430.0">
-                        <font>
-                            <Font size="25.0"/>
-                        </font>
-                    </Text>
-                </children>
-            </VBox>
-        </VBox>
-    </center>
+   <center>
+      <VBox alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Polygon points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="270.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Rectangle height="35.0" stroke="BLACK" strokeType="INSIDE" width="69.0" />
+                     </children>
+                  </HBox>
+                  <VBox style="-fx-background-color: #c9c9c9; -fx-background-radius: 6;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics A &amp; B (this floor) " wrappingWidth="242.63882398605347">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics C (up to 3rd floor) " wrappingWidth="245.44366455078125">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rehabilitation Services (down to 1st floor)" wrappingWidth="245.44366455078125">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox style="-fx-background-color: #c9c9c9; -fx-background-radius: 6;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Information">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shapiro Admitting">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shapiro Procedural Check-in">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Rectangle height="35.0" stroke="BLACK" strokeType="INSIDE" width="69.0" />
+                        <Polygon points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>
