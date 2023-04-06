@@ -2,31 +2,42 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.LocationName;
+import java.util.Arrays;
+import java.util.Arrays;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class LocationNameDaoImpl implements IDao<LocationName, String> {
+public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, LocationName.Field> {
 
     static String[] fields = {"uuid", "longName", "shortName", "nodeType"};
-    private final PdbController dbController = App.getSingleton().getPdb();
+    private final PdbController dbController;
+
+    public LocationNameDaoImpl(PdbController dbController) {
+        this.dbController = dbController;
+    }
+
+    public LocationNameDaoImpl() {
+        this.dbController = App.getSingleton().getPdb();
+    }
 
     @Override
-    public Optional<LocationName> get(String key) {
+    public Optional<LocationName> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, "uuid", key)) {
             rs.next();
             LocationName req = new LocationName(
-                    (java.lang.Long) rs.getObject("uuid"),
-                    (java.lang.String) rs.getObject("longName"),
-                    (java.lang.String) rs.getObject("shortName"),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -35,17 +46,55 @@ public class LocationNameDaoImpl implements IDao<LocationName, String> {
     }
 
     @Override
-    public Map<String, LocationName> getAll() {
-        var map = new HashMap<String, LocationName>();
+    public Map<java.lang.Long, LocationName> get(LocationName.Field column, Object value) {
+        var map = new HashMap<java.lang.Long, LocationName>();
+        try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, column.getColName(), value)) {
+            while (rs.next()) {
+                LocationName req = new LocationName(
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
+    }
+
+    @Override
+    public Map<java.lang.Long, LocationName> get(LocationName.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.Long, LocationName>();
+        try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, Arrays.stream(params).map(LocationName.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                LocationName req = new LocationName(
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
+    }
+
+    @Override
+    public Map<java.lang.Long, LocationName> getAll() {
+        var map = new HashMap<java.lang.Long, LocationName>();
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                        (java.lang.Long) rs.getObject("uuid"),
-                        (java.lang.String) rs.getObject("longName"),
-                        (java.lang.String) rs.getObject("shortName"),
-                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
                 if (req != null)
-                    map.put(String.valueOf(req.getUuid()), req);
+                    map.put(req.getUuid(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -65,14 +114,20 @@ public class LocationNameDaoImpl implements IDao<LocationName, String> {
     }
 
     @Override
-    public void update(LocationName locationName, Object[] params) {
-        // What does this even mean?
+    public void update(LocationName locationName, LocationName.Field[] params) {
+        if (params.length < 1)
+            return;
+        try {
+            dbController.updateQuery(TableType.LOCATIONNAMES, "uuid", locationName.getUuid(), Arrays.stream(params).map(LocationName.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(locationName)).toArray());
+        } catch (PdbController.DatabaseException e) {
+            log.error("Error saving", e);
+        }
     }
 
     @Override
     public void delete(LocationName locationName) {
         try {
-            dbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", String.valueOf(locationName.getUuid()));
+            dbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", locationName.getUuid());
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }

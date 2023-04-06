@@ -32,7 +32,7 @@ public class PdbController {
         return objectToPsqlString(o, true);
     }
 
-    private static String objectToPsqlString(Object o, boolean first) {
+    public static String objectToPsqlString(Object o, boolean first) {
         if (o instanceof String || o instanceof UUID || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {
@@ -47,9 +47,9 @@ public class PdbController {
     public void initTableByType(TableType tableType) throws DatabaseException {
         try {
             initTable(tableType);
-            System.out.println("Table initialized");
+            log.info(tableType.name() + " table initialized");
         } catch (SQLException e) {
-            log.error("Failed to Initialize table", e);
+            log.error("Failed to initialize " + tableType.name() + " table", e);
             throw new DatabaseException("SQL error");
         }
     }
@@ -57,127 +57,14 @@ public class PdbController {
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
-        var query = "CREATE TABLE IF NOT EXISTS " + tableType.name().toLowerCase();
-        switch (tableType) {
-            case NODES -> {
-                var ret = statement.execute(query + "(" +
-                        "nodeID bigint PRIMARY KEY, " +
-                        "xcoord int, " +
-                        "ycoord int, " +
-                        "floor varchar, " +
-                        "building varchar);");
-            }
-            case EDGES -> {
-                statement.execute("DROP SEQUENCE IF EXISTS table_name_id_seq;");
-                statement.execute("CREATE SEQUENCE table_name_id_seq;");
-                var ret2 = statement.execute(query + "(" +
-                        "uuid bigint DEFAULT nextval('table_name_id_seq')," +
-                        "startNode varchar, " +
-                        "endNode varchar);");
-                statement.execute("ALTER SEQUENCE table_name_id_seq OWNED BY edges.uuid;");
-
-            }
-            case MOVES -> {
-                var ret2 = statement.execute(query +
-                        "(" +
-                        "nodeID bigint, " +
-                        "longName varchar, " +
-                        "date varchar" +
-                        ");");
-            }
-            case LOCATIONNAMES -> {
-                var ret2 = statement.execute(query + "(" +
-                        "longName varchar PRIMARY KEY, " +
-                        "shortName varchar, " +
-                        "nodeType varchar" +
-                        ");");
-            }
-            case FOODREQUESTS -> {
-                var ret2 = statement.execute(query + "(" +
-                        "serviceID uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "patientName varchar(100)," +
-                        "roomNumber varchar(100)," +
-                        "staffAssignment varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "status varchar(50)," +
-                        "foodSelection varchar(100)," +
-                        "tempType varchar(50)," +
-                        "additionalItems varchar(100) ARRAY," +
-                        "dietaryRestrictions varchar(1000)," +
-                        "PRIMARY KEY (serviceID)" +
-                        ");");
-            }
-            case FLOWERREQUESTS -> {
-                var ret2 = statement.execute(query +
-                        "(" +
-                        "serviceID uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "patientName varchar(100)," +
-                        "roomNumber varchar(100)," +
-                        "staffAssignment varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "status varchar(50)," +
-                        "flowerSize varchar(100)," +
-                        "flowerAmount varchar(100)," +
-                        "flowerType varchar(100)," +
-                        "PRIMARY KEY (serviceID)" +
-                        ");");
-            }
-            case CONFERENCEREQUESTS -> {
-                var ret2 = statement.execute(query +
-                        "(" +
-                        "serviceID uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "patientName varchar(100)," +
-                        "roomNumber varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "staffAssignment varchar(100)," +
-                        "status varchar(50)," +
-                        "beginningTime varchar(100)," +
-                        "endTime varchar(100)," +
-                        "PRIMARY KEY (serviceID)" +
-                        ");");
-            }
-            case FURNITUREREQUESTS -> {
-                var ret2 = statement.execute(query +
-                        "(" +
-                        "serviceID uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "patientName varchar(100)," +
-                        "roomNumber varchar(100)," +
-                        "staffAssignment varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "status varchar(50)," +
-                        "selectFurniture varchar(100) ARRAY," +
-                        "PRIMARY KEY (serviceID)" +
-                        ");");
-            }
-            case OFFICEREQUESTS -> {
-                var ret2 = statement.execute(query +
-                        "(" +
-                        "serviceID uuid DEFAULT uuid_generate_v4()," +
-                        // if pass null, psql will generate a uuid
-                        "patientName varchar(100)," +
-                        "roomNumber varchar(100)," +
-                        "staffAssignment varchar(100)," +
-                        "additionalNotes varchar(1000)," +
-                        "status varchar(50)," +
-                        "officeRequest varchar(100)," +
-                        "employeeName varchar(100)," +
-                        "PRIMARY KEY (serviceID)" +
-                        ");");
-            }
-
-
-        }
+        var q = tableType.getTableSQL();
+        statement.execute(q);
     }
 
-    private String getFieldValueString(String[] fields, Object[] values, String delimiter) {
+    private String getFieldValueString(String[] fields, Object[] values, String equator, String delimiter) {
         String query = "";
         for (int i = 0; i < fields.length; i++) {
-            query += fields[i] +
-                        " = " + objectToPsqlString(values[i]);
+            query += fields[i] + " " + equator + " " + objectToPsqlString(values[i]);
             if (i != fields.length - 1) query += delimiter;
         }
         return query;
@@ -192,15 +79,14 @@ public class PdbController {
      * @return The number of rows updated
      * @throws DatabaseException
      */
-    public int updateQuery(TableType tableType, String[] fields, Object[] values) throws DatabaseException {
+    public int updateQuery(TableType tableType, String keyField, Object keyValue, String[] fields, Object[] values) throws DatabaseException {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
             var query = "UPDATE teamp." + tableType.name().toLowerCase() + " SET ";
-            getFieldValueString(fields, values, ", ");
-            query += " WHERE " + fields[0] + " = " + values[0];
-            var ret = statement.executeUpdate(query);
-            return ret;
+            query += getFieldValueString(fields, values, " = ", ", ");
+            query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
+            return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to update node", e);
             throw new DatabaseException("SQL error");
@@ -228,7 +114,7 @@ public class PdbController {
             return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to insert row", e);
-            throw new DatabaseException("SQL er ror");
+            throw new DatabaseException("SQL error");
         }
     }
 
@@ -246,7 +132,7 @@ public class PdbController {
         try {
             var statement = connection.createStatement();
             var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
-            query += getFieldValueString(field, value, " AND ");
+            query += getFieldValueString(field, value, "=", " AND ");
             return statement.executeUpdate(query);
         } catch (SQLException e) {
             log.error("Failed to delete node", e);
@@ -283,7 +169,7 @@ public class PdbController {
             var query = "SELECT * FROM teamp." + tableType.name().toLowerCase();
             if (fields.length > 0) {
                 query += " WHERE ";
-                query += getFieldValueString(fields, values, " AND ");
+                query += getFieldValueString(fields, values, "=", " AND ");
             }
             query += ";";
             return statement.executeQuery(query);
