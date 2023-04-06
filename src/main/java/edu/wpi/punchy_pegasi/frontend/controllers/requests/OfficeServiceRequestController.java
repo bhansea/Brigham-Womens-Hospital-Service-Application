@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.generated.OfficeServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -29,6 +31,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     public void submitEntry() {
         //makes sure shared fields aren't empty
         requestEntry = new OfficeServiceRequestEntry(roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), officeRequest.getText(), "");
+        OfficeServiceRequestEntryDaoImpl request = new OfficeServiceRequestEntryDaoImpl();
+        request.save(requestEntry);
         Navigation.navigate(Screen.HOME);
     }
 
