@@ -31,6 +31,12 @@ import static java.util.Comparator.comparing;
 public class AdminPageController {
 
     public HBox buttonContainer;
+    @FXML Button displayButton;
+    @FXML MFXComboBox<String> displayTableTypeComboBox;
+    @FXML MFXTableView<Node> nodeTable;
+    @FXML MFXTableView<LocationName> locationTable;
+    @FXML MFXTableView<Edge> edgeTable;
+    @FXML MFXTableView<Move> moveTable;
     @FXML Button flowerButton;
     @FXML Button foodButton;
     @FXML Button furnitureButton;
@@ -76,32 +82,37 @@ public class AdminPageController {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         fileChooser.setTitle("File Chooser");
 
+        ObservableList<String> displayTableTypeList = FXCollections.observableArrayList
+                ("Flower", "Food", "Furniture", "Conference Room Reservation", "Office Supplies", "Node", "Edge", "Moves", "Location Names");
+        displayTableTypeComboBox.setItems(displayTableTypeList);
+
         initTables();
         // Table View stuff
 
-
-
-
-
-        flowerButton.setOnAction(e -> {
-            showFlowerTable();
+        displayButton.setOnAction(e -> {
+            if (displayTableTypeComboBox.getSelectedItem().equals("Flower")) {
+                showFlowerTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Food")) {
+                showFoodTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Furniture")) {
+                showFurnitureTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Conference Room Reservation")) {
+                showConferenceTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Office Supplies")) {
+                showOfficeSuppliesTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Node")) {
+                showNodeTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Edge")) {
+                showEdgeTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Moves")) {
+                showMoveTable();
+            } else if (displayTableTypeComboBox.getSelectedItem().equals("Location Names")) {
+                showLocationTable();
+            }
         });
 
-        foodButton.setOnAction(e -> {
-            showFoodTable();
-        });
 
-        furnitureButton.setOnAction(e -> {
-            showFurnitureTable();
-        });
 
-        conferenceButton.setOnAction(e -> {
-            showConferenceTable();
-        });
-
-        officeButton.setOnAction(e -> {
-            showOfficeSuppliesTable();
-        });
 
 
         importButton.setOnAction(e -> {
@@ -203,6 +214,16 @@ public class AdminPageController {
         furnitureServiceRequestTable.setManaged(false);
         officeServiceRequestTable.setManaged(false);
 
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
+
 
         // add function that shows only current table, hides the rest
     }
@@ -219,6 +240,16 @@ public class AdminPageController {
         conferenceRoomServiceRequestTable.setManaged(false);
         furnitureServiceRequestTable.setManaged(false);
         officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
     }
 
     public void showConferenceTable() {
@@ -233,6 +264,16 @@ public class AdminPageController {
         foodServiceRequestTable.setManaged(false);
         furnitureServiceRequestTable.setManaged(false);
         officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
     }
 
     public void showFurnitureTable() {
@@ -247,6 +288,16 @@ public class AdminPageController {
         foodServiceRequestTable.setManaged(false);
         conferenceRoomServiceRequestTable.setManaged(false);
         officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
     }
 
     public void showOfficeSuppliesTable() {
@@ -261,7 +312,119 @@ public class AdminPageController {
         foodServiceRequestTable.setManaged(false);
         conferenceRoomServiceRequestTable.setManaged(false);
         furnitureServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
     }
+
+
+    public void showNodeTable() {
+        flowerServiceRequestTable.setVisible(false);
+        foodServiceRequestTable.setVisible(false);
+        conferenceRoomServiceRequestTable.setVisible(false);
+        furnitureServiceRequestTable.setVisible(false);
+        officeServiceRequestTable.setVisible(false);
+
+
+        flowerServiceRequestTable.setManaged(false);
+        foodServiceRequestTable.setManaged(false);
+        conferenceRoomServiceRequestTable.setManaged(false);
+        furnitureServiceRequestTable.setManaged(false);
+        officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(true);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(true);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
+    }
+
+    public void showEdgeTable() {
+        flowerServiceRequestTable.setVisible(false);
+        foodServiceRequestTable.setVisible(false);
+        conferenceRoomServiceRequestTable.setVisible(false);
+        furnitureServiceRequestTable.setVisible(false);
+        officeServiceRequestTable.setVisible(false);
+
+
+        flowerServiceRequestTable.setManaged(false);
+        foodServiceRequestTable.setManaged(false);
+        conferenceRoomServiceRequestTable.setManaged(false);
+        furnitureServiceRequestTable.setManaged(false);
+        officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(true);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(true);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
+    }
+
+    public void showMoveTable() {
+        flowerServiceRequestTable.setVisible(false);
+        foodServiceRequestTable.setVisible(false);
+        conferenceRoomServiceRequestTable.setVisible(false);
+        furnitureServiceRequestTable.setVisible(false);
+        officeServiceRequestTable.setVisible(false);
+
+
+        flowerServiceRequestTable.setManaged(false);
+        foodServiceRequestTable.setManaged(false);
+        conferenceRoomServiceRequestTable.setManaged(false);
+        furnitureServiceRequestTable.setManaged(false);
+        officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(true);
+        locationTable.setVisible(false);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(true);
+        locationTable.setManaged(false);
+    }
+
+    public void showLocationTable() {
+        flowerServiceRequestTable.setVisible(false);
+        foodServiceRequestTable.setVisible(false);
+        conferenceRoomServiceRequestTable.setVisible(false);
+        furnitureServiceRequestTable.setVisible(false);
+        officeServiceRequestTable.setVisible(false);
+
+
+        flowerServiceRequestTable.setManaged(false);
+        foodServiceRequestTable.setManaged(false);
+        conferenceRoomServiceRequestTable.setManaged(false);
+        furnitureServiceRequestTable.setManaged(false);
+        officeServiceRequestTable.setManaged(false);
+
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(true);
+
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(true);
+    }
+
 
     public void initTables() {
 
@@ -302,7 +465,7 @@ public class AdminPageController {
         MFXTableColumn<FoodServiceRequestEntry> foodStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(FoodServiceRequestEntry::getStatus));
         MFXTableColumn<FoodServiceRequestEntry> foodSelectionCol = new MFXTableColumn<>("Food Selection", true, Comparator.comparing(FoodServiceRequestEntry::getFoodSelection));
         MFXTableColumn<FoodServiceRequestEntry> foodTempCol = new MFXTableColumn<>("Food Temperature", true, Comparator.comparing(FoodServiceRequestEntry::getTempType));
-//        MFXTableColumn<FoodServiceRequestEntry> additionalItemsCol = new MFXTableColumn<>("Additional Items", true, Comparator.comparing(FoodServiceRequestEntry::getAdditionalItems));
+        MFXTableColumn<FoodServiceRequestEntry> additionalItemsCol = new MFXTableColumn<>("Additional Items", true, null);
         MFXTableColumn<FoodServiceRequestEntry> foodRestrictionCol = new MFXTableColumn<>("Food Restriction", true, Comparator.comparing(FoodServiceRequestEntry::getDietaryRestrictions));
         MFXTableColumn<FoodServiceRequestEntry> foodAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(FoodServiceRequestEntry::getAdditionalNotes));
 
@@ -314,7 +477,7 @@ public class AdminPageController {
         foodStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getStatus));
         foodSelectionCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getFoodSelection));
         foodTempCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getTempType));
-//        additionalItemsCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getAdditionalItems));
+        additionalItemsCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getAdditionalItems));
         foodRestrictionCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getDietaryRestrictions));
         foodAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getAdditionalNotes));
 
@@ -351,7 +514,7 @@ public class AdminPageController {
         MFXTableColumn<FurnitureRequestEntry> furnitureRoomNumberCol = new MFXTableColumn<>("Room Number", true, Comparator.comparing(FurnitureRequestEntry::getRoomNumber));
         MFXTableColumn<FurnitureRequestEntry> furnitureStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(FurnitureRequestEntry::getStaffAssignment));
         MFXTableColumn<FurnitureRequestEntry> furnitureStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(FurnitureRequestEntry::getStatus));
-//        MFXTableColumn<FurnitureRequestEntry> furnitureSelCol = new MFXTableColumn<>("Furniture Selection", true, Comparator.comparing(FurnitureRequestEntry::getSelectFurniture));
+        MFXTableColumn<FurnitureRequestEntry> furnitureSelCol = new MFXTableColumn<>("Furniture Selection", true, null);
         MFXTableColumn<FurnitureRequestEntry> furnitureAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(FurnitureRequestEntry::getAdditionalNotes));
 
 
@@ -359,7 +522,7 @@ public class AdminPageController {
         furnitureRoomNumberCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getRoomNumber));
         furnitureStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getStaffAssignment));
         furnitureStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getStatus));
-//        furnitureSelCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getSelectFurniture));
+        furnitureSelCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getSelectFurniture));
         furnitureAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getAdditionalNotes));
 
         furnitureServiceRequestTable.setItems(furnitureList);
@@ -374,8 +537,8 @@ public class AdminPageController {
         MFXTableColumn<OfficeServiceRequestEntry> officeStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(OfficeServiceRequestEntry::getStaffAssignment));
         MFXTableColumn<OfficeServiceRequestEntry> officeStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(OfficeServiceRequestEntry::getStatus));
         MFXTableColumn<OfficeServiceRequestEntry> officeReqCol = new MFXTableColumn<>("Office Supplies", true, Comparator.comparing(OfficeServiceRequestEntry::getOfficeRequest));
-        MFXTableColumn<OfficeServiceRequestEntry> employeeOrderCol = new MFXTableColumn<>("Employee Order Name", true, Comparator.comparing(OfficeServiceRequestEntry::getEmployeeName));
-        MFXTableColumn<OfficeServiceRequestEntry> additionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(OfficeServiceRequestEntry::getAdditionalNotes));
+        MFXTableColumn<OfficeServiceRequestEntry> officeEmployeeOrderCol = new MFXTableColumn<>("Employee Order Name", true, Comparator.comparing(OfficeServiceRequestEntry::getEmployeeName));
+        MFXTableColumn<OfficeServiceRequestEntry> officeAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(OfficeServiceRequestEntry::getAdditionalNotes));
 
 
         officeServiceCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getServiceID));
@@ -383,11 +546,79 @@ public class AdminPageController {
         officeStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getStaffAssignment));
         officeStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getStatus));
         officeReqCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getOfficeRequest));
-        employeeOrderCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getEmployeeName));
-        additionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getAdditionalNotes));
+        officeEmployeeOrderCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getEmployeeName));
+        officeAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getAdditionalNotes));
 
         officeServiceRequestTable.setItems(officeList);
-        officeServiceRequestTable.getTableColumns().addAll(officeServiceCol, officeRoomNumberCol, officeStaffAssignCol, officeStatusCol, officeReqCol, employeeOrderCol, additionalNotesCol);
+        officeServiceRequestTable.getTableColumns().addAll(officeServiceCol, officeRoomNumberCol, officeStaffAssignCol, officeStatusCol, officeReqCol, officeEmployeeOrderCol, officeAdditionalNotesCol);
+
+        // Back end Tables
+
+        NodeDaoImpl nodeDaoImpl = new NodeDaoImpl();
+
+        ObservableList<Node> nodeList = FXCollections.observableArrayList(nodeDaoImpl.getAll().values());
+        MFXTableColumn<Node> nodeIdCol = new MFXTableColumn<>("Node ID", true, Comparator.comparing(Node::getNodeID));
+        MFXTableColumn<Node> xcoordCol = new MFXTableColumn<>("X Cord", true, Comparator.comparing(Node::getXcoord));
+        MFXTableColumn<Node> ycoordCol = new MFXTableColumn<>("Y Cord", true, Comparator.comparing(Node::getYcoord));
+        MFXTableColumn<Node> floorCol = new MFXTableColumn<>("Floor", true, Comparator.comparing(Node::getFloor));
+        MFXTableColumn<Node> buildingCol = new MFXTableColumn<>("Building", true, Comparator.comparing(Node::getBuilding));
+
+
+        nodeIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getNodeID));
+        xcoordCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getXcoord));
+        ycoordCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getYcoord));
+        floorCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getFloor));
+        buildingCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getBuilding));
+
+        nodeTable.setItems(nodeList);
+        nodeTable.getTableColumns().addAll(nodeIdCol, xcoordCol, ycoordCol, floorCol, buildingCol);
+
+
+        EdgeDaoImpl edgeDaoImpl = new EdgeDaoImpl();
+
+        ObservableList<Edge> edgeList = FXCollections.observableArrayList(edgeDaoImpl.getAll().values());
+        MFXTableColumn<Edge> edgeIdCol = new MFXTableColumn<>("Edge ID", true, Comparator.comparing(Edge::getUuid));
+        MFXTableColumn<Edge> edgeStartNodeCol = new MFXTableColumn<>("Start Node", true, Comparator.comparing(Edge::getStartNode));
+        MFXTableColumn<Edge> edgeEndNodeCol = new MFXTableColumn<>("End Node", true, Comparator.comparing(Edge::getEndNode));
+
+        edgeIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(Edge::getUuid));
+        edgeStartNodeCol.setRowCellFactory(p -> new MFXTableRowCell<>(Edge::getStartNode));
+        edgeEndNodeCol.setRowCellFactory(p -> new MFXTableRowCell<>(Edge::getEndNode));
+
+        edgeTable.setItems(edgeList);
+        edgeTable.getTableColumns().addAll(edgeIdCol, edgeStartNodeCol, edgeEndNodeCol);
+
+        MoveDaoImpl moveDaoImpl = new MoveDaoImpl();
+
+        ObservableList<Move> moveList = FXCollections.observableArrayList(moveDaoImpl.getAll().values());
+        MFXTableColumn<Move> moveIdCol = new MFXTableColumn<>("Move ID", true, Comparator.comparing(Move::getUuid));
+        MFXTableColumn<Move> moveLongNameCol = new MFXTableColumn<>("Start Node", true, Comparator.comparing(Move::getLongName));
+        MFXTableColumn<Move> moveDateCol = new MFXTableColumn<>("End Node", true, Comparator.comparing(Move::getDate));
+
+        moveIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(Move::getUuid));
+        moveLongNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(Move::getLongName));
+        moveDateCol.setRowCellFactory(p -> new MFXTableRowCell<>(Move::getDate));
+
+        moveTable.setItems(moveList);
+        moveTable.getTableColumns().addAll(moveIdCol, moveLongNameCol, moveDateCol);
+
+        LocationNameDaoImpl locationDaoImpl = new LocationNameDaoImpl();
+
+        ObservableList<LocationName> locationList = FXCollections.observableArrayList(locationDaoImpl.getAll().values());
+        MFXTableColumn<LocationName> locationIdCol = new MFXTableColumn<>("Move ID", true, Comparator.comparing(LocationName::getUuid));
+        MFXTableColumn<LocationName> locationLongNameCol = new MFXTableColumn<>("Start Node", true, Comparator.comparing(LocationName::getLongName));
+        MFXTableColumn<LocationName> locationShortNameCol = new MFXTableColumn<>("End Node", true, Comparator.comparing(LocationName::getShortName));
+        MFXTableColumn<LocationName> nodeTypeCol = new MFXTableColumn<>("Node Type", true, Comparator.comparing(LocationName::getNodeType));
+
+        locationIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getUuid));
+        locationLongNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getLongName));
+        locationShortNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getShortName));
+        nodeTypeCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getNodeType));
+
+        locationTable.setItems(locationList);
+        locationTable.getTableColumns().addAll(locationIdCol, locationLongNameCol, locationShortNameCol, nodeTypeCol);
+
+
 
         flowerServiceRequestTable.setVisible(true);
         foodServiceRequestTable.setVisible(false);
@@ -395,12 +626,21 @@ public class AdminPageController {
         furnitureServiceRequestTable.setVisible(false);
         officeServiceRequestTable.setVisible(false);
 
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
         flowerServiceRequestTable.setManaged(true);
         foodServiceRequestTable.setManaged(false);
         conferenceRoomServiceRequestTable.setManaged(false);
         furnitureServiceRequestTable.setManaged(false);
         officeServiceRequestTable.setManaged(false);
 
+        nodeTable.setManaged(false);
+        edgeTable.setManaged(false);
+        moveTable.setManaged(false);
+        locationTable.setManaged(false);
     }
 
 
