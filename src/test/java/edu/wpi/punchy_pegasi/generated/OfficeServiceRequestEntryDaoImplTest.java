@@ -31,7 +31,6 @@ class OfficeServiceRequestEntryDaoImplTest {
     }
     @Test
     void get() {
-        var dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
         Object[] values = new Object[]{office.getServiceID(), office.getRoomNumber(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
         try{

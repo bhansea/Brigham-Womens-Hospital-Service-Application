@@ -37,7 +37,6 @@ class ConferenceRoomEntryDaoImplTest {
     }
     @Test
     void get() {
-        var dao = new ConferenceRoomEntryDaoImpl(pdbController);
         ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
 
         Object[] values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};

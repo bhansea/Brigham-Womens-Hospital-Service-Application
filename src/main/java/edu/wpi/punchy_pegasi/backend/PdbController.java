@@ -49,7 +49,7 @@ public class PdbController {
             initTable(tableType);
             log.info(tableType.name() + " table initialized");
         } catch (SQLException e) {
-            log.error("Failed to initialize" + tableType.name() + " table", e);
+            log.error("Failed to initialize " + tableType.name() + " table", e);
             throw new DatabaseException("SQL error");
         }
     }

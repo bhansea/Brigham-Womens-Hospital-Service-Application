@@ -35,7 +35,6 @@ class FurnitureRequestEntryDaoImplTest {
     }
     @Test
     void get() {
-        var dao = new FurnitureRequestEntryDaoImpl(pdbController);
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
         FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);

@@ -30,7 +30,6 @@ class NodeDaoImplTest {
 
     @Test
     void get() {
-        var dao = new NodeDaoImpl(pdbController);
         Node node = new Node(100L, 500, 500, "L1", "testBuilding");
         Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
         try{

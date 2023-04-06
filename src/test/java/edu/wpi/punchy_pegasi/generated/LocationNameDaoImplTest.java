@@ -34,7 +34,6 @@ class LocationNameDaoImplTest {
 
     @Test
     void get() {
-        var dao = new LocationNameDaoImpl(pdbController);
         LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
         Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
         try{

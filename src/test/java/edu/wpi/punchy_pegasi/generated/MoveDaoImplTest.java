@@ -31,7 +31,6 @@ class MoveDaoImplTest {
 
     @Test
     void get() {
-        var dao = new MoveDaoImpl(pdbController);
         Move move = new Move(100L, 1005L, "testLong", "testDate");
         Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
         try {

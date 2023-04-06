@@ -32,8 +32,7 @@ class EdgeDaoImplTest {
 
     @Test
     void get() {
-        var dao = new EdgeDaoImpl(pdbController);
-        Edge edge = new Edge(100L, 1005L, 1006L);
+        Edge edge = new Edge(123123L, 123123L, 123123L);
         Object[] values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
         try{
             pdbController.insertQuery(TableType.EDGES, fields, values);
@@ -52,6 +51,21 @@ class EdgeDaoImplTest {
 
     @Test
     void testGet() {
+        Edge edge = new Edge(1231234L, 123123L, 123123L);
+        Object[] values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
+        try{
+            pdbController.insertQuery(TableType.EDGES, fields, values);
+        } catch (PdbController.DatabaseException e){
+            throw new RuntimeException(e);
+        }
+        Optional<Edge> results = dao.get(Edge.Field.START_NODE, 123123L);
+        Edge daoresult = results.get();
+        assertEquals(daoresult,edge);
+        try {
+            pdbController.deleteQuery(TableType.EDGES,"uuid", edge.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

@@ -35,7 +35,6 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void get() {
-        var dao = new FoodServiceRequestEntryDaoImpl(pdbController);
         List<String> additionalItems = new ArrayList<>();
         additionalItems.add("testItems");
         FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
