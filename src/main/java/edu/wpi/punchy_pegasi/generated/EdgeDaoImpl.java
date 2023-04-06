@@ -7,12 +7,13 @@ import java.util.Arrays;
 import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
@@ -89,8 +90,10 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
 
     @Override
     public void update(Edge edge, Edge.Field[] params) {
+        if (params.length < 1)
+            return;
         try {
-            dbController.updateQuery(TableType.EDGES, "uuid", edge.getUuid(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(edge)).toArray());
+            dbController.updateQuery(TableType.EDGES, "uuid", edge.getUuid(), Arrays.stream(params).map(Edge.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(edge)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }

@@ -7,12 +7,13 @@ import java.util.Arrays;
 import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
@@ -95,8 +96,10 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
 
     @Override
     public void update(Node node, Node.Field[] params) {
+        if (params.length < 1)
+            return;
         try {
-            dbController.updateQuery(TableType.NODES, "nodeID", node.getNodeID(), (String[])Arrays.stream(params).map(p->p.getColName()).toArray(), Arrays.stream(params).map(p->p.getValue(node)).toArray());
+            dbController.updateQuery(TableType.NODES, "nodeID", node.getNodeID(), Arrays.stream(params).map(Node.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(node)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
