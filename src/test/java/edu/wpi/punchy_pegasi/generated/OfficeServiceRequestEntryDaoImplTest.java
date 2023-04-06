@@ -8,6 +8,8 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +56,31 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var value0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName"};
+        var value1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName"};
+        var value2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName"};
+        var valueSet = new Object[][]{value0, value1, value2};
+
+        var refMap = new HashMap<UUID, OfficeServiceRequestEntry>();
+        for (var value : valueSet) {
+            var office = new OfficeServiceRequestEntry((UUID) value[0], (String) value[1], (String) value[2], (String) value[3], (RequestEntry.Status) value[4], (String) value[5], (String) value[6]);
+            refMap.put(office.getServiceID(), office);
+            try {
+                pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, value);
+            } catch (PdbController.DatabaseException e) {
+                assert false: e.getMessage();
+            }
+        }
+        Map<UUID, OfficeServiceRequestEntry> resultMap = dao.getAll();
+        for (var key : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", key);
+            } catch (PdbController.DatabaseException e) {
+                assert false: e.getMessage();
+            }
+        }
+
+        assertEquals(refMap, resultMap);
     }
 
     @Test

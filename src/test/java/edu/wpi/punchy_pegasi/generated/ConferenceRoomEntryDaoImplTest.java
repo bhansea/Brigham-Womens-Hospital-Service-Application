@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.sql.ResultSet;
@@ -61,7 +63,62 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var values0 = new Object[] {
+                UUID.randomUUID(),
+                "testRoomNum0",
+                "testStaff0",
+                "testNotes0",
+                RequestEntry.Status.PROCESSING,
+                "beginTime0",
+                "endTime0"
+        };
+        var values1 = new Object[] {
+                UUID.randomUUID(),
+                "testRoomNum1",
+                "testStaff1",
+                "testNotes1",
+                RequestEntry.Status.PROCESSING,
+                "beginTime1",
+                "endTime1"
+        };
+        var values2 = new Object[] {
+                UUID.randomUUID(),
+                "testRoomNum2",
+                "testStaff2",
+                "testNotes2",
+                RequestEntry.Status.PROCESSING,
+                "beginTime2",
+                "endTime2"
+        };
 
+        var valuesSet = new Object[][] {values0, values1, values2};
+        var refMap = new HashMap<UUID, ConferenceRoomEntry>();
+
+        for(var values : valuesSet) {
+            try {
+                pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                assert false : e.getMessage();
+            }
+            var uuid = (UUID) values[0];
+            var roomNum = (String) values[1];
+            var staff = (String) values[2];
+            var notes = (String) values[3];
+            var status = (RequestEntry.Status) values[4];
+            var beginTime = (String) values[5];
+            var endTime = (String) values[6];
+            refMap.put(uuid, new ConferenceRoomEntry(uuid, roomNum, staff, notes, status, beginTime, endTime));
+        }
+
+        Map<UUID, ConferenceRoomEntry> resultMap = dao.getAll();
+        for (var entry : resultMap.entrySet()) {
+            try {
+                pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", entry.getKey());
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
 
     }
 
