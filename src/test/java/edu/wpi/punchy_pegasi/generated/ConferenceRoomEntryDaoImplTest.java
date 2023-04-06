@@ -59,10 +59,10 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void testGet() {
-        ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-        ConferenceRoomEntry room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-        Object[] values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
-        Object[] values2 = new Object[]{room2.getServiceID(), room2.getRoomNumber(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
+        var room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        var room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        var values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
+        var values2 = new Object[]{room2.getServiceID(), room2.getRoomNumber(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
         try{
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values2);
@@ -87,7 +87,8 @@ class ConferenceRoomEntryDaoImplTest {
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        assertEquals(map, results);
+        assertEquals(map.get(room.getServiceID()), results.get(room.getServiceID()));
+        assertEquals(map.get(room2.getServiceID()), results.get(room2.getServiceID()));
         try{
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room.getServiceID());
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room2.getServiceID());

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,10 +54,85 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
+        List<String> additionalItems = new ArrayList<>();
+        additionalItems.add("testItems");
+        var food = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        var values = new Object[]{food.getServiceID(), food.getRoomNumber(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
+        var values2 = new Object[]{food2.getServiceID(), food2.getRoomNumber(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getDietaryRestrictions(), food2.getPatientName()};
+        try {
+            pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
+            pdbController.insertQuery(TableType.FOODREQUESTS, fields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT,"testStaff");
+        var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
+        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, String.valueOf(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT), "testStaff")) {
+            while (rs.next()) {
+                FoodServiceRequestEntry req = new FoodServiceRequestEntry(
+                        (java.util.UUID)rs.getObject("serviceID"),
+                        (java.lang.String)rs.getObject("roomNumber"),
+                        (java.lang.String)rs.getObject("staffAssignment"),
+                        (java.lang.String)rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                        (java.lang.String)rs.getObject("foodSelection"),
+                        (java.lang.String)rs.getObject("tempType"),
+                        Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                        (java.lang.String)rs.getObject("dietaryRestrictions"),
+                        (java.lang.String)rs.getObject("patientName"));
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            assert false: e.getMessage();
+        }
+        assertEquals(map.get(food.getServiceID()), results.get(food.getServiceID()));
+        assertEquals(map.get(food2.getServiceID()), results.get(food2.getServiceID()));
+        try {
+            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food.getServiceID());
+            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food2.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAll() {
+        var values0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var valuesSet = new Object[][]{values0, values1, values2};
+        var refMap = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
+        for (var values : valuesSet) {
+            try {
+                pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+            FoodServiceRequestEntry req = new FoodServiceRequestEntry(
+                    (java.util.UUID)values[0],
+                    (java.lang.String)values[1],
+                    (java.lang.String)values[2],
+                    (java.lang.String)values[3],
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)values[4]),
+                    (java.lang.String)values[5],
+                    (java.lang.String)values[6],
+                    Arrays.asList((String[])values[7]),
+                    (java.lang.String)values[8],
+                    (java.lang.String)values[9]);
+        }
+
+        Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
+
+        for(var key : resultMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", key);
+            } catch (PdbController.DatabaseException e) {
+                assert false: e.getMessage();
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
