@@ -5,16 +5,18 @@ import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Slf4j
 class EdgeDaoImplTest {
 
     static PdbController pdbController;
@@ -54,18 +56,35 @@ class EdgeDaoImplTest {
 
     @Test
     void testGet() {
-        Edge edge = new Edge(1231234L, 123123L, 123123L);
-        Object[] values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
+        var edge = new Edge(1231234L, 123123L, 123123L);
+        var edge2 = new Edge(12312345L, 123123L, 123123L);
+        var values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
+        var values2 = new Object[]{edge2.getUuid(), edge2.getStartNode(), edge2.getEndNode()};
         try{
             pdbController.insertQuery(TableType.EDGES, fields, values);
+            pdbController.insertQuery(TableType.EDGES,fields,values2);
         } catch (PdbController.DatabaseException e){
             throw new RuntimeException(e);
         }
-        Optional<Edge> results = dao.get(Edge.Field.START_NODE, 123123L);
-        Edge daoresult = results.get();
-        assertEquals(daoresult,edge);
+        var results = dao.get(Edge.Field.START_NODE, 123123L);
+        var map = new HashMap<Long, Edge>();
+        try (var rs = pdbController.searchQuery(TableType.EDGES, Edge.Field.START_NODE.getColName(), 123123L)) {
+            while (rs.next()) {
+                Edge req = new Edge(
+                        (java.lang.Long)rs.getObject("uuid"),
+                        (java.lang.Long)rs.getObject("startNode"),
+                        (java.lang.Long)rs.getObject("endNode"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(edge.getUuid()),results.get(edge.getUuid()));
+        assertEquals(map.get(edge2.getUuid()),results.get(edge2.getUuid()));
         try {
             pdbController.deleteQuery(TableType.EDGES,"uuid", edge.getUuid());
+            pdbController.deleteQuery(TableType.EDGES,"uuid", edge2.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }

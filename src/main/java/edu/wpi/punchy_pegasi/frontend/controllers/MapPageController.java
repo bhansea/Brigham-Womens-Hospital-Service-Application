@@ -54,8 +54,8 @@ public class MapPageController {
     }};
     private Floor currentFloor;
 
-    private Map<String, Node> nodes;
-    private Map<String, Edge> edges;
+    private Map<Long, Node> nodes;
+    private Map<Long, Edge> edges;
 
     @FXML
     public void initialize() throws InterruptedException {
