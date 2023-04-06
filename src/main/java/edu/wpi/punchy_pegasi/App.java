@@ -95,6 +95,7 @@ public class App extends Application {
         Navigation.navigate(Screen.HOME);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
         loadStylesheet("frontend/css/MFXColors.css");
+        loadStylesheet("frontend/css/Button.css");
 
         initDatabaseTables();
     }
