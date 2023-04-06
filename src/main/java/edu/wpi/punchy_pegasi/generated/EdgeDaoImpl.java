@@ -45,18 +45,39 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
     }
 
     @Override
-    public Optional<Edge> get(Edge.Field column, Object value) {
-        try (var rs = dbController.searchQuery(TableType.EDGES, column.name(), value)) {
-            rs.next();
-            Edge req = new Edge(
+    public Map<java.lang.Long, Edge> get(Edge.Field column, Object value) {
+        var map = new HashMap<java.lang.Long, Edge>();
+        try (var rs = dbController.searchQuery(TableType.EDGES, column.getColName(), value)) {
+            while (rs.next()) {
+                Edge req = new Edge(
                     (java.lang.Long)rs.getObject("uuid"),
                     (java.lang.Long)rs.getObject("startNode"),
                     (java.lang.Long)rs.getObject("endNode"));
-            return Optional.ofNullable(req);
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
-            return Optional.empty();
         }
+        return map;
+    }
+
+    @Override
+    public Map<java.lang.Long, Edge> get(Edge.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.Long, Edge>();
+        try (var rs = dbController.searchQuery(TableType.EDGES, Arrays.stream(params).map(Edge.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                Edge req = new Edge(
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override

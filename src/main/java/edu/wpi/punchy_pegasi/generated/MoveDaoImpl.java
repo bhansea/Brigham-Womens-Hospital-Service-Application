@@ -46,19 +46,41 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
     }
 
     @Override
-    public Optional<Move> get(Move.Field column, Object value) {
-        try (var rs = dbController.searchQuery(TableType.MOVES, column.name(), value)) {
-            rs.next();
-            Move req = new Move(
+    public Map<java.lang.Long, Move> get(Move.Field column, Object value) {
+        var map = new HashMap<java.lang.Long, Move>();
+        try (var rs = dbController.searchQuery(TableType.MOVES, column.getColName(), value)) {
+            while (rs.next()) {
+                Move req = new Move(
                     (java.lang.Long)rs.getObject("uuid"),
                     (java.lang.Long)rs.getObject("nodeID"),
                     (java.lang.String)rs.getObject("longName"),
                     (java.lang.String)rs.getObject("date"));
-            return Optional.ofNullable(req);
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
-            return Optional.empty();
         }
+        return map;
+    }
+
+    @Override
+    public Map<java.lang.Long, Move> get(Move.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.Long, Move>();
+        try (var rs = dbController.searchQuery(TableType.MOVES, Arrays.stream(params).map(Move.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                Move req = new Move(
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.Long)rs.getObject("nodeID"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("date"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override

@@ -49,10 +49,11 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
     }
 
     @Override
-    public Optional<ConferenceRoomEntry> get(ConferenceRoomEntry.Field column, Object value) {
-        try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, column.name(), value)) {
-            rs.next();
-            ConferenceRoomEntry req = new ConferenceRoomEntry(
+    public Map<java.util.UUID, ConferenceRoomEntry> get(ConferenceRoomEntry.Field column, Object value) {
+        var map = new HashMap<java.util.UUID, ConferenceRoomEntry>();
+        try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, column.getColName(), value)) {
+            while (rs.next()) {
+                ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
@@ -60,11 +61,35 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
                     (java.lang.String)rs.getObject("endTime"));
-            return Optional.ofNullable(req);
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
-            return Optional.empty();
         }
+        return map;
+    }
+
+    @Override
+    public Map<java.util.UUID, ConferenceRoomEntry> get(ConferenceRoomEntry.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, ConferenceRoomEntry>();
+        try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, Arrays.stream(params).map(ConferenceRoomEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                ConferenceRoomEntry req = new ConferenceRoomEntry(
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("beginningTime"),
+                    (java.lang.String)rs.getObject("endTime"));
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override

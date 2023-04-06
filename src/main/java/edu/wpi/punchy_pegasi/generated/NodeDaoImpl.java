@@ -47,20 +47,43 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
     }
 
     @Override
-    public Optional<Node> get(Node.Field column, Object value) {
-        try (var rs = dbController.searchQuery(TableType.NODES, column.name(), value)) {
-            rs.next();
-            Node req = new Node(
+    public Map<java.lang.Long, Node> get(Node.Field column, Object value) {
+        var map = new HashMap<java.lang.Long, Node>();
+        try (var rs = dbController.searchQuery(TableType.NODES, column.getColName(), value)) {
+            while (rs.next()) {
+                Node req = new Node(
                     (java.lang.Long)rs.getObject("nodeID"),
                     (java.lang.Integer)rs.getObject("xcoord"),
                     (java.lang.Integer)rs.getObject("ycoord"),
                     (java.lang.String)rs.getObject("floor"),
                     (java.lang.String)rs.getObject("building"));
-            return Optional.ofNullable(req);
+                if (req != null)
+                    map.put(req.getNodeID(), req);
+            }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
-            return Optional.empty();
         }
+        return map;
+    }
+
+    @Override
+    public Map<java.lang.Long, Node> get(Node.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.Long, Node>();
+        try (var rs = dbController.searchQuery(TableType.NODES, Arrays.stream(params).map(Node.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                Node req = new Node(
+                    (java.lang.Long)rs.getObject("nodeID"),
+                    (java.lang.Integer)rs.getObject("xcoord"),
+                    (java.lang.Integer)rs.getObject("ycoord"),
+                    (java.lang.String)rs.getObject("floor"),
+                    (java.lang.String)rs.getObject("building"));
+                if (req != null)
+                    map.put(req.getNodeID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override
