@@ -52,9 +52,7 @@ public class HeaderController implements PropertyChangeListener {
         App.getSingleton().addPropertyChangeListener(this);
 
         for (var entry : Screen.values()) {
-            if (entry.name().toLowerCase().contains("flower")
-                || entry.name().toLowerCase().contains("office")
-                || entry.name().toLowerCase().contains("food")
+            if (entry.name().toLowerCase().contains("request")
                 || entry.name().toLowerCase().contains("home"))
                 continue;
             Button button = new Button();
