@@ -96,12 +96,17 @@ public class App extends Application {
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
         loadStylesheet("frontend/css/MFXColors.css");
 
-//        try {
-//            pdb.importTable(TableType.NODES, "/home/xyven/Downloads/Node.csv");
-//            pdb.importTable(TableType.EDGES, "/home/xyven/Downloads/Edge.csv");
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//        }
+        initDatabaseTables();
+    }
+
+    private void initDatabaseTables() {
+        for(var tt : TableType.values()) {
+            try {
+                pdb.initTableByType(tt);
+            } catch (PdbController.DatabaseException e) {
+                log.error("Could not init table "+ tt.name());
+            }
+        }
     }
 
     public <T> T loadWithCache(URL url) throws IOException {

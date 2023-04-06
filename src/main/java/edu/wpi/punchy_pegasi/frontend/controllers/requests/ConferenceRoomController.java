@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.generated.ConferenceRoomEntryDaoImpl;
+import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
@@ -94,6 +96,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         additionalNotes.getText(),
                         beginningTime.getText(),
                         endTime.getText());
+        ConferenceRoomEntryDaoImpl request = new ConferenceRoomEntryDaoImpl();
+        request.save(requestEntry);
         Navigation.navigate(Screen.HOME);
     }
 

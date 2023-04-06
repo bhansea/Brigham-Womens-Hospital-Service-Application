@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.generated.FurnitureRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,6 +49,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 staffAssignment.getText(),
                 additionalNotes.getText(),
                 selectFurniture.getItems());
+        FurnitureRequestEntryDaoImpl request = new FurnitureRequestEntryDaoImpl();
+        request.save(requestEntry);
         Navigation.navigate(Screen.HOME);
     }
 

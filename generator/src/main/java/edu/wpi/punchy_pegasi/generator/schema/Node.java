@@ -1,11 +1,13 @@
-package edu.wpi.punchy_pegasi.schema;
+package edu.wpi.punchy_pegasi.generator.schema;
 
+import edu.wpi.punchy_pegasi.generator.SchemaID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Node implements INode {
+    @SchemaID
     private Long nodeID;
     private Integer xcoord;
     private Integer ycoord;
