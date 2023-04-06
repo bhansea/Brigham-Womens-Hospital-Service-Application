@@ -22,8 +22,9 @@ public class PdbController {
     private Connection connection;
     public PdbController(String url, String username, String password) {
         try {
+            Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             log.error("Failed to connect to db :", e);
         }
     }
