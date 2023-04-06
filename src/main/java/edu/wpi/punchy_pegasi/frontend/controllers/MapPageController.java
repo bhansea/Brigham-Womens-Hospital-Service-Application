@@ -124,10 +124,10 @@ public class MapPageController {
     public void show(Floor floor) {
         currentFloor = floor;
         floor.root.setVisible(true);
-        floor.button.setStyle("-fx-background-color: blue; -fx-text-fill: white");
+        floor.button.setStyle("-fx-background-color: -pp-light-blue; -fx-text-fill: black");
         floors.values().stream().filter(f -> !Objects.equals(f.identifier, floor.identifier)).forEach(f -> {
             f.root.setVisible(false);
-            f.button.setStyle("");
+            f.button.setStyle("-fx-background-color: -pp-dark-blue; -fx-text-fill: white");
         });
     }
 
@@ -210,7 +210,7 @@ public class MapPageController {
         final String path;
         final String humanReadableName;
         final String identifier;
-        Button button = new Button();
+        MFXButton button = new MFXButton();
         Group root = new Group();
         Group canvas = new Group();
         ImageView imageView = new ImageView();

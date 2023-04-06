@@ -20,8 +20,7 @@ public enum Screen {
     OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeServiceRequest.fxml", OfficeServiceRequestController::create),
     FOOD_SERVICE_REQUEST("Request Food Delivery", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create),
     CONFERENCE_ROOM_SERVICE_REQUEST("Request Conference Room", "frontend/requests/ConferenceRoomRequest.fxml", ConferenceRoomController::create),
-    FURNITURE_DELIVERY_SERVICE_REQUEST("Request Furniture Delivery", "frontend/requests/FurnitureDeliveryRequest.fxml", FurnitureRequestController::create),
-    DISPLAY_SERVICE_REQUESTS("Display Service Request", "frontend/requests/ServiceRequest.fxml");
+    FURNITURE_DELIVERY_SERVICE_REQUEST("Request Furniture Delivery", "frontend/requests/FurnitureDeliveryRequest.fxml", FurnitureRequestController::create);
     private final Function<URL, ? extends Parent> createFunction;
     private final URL path;
     private final String readable;
