@@ -9,10 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,6 +84,77 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void update() {
+        var values0 = new Object[]{
+                UUID.randomUUID(),
+                "123",
+                "testStaff0",
+                "testNode0",
+                RequestEntry.Status.PROCESSING,
+                "testFood0",
+                "100",
+                List.of("item1", "item2"),
+                "restrictions0",
+                "patientName0"
+        };
+        var values1 = new Object[]{
+                UUID.randomUUID(),
+                "123",
+                "testStaff1",
+                "testNode1",
+                RequestEntry.Status.PROCESSING,
+                "testFood1",
+                "100",
+                List.of("item1", "item2"),
+                "restrictions1",
+                "patientName1"
+        };
+        var values2 = new Object[]{
+                UUID.randomUUID(),
+                "123",
+                "testStaff2",
+                "testNode2",
+                RequestEntry.Status.PROCESSING,
+                "testFood2",
+                "100",
+                List.of("item1", "item2"),
+                "restrictions2",
+                "patientName2"
+        };
+        var valueSets = new Object[][]{values0, values1, values2};
+        var refMap = new HashMap<UUID, FoodServiceRequestEntry>();
+
+        for (Object[] values : valueSets) {
+            try {
+                pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                assert false: "Failed to insert test data";
+            }
+            FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(
+                    (UUID) values[0],
+                    (String) values[1],
+                    (String) values[2],
+                    (String) values[3],
+                    (RequestEntry.Status) values[4],
+                    (String) values[5],
+                    (String) values[6],
+                    (List<String>) values[7],
+                    (String) values[8],
+                    (String) values[9]
+            );
+            refMap.put(fsre.getServiceID(), fsre);
+        }
+
+        Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
+            } catch (PdbController.DatabaseException e) {
+                assert false: "Failed to delete test data";
+            }
+        }
+
+        assert resultMap.equals(refMap);
+
     }
 
     @Test

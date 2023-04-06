@@ -40,15 +40,33 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public Optional<GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
-        try (var rs = dbController.searchQuery(TableType.GENERIC, column.name(), value)) {
-            rs.next();
-            GenericRequestEntry req/*fromResultSet*/ = null;
-            return Optional.ofNullable(req);
+    public Map<String/*idFieldType*/, GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
+        var map = new HashMap<String/*idFieldType*/, GenericRequestEntry>();
+        try (var rs = dbController.searchQuery(TableType.GENERIC, column.getColName(), value)) {
+            while (rs.next()) {
+                GenericRequestEntry req/*fromResultSet*/ = null;
+                if (req != null)
+                    map.put("req"/*getID*/, req);
+            }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
-            return Optional.empty();
         }
+        return map;
+    }
+
+    @Override
+    public Map<String/*idFieldType*/, GenericRequestEntry> get(GenericRequestEntry.Field[] params, Object[] value) {
+        var map = new HashMap<String/*idFieldType*/, GenericRequestEntry>();
+        try (var rs = dbController.searchQuery(TableType.GENERIC, Arrays.stream(params).map(GenericRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                GenericRequestEntry req/*fromResultSet*/ = null;
+                if (req != null)
+                    map.put("req"/*getID*/, req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override

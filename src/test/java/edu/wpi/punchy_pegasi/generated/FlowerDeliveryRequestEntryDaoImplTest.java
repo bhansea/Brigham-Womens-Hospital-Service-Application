@@ -8,13 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,6 +61,70 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var values0 = new Object[]{
+                UUID.randomUUID(),
+                "testPatient0",
+                "testRoomNum0",
+                "testStaff0",
+                "testNotes0",
+                RequestEntry.Status.PROCESSING,
+                "testSmall0",
+                "test0",
+                "testTulip0"
+        };
+        var values1 = new Object[]{
+                UUID.randomUUID(),
+                "testPatient1",
+                "testRoomNum1",
+                "testStaff1",
+                "testNotes1",
+                RequestEntry.Status.PROCESSING,
+                "testSmall1",
+                "test1",
+                "testTulip1"
+        };
+        var values2 = new Object[]{
+                UUID.randomUUID(),
+                "testPatient2",
+                "testRoomNum2",
+                "testStaff2",
+                "testNotes2",
+                RequestEntry.Status.PROCESSING,
+                "testSmall2",
+                "test2",
+                "testTulip2"
+        };
+
+        var valueSet = new Object[][]{values0, values1, values2};
+        var refMap = new HashMap<UUID, FlowerDeliveryRequestEntry>();
+
+        for (var values : valueSet) {
+            try {
+                pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+            var uuid = (UUID) values[0];
+            var patientName = (String) values[1];
+            var roomNumber = (String) values[2];
+            var staffAssignment = (String) values[3];
+            var additionalNotes = (String) values[4];
+            var status = (RequestEntry.Status) values[5];
+            var flowerSize = (String) values[6];
+            var flowerAmount = (String) values[7];
+            var flowerType = (String) values[8];
+            var entry = new FlowerDeliveryRequestEntry(uuid, patientName, roomNumber, staffAssignment, additionalNotes, status, flowerSize, flowerAmount, flowerType);
+            refMap.put(uuid, entry);
+        }
+        Map<UUID, FlowerDeliveryRequestEntry> resultMap = dao.getAll();
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", uuid);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test

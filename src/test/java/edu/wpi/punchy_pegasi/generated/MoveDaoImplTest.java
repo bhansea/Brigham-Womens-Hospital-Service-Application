@@ -7,6 +7,8 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +56,31 @@ class MoveDaoImplTest {
 
     @Test
     void getAll() {
+        var values0 = new Object[]{100L, 1005L, "testLong", "testDate"};
+        var values1 = new Object[]{101L, 1006L, "testLong1", "testDate1"};
+        var values2 = new Object[]{102L, 1007L, "testLong2", "testDate2"};
+        var valueSet = new Object[][]{values0, values1, values2};
+
+        var refMap = new HashMap<Long, Move>();
+        for (Object[] values : valueSet) {
+            var move = new Move((Long) values[0], (Long) values[1], (String) values[2], (String) values[3]);
+            refMap.put(move.getUuid(), move);
+            try {
+                pdbController.insertQuery(TableType.MOVES, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Map<Long, Move> resultMap = dao.getAll();
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.MOVES, "uuid", uuid);
+            } catch (PdbController.DatabaseException e) {
+                assert false: "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test

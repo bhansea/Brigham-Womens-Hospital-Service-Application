@@ -49,10 +49,11 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
     }
 
     @Override
-    public Optional<OfficeServiceRequestEntry> get(OfficeServiceRequestEntry.Field column, Object value) {
-        try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, column.name(), value)) {
-            rs.next();
-            OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
+    public Map<java.util.UUID, OfficeServiceRequestEntry> get(OfficeServiceRequestEntry.Field column, Object value) {
+        var map = new HashMap<java.util.UUID, OfficeServiceRequestEntry>();
+        try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, column.getColName(), value)) {
+            while (rs.next()) {
+                OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("roomNumber"),
                     (java.lang.String)rs.getObject("staffAssignment"),
@@ -60,11 +61,35 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
                     (java.lang.String)rs.getObject("employeeName"));
-            return Optional.ofNullable(req);
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
-            return Optional.empty();
         }
+        return map;
+    }
+
+    @Override
+    public Map<java.util.UUID, OfficeServiceRequestEntry> get(OfficeServiceRequestEntry.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, OfficeServiceRequestEntry>();
+        try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, Arrays.stream(params).map(OfficeServiceRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
+            while (rs.next()) {
+                OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        return map;
     }
 
     @Override

@@ -8,6 +8,8 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,6 +73,30 @@ class EdgeDaoImplTest {
 
     @Test
     void getAll() {
+        var value0 = new Long[]{100L, 1005L, 1006L};
+        var value1 = new Long[]{101L, 1005L, 1007L};
+        var value2 = new Long[]{102L, 1005L, 1008L};
+        var valueSet = new Object[][]{value0, value1, value2};
+        var refMap = new HashMap<Long, Edge>();
+        for (Object[] values : valueSet) {
+            try {
+                pdbController.insertQuery(TableType.EDGES, fields, values);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to insert edge";
+            }
+            Edge edge = new Edge((Long) values[0], (Long) values[1], (Long) values[2]);
+            refMap.put(edge.getUuid(), edge);
+        }
+
+        Map<Long, Edge> resultMap = dao.getAll();
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.EDGES, "uuid", uuid);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
