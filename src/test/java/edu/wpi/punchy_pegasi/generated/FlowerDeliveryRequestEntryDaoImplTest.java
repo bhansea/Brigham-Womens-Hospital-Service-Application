@@ -57,6 +57,44 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
+        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getRoomNumber(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
+        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getRoomNumber(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType()};
+        try {
+            pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
+            pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient");
+        var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
+        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient")) {
+            while (rs.next()) {
+                FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
+                        (java.util.UUID)rs.getObject("serviceID"),
+                        (java.lang.String)rs.getObject("patientName"),
+                        (java.lang.String)rs.getObject("roomNumber"),
+                        (java.lang.String)rs.getObject("staffAssignment"),
+                        (java.lang.String)rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                        (java.lang.String)rs.getObject("flowerSize"),
+                        (java.lang.String)rs.getObject("flowerAmount"),
+                        (java.lang.String)rs.getObject("flowerType"));
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(flowers.getServiceID()), results.get(flowers.getServiceID()));
+        assertEquals(map.get(flowers2.getServiceID()), results.get(flowers2.getServiceID()));
+        try {
+            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers.getServiceID());
+            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers2.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

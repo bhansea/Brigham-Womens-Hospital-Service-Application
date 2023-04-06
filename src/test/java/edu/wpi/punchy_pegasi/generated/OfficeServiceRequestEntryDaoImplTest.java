@@ -8,6 +8,7 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -52,6 +53,45 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
+        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        Object[] values0 = new Object[]{office0.getServiceID(), office0.getRoomNumber(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(),office0.getOfficeRequest(), office0.getEmployeeName()};
+        Object[] values1 = new Object[]{office1.getServiceID(), office1.getRoomNumber(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(),office1.getOfficeRequest(), office1.getEmployeeName()};
+        try{
+            pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values0);
+            pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values1);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(OfficeServiceRequestEntry.Field.ROOM_NUMBER, "testRoom");
+        var map = new HashMap<UUID, OfficeServiceRequestEntry>();
+        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, OfficeServiceRequestEntry.Field.ROOM_NUMBER.getColName(), "testRoom")) {
+            while (rs.next()) {
+                var req = new OfficeServiceRequestEntry(
+                        (UUID)rs.getObject("serviceID"),
+                        (String)rs.getObject("roomNumber"),
+                        (String)rs.getObject("staffAssignment"),
+                        (String)rs.getObject("additionalNotes"),
+                        (RequestEntry.Status)rs.getObject("status"),
+                        (String)rs.getObject("officeRequest"),
+                        (String)rs.getObject("employeeName"));
+                if (req != null) {
+                    map.put(req.getServiceID(), req);
+                }
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            assert false: e.getMessage();
+        }
+
+        assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
+        assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
+        try{
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS,"serviceID", office0.getServiceID());
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS,"serviceID", office1.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
