@@ -17,7 +17,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     @FXML
     CheckComboBox<String> selectFurniture;
 
-    public static BorderPane create(URL path) {
+    public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);
     }
 

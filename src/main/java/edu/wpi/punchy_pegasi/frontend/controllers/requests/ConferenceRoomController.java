@@ -20,7 +20,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXComboBox<String> endTime;
 
 
-    public static BorderPane create(URL path) {
+    public static BorderPane create(String path) {
         return RequestController.create(new ConferenceRoomController(), path);
     }
 

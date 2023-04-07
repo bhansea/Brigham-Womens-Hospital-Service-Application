@@ -65,7 +65,7 @@ public class App extends Application {
         try {
             Parent root = loader.load();
             ((ErrorController) loader.getController()).setErrorText(errorMsg.toString());
-            dialog.setScene(new Scene(root, 250, 400));
+            dialog.setScene(new Scene(root, 600, 400));
             dialog.show();
         } catch (IOException exc) {
             exc.printStackTrace();
@@ -115,7 +115,7 @@ public class App extends Application {
         Thread.setDefaultUncaughtExceptionHandler(App::showError);
         this.primaryStage = primaryStage;
 
-        final BorderPane loadedSplash = loadWithCache(App.class.getResource("frontend/views/Splash.fxml"));
+        final BorderPane loadedSplash = loadWithCache("frontend/views/Splash.fxml");
         final SplashController splashController = loader.getController();
         scene = new Scene(loadedSplash, 600, 400);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
@@ -129,13 +129,14 @@ public class App extends Application {
     }
 
     private void loadUI(PdbController pdb) {
-        if(pdb == null) {
+        if (pdb == null) {
             log.error("No database connection");
             return;
         }
+        log.info("Application started with database {}", pdb.source);
         this.pdb = pdb;
         try {
-            final BorderPane loadedLayout = loadWithCache(App.class.getResource("frontend/layouts/AppLayout.fxml"));
+            final BorderPane loadedLayout = loadWithCache("frontend/layouts/AppLayout.fxml");
             final LayoutController layoutController = loader.getController();
 
             viewPane = layoutController.getViewPane();
@@ -148,7 +149,8 @@ public class App extends Application {
             loadStylesheet("frontend/css/Default.css");
             new Thread(this::initDatabaseTables).start();
         } catch (IOException e) {
-            log.error("Failed to load application", e);
+            log.error("Failed to load application ", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -162,19 +164,24 @@ public class App extends Application {
         }
     }
 
-    public <T> T loadWithCache(URL url) throws IOException {
-        return loadWithCache(url, null, null);
+    public <T> T loadWithCache(String path) throws IOException {
+        return loadWithCache(path, null, null);
     }
 
-    public <T> T loadWithCache(URL url, Object controller) throws IOException {
-        return loadWithCache(url, null, controller);
+    public <T> T loadWithCache(String path, Object controller) throws IOException {
+        return loadWithCache(path, null, controller);
     }
 
-    public <T> T loadWithCache(URL url, Object root, Object controller) throws IOException {
+    public <T> T loadWithCache(String path, Object root, Object controller) throws IOException {
+        var resource = App.class.getResource(path);
+        if(resource == null){
+            log.error("Could not find file {}", path);
+            throw new IOException("No such file");
+        }
         loader = new FXMLLoader();
         loader.setRoot(root);
         loader.setController(controller);
-        loader.setLocation(url);
+        loader.setLocation(resource);
         return loader.load();
     }
 }

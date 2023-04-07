@@ -22,7 +22,7 @@ public class LinkControl extends HBox {
 
     public LinkControl() {
         try {
-            App.getSingleton().loadWithCache(App.class.getResource("frontend/components/Link.fxml"), this, this);
+            App.getSingleton().loadWithCache("frontend/components/Link.fxml", this, this);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }

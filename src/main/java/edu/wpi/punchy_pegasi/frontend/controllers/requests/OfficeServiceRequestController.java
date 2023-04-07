@@ -16,7 +16,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     TextField officeRequest;
 
-    public static BorderPane create(URL path) {
+    public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
     }
 

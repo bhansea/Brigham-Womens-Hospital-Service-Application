@@ -21,12 +21,12 @@ public enum Screen {
     FOOD_SERVICE_REQUEST("Request Food Delivery", "frontend/requests/FoodServiceRequest.fxml", FoodServiceRequestController::create),
     CONFERENCE_ROOM_SERVICE_REQUEST("Request Conference Room", "frontend/requests/ConferenceRoomRequest.fxml", ConferenceRoomController::create),
     FURNITURE_DELIVERY_SERVICE_REQUEST("Request Furniture Delivery", "frontend/requests/FurnitureDeliveryRequest.fxml", FurnitureRequestController::create);
-    private final Function<URL, ? extends Parent> createFunction;
-    private final URL path;
+    private final Function<String, ? extends Parent> createFunction;
+    private final String path;
     private final String readable;
 
-    Screen(String readable, String path, Function<URL, ? extends Parent> createFunction) {
-        this.path = App.class.getResource(path);
+    Screen(String readable, String path, Function<String, ? extends Parent> createFunction) {
+        this.path = path;
         this.readable = readable.toUpperCase();
         this.createFunction = createFunction;
     }
@@ -35,7 +35,7 @@ public enum Screen {
         this(readable, path, Screen::defaultCreate);
     }
 
-    private static Parent defaultCreate(URL path) {
+    private static Parent defaultCreate(String path) {
         try {
             return App.getSingleton().loadWithCache(path);
         } catch (IOException e) {

@@ -32,7 +32,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     TextField patientName = new TextField();
     Label price = new Label("$0.00");
 
-    public static BorderPane create(URL path) {
+    public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
     }
 
