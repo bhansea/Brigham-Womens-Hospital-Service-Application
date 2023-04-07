@@ -43,7 +43,7 @@ public class HeaderController implements PropertyChangeListener {
 
     @FXML
     private void exit() {
-        App.exit();
+        App.getSingleton().exit();
     }
 
     @FXML
