@@ -58,7 +58,7 @@ public class MapPageController {
     private Map<Long, Edge> edges;
 
     @FXML
-    public void initialize() throws InterruptedException {
+    public void initialize() {
         gesturePane.zoomTo(.1, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.ALWAYS);
 
@@ -223,9 +223,16 @@ public class MapPageController {
             maps.getChildren().add(root);
             new Thread(this::loadImage).start();
         }
+        private static Map<String, Image> imageCache = new HashMap<>();
 
         public void loadImage() {
-            var image = new Image(Objects.requireNonNull(App.class.getResourceAsStream(path)));
+            Image image;
+            if(imageCache.containsKey(path))
+                image = imageCache.get(path);
+            else {
+                image = new Image(Objects.requireNonNull(App.class.getResourceAsStream(path)));
+                imageCache.put(path, image);
+            }
             imageView.imageProperty().set(image);
             imageView.setFitHeight(image.getHeight());
             imageView.setFitWidth(image.getWidth());
