@@ -1,16 +1,15 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,9 +19,9 @@ class MoveDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"uuid", "nodeID", "longName", "date"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new MoveDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.MOVES);
