@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
+import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
-import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
-import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,7 +47,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
         FlowerDeliveryRequestEntryDaoImpl request = new FlowerDeliveryRequestEntryDaoImpl();
         request.save(requestEntry);
-        Navigation.navigate(Screen.HOME);
+        App.getSingleton().navigate(Screen.HOME);
     }
 
     @FXML

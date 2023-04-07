@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
-import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +18,7 @@ public class LoginController {
     private MFXPasswordField passwordBox;
 
     public void logIn(ActionEvent event) {
-        Navigation.navigate(Screen.HOME);
+        App.getSingleton().navigate(Screen.HOME);
     }
 
     public void usernameEnter(ActionEvent event) {

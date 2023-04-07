@@ -1,4 +1,4 @@
-package edu.wpi.punchy_pegasi.frontend.navigation;
+package edu.wpi.punchy_pegasi.frontend;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.*;
@@ -40,7 +40,7 @@ public enum Screen {
             return App.getSingleton().loadWithCache(path);
         } catch (IOException e) {
             log.error("Error in screen", e);
-            return null;
+            throw new RuntimeException(e);
         }
     }
 

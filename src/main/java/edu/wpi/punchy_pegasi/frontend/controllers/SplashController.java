@@ -59,7 +59,7 @@ public class SplashController {
 
     public boolean getConnection() {
         if (onConnection == null) return false;
-        new Thread(() -> {
+        var thread = new Thread(() -> {
             try {
                 PdbController.Source source = PdbController.Source.Wong;
                 while (!attemptDataBaseConnection(source)) {
@@ -79,7 +79,9 @@ public class SplashController {
                 submit.setOnMouseClicked(null);
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
+        thread.setDaemon(true);
+        thread.start();
         return true;
     }
 
