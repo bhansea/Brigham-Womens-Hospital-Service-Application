@@ -47,21 +47,7 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
 
     @Override
     public Map<java.lang.Long, Move> get(Move.Field column, Object value) {
-        var map = new HashMap<java.lang.Long, Move>();
-        try (var rs = dbController.searchQuery(TableType.MOVES, column.getColName(), value)) {
-            while (rs.next()) {
-                Move req = new Move(
-                    (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.Long)rs.getObject("nodeID"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("date"));
-                if (req != null)
-                    map.put(req.getUuid(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new Move.Field[]{column}, new Object[]{value});
     }
 
     @Override

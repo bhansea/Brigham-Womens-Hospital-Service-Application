@@ -1,14 +1,15 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.LocationName;
-import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,9 +19,9 @@ class LocationNameDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"uuid", "longName", "shortName", "nodeType"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new LocationNameDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.LOCATIONNAMES);

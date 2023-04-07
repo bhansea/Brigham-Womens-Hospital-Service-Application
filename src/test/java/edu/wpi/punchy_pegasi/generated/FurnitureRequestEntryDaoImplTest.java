@@ -1,14 +1,16 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.*;
+import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
+import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FurnitureRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -17,9 +19,9 @@ class FurnitureRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new FurnitureRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FURNITUREREQUESTS);
@@ -27,6 +29,7 @@ class FurnitureRequestEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     void get() {
         List<String> requestItems = new ArrayList<>();

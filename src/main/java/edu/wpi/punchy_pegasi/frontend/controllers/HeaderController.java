@@ -1,21 +1,12 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
-import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import org.w3c.dom.events.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,22 +14,14 @@ import java.beans.PropertyChangeListener;
 public class HeaderController implements PropertyChangeListener {
     public StackPane headerStackpane;
     @FXML HBox navButtonContainer;
-    //    @FXML
-//    private VBox imageContainer;
-//    @FXML
-//    private ImageView bannerImage;
-//    @FXML
-//    private GridPane headerGrid;
     @FXML
     private Button exitButton;
     @FXML
     private Button homeButton;
-//    @FXML
-//    private Pane clipper;
 
     @FXML
     private void toHome(ActionEvent event) {
-        Navigation.navigate(Screen.HOME);
+        App.getSingleton().navigate(Screen.HOME);
     }
 
     @FXML
@@ -59,7 +42,7 @@ public class HeaderController implements PropertyChangeListener {
             button.setText(entry.getReadable());
             button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
             button.setOnMouseClicked(e -> {
-                Navigation.navigate(entry);
+                App.getSingleton().navigate(entry);
             });
             navButtonContainer.getChildren().add(button);
         }

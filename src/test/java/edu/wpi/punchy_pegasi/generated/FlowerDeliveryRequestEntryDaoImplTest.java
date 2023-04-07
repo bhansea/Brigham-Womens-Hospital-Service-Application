@@ -8,14 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 class FlowerDeliveryRequestEntryDaoImplTest {
@@ -25,9 +26,9 @@ class FlowerDeliveryRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FLOWERREQUESTS);
@@ -69,7 +70,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         }
         var results = dao.get(FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient");
         var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, String.valueOf(FlowerDeliveryRequestEntry.Field.PATIENT_NAME), "testPatient")) {
+        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, FlowerDeliveryRequestEntry.Field.PATIENT_NAME.getColName(), "testPatient")) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),

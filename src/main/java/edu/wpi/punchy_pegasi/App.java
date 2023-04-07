@@ -1,18 +1,20 @@
 package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.controllers.ErrorController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.controllers.SplashController;
-import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
-import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 
 @Slf4j
@@ -41,14 +45,31 @@ public class App extends Application {
     @Getter
     private Scene scene;
 
+    private static void showError(Thread t, Throwable e) {
+        log.error("An unexpected error occurred in " + t, e);
+        if (Platform.isFxApplicationThread()) {
+            showErrorDialog(e);
+        }
+    }
+
     public void exit() {
         Platform.exit();
     }
 
-    public void loadStylesheet(String resourcePath) {
-        var resource = App.class.getResource(resourcePath);
-        if(resource != null)
-            scene.getStylesheets().add(resource.toExternalForm());
+    private static void showErrorDialog(Throwable e) {
+        StringWriter errorMsg = new StringWriter();
+        e.printStackTrace(new PrintWriter(errorMsg));
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("frontend/components/Error.fxml"));
+        try {
+            Parent root = loader.load();
+            ((ErrorController) loader.getController()).setErrorText(errorMsg.toString());
+            dialog.setScene(new Scene(root, 600, 400));
+            dialog.show();
+        } catch (IOException exc) {
+            exc.printStackTrace();
+        }
     }
 
     public void setCurrentScreen(Screen value) {
@@ -78,15 +99,27 @@ public class App extends Application {
         log.info("Shutting Down");
     }
 
+    public void navigate(final Screen screen) {
+        getViewPane().setCenter(screen.get());
+        setCurrentScreen(screen);
+    }
+
+    public void loadStylesheet(String resourcePath) {
+        var resource = App.class.getResource(resourcePath);
+        if (resource != null)
+            scene.getStylesheets().add(resource.toExternalForm());
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Thread.setDefaultUncaughtExceptionHandler(App::showError);
         this.primaryStage = primaryStage;
 
-        final BorderPane loadedSplash = loadWithCache(App.class.getResource("frontend/views/Splash.fxml"));
+        final BorderPane loadedSplash = loadWithCache("frontend/views/Splash.fxml");
         final SplashController splashController = loader.getController();
         scene = new Scene(loadedSplash, 600, 400);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
-        loadStylesheet("frontend/css/MFXColors.css");
+        loadStylesheet("frontend/css/Default.css");
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
 
@@ -96,13 +129,14 @@ public class App extends Application {
     }
 
     private void loadUI(PdbController pdb) {
-        if(pdb == null) {
+        if (pdb == null) {
             log.error("No database connection");
             return;
         }
+        log.info("Application started with database {}", pdb.source);
         this.pdb = pdb;
         try {
-            final BorderPane loadedLayout = loadWithCache(App.class.getResource("frontend/layouts/AppLayout.fxml"));
+            final BorderPane loadedLayout = loadWithCache("frontend/layouts/AppLayout.fxml");
             final LayoutController layoutController = loader.getController();
 
             viewPane = layoutController.getViewPane();
@@ -110,13 +144,13 @@ public class App extends Application {
             scene = new Scene(loadedLayout, 1280, 720);
             primaryStage.setScene(scene);
             primaryStage.show();
-            Navigation.navigate(Screen.HOME);
+            navigate(Screen.HOME);
             MFXThemeManager.addOn(scene, Themes.DEFAULT);
-            loadStylesheet("frontend/css/MFXColors.css");
-            loadStylesheet("frontend/css/Button.css");
+            loadStylesheet("frontend/css/Default.css");
             new Thread(this::initDatabaseTables).start();
         } catch (IOException e) {
-            log.error("Failed to load application", e);
+            log.error("Failed to load application ", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -130,19 +164,24 @@ public class App extends Application {
         }
     }
 
-    public <T> T loadWithCache(URL url) throws IOException {
-        return loadWithCache(url, null, null);
+    public <T> T loadWithCache(String path) throws IOException {
+        return loadWithCache(path, null, null);
     }
 
-    public <T> T loadWithCache(URL url, Object controller) throws IOException {
-        return loadWithCache(url, null, controller);
+    public <T> T loadWithCache(String path, Object controller) throws IOException {
+        return loadWithCache(path, null, controller);
     }
 
-    public <T> T loadWithCache(URL url, Object root, Object controller) throws IOException {
+    public <T> T loadWithCache(String path, Object root, Object controller) throws IOException {
+        var resource = App.class.getResource(path);
+        if(resource == null){
+            log.error("Could not find file {}", path);
+            throw new IOException("No such file");
+        }
         loader = new FXMLLoader();
         loader.setRoot(root);
         loader.setController(controller);
-        loader.setLocation(url);
+        loader.setLocation(resource);
         return loader.load();
     }
 }

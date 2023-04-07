@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns="http://javafx.com/javafx/19"
+<BorderPane xmlns="http://javafx.com/javafx/"
             xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="30.0">

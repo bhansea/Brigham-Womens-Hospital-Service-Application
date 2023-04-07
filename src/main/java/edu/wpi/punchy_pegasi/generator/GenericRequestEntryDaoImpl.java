@@ -41,17 +41,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
 
     @Override
     public Map<String/*idFieldType*/, GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
-        var map = new HashMap<String/*idFieldType*/, GenericRequestEntry>();
-        try (var rs = dbController.searchQuery(TableType.GENERIC, column.getColName(), value)) {
-            while (rs.next()) {
-                GenericRequestEntry req/*fromResultSet*/ = null;
-                if (req != null)
-                    map.put("req"/*getID*/, req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new GenericRequestEntry.Field[]{column}, new Object[]{value});
     }
 
     @Override

@@ -1,18 +1,16 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FoodServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -20,9 +18,9 @@ class FoodServiceRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init() {
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new FoodServiceRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FOODREQUESTS);
@@ -68,7 +66,7 @@ class FoodServiceRequestEntryDaoImplTest {
         }
         var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT,"testStaff");
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, String.valueOf(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT), "testStaff")) {
+        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT.getColName(), "testStaff")) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),
@@ -99,9 +97,9 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var values0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
-        var values1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
-        var values2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", "PROCESSING", "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", "PROCESSING", "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", "PROCESSING", "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
         var valuesSet = new Object[][]{values0, values1, values2};
         var refMap = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
         for (var values : valuesSet) {
@@ -121,6 +119,7 @@ class FoodServiceRequestEntryDaoImplTest {
                     Arrays.asList((String[])values[7]),
                     (java.lang.String)values[8],
                     (java.lang.String)values[9]);
+            refMap.put(req.getServiceID(), req);
         }
 
         Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();

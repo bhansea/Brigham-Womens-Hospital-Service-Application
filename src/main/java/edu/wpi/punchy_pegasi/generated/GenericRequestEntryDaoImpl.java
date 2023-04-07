@@ -48,22 +48,7 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
 
     @Override
     public Map<java.util.UUID, GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
-        var map = new HashMap<java.util.UUID, GenericRequestEntry>();
-        try (var rs = dbController.searchQuery(TableType.GENERIC, column.getColName(), value)) {
-            while (rs.next()) {
-                GenericRequestEntry req = new GenericRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
-                if (req != null)
-                    map.put(req.getServiceID(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new GenericRequestEntry.Field[]{column}, new Object[]{value});
     }
 
     @Override

@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -14,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OfficeServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -22,9 +21,9 @@ class OfficeServiceRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.OFFICEREQUESTS);
@@ -32,6 +31,7 @@ class OfficeServiceRequestEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     void get() {
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
@@ -72,7 +72,7 @@ class OfficeServiceRequestEntryDaoImplTest {
                         (String)rs.getObject("roomNumber"),
                         (String)rs.getObject("staffAssignment"),
                         (String)rs.getObject("additionalNotes"),
-                        (RequestEntry.Status)rs.getObject("status"),
+                        RequestEntry.Status.valueOf((String)rs.getObject("status")),
                         (String)rs.getObject("officeRequest"),
                         (String)rs.getObject("employeeName"));
                 if (req != null) {
