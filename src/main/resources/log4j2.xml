@@ -1,0 +1,32 @@
+<Configuration status="WARN">
+    <Properties>
+        <Property name="CONSOLE">%highlight{%d{HH:mm:ss.SSS} %-5p method: [%t] %c{-3} (%F:%L) - %m%n}</Property>
+        <Property name="FILE">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p method: [%t] %c{1.} - %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${CONSOLE}"/>
+        </Console>
+        <RollingFile name="rollingFile"
+                     fileName=".edu_wpi_punchy_pegasi_logs/app.log"
+                     filePattern=".edu_wpi_punchy_pegasi_logs/%d{yyyy-MM-dd}/app-%d{HH:mm:ss}.log"
+                     ignoreExceptions="false">
+            <PatternLayout pattern="${FILE}"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="edu.wpi.punchy_pegasi" level="error">
+            <AppenderRef ref="rollingFile"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+</Configuration>
