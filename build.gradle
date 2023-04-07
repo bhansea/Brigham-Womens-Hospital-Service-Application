@@ -6,7 +6,7 @@ plugins {
     id "io.freefair.lombok"
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
-mainClassName = 'edu.wpi.punchy_pegasi.Main'
+mainClassName = 'edu.wpi.punchy_pegasi.App'
 
 repositories {
     mavenCentral()
