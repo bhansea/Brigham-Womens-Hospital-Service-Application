@@ -23,6 +23,7 @@ public class LocationName {
         CONF,
         EXIT,
         RETL,
-        SERV
+        SERV,
+        BATH
     }
 }
