@@ -46,20 +46,7 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
 
     @Override
     public Map<java.lang.Long, Edge> get(Edge.Field column, Object value) {
-        var map = new HashMap<java.lang.Long, Edge>();
-        try (var rs = dbController.searchQuery(TableType.EDGES, column.getColName(), value)) {
-            while (rs.next()) {
-                Edge req = new Edge(
-                    (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.Long)rs.getObject("startNode"),
-                    (java.lang.Long)rs.getObject("endNode"));
-                if (req != null)
-                    map.put(req.getUuid(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new Edge.Field[]{column}, new Object[]{value});
     }
 
     @Override

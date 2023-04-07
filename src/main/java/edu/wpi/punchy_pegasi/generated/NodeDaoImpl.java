@@ -48,22 +48,7 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
 
     @Override
     public Map<java.lang.Long, Node> get(Node.Field column, Object value) {
-        var map = new HashMap<java.lang.Long, Node>();
-        try (var rs = dbController.searchQuery(TableType.NODES, column.getColName(), value)) {
-            while (rs.next()) {
-                Node req = new Node(
-                    (java.lang.Long)rs.getObject("nodeID"),
-                    (java.lang.Integer)rs.getObject("xcoord"),
-                    (java.lang.Integer)rs.getObject("ycoord"),
-                    (java.lang.String)rs.getObject("floor"),
-                    (java.lang.String)rs.getObject("building"));
-                if (req != null)
-                    map.put(req.getNodeID(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new Node.Field[]{column}, new Object[]{value});
     }
 
     @Override

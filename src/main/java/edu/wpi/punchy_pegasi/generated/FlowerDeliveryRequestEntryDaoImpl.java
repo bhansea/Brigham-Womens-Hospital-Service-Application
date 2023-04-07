@@ -52,26 +52,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
 
     @Override
     public Map<java.util.UUID, FlowerDeliveryRequestEntry> get(FlowerDeliveryRequestEntry.Field column, Object value) {
-        var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
-        try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS, column.getColName(), value)) {
-            while (rs.next()) {
-                FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("flowerSize"),
-                    (java.lang.String)rs.getObject("flowerAmount"),
-                    (java.lang.String)rs.getObject("flowerType"));
-                if (req != null)
-                    map.put(req.getServiceID(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new FlowerDeliveryRequestEntry.Field[]{column}, new Object[]{value});
     }
 
     @Override
