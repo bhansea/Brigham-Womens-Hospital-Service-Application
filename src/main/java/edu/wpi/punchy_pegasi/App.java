@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
+import edu.wpi.punchy_pegasi.frontend.controllers.SplashController;
 import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
 import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -28,8 +29,7 @@ public class App extends Application {
     private static App singleton;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Getter
-    private final PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
-    //private final PdbController pdb = new PdbController("jdbc:postgresql://bruellcarlisle.dyndns.org:54321/softeng", "teamp", "teamp130");
+    private PdbController pdb;
     @Setter
     @Getter
     private Stage primaryStage;
@@ -41,14 +41,14 @@ public class App extends Application {
     @Getter
     private Scene scene;
 
-    public static void exit() {
+    public void exit() {
         Platform.exit();
     }
 
-    public static void loadStylesheet(String resourcePath) {
+    public void loadStylesheet(String resourcePath) {
         var resource = App.class.getResource(resourcePath);
         if(resource != null)
-            App.singleton.scene.getStylesheets().add(resource.toExternalForm());
+            scene.getStylesheets().add(resource.toExternalForm());
     }
 
     public void setCurrentScreen(Screen value) {
@@ -80,32 +80,52 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        /* primaryStage is generally only used if one of your components require the stage to display */
-        App.singleton.primaryStage = primaryStage;
+        this.primaryStage = primaryStage;
 
-        final BorderPane loadedLayout = loadWithCache(App.class.getResource("frontend/layouts/AppLayout.fxml"));
-        final LayoutController layoutController = loader.getController();
-
-        App.singleton.viewPane = layoutController.getViewPane();
-
-        scene = new Scene(loadedLayout, 1280, 720);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        Navigation.navigate(Screen.HOME);
+        final BorderPane loadedSplash = loadWithCache(App.class.getResource("frontend/views/Splash.fxml"));
+        final SplashController splashController = loader.getController();
+        scene = new Scene(loadedSplash, 600, 400);
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
         loadStylesheet("frontend/css/MFXColors.css");
-        loadStylesheet("frontend/css/Button.css");
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
 
-        initDatabaseTables();
+
+        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
+        splashController.getConnection();
+    }
+
+    private void loadUI(PdbController pdb) {
+        if(pdb == null) {
+            log.error("No database connection");
+            return;
+        }
+        this.pdb = pdb;
+        try {
+            final BorderPane loadedLayout = loadWithCache(App.class.getResource("frontend/layouts/AppLayout.fxml"));
+            final LayoutController layoutController = loader.getController();
+
+            viewPane = layoutController.getViewPane();
+
+            scene = new Scene(loadedLayout, 1280, 720);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+            Navigation.navigate(Screen.HOME);
+            MFXThemeManager.addOn(scene, Themes.DEFAULT);
+            loadStylesheet("frontend/css/MFXColors.css");
+            loadStylesheet("frontend/css/Button.css");
+            new Thread(this::initDatabaseTables).start();
+        } catch (IOException e) {
+            log.error("Failed to load application", e);
+        }
     }
 
     private void initDatabaseTables() {
-        for(var tt : TableType.values()) {
+        for (var tt : TableType.values()) {
             try {
                 pdb.initTableByType(tt);
             } catch (PdbController.DatabaseException e) {
-                log.error("Could not init table "+ tt.name());
+                log.error("Could not init table " + tt.name());
             }
         }
     }

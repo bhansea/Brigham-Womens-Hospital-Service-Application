@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressSpinner?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SplashController"
+            style="-fx-background-color: #F1F1F1;">
+    <center>
+        <VBox alignment="CENTER" spacing="10" fx:id="container">
+            <Text fx:id="statusText" textAlignment="CENTER"/>
+            <MFXProgressSpinner fx:id="progressBar" prefWidth="200"/>
+            <MFXComboBox fx:id="databaseSourceSelection" floatingText="Database"/>
+            <MFXButton fx:id="submit" text="Connect"/>
+            <MFXButton fx:id="exit" style="-fx-background-color: #CC0202; -fx-text-fill: white;" text="EXIT"/>
+        </VBox>
+    </center>
+</BorderPane>

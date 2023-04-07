@@ -6,21 +6,14 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.SQLException;
+
 @Slf4j
 public class TestDB {
-
-    @Getter
-    private static final TestDB singleton = new TestDB();
-    @Getter
-//    PdbController pdb = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb",
-//            "teamp", "teamp130");
-    PdbController pdb = new PdbController("jdbc:postgresql://bruellcarlisle.dyndns.org:54321/softeng",
-            "teamp", "teamp130");
-
-
     public static void main(String[] args) {
         try {
-            singleton.pdb.initTableByType(TableType.LOCATIONNAMES);
+            PdbController pdb = new PdbController(PdbController.Source.Blake);
+            pdb.initTableByType(TableType.LOCATIONNAMES);
             var LocationNameDAO = new LocationNameDaoImpl();
             LocationNameDAO.save(new LocationName(1L, "lllllllong Name", "short name", LocationName.NodeType.EXIT));
             LocationNameDAO.save(new LocationName(2L, "lllllllongg Name", "short name", LocationName.NodeType.DEPT));
@@ -52,7 +45,7 @@ public class TestDB {
 //            ));
 //            var foodServiceRequestEntryMap = FoodServiceRequestEntryDAO.getAll();
 //            System.out.println();
-        } catch (PdbController.DatabaseException e) {
+        } catch (PdbController.DatabaseException | SQLException | ClassNotFoundException e) {
             log.error(e.getMessage());
         }
 

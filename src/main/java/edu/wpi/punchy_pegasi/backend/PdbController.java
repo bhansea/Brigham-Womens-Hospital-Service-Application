@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi.backend;
 
 
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -19,14 +21,25 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class PdbController {
+
+    @AllArgsConstructor
+    @Getter
+    public enum Source {
+        Wong("database.cs.wpi.edu", 5432, "teampdb", "teamp", "teamp130"),
+        Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130"),
+        Local("localhost", 54321, "postgres", "", "");
+        private String url;
+        private int port;
+        private String database;
+        private String username;
+        private String password;
+    }
     private Connection connection;
-    public PdbController(String url, String username, String password) {
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error("Failed to connect to db :", e);
-        }
+    public final Source source;
+    public PdbController(Source source) throws SQLException, ClassNotFoundException {
+        this.source = source;
+        Class.forName("org.postgresql.Driver");
+        connection = DriverManager.getConnection("jdbc:postgresql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password);
     }
 
     private static String objectToPsqlString(Object o) {
