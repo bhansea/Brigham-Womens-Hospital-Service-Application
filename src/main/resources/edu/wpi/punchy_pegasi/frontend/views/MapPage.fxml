@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
-<?import net.kurobako.gesturefx.GesturePane?>
-<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.scene.text.Text?>
+<?import net.kurobako.gesturefx.GesturePane?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import javafx.scene.control.ComboBox?>
 <BorderPane minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.MapPageController">
    <center>
       <VBox>
-         <padding>
-            <Insets topRightBottomLeft="20.0"/>
-         </padding>
-         <VBox VBox.vgrow="ALWAYS"
-               style="-fx-border-color: black; -fx-border-style: solid inside; -fx-border-width: 3; -fx-border-radius: 3">
-            <GesturePane VBox.vgrow="ALWAYS" fitHeight="false" fitWidth="false" style="-fx-background-color: #D9D9D9"
-                         fx:id="gesturePane" maxScale="1.0" minScale="0.1" prefWidth="400" prefHeight="400">
-               <StackPane fx:id="maps" alignment="TOP_LEFT"/>
-            </GesturePane>
+         <VBox>
+            <padding>
+               <Insets top="10" right="10" left="10" bottom="2"/>
+            </padding>
+            <HBox fx:id="buttonContainer" alignment="CENTER" spacing="10.0"/>
+         </VBox>
+         <VBox VBox.vgrow="ALWAYS">
+            <padding>
+               <Insets topRightBottomLeft="20.0"/>
+            </padding>
+            <VBox VBox.vgrow="ALWAYS"
+                  style="-fx-border-color: black; -fx-border-style: solid inside; -fx-border-width: 3; -fx-border-radius: 3">
+               <GesturePane VBox.vgrow="ALWAYS" fitHeight="false" fitWidth="false" style="-fx-background-color: #D9D9D9"
+                            fx:id="gesturePane" maxScale="1.0" minScale="0.1" prefWidth="400" prefHeight="400">
+                  <StackPane fx:id="maps" alignment="TOP_LEFT"/>
+               </GesturePane>
+            </VBox>
          </VBox>
       </VBox>
    </center>
+   <left>
+      <VBox alignment="CENTER" spacing="10">
+         <padding>
+            <Insets topRightBottomLeft="10"/>
+         </padding>
+<!--         <HBox>-->
+            <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity" />
+<!--         </HBox>-->
+         <HBox>
+            <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo"  maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+         </HBox>
+         <HBox spacing="10" alignment="CENTER">
+            <padding>
+               <Insets topRightBottomLeft="5"/>
+            </padding>
+            <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"/>
+            <MFXButton text="Find path" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+         </HBox>
+         <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+      </VBox>
+   </left>
    <top>
-      <HBox>
-         <VBox>
-            <HBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
-               <padding>
-                  <Insets topRightBottomLeft="5"/>
-               </padding>
-               <MFXComboBox floatingText="Start node" fx:id="nodeStartCombo" minWidth="100"/>
-               <MFXComboBox floatingText="End node" fx:id="nodeEndCombo" minWidth="100"/>
-               <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"/>
-               <MFXButton text="Find path" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
-               <Text fx:id="pathfindStatus"/>
-            </HBox>
-         </VBox>
-         <VBox HBox.hgrow="ALWAYS">
-            <HBox fx:id="buttonContainer" alignment="CENTER" spacing="15.0" VBox.vgrow="ALWAYS"/>
-         </VBox>
-      </HBox>
    </top>
 </BorderPane>

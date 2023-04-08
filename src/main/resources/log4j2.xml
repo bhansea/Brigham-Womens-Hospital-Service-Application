@@ -25,6 +25,9 @@
         <Logger name="edu.wpi.punchy_pegasi" level="error">
             <AppenderRef ref="rollingFile"/>
         </Logger>
+        <Logger name="edu.wpi.punchy_pegasi" level="info">
+            <AppenderRef ref="console"/>
+        </Logger>
         <Root level="info">
             <AppenderRef ref="console"/>
         </Root>
