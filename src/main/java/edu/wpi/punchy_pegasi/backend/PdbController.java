@@ -288,6 +288,18 @@ public class PdbController {
         }
     }
 
+    public boolean loginCheck(String username, String password) throws SQLException{
+        var statement = connection.createStatement();
+        // TODO: Change teamp.accounts
+        var query = "SELECT * FROM teamp.accounts WHERE username='" + username + "' AND password='" + password + "';";
+        ResultSet resultSet = statement.executeQuery(query);
+        if(resultSet.next()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public class DatabaseException extends Exception {
         public DatabaseException(String e) {
             super(e);
