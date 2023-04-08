@@ -4,9 +4,11 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 class NodeDaoImplTest {
     static PdbController pdbController;
     static NodeDaoImpl dao;
@@ -52,7 +55,40 @@ class NodeDaoImplTest {
 
     @Test
     void testGet() {
-
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        Node node2 = new Node(101L, 500, 500, "L1", "testBuilding");
+        Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
+        Object[] values2 = new Object[]{node2.getNodeID(), node2.getXcoord(), node2.getYcoord(), node2.getFloor(), node2.getBuilding()};
+        try{
+            pdbController.insertQuery(TableType.NODES,fields, values);
+            pdbController.insertQuery(TableType.NODES,fields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(Node.Field.BUILDING, "testBuilding");
+        var map = new HashMap<java.lang.Long, Node>();
+        try (var rs = pdbController.searchQuery(TableType.NODES, "building", "testBuilding")) {
+            while (rs.next()) {
+                Node req = new Node(
+                        (java.lang.Long)rs.getObject("nodeID"),
+                        (java.lang.Integer)rs.getObject("xcoord"),
+                        (java.lang.Integer)rs.getObject("ycoord"),
+                        (java.lang.String)rs.getObject("floor"),
+                        (java.lang.String)rs.getObject("building"));
+                if (req != null)
+                    map.put(req.getNodeID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(node.getNodeID()), results.get(node.getNodeID()));
+        assertEquals(map.get(node2.getNodeID()), results.get(node2.getNodeID()));
+        try{
+            pdbController.deleteQuery(TableType.NODES,"nodeID", node.getNodeID());
+            pdbController.deleteQuery(TableType.NODES,"nodeID", node2.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
