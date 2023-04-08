@@ -162,6 +162,7 @@ public class DaoImplGenerator {
     }};
 
     private static boolean fieldIsID(Field field){
+        // locate the @SchemaID annotation
         return Arrays.stream(field.getAnnotations()).anyMatch(a -> a.annotationType() == SchemaID.class);
     }
 
@@ -236,7 +237,7 @@ public class DaoImplGenerator {
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
-        if(clazz == TableType.class){
+        if(clazz == TableType.class){  // check if we are generating the TableType enum
             for(var tt : TableType.values())
                 sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
                         Matcher.quoteReplacement(generateTableInit(tt)));
@@ -259,12 +260,14 @@ public class DaoImplGenerator {
         var classFieldsText = classFields.stream().map(Field::getName).toList();
         var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
 
-        var idFields = classFields.stream().filter(DaoImplGenerator::fieldIsID).toList();
+        var idFields = classFields.stream().filter(DaoImplGenerator::fieldIsID).toList(); // locate id field with @SchemaID
         if (idFields.size() < 1) {
+            // check if no id annotation (@SchemaID) is present
             System.err.println("No id field found for " + clazz.getCanonicalName());
             return;
         }
         if (idFields.size() > 1) {
+            // check if more than one id annotation (@SchemaID) is present
             System.err.println("More than one id field found for " + clazz.getCanonicalName());
             return;
         }
@@ -273,7 +276,7 @@ public class DaoImplGenerator {
 
 
         // gen schema
-        var schemaFileText = sourceFileText
+        var schemaFileText = sourceFileText  // remove @SchemaID annotations
                 .replaceAll("@SchemaID[.\n]*", "")
                 .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "").trim();
 
