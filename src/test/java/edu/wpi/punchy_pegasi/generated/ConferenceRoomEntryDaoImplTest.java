@@ -1,24 +1,23 @@
 package edu.wpi.punchy_pegasi.generated;
 
+import edu.wpi.punchy_pegasi.DefaultTest;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
-
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.sql.ResultSet;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 class ConferenceRoomEntryDaoImplTest {
     static PdbController pdbController;
@@ -28,9 +27,9 @@ class ConferenceRoomEntryDaoImplTest {
 
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new ConferenceRoomEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.CONFERENCEREQUESTS);
@@ -38,6 +37,7 @@ class ConferenceRoomEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     void get() {
         ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");

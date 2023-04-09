@@ -21,9 +21,8 @@ public class LinkControl extends HBox {
     private Runnable onClick;
 
     public LinkControl() {
-        App.loadStylesheet("frontend/css/Link.css");
         try {
-            App.getSingleton().loadWithCache(App.class.getResource("frontend/components/Link.fxml"), this, this);
+            App.getSingleton().loadWithCache("frontend/components/Link.fxml", this, this);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }

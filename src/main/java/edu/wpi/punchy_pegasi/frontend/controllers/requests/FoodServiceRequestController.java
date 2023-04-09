@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
-import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
+import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -32,7 +32,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     TextField patientName = new TextField();
     Label price = new Label("$0.00");
 
-    public static BorderPane create(URL path) {
+    public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
     }
 
@@ -63,7 +63,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, ((RadioButton) temp.getSelectedToggle()).getId(), dietaryRestrictions.getText());
         FoodServiceRequestEntryDaoImpl request = new FoodServiceRequestEntryDaoImpl();
         request.save(requestEntry);
-        Navigation.navigate(Screen.HOME);
+        App.getSingleton().navigate(Screen.HOME);
     }
 
     @Override

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: #012D5A;" stylesheets="@../css/HeaderBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HeaderController">
+<BorderPane style="-fx-background-color: #012D5A;" stylesheets="@../css/HeaderBackground.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HeaderController">
     <bottom>
 
         <VBox alignment="CENTER_RIGHT">

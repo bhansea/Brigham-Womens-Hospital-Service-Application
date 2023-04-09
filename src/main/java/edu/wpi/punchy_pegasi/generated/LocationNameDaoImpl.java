@@ -47,21 +47,7 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
 
     @Override
     public Map<java.lang.Long, LocationName> get(LocationName.Field column, Object value) {
-        var map = new HashMap<java.lang.Long, LocationName>();
-        try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, column.getColName(), value)) {
-            while (rs.next()) {
-                LocationName req = new LocationName(
-                    (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("shortName"),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
-                if (req != null)
-                    map.put(req.getUuid(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new LocationName.Field[]{column}, new Object[]{value});
     }
 
     @Override

@@ -49,23 +49,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
 
     @Override
     public Map<java.util.UUID, FurnitureRequestEntry> get(FurnitureRequestEntry.Field column, Object value) {
-        var map = new HashMap<java.util.UUID, FurnitureRequestEntry>();
-        try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, column.getColName(), value)) {
-            while (rs.next()) {
-                FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
-                if (req != null)
-                    map.put(req.getServiceID(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        return map;
+        return get(new FurnitureRequestEntry.Field[]{column}, new Object[]{value});
     }
 
     @Override

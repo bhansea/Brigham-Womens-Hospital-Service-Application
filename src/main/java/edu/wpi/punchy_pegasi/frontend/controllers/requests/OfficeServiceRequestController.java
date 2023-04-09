@@ -1,8 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.frontend.navigation.Navigation;
-import edu.wpi.punchy_pegasi.frontend.navigation.Screen;
-import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
+import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.OfficeServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
@@ -17,7 +16,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     TextField officeRequest;
 
-    public static BorderPane create(URL path) {
+    public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
     }
 
@@ -33,7 +32,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         requestEntry = new OfficeServiceRequestEntry(roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), officeRequest.getText(), "");
         OfficeServiceRequestEntryDaoImpl request = new OfficeServiceRequestEntryDaoImpl();
         request.save(requestEntry);
-        Navigation.navigate(Screen.HOME);
+        App.getSingleton().navigate(Screen.HOME);
     }
 
     @Override

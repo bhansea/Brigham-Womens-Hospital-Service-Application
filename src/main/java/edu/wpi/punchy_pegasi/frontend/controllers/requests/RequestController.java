@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.net.URL;
 
 import static com.sun.javafx.font.FontFactory.DEFAULT_FULLNAME;
 
@@ -41,10 +40,10 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected VBox totalContainer;
 
-    public static BorderPane create(RequestController controller, URL path) {
+    public static BorderPane create(RequestController controller, String path) {
         try {
             Parent l = App.getSingleton().loadWithCache(path, controller);
-            BorderPane g = App.getSingleton().loadWithCache(App.class.getResource("frontend/layouts/Request.fxml"), controller);
+            BorderPane g = App.getSingleton().loadWithCache("frontend/layouts/Request.fxml", controller);
             g.setCenter(l);
             return g;
         } catch (IOException e) {
