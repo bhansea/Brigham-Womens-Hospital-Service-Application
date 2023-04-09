@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.generator;
 
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
-import org.intellij.lang.annotations.Language;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -22,7 +21,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class DaoImplGenerator {
+public class EntityGenerator {
 
     /**
      * Returns a list containing one parameter name for each argument accepted
@@ -162,6 +161,7 @@ public class DaoImplGenerator {
     }};
 
     private static boolean fieldIsID(Field field){
+        // locate the @SchemaID annotation
         return Arrays.stream(field.getAnnotations()).anyMatch(a -> a.annotationType() == SchemaID.class);
     }
 
@@ -170,7 +170,7 @@ public class DaoImplGenerator {
         var tableName = "teamp." + tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
         var classFields = getFieldsRecursively(clazz);
-        var idField = classFields.stream().filter(DaoImplGenerator::fieldIsID).findFirst().get();
+        var idField = classFields.stream().filter(EntityGenerator::fieldIsID).findFirst().get();
         var tableColumns = classFields.stream().map(f -> {
             var appendText = fieldIsID(f) ?
                     f.getType() == Long.class ?
@@ -236,7 +236,7 @@ public class DaoImplGenerator {
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
-        if(clazz == TableType.class){
+        if(clazz == TableType.class){  // check if we are generating the TableType enum
             for(var tt : TableType.values())
                 sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
                         Matcher.quoteReplacement(generateTableInit(tt)));
@@ -259,12 +259,14 @@ public class DaoImplGenerator {
         var classFieldsText = classFields.stream().map(Field::getName).toList();
         var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
 
-        var idFields = classFields.stream().filter(DaoImplGenerator::fieldIsID).toList();
+        var idFields = classFields.stream().filter(EntityGenerator::fieldIsID).toList(); // locate id field with @SchemaID
         if (idFields.size() < 1) {
+            // check if no id annotation (@SchemaID) is present
             System.err.println("No id field found for " + clazz.getCanonicalName());
             return;
         }
         if (idFields.size() > 1) {
+            // check if more than one id annotation (@SchemaID) is present
             System.err.println("More than one id field found for " + clazz.getCanonicalName());
             return;
         }
@@ -273,7 +275,7 @@ public class DaoImplGenerator {
 
 
         // gen schema
-        var schemaFileText = sourceFileText
+        var schemaFileText = sourceFileText  // remove @SchemaID annotations
                 .replaceAll("@SchemaID[.\n]*", "")
                 .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "").trim();
 

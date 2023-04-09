@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 class MoveDaoImplTest {
     static PdbController pdbController;
     static MoveDaoImpl dao;
@@ -51,6 +53,39 @@ class MoveDaoImplTest {
 
     @Test
     void testGet() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Move move2 = new Move(101L, 1005L, "testLong", "testDate");
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
+        try {
+            pdbController.insertQuery(TableType.MOVES, fields, values);
+            pdbController.insertQuery(TableType.MOVES, fields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(Move.Field.LONG_NAME, "testLong");
+        var map = new HashMap<java.lang.Long, Move>();
+        try (var rs = pdbController.searchQuery(TableType.MOVES, "longName", "testLong")) {
+            while (rs.next()) {
+                Move req = new Move(
+                        (java.lang.Long)rs.getObject("uuid"),
+                        (java.lang.Long)rs.getObject("nodeID"),
+                        (java.lang.String)rs.getObject("longName"),
+                        (java.lang.String)rs.getObject("date"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(move.getUuid()), results.get(move.getUuid()));
+        assertEquals(map.get(move2.getUuid()), results.get(move2.getUuid()));
+        try{
+            pdbController.deleteQuery(TableType.MOVES,"uuid", move.getUuid());
+            pdbController.deleteQuery(TableType.MOVES,"uuid", move2.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

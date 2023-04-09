@@ -1,17 +1,17 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
-import edu.wpi.punchy_pegasi.schema.RequestEntry;
-import edu.wpi.punchy_pegasi.schema.TableType;
+import edu.wpi.punchy_pegasi.schema.*;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 class FurnitureRequestEntryDaoImplTest {
     static PdbController pdbController;
     static FurnitureRequestEntryDaoImpl dao;
@@ -29,7 +29,6 @@ class FurnitureRequestEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
-
     @Test
     void get() {
         List<String> requestItems = new ArrayList<>();
@@ -53,7 +52,43 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
-
+        List<String> requestItems = new ArrayList<>();
+        requestItems.add("testItems");
+        FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        FurnitureRequestEntry furniture2 = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        Object[] values = new Object[]{furniture.getServiceID(), furniture.getRoomNumber(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
+        Object[] values2 = new Object[]{furniture2.getServiceID(), furniture2.getRoomNumber(), furniture2.getStaffAssignment(), furniture2.getAdditionalNotes(), furniture2.getStatus(), furniture2.getSelectFurniture()};
+        try{
+            pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
+            pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(FurnitureRequestEntry.Field.ADDITIONAL_NOTES, "testNotes");
+        var map = new HashMap<java.util.UUID, FurnitureRequestEntry>();
+        try (var rs = pdbController.searchQuery(TableType.FURNITUREREQUESTS, "additionalNotes", "testNotes")) {
+            while (rs.next()) {
+                FurnitureRequestEntry req = new FurnitureRequestEntry(
+                        (java.util.UUID)rs.getObject("serviceID"),
+                        (java.lang.String)rs.getObject("roomNumber"),
+                        (java.lang.String)rs.getObject("staffAssignment"),
+                        (java.lang.String)rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                        Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                if (req != null)
+                    map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(furniture.getServiceID()), results.get(furniture.getServiceID()));
+        assertEquals(map.get(furniture2.getServiceID()), results.get(furniture2.getServiceID()));
+        try{
+            pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture.getServiceID());
+            pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture2.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

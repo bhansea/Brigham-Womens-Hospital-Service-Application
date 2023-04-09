@@ -1,16 +1,18 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FoodServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -66,7 +68,7 @@ class FoodServiceRequestEntryDaoImplTest {
         }
         var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT,"testStaff");
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT.getColName(), "testStaff")) {
+        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, "staffAssignment", "testStaff")) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),
@@ -97,9 +99,9 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var values0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", "PROCESSING", "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
-        var values1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", "PROCESSING", "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
-        var values2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", "PROCESSING", "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var values2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
         var valuesSet = new Object[][]{values0, values1, values2};
         var refMap = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
         for (var values : valuesSet) {
@@ -113,13 +115,13 @@ class FoodServiceRequestEntryDaoImplTest {
                     (java.lang.String)values[1],
                     (java.lang.String)values[2],
                     (java.lang.String)values[3],
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)values[4]),
+                    (RequestEntry.Status)values[4],
                     (java.lang.String)values[5],
                     (java.lang.String)values[6],
                     Arrays.asList((String[])values[7]),
                     (java.lang.String)values[8],
                     (java.lang.String)values[9]);
-            refMap.put(req.getServiceID(), req);
+            refMap.put(req.getServiceID(),req);
         }
 
         Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
@@ -218,8 +220,8 @@ class FoodServiceRequestEntryDaoImplTest {
             );
             refMap.put(fsre.getServiceID(), fsre);
         }
-
         Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
+        assert resultMap.equals(refMap);
         for (var uuid : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
@@ -228,7 +230,6 @@ class FoodServiceRequestEntryDaoImplTest {
             }
         }
 
-        assert resultMap.equals(refMap);
 
     }
 

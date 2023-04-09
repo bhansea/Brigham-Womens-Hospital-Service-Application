@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OfficeServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -31,7 +32,6 @@ class OfficeServiceRequestEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
-
     @Test
     void get() {
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
@@ -72,7 +72,7 @@ class OfficeServiceRequestEntryDaoImplTest {
                         (String)rs.getObject("roomNumber"),
                         (String)rs.getObject("staffAssignment"),
                         (String)rs.getObject("additionalNotes"),
-                        RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                         (String)rs.getObject("officeRequest"),
                         (String)rs.getObject("employeeName"));
                 if (req != null) {
