@@ -68,7 +68,7 @@ class FoodServiceRequestEntryDaoImplTest {
         }
         var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT,"testStaff");
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, String.valueOf(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT), "testStaff")) {
+        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, "staffAssignment", "testStaff")) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),
@@ -115,12 +115,13 @@ class FoodServiceRequestEntryDaoImplTest {
                     (java.lang.String)values[1],
                     (java.lang.String)values[2],
                     (java.lang.String)values[3],
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)values[4]),
+                    (RequestEntry.Status)values[4],
                     (java.lang.String)values[5],
                     (java.lang.String)values[6],
                     Arrays.asList((String[])values[7]),
                     (java.lang.String)values[8],
                     (java.lang.String)values[9]);
+            refMap.put(req.getServiceID(),req);
         }
 
         Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
@@ -219,8 +220,8 @@ class FoodServiceRequestEntryDaoImplTest {
             );
             refMap.put(fsre.getServiceID(), fsre);
         }
-
         Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
+        assert resultMap.equals(refMap);
         for (var uuid : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
@@ -229,7 +230,6 @@ class FoodServiceRequestEntryDaoImplTest {
             }
         }
 
-        assert resultMap.equals(refMap);
 
     }
 

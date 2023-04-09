@@ -72,7 +72,7 @@ class OfficeServiceRequestEntryDaoImplTest {
                         (String)rs.getObject("roomNumber"),
                         (String)rs.getObject("staffAssignment"),
                         (String)rs.getObject("additionalNotes"),
-                        (RequestEntry.Status)rs.getObject("status"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                         (String)rs.getObject("officeRequest"),
                         (String)rs.getObject("employeeName"));
                 if (req != null) {

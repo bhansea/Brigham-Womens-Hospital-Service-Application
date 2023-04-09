@@ -5,13 +5,16 @@ import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 class LocationNameDaoImplTest {
     static PdbController pdbController;
     static LocationNameDaoImpl dao;
@@ -50,6 +53,39 @@ class LocationNameDaoImplTest {
 
     @Test
     void testGet() {
+        LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
+        LocationName location2 = new LocationName(101L, "testName", "testName", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
+        Object[] values2 = new Object[]{location2.getUuid(), location2.getLongName(),location2.getShortName(),location2.getNodeType()};
+        try{
+            pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values);
+            pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = dao.get(LocationName.Field.SHORT_NAME, "testName");
+        var map = new HashMap<java.lang.Long, LocationName>();
+        try (var rs = pdbController.searchQuery(TableType.LOCATIONNAMES, "shortName", "testName")) {
+            while (rs.next()) {
+                LocationName req = new LocationName(
+                        (java.lang.Long)rs.getObject("uuid"),
+                        (java.lang.String)rs.getObject("longName"),
+                        (java.lang.String)rs.getObject("shortName"),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(location.getUuid()), results.get(location.getUuid()));
+        assertEquals(map.get(location2.getUuid()), results.get(location2.getUuid()));
+        try{
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location2.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

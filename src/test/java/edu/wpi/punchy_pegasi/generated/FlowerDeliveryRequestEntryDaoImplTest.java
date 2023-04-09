@@ -69,7 +69,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         }
         var results = dao.get(FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient");
         var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, String.valueOf(FlowerDeliveryRequestEntry.Field.PATIENT_NAME), "testPatient")) {
+        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, "patientName", "testPatient")) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),
