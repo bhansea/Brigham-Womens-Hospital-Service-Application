@@ -7,6 +7,7 @@
 <?import javafx.scene.text.Text?>
 <?import net.kurobako.gesturefx.GesturePane?>
 <?import javafx.scene.control.Separator?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <BorderPane minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.MapPageController">
@@ -53,6 +54,12 @@
          <VBox alignment="CENTER" spacing="10" fx:id="editing">
             <MFXButton text="Edit Node Locations" onMouseClicked="#editNodes" fx:id="editButton"/>
             <MFXButton text="Done Editing Nodes" onMouseClicked="#doneEditingNodes" fx:id="doneEditingButton"/>
+            <MFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton" />
+            <MFXProgressBar fx:id="commitProgress" maxWidth="Infinity" progress="0">
+               <padding>
+                  <Insets topRightBottomLeft="5"/>
+               </padding>
+            </MFXProgressBar>
          </VBox>
       </VBox>
    </left>

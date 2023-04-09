@@ -13,7 +13,7 @@ public interface IDao<K, T, C> {
 
     void save(T t);
 
-    void update(T t, C[] params);
+    void update(T t, C[] params) throws InterruptedException;
 
     void delete(T t);
 }

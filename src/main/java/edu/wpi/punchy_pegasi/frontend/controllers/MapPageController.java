@@ -17,12 +17,16 @@ import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -35,6 +39,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +47,9 @@ import net.kurobako.gesturefx.GesturePane;
 import org.javatuples.Pair;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,6 +64,10 @@ public class MapPageController {
         put("2", new Floor("frontend/assets/map/02_thesecondfloor.png", "Second Floor", "2"));
         put("3", new Floor("frontend/assets/map/03_thethirdfloor.png", "Third Floor", "3"));
     }};
+    @FXML
+    private MFXProgressBar commitProgress;
+    @FXML
+    private MFXButton commitButton;
     @FXML
     private MFXButton doneEditingButton;
     @FXML
@@ -85,50 +97,29 @@ public class MapPageController {
     private Map<Long, LocationName> locations;
     private Map<Long, Move> moves;
 
+    private Set<Node> editedNodes = ConcurrentHashMap.newKeySet();
+    private AtomicBoolean commiting = new AtomicBoolean();
+    private Map<Long, Move> movesByNodeID = new HashMap<>();
+    private Map<String, LocationName> locationsByLongName = new HashMap<>();
+    private StringConverter<Node> nodeToLocation = new StringConverter<>() {
+        @Override
+        public String toString(Node node) {
+            if (node == null) return "";
+            var move = movesByNodeID.get(node.getNodeID()).getLongName();
+            if (move == null) return "";
+            return locationsByLongName.get(move).getLongName();
+        }
+
+        @Override
+        public Node fromString(String string) {
+            return nodes.get(moves.values().stream().filter(m -> Objects.equals(m.getLongName(), string)).findFirst().get().getNodeID());// nodesList.stream().filter(n -> n.getNodeID().toString().equals(string)).findFirst().orElse(null);
+        }
+    };
+    private ObservableList<Node> filteredNodes;
+
     @FXML
-    private void initialize() {
-        gesturePane.zoomTo(.1, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
-        gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.ALWAYS);
-
-        floors.values().forEach(Floor::init);
-
-        show(floors.get("1"));
-        nodes = new NodeDaoImpl().getAll();
-        edges = new EdgeDaoImpl().getAll();
-        moves = new MoveDaoImpl().getAll();
-        locations = new LocationNameDaoImpl().getAll();
-
-        // TODO: This code makes the assumption that if the location names column of moves is a foreign key and thus there is no null checking when converting from a move to a location name
-        var movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
-        var locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
-
-        ObservableList<Node> nodesList = FXCollections.observableArrayList(nodes.values().stream().filter(v -> {
-            var move = movesByNodeID.get(v.getNodeID());
-            if (move == null) return false;
-            var location = locationsByLongName.get(move.getLongName());
-            var locationType = location.getNodeType();
-            return locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
-        }).sorted(Comparator.comparing(Node::getNodeID)).toList());
-        var nodeToID = new StringConverter<Node>() {
-            @Override
-            public String toString(Node node) {
-                if (node == null) return "";
-                var move = movesByNodeID.get(node.getNodeID()).getLongName();
-                if (move == null) return "";
-                return locationsByLongName.get(move).getLongName();
-            }
-
-            @Override
-            public Node fromString(String string) {
-                return nodes.get(moves.values().stream().filter(m -> Objects.equals(m.getLongName(), string)).findFirst().get().getNodeID());// nodesList.stream().filter(n -> n.getNodeID().toString().equals(string)).findFirst().orElse(null);
-            }
-        };
-        nodeStartCombo.setFilterFunction(s -> n -> nodeToID.toString(n).toLowerCase().contains(s.toLowerCase()));
-        nodeStartCombo.setItems(nodesList);
-        nodeStartCombo.setConverter(nodeToID);
-        nodeEndCombo.setItems(nodesList);
-        nodeEndCombo.setFilterFunction(s -> n -> nodeToID.toString(n).toLowerCase().contains(s.toLowerCase()));
-        nodeEndCombo.setConverter(nodeToID);
+    private void clearCanvas() {
+        floors.values().forEach(Floor::clearFloor);
     }
 
     @FXML
@@ -138,13 +129,10 @@ public class MapPageController {
         nodeStartCombo.setDisable(true);
         nodeEndCombo.setDisable(true);
         pathfindButton.setDisable(true);
-        nodes.values().forEach(n -> {
-            var pointOpt = drawCircle(n, "#FFFF00");
+        filteredNodes.forEach(n -> {
+            var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();
-            point.setRadius(10);
-            point.setStrokeWidth(2);
-            point.setStroke(Color.valueOf("#000000"));
             point.setOnMouseClicked(e -> {
                 point.setStroke(Color.valueOf("#00FFFF"));
                 var startSet = nodeStartCombo.getSelectedItem() != null;
@@ -160,31 +148,62 @@ public class MapPageController {
         });
     }
 
+    private void load() {
+        nodes = new NodeDaoImpl().getAll();
+        edges = new EdgeDaoImpl().getAll();
+        moves = new MoveDaoImpl().getAll();
+        locations = new LocationNameDaoImpl().getAll();
+
+        movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
+        locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
+        filteredNodes = FXCollections.observableArrayList(nodes.values().stream().filter(v -> {
+            var move = movesByNodeID.get(v.getNodeID());
+            if (move == null) return false;
+            var location = locationsByLongName.get(move.getLongName());
+            var locationType = location.getNodeType();
+            return locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
+        }).sorted(Comparator.comparing(Node::getNodeID)).toList());
+    }
+
     @FXML
-    private void clearCanvas() {
-        floors.values().forEach(Floor::clearFloor);
+    private void initialize() {
+        gesturePane.zoomTo(.1, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
+        gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.ALWAYS);
+
+        floors.values().forEach(Floor::init);
+
+        show(floors.get("1"));
+        setEditingNodes(false);
+        load();
+
+        nodeStartCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
+        nodeStartCombo.setItems(filteredNodes);
+        nodeStartCombo.setConverter(nodeToLocation);
+        nodeEndCombo.setItems(filteredNodes);
+        nodeEndCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
+        nodeEndCombo.setConverter(nodeToLocation);
     }
 
     @FXML
     private void editNodes() {
         if (App.getSingleton().getAccountType() != AccountType.ADMIN) return;
-        // disable the other features
-        pathfinding.setDisable(true);
-        editButton.setVisible(false);
-        editButton.setManaged(false);
+        setEditingNodes(true);
+        clearCanvas();
         var nodePoints = nodes.values().stream().map(n -> {
-            var pointOpt = drawCircle(n, "#FFFF00");
+            var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return new Pair<Long, javafx.scene.Node>(null, null);
             var point = pointOpt.get();
-            point.setRadius(10);
-            point.setStrokeWidth(2);
-            point.setStroke(Color.valueOf("#000000"));
+            point.setOnMouseClicked(e -> {
+                if (e.isSecondaryButtonDown()) {
+
+                }
+            });
             DragController dragController = new DragController(point, true);
             dragController.setScaleSupplier(gesturePane::getCurrentScale);
             dragController.setOnMove(node -> {
                 n.setXcoord((int) node.getLayoutX());
                 n.setYcoord((int) node.getLayoutY());
-                new NodeDaoImpl().update(n, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD});
+                editedNodes.add(n);
             });
             dragController.setOnEnd(node -> gesturePane.setGestureEnabled(true));
             dragController.setOnStart(node -> gesturePane.setGestureEnabled(false));
@@ -199,11 +218,48 @@ public class MapPageController {
     }
 
     @FXML
-    void doneEditingNodes() {
-        clearCanvas();
-        pathfinding.setDisable(false);
-        editButton.setVisible(true);
-        editButton.setManaged(true);
+    private void commitChanges() {
+        if (commiting.compareAndExchange(false, true)) return;
+        var totalEdited = editedNodes.size();
+        commitButton.setDisable(true);
+        doneEditingButton.setDisable(true);
+        commitProgress.setProgress(0);
+        AtomicInteger counter = new AtomicInteger(0);
+        var commitThread = new Thread(() -> {
+            editedNodes.parallelStream().forEach(n -> {
+                new NodeDaoImpl().update(n, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD});
+                Platform.runLater(() -> commitProgress.setProgress((double) counter.incrementAndGet() / totalEdited));
+            });
+            editedNodes.clear();
+            Platform.runLater(() -> {
+                commitButton.setDisable(false);
+                doneEditingButton.setDisable(false);
+            });
+            commiting.set(false);
+        });
+        commitThread.setDaemon(true);
+        commitThread.start();
+    }
+
+    @FXML
+    private void doneEditingNodes() {
+        setEditingNodes(false);
+    }
+
+    private void setEditingNodes(boolean editing) {
+        // if you are editing the map nodes
+        pathfinding.setDisable(editing);
+        doneEditingButton.setVisible(editing);
+        doneEditingButton.setManaged(editing);
+        commitButton.setManaged(editing);
+        commitButton.setVisible(editing);
+        commitProgress.setManaged(editing);
+        commitProgress.setVisible(editing);
+
+        // if you are done editing
+        if (!editing) clearCanvas();
+        editButton.setVisible(!editing);
+        editButton.setManaged(!editing);
     }
 
     @FXML
@@ -234,7 +290,7 @@ public class MapPageController {
         imgView.setLayoutY(node.getYcoord() - 80);
         imgView.setFitHeight(80);
         imgView.setFitWidth(80);
-        floor.canvas.getChildren().add(imgView);
+        floor.nodeCanvas.getChildren().add(imgView);
     }
 
     private void drawLine(Floor floor, List<Node> nodes) {
@@ -243,17 +299,45 @@ public class MapPageController {
         polyline.setStroke(Color.valueOf("#FF000099"));
         polyline.setStrokeWidth(10);
         polyline.getPoints().addAll(nodes.stream().flatMap(n -> Stream.of(n.getXcoord(), n.getYcoord())).map(Double::valueOf).toList());
-        floor.canvas.getChildren().add(0, polyline);
+        floor.lineCanvas.getChildren().add(0, polyline);
     }
 
-    private Optional<Circle> drawCircle(Node node, String color) {
+    private Optional<Circle> drawNode(Node node, String color) {
         var floor = floors.get(node.getFloor());
         if (floor == null) return Optional.empty();
         var circle = new Circle(0, 0, 15);
         circle.setLayoutX(node.getXcoord());
         circle.setLayoutY(node.getYcoord());
         circle.setFill(Color.valueOf(color));
-        floor.canvas.getChildren().add(circle);
+        circle.setRadius(10);
+        circle.setStrokeWidth(2);
+        circle.setStroke(Color.valueOf("#000000"));
+        var toolTip = new VBox();
+        var text = new Label(nodeToLocation.toString(node) + "\nNode ID: " + node.getNodeID().toString());
+        // tool tip text styling
+        text.setTextFill(Color.valueOf("#ffffff"));
+        text.setTextAlignment(TextAlignment.CENTER);
+        text.layout();
+        text.applyCss();
+        //tool tip styling
+        toolTip.getChildren().add(text);
+        toolTip.setPadding(new Insets(5));
+        toolTip.setAlignment(Pos.CENTER);
+        toolTip.setStyle("-fx-background-color: #000000aa; -fx-background-radius: 5");
+        toolTip.layoutXProperty().bind(circle.layoutXProperty());
+        toolTip.layoutYProperty().bind(circle.layoutYProperty());
+        toolTip.layout();
+        toolTip.boundsInParentProperty().addListener((v, o, n) -> {
+            toolTip.setTranslateY(-(n.getHeight() + 20));
+            toolTip.setTranslateX(-n.getWidth() / 2);
+        });
+
+        circle.setOnMouseEntered(e -> toolTip.setVisible(true));
+        circle.setOnMouseExited(e -> toolTip.setVisible(false));
+        toolTip.setVisible(false);
+
+        floor.nodeCanvas.getChildren().add(circle);
+        floor.tooltipCanvas.getChildren().add(toolTip);
         return Optional.of(circle);
     }
 
@@ -270,7 +354,7 @@ public class MapPageController {
         line.endYProperty().bind(endSceneNode.layoutYProperty());
         line.setFill(Color.valueOf("#000000"));
         line.setStrokeWidth(3);
-        startFloor.canvas.getChildren().add(0, line);
+        startFloor.lineCanvas.getChildren().add(0, line);
         return Optional.of(line);
     }
 
@@ -290,7 +374,7 @@ public class MapPageController {
         arrow.setLayoutX(-7.5);
         arrow.setLayoutY(-7.5);
         group.getChildren().addAll(box, arrow);
-        floor.canvas.getChildren().add(group);
+        floor.nodeCanvas.getChildren().add(group);
         new Bobbing(arrow).play();
         return group;
     }
@@ -311,7 +395,7 @@ public class MapPageController {
         try {
             var path = palgo.AStar(start, end).stream().toList();
             for (var floor : floors.values())
-                floor.canvas.getChildren().clear();
+                floor.clearFloor();
             String currentFloor = path.get(0).getFloor();
             List<Node> currentPath = new ArrayList<>();
             for (var node : path) {
@@ -327,7 +411,7 @@ public class MapPageController {
             }
             drawLine(floors.get(currentPath.get(0).getFloor()), currentPath);
             drawYouAreHere(path.get(0));
-            drawCircle(path.get(path.size() - 1), "#3cb043");
+            drawNode(path.get(path.size() - 1), "#3cb043");
             focusOn(path.get(0));
             return "";
         } catch (IllegalStateException e) {
@@ -342,20 +426,20 @@ public class MapPageController {
         final String identifier;
         MFXButton button = new MFXButton();
         Group root = new Group();
-        Group canvas = new Group();
+        Group lineCanvas = new Group();
+        Group nodeCanvas = new Group();
+        Group tooltipCanvas = new Group();
         ImageView imageView = new ImageView();
 
-        private static Image imageCache;
+        private Image imageCache;
 
         private void init() {
-            root.getChildren().addAll(imageView, canvas);
+            root.getChildren().addAll(imageView, lineCanvas, nodeCanvas, tooltipCanvas);
             button.setText(this.humanReadableName);
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> show(this));
             buttonContainer.getChildren().add(button);
             maps.getChildren().add(root);
             new Thread(this::loadImage).start();
-//            var scene = new Scene(root);
-//            maps.getChildren().add(scene.getRoot());
         }
 
         void loadImage() {
@@ -372,7 +456,9 @@ public class MapPageController {
         }
 
         void clearFloor() {
-            canvas.getChildren().clear();
+            lineCanvas.getChildren().clear();
+            tooltipCanvas.getChildren().clear();
+            nodeCanvas.getChildren().clear();
         }
     }
 }

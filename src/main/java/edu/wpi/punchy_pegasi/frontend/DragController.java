@@ -7,7 +7,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import lombok.Setter;
-import net.kurobako.gesturefx.GesturePane;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -54,7 +53,6 @@ public class DragController {
     private void createHandlers() {
         setAnchor = event -> {
             if (event.isPrimaryButtonDown()) {
-                cycleStatus = ACTIVE;
                 anchorX = event.getSceneX();
                 anchorY = event.getSceneY();
                 layoutX = target.getLayoutX();
@@ -62,26 +60,15 @@ public class DragController {
                 target.setCursor(Cursor.CLOSED_HAND);
                 if(onStart != null) onStart.accept(target);
             }
-            if (event.isSecondaryButtonDown()) {
-                cycleStatus = INACTIVE;
-                if(onEnd != null) onEnd.accept(target);
-                target.setLayoutX(layoutX);
-                target.setLayoutY(layoutY);
-                target.setCursor(Cursor.OPEN_HAND);
-            }
         };
         updatePositionOnDrag = event -> {
-            if (cycleStatus != INACTIVE) {
-                target.setLayoutX(layoutX + (event.getSceneX() - anchorX)/getScale());
-                target.setLayoutY(layoutY + (event.getSceneY() - anchorY)/getScale());
-            }
+            target.setLayoutX(layoutX + (event.getSceneX() - anchorX) / getScale());
+            target.setLayoutY(layoutY + (event.getSceneY() - anchorY) / getScale());
         };
         commitPositionOnRelease = event -> {
-            if (cycleStatus != INACTIVE) {
-                if(onEnd != null) onEnd.accept(target);
-                if(onMove != null) onMove.accept(target);
-                target.setCursor(Cursor.OPEN_HAND);
-            }
+            if (onEnd != null) onEnd.accept(target);
+            if (onMove != null) onMove.accept(target);
+            target.setCursor(Cursor.OPEN_HAND);
         };
     }
 
