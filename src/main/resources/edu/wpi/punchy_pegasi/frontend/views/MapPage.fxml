@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import net.kurobako.gesturefx.GesturePane?>
-<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
-<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Separator?>
 <BorderPane minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.MapPageController">
@@ -38,20 +37,23 @@
          <padding>
             <Insets topRightBottomLeft="10"/>
          </padding>
-<!--         <HBox>-->
+         <VBox alignment="CENTER" spacing="10" fx:id="pathfinding">
             <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity" />
-<!--         </HBox>-->
-         <HBox>
             <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo"  maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-         </HBox>
-         <HBox spacing="10" alignment="CENTER">
-            <padding>
-               <Insets topRightBottomLeft="5"/>
-            </padding>
-            <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"/>
-            <MFXButton text="Find path" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
-         </HBox>
-         <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+            <HBox spacing="10" alignment="CENTER">
+               <padding>
+                  <Insets topRightBottomLeft="5"/>
+               </padding>
+               <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"/>
+               <MFXButton text="Find path" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+            </HBox>
+            <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+         </VBox>
+         <Separator/>
+         <VBox alignment="CENTER" spacing="10" fx:id="editing">
+            <MFXButton text="Edit Node Locations" onMouseClicked="#editNodes" fx:id="editButton"/>
+            <MFXButton text="Done Editing Nodes" onMouseClicked="#doneEditingNodes" fx:id="doneEditingButton"/>
+         </VBox>
       </VBox>
    </left>
    <top>

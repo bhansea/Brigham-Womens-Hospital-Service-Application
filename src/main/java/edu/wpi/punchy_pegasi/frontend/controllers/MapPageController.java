@@ -28,8 +28,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -45,7 +47,21 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class MapPageController {
-    private static Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
+    private static final Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
+    private final Map<String, Floor> floors = new LinkedHashMap<>() {{
+        put("00", new Floor("frontend/assets/map/00_thegroundfloor.png", "Ground Floor", "00"));
+        put("L1", new Floor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
+        put("L2", new Floor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
+        put("1", new Floor("frontend/assets/map/01_thefirstfloor.png", "First Floor", "1"));
+        put("2", new Floor("frontend/assets/map/02_thesecondfloor.png", "Second Floor", "2"));
+        put("3", new Floor("frontend/assets/map/03_thethirdfloor.png", "Third Floor", "3"));
+    }};
+    @FXML
+    private MFXButton doneEditingButton;
+    @FXML
+    private MFXButton editButton;
+    @FXML
+    private VBox pathfinding;
     @FXML
     private HBox buttonContainer;
     @FXML
@@ -58,14 +74,8 @@ public class MapPageController {
     private MFXButton pathfindButton;
     @FXML
     GesturePane gesturePane;
-    private Map<String, Floor> floors = new LinkedHashMap<>() {{
-        put("00", new Floor("frontend/assets/map/00_thegroundfloor.png", "Ground Floor", "00"));
-        put("L1", new Floor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
-        put("L2", new Floor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
-        put("1", new Floor("frontend/assets/map/01_thefirstfloor.png", "First Floor", "1"));
-        put("2", new Floor("frontend/assets/map/02_thesecondfloor.png", "Second Floor", "2"));
-        put("3", new Floor("frontend/assets/map/03_thethirdfloor.png", "Third Floor", "3"));
-    }};
+    @FXML
+    private VBox editing;
     private Floor currentFloor;
 
     private Map<Long, Node> nodes;
@@ -82,7 +92,7 @@ public class MapPageController {
 
         floors.values().forEach(Floor::init);
 
-        show(floors.values().stream().toList().get(0));
+        show(floors.get("1"));
         nodes = new NodeDaoImpl().getAll();
         edges = new EdgeDaoImpl().getAll();
         moves = new MoveDaoImpl().getAll();
@@ -97,9 +107,7 @@ public class MapPageController {
             if (move == null) return false;
             var location = locationsByLongName.get(move.getLongName());
             var locationType = location.getNodeType();
-            if (locationType == LocationName.NodeType.HALL || locationType == LocationName.NodeType.STAI || locationType == LocationName.NodeType.ELEV)
-                return false;
-            return true;
+            return locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
         }).sorted(Comparator.comparing(Node::getNodeID)).toList());
         var nodeToID = new StringConverter<Node>() {
             @Override
@@ -112,7 +120,7 @@ public class MapPageController {
 
             @Override
             public Node fromString(String string) {
-                return nodes.get(moves.values().stream().filter(m -> m.getLongName() == string).findFirst().get().getNodeID());// nodesList.stream().filter(n -> n.getNodeID().toString().equals(string)).findFirst().orElse(null);
+                return nodes.get(moves.values().stream().filter(m -> Objects.equals(m.getLongName(), string)).findFirst().get().getNodeID());// nodesList.stream().filter(n -> n.getNodeID().toString().equals(string)).findFirst().orElse(null);
             }
         };
         nodeStartCombo.setFilterFunction(s -> n -> nodeToID.toString(n).toLowerCase().contains(s.toLowerCase()));
@@ -131,7 +139,9 @@ public class MapPageController {
         nodeEndCombo.setDisable(true);
         pathfindButton.setDisable(true);
         nodes.values().forEach(n -> {
-            var point = drawCircle(n, "#FFFF00");
+            var pointOpt = drawCircle(n, "#FFFF00");
+            if (pointOpt.isEmpty()) return;
+            var point = pointOpt.get();
             point.setRadius(10);
             point.setStrokeWidth(2);
             point.setStroke(Color.valueOf("#000000"));
@@ -158,13 +168,41 @@ public class MapPageController {
     @FXML
     private void editNodes() {
         if (App.getSingleton().getAccountType() != AccountType.ADMIN) return;
-        nodes.values().forEach(n -> {
-            var point = drawCircle(n, "#FFFF00");
+        // disable the other features
+        pathfinding.setDisable(true);
+        editButton.setVisible(false);
+        editButton.setManaged(false);
+        var nodePoints = nodes.values().stream().map(n -> {
+            var pointOpt = drawCircle(n, "#FFFF00");
+            if (pointOpt.isEmpty()) return new Pair<Long, javafx.scene.Node>(null, null);
+            var point = pointOpt.get();
             point.setRadius(10);
             point.setStrokeWidth(2);
             point.setStroke(Color.valueOf("#000000"));
             DragController dragController = new DragController(point, true);
+            dragController.setScaleSupplier(gesturePane::getCurrentScale);
+            dragController.setOnMove(node -> {
+                n.setXcoord((int) node.getLayoutX());
+                n.setYcoord((int) node.getLayoutY());
+                new NodeDaoImpl().update(n, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD});
+            });
+            dragController.setOnEnd(node -> gesturePane.setGestureEnabled(true));
+            dragController.setOnStart(node -> gesturePane.setGestureEnabled(false));
+            return new Pair<Long, javafx.scene.Node>(n.getNodeID(), point);
+        }).collect(Collectors.toMap(Pair::getValue0, Pair::getValue1));
+        edges.values().forEach(e -> {
+            var startNode = nodes.get(e.getStartNode());
+            var endNode = nodes.get(e.getEndNode());
+            if (startNode == null || endNode == null) return;
+            drawEdge(startNode, endNode, nodePoints.get(startNode.getNodeID()), nodePoints.get(endNode.getNodeID()));
         });
+    }
+
+    @FXML
+    void doneEditingNodes() {
+        pathfinding.setDisable(false);
+        editButton.setVisible(true);
+        editButton.setManaged(true);
     }
 
     @FXML
@@ -207,13 +245,32 @@ public class MapPageController {
         floor.canvas.getChildren().add(0, polyline);
     }
 
-    private Circle drawCircle(Node node, String color) {
+    private Optional<Circle> drawCircle(Node node, String color) {
         var floor = floors.get(node.getFloor());
-        if (floor == null) return null;
-        var circle = new Circle(node.getXcoord(), node.getYcoord(), 15);
+        if (floor == null) return Optional.empty();
+        var circle = new Circle(0, 0, 15);
+        circle.setLayoutX(node.getXcoord());
+        circle.setLayoutY(node.getYcoord());
         circle.setFill(Color.valueOf(color));
         floor.canvas.getChildren().add(circle);
-        return circle;
+        return Optional.of(circle);
+    }
+
+    private Optional<Line> drawEdge(Node startNode, Node endNode, javafx.scene.Node startSceneNode, javafx.scene.Node endSceneNode) {
+        if (startNode == null || endNode == null || startSceneNode == null || endSceneNode == null)
+            return Optional.empty();
+        var startFloor = floors.get(startNode.getFloor());
+        var endFloor = floors.get(endNode.getFloor());
+        if (startFloor == null || startFloor != endFloor) return Optional.empty();
+        var line = new Line();
+        line.startXProperty().bind(startSceneNode.layoutXProperty());
+        line.startYProperty().bind(startSceneNode.layoutYProperty());
+        line.endXProperty().bind(endSceneNode.layoutXProperty());
+        line.endYProperty().bind(endSceneNode.layoutYProperty());
+        line.setFill(Color.valueOf("#000000"));
+        line.setStrokeWidth(3);
+        startFloor.canvas.getChildren().add(0, line);
+        return Optional.of(line);
     }
 
     private javafx.scene.Node drawArrow(Node node, boolean up) {
@@ -296,6 +353,8 @@ public class MapPageController {
             buttonContainer.getChildren().add(button);
             maps.getChildren().add(root);
             new Thread(this::loadImage).start();
+//            var scene = new Scene(root);
+//            maps.getChildren().add(scene.getRoot());
         }
 
         void loadImage() {
