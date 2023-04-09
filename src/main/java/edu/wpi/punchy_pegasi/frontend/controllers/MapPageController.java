@@ -200,6 +200,7 @@ public class MapPageController {
 
     @FXML
     void doneEditingNodes() {
+        clearCanvas();
         pathfinding.setDisable(false);
         editButton.setVisible(true);
         editButton.setManaged(true);
