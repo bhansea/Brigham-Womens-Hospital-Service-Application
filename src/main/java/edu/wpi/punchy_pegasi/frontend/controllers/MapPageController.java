@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import animatefx.animation.Bounce;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.CartesianHeuristic;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
@@ -59,7 +58,7 @@ public class MapPageController {
     private MFXButton pathfindButton;
     @FXML
     GesturePane gesturePane;
-    private Map<String, Floor> floors = new HashMap<>() {{
+    private Map<String, Floor> floors = new LinkedHashMap<>() {{
         put("00", new Floor("frontend/assets/map/00_thegroundfloor.png", "Ground Floor", "00"));
         put("L1", new Floor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
         put("L2", new Floor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
@@ -303,11 +302,13 @@ public class MapPageController {
             Image image;
             if (imageCache != null) image = imageCache;
             else imageCache = image = new Image(Objects.requireNonNull(App.class.getResourceAsStream(path)));
-            imageView.imageProperty().set(image);
-            imageView.setFitHeight(image.getHeight());
-            imageView.setFitWidth(image.getWidth());
-            gesturePane.setFitMode(GesturePane.FitMode.CENTER);
-            gesturePane.zoomTo(.3, new Point2D(image.getWidth() / 2, image.getHeight() / 2));
+            Platform.runLater(() -> {
+                imageView.imageProperty().set(image);
+                imageView.setFitHeight(image.getHeight());
+                imageView.setFitWidth(image.getWidth());
+                gesturePane.setFitMode(GesturePane.FitMode.CENTER);
+                gesturePane.zoomTo(.3, new Point2D(image.getWidth() / 2, image.getHeight() / 2));
+            });
         }
 
         void clearFloor() {
