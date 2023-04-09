@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 import lombok.Data;
 
 @Data
@@ -28,13 +24,13 @@ public class LocationName {
         SERV,
         BATH
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         UUID("uuid"),
         LONG_NAME("longName"),
         SHORT_NAME("shortName"),
         NODE_TYPE("nodeType");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref){
             return ref.getFromField(this);

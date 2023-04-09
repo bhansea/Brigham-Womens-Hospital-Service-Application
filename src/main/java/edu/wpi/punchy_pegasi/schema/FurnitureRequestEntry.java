@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +19,7 @@ public class FurnitureRequestEntry extends RequestEntry {
         this.selectFurniture = selectFurniture;
     }
 
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
@@ -31,7 +27,7 @@ public class FurnitureRequestEntry extends RequestEntry {
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
         SELECT_FURNITURE("selectFurniture");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref){
             return ref.getFromField(this);
