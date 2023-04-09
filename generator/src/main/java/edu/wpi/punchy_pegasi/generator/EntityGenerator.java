@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.generator;
 
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
-import org.intellij.lang.annotations.Language;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -22,7 +21,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class DaoImplGenerator {
+public class EntityGenerator {
 
     /**
      * Returns a list containing one parameter name for each argument accepted
@@ -171,7 +170,7 @@ public class DaoImplGenerator {
         var tableName = "teamp." + tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
         var classFields = getFieldsRecursively(clazz);
-        var idField = classFields.stream().filter(DaoImplGenerator::fieldIsID).findFirst().get();
+        var idField = classFields.stream().filter(EntityGenerator::fieldIsID).findFirst().get();
         var tableColumns = classFields.stream().map(f -> {
             var appendText = fieldIsID(f) ?
                     f.getType() == Long.class ?
@@ -260,7 +259,7 @@ public class DaoImplGenerator {
         var classFieldsText = classFields.stream().map(Field::getName).toList();
         var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
 
-        var idFields = classFields.stream().filter(DaoImplGenerator::fieldIsID).toList(); // locate id field with @SchemaID
+        var idFields = classFields.stream().filter(EntityGenerator::fieldIsID).toList(); // locate id field with @SchemaID
         if (idFields.size() < 1) {
             // check if no id annotation (@SchemaID) is present
             System.err.println("No id field found for " + clazz.getCanonicalName());
