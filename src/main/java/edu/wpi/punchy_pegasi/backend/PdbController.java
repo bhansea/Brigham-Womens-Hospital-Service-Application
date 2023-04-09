@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -147,7 +148,27 @@ public class PdbController {
             var statement = connection.createStatement();
             var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
             query += getFieldValueString(field, value, "=", " AND ");
+            query += ";";
             return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            log.error("Failed to delete node", e);
+            throw new DatabaseException("SQL error");
+        }
+    }
+    public String getDeleteQuery(TableType tableType, String[] field, Object[] value) throws DatabaseException {
+        if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
+        var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
+        query += getFieldValueString(field, value, "=", " AND ");
+        query += ";";
+        return query;
+    }
+
+    public int[] executeDeletes(List<String> deleteQueries) throws DatabaseException {
+        try {
+            var statement = connection.createStatement();
+            for(var query : deleteQueries)
+                statement.addBatch(query);
+            return statement.executeBatch();
         } catch (SQLException e) {
             log.error("Failed to delete node", e);
             throw new DatabaseException("SQL error");
