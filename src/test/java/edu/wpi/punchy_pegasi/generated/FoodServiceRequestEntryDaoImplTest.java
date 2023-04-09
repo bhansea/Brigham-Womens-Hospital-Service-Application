@@ -20,9 +20,9 @@ class FoodServiceRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init() {
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new FoodServiceRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FOODREQUESTS);

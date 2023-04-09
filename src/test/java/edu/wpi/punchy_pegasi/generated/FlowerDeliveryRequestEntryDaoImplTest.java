@@ -25,9 +25,9 @@ class FlowerDeliveryRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FLOWERREQUESTS);

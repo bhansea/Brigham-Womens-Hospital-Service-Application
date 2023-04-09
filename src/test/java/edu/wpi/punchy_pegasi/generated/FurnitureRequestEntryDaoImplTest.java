@@ -19,9 +19,9 @@ class FurnitureRequestEntryDaoImplTest {
     static String[] fields;
 
     @BeforeAll
-    static void init(){
+    static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
-        pdbController = new PdbController("jdbc:postgresql://database.cs.wpi.edu:5432/teampdb", "teamp", "teamp130");
+        pdbController = new PdbController(Config.source);
         dao = new FurnitureRequestEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.FURNITUREREQUESTS);
