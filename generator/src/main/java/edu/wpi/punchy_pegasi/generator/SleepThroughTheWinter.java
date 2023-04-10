@@ -377,7 +377,7 @@ public class SleepThroughTheWinter {
                             .append(fcnHeader)
                             .append("{\n")
                             .append(String.format("""
-                                           \t\t%1$s %2$s = new %1$s();
+                                           \t\t%1$s %2$s = new %1$s(dbController);
                                            \t}
                                            """, ClassName+"DaoImpl", className+"Dao"
                             ));
