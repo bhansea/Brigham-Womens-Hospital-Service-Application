@@ -61,7 +61,7 @@ public class SplashController {
         if (onConnection == null) return false;
         var thread = new Thread(() -> {
             try {
-                PdbController.Source source = PdbController.Source.Wong;
+                PdbController.Source source = PdbController.Source.Blake;
                 while (!attemptDataBaseConnection(source)) {
                     source = null;
                     while (source == null) {

@@ -16,7 +16,18 @@ public class Node implements INode {
 
     @Override
     public String getId() {
-        return null;
+        return nodeID.toString();
+    }
+
+    public int getFloorNum() {
+        return switch (floor) {
+            case "L1" -> 1;
+            case "L2" -> 2;
+            case "1" -> 3;
+            case "2" -> 4;
+            case "3" -> 5;
+            default -> -1;
+        };
     }
     @lombok.RequiredArgsConstructor
     public enum Field {

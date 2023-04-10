@@ -37,11 +37,6 @@ public class AdminPageController {
     @FXML MFXTableView<LocationName> locationTable;
     @FXML MFXTableView<Edge> edgeTable;
     @FXML MFXTableView<Move> moveTable;
-    @FXML Button flowerButton;
-    @FXML Button foodButton;
-    @FXML Button furnitureButton;
-    @FXML Button officeButton;
-    @FXML Button conferenceButton;
     @FXML MFXTableView<ConferenceRoomEntry> conferenceRoomServiceRequestTable;
     @FXML MFXTableView<OfficeServiceRequestEntry> officeServiceRequestTable;
     @FXML MFXTableView<FurnitureRequestEntry> furnitureServiceRequestTable;
@@ -86,8 +81,7 @@ public class AdminPageController {
                 ("Flower", "Food", "Furniture", "Conference Room Reservation", "Office Supplies", "Node", "Edge", "Moves", "Location Names");
         displayTableTypeComboBox.setItems(displayTableTypeList);
 
-        //initTables();
-        // Table View stuff
+        initTables();
 
         displayButton.setOnAction(e -> {
             if (displayTableTypeComboBox.getSelectedItem().equals("Flower")) {
@@ -110,10 +104,6 @@ public class AdminPageController {
                 showLocationTable();
             }
         });
-
-
-
-
 
         importButton.setOnAction(e -> {
 
@@ -425,199 +415,124 @@ public class AdminPageController {
         locationTable.setManaged(true);
     }
 
+    public void initFlowerTable() {
+        FlowerDeliveryRequestEntryDaoImpl flowerDaoImpl = new FlowerDeliveryRequestEntryDaoImpl();
+        ObservableList<FlowerDeliveryRequestEntry> flowerList = FXCollections.observableArrayList(flowerDaoImpl.getAll().values());
 
+        for (FlowerDeliveryRequestEntry.Field field: FlowerDeliveryRequestEntry.Field.values()) {
+            MFXTableColumn<FlowerDeliveryRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(FlowerDeliveryRequestEntry::getServiceID));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            flowerServiceRequestTable.getTableColumns().add(col);
+        }
+        flowerServiceRequestTable.setItems(flowerList);
+    }
+
+    public void initFoodTable() {
+        FoodServiceRequestEntryDaoImpl foodDaoImpl = new FoodServiceRequestEntryDaoImpl();
+        ObservableList<FoodServiceRequestEntry> foodList = FXCollections.observableArrayList(foodDaoImpl.getAll().values());
+
+        for (FoodServiceRequestEntry.Field field: FoodServiceRequestEntry.Field.values()) {
+            MFXTableColumn<FoodServiceRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(FoodServiceRequestEntry::getServiceID));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            foodServiceRequestTable.getTableColumns().add(col);
+        }
+        foodServiceRequestTable.setItems(foodList);
+    }
+
+    public void initConferenceTable() {
+        ConferenceRoomEntryDaoImpl conferenceDaoImpl = new ConferenceRoomEntryDaoImpl();
+        ObservableList<ConferenceRoomEntry> conferenceList = FXCollections.observableArrayList(conferenceDaoImpl.getAll().values());
+
+        for (ConferenceRoomEntry.Field field: ConferenceRoomEntry.Field.values()) {
+            MFXTableColumn<ConferenceRoomEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(ConferenceRoomEntry::getServiceID));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            conferenceRoomServiceRequestTable.getTableColumns().add(col);
+        }
+        conferenceRoomServiceRequestTable.setItems(conferenceList);
+    }
+
+    public void initOfficeSuppliesTable() {
+        OfficeServiceRequestEntryDaoImpl officeDaoImpl = new OfficeServiceRequestEntryDaoImpl();
+        ObservableList<OfficeServiceRequestEntry> officeList = FXCollections.observableArrayList(officeDaoImpl.getAll().values());
+
+        for (OfficeServiceRequestEntry.Field field: OfficeServiceRequestEntry.Field.values()) {
+            MFXTableColumn<OfficeServiceRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(OfficeServiceRequestEntry::getServiceID));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            officeServiceRequestTable.getTableColumns().add(col);
+        }
+        officeServiceRequestTable.setItems(officeList);
+    }
+
+    public void initFurnitureTable() {
+        FurnitureRequestEntryDaoImpl furnitureDaoImpl = new FurnitureRequestEntryDaoImpl();
+        ObservableList<FurnitureRequestEntry> furnitureList = FXCollections.observableArrayList(furnitureDaoImpl.getAll().values());
+
+        for (FurnitureRequestEntry.Field field: FurnitureRequestEntry.Field.values()) {
+            MFXTableColumn<FurnitureRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(FurnitureRequestEntry::getServiceID));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            furnitureServiceRequestTable.getTableColumns().add(col);
+        }
+        furnitureServiceRequestTable.setItems(furnitureList);
+    }
+
+    public void initNodeTable() {
+        NodeDaoImpl nodeDaoImpl = new NodeDaoImpl();
+        ObservableList<Node> nodeList = FXCollections.observableArrayList(nodeDaoImpl.getAll().values());
+
+        for (Node.Field field: Node.Field.values()) {
+            MFXTableColumn<Node> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(Node::getNodeID));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            nodeTable.getTableColumns().add(col);
+        }
+        nodeTable.setItems(nodeList);
+    }
+
+    public void initEdgeTable() {
+        EdgeDaoImpl edgeDaoImpl = new EdgeDaoImpl();
+        ObservableList<Edge> edgeList = FXCollections.observableArrayList(edgeDaoImpl.getAll().values());
+
+        for (Edge.Field field: Edge.Field.values()) {
+            MFXTableColumn<Edge> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(Edge::getUuid));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            edgeTable.getTableColumns().add(col);
+        }
+        edgeTable.setItems(edgeList);
+    }
+
+    public void initMoveTable() {
+        MoveDaoImpl moveDaoImpl = new MoveDaoImpl();
+        ObservableList<Move> moveList = FXCollections.observableArrayList(moveDaoImpl.getAll().values());
+
+        for (Move.Field field: Move.Field.values()) {
+            MFXTableColumn<Move> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(Move::getUuid));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            moveTable.getTableColumns().add(col);
+        }
+        moveTable.setItems(moveList);
+    }
+
+    public void initLocationTable() {
+        LocationNameDaoImpl locationDaoImpl = new LocationNameDaoImpl();
+        ObservableList<LocationName> locationList = FXCollections.observableArrayList(locationDaoImpl.getAll().values());
+
+        for (LocationName.Field field: LocationName.Field.values()) {
+            MFXTableColumn<LocationName> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(LocationName::getUuid));
+            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
+            locationTable.getTableColumns().add(col);
+        }
+        locationTable.setItems(locationList);
+    }
     public void initTables() {
 
-        FlowerDeliveryRequestEntryDaoImpl flowerDaoImp = new FlowerDeliveryRequestEntryDaoImpl();
-
-        ObservableList<FlowerDeliveryRequestEntry> flowerList = FXCollections.observableArrayList(flowerDaoImp.getAll().values());
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerServiceCol = new MFXTableColumn<>("Service ID", true, Comparator.comparing(FlowerDeliveryRequestEntry::getServiceID));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerPatientNameCol = new MFXTableColumn<>("Patient Name", true, Comparator.comparing(FlowerDeliveryRequestEntry::getPatientName));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerRoomNumberCol = new MFXTableColumn<>("Room Number", true, Comparator.comparing(FlowerDeliveryRequestEntry::getRoomNumber));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(FlowerDeliveryRequestEntry::getStaffAssignment));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(FlowerDeliveryRequestEntry::getStatus));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerSizeCol = new MFXTableColumn<>("Flower Size", true, Comparator.comparing(FlowerDeliveryRequestEntry::getFlowerSize));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerAmountCol = new MFXTableColumn<>("Flower Amount", true, Comparator.comparing(FlowerDeliveryRequestEntry::getFlowerAmount));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerTypeCol = new MFXTableColumn<>("Flower Type", true, Comparator.comparing(FlowerDeliveryRequestEntry::getFlowerType));
-        MFXTableColumn<FlowerDeliveryRequestEntry> flowerAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(FlowerDeliveryRequestEntry::getAdditionalNotes));
-
-
-        flowerStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getServiceID));
-        flowerPatientNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getPatientName));
-        flowerRoomNumberCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getRoomNumber));
-        flowerStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getStaffAssignment));
-        flowerStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getStatus));
-        flowerSizeCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getFlowerSize));
-        flowerAmountCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getFlowerAmount));
-        flowerTypeCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getFlowerType));
-        flowerAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(FlowerDeliveryRequestEntry::getAdditionalNotes));
-
-        flowerServiceRequestTable.setItems(flowerList);
-        flowerServiceRequestTable.getTableColumns().addAll(flowerServiceCol, flowerPatientNameCol, flowerRoomNumberCol, flowerStaffAssignCol, flowerStatusCol, flowerAmountCol, flowerTypeCol, flowerAdditionalNotesCol);
-
-        FoodServiceRequestEntryDaoImpl foodDaoImpl = new FoodServiceRequestEntryDaoImpl();
-
-        ObservableList<FoodServiceRequestEntry> foodList = FXCollections.observableArrayList(foodDaoImpl.getAll().values());
-        MFXTableColumn<FoodServiceRequestEntry> foodServiceCol = new MFXTableColumn<>("Service ID", true, Comparator.comparing(FoodServiceRequestEntry::getServiceID));
-        MFXTableColumn<FoodServiceRequestEntry> foodPatientNameCol = new MFXTableColumn<>("Patient Name", true, Comparator.comparing(FoodServiceRequestEntry::getPatientName));
-        MFXTableColumn<FoodServiceRequestEntry> foodRoomNumberCol = new MFXTableColumn<>("Room Number", true, Comparator.comparing(FoodServiceRequestEntry::getRoomNumber));
-        MFXTableColumn<FoodServiceRequestEntry> foodStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(FoodServiceRequestEntry::getStaffAssignment));
-        MFXTableColumn<FoodServiceRequestEntry> foodStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(FoodServiceRequestEntry::getStatus));
-        MFXTableColumn<FoodServiceRequestEntry> foodSelectionCol = new MFXTableColumn<>("Food Selection", true, Comparator.comparing(FoodServiceRequestEntry::getFoodSelection));
-        MFXTableColumn<FoodServiceRequestEntry> foodTempCol = new MFXTableColumn<>("Food Temperature", true, Comparator.comparing(FoodServiceRequestEntry::getTempType));
-        MFXTableColumn<FoodServiceRequestEntry> additionalItemsCol = new MFXTableColumn<>("Additional Items", true, null);
-        MFXTableColumn<FoodServiceRequestEntry> foodRestrictionCol = new MFXTableColumn<>("Food Restriction", true, Comparator.comparing(FoodServiceRequestEntry::getDietaryRestrictions));
-        MFXTableColumn<FoodServiceRequestEntry> foodAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(FoodServiceRequestEntry::getAdditionalNotes));
-
-
-        foodServiceCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getServiceID));
-        foodPatientNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getPatientName));
-        foodRoomNumberCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getRoomNumber));
-        foodStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getStaffAssignment));
-        foodStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getStatus));
-        foodSelectionCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getFoodSelection));
-        foodTempCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getTempType));
-        additionalItemsCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getAdditionalItems));
-        foodRestrictionCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getDietaryRestrictions));
-        foodAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(FoodServiceRequestEntry::getAdditionalNotes));
-
-        foodServiceRequestTable.setItems(foodList);
-        foodServiceRequestTable.getTableColumns().addAll(foodServiceCol, foodPatientNameCol, foodRoomNumberCol, foodStaffAssignCol, foodStatusCol, foodSelectionCol, foodTempCol,foodRestrictionCol ,foodAdditionalNotesCol);
-
-        ConferenceRoomEntryDaoImpl conferenceDaoImpl = new ConferenceRoomEntryDaoImpl();
-
-        ObservableList<ConferenceRoomEntry> conferenceList = FXCollections.observableArrayList(conferenceDaoImpl.getAll().values());
-        MFXTableColumn<ConferenceRoomEntry> conferenceServiceCol = new MFXTableColumn<>("Service ID", true, Comparator.comparing(ConferenceRoomEntry::getServiceID));
-        MFXTableColumn<ConferenceRoomEntry> conferenceRoomNumberCol = new MFXTableColumn<>("Room Number", true, Comparator.comparing(ConferenceRoomEntry::getRoomNumber));
-        MFXTableColumn<ConferenceRoomEntry> conferenceStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(ConferenceRoomEntry::getStaffAssignment));
-        MFXTableColumn<ConferenceRoomEntry> conferenceStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(ConferenceRoomEntry::getStatus));
-        MFXTableColumn<ConferenceRoomEntry> beginTimeCol = new MFXTableColumn<>("Beginning Time", true, Comparator.comparing(ConferenceRoomEntry::getBeginningTime));
-        MFXTableColumn<ConferenceRoomEntry> endTimeCol = new MFXTableColumn<>("Ending Time", true, Comparator.comparing(ConferenceRoomEntry::getEndTime));
-        MFXTableColumn<ConferenceRoomEntry> conferenceAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(ConferenceRoomEntry::getAdditionalNotes));
-
-
-        conferenceServiceCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getServiceID));
-        conferenceRoomNumberCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getRoomNumber));
-        conferenceStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getStaffAssignment));
-        conferenceStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getStatus));
-        beginTimeCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getBeginningTime));
-        endTimeCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getEndTime));
-        conferenceAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(ConferenceRoomEntry::getAdditionalNotes));
-
-        conferenceRoomServiceRequestTable.setItems(conferenceList);
-        conferenceRoomServiceRequestTable.getTableColumns().addAll(conferenceServiceCol, conferenceRoomNumberCol, conferenceStaffAssignCol, conferenceStatusCol, beginTimeCol, endTimeCol ,conferenceAdditionalNotesCol);
-
-        FurnitureRequestEntryDaoImpl furnitureDaoImpl = new FurnitureRequestEntryDaoImpl();
-
-        ObservableList<FurnitureRequestEntry> furnitureList = FXCollections.observableArrayList(furnitureDaoImpl.getAll().values());
-        MFXTableColumn<FurnitureRequestEntry> furnitureServiceCol = new MFXTableColumn<>("Service ID", true, Comparator.comparing(FurnitureRequestEntry::getServiceID));
-        MFXTableColumn<FurnitureRequestEntry> furnitureRoomNumberCol = new MFXTableColumn<>("Room Number", true, Comparator.comparing(FurnitureRequestEntry::getRoomNumber));
-        MFXTableColumn<FurnitureRequestEntry> furnitureStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(FurnitureRequestEntry::getStaffAssignment));
-        MFXTableColumn<FurnitureRequestEntry> furnitureStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(FurnitureRequestEntry::getStatus));
-        MFXTableColumn<FurnitureRequestEntry> furnitureSelCol = new MFXTableColumn<>("Furniture Selection", true, null);
-        MFXTableColumn<FurnitureRequestEntry> furnitureAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(FurnitureRequestEntry::getAdditionalNotes));
-
-
-        furnitureServiceCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getServiceID));
-        furnitureRoomNumberCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getRoomNumber));
-        furnitureStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getStaffAssignment));
-        furnitureStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getStatus));
-        furnitureSelCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getSelectFurniture));
-        furnitureAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(FurnitureRequestEntry::getAdditionalNotes));
-
-        furnitureServiceRequestTable.setItems(furnitureList);
-        furnitureServiceRequestTable.getTableColumns().addAll(furnitureServiceCol, furnitureRoomNumberCol, furnitureStaffAssignCol, furnitureStatusCol ,furnitureAdditionalNotesCol);
-
-
-        OfficeServiceRequestEntryDaoImpl officeDaoImpl = new OfficeServiceRequestEntryDaoImpl();
-
-        ObservableList<OfficeServiceRequestEntry> officeList = FXCollections.observableArrayList(officeDaoImpl.getAll().values());
-        MFXTableColumn<OfficeServiceRequestEntry> officeServiceCol = new MFXTableColumn<>("Service ID", true, Comparator.comparing(OfficeServiceRequestEntry::getServiceID));
-        MFXTableColumn<OfficeServiceRequestEntry> officeRoomNumberCol = new MFXTableColumn<>("Room Number", true, Comparator.comparing(OfficeServiceRequestEntry::getRoomNumber));
-        MFXTableColumn<OfficeServiceRequestEntry> officeStaffAssignCol = new MFXTableColumn<>("Staff Assignment", true, Comparator.comparing(OfficeServiceRequestEntry::getStaffAssignment));
-        MFXTableColumn<OfficeServiceRequestEntry> officeStatusCol = new MFXTableColumn<>("Status", true, Comparator.comparing(OfficeServiceRequestEntry::getStatus));
-        MFXTableColumn<OfficeServiceRequestEntry> officeReqCol = new MFXTableColumn<>("Office Supplies", true, Comparator.comparing(OfficeServiceRequestEntry::getOfficeRequest));
-        MFXTableColumn<OfficeServiceRequestEntry> officeEmployeeOrderCol = new MFXTableColumn<>("Employee Order Name", true, Comparator.comparing(OfficeServiceRequestEntry::getEmployeeName));
-        MFXTableColumn<OfficeServiceRequestEntry> officeAdditionalNotesCol = new MFXTableColumn<>("Additional Notes", true, Comparator.comparing(OfficeServiceRequestEntry::getAdditionalNotes));
-
-
-        officeServiceCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getServiceID));
-        officeRoomNumberCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getRoomNumber));
-        officeStaffAssignCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getStaffAssignment));
-        officeStatusCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getStatus));
-        officeReqCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getOfficeRequest));
-        officeEmployeeOrderCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getEmployeeName));
-        officeAdditionalNotesCol.setRowCellFactory(p -> new MFXTableRowCell<>(OfficeServiceRequestEntry::getAdditionalNotes));
-
-        officeServiceRequestTable.setItems(officeList);
-        officeServiceRequestTable.getTableColumns().addAll(officeServiceCol, officeRoomNumberCol, officeStaffAssignCol, officeStatusCol, officeReqCol, officeEmployeeOrderCol, officeAdditionalNotesCol);
-
-        // Back end Tables
-
-        NodeDaoImpl nodeDaoImpl = new NodeDaoImpl();
-
-        ObservableList<Node> nodeList = FXCollections.observableArrayList(nodeDaoImpl.getAll().values());
-        MFXTableColumn<Node> nodeIdCol = new MFXTableColumn<>("Node ID", true, Comparator.comparing(Node::getNodeID));
-        MFXTableColumn<Node> xcoordCol = new MFXTableColumn<>("X Cord", true, Comparator.comparing(Node::getXcoord));
-        MFXTableColumn<Node> ycoordCol = new MFXTableColumn<>("Y Cord", true, Comparator.comparing(Node::getYcoord));
-        MFXTableColumn<Node> floorCol = new MFXTableColumn<>("Floor", true, Comparator.comparing(Node::getFloor));
-        MFXTableColumn<Node> buildingCol = new MFXTableColumn<>("Building", true, Comparator.comparing(Node::getBuilding));
-
-
-        nodeIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getNodeID));
-        xcoordCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getXcoord));
-        ycoordCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getYcoord));
-        floorCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getFloor));
-        buildingCol.setRowCellFactory(p -> new MFXTableRowCell<>(Node::getBuilding));
-
-        nodeTable.setItems(nodeList);
-        nodeTable.getTableColumns().addAll(nodeIdCol, xcoordCol, ycoordCol, floorCol, buildingCol);
-
-
-        EdgeDaoImpl edgeDaoImpl = new EdgeDaoImpl();
-
-        ObservableList<Edge> edgeList = FXCollections.observableArrayList(edgeDaoImpl.getAll().values());
-        MFXTableColumn<Edge> edgeIdCol = new MFXTableColumn<>("Edge ID", true, Comparator.comparing(Edge::getUuid));
-        MFXTableColumn<Edge> edgeStartNodeCol = new MFXTableColumn<>("Start Node", true, Comparator.comparing(Edge::getStartNode));
-        MFXTableColumn<Edge> edgeEndNodeCol = new MFXTableColumn<>("End Node", true, Comparator.comparing(Edge::getEndNode));
-
-        edgeIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(Edge::getUuid));
-        edgeStartNodeCol.setRowCellFactory(p -> new MFXTableRowCell<>(Edge::getStartNode));
-        edgeEndNodeCol.setRowCellFactory(p -> new MFXTableRowCell<>(Edge::getEndNode));
-
-        edgeTable.setItems(edgeList);
-        edgeTable.getTableColumns().addAll(edgeIdCol, edgeStartNodeCol, edgeEndNodeCol);
-
-        MoveDaoImpl moveDaoImpl = new MoveDaoImpl();
-
-        ObservableList<Move> moveList = FXCollections.observableArrayList(moveDaoImpl.getAll().values());
-        MFXTableColumn<Move> moveIdCol = new MFXTableColumn<>("Move ID", true, Comparator.comparing(Move::getUuid));
-        MFXTableColumn<Move> moveLongNameCol = new MFXTableColumn<>("Start Node", true, Comparator.comparing(Move::getLongName));
-        MFXTableColumn<Move> moveDateCol = new MFXTableColumn<>("End Node", true, Comparator.comparing(Move::getDate));
-
-        moveIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(Move::getUuid));
-        moveLongNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(Move::getLongName));
-        moveDateCol.setRowCellFactory(p -> new MFXTableRowCell<>(Move::getDate));
-
-        moveTable.setItems(moveList);
-        moveTable.getTableColumns().addAll(moveIdCol, moveLongNameCol, moveDateCol);
-
-        LocationNameDaoImpl locationDaoImpl = new LocationNameDaoImpl();
-
-        ObservableList<LocationName> locationList = FXCollections.observableArrayList(locationDaoImpl.getAll().values());
-        MFXTableColumn<LocationName> locationIdCol = new MFXTableColumn<>("Move ID", true, Comparator.comparing(LocationName::getUuid));
-        MFXTableColumn<LocationName> locationLongNameCol = new MFXTableColumn<>("Start Node", true, Comparator.comparing(LocationName::getLongName));
-        MFXTableColumn<LocationName> locationShortNameCol = new MFXTableColumn<>("End Node", true, Comparator.comparing(LocationName::getShortName));
-        MFXTableColumn<LocationName> nodeTypeCol = new MFXTableColumn<>("Node Type", true, Comparator.comparing(LocationName::getNodeType));
-
-        locationIdCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getUuid));
-        locationLongNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getLongName));
-        locationShortNameCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getShortName));
-        nodeTypeCol.setRowCellFactory(p -> new MFXTableRowCell<>(LocationName::getNodeType));
-
-        locationTable.setItems(locationList);
-        locationTable.getTableColumns().addAll(locationIdCol, locationLongNameCol, locationShortNameCol, nodeTypeCol);
-
+        initFlowerTable();
+        initFoodTable();
+        initConferenceTable();
+        initOfficeSuppliesTable();
+        initFurnitureTable();
+        initNodeTable();
+        initEdgeTable();
+        initMoveTable();
+        initLocationTable();
 
 
         flowerServiceRequestTable.setVisible(true);
@@ -626,10 +541,6 @@ public class AdminPageController {
         furnitureServiceRequestTable.setVisible(false);
         officeServiceRequestTable.setVisible(false);
 
-        nodeTable.setVisible(false);
-        edgeTable.setVisible(false);
-        moveTable.setVisible(false);
-        locationTable.setVisible(false);
 
         flowerServiceRequestTable.setManaged(true);
         foodServiceRequestTable.setManaged(false);
@@ -637,35 +548,14 @@ public class AdminPageController {
         furnitureServiceRequestTable.setManaged(false);
         officeServiceRequestTable.setManaged(false);
 
+        nodeTable.setVisible(false);
+        edgeTable.setVisible(false);
+        moveTable.setVisible(false);
+        locationTable.setVisible(false);
+
         nodeTable.setManaged(false);
         edgeTable.setManaged(false);
         moveTable.setManaged(false);
         locationTable.setManaged(false);
-    }
-
-
-    @FXML
-    String showReq() {
-        String temp = "";
-        if (submit.isPressed()) {
-            temp = servSearchBar.getText();
-            for (int i = 0; i < requests.size(); i++) { //does not loop because theres nothing in requests so no size
-                //so i++ is never used as well
-                if (temp.matches(requests.get(i))) {
-                    return requests.get(i);
-                } else {
-                    throw new RuntimeException("No such request found.");
-                }
-            }
-        }
-
-        //match case
-        //throw error if no request found
-        //display request
-        //display back button/somehow reset the search bar for a new search?
-
-        return temp;
-
-
     }
 }
