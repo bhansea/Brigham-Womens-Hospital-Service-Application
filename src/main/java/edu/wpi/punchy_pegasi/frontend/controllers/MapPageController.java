@@ -102,13 +102,13 @@ public class MapPageController {
     private AtomicBoolean commiting = new AtomicBoolean();
     private Map<Long, Move> movesByNodeID = new HashMap<>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
+
     private StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
         public String toString(Node node) {
-            if (node == null) return "";
-            var move = movesByNodeID.get(node.getNodeID()).getLongName();
-            if (move == null) return "";
-            return locationsByLongName.get(move).getLongName();
+            var location = nodeToLocation(node);
+            if (location.isEmpty()) return "";
+            return location.get().getLongName();
         }
 
         @Override
@@ -116,6 +116,14 @@ public class MapPageController {
             return nodes.get(moves.values().stream().filter(m -> Objects.equals(m.getLongName(), string)).findFirst().get().getNodeID());// nodesList.stream().filter(n -> n.getNodeID().toString().equals(string)).findFirst().orElse(null);
         }
     };
+
+    private Optional<LocationName> nodeToLocation(Node node) {
+        if (node == null) return Optional.empty();
+        var move = movesByNodeID.get(node.getNodeID()).getLongName();
+        if (move == null) return Optional.empty();
+        return Optional.of(locationsByLongName.get(move));
+    }
+
     private ObservableList<Node> filteredNodes;
 
     @FXML
@@ -303,6 +311,24 @@ public class MapPageController {
         floor.lineCanvas.getChildren().add(0, polyline);
     }
 
+    private VBox makeTooltip(javafx.scene.Node parent, String text) {
+        var toolTip = new VBox();
+        var textLabel = new Label(text);
+        // tool tip text styling
+        textLabel.setTextFill(Color.valueOf("#ffffff"));
+        textLabel.setTextAlignment(TextAlignment.CENTER);
+        textLabel.layout();
+        //tool tip styling
+        toolTip.getChildren().add(textLabel);
+        toolTip.setPadding(new Insets(5));
+        toolTip.setAlignment(Pos.CENTER);
+        toolTip.setStyle("-fx-background-color: #000000aa; -fx-background-radius: 5");
+        toolTip.layoutXProperty().bind(parent.layoutXProperty());
+        toolTip.layoutYProperty().bind(parent.layoutYProperty());
+        toolTip.layout();
+        return toolTip;
+    }
+
     private Optional<Circle> drawNode(Node node, String color) {
         var floor = floors.get(node.getFloor());
         if (floor == null) return Optional.empty();
@@ -313,35 +339,40 @@ public class MapPageController {
         circle.setRadius(10);
         circle.setStrokeWidth(2);
         circle.setStroke(Color.valueOf("#000000"));
-        var toolTip = new VBox();
-        var text = new Label(nodeToLocation.toString(node) + "\nNode ID: " + node.getNodeID().toString());
-        // tool tip text styling
-        text.setTextFill(Color.valueOf("#ffffff"));
-        text.setTextAlignment(TextAlignment.CENTER);
-        text.layout();
-        //tool tip styling
-        toolTip.getChildren().add(text);
-        toolTip.setPadding(new Insets(5));
-        toolTip.setAlignment(Pos.CENTER);
-        toolTip.setStyle("-fx-background-color: #000000aa; -fx-background-radius: 5");
-        toolTip.layoutXProperty().bind(circle.layoutXProperty());
-        toolTip.layoutYProperty().bind(circle.layoutYProperty());
-        toolTip.layout();
-        final boolean[] updated = {false};
+        var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", null));
+        var toolTip = makeTooltip(circle, location.getLongName() + "\nNode ID: " + node.getNodeID().toString());
+        var shortNameTooltip = makeTooltip(circle, location.getShortName());
+
+        final boolean[] updated = {false, false};
         toolTip.boundsInParentProperty().addListener((v, o, n) -> {
-            if(!updated[0] && n.getHeight() > 40 && n.getWidth() > 0) {
+            if (!updated[0] && n.getHeight() > 40 && n.getWidth() > 0) {
                 updated[0] = true;
-                toolTip.setTranslateY(-(n.getHeight() + 20));
+                toolTip.setTranslateY(-(n.getHeight()));
                 toolTip.setTranslateX(-n.getWidth() / 2);
             }
         });
+        shortNameTooltip.boundsInParentProperty().addListener((v, o, n) -> {
+            if (!updated[1] && n.getHeight() > 20 && n.getWidth() > 0) {
+                updated[1] = true;
+                shortNameTooltip.setTranslateY(-(n.getHeight()));
+                shortNameTooltip.setTranslateX(-n.getWidth() / 2);
+            }
+        });
 
-        circle.setOnMouseEntered(e -> toolTip.setVisible(true));
-        circle.setOnMouseExited(e -> toolTip.setVisible(false));
+        circle.setOnMouseEntered(e -> {
+            toolTip.setVisible(true);
+            shortNameTooltip.setVisible(false);
+        });
+        circle.setOnMouseExited(e -> {
+            toolTip.setVisible(false);
+            shortNameTooltip.setVisible(true);
+        });
         toolTip.setVisible(false);
+        shortNameTooltip.setVisible(true);
 
         floor.nodeCanvas.getChildren().add(circle);
         floor.tooltipCanvas.getChildren().add(toolTip);
+        floor.tooltipCanvas.getChildren().add(shortNameTooltip);
         return Optional.of(circle);
     }
 
