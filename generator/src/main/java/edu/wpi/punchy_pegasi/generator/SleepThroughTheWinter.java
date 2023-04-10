@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class SleepThroughTheWinter {
@@ -240,7 +241,7 @@ public class SleepThroughTheWinter {
         Files.writeString(schemaDestPath, sourceFileText);
     }
 
-    private static void generateEntry(Class<?> entryClass) throws IOException {
+    private static void generateEntry(Class<?> entryClass) throws IOException, IllegalStateException {
         var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", entryClass.getSimpleName() + ".java");
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", entryClass.getSimpleName() + ".java");
         var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
@@ -255,25 +256,19 @@ public class SleepThroughTheWinter {
         }
         var tt = typeOptional.get();
 
+        var idField = getIdField(entryClass);
+
         var ClassText = entryClass.getSimpleName();
         // set first letter lowercase
         var classText = firstLower(ClassText);
+
 
         var classFields = getFieldsRecursively(entryClass);
         var classFieldsText = classFields.stream().map(Field::getName).toList();
         var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
 
-        var idFields = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).toList(); // locate id field with @SchemaID
-        if (idFields.size() < 1) {
-            // check if no id annotation (@SchemaID) is present
-            throw new IllegalStateException("No id field found for " + entryClass.getCanonicalName());
-        }
-        if (idFields.size() > 1) {
-            // check if more than one id annotation (@SchemaID) is present
-            throw new IllegalStateException("No id field found for " + entryClass.getCanonicalName());
-        }
-        var idFieldText = idFields.get(0).getName();
-        var idFieldType = idFields.get(0).getType().getCanonicalName();
+        var idFieldText = idField.getName();
+        var idFieldType = idField.getType().getCanonicalName();
 
 
         // gen schema
@@ -292,6 +287,7 @@ public class SleepThroughTheWinter {
         // gen impl
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         var implFileText = template.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator", "edu.wpi.punchy_pegasi.generated")
+                .replaceAll("/\\*FacadeClassName\\*/", "")
                 .replaceAll("GenericRequestEntry", ClassText).replaceAll("genericRequestEntry", classText)
                 .replaceAll("TableType\\.GENERIC", "TableType." + tt.name())
                 .replaceAll("/\\*fields\\*/", String.join(", ", classFieldsText.stream().map(v -> "\"" + v + "\"").toList()))
@@ -307,20 +303,56 @@ public class SleepThroughTheWinter {
         Files.writeString(daoImplDestPath, implFileText);
     }
 
-    private static String generateFacadeEntry(Class<?> entryClass){
-        return String.format("""
-                
-                """);
+    private static Field getIdField(Class<?> clazz) throws IllegalStateException{
+        var classFields = getFieldsRecursively(clazz);
+        var idFields = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).toList(); // locate id field with @SchemaID
+        if (idFields.size() < 1) {
+            // check if no id annotation (@SchemaID) is present
+            throw new IllegalStateException("No id field found for " + clazz.getCanonicalName());
+        }
+        if (idFields.size() > 1) {
+            // check if more than one id annotation (@SchemaID) is present
+            throw new IllegalStateException("More than one id field found for " + clazz.getCanonicalName());
+        }
+        return idFields.get(0);
     }
 
-    private static void generateFacade(){
+    private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
+        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
+        var template = new String(Files.readAllBytes(daoImplSourcePath));
+        Pattern pattern = Pattern.compile("(public\\s+[^{]{3,}\\{)");
+        Matcher matcher = pattern.matcher(template);
+        var ClassName = entryClass.getSimpleName();
+        var className = firstLower(ClassName);
+        var id_field = getIdField(entryClass).getName();
+
+        StringBuilder resultText = new StringBuilder();
+        for (int i = 0; i < 3; i++) matcher.find();
+        while (matcher.find()) {
+            var match = matcher.group(1).replaceAll("/\\*FacadeClassName\\*/", ClassName)
+                            .replaceAll("String/\\*idFieldType\\*/", id_field)
+                            .replaceAll("GenericRequestEntry", ClassName).replaceAll("genericRequestEntry", className);
+            resultText.append("\t").append(match).append("}\n");
+        }
+        return resultText;
+    }
+
+    private static void generateFacade() throws IOException, IllegalStateException{
+        var facadeDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated/Facade.java");
+        var facadeSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/Facade.java");
+        var template = new String(Files.readAllBytes(facadeSourcePath)).replaceAll("}", "")
+                .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.generated");
+        StringBuilder sb = new StringBuilder();
+        sb.append(template);
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
-                generateEntry(clazz);
+                sb.append(generateFacadeEntry(clazz));
             } catch (Exception e) {
                 System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
         }
+        var facadeFileText = sb.append("}").toString();
+        Files.writeString(facadeDestPath, facadeFileText);
     }
 
     /***
