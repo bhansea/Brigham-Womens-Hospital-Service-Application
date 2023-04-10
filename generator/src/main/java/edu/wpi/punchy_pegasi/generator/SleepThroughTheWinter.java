@@ -320,19 +320,79 @@ public class SleepThroughTheWinter {
     private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
         var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
         var template = new String(Files.readAllBytes(daoImplSourcePath));
-        Pattern pattern = Pattern.compile("(public\\s+[^{]{3,}\\{)");
-        Matcher matcher = pattern.matcher(template);
-        var ClassName = entryClass.getSimpleName();
-        var className = firstLower(ClassName);
-        var id_field = getIdField(entryClass).getName();
-
         StringBuilder resultText = new StringBuilder();
-        for (int i = 0; i < 3; i++) matcher.find();
+
+        var ClassName = entryClass.getSimpleName();
+        if (ClassName.equals("GenericRequestEntry")) return resultText;  // skip GenericRequestEntry
+        var className = firstLower(ClassName);
+        var id_field = getIdField(entryClass);
+//        var id_field_name = id_field.getName();
+        var id_field_type = id_field.getType().getCanonicalName();
+
+        Pattern pattern = Pattern.compile("(public\\s+[^{]{3,})\\{");  // extract all public method header
+        Pattern pattern1 = Pattern.compile("(\\w+)\\s*/\\*FacadeClassName\\*/");  // extract fcn name
+        Pattern pattern2 = Pattern.compile("(\\([^()]*\\))");  // extract fcn args
+        Pattern pattern3 = Pattern.compile("(?:,\\s*)?(\\w+)\\s*(?:=[^,)]+)?(?=[,)])");  // extract fcn args name
+        Pattern pattern4 = Pattern.compile("public\\s*(\\w*)");  // extract return type
+        Matcher matcher = pattern.matcher(template);
+
+        for (int i = 0; i < 3; i++) matcher.find();  // skip first 3 matches
+
         while (matcher.find()) {
-            var match = matcher.group(1).replaceAll("/\\*FacadeClassName\\*/", ClassName)
-                            .replaceAll("String/\\*idFieldType\\*/", id_field)
-                            .replaceAll("GenericRequestEntry", ClassName).replaceAll("genericRequestEntry", className);
-            resultText.append("\t").append(match).append("}\n");
+            var fcnHeader = matcher.group(1);
+
+            Matcher matcher1 = pattern1.matcher(fcnHeader);
+            if (!matcher1.find()) {
+                throw new IllegalStateException("No function name found for " + ClassName);
+            }
+            var fcnName = matcher1.group(1);
+
+            fcnHeader = fcnHeader.replaceAll("/\\*FacadeClassName\\*/", ClassName)
+                    .replaceAll("String/\\*idFieldType\\*/", id_field_type)
+                    .replaceAll("GenericRequestEntry", ClassName).replaceAll("genericRequestEntry", className);
+
+            Matcher matcher2 = pattern2.matcher(fcnHeader);
+            var argsField = "";
+            if (matcher2.find()){
+                argsField = matcher2.group(1);
+            } else {
+                throw new IllegalStateException("No function args found for " + ClassName);
+            }
+
+            var fcnArgs = "";
+            var sb = new StringBuilder();
+            Matcher matcher3 = pattern3.matcher(argsField);
+            while (matcher3.find()){
+                sb.append(matcher3.group(1)).append(", ");
+            }
+            if (sb.length() > 0)
+                fcnArgs = sb.substring(0, sb.length()-2);
+
+            Matcher matcher4 = pattern4.matcher(fcnHeader);
+            if (!matcher4.find()) {
+                throw new IllegalStateException("No return type found for " + ClassName);
+            } else {
+                if (matcher4.group(1).equals("void")) {
+                    resultText.append("\t")
+                            .append(fcnHeader)
+                            .append("{\n")
+                            .append(String.format("""
+                                           \t\t%1$s %2$s = new %1$s();
+                                           \t}
+                                           """, ClassName+"DaoImpl", className+"Dao"
+                            ));
+                } else {
+                    resultText.append("\t")
+                            .append(fcnHeader)
+                            .append("{\n")
+                            .append(String.format("""
+                                           \t\t%1$s %2$s = new %1$s(dbController);
+                                           \t\treturn %2$s.%3$s(%4$s);
+                                           \t}
+                                           """, ClassName+"DaoImpl", className+"Dao", fcnName, fcnArgs
+                            ));
+                }
+            }
         }
         return resultText;
     }
@@ -340,8 +400,19 @@ public class SleepThroughTheWinter {
     private static void generateFacade() throws IOException, IllegalStateException{
         var facadeDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated/Facade.java");
         var facadeSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/Facade.java");
-        var template = new String(Files.readAllBytes(facadeSourcePath)).replaceAll("}", "")
-                .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.generated");
+        var template = new String(Files.readAllBytes(facadeSourcePath))
+                .replaceAll("}\n*$", "")
+                .replaceAll("\\*/", "")
+                .replaceAll("/\\*", "")
+                .replaceAll("package edu\\.wpi\\.punchy_pegasi\\.generator\\.schema;",
+                        """
+                                package edu.wpi.punchy_pegasi.generated;
+                                                                
+                                import edu.wpi.punchy_pegasi.schema.*;
+                                import edu.wpi.punchy_pegasi.backend.PdbController;
+                                import java.util.Map;
+                                import java.util.Optional;
+                                """);
         StringBuilder sb = new StringBuilder();
         sb.append(template);
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
