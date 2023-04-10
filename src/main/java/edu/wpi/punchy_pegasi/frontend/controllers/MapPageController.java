@@ -25,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -318,7 +319,6 @@ public class MapPageController {
         text.setTextFill(Color.valueOf("#ffffff"));
         text.setTextAlignment(TextAlignment.CENTER);
         text.layout();
-        text.applyCss();
         //tool tip styling
         toolTip.getChildren().add(text);
         toolTip.setPadding(new Insets(5));
@@ -327,9 +327,13 @@ public class MapPageController {
         toolTip.layoutXProperty().bind(circle.layoutXProperty());
         toolTip.layoutYProperty().bind(circle.layoutYProperty());
         toolTip.layout();
+        final boolean[] updated = {false};
         toolTip.boundsInParentProperty().addListener((v, o, n) -> {
-            toolTip.setTranslateY(-(n.getHeight() + 20));
-            toolTip.setTranslateX(-n.getWidth() / 2);
+            if(!updated[0] && n.getHeight() > 40 && n.getWidth() > 0) {
+                updated[0] = true;
+                toolTip.setTranslateY(-(n.getHeight() + 20));
+                toolTip.setTranslateX(-n.getWidth() / 2);
+            }
         });
 
         circle.setOnMouseEntered(e -> toolTip.setVisible(true));
@@ -374,6 +378,7 @@ public class MapPageController {
         arrow.setLayoutX(-7.5);
         arrow.setLayoutY(-7.5);
         group.getChildren().addAll(box, arrow);
+        group.setCursor(Cursor.HAND);
         floor.nodeCanvas.getChildren().add(group);
         new Bobbing(arrow).play();
         return group;
@@ -431,7 +436,7 @@ public class MapPageController {
         Group tooltipCanvas = new Group();
         ImageView imageView = new ImageView();
 
-        private Image imageCache;
+        private static Map<String, Image> imageCache = new ConcurrentHashMap<>();
 
         private void init() {
             root.getChildren().addAll(imageView, lineCanvas, nodeCanvas, tooltipCanvas);
@@ -444,8 +449,12 @@ public class MapPageController {
 
         void loadImage() {
             Image image;
-            if (imageCache != null) image = imageCache;
-            else imageCache = image = new Image(Objects.requireNonNull(App.class.getResourceAsStream(path)));
+            if (imageCache.containsKey(identifier))
+                image = imageCache.get(identifier);
+            else {
+                image = new Image(Objects.requireNonNull(App.class.getResourceAsStream(path)));
+                imageCache.put(identifier, image);
+            }
             Platform.runLater(() -> {
                 imageView.imageProperty().set(image);
                 imageView.setFitHeight(image.getHeight());
