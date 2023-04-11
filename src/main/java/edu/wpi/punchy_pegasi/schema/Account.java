@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Account {
-        private String username;
-        private String password;
-        
-        private Long employeeID;
-        private AccountType accountType;
+    private String username;
+    private String password;
+    
+    private Long employeeID;
+    private AccountType accountType;
 
         public enum AccountType {
             NONE,
