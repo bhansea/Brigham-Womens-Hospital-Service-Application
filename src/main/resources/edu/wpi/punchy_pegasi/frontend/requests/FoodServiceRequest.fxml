@@ -3,7 +3,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -49,7 +49,7 @@
                                                               <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                                           </children>
                                                       </HBox>
-                                          <MFXComboBox fx:id="endTime11" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Meals">
+                                          <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Meals">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -94,7 +94,7 @@
                                           </MFXComboBox>
                                        </children>
                                     </VBox>
-                                    <VBox>
+                                    <VBox VBox.vgrow="ALWAYS">
                                        <children>
                                           <HBox>
                                              <children>
@@ -106,25 +106,39 @@
                                                 <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                              </children>
                                           </HBox>
-                                          <TextField fx:id="numberOfParticipants" maxWidth="450.1" prefHeight="50.0" prefWidth="450.0" promptText="Number of Participants" style="-fx-background-radius: 6; -fx-border-radius: 6;" text="Food Allergies, Gluten Free, etc.">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </TextField>
+                                          <TextArea promptText="Food Allergies, Gluten Free, etc." wrapText="true" />
                                        </children>
+                                       <padding>
+                                          <Insets right="35.0" />
+                                       </padding>
                                     </VBox>
                                  </children>
                               </VBox>
-                                        <VBox alignment="CENTER" prefHeight="125.0" prefWidth="562.0" spacing="32.0">
+                                        <VBox alignment="TOP_CENTER" prefHeight="125.0" prefWidth="562.0" spacing="32.0">
                                  <children>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../assets/foodImage.jpg" />
+                                                <Image url="@../assets/mealPicture.jpeg" />
                                              </image>
                                           </ImageView>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;">
+                                             <children>
+                                                <Label text="Meal Name">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets left="30.0" right="30.0" />
+                                             </VBox.margin>
+                                          </VBox>
                                        </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
                                     </VBox>
                                  </children>
                                         </VBox>
