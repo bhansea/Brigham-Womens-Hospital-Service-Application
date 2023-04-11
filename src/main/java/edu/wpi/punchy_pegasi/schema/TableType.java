@@ -148,6 +148,26 @@ CREATE TABLE IF NOT EXISTS teamp.officerequests
   employeeName varchar
 );
 """)
+,
+    EMPLOYEES(edu.wpi.punchy_pegasi.generator.schema.Employee.class, """
+CREATE TABLE IF NOT EXISTS teamp.employees
+(
+  employeeID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  firstName varchar,
+  lastName varchar
+);
+""")
+,
+
+    ACCOUNTS(edu.wpi.punchy_pegasi.generator.schema.Account.class, """
+CREATE TABLE IF NOT EXISTS teamp.accounts
+(
+  username varchar PRIMARY KEY,``
+  password varchar,
+  employeeID uuid,
+  accountType varchar
+);
+""") // foreign key employeeID references employee(employeeID)
 ;
     @Getter
     private final Class<?> clazz;

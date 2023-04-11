@@ -14,7 +14,9 @@ public enum TableType {
     CONFERENCEREQUESTS(ConferenceRoomEntry.class, ""),
     FURNITUREREQUESTS(FurnitureRequestEntry.class, ""),
 
-    OFFICEREQUESTS(OfficeServiceRequestEntry.class, "");
+    OFFICEREQUESTS(OfficeServiceRequestEntry.class, ""),
+    EMPLOYEES(Employee.class, ""),
+    ACCOUNTS(Account.class, "");
     @Getter
     private final Class<?> clazz;
     @Getter
