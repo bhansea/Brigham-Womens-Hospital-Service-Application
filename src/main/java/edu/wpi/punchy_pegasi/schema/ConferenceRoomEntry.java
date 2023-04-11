@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 
 import java.util.UUID;
 
@@ -24,7 +20,7 @@ public class ConferenceRoomEntry extends RequestEntry {
         this.beginningTime = beginningTime;
         this.endTime = endTime;
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
@@ -33,7 +29,7 @@ public class ConferenceRoomEntry extends RequestEntry {
         STATUS("status"),
         BEGINNING_TIME("beginningTime"),
         END_TIME("endTime");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref){
             return ref.getFromField(this);
