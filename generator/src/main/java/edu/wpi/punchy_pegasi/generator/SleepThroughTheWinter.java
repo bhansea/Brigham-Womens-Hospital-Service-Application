@@ -329,50 +329,48 @@ public class SleepThroughTheWinter {
 //        var id_field_name = id_field.getName();
         var id_field_type = id_field.getType().getCanonicalName();
 
-        Pattern pattern = Pattern.compile("(public\\s+[^{]{3,})\\{");  // extract all public method header
-        Pattern pattern1 = Pattern.compile("(\\w+)\\s*/\\*FacadeClassName\\*/");  // extract fcn name
-        Pattern pattern2 = Pattern.compile("(\\([^()]*\\))");  // extract fcn args
-        Pattern pattern3 = Pattern.compile("(?:,\\s*)?(\\w+)\\s*(?:=[^,)]+)?(?=[,)])");  // extract fcn args name
-        Pattern pattern4 = Pattern.compile("public\\s*(\\w*)");  // extract return type
-        Matcher matcher = pattern.matcher(template);
-
-        for (int i = 0; i < 3; i++) matcher.find();  // skip first 3 matches
+        Pattern header = Pattern.compile("(public\\s+[^{]+\\/*\\*FacadeClassName\\*\\/\\s*\\([^)]*\\)\\s*)\\{");  // extract all public method header
+        Pattern name = Pattern.compile("(\\w+)\\s*/\\*FacadeClassName\\*/");  // extract fcn name
+        Pattern args = Pattern.compile("(\\([^()]*\\))");  // extract fcn args
+        Pattern argsName = Pattern.compile("(?:,\\s*)?(\\w+)\\s*(?:=[^,)]+)?(?=[,)])");  // extract fcn args name
+        Pattern returnType = Pattern.compile("public\\s*(\\w*)");  // extract return type
+        Matcher matcher = header.matcher(template);
 
         while (matcher.find()) {
             var fcnHeader = matcher.group(1);
 
-            Matcher matcher1 = pattern1.matcher(fcnHeader);
-            if (!matcher1.find()) {
+            Matcher matcherName = name.matcher(fcnHeader);
+            if (!matcherName.find()) {
                 throw new IllegalStateException("No function name found for " + ClassName);
             }
-            var fcnName = matcher1.group(1);
+            var fcnName = matcherName.group(1);
 
             fcnHeader = fcnHeader.replaceAll("/\\*FacadeClassName\\*/", ClassName)
                     .replaceAll("String/\\*idFieldType\\*/", id_field_type)
                     .replaceAll("GenericRequestEntry", ClassName).replaceAll("genericRequestEntry", className);
 
-            Matcher matcher2 = pattern2.matcher(fcnHeader);
+            Matcher matcherArgs = args.matcher(fcnHeader);
             var argsField = "";
-            if (matcher2.find()){
-                argsField = matcher2.group(1);
+            if (matcherArgs.find()){
+                argsField = matcherArgs.group(1);
             } else {
                 throw new IllegalStateException("No function args found for " + ClassName);
             }
 
             var fcnArgs = "";
             var sb = new StringBuilder();
-            Matcher matcher3 = pattern3.matcher(argsField);
-            while (matcher3.find()){
-                sb.append(matcher3.group(1)).append(", ");
+            Matcher matcherArgsName = argsName.matcher(argsField);
+            while (matcherArgsName.find()){
+                sb.append(matcherArgsName.group(1)).append(", ");
             }
             if (sb.length() > 0)
                 fcnArgs = sb.substring(0, sb.length()-2);
 
-            Matcher matcher4 = pattern4.matcher(fcnHeader);
-            if (!matcher4.find()) {
+            Matcher matcherReturnType = returnType.matcher(fcnHeader);
+            if (!matcherReturnType.find()) {
                 throw new IllegalStateException("No return type found for " + ClassName);
             } else {
-                if (matcher4.group(1).equals("void")) {
+                if (matcherReturnType.group(1).equals("void")) {
                     resultText.append("\t")
                             .append(fcnHeader)
                             .append("{\n")
@@ -408,7 +406,7 @@ public class SleepThroughTheWinter {
                 if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
                 var className = firstLower(ClassName);
                 sbDaoDec.append("\tprivate final " + ClassName + "DaoImpl " + className + "Dao;\n");
-                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(this.dbController);\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(dbController);\n");
             } catch (Exception e) {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }

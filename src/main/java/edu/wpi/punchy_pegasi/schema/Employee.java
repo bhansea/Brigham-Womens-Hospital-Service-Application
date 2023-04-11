@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 public class Employee {
