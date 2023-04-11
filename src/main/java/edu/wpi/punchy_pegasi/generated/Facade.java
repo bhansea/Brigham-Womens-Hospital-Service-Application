@@ -7,7 +7,6 @@ import java.util.Optional;
 
 
 public class Facade {
-    private PdbController dbController; 
 	private final NodeDaoImpl nodeDao;
 	private final EdgeDaoImpl edgeDao;
 	private final MoveDaoImpl moveDao;
@@ -19,16 +18,15 @@ public class Facade {
 	private final OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
 
     public Facade(PdbController dbController) {
-        this.dbController = dbController;
-		nodeDao = new NodeDaoImpl(this.dbController);
-		edgeDao = new EdgeDaoImpl(this.dbController);
-		moveDao = new MoveDaoImpl(this.dbController);
-		locationNameDao = new LocationNameDaoImpl(this.dbController);
-		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(this.dbController);
-		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(this.dbController);
-		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(this.dbController);
-		furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(this.dbController);
-		officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(this.dbController);
+		nodeDao = new NodeDaoImpl(dbController);
+		edgeDao = new EdgeDaoImpl(dbController);
+		moveDao = new MoveDaoImpl(dbController);
+		locationNameDao = new LocationNameDaoImpl(dbController);
+		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(dbController);
+		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(dbController);
+		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(dbController);
+		furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(dbController);
+		officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(dbController);
 
     }
 

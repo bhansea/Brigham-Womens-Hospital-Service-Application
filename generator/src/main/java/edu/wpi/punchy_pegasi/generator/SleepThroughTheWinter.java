@@ -408,7 +408,7 @@ public class SleepThroughTheWinter {
                 if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
                 var className = firstLower(ClassName);
                 sbDaoDec.append("\tprivate final " + ClassName + "DaoImpl " + className + "Dao;\n");
-                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(this.dbController);\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(dbController);\n");
             } catch (Exception e) {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
