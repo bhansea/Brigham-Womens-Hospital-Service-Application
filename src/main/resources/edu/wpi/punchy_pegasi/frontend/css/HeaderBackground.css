@@ -1,5 +1,6 @@
 .header-background-image {
-    -fx-background-image: url("../assets/surgery_banner.jpg");
+    /*-fx-background-image: url("../assets/surgery_banner.jpg");*/
+    -fx-background-color: #FFFFFF;
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover, auto;
 }

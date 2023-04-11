@@ -1,0 +1,23 @@
+.icon {
+    -fx-background-color: white;
+    -height: 20;
+    -fx-min-height: -height;
+    -fx-max-height: -height;
+    -width: 20;
+    -fx-min-width: -width;
+    -fx-max-width: -width;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.button:hover {
+    -fx-background-color: #012D5A;
+    -fx-border-color: #012D5A;
+    -fx-border-width: 7;
+    -fx-border-style: solid outside;
+    -fx-border-radius: 1;
+}
+
+.button {
+    -fx-background-color: #0067B1;
+}

@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +39,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
-                    Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
                     (java.lang.String)rs.getObject("dietaryRestrictions"),
                     (java.lang.String)rs.getObject("patientName"));
             return Optional.ofNullable(req);
@@ -69,7 +67,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
-                    Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
                     (java.lang.String)rs.getObject("dietaryRestrictions"),
                     (java.lang.String)rs.getObject("patientName"));
                 if (req != null)
@@ -94,7 +92,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
-                    Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
                     (java.lang.String)rs.getObject("dietaryRestrictions"),
                     (java.lang.String)rs.getObject("patientName"));
                 if (req != null)

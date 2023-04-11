@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +30,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.dietaryRestrictions = dietaryRestrictions;
         this.patientName = patientName;
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
@@ -46,7 +42,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
         ADDITIONAL_ITEMS("additionalItems"),
         DIETARY_RESTRICTIONS("dietaryRestrictions"),
         PATIENT_NAME("patientName");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
             return ref.getFromField(this);

@@ -13,7 +13,6 @@ public enum TableType {
     FLOWERREQUESTS(FlowerDeliveryRequestEntry.class, ""),
     CONFERENCEREQUESTS(ConferenceRoomEntry.class, ""),
     FURNITUREREQUESTS(FurnitureRequestEntry.class, ""),
-
     OFFICEREQUESTS(OfficeServiceRequestEntry.class, "");
     @Getter
     private final Class<?> clazz;

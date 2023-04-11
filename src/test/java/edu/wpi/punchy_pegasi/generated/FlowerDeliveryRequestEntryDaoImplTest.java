@@ -8,15 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class FlowerDeliveryRequestEntryDaoImplTest {
@@ -70,7 +69,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         }
         var results = dao.get(FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient");
         var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, FlowerDeliveryRequestEntry.Field.PATIENT_NAME.getColName(), "testPatient")) {
+        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, "patientName", "testPatient")) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                         (java.util.UUID)rs.getObject("serviceID"),

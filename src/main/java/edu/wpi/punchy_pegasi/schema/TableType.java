@@ -135,7 +135,6 @@ CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 );
 """)
 ,
-
     OFFICEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.officerequests
 (
