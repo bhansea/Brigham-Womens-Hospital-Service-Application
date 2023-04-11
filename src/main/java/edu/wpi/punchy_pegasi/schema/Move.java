@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,13 +15,13 @@ public class Move {
     private Long nodeID;
     private String longName;
     private String date;
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         UUID("uuid"),
         NODE_ID("nodeID"),
         LONG_NAME("longName"),
         DATE("date");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref){
             return ref.getFromField(this);

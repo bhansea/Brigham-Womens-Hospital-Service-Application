@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 
 import java.util.UUID;
 
@@ -22,7 +18,7 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     public OfficeServiceRequestEntry(String roomNumber, String staffAssignment, String additionalNotes, String officeRequest, String employeeName) {
         this(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING, officeRequest, employeeName);
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
@@ -31,7 +27,7 @@ public class OfficeServiceRequestEntry extends RequestEntry {
         STATUS("status"),
         OFFICE_REQUEST("officeRequest"),
         EMPLOYEE_NAME("employeeName");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
             return ref.getFromField(this);

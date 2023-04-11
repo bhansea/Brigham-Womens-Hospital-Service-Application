@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.generator;
 
+import edu.wpi.punchy_pegasi.generator.schema.Facade;
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -19,9 +20,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class EntityGenerator {
+public class SleepThroughTheWinter {
 
     /**
      * Returns a list containing one parameter name for each argument accepted
@@ -109,7 +111,7 @@ public class EntityGenerator {
                 constructor.append(type.getCanonicalName())
                         .append(".valueOf((String)rs.getObject(\"").append(column).append("\"))");
             else if (List.class.isAssignableFrom(type))
-                constructor.append("Arrays.asList((")//.append(type.getCanonicalName())
+                constructor.append("java.util.Arrays.asList((")//.append(type.getCanonicalName())
                         .append("String[])rs.getArray(\"").append(column).append("\").getArray())");
             else
                 constructor.append("(").append(type.getCanonicalName())
@@ -133,11 +135,11 @@ public class EntityGenerator {
     private static String generateEnum(Class<?> clazz, List<Field> fields) {
         return
                 """
-                            @RequiredArgsConstructor
+                            @lombok.RequiredArgsConstructor
                             public enum Field {
                         """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
                         ;
-                                @Getter
+                                @lombok.Getter
                                 private final String colName;
                                 public Object getValue(""" + clazz.getCanonicalName() + """
  ref){
@@ -170,7 +172,7 @@ public class EntityGenerator {
         var tableName = "teamp." + tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
         var classFields = getFieldsRecursively(clazz);
-        var idField = classFields.stream().filter(EntityGenerator::fieldIsID).findFirst().get();
+        var idField = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).findFirst().get();
         var tableColumns = classFields.stream().map(f -> {
             var appendText = fieldIsID(f) ?
                     f.getType() == Long.class ?
@@ -184,28 +186,28 @@ public class EntityGenerator {
 
         if (idField.getType() == UUID.class)
             return String.format("""
-                %s(%s.class, \"\"\"
-                CREATE TABLE IF NOT EXISTS %s 
-                (
-                  %s
-                );
-                \"\"\")
-                """, tt.name(), clazz.getCanonicalName(), tableName, String.join(",\n  ", tableColumns));
+                    %s(%s.class, \"\"\"
+                    CREATE TABLE IF NOT EXISTS %s
+                    (
+                      %s
+                    );
+                    \"\"\")
+                    """, tt.name(), clazz.getCanonicalName(), tableName, String.join(",\n  ", tableColumns));
         else
             return String.format("""
-                    %s(%s.class, \"\"\" 
+                    %1$s(%2$s.class, \"\"\"
                     DO $$
                     BEGIN
-                      IF to_regclass('%s') IS NULL THEN 
-                        CREATE SEQUENCE %s;
-                        CREATE TABLE %s
+                      IF to_regclass('%3$s') IS NULL THEN
+                        CREATE SEQUENCE %4$s;
+                        CREATE TABLE %3$s
                         (
-                          %s
+                          %5$s
                         );
-                        ALTER SEQUENCE %s OWNED BY %s;
+                        ALTER SEQUENCE %4$s OWNED BY %3$s.%6$s;
                       END IF;
-                    END $$;      
-                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, tableName, String.join(",\n      ", tableColumns), sequenceName, tableName + "." + idField.getName());
+                    END $$;
+                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.getName());
     }
 
     private static Class getClass(String className, String packageName) {
@@ -227,51 +229,46 @@ public class EntityGenerator {
                 .collect(Collectors.toSet()).stream().toList();
     }
 
-    private static void generate(Class<?> clazz) throws IOException {
-        var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", clazz.getSimpleName() + ".java");
-        var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", clazz.getSimpleName() + ".java");
-        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
-        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", clazz.getSimpleName() + "DaoImpl.java");
-
+    private static void generateTable() throws IOException {
+        var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", TableType.class.getSimpleName() + ".java");
+        var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", TableType.class.getSimpleName() + ".java");
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
-        if(clazz == TableType.class){  // check if we are generating the TableType enum
-            for(var tt : TableType.values())
-                sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
-                        Matcher.quoteReplacement(generateTableInit(tt)));
-            Files.writeString(schemaDestPath, sourceFileText);
-            return;
-        }
+        for(var tt : TableType.values())
+            sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
+                    Matcher.quoteReplacement(generateTableInit(tt)));
+        Files.writeString(schemaDestPath, sourceFileText);
+    }
 
-        var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == clazz).findFirst();
-        if(typeOptional.isEmpty()) {
+    private static void generateEntry(Class<?> entryClass) throws IOException, IllegalStateException {
+        var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", entryClass.getSimpleName() + ".java");
+        var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", entryClass.getSimpleName() + ".java");
+        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
+        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + "DaoImpl.java");
+        var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
+                .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
+
+        var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == entryClass).findFirst();
+        if (typeOptional.isEmpty()) {
             Files.writeString(schemaDestPath, sourceFileText);
-            return;
+            throw new IllegalStateException("No table type found for " + entryClass.getCanonicalName());
         }
         var tt = typeOptional.get();
 
-        var ClassText = clazz.getSimpleName();
+        var idField = getIdField(entryClass);
+
+        var ClassText = entryClass.getSimpleName();
         // set first letter lowercase
         var classText = firstLower(ClassText);
 
-        var classFields = getFieldsRecursively(clazz);
+
+        var classFields = getFieldsRecursively(entryClass);
         var classFieldsText = classFields.stream().map(Field::getName).toList();
         var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
 
-        var idFields = classFields.stream().filter(EntityGenerator::fieldIsID).toList(); // locate id field with @SchemaID
-        if (idFields.size() < 1) {
-            // check if no id annotation (@SchemaID) is present
-            System.err.println("No id field found for " + clazz.getCanonicalName());
-            return;
-        }
-        if (idFields.size() > 1) {
-            // check if more than one id annotation (@SchemaID) is present
-            System.err.println("More than one id field found for " + clazz.getCanonicalName());
-            return;
-        }
-        var idFieldText = idFields.get(0).getName();
-        var idFieldType = idFields.get(0).getType().getCanonicalName();
+        var idFieldText = idField.getName();
+        var idFieldType = idField.getType().getCanonicalName();
 
 
         // gen schema
@@ -280,9 +277,7 @@ public class EntityGenerator {
                 .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "").trim();
 
         var schemaLines = new ArrayList<>(schemaFileText.lines().toList());
-        schemaLines.add(3, "import lombok.Getter;\n");
-        schemaLines.add(4, "import lombok.RequiredArgsConstructor;\n");
-        schemaLines.add(schemaLines.size()-1, generateEnum(clazz, classFields));
+        schemaLines.add(schemaLines.size()-1, generateEnum(entryClass, classFields));
 
         schemaFileText = schemaLines.stream().reduce("", (a, b) -> a + "\n" + b)
                 .replaceAll("\\.generator\\.", ".").trim();
@@ -292,10 +287,11 @@ public class EntityGenerator {
         // gen impl
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         var implFileText = template.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator", "edu.wpi.punchy_pegasi.generated")
+                .replaceAll("/\\*FacadeClassName\\*/", "")
                 .replaceAll("GenericRequestEntry", ClassText).replaceAll("genericRequestEntry", classText)
                 .replaceAll("TableType\\.GENERIC", "TableType." + tt.name())
                 .replaceAll("/\\*fields\\*/", String.join(", ", classFieldsText.stream().map(v -> "\"" + v + "\"").toList()))
-                .replaceAll("(\\S+)/\\*fromResultSet\\*/.+", "$1 = " + classResultSetConstructor(clazz))
+                .replaceAll("(\\S+)/\\*fromResultSet\\*/[^(null;)]*null;", "$1 = " + classResultSetConstructor(entryClass))
                 .replaceAll("/\\*getFields\\*/", String.join(", ", ClassFieldsGet))
                 .replaceAll("\"\"/\\*idField\\*/", "\"" + idFieldText + "\"")
                 .replaceAll("String/\\*idFieldType\\*/", idFieldType)
@@ -303,10 +299,146 @@ public class EntityGenerator {
                 .replaceAll("\\.generator\\.", ".").trim();
 
         var lines = new java.util.ArrayList<>(implFileText.lines().toList());
-        lines.add(5, "import java.util.Arrays;");
-        lines.add(5, "import java.util.Arrays;");
         implFileText = lines.stream().reduce("", (a, b) -> a + "\n" + b).trim();
         Files.writeString(daoImplDestPath, implFileText);
+    }
+
+    private static Field getIdField(Class<?> clazz) throws IllegalStateException{
+        var classFields = getFieldsRecursively(clazz);
+        var idFields = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).toList(); // locate id field with @SchemaID
+        if (idFields.size() < 1) {
+            // check if no id annotation (@SchemaID) is present
+            throw new IllegalStateException("No id field found for " + clazz.getCanonicalName());
+        }
+        if (idFields.size() > 1) {
+            // check if more than one id annotation (@SchemaID) is present
+            throw new IllegalStateException("More than one id field found for " + clazz.getCanonicalName());
+        }
+        return idFields.get(0);
+    }
+
+    private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
+        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
+        var template = new String(Files.readAllBytes(daoImplSourcePath));
+        StringBuilder resultText = new StringBuilder();
+
+        var ClassName = entryClass.getSimpleName();
+        if (ClassName.equals("GenericRequestEntry")) return resultText;  // skip GenericRequestEntry
+        var className = firstLower(ClassName);
+        var id_field = getIdField(entryClass);
+//        var id_field_name = id_field.getName();
+        var id_field_type = id_field.getType().getCanonicalName();
+
+        Pattern pattern = Pattern.compile("(public\\s+[^{]{3,})\\{");  // extract all public method header
+        Pattern pattern1 = Pattern.compile("(\\w+)\\s*/\\*FacadeClassName\\*/");  // extract fcn name
+        Pattern pattern2 = Pattern.compile("(\\([^()]*\\))");  // extract fcn args
+        Pattern pattern3 = Pattern.compile("(?:,\\s*)?(\\w+)\\s*(?:=[^,)]+)?(?=[,)])");  // extract fcn args name
+        Pattern pattern4 = Pattern.compile("public\\s*(\\w*)");  // extract return type
+        Matcher matcher = pattern.matcher(template);
+
+        for (int i = 0; i < 3; i++) matcher.find();  // skip first 3 matches
+
+        while (matcher.find()) {
+            var fcnHeader = matcher.group(1);
+
+            Matcher matcher1 = pattern1.matcher(fcnHeader);
+            if (!matcher1.find()) {
+                throw new IllegalStateException("No function name found for " + ClassName);
+            }
+            var fcnName = matcher1.group(1);
+
+            fcnHeader = fcnHeader.replaceAll("/\\*FacadeClassName\\*/", ClassName)
+                    .replaceAll("String/\\*idFieldType\\*/", id_field_type)
+                    .replaceAll("GenericRequestEntry", ClassName).replaceAll("genericRequestEntry", className);
+
+            Matcher matcher2 = pattern2.matcher(fcnHeader);
+            var argsField = "";
+            if (matcher2.find()){
+                argsField = matcher2.group(1);
+            } else {
+                throw new IllegalStateException("No function args found for " + ClassName);
+            }
+
+            var fcnArgs = "";
+            var sb = new StringBuilder();
+            Matcher matcher3 = pattern3.matcher(argsField);
+            while (matcher3.find()){
+                sb.append(matcher3.group(1)).append(", ");
+            }
+            if (sb.length() > 0)
+                fcnArgs = sb.substring(0, sb.length()-2);
+
+            Matcher matcher4 = pattern4.matcher(fcnHeader);
+            if (!matcher4.find()) {
+                throw new IllegalStateException("No return type found for " + ClassName);
+            } else {
+                if (matcher4.group(1).equals("void")) {
+                    resultText.append("\t")
+                            .append(fcnHeader)
+                            .append("{\n")
+                            .append(String.format("""
+                                           \t\t%1$s.%2$s(%3$s);
+                                           \t}
+                                           """, className+"Dao", fcnName, fcnArgs
+                            ));
+                } else {
+                    resultText.append("\t")
+                            .append(fcnHeader)
+                            .append("{\n")
+                            .append(String.format("""
+                                           \t\treturn %1$s.%2$s(%3$s);
+                                           \t}
+                                           """, className+"Dao", fcnName, fcnArgs
+                            ));
+                }
+            }
+        }
+        return resultText;
+    }
+
+    private static void generateFacade() throws IOException, IllegalStateException{
+        var facadeDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated/Facade.java");
+        var facadeSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/Facade.java");
+
+        StringBuilder sbDaoDec = new StringBuilder();
+        StringBuilder sbDaoInit = new StringBuilder();
+        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()){
+            try {
+                var ClassName = clazz.getSimpleName();
+                if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
+                var className = firstLower(ClassName);
+                sbDaoDec.append("\tprivate final " + ClassName + "DaoImpl " + className + "Dao;\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(this.dbController);\n");
+            } catch (Exception e) {
+                System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
+            }
+        }
+        var template = new String(Files.readAllBytes(facadeSourcePath))
+                .replaceAll("}\n*$", "")
+                .replaceAll("/\\*Dao Declarations\\*/", sbDaoDec.toString())
+                .replaceAll("/\\*Dao Initialization\\*/", sbDaoInit.toString())
+                .replaceAll("\\*/", "")
+                .replaceAll("/\\*", "")
+                .replaceAll("package edu\\.wpi\\.punchy_pegasi\\.generator\\.schema;",
+                        """
+                                package edu.wpi.punchy_pegasi.generated;
+                                                                
+                                import edu.wpi.punchy_pegasi.schema.*;
+                                import edu.wpi.punchy_pegasi.backend.PdbController;
+                                import java.util.Map;
+                                import java.util.Optional;
+                                """);
+        StringBuilder sbTemplate = new StringBuilder();
+        sbTemplate.append(template);
+        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
+            try {
+                sbTemplate.append(generateFacadeEntry(clazz));
+            } catch (Exception e) {
+                System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
+            }
+        }
+        var facadeFileText = sbTemplate.append("}").toString();
+        Files.writeString(facadeDestPath, facadeFileText);
     }
 
     /***
@@ -316,16 +448,29 @@ public class EntityGenerator {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException, URISyntaxException {
-        // generate schema
+    public static void main(String[] args) throws IOException {
+        // generate destination folders
         var schemaFolder = new File("src/main/java/edu/wpi/punchy_pegasi/schema");
         if (!schemaFolder.exists()) schemaFolder.mkdir();
-        var classes = findAllClassesUsingClassLoader("edu.wpi.punchy_pegasi.generator.schema");
-        for (var clazz : classes) {
+        var generatedFolder = new File("src/main/java/edu/wpi/punchy_pegasi/generated");
+        if (!generatedFolder.exists()) generatedFolder.mkdir();
+        var schemaSourceDir = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/");
+        var schemaDestDir = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema/");
+        // default, copy files over
+        try (var fileWalk = Files.walk(schemaSourceDir)) {
+            for (var schemaSourceFile : fileWalk.filter(Files::isRegularFile).toList()) {
+                var schemaDestFile = schemaDestDir.resolve(schemaSourceDir.relativize(schemaSourceFile));
+                Files.writeString(schemaDestFile, new String(Files.readAllBytes(schemaSourceFile))
+                        .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema"));
+            }
+        }
+        generateFacade();
+        generateTable();
+        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
-                generate(clazz);
-            } catch (Exception e){
-                System.out.println("Failed to generate schema for " + clazz.getCanonicalName());
+                generateEntry(clazz);
+            } catch (Exception e) {
+                System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
         }
     }

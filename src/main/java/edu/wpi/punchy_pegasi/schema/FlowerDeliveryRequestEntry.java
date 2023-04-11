@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 
 import java.util.UUID;
 
@@ -26,7 +22,7 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     public FlowerDeliveryRequestEntry(String patientName, String roomNumber, String staffAssignment, String additionalNotes, String flowerSize, String flowerAmount, String flowerType) {
         this(UUID.randomUUID(), patientName, roomNumber, staffAssignment, additionalNotes, Status.PROCESSING, flowerSize, flowerAmount, flowerType);
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
         ROOM_NUMBER("roomNumber"),
@@ -37,7 +33,7 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
         FLOWER_TYPE("flowerType"),
         FLOWER_AMOUNT("flowerAmount"),
         PATIENT_NAME("patientName");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
             return ref.getFromField(this);

@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +37,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -63,7 +61,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -84,7 +82,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

@@ -1,16 +1,14 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Node implements INode {
-        private Long nodeID;
+    
+    private Long nodeID;
     private Integer xcoord;
     private Integer ycoord;
     private String floor;
@@ -31,14 +29,14 @@ public class Node implements INode {
             default -> -1;
         };
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         NODE_ID("nodeID"),
         XCOORD("xcoord"),
         YCOORD("ycoord"),
         FLOOR("floor"),
         BUILDING("building");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref){
             return ref.getFromField(this);
