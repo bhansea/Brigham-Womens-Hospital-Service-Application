@@ -337,7 +337,6 @@ public class SleepThroughTheWinter {
         Matcher matcher = pattern.matcher(template);
 
         for (int i = 0; i < 3; i++) matcher.find();  // skip first 3 matches
-        resultText.append("\tprivate " + ClassName + "DaoImpl " + className + "Dao = new " + ClassName + "DaoImpl(dbController);\n");
 
         while (matcher.find()) {
             var fcnHeader = matcher.group(1);
@@ -400,8 +399,24 @@ public class SleepThroughTheWinter {
     private static void generateFacade() throws IOException, IllegalStateException{
         var facadeDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated/Facade.java");
         var facadeSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/Facade.java");
+
+        StringBuilder sbDaoDec = new StringBuilder();
+        StringBuilder sbDaoInit = new StringBuilder();
+        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()){
+            try {
+                var ClassName = clazz.getSimpleName();
+                if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
+                var className = firstLower(ClassName);
+                sbDaoDec.append("\tprivate final " + ClassName + "DaoImpl " + className + "Dao;\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(this.dbController);\n");
+            } catch (Exception e) {
+                System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
+            }
+        }
         var template = new String(Files.readAllBytes(facadeSourcePath))
                 .replaceAll("}\n*$", "")
+                .replaceAll("/\\*Dao Declarations\\*/", sbDaoDec.toString())
+                .replaceAll("/\\*Dao Initialization\\*/", sbDaoInit.toString())
                 .replaceAll("\\*/", "")
                 .replaceAll("/\\*", "")
                 .replaceAll("package edu\\.wpi\\.punchy_pegasi\\.generator\\.schema;",
@@ -413,16 +428,16 @@ public class SleepThroughTheWinter {
                                 import java.util.Map;
                                 import java.util.Optional;
                                 """);
-        StringBuilder sb = new StringBuilder();
-        sb.append(template);
+        StringBuilder sbTemplate = new StringBuilder();
+        sbTemplate.append(template);
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
-                sb.append(generateFacadeEntry(clazz));
+                sbTemplate.append(generateFacadeEntry(clazz));
             } catch (Exception e) {
                 System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
         }
-        var facadeFileText = sb.append("}").toString();
+        var facadeFileText = sbTemplate.append("}").toString();
         Files.writeString(facadeDestPath, facadeFileText);
     }
 

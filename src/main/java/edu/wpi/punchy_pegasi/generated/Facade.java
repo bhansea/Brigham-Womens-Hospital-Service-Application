@@ -7,12 +7,31 @@ import java.util.Optional;
 
 
 public class Facade {
-    private PdbController dbController = null; 
+    private PdbController dbController; 
+	private final NodeDaoImpl nodeDao;
+	private final EdgeDaoImpl edgeDao;
+	private final MoveDaoImpl moveDao;
+	private final LocationNameDaoImpl locationNameDao;
+	private final FoodServiceRequestEntryDaoImpl foodServiceRequestEntryDao;
+	private final FlowerDeliveryRequestEntryDaoImpl flowerDeliveryRequestEntryDao;
+	private final ConferenceRoomEntryDaoImpl conferenceRoomEntryDao;
+	private final FurnitureRequestEntryDaoImpl furnitureRequestEntryDao;
+	private final OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
+
     public Facade(PdbController dbController) {
         this.dbController = dbController;
+		nodeDao = new NodeDaoImpl(this.dbController);
+		edgeDao = new EdgeDaoImpl(this.dbController);
+		moveDao = new MoveDaoImpl(this.dbController);
+		locationNameDao = new LocationNameDaoImpl(this.dbController);
+		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(this.dbController);
+		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(this.dbController);
+		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(this.dbController);
+		furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(this.dbController);
+		officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(this.dbController);
+
     }
 
-	private NodeDaoImpl nodeDao = new NodeDaoImpl(dbController);
 	public Optional<Node> getNode(java.lang.Long key) {
 		return nodeDao.get(key);
 	}
@@ -34,7 +53,6 @@ public class Facade {
 	public void deleteNode(Node node) {
 		nodeDao.delete(node);
 	}
-	private EdgeDaoImpl edgeDao = new EdgeDaoImpl(dbController);
 	public Optional<Edge> getEdge(java.lang.Long key) {
 		return edgeDao.get(key);
 	}
@@ -56,7 +74,6 @@ public class Facade {
 	public void deleteEdge(Edge edge) {
 		edgeDao.delete(edge);
 	}
-	private MoveDaoImpl moveDao = new MoveDaoImpl(dbController);
 	public Optional<Move> getMove(java.lang.Long key) {
 		return moveDao.get(key);
 	}
@@ -78,7 +95,6 @@ public class Facade {
 	public void deleteMove(Move move) {
 		moveDao.delete(move);
 	}
-	private LocationNameDaoImpl locationNameDao = new LocationNameDaoImpl(dbController);
 	public Optional<LocationName> getLocationName(java.lang.Long key) {
 		return locationNameDao.get(key);
 	}
@@ -100,7 +116,6 @@ public class Facade {
 	public void deleteLocationName(LocationName locationName) {
 		locationNameDao.delete(locationName);
 	}
-	private FoodServiceRequestEntryDaoImpl foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(dbController);
 	public Optional<FoodServiceRequestEntry> getFoodServiceRequestEntry(java.util.UUID key) {
 		return foodServiceRequestEntryDao.get(key);
 	}
@@ -122,7 +137,6 @@ public class Facade {
 	public void deleteFoodServiceRequestEntry(FoodServiceRequestEntry foodServiceRequestEntry) {
 		foodServiceRequestEntryDao.delete(foodServiceRequestEntry);
 	}
-	private FlowerDeliveryRequestEntryDaoImpl flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(dbController);
 	public Optional<FlowerDeliveryRequestEntry> getFlowerDeliveryRequestEntry(java.util.UUID key) {
 		return flowerDeliveryRequestEntryDao.get(key);
 	}
@@ -144,7 +158,6 @@ public class Facade {
 	public void deleteFlowerDeliveryRequestEntry(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
 		flowerDeliveryRequestEntryDao.delete(flowerDeliveryRequestEntry);
 	}
-	private ConferenceRoomEntryDaoImpl conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(dbController);
 	public Optional<ConferenceRoomEntry> getConferenceRoomEntry(java.util.UUID key) {
 		return conferenceRoomEntryDao.get(key);
 	}
@@ -166,7 +179,6 @@ public class Facade {
 	public void deleteConferenceRoomEntry(ConferenceRoomEntry conferenceRoomEntry) {
 		conferenceRoomEntryDao.delete(conferenceRoomEntry);
 	}
-	private FurnitureRequestEntryDaoImpl furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(dbController);
 	public Optional<FurnitureRequestEntry> getFurnitureRequestEntry(java.util.UUID key) {
 		return furnitureRequestEntryDao.get(key);
 	}
@@ -188,7 +200,6 @@ public class Facade {
 	public void deleteFurnitureRequestEntry(FurnitureRequestEntry furnitureRequestEntry) {
 		furnitureRequestEntryDao.delete(furnitureRequestEntry);
 	}
-	private OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(dbController);
 	public Optional<OfficeServiceRequestEntry> getOfficeServiceRequestEntry(java.util.UUID key) {
 		return officeServiceRequestEntryDao.get(key);
 	}
