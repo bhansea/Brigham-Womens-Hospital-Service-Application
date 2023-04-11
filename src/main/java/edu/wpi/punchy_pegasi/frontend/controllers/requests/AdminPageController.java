@@ -4,14 +4,16 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.generated.*;
 import edu.wpi.punchy_pegasi.schema.*;
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -22,10 +24,6 @@ import lombok.Setter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Comparator.comparing;
 
 
 public class AdminPageController {
@@ -108,17 +106,17 @@ public class AdminPageController {
         });
 
         importButton.setOnAction(e -> {
-
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+            fileChooser.getExtensionFilters().add(extFilter);
             selectedFile = fileChooser.showOpenDialog(stage);
-            filePath = selectedFile.getAbsolutePath();
-            fileText.setText(filePath);
 
-            while(selectedFile != null) {
+            if (selectedFile != null && tableTypesComboBox.getSelectedItem() != null) {
+                filePath = selectedFile.getAbsolutePath();
+                fileText.setText(filePath);
                 if (tableTypesComboBox.getSelectedItem().equals("Nodes")) {
                     try {
                         pdb.importTable(TableType.NODES, filePath);
                         selectedFile = null;
-                        break;
                     } catch (PdbController.DatabaseException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -126,7 +124,6 @@ public class AdminPageController {
                     try {
                         pdb.importTable(TableType.EDGES, filePath);
                         selectedFile = null;
-                        break;
                     } catch (PdbController.DatabaseException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -134,7 +131,6 @@ public class AdminPageController {
                     try {
                         pdb.importTable(TableType.MOVES, filePath);
                         selectedFile = null;
-                        break;
                     } catch (PdbController.DatabaseException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -142,7 +138,6 @@ public class AdminPageController {
                     try {
                         pdb.importTable(TableType.LOCATIONNAMES, filePath);
                         selectedFile = null;
-                        break;
                     } catch (PdbController.DatabaseException ex) {
                         throw new RuntimeException(ex);
                     }

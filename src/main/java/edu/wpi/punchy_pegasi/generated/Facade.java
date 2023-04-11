@@ -7,6 +7,7 @@ import java.util.Optional;
 
 
 public class Facade {
+    private PdbController dbController; 
 	private final NodeDaoImpl nodeDao;
 	private final EdgeDaoImpl edgeDao;
 	private final MoveDaoImpl moveDao;
@@ -16,17 +17,22 @@ public class Facade {
 	private final ConferenceRoomEntryDaoImpl conferenceRoomEntryDao;
 	private final FurnitureRequestEntryDaoImpl furnitureRequestEntryDao;
 	private final OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
+	private final EmployeeDaoImpl employeeDao;
+	private final AccountDaoImpl accountDao;
 
     public Facade(PdbController dbController) {
-		nodeDao = new NodeDaoImpl(dbController);
-		edgeDao = new EdgeDaoImpl(dbController);
-		moveDao = new MoveDaoImpl(dbController);
-		locationNameDao = new LocationNameDaoImpl(dbController);
-		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(dbController);
-		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(dbController);
-		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(dbController);
-		furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(dbController);
-		officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(dbController);
+        this.dbController = dbController;
+		nodeDao = new NodeDaoImpl(this.dbController);
+		edgeDao = new EdgeDaoImpl(this.dbController);
+		moveDao = new MoveDaoImpl(this.dbController);
+		locationNameDao = new LocationNameDaoImpl(this.dbController);
+		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(this.dbController);
+		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(this.dbController);
+		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(this.dbController);
+		furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(this.dbController);
+		officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(this.dbController);
+		employeeDao = new EmployeeDaoImpl(this.dbController);
+		accountDao = new AccountDaoImpl(this.dbController);
 
     }
 
@@ -218,5 +224,47 @@ public class Facade {
 	}
 	public void deleteOfficeServiceRequestEntry(OfficeServiceRequestEntry officeServiceRequestEntry) {
 		officeServiceRequestEntryDao.delete(officeServiceRequestEntry);
+	}
+	public Optional<Employee> getEmployee(java.lang.Long key) {
+		return employeeDao.get(key);
+	}
+	public Map<java.lang.Long, Employee> getEmployee(Employee.Field column, Object value) {
+		return employeeDao.get(column, value);
+	}
+	public Map<java.lang.Long, Employee> getEmployee(Employee.Field[] params, Object[] value) {
+		return employeeDao.get(params, value);
+	}
+	public Map<java.lang.Long, Employee> getAllEmployee() {
+		return employeeDao.getAll();
+	}
+	public void saveEmployee(Employee employee) {
+		employeeDao.save(employee);
+	}
+	public void updateEmployee(Employee employee, Employee.Field[] params) {
+		employeeDao.update(employee, params);
+	}
+	public void deleteEmployee(Employee employee) {
+		employeeDao.delete(employee);
+	}
+	public Optional<Account> getAccount(java.lang.Long key) {
+		return accountDao.get(key);
+	}
+	public Map<java.lang.Long, Account> getAccount(Account.Field column, Object value) {
+		return accountDao.get(column, value);
+	}
+	public Map<java.lang.Long, Account> getAccount(Account.Field[] params, Object[] value) {
+		return accountDao.get(params, value);
+	}
+	public Map<java.lang.Long, Account> getAllAccount() {
+		return accountDao.getAll();
+	}
+	public void saveAccount(Account account) {
+		accountDao.save(account);
+	}
+	public void updateAccount(Account account, Account.Field[] params) {
+		accountDao.update(account, params);
+	}
+	public void deleteAccount(Account account) {
+		accountDao.delete(account);
 	}
 }
