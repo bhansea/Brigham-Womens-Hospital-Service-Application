@@ -68,7 +68,7 @@
                                                 <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                              </children>
                                           </HBox>
-                                          <MFXComboBox fx:id="endTime1" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Temperature Type">
+                                          <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Temperature Type">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -84,33 +84,50 @@
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Text>
-                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                              </children>
                                           </HBox>
-                                          <MFXComboBox fx:id="endTime2" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Items">
+                                          <MFXComboBox fx:id="additionalItemsDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Items">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                           </MFXComboBox>
                                        </children>
                                     </VBox>
-                                    <VBox VBox.vgrow="ALWAYS">
+                                    <VBox>
                                        <children>
                                           <HBox>
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Dietary Restrictions">
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Beverage">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
                                                 </Text>
-                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                              </children>
                                           </HBox>
-                                          <TextArea promptText="Food Allergies, Gluten Free, etc." wrapText="true" />
+                                          <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Beverages">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </MFXComboBox>
                                        </children>
-                                       <padding>
-                                          <Insets right="35.0" />
-                                       </padding>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <HBox>
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fill in Dietary Restrictions">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                          </HBox>
+                                          <HBox>
+                                             <children>
+                                                <TextArea fx:id="dietaryRestrictions" prefHeight="90.0" prefWidth="450.0" promptText="Allergies, Gluten Free, etc." wrapText="true" />
+                                             </children>
+                                          </HBox>
+                                       </children>
                                     </VBox>
                                  </children>
                               </VBox>
@@ -125,7 +142,7 @@
                                           </ImageView>
                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;">
                                              <children>
-                                                <Label text="Meal Name">
+                                                <Label fx:id="mealName" text="Meal Name">
                                                    <font>
                                                       <Font size="24.0" />
                                                    </font>
