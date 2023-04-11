@@ -14,7 +14,7 @@ BEGIN
       nodeID bigint DEFAULT nextval('nodes_id_seq') PRIMARY KEY,
       xcoord int,
       ycoord int,
-      floor varchar,
+      layer varchar,
       building varchar
     );
     ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes.nodeID;

@@ -560,7 +560,7 @@ public class AdminPageController {
         MFXTableColumn<Node> nodeIdCol = new MFXTableColumn<>("Node ID", true, Comparator.comparing(Node::getNodeID));
         MFXTableColumn<Node> xcoordCol = new MFXTableColumn<>("X Cord", true, Comparator.comparing(Node::getXcoord));
         MFXTableColumn<Node> ycoordCol = new MFXTableColumn<>("Y Cord", true, Comparator.comparing(Node::getYcoord));
-        MFXTableColumn<Node> floorCol = new MFXTableColumn<>("Floor", true, Comparator.comparing(Node::getFloor));
+        MFXTableColumn<Node> floorCol = new MFXTableColumn<>("Layer", true, Comparator.comparing(Node::getFloor));
         MFXTableColumn<Node> buildingCol = new MFXTableColumn<>("Building", true, Comparator.comparing(Node::getBuilding));
 
 

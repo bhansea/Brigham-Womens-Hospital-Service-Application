@@ -33,17 +33,17 @@
                   </HBox>
                   <VBox style="-fx-background-color: #c9c9c9; -fx-background-radius: 6;">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics A &amp; B (this floor) " wrappingWidth="242.63882398605347">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics A &amp; B (this layer) " wrappingWidth="242.63882398605347">
                            <font>
                               <Font size="25.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics C (up to 3rd floor) " wrappingWidth="245.44366455078125">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics C (up to 3rd layer) " wrappingWidth="245.44366455078125">
                            <font>
                               <Font size="25.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rehabilitation Services (down to 1st floor)" wrappingWidth="245.44366455078125">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rehabilitation Services (down to 1st layer)" wrappingWidth="245.44366455078125">
                            <font>
                               <Font size="25.0" />
                            </font>

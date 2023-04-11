@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.map.PathfindingMap"
+            fx:id="root">
+    <left>
+        <VBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets topRightBottomLeft="10"/>
+            </padding>
+            <VBox alignment="CENTER" spacing="10" fx:id="pathfinding">
+                <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
+                <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"
+                                   HBox.hgrow="ALWAYS"/>
+                <HBox spacing="10" alignment="CENTER">
+                    <padding>
+                        <Insets topRightBottomLeft="5"/>
+                    </padding>
+                    <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"/>
+                    <MFXButton text="Find path" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+                </HBox>
+                <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+            </VBox>
+        </VBox>
+    </left>
+</BorderPane>
