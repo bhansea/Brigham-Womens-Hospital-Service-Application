@@ -69,6 +69,7 @@ public class AdminPageController {
 
     public void initialize() {
         final PdbController pdb = App.getSingleton().getPdb();
+        // TODO: make tableTypes enum type
         ObservableList<String> tableTypes = FXCollections.observableArrayList("Nodes", "Edges", "Moves", "Location Names");
         tableTypesComboBox.setItems(tableTypes);
 
@@ -77,6 +78,7 @@ public class AdminPageController {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         fileChooser.setTitle("File Chooser");
 
+        // TODO: make tableTypes enum type
         ObservableList<String> displayTableTypeList = FXCollections.observableArrayList
                 ("Flower", "Food", "Furniture", "Conference Room Reservation", "Office Supplies", "Node", "Edge", "Moves", "Location Names");
         displayTableTypeComboBox.setItems(displayTableTypeList);
