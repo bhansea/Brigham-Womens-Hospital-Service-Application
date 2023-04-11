@@ -1,0 +1,11 @@
+.icon {
+    -fx-background-color: white;
+    -height: 25;
+    -fx-min-height: -height;
+    -fx-max-height: -height;
+    -width: 25;
+    -fx-min-width: -width;
+    -fx-max-width: -width;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
