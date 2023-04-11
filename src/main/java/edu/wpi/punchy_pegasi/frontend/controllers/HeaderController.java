@@ -34,32 +34,32 @@ public class HeaderController implements PropertyChangeListener {
 
         App.getSingleton().addPropertyChangeListener(this);
 
-        for (var entry : Screen.values()) {
-            if (entry.name().toLowerCase().contains("request")
-                || entry.name().toLowerCase().contains("home"))
-                continue;
-            Button button = new Button();
-            button.setText(entry.getReadable());
-            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
-            button.setOnMouseClicked(e -> {
-                App.getSingleton().navigate(entry);
-            });
-            navButtonContainer.getChildren().add(button);
-        }
+//        for (var entry : Screen.values()) {
+//            if (entry.name().toLowerCase().contains("request")
+//                || entry.name().toLowerCase().contains("home"))
+//                continue;
+//            Button button = new Button();
+//            button.setText(entry.getReadable());
+//            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
+//            button.setOnMouseClicked(e -> {
+//                App.getSingleton().navigate(entry);
+//            });
+//            navButtonContainer.getChildren().add(button);
+//        }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getNewValue().equals(Screen.HOME)) {
-            exitButton.setVisible(true);
-            exitButton.setManaged(true);
-            homeButton.setVisible(false);
-            homeButton.setManaged(false);
-        } else {
-            exitButton.setVisible(false);
-            exitButton.setManaged(false);
-            homeButton.setVisible(true);
-            homeButton.setManaged(true);
-        }
+//        if (evt.getNewValue().equals(Screen.HOME)) {
+//            exitButton.setVisible(true);
+//            exitButton.setManaged(true);
+//            homeButton.setVisible(false);
+//            homeButton.setManaged(false);
+//        } else {
+//            exitButton.setVisible(false);
+//            exitButton.setManaged(false);
+//            homeButton.setVisible(true);
+//            homeButton.setManaged(true);
+//        }
     }
 }
