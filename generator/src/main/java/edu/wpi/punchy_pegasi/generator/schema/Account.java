@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 public class Account {
@@ -17,9 +15,10 @@ public class Account {
     private Long employeeID;
     private AccountType accountType;
 
-    public enum AccountType {
-        NONE,
-        ADMIN,
-        STAFF;
-    }
+        public enum AccountType {
+            NONE,
+            ADMIN,
+            STAFF;
+        }
+
 }
