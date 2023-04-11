@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.ConferenceRoomEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,6 +19,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXComboBox<String> beginningTime;
     @FXML
     MFXComboBox<String> endTime;
+    @FXML
+    MFXDatePicker calendar;
 
 
     public static BorderPane create(String path) {
