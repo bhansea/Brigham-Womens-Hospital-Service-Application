@@ -337,6 +337,7 @@ public class SleepThroughTheWinter {
         Matcher matcher = pattern.matcher(template);
 
         for (int i = 0; i < 3; i++) matcher.find();  // skip first 3 matches
+        resultText.append("\tprivate " + ClassName + "DaoImpl " + className + "Dao = new " + ClassName + "DaoImpl(dbController);\n");
 
         while (matcher.find()) {
             var fcnHeader = matcher.group(1);
@@ -377,19 +378,18 @@ public class SleepThroughTheWinter {
                             .append(fcnHeader)
                             .append("{\n")
                             .append(String.format("""
-                                           \t\t%1$s %2$s = new %1$s(dbController);
+                                           \t\t%1$s.%2$s(%3$s);
                                            \t}
-                                           """, ClassName+"DaoImpl", className+"Dao"
+                                           """, className+"Dao", fcnName, fcnArgs
                             ));
                 } else {
                     resultText.append("\t")
                             .append(fcnHeader)
                             .append("{\n")
                             .append(String.format("""
-                                           \t\t%1$s %2$s = new %1$s(dbController);
-                                           \t\treturn %2$s.%3$s(%4$s);
+                                           \t\treturn %1$s.%2$s(%3$s);
                                            \t}
-                                           """, ClassName+"DaoImpl", className+"Dao", fcnName, fcnArgs
+                                           """, className+"Dao", fcnName, fcnArgs
                             ));
                 }
             }
