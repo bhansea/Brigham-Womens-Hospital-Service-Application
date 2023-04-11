@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import java.util.Objects;
 
 public class SidebarController {
+    @FXML HBox home;
     @FXML VBox serviceRequestDropDown;
     @FXML Label conferenceRoomText;
     @FXML Label officeSuppliesText;
@@ -105,6 +106,10 @@ public class SidebarController {
 
         signagePage.setOnMouseClicked(e -> {
             App.getSingleton().navigate(Screen.SIGNAGE);
+        });
+
+        home.setOnMouseClicked(e -> {
+            App.getSingleton().navigate(Screen.HOME);
         });
 
         logout.setOnMouseClicked(e -> {

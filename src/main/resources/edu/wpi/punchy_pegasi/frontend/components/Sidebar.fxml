@@ -13,7 +13,7 @@
 
 <BorderPane maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
    <center>
-      <VBox spacing="25.0" style="-fx-background-color: #0067B1; -fx-border-radius: 6;" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+      <VBox spacing="25.0" style="-fx-background-color: #00458E; -fx-border-radius: 6;" styleClass="sideBar" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>
             <HBox>
                <children>
@@ -21,7 +21,7 @@
                      <children>
                         <ImageView fx:id="profileImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <VBox.margin>
-                              <Insets top="5.0"/>
+                              <Insets left="25.0" top="5.0" />
                            </VBox.margin>
                         </ImageView>
                      </children>
@@ -32,22 +32,49 @@
                            <font>
                               <Font size="20.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </Label>
                         <Label fx:id="roleText" text="Admin" textFill="WHITE">
                            <font>
-                              <Font size="15.0"/>
+                              <Font size="15.0" />
                            </font>
                         </Label>
                      </children>
+                     <HBox.margin>
+                        <Insets left="-20.0" />
+                     </HBox.margin>
                   </VBox>
                </children>
             </HBox>
-            <Line endX="256.0" startX="0.0" stroke="#004c83"/>
+            <Line endX="256.0" startX="0.0" stroke="#012D5A" />
+            <HBox fx:id="home" alignment="CENTER_LEFT" spacing="10.0" styleClass="button">
+               <children>
+                  <Region styleClass="icon">
+                     <shape>
+                        <SVGPath>
+                           <content>
+                              M19.469 12.594l3.625 3.313c0.438 0.406 0.313 0.719-0.281 0.719h-2.719v8.656c0 0.594-0.5 1.125-1.094 1.125h-4.719v-6.063c0-0.594-0.531-1.125-1.125-1.125h-2.969c-0.594 0-1.125 0.531-1.125 1.125v6.063h-4.719c-0.594 0-1.125-0.531-1.125-1.125v-8.656h-2.688c-0.594 0-0.719-0.313-0.281-0.719l10.594-9.625c0.438-0.406 1.188-0.406 1.656 0l2.406 2.156v-1.719c0-0.594 0.531-1.125 1.125-1.125h2.344c0.594 0 1.094 0.531 1.094 1.125v5.875z
+                           </content>
+                        </SVGPath>
+                     </shape>
+                  </Region>
+                  <Label text="Home" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </HBox>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="10.0">
+                  <VBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox fx:id="serviceRequests" alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS" styleClass="button">
+                        <HBox fx:id="serviceRequests" alignment="CENTER_LEFT" spacing="10.0" styleClass="button" HBox.hgrow="ALWAYS">
                            <Region styleClass="icon">
                               <shape>
                                  <SVGPath>
@@ -62,8 +89,11 @@
                                  <Font size="20.0" />
                               </font>
                            </Label>
+                           <padding>
+                              <Insets left="25.0" />
+                           </padding>
                         </HBox>
-                        <VBox fx:id="serviceRequestDropDown" alignment="CENTER_LEFT" VBox.vgrow="ALWAYS" spacing="5.0">
+                        <VBox fx:id="serviceRequestDropDown" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Label fx:id="conferenceRoomText" opacity="0.5" text="Conference Room" textFill="WHITE" />
                               <Label fx:id="officeSuppliesText" opacity="0.5" text="Office Supplies" textFill="WHITE" />
@@ -72,7 +102,7 @@
                               <Label fx:id="mealText" opacity="0.5" text="Meal" textFill="WHITE" />
                            </children>
                            <padding>
-                              <Insets left="40.0" />
+                              <Insets left="65.0" />
                            </padding>
                         </VBox>
                      </children>
@@ -100,6 +130,9 @@
                      </font>
                   </Label>
                </children>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
             </HBox>
             <HBox fx:id="adminPage" alignment="CENTER_LEFT" spacing="10.0" styleClass="button">
                <children>
@@ -118,6 +151,9 @@
                      </font>
                   </Label>
                </children>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
             </HBox>
             <HBox fx:id="signagePage" alignment="CENTER_LEFT" spacing="10.0" styleClass="button">
                <children>
@@ -136,31 +172,39 @@
                      </font>
                   </Label>
                </children>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
             </HBox>
-            <HBox fx:id="logout" alignment="BOTTOM_LEFT" spacing="10.0" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
-                  <Region styleClass="icon">
-                     <shape>
-                        <SVGPath>
-                           <content>
+                  <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="button" fx:id="logout">
+                     <children>
+                        <Region styleClass="icon">
+                           <shape>
+                              <SVGPath>
+                                 <content>
                               M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z
                            </content>
-                        </SVGPath>
-                     </shape>
-                     <HBox.margin>
-                        <Insets left="20.0" bottom="5.0" />
-                     </HBox.margin>
-                  </Region>
-                  <Label text="Logout" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
+                              </SVGPath>
+                           </shape>
+                        </Region>
+                        <Label text="Logout" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="25.0" />
+                     </padding>
+                  </HBox>
                </children>
-            </HBox>
+            </VBox>
          </children>
          <padding>
-            <Insets bottom="20.0" top="10.0" />
+            <Insets bottom="30.0" top="10.0" />
          </padding>
       </VBox>
    </center>
