@@ -14,7 +14,7 @@ BEGIN
       nodeID bigint DEFAULT nextval('nodes_id_seq') PRIMARY KEY,
       xcoord int,
       ycoord int,
-      layer varchar,
+      floor varchar,
       building varchar
     );
     ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes.nodeID;
@@ -91,7 +91,8 @@ CREATE TABLE IF NOT EXISTS teamp.foodrequests
   tempType varchar,
   additionalItems varchar ARRAY,
   dietaryRestrictions varchar,
-  patientName varchar
+  patientName varchar,
+  beverage varchar
 );
 """)
 ,
