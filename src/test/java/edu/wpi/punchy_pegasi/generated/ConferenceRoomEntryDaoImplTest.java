@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -40,8 +41,8 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void get() {
-        ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-        Object[] values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
+        ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testLocation", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
+        Object[] values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
         try{
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e){
@@ -59,19 +60,19 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-        var room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-        var values = new Object[]{room.getServiceID(), room.getRoomNumber(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
-        var values2 = new Object[]{room2.getServiceID(), room2.getRoomNumber(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
+        var room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
+        var room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
+        var values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
+        var values2 = new Object[]{room2.getServiceID(), room2.getLocationName(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
         try{
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values2);
         } catch (PdbController.DatabaseException e){
             throw new RuntimeException(e);
         }
-        var results = dao.get(ConferenceRoomEntry.Field.ROOM_NUMBER, "testRoom");
+        var results = dao.get(ConferenceRoomEntry.Field.LOCATION_NAME, "testRoom");
         var map = new HashMap<java.util.UUID, ConferenceRoomEntry>();
-        try (var rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, ConferenceRoomEntry.Field.ROOM_NUMBER.getColName(), "testRoom")) {
+        try (var rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, ConferenceRoomEntry.Field.LOCATION_NAME.getColName(), "testRoom")) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                         (java.util.UUID)rs.getObject("serviceID"),
@@ -80,7 +81,8 @@ class ConferenceRoomEntryDaoImplTest {
                         (java.lang.String)rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                         (java.lang.String)rs.getObject("beginningTime"),
-                        (java.lang.String)rs.getObject("endTime"));
+                        (java.lang.String)rs.getObject("endTime"),
+                        LocalDate.now());
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -106,7 +108,8 @@ class ConferenceRoomEntryDaoImplTest {
                 "testNotes0",
                 RequestEntry.Status.PROCESSING,
                 "beginTime0",
-                "endTime0"
+                "endTime0",
+                LocalDate.now()
         };
         var values1 = new Object[] {
                 UUID.randomUUID(),
@@ -115,7 +118,8 @@ class ConferenceRoomEntryDaoImplTest {
                 "testNotes1",
                 RequestEntry.Status.PROCESSING,
                 "beginTime1",
-                "endTime1"
+                "endTime1",
+                LocalDate.now()
         };
         var values2 = new Object[] {
                 UUID.randomUUID(),
@@ -124,7 +128,8 @@ class ConferenceRoomEntryDaoImplTest {
                 "testNotes2",
                 RequestEntry.Status.PROCESSING,
                 "beginTime2",
-                "endTime2"
+                "endTime2",
+                LocalDate.now()
         };
 
         var valuesSet = new Object[][] {values0, values1, values2};
@@ -137,13 +142,14 @@ class ConferenceRoomEntryDaoImplTest {
                 assert false : e.getMessage();
             }
             var uuid = (UUID) values[0];
-            var roomNum = (String) values[1];
+            var locName = (String) values[1];
             var staff = (String) values[2];
             var notes = (String) values[3];
             var status = (RequestEntry.Status) values[4];
             var beginTime = (String) values[5];
             var endTime = (String) values[6];
-            refMap.put(uuid, new ConferenceRoomEntry(uuid, roomNum, staff, notes, status, beginTime, endTime));
+            var date = (LocalDate) values[7];
+            refMap.put(uuid, new ConferenceRoomEntry(uuid, locName, staff, notes, status, beginTime, endTime, date));
         }
 
         Map<UUID, ConferenceRoomEntry> resultMap = dao.getAll();
@@ -208,7 +214,7 @@ class ConferenceRoomEntryDaoImplTest {
 
         var values = new Object[] {
                 conferenceRoom.getServiceID(),
-                conferenceRoom.getRoomNumber(),
+                conferenceRoom.getLocationName(),
                 conferenceRoom.getStaffAssignment(),
                 conferenceRoom.getAdditionalNotes(),
                 conferenceRoom.getStatus(),

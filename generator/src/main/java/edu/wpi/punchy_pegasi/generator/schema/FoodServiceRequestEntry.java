@@ -13,8 +13,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final String dietaryRestrictions;
     private final String patientName;
 
-    public FoodServiceRequestEntry(UUID serviceID, String roomNumber, String staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
-        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
+    public FoodServiceRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -22,8 +22,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.patientName = patientName;
     }
 
-    public FoodServiceRequestEntry(String roomNumber, String staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
-        super(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING);
+    public FoodServiceRequestEntry(String locationName, String staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;

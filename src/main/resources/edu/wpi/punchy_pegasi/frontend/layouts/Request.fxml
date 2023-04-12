@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
     </center>
@@ -28,11 +29,11 @@
                                         <Font size="24.0" />
                                     </font>
                                 </Label>
-                                <MFXComboBox fx:id="locationName" floatMode="DISABLED" floatingText="Location Name" prefHeight="51.0" prefWidth="298.0" promptText="Location Names">
+                                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" floatingText="Location Name" prefHeight="51.0" prefWidth="298.0" promptText="Location Names">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
-                                </MFXComboBox>
+                                </MFXFilterComboBox>
                             </children>
                         </VBox>
                         <VBox spacing="6.0">

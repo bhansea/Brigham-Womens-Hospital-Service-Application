@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
     private final PdbController dbController;
 
     public FoodServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -33,7 +33,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             rs.next();
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("locationName"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
@@ -61,7 +61,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("locationName"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
@@ -86,7 +86,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("locationName"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
@@ -106,7 +106,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName()};
+        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

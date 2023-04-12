@@ -67,6 +67,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         clearGeneric();
         beginningTime.clear();
         endTime.clear();
+        calendar.clear();
     }
 
     //validates the bottom box if the front one is filled in
@@ -93,11 +94,12 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     public void submitEntry() {
         requestEntry =
                 new ConferenceRoomEntry(
-                        roomNumber.getText(),
+                        locationName.getText(),
                         staffAssignment.getText(),
                         additionalNotes.getText(),
                         beginningTime.getText(),
-                        endTime.getText());
+                        endTime.getText(),
+                        calendar.getValue());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

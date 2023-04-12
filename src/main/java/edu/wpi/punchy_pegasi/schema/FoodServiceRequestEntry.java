@@ -13,8 +13,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final String dietaryRestrictions;
     private final String patientName;
 
-    public FoodServiceRequestEntry(UUID serviceID, String roomNumber, String staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
-        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
+    public FoodServiceRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -22,8 +22,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.patientName = patientName;
     }
 
-    public FoodServiceRequestEntry(String roomNumber, String staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
-        super(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING);
+    public FoodServiceRequestEntry(String locationName, String staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -33,7 +33,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
+        LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
@@ -51,7 +51,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
-            case ROOM_NUMBER -> getRoomNumber();
+            case LOCATION_NAME -> getLocationName();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();

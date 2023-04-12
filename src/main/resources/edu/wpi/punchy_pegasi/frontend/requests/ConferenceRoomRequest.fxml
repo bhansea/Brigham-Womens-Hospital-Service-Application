@@ -103,6 +103,9 @@
                                        </font>
                                     </TextField>
                                  </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
                               </VBox>
                               <VBox prefHeight="125.0" prefWidth="562.0">
                                  <children>
@@ -121,6 +124,9 @@
                                     </HBox>
                                     <MFXDatePicker fx:id="calendar" style="-fx-background-color: #ffffff;" />
                                  </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
                               </VBox>
                            </children>
                         </HBox>
