@@ -1,81 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns="http://javafx.com/javafx/"
-            xmlns:fx="http://javafx.com/fxml/1">
-    <center>
-        <VBox spacing="30.0">
-            <children>
-                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;"
-                      VBox.vgrow="ALWAYS">
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                    <children>
-                        <Label minWidth="475.0" text="Office Supply Service Request">
-                            <font>
-                                <Font size="36.0"/>
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
-                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label minWidth="350.0" text="Enter Office Supplies to Request">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets left="10.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <TextField fx:id="officeRequest" prefWidth="475.0" promptText="Enter supplies" onKeyReleased="#validateEntry">
-                            <font>
-                                <Font size="15.0"/>
-                            </font>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <HBox spacing="100.0" style="-fx-background-color: FFFFFF; -fx-background-radius: 6;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label minWidth="354.0" text="What office items do you need? *">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="pencils" minWidth="150.0" mnemonicParsing="false" onMouseClicked="#validateEntry" text="Pencils" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="pencilAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
                         </TextField>
-                    </children>
-                </VBox>
-            </children>
-            <BorderPane.margin>
-                <Insets bottom="20.0" top="20.0"/>
-            </BorderPane.margin>
-        </VBox>
-    </center>
-    <right>
-        <VBox spacing="40.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-            </padding>
-        </VBox>
-    </right>
-    <left>
-        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-            <children>
-                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;"/>
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../assets/officeSuppliesPic.png"/>
-                    </image>
-                </ImageView>
-                <Label style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" text="Office Supplies">
-                    <font>
-                        <Font size="25.0"/>
-                    </font>
-                </Label>
-            </children>
-            <BorderPane.margin>
-                <Insets/>
-            </BorderPane.margin>
-            <padding>
-                <Insets left="20.0" right="20.0"/>
-            </padding>
-        </VBox>
-    </left>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="pens" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Pens" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="penAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="paper" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Paper" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="paperAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="stapler" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Stapler" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="staplerAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="staples" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Staples" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="stapleAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="paperclips" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Paperclips" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="paperclipAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <CheckBox fx:id="other" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Other" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </CheckBox>
+                        <TextField fx:id="otherItems" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Please specify" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets left="32.0" />
+               </HBox.margin>
+            </VBox>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="215.0" style="-fx-background-color: #00458E; -fx-background-radius: 6;">
+               <center>
+                  <ImageView fitHeight="205.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../assets/officeSuppliesPic.jpg" />
+                     </image>
+                  </ImageView>
+               </center>
+            </BorderPane>
+         </children>
+      </HBox>
+   </center>
 </BorderPane>
