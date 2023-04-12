@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.frontend.authentication.AccountType;
 import edu.wpi.punchy_pegasi.frontend.controllers.ErrorController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.controllers.SplashController;
+import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
@@ -36,6 +37,8 @@ public class App extends Application {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Getter
     private PdbController pdb;
+    @Getter
+    private Facade facade;
     @Setter
     @Getter
     private Stage primaryStage;
@@ -139,6 +142,7 @@ public class App extends Application {
         }
         log.info("Application started with database {}", pdb.source);
         this.pdb = pdb;
+        facade = new Facade(pdb);
         try {
             final BorderPane loadedLayout = loadWithCache("frontend/layouts/AppLayout.fxml");
             final LayoutController layoutController = loader.getController();

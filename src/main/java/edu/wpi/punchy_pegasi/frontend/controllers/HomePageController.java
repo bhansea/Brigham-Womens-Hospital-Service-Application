@@ -17,17 +17,6 @@ public class HomePageController {
 
     @FXML
     public void initialize() {
-        ObservableList<HBox> serviceRequestButtons = FXCollections.observableArrayList();
-        Bindings.bindContent(serviceRequests.getChildren(), serviceRequestButtons);
-        for (var entry : Screen.values()) {
-            if (!entry.name().toLowerCase().contains("request"))
-                continue;
-            LinkControl linkControl = new LinkControl(entry.getReadable(), () -> {
-                App.getSingleton().navigate(entry);
-            });
-            serviceRequestButtons.add(linkControl);
-        }
-
         ObservableList<HBox> otherPageButtons = FXCollections.observableArrayList();
         Bindings.bindContent(otherPages.getChildren(), otherPageButtons);
 
