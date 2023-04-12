@@ -27,8 +27,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
-import java.sql.SQLException;
 
 @Slf4j
 public class App extends Application {

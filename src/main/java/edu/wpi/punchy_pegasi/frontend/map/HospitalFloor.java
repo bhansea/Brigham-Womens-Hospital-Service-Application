@@ -27,6 +27,7 @@ class HospitalFloor {
     Group tooltipCanvas = new Group();
     ImageView imageView = new ImageView();
     void init() {
+        tooltipCanvas.setPickOnBounds(false);
         root.getChildren().addAll(imageView, lineCanvas, nodeCanvas, tooltipCanvas);
         button.setText(this.humanReadableName);
         new Thread(this::loadImage).start();

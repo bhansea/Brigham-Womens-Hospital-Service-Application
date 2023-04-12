@@ -145,6 +145,7 @@ public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
         textLabel.setTextFill(Color.valueOf("#ffffff"));
         textLabel.setTextAlignment(TextAlignment.CENTER);
         textLabel.layout();
+        toolTip.setPickOnBounds(false);
         //tool tip styling
         toolTip.getChildren().add(textLabel);
         toolTip.setPadding(new Insets(5));

@@ -10,13 +10,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+@Slf4j
 public class HomePageController {
     @FXML
     private VBox tableContainer;
@@ -28,13 +26,21 @@ public class HomePageController {
 
     @FXML
     private void initialize() {
-        showServiceRequestTable();
+        showServiceRequestTable(true);
         initRequestTable();
     }
 
-    private void showServiceRequestTable() {
-        requestTable.setVisible(true);
-        requestTable.setManaged(true);
+    private void showServiceRequestTable(boolean show) {
+        requestTable.setVisible(show);
+        requestTable.setManaged(show);
+    }
+
+    private Map<Long, LocationName> locationNames = facade.getAllLocationName();
+    private Map<Long, Employee> employees = facade.getAllEmployee();
+
+    private void rowClicked(GenericRequestEntry entry) {
+        var original = entry.originalEntry;
+        var tt = Arrays.stream(TableType.values()).filter(f -> f.getClazz() == original.getClass()).findFirst().get();
     }
 
     private void initRequestTable() {
@@ -45,21 +51,10 @@ public class HomePageController {
         requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
         requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
 
-        var locationNames = facade.getAllLocationName();
-        var employees = facade.getAllEmployee();
-
 
         ObservableList<GenericRequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream()
                 .filter(e -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel() || Objects.equals(e.getStaffAssignment(), employeeID))
-                .map(re -> new GenericRequestEntry(
-                        locationNames.getOrDefault(re.getLocationName(), new LocationName(null, "Unknown location", "", null)).getLongName(),
-                        employees.getOrDefault(re.getStaffAssignment(), new Employee(0L, "Unknown", "Employee")).getFullName(),
-                        re.getAdditionalNotes(),
-                        re.getStatus(),
-                        Arrays.stream(TableType.values())
-                                .filter(tt -> tt.getClazz() == re.getClass())
-                                .findFirst()
-                                .orElseGet(() -> TableType.GENERIC)))
+                .map(GenericRequestEntry::new)
                 .toList());
 
         MFXTableColumn<GenericRequestEntry> locationCol = new MFXTableColumn<>("Location", true);
@@ -72,29 +67,40 @@ public class HomePageController {
         additionalCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.additionalNotes));
         statusCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.status));
         typeCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.tableType));
+//        requestTable.setTableRowFactory(r -> {
+//            var row = new MFXTableRow<>(requestTable, r);
+//            row.setStyle("-fx-background-color: red");
+//            row.setOnMouseClicked(e -> {
+//                rowClicked(r);
+//            });
+//            return row;
+//        });
         requestTable.getTableColumns().addAll(locationCol, employeeCol, additionalCol, statusCol, typeCol);
         requestTable.setItems(requestList);
         requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
         requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
-        var thread = new Thread(() -> {
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            resizeColumns();
-        });
-        thread.setDaemon(true);
-        thread.start();
+        requestTable.autosizeColumnsOnInitialization();
     }
 
-    @AllArgsConstructor
     private class GenericRequestEntry {
+        RequestEntry originalEntry;
         String location;
         String assigned;
         String additionalNotes;
         RequestEntry.Status status;
         TableType tableType;
+
+        GenericRequestEntry(RequestEntry re) {
+            originalEntry = re;
+            location = locationNames.getOrDefault(re.getLocationName(), new LocationName(null, "Unknown location", "", null)).getLongName();
+            assigned = employees.getOrDefault(re.getStaffAssignment(), new Employee(0L, "Unknown", "Employee")).getFullName();
+            additionalNotes = re.getAdditionalNotes();
+            status = re.getStatus();
+            tableType = Arrays.stream(TableType.values())
+                    .filter(tt -> tt.getClazz() == re.getClass())
+                    .findFirst()
+                    .orElseGet(() -> TableType.GENERIC);
+        }
     }
 
     @FXML
