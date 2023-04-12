@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -9,6 +11,7 @@ import java.sql.SQLException;
 public class LoginAttempt {
     private String username;
     private String password;
+    @Getter
     private boolean loginSuccess;
     private final PdbController pdb = App.getSingleton().getPdb();
 
