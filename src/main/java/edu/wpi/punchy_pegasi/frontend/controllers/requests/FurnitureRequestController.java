@@ -110,7 +110,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 staffAssignment.getText(),
                 additionalNotes.getText(),
                 furniture.getItems());
-merge        facade.saveFurnitureRequestEntry(requestEntry);
+        facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
 
