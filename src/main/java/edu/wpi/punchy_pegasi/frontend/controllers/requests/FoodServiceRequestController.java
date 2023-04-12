@@ -27,7 +27,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     CheckBox utensils, napkins, straw;
 
     TextField patientName = new TextField();
-    Label price = new Label("$0.00");
 
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
@@ -42,7 +41,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         ObservableList<String> tempType = FXCollections.observableArrayList("Hot", "Warm", "Cold");
         tempDropdown.setItems(tempType);
         addTextField(patientName);
-        addLabel(price);
         setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
@@ -67,7 +65,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 staffAssignment.getItems().get(0).getEmployeeID(),
                 additionalNotes.getText(),
                 mealDropdown.getSelectedItem(),
-                ((RadioButton) temp.getSelectedToggle()).getId(),
+                tempDropdown.getSelectedItem(),
                 extras,
                 beverageDropdown.getSelectedItem(),
                 dietaryRestrictions.getText(),
@@ -90,14 +88,14 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     public void clearEntry() {
         clearGeneric();
-        mealDropdown.clear();
+        mealDropdown.clearSelection();
         patientName.clear();
         dietaryRestrictions.clear();
-        tempDropdown.clear();
+        tempDropdown.clearSelection();
         napkins.setSelected(false);
         utensils.setSelected(false);
         straw.setSelected(false);
-        beverageDropdown.clear();
+        beverageDropdown.clearSelection();
     }
 
 

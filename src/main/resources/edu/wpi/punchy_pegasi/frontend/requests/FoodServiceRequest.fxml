@@ -21,7 +21,7 @@
                                 <Font name="System Bold" size="24.0" />
                             </font>
                         </Text>
-            <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+            <HBox spacing="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox spacing="32.0" HBox.hgrow="ALWAYS">
                      <children>
@@ -37,7 +37,7 @@
                                                   <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                               </children>
                                           </HBox>
-                              <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#updateLabelEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
+                              <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -137,9 +137,9 @@
                         </VBox>
                      </children>
                   </VBox>
-                            <VBox alignment="TOP_CENTER" spacing="32.0">
+                            <VBox alignment="TOP_RIGHT" spacing="32.0">
                      <children>
-                        <VBox alignment="CENTER">
+                        <VBox alignment="TOP_RIGHT">
                            <children>
                               <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
