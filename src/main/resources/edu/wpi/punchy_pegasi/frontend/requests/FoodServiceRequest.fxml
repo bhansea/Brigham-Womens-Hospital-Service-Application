@@ -6,12 +6,8 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
       <VBox spacing="16.0" style="-fx-background-color: white;">
@@ -39,7 +35,7 @@
                                           </HBox>
                               <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                  </font>
                               </MFXComboBox>
                            </children>
@@ -50,15 +46,15 @@
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Temperature Type">
                                        <font>
-                                          <Font size="18.0" />
+                                          <Font size="18.0"/>
                                        </font>
                                     </Text>
-                                    <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                                    <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
                                  </children>
                               </HBox>
                               <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Temperature Type">
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font size="16.0"/>
                                  </font>
                               </MFXComboBox>
                            </children>
@@ -143,7 +139,7 @@
                            <children>
                               <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../assets/mealPicture.jpeg" />
+                                    <Image url="@../assets/mealPicture.jpeg"/>
                                  </image>
                               </ImageView>
                            </children>

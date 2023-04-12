@@ -2,19 +2,14 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
-
-import java.net.URL;
 
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
     @FXML
@@ -38,7 +33,10 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         addTextField(patientName);
         submit.setDisable(true);
         setHeaderText("Flower Delivery Request");
-
+        flowerAmountField.setOnKeyTyped(e -> validateEntry());
+        patientName.setOnKeyTyped(e -> validateEntry());
+        flowerTypeComboBox.setOnAction(e -> validateEntry());
+        flowerSize.setOnAction(e -> validateEntry());
     }
 
     @FXML

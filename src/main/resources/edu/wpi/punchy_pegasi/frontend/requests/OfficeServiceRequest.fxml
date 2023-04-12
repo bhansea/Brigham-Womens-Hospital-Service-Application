@@ -24,12 +24,12 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="pencils" minWidth="150.0" mnemonicParsing="false" onMouseClicked="#validateEntry" text="Pencils" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="pencils" minWidth="150.0" mnemonicParsing="false" text="Pencils" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="pencilAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="pencilAmount" minWidth="175.0"  promptText="Enter amount" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -38,12 +38,12 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="pens" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Pens" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="pens" minWidth="150.0" mnemonicParsing="false" text="Pens" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="penAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="penAmount" minWidth="175.0"  promptText="Enter amount" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -52,12 +52,12 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="paper" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Paper" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="paper" minWidth="150.0" mnemonicParsing="false" text="Paper" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="paperAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="paperAmount" minWidth="175.0"  promptText="Enter amount" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -66,12 +66,12 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="stapler" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Stapler" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="stapler" minWidth="150.0" mnemonicParsing="false" text="Stapler" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="staplerAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="staplerAmount" minWidth="175.0"  promptText="Enter amount" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -80,12 +80,12 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="staples" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Staples" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="staples" minWidth="150.0" mnemonicParsing="false" text="Staples" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="stapleAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="stapleAmount" minWidth="175.0"  promptText="Enter amount" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -94,12 +94,12 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="paperclips" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Paperclips" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="paperclips" minWidth="150.0" mnemonicParsing="false" text="Paperclips" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="paperclipAmount" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Enter amount" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="paperclipAmount" minWidth="175.0"  promptText="Enter amount" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -108,12 +108,12 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <CheckBox fx:id="other" minWidth="150.0" mnemonicParsing="false" onAction="#validateEntry" text="Other" HBox.hgrow="ALWAYS">
+                        <CheckBox fx:id="other" minWidth="150.0" mnemonicParsing="false" text="Other" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </CheckBox>
-                        <TextField fx:id="otherItems" minWidth="175.0" onKeyPressed="#validateEntry" promptText="Please specify" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="otherItems" minWidth="175.0"  promptText="Please specify" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -125,7 +125,7 @@
                   <Insets left="32.0" />
                </HBox.margin>
             </VBox>
-            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="215.0" style="-fx-background-color: #00458E; -fx-background-radius: 6;">
+            <BorderPane style="-fx-background-color: #00458E; -fx-background-radius: 6;">
                <center>
                   <ImageView fitHeight="205.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                      <image>

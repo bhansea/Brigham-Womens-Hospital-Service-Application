@@ -32,30 +32,6 @@ public class SidebarController implements PropertyChangeListener {
     @FXML
     private VBox sidebar;
     @FXML
-    HBox editMapPage;
-    @FXML
-    HBox home;
-    @FXML
-    VBox serviceRequestDropDown;
-    @FXML
-    Label conferenceRoomText;
-    @FXML
-    Label officeSuppliesText;
-    @FXML
-    Label furnitureText;
-    @FXML
-    Label flowersText;
-    @FXML
-    Label mealText;
-    @FXML
-    HBox serviceRequests;
-    @FXML
-    HBox map;
-    @FXML
-    HBox adminPage;
-    @FXML
-    HBox signagePage;
-    @FXML
     private Label loginLogoutText;
     @FXML
     ImageView profileImage;

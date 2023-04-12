@@ -92,8 +92,8 @@ public abstract class RequestController<T extends RequestEntry> {
         if (!isLoaded()) return;
         locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
         staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
-        locationName.setOnCommit(p -> validateEntry());
-        staffAssignment.setOnCommit(p -> validateEntry());
+        locationName.setOnAction(p -> validateEntry());
+        staffAssignment.setOnAction(p -> validateEntry());
         var employeeToName = new StringConverter<Employee>()
         {
 
@@ -123,6 +123,8 @@ public abstract class RequestController<T extends RequestEntry> {
         };
         staffAssignment.setConverter(employeeToName);
         locationName.setConverter(locationToLongName);
+        staffAssignment.setOnAction(e-> validateEntry());
+        locationName.setOnAction(e-> validateEntry());
         for (var node : new TextField[]{locationName, staffAssignment, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);
@@ -166,7 +168,7 @@ public abstract class RequestController<T extends RequestEntry> {
         inputContainer.setPadding(new Insets(20,20,20,20));
         inputContainer.setSpacing(6);
         hbox.setPadding(new Insets(0,0,0,0));
-        field.setOnAction(a -> validateEntry());
+        field.setOnKeyTyped(a -> validateEntry());
     }
 
     @FXML

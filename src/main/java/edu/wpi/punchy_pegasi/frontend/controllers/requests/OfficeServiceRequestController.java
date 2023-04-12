@@ -43,7 +43,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     TextField otherItems;
     ArrayList<CheckBox> items = new ArrayList<>();
-    ArrayList<TextField> itemsAmount;
+    ArrayList<TextField> itemsAmount = new ArrayList<>();
 
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
@@ -52,7 +52,23 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     @Override
     public void init() {
-        //validateEntry();
+        items.addAll(List.of(new CheckBox[]{pencils,
+                pens,
+                paper,
+                stapler,
+                staples,
+                paperclips,
+                other}));
+        itemsAmount.add(pencilAmount);
+        itemsAmount.add(penAmount);
+        itemsAmount.add(paperAmount);
+        itemsAmount.add(staplerAmount);
+        itemsAmount.add(stapleAmount);
+        itemsAmount.add(paperclipAmount);
+        itemsAmount.add(otherItems);
+
+        items.forEach(i-> i.setOnAction(e->validateEntry()));
+        itemsAmount.forEach(i-> i.setOnKeyTyped(e->validateEntry()));
     }
 
     @FXML
@@ -73,20 +89,6 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
 
     @FXML
     public void validateEntry() {
-        items.addAll(List.of(new CheckBox[]{pencils,
-                pens,
-                paper,
-                stapler,
-                staples,
-                paperclips,
-                other}));
-        itemsAmount.add(pencilAmount);
-        itemsAmount.add(penAmount);
-        itemsAmount.add(paperAmount);
-        itemsAmount.add(staplerAmount);
-        itemsAmount.add(stapleAmount);
-        itemsAmount.add(paperclipAmount);
-        itemsAmount.add(otherItems);
 
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isSelected()) {
