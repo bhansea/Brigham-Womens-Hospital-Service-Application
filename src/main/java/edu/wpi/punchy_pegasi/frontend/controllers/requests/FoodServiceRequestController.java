@@ -27,6 +27,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     CheckBox utensils, napkins, straw;
 
     TextField patientName = new TextField();
+    Label price = new Label("$0.00");
 
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
@@ -41,6 +42,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         ObservableList<String> tempType = FXCollections.observableArrayList("Hot", "Warm", "Cold");
         tempDropdown.setItems(tempType);
         addTextField(patientName);
+        addLabel(price);
         setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
@@ -81,7 +83,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void validateEntry() {
-        boolean validate = validateGeneric() || mealDropdown.getSelectedItem() == null || tempDropdown.getSelectedItem() == null;
+        boolean validate = validateGeneric() || patientName.getText().isBlank() || mealDropdown.getSelectedItem() == null || tempDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 
