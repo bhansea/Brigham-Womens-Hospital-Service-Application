@@ -10,12 +10,12 @@ public class FurnitureRequestEntry extends RequestEntry {
 
     private final List<String> selectFurniture;
 
-    public FurnitureRequestEntry(String roomNumber, String staffAssignment, String additionalNotes, List<String> selectFurniture) {
-        this(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING, selectFurniture);
+    public FurnitureRequestEntry(String locationName, String staffAssignment, String additionalNotes, List<String> selectFurniture) {
+        this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, selectFurniture);
     }
 
-    public FurnitureRequestEntry(UUID serviceID, String roomNumber, String staffAssignment, String additionalNotes, Status status, List<String> selectFurniture) {
-        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
+    public FurnitureRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, List<String> selectFurniture) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.selectFurniture = selectFurniture;
     }
 

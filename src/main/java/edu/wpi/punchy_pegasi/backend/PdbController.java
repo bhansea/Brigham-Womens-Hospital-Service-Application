@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,7 @@ public class PdbController {
     }
 
     public static String objectToPsqlString(Object o, boolean first) {
-        if (o instanceof String || o instanceof UUID || o.getClass().isEnum()) {
+        if (o instanceof String || o instanceof UUID || o instanceof LocalDate || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {
             return (first ? "ARRAY" : "") + "[" + String.join(", ", ((List<?>) o).stream().map(v -> objectToPsqlString(v, false)).toList()) + "]";

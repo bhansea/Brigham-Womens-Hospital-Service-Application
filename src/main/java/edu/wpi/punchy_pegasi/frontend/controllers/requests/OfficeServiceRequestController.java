@@ -29,7 +29,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     public void submitEntry() {
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), officeRequest.getText(), "");
+        requestEntry = new OfficeServiceRequestEntry(locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), officeRequest.getText(), "");
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

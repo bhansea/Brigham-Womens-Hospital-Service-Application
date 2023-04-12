@@ -36,7 +36,7 @@ class FoodServiceRequestEntryDaoImplTest {
         List<String> additionalItems = new ArrayList<>();
         additionalItems.add("testItems");
         FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
-        Object[] values = new Object[]{food.getServiceID(), food.getRoomNumber(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
+        Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
@@ -58,8 +58,8 @@ class FoodServiceRequestEntryDaoImplTest {
         additionalItems.add("testItems");
         var food = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
         var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
-        var values = new Object[]{food.getServiceID(), food.getRoomNumber(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
-        var values2 = new Object[]{food2.getServiceID(), food2.getRoomNumber(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getDietaryRestrictions(), food2.getPatientName()};
+        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
+        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getDietaryRestrictions(), food2.getPatientName()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values2);
@@ -251,7 +251,7 @@ class FoodServiceRequestEntryDaoImplTest {
 
         var values = new Object[]{
                 foodRequest.getServiceID(),
-                foodRequest.getRoomNumber(),
+                foodRequest.getLocationName(),
                 foodRequest.getStaffAssignment(),
                 foodRequest.getAdditionalNotes(),
                 foodRequest.getStatus(),
