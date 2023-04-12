@@ -1,14 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class LocationName {
-    
-    private Long uuid;
+        private Long uuid;
     private String longName;
     private String shortName;
     private NodeType nodeType;

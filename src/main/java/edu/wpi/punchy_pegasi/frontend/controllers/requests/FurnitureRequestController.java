@@ -110,8 +110,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 staffAssignment.getText(),
                 additionalNotes.getText(),
                 furniture.getItems());
-        FurnitureRequestEntryDaoImpl request = new FurnitureRequestEntryDaoImpl();
-        request.save(requestEntry);
+merge        facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
 

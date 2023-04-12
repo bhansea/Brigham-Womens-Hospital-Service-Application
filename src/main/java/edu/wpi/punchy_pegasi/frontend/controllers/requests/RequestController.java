@@ -1,7 +1,10 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
+import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,12 +29,13 @@ import static com.sun.javafx.font.FontFactory.DEFAULT_FULLNAME;
 
 @Slf4j
 public abstract class RequestController<T extends RequestEntry> {
+    protected final Facade facade = App.getSingleton().getFacade();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @FXML
     protected T requestEntry;
 
     @FXML
-    MFXComboBox<String> locationName;
+    MFXFilterComboBox<String> locationName;
     @FXML
     protected TextField staffAssignment;
     @FXML
@@ -78,6 +82,7 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
+        locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().map(v->v.getLongName()).toList()));
         for (var node : new TextField[]{locationName, staffAssignment, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);
