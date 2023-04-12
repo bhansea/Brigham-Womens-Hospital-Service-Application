@@ -17,8 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 public class HomePageController {
     @FXML
@@ -41,10 +40,15 @@ public class HomePageController {
     }
 
     public void initRequestTable() {
-        ObservableList<RequestEntry> requestList = FXCollections.observableArrayList(facade.getAllFurnitureRequestEntry().values());
-        requestList.addAll(facade.getAllConferenceRoomEntry().values());
-        requestList.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
-        requestList.addAll(facade.getAllOfficeServiceRequestEntry().values());
+        var employeeID = App.getSingleton().getAccount().getEmployeeID();
+        List<RequestEntry> requestEntries = new ArrayList<>();
+        requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
+        requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
+        requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
+        requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
+
+        ObservableList<RequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream().filter(e-> Objects.equals(e.getStaffAssignment(), employeeID)).toList());
+
         for (RequestEntry.Field field : Arrays.stream(RequestEntry.Field.values()).filter(v -> v != RequestEntry.Field.SERVICE_ID).toList()) {
             MFXTableColumn<RequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
