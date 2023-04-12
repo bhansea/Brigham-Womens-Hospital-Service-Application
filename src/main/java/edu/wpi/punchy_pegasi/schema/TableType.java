@@ -171,12 +171,12 @@ BEGIN
     CREATE SEQUENCE accounts_id_seq;
     CREATE TABLE teamp.accounts
     (
-      username varchar,
+      username varchar PRIMARY KEY,
       password varchar,
-      employeeID bigint DEFAULT nextval('accounts_id_seq') PRIMARY KEY,
+      employeeID bigint,
       accountType varchar
     );
-    ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.employeeID;
+    ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.username;
   END IF;
 END $$;
 """);

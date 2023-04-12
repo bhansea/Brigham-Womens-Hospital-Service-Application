@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import java.util.Map;
+
 public class LoginController {
 
     @FXML
@@ -33,7 +35,10 @@ public class LoginController {
         String password = passwordBox.getText();
         Account.Field[] fields = { Account.Field.USERNAME, Account.Field.PASSWORD };
         Object[] values = { username, password };
-        if(facade.getAccount(fields, values).size() > 0) {
+        Map<String, Account> map = facade.getAccount(fields, values);
+
+        if(map.size() > 0) {
+            App.getSingleton().setAccount(map.values().stream().findFirst().get());
             App.getSingleton().navigate(Screen.HOME);
         } else {
             invalidText.setVisible(true);

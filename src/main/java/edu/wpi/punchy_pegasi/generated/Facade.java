@@ -33,6 +33,7 @@ public class Facade {
 		accountDao = new AccountDaoImpl(dbController);
 
     }
+
 	public Optional<Node> getNode(java.lang.Long key) {
 		return nodeDao.get(key);
 	}
@@ -243,16 +244,16 @@ public class Facade {
 	public void deleteEmployee(Employee employee) {
 		employeeDao.delete(employee);
 	}
-	public Optional<Account> getAccount(java.lang.Long key) {
+	public Optional<Account> getAccount(java.lang.String key) {
 		return accountDao.get(key);
 	}
-	public Map<java.lang.Long, Account> getAccount(Account.Field column, Object value) {
+	public Map<java.lang.String, Account> getAccount(Account.Field column, Object value) {
 		return accountDao.get(column, value);
 	}
-	public Map<java.lang.Long, Account> getAccount(Account.Field[] params, Object[] value) {
+	public Map<java.lang.String, Account> getAccount(Account.Field[] params, Object[] value) {
 		return accountDao.get(params, value);
 	}
-	public Map<java.lang.Long, Account> getAllAccount() {
+	public Map<java.lang.String, Account> getAllAccount() {
 		return accountDao.getAll();
 	}
 	public void saveAccount(Account account) {

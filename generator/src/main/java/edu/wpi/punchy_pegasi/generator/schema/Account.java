@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Account {
+    @SchemaID
     private String username;
     private String password;
-    @SchemaID
     private Long employeeID;
     private AccountType accountType;
 
