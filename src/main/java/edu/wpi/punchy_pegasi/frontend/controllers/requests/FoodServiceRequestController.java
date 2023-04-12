@@ -29,7 +29,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     Label mealName;
 
-    TextField patientName = new TextField("Enter Patient Name");
+    TextField patientName = new TextField();
 
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
@@ -39,6 +39,10 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     public void init() {
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
+        ObservableList<String> beverageList = FXCollections.observableArrayList("Water", "Coffee", "Lemonade", "Milk", "Vitamin Water", "Dr. Pepper", "Chocolate Milk", "Apple Juice", "Orange Juice", "Cranberry Juice");
+        beverageDropdown.setItems(beverageList);
+        ObservableList<String> tempType = FXCollections.observableArrayList("Hot", "Warm", "Cold");
+        tempDropdown.setItems(tempType);
         addTextField(patientName);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
@@ -58,7 +62,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         }
 
         //makes sure shared fields aren't empty
-        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, tempDropdown.getSelectedItem(), dietaryRestrictions.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, tempDropdown.getSelectedItem(), dietaryRestrictions.getText());
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
@@ -70,7 +74,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void validateEntry() {
-        boolean validate = validateGeneric() || mealDropdown.getSelectedItem() == null;
+        boolean validate = validateGeneric() || mealDropdown.getSelectedItem() == null || tempDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 
@@ -78,12 +82,14 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     public void clearEntry() {
         clearGeneric();
         mealDropdown.clear();
+        patientName.clear();
         dietaryRestrictions.clear();
         tempDropdown.clear();
         napkins.setSelected(false);
         utensils.setSelected(false);
         straw.setSelected(false);
         beverageDropdown.clear();
+        mealName.setText("Meal Name");
     }
 
     @FXML

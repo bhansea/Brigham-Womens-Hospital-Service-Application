@@ -15,7 +15,7 @@
 
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
-        <VBox prefHeight="819.0" prefWidth="1168.0" spacing="30.0">
+        <VBox spacing="30.0">
             <children>
                 <VBox style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <children>
@@ -36,7 +36,7 @@
                                     </Text>
                         <HBox spacing="16.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="32.0" HBox.hgrow="ALWAYS">
+                              <VBox spacing="32.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <VBox>
                                        <children>
@@ -50,7 +50,7 @@
                                                               <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                                           </children>
                                                       </HBox>
-                                          <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Meals">
+                                          <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#updateLabelEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -69,7 +69,7 @@
                                                 <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                                              </children>
                                           </HBox>
-                                          <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Temperature Type">
+                                          <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Temperature Type">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -119,7 +119,7 @@
                                                 </Text>
                                              </children>
                                           </HBox>
-                                          <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Beverages">
+                                          <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="Beverages">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -149,16 +149,16 @@
                                     </VBox>
                                  </children>
                               </VBox>
-                                        <VBox alignment="TOP_CENTER" prefHeight="125.0" prefWidth="562.0" spacing="32.0">
+                                        <VBox alignment="TOP_CENTER" spacing="32.0">
                                  <children>
-                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                    <VBox alignment="CENTER">
                                        <children>
                                           <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../assets/mealPicture.jpeg" />
                                              </image>
                                           </ImageView>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;">
+                                          <VBox alignment="CENTER" style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;">
                                              <children>
                                                 <Label fx:id="mealName" text="Meal Name">
                                                    <font>
