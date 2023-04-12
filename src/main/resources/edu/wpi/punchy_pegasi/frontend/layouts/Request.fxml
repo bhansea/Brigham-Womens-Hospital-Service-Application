@@ -82,7 +82,7 @@
                                     </font>
                                 </Label>
                                 <TextField fx:id="staffAssignment" alignment="TOP_LEFT" onKeyReleased="#validateEntry"
-                                           promptText="Enter Staff Member">
+                                           promptText="Employee Name">
                                     <font>
                                         <Font size="24.0"/>
                                     </font>

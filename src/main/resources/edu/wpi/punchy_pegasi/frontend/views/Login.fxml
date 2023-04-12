@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
 <BorderPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
     <center>
@@ -13,16 +14,22 @@
             <children>
                 <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
+                        <Label fx:id = "invalidText" text = "Invalid username/password" textFill = "red" visible = "false">
+                            <font>
+                                <Font size = "14">
+                                </Font>
+                            </font>
+                        </Label>
                         <HBox alignment="CENTER">
                             <children>
-                                <MFXTextField fx:id="usernameEnter" floatingText="Username"
+                                    <MFXTextField fx:id="usernameEnter" floatingText="Username"
                                               maxHeight="50.0" maxWidth="350.0" minHeight="0.0"
                                               onAction="#passwordEnter" prefHeight="50.0" prefWidth="350.0"
                                               style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                                    <textFill>
-                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
-                                    </textFill>
-                                </MFXTextField>
+                                        <textFill>
+                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
+                                        </textFill>
+                                    </MFXTextField>
                             </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">

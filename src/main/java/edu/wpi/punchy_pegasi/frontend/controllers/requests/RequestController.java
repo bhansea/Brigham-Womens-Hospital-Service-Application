@@ -3,6 +3,8 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 import com.sun.glass.ui.Screen;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
+import edu.wpi.punchy_pegasi.schema.Employee;
+import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.collections.FXCollections;
@@ -18,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 import lombok.extern.slf4j.Slf4j;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 
@@ -36,9 +39,9 @@ public abstract class RequestController<T extends RequestEntry> {
     protected T requestEntry;
 
     @FXML
-    MFXFilterComboBox<String> locationName;
+    MFXFilterComboBox<LocationName> locationName;
     @FXML
-    protected TextField staffAssignment;
+    MFXFilterComboBox<Employee> staffAssignment;
     @FXML
     protected TextField additionalNotes;
     @FXML
@@ -90,7 +93,35 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
-        locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().map(v->v.getLongName()).toList()));
+        locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
+        staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
+        var employeeToName = new StringConverter<Employee>()
+        {
+
+            @Override
+            public String toString(Employee employee) {
+                return employee.getFirstName() + " " + employee.getLastName();
+            }
+
+            @Override
+            public Employee fromString(String string) {
+                return null;
+            }
+        };
+        var locationToLongName = new StringConverter<LocationName>(){
+
+            @Override
+            public String toString(LocationName object) {
+                return object.getLongName();
+            }
+
+            @Override
+            public LocationName fromString(String string) {
+                return null;
+            }
+        };
+        staffAssignment.setConverter(employeeToName);
+        locationName.setConverter(locationToLongName);
         for (var node : new TextField[]{locationName, staffAssignment, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);

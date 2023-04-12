@@ -95,8 +95,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     public void submitEntry() {
         requestEntry =
                 new ConferenceRoomEntry(
-                        locationName.getText(),
-                        staffAssignment.getText(),
+                        locationName.getItems().get(0).getUuid(),
+                        staffAssignment.getItems().get(0).getEmployeeID(),
                         additionalNotes.getText(),
                         beginningTime.getText(),
                         endTime.getText(),
