@@ -62,7 +62,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         }
 
         //makes sure shared fields aren't empty
-        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, tempDropdown.getSelectedItem(), dietaryRestrictions.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), tempDropdown.getSelectedItem(), extras, beverageDropdown.getSelectedItem(), dietaryRestrictions.getText(), patientName.getText());
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

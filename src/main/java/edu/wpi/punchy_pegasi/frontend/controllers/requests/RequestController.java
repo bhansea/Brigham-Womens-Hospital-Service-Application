@@ -124,6 +124,7 @@ public abstract class RequestController<T extends RequestEntry> {
         field.setAlignment(Pos.CENTER_LEFT);
         field.setFont(new Font(DEFAULT_FULLNAME, 24));
         inputContainer.setPadding(new Insets(20,20,20,20));
+        inputContainer.setSpacing(6);
         hbox.setPadding(new Insets(0,0,0,0));
     }
 

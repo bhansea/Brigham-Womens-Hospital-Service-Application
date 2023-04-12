@@ -12,23 +12,26 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final List<String> additionalItems;
     private final String dietaryRestrictions;
     private final String patientName;
+    private final String beverage;
 
-    public FoodServiceRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
+    public FoodServiceRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
         this.dietaryRestrictions = dietaryRestrictions;
         this.patientName = patientName;
+        this.beverage = beverage;
     }
 
-    public FoodServiceRequestEntry(String locationName, String staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String dietaryRestrictions, String patientName) {
+    public FoodServiceRequestEntry(String locationName, String staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
         this.dietaryRestrictions = dietaryRestrictions;
         this.patientName = patientName;
+        this.beverage = beverage;
     }
     @lombok.RequiredArgsConstructor
     public enum Field {
@@ -41,7 +44,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
         TEMP_TYPE("tempType"),
         ADDITIONAL_ITEMS("additionalItems"),
         DIETARY_RESTRICTIONS("dietaryRestrictions"),
-        PATIENT_NAME("patientName");
+        PATIENT_NAME("patientName"),
+        BEVERAGE("beverage");
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
@@ -60,6 +64,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
             case ADDITIONAL_ITEMS -> getAdditionalItems();
             case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
             case PATIENT_NAME -> getPatientName();
+            case BEVERAGE -> getBeverage();
         };
     }
 
