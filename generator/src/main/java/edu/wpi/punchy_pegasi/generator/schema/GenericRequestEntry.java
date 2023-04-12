@@ -6,11 +6,11 @@ import java.util.UUID;
 
 @Getter
 public class GenericRequestEntry extends RequestEntry {
-    public GenericRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status) {
+    public GenericRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status);
     }
 
-    public GenericRequestEntry(String locationName, String staffAssignment, String additionalNotes) {
+    public GenericRequestEntry(Long locationName, Long staffAssignment, String additionalNotes) {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
     }
 }

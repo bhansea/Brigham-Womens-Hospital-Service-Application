@@ -37,14 +37,17 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void init() {
         ObservableList<String> flowerTypesList = FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
         flowerTypeComboBox.setItems(flowerTypesList);
-        addTotal(price);
+        addLabel(price);
         addTextField(patientName);
         submit.setDisable(true);
+        setHeaderText("Flower Delivery Request");
+
     }
 
     @FXML
     public void submitEntry() {
-        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getItems().get(0).getUuid(),
+                staffAssignment.getItems().get(0).getEmployeeID(),additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
         App.getSingleton().getFacade().saveFlowerDeliveryRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

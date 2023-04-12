@@ -27,6 +27,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     CheckBox utensils, napkins, straw;
 
     TextField patientName = new TextField();
+    Label price = new Label("$0.00");
 
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
@@ -41,6 +42,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         ObservableList<String> tempType = FXCollections.observableArrayList("Hot", "Warm", "Cold");
         tempDropdown.setItems(tempType);
         addTextField(patientName);
+        addLabel(price);
+        setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
     }
@@ -59,7 +62,16 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         }
 
         //makes sure shared fields aren't empty
-        requestEntry = entry = new FoodServiceRequestEntry(locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), tempDropdown.getSelectedItem(), extras, beverageDropdown.getSelectedItem(), dietaryRestrictions.getText(), patientName.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(
+                locationName.getItems().get(0).getUuid(),
+                staffAssignment.getItems().get(0).getEmployeeID(),
+                additionalNotes.getText(),
+                mealDropdown.getSelectedItem(),
+                ((RadioButton) temp.getSelectedToggle()).getId(),
+                extras,
+                beverageDropdown.getSelectedItem(),
+                dietaryRestrictions.getText(),
+                patientName.getText());
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

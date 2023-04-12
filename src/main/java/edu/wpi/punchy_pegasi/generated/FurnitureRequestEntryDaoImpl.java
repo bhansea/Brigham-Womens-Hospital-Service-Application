@@ -33,8 +33,8 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
             rs.next();
             FurnitureRequestEntry req = new FurnitureRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
@@ -57,8 +57,8 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
@@ -78,8 +78,8 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));

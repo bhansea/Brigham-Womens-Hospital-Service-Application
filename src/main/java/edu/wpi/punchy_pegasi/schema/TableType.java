@@ -14,7 +14,7 @@ BEGIN
       nodeID bigint DEFAULT nextval('nodes_id_seq') PRIMARY KEY,
       xcoord int,
       ycoord int,
-      floor varchar,
+      layer varchar,
       building varchar
     );
     ALTER SEQUENCE nodes_id_seq OWNED BY teamp.nodes.nodeID;
@@ -72,8 +72,8 @@ END $$;
 CREATE TABLE IF NOT EXISTS teamp.generic
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  locationName varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar
 );
@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS teamp.generic
 CREATE TABLE IF NOT EXISTS teamp.foodrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  locationName varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   foodSelection varchar,
@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS teamp.foodrequests
 CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  locationName varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   flowerSize varchar,
@@ -115,8 +115,8 @@ CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  locationName varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   beginningTime varchar,
@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  locationName varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   selectFurniture varchar ARRAY
@@ -141,8 +141,8 @@ CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 CREATE TABLE IF NOT EXISTS teamp.officerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  locationName varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   officeRequest varchar,
@@ -172,12 +172,12 @@ BEGIN
     CREATE SEQUENCE accounts_id_seq;
     CREATE TABLE teamp.accounts
     (
-      username varchar,
+      username varchar PRIMARY KEY,
       password varchar,
-      employeeID bigint DEFAULT nextval('accounts_id_seq') PRIMARY KEY,
+      employeeID bigint,
       accountType varchar
     );
-    ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.employeeID;
+    ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.username;
   END IF;
 END $$;
 """);
