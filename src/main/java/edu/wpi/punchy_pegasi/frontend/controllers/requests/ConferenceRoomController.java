@@ -66,8 +66,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     @Override
     protected void clearEntry() {
         clearGeneric();
-        beginningTime.clear();
-        endTime.clear();
+        beginningTime.clearSelection();
+        endTime.clearSelection();
         calendar.clear();
     }
 
@@ -76,6 +76,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     public void validateField() {
         boolean selected = beginningTime.getSelectedItem() == null;
         endTime.setDisable(selected);
+        validateEntry();
     }
 
     @Override

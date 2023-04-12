@@ -3,7 +3,6 @@
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,7 +14,7 @@
     <center>
          <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
             <children>
-               <VBox >
+               <VBox>
                   <children>
                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
                         <font>
@@ -38,7 +37,7 @@
                            <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                         </children>
                      </HBox>
-                     <MFXComboBox fx:id="beginningTime" alignment="TOP_LEFT" promptText="Beginning Time">
+                     <MFXComboBox fx:id="beginningTime" alignment="TOP_LEFT" onAction="#validateField" prefHeight="50.0" prefWidth="360.0" promptText="Beginning Time">
                         <VBox.margin>
                            <Insets left="20.0" top="5.0" />
                         </VBox.margin>
@@ -59,7 +58,7 @@
                            <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
                         </children>
                      </HBox>
-                     <MFXComboBox fx:id="endTime" alignment="TOP_LEFT" promptText="End Time">
+                     <MFXComboBox fx:id="endTime" alignment="TOP_LEFT" onAction="#validateField" prefHeight="50.0" prefWidth="360.0" promptText="End Time">
                         <VBox.margin>
                            <Insets left="20.0" top="5.0" />
                         </VBox.margin>

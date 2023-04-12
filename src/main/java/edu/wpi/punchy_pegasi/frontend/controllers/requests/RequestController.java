@@ -92,6 +92,8 @@ public abstract class RequestController<T extends RequestEntry> {
         if (!isLoaded()) return;
         locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
         staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
+        locationName.setOnCommit(p -> validateEntry());
+        staffAssignment.setOnCommit(p -> validateEntry());
         var employeeToName = new StringConverter<Employee>()
         {
 
@@ -132,7 +134,7 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (locationName.getText().isBlank() || staffAssignment.getText().isBlank());
+        return (locationName.getSelectedItem()  == null || staffAssignment.getSelectedItem() == null);
     }
 
     protected void clearGeneric() {
