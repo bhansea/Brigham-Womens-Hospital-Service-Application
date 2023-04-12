@@ -72,8 +72,8 @@ END $$;
 CREATE TABLE IF NOT EXISTS teamp.generic
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar
 );
@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS teamp.generic
 CREATE TABLE IF NOT EXISTS teamp.foodrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   foodSelection varchar,
@@ -99,8 +99,8 @@ CREATE TABLE IF NOT EXISTS teamp.foodrequests
 CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   flowerSize varchar,
@@ -114,12 +114,13 @@ CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   beginningTime varchar,
-  endTime varchar
+  endTime varchar,
+  date date
 );
 """)
 ,
@@ -127,28 +128,58 @@ CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   selectFurniture varchar ARRAY
 );
 """)
 ,
-
     OFFICEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.officerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
-  staffAssignment varchar,
+  locationName bigint,
+  staffAssignment bigint,
   additionalNotes varchar,
   status varchar,
   officeRequest varchar,
   employeeName varchar
 );
 """)
-;
+,
+    EMPLOYEES(edu.wpi.punchy_pegasi.generator.schema.Employee.class, """
+DO $$
+BEGIN
+  IF to_regclass('teamp.employees') IS NULL THEN
+    CREATE SEQUENCE employees_id_seq;
+    CREATE TABLE teamp.employees
+    (
+      employeeID bigint DEFAULT nextval('employees_id_seq') PRIMARY KEY,
+      firstName varchar,
+      lastName varchar
+    );
+    ALTER SEQUENCE employees_id_seq OWNED BY teamp.employees.employeeID;
+  END IF;
+END $$;
+"""),
+    ACCOUNTS(edu.wpi.punchy_pegasi.generator.schema.Account.class, """
+DO $$
+BEGIN
+  IF to_regclass('teamp.accounts') IS NULL THEN
+    CREATE SEQUENCE accounts_id_seq;
+    CREATE TABLE teamp.accounts
+    (
+      username varchar PRIMARY KEY,
+      password varchar,
+      employeeID bigint,
+      accountType varchar
+    );
+    ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.username;
+  END IF;
+END $$;
+""");
     @Getter
     private final Class<?> clazz;
     @Getter

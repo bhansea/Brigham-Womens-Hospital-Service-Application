@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericRequestEntry, GenericRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
 
     public GenericRequestEntryDaoImpl(PdbController dbController) {
@@ -35,8 +33,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
             rs.next();
             GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
             return Optional.ofNullable(req);
@@ -58,8 +56,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
                 if (req != null)
@@ -78,8 +76,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
                 if (req != null)
@@ -93,7 +91,7 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
 
     @Override
     public void save(GenericRequestEntry genericRequestEntry) {
-        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getRoomNumber(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
+        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getLocationName(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
         try {
             dbController.insertQuery(TableType.GENERIC, fields, values);
         } catch (PdbController.DatabaseException e) {

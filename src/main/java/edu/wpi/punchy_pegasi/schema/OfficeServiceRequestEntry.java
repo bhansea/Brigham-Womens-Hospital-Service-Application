@@ -1,10 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
-import lombok.Getter;
-
-import lombok.RequiredArgsConstructor;
-
 
 import java.util.UUID;
 
@@ -13,25 +9,25 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     private final String officeRequest;
     private final String employeeName;
 
-    public OfficeServiceRequestEntry(UUID serviceID, String roomNumber, String staffAssignment, String additionalNotes, Status status, String officeRequest, String employeeName) {
-        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
+    public OfficeServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String officeRequest, String employeeName) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.officeRequest = officeRequest;
         this.employeeName = employeeName;
     }
 
-    public OfficeServiceRequestEntry(String roomNumber, String staffAssignment, String additionalNotes, String officeRequest, String employeeName) {
-        this(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING, officeRequest, employeeName);
+    public OfficeServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String officeRequest, String employeeName) {
+        this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, officeRequest, employeeName);
     }
-    @RequiredArgsConstructor
+    @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
+        LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
         OFFICE_REQUEST("officeRequest"),
         EMPLOYEE_NAME("employeeName");
-        @Getter
+        @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
             return ref.getFromField(this);
@@ -40,7 +36,7 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
-            case ROOM_NUMBER -> getRoomNumber();
+            case LOCATION_NAME -> getLocationName();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();

@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerType", "flowerAmount", "patientName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerType", "flowerAmount", "patientName"};
     private final PdbController dbController;
 
     public FlowerDeliveryRequestEntryDaoImpl(PdbController dbController) {
@@ -36,8 +34,8 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
             FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
@@ -63,8 +61,8 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
@@ -87,8 +85,8 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
@@ -105,7 +103,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getRoomNumber(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
+        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
     private final PdbController dbController;
 
     public FoodServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -35,13 +33,13 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             rs.next();
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
-                    Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
                     (java.lang.String)rs.getObject("dietaryRestrictions"),
                     (java.lang.String)rs.getObject("patientName"));
             return Optional.ofNullable(req);
@@ -63,13 +61,13 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
-                    Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
                     (java.lang.String)rs.getObject("dietaryRestrictions"),
                     (java.lang.String)rs.getObject("patientName"));
                 if (req != null)
@@ -88,13 +86,13 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("foodSelection"),
                     (java.lang.String)rs.getObject("tempType"),
-                    Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
                     (java.lang.String)rs.getObject("dietaryRestrictions"),
                     (java.lang.String)rs.getObject("patientName"));
                 if (req != null)
@@ -108,7 +106,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getRoomNumber(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName()};
+        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

@@ -35,7 +35,7 @@ class OfficeServiceRequestEntryDaoImplTest {
     @Test
     void get() {
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        Object[] values = new Object[]{office.getServiceID(), office.getRoomNumber(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
+        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
         try{
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
@@ -55,8 +55,8 @@ class OfficeServiceRequestEntryDaoImplTest {
     void testGet() {
         var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
         var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        Object[] values0 = new Object[]{office0.getServiceID(), office0.getRoomNumber(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(),office0.getOfficeRequest(), office0.getEmployeeName()};
-        Object[] values1 = new Object[]{office1.getServiceID(), office1.getRoomNumber(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(),office1.getOfficeRequest(), office1.getEmployeeName()};
+        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(),office0.getOfficeRequest(), office0.getEmployeeName()};
+        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(),office1.getOfficeRequest(), office1.getEmployeeName()};
         try{
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values0);
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values1);
@@ -162,7 +162,7 @@ class OfficeServiceRequestEntryDaoImplTest {
     @Test
     void delete() {
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"110", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        Object[] values = new Object[]{office.getServiceID(), office.getRoomNumber(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
+        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
         try{
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

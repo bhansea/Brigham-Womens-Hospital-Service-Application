@@ -28,7 +28,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public Optional<GenericRequestEntry> get(String/*idFieldType*/ key) {
+    public Optional<GenericRequestEntry> get/*FacadeClassName*/(String/*idFieldType*/ key) {
         try (var rs = dbController.searchQuery(TableType.GENERIC, ""/*idField*/, key)) {
             rs.next();
             GenericRequestEntry req/*fromResultSet*/ = null;
@@ -40,12 +40,12 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public Map<String/*idFieldType*/, GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
+    public Map<String/*idFieldType*/, GenericRequestEntry> get/*FacadeClassName*/(GenericRequestEntry.Field column, Object value) {
         return get(new GenericRequestEntry.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<String/*idFieldType*/, GenericRequestEntry> get(GenericRequestEntry.Field[] params, Object[] value) {
+    public Map<String/*idFieldType*/, GenericRequestEntry> get/*FacadeClassName*/(GenericRequestEntry.Field[] params, Object[] value) {
         var map = new HashMap<String/*idFieldType*/, GenericRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.GENERIC, Arrays.stream(params).map(GenericRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
@@ -60,7 +60,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public Map<String/*idFieldType*/, GenericRequestEntry> getAll() {
+    public Map<String/*idFieldType*/, GenericRequestEntry> getAll/*FacadeClassName*/() {
         var map = new HashMap<String/*idFieldType*/, GenericRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.GENERIC)) {
             while (rs.next()) {
@@ -75,7 +75,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public void save(GenericRequestEntry genericRequestEntry) {
+    public void save/*FacadeClassName*/(GenericRequestEntry genericRequestEntry) {
         Object[] values = {/*getFields*/};
         try {
             dbController.insertQuery(TableType.GENERIC, fields, values);
@@ -86,7 +86,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public void update(GenericRequestEntry genericRequestEntry, GenericRequestEntry.Field[] params) {
+    public void update/*FacadeClassName*/(GenericRequestEntry genericRequestEntry, GenericRequestEntry.Field[] params) {
         if (params.length < 1)
             return;
         try {
@@ -97,7 +97,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public void delete(GenericRequestEntry genericRequestEntry) {
+    public void delete/*FacadeClassName*/(GenericRequestEntry genericRequestEntry) {
         try {
             dbController.deleteQuery(TableType.GENERIC, ""/*idField*/, "genericRequestEntry"/*getID*/);
         } catch (PdbController.DatabaseException e) {

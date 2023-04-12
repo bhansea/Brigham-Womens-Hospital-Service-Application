@@ -14,4 +14,7 @@
             <BorderPane fx:id="ViewPane"/>
         </ScrollPane>
     </center>
+    <left>
+        <fx:include source="../components/Sidebar.fxml" />
+    </left>
 </BorderPane>

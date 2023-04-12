@@ -2,10 +2,11 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.frontend.authentication.AccountType;
 import edu.wpi.punchy_pegasi.frontend.controllers.ErrorController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
 import edu.wpi.punchy_pegasi.frontend.controllers.SplashController;
+import edu.wpi.punchy_pegasi.generated.Facade;
+import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.sql.SQLException;
 
 @Slf4j
 public class App extends Application {
@@ -35,6 +37,8 @@ public class App extends Application {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Getter
     private PdbController pdb;
+    @Getter
+    private Facade facade;
     @Setter
     @Getter
     private Stage primaryStage;
@@ -45,8 +49,9 @@ public class App extends Application {
     private Screen currentScreen;
     @Getter
     private Scene scene;
-    @Getter
-    private AccountType accountType = AccountType.ADMIN;
+    @Getter@Setter
+    private Account account = null;
+
 
     private static void showError(Thread t, Throwable e) {
         log.error("An unexpected error occurred in " + t, e);
@@ -103,6 +108,8 @@ public class App extends Application {
     }
 
     public void navigate(final Screen screen) {
+        if(screen != Screen.LOGIN && account == null)
+            return;
         getViewPane().setCenter(screen.get());
         setCurrentScreen(screen);
     }
@@ -138,6 +145,7 @@ public class App extends Application {
         }
         log.info("Application started with database {}", pdb.source);
         this.pdb = pdb;
+        facade = new Facade(pdb);
         try {
             final BorderPane loadedLayout = loadWithCache("frontend/layouts/AppLayout.fxml");
             final LayoutController layoutController = loader.getController();
@@ -147,7 +155,7 @@ public class App extends Application {
             scene = new Scene(loadedLayout, 1280, 720);
             primaryStage.setScene(scene);
             primaryStage.show();
-            navigate(Screen.HOME);
+            navigate(Screen.LOGIN);
             MFXThemeManager.addOn(scene, Themes.DEFAULT);
             loadStylesheet("frontend/css/Default.css");
             new Thread(this::initDatabaseTables).start();

@@ -2,22 +2,27 @@ package edu.wpi.punchy_pegasi.generator.schema;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
 public class ConferenceRoomEntry extends RequestEntry {
     private final String beginningTime;
     private final String endTime;
+    private final LocalDate date;
 
-    public ConferenceRoomEntry(UUID serviceID, String roomNumber, String staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime) {
-        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
+    public ConferenceRoomEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime, LocalDate date) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.beginningTime = beginningTime;
         this.endTime = endTime;
+        this.date = date;
+
     }
 
-    public ConferenceRoomEntry(String roomNumber, String staffAssignment, String additionalNotes, String beginningTime, String endTime) {
-        super(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING);
+    public ConferenceRoomEntry(Long locationName, Long staffAssignment, String additionalNotes, String beginningTime, String endTime, LocalDate date) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
         this.beginningTime = beginningTime;
         this.endTime = endTime;
+        this.date = date;
     }
 }

@@ -1,7 +1,9 @@
 .header-background-image {
-    -fx-background-image: url("../assets/surgery_banner.jpg");
+    /*-fx-background-image: url("../assets/surgery_banner.jpg");*/
+    -fx-background-color: #FFFFFF;
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover, auto;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 1.0, 0.0, 3.0);
 }
 .header-logo-overlay {
     -fx-alignment: CENTER;

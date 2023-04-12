@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, FurnitureRequestEntry, FurnitureRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
     private final PdbController dbController;
 
     public FurnitureRequestEntryDaoImpl(PdbController dbController) {
@@ -35,11 +33,11 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
             rs.next();
             FurnitureRequestEntry req = new FurnitureRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -59,11 +57,11 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -80,11 +78,11 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -96,7 +94,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
 
     @Override
     public void save(FurnitureRequestEntry furnitureRequestEntry) {
-        Object[] values = {furnitureRequestEntry.getServiceID(), furnitureRequestEntry.getRoomNumber(), furnitureRequestEntry.getStaffAssignment(), furnitureRequestEntry.getAdditionalNotes(), furnitureRequestEntry.getStatus(), furnitureRequestEntry.getSelectFurniture()};
+        Object[] values = {furnitureRequestEntry.getServiceID(), furnitureRequestEntry.getLocationName(), furnitureRequestEntry.getStaffAssignment(), furnitureRequestEntry.getAdditionalNotes(), furnitureRequestEntry.getStatus(), furnitureRequestEntry.getSelectFurniture()};
         try {
             dbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

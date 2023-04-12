@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.ConferenceRoomEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,6 +19,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXComboBox<String> beginningTime;
     @FXML
     MFXComboBox<String> endTime;
+    @FXML
+    MFXDatePicker calendar;
 
 
     public static BorderPane create(String path) {
@@ -57,6 +60,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         submit.setDisable(true);
         beginningTime.setOnCommit(e->validateEntry());
         endTime.setOnCommit(e-> validateEntry());
+        setHeaderText("Conference Room Request");
     }
 
     @Override
@@ -64,6 +68,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         clearGeneric();
         beginningTime.clear();
         endTime.clear();
+        calendar.clear();
     }
 
     //validates the bottom box if the front one is filled in
@@ -90,13 +95,13 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     public void submitEntry() {
         requestEntry =
                 new ConferenceRoomEntry(
-                        roomNumber.getText(),
-                        staffAssignment.getText(),
+                        locationName.getItems().get(0).getUuid(),
+                        staffAssignment.getItems().get(0).getEmployeeID(),
                         additionalNotes.getText(),
                         beginningTime.getText(),
-                        endTime.getText());
-        ConferenceRoomEntryDaoImpl request = new ConferenceRoomEntryDaoImpl();
-        request.save(requestEntry);
+                        endTime.getText(),
+                        calendar.getValue());
+        App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
 

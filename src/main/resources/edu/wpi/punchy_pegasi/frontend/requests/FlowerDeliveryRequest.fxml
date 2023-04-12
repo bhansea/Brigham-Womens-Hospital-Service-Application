@@ -17,18 +17,6 @@
     <center>
         <VBox spacing="30.0">
             <children>
-                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                    <children>
-                        <Label text="Flower Service Request">
-                            <font>
-                                <Font size="36.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
                 <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <children>
                         <Label text="1.) Pick Flower Type">

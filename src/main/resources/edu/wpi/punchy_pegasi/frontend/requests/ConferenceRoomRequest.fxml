@@ -1,76 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
-        <VBox prefHeight="592.0" prefWidth="350.0" spacing="30.0">
+         <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
             <children>
-                <VBox alignment="CENTER" style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;">
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                    <children>
-                        <Label text="Conference Room Request">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
-                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label text="1.) Select a Beginning Time ">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets left="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                            <children>
-                                <MFXComboBox fx:id="beginningTime" onAction="#validateField" prefHeight="40.0" prefWidth="150.0" style="-fx-alignment: center;" />
-                            </children>
-                        </VBox>
-                    </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-                </VBox>
-                <VBox style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label text="2.) Select a End Time ">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets left="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER" prefWidth="350.0" spacing="100.0" style="-fx-background-color: #ffffff; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                            <padding>
-                                <Insets left="20.0" right="20.0" />
-                            </padding>
-                     <children>
-                        <MFXComboBox fx:id="endTime" prefHeight="40.0" prefWidth="150.0" style="-fx-alignment: center;" />
-                     </children>
-                        </HBox>
-                    </children>
-                </VBox>
+               <VBox >
+                  <children>
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
+                        <font>
+                           <Font name="System Bold" size="24.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets left="15.0" top="15.0" />
+                        </VBox.margin>
+                     </Text>
+                     <HBox>
+                        <VBox.margin>
+                           <Insets left="20.0" top="20.0" />
+                        </VBox.margin>
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Beginning Time " wrappingWidth="195.19991302490234">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Text>
+                           <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                        </children>
+                     </HBox>
+                     <MFXComboBox fx:id="beginningTime" alignment="TOP_LEFT" promptText="Beginning Time">
+                        <VBox.margin>
+                           <Insets left="20.0" top="5.0" />
+                        </VBox.margin>
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </MFXComboBox>
+                     <HBox>
+                        <VBox.margin>
+                           <Insets left="20.0" top="50.0" />
+                        </VBox.margin>
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select an End Time" wrappingWidth="151.46660614013672">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Text>
+                           <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                        </children>
+                     </HBox>
+                     <MFXComboBox fx:id="endTime" alignment="TOP_LEFT" promptText="End Time">
+                        <VBox.margin>
+                           <Insets left="20.0" top="5.0" />
+                        </VBox.margin>
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </MFXComboBox>
+                     <HBox>
+                        <VBox.margin>
+                           <Insets left="20.0" top="50.0" />
+                        </VBox.margin>
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter The Amount of Participants">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Text>
+                           <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                        </children>
+                     </HBox>
+                     <TextField fx:id="numberOfParticipants" maxWidth="450.1" promptText="Number of Participants" style="-fx-background-radius: 6; -fx-border-radius: 6;">
+                        <VBox.margin>
+                           <Insets left="20.0" top="5.0" />
+                        </VBox.margin>
+                        <font>
+                           <Font size="16.0" />
+                        </font>
+                     </TextField>
+                  </children>
+                  <padding>
+                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </padding>
+               </VBox>
+               <VBox>
+                  <children>
+                     <HBox>
+                        <VBox.margin>
+                           <Insets left="20.0" top="70.0" />
+                        </VBox.margin>
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Date ">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Text>
+                           <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                        </children>
+                     </HBox>
+                     <MFXDatePicker fx:id="calendar" style="-fx-background-color: #ffffff;" />
+                  </children>
+                  <padding>
+                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </padding>
+               </VBox>
             </children>
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-        </VBox>
+         </HBox>
+
     </center>
 </BorderPane>

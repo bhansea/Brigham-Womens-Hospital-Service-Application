@@ -3,8 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
-import java.util.Arrays;
-import java.util.Arrays;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
     private final PdbController dbController;
 
     public OfficeServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -35,8 +33,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
             rs.next();
             OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
@@ -60,8 +58,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
@@ -82,8 +80,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
@@ -99,7 +97,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
 
     @Override
     public void save(OfficeServiceRequestEntry officeServiceRequestEntry) {
-        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getRoomNumber(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName()};
+        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName()};
         try {
             dbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
