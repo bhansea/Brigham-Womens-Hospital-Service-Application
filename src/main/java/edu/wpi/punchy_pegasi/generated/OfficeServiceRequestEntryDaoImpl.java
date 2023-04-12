@@ -16,8 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "pencils", "pencilAmount", "pens", "penAmount",
-    "paper", "paperAmount", "stapler", "staplerAmount", "staples", "stapleAmount", "paperclips", "paperclipAmount", "other", "otherItems"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
     private final PdbController dbController;
 
     public OfficeServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -38,21 +37,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.Boolean)rs.getObject("pencils"),
-                    (java.lang.String)rs.getObject("pencilAmount"),
-                    (java.lang.Boolean)rs.getObject("pens"),
-                    (java.lang.String)rs.getObject("penAmount"),
-                    (java.lang.Boolean)rs.getObject("paper"),
-                    (java.lang.String)rs.getObject("paperAmount"),
-                    (java.lang.Boolean)rs.getObject("stapler"),
-                    (java.lang.String)rs.getObject("staplerAmount"),
-                    (java.lang.Boolean)rs.getObject("staples"),
-                    (java.lang.String)rs.getObject("stapleAmount"),
-                    (java.lang.Boolean)rs.getObject("paperclips"),
-                    (java.lang.String)rs.getObject("paperclipAmount"),
-                    (java.lang.Boolean)rs.getObject("other"),
-                    (java.lang.String)rs.getObject("otherItems"));
-
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -76,20 +62,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        (java.lang.Boolean)rs.getObject("pencils"),
-                        (java.lang.String)rs.getObject("pencilAmount"),
-                        (java.lang.Boolean)rs.getObject("pens"),
-                        (java.lang.String)rs.getObject("penAmount"),
-                        (java.lang.Boolean)rs.getObject("paper"),
-                        (java.lang.String)rs.getObject("paperAmount"),
-                        (java.lang.Boolean)rs.getObject("stapler"),
-                        (java.lang.String)rs.getObject("staplerAmount"),
-                        (java.lang.Boolean)rs.getObject("staples"),
-                        (java.lang.String)rs.getObject("stapleAmount"),
-                        (java.lang.Boolean)rs.getObject("paperclips"),
-                        (java.lang.String)rs.getObject("paperclipAmount"),
-                        (java.lang.Boolean)rs.getObject("other"),
-                        (java.lang.String)rs.getObject("otherItems"));
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -110,20 +84,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        (java.lang.Boolean)rs.getObject("pencils"),
-                        (java.lang.String)rs.getObject("pencilAmount"),
-                        (java.lang.Boolean)rs.getObject("pens"),
-                        (java.lang.String)rs.getObject("penAmount"),
-                        (java.lang.Boolean)rs.getObject("paper"),
-                        (java.lang.String)rs.getObject("paperAmount"),
-                        (java.lang.Boolean)rs.getObject("stapler"),
-                        (java.lang.String)rs.getObject("staplerAmount"),
-                        (java.lang.Boolean)rs.getObject("staples"),
-                        (java.lang.String)rs.getObject("stapleAmount"),
-                        (java.lang.Boolean)rs.getObject("paperclips"),
-                        (java.lang.String)rs.getObject("paperclipAmount"),
-                        (java.lang.Boolean)rs.getObject("other"),
-                        (java.lang.String)rs.getObject("otherItems"));
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -135,10 +97,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
 
     @Override
     public void save(OfficeServiceRequestEntry officeServiceRequestEntry) {
-        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(),
-                officeServiceRequestEntry.getPencils(), officeServiceRequestEntry.getPencilAmount(), officeServiceRequestEntry.getPens(), officeServiceRequestEntry.getPenAmount(), officeServiceRequestEntry.getPaper(), officeServiceRequestEntry.getPaperAmount(),
-                officeServiceRequestEntry.getStapler(), officeServiceRequestEntry.getStaplerAmount(), officeServiceRequestEntry.getStaples(), officeServiceRequestEntry.getStapleAmount(), officeServiceRequestEntry.getPaperclips(), officeServiceRequestEntry.getPaperclipAmount(),
-                officeServiceRequestEntry.getOther(), officeServiceRequestEntry.getOtherItems()};
+        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getOfficeRequest(), officeServiceRequestEntry.getEmployeeName()};
         try {
             dbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

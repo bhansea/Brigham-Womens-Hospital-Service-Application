@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <HBox spacing="100.0" style="-fx-background-color: FFFFFF; -fx-background-radius: 6;" BorderPane.alignment="CENTER">
          <children>

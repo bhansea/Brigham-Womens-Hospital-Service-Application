@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generator;
 
-import edu.wpi.punchy_pegasi.generator.schema.Facade;
 import edu.wpi.punchy_pegasi.generator.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
 import org.objectweb.asm.ClassReader;
@@ -16,7 +15,6 @@ import org.objectweb.asm.tree.MethodNode;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -235,13 +233,12 @@ public class  SleepThroughTheWinter {
     private static void generateTable() throws IOException {
         var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", TableType.class.getSimpleName() + ".java");
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", TableType.class.getSimpleName() + ".java");
-        var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
-                .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
+        var sourceFileText = new String(Files.readAllBytes(schemaSourcePath));
 
         for(var tt : TableType.values())
             sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
                     Matcher.quoteReplacement(generateTableInit(tt)));
-        Files.writeString(schemaDestPath, sourceFileText);
+        Files.writeString(schemaDestPath, sourceFileText.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema"));
     }
 
     private static void generateEntry(Class<?> entryClass) throws IOException, IllegalStateException {

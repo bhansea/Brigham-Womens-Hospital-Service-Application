@@ -48,10 +48,10 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
     }
-
     @FXML
     @Override
     public void init() {
+        submit.setDisable(true);
         items.addAll(List.of(new CheckBox[]{pencils,
                 pens,
                 paper,
@@ -73,11 +73,13 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
 
     @FXML
     public void submitEntry() {
+        StringBuilder reqString = new StringBuilder();
+        for (int i = 0; i < items.size(); i++)
+            if (items.get(i).isSelected())
+                reqString.append(items.get(i).getText()).append(" - ").append(itemsAmount.get(i)).append("; ");
+
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(locationName.getItems().get(0).getUuid(), staffAssignment.getItems().get(0).getEmployeeID(), additionalNotes.getText(),
-                pencils.isSelected(), pencilAmount.getText(), pens.isSelected(), penAmount.getText(), paper.isSelected(), paperAmount.getText(),
-                stapler.isSelected(), staplerAmount.getText(), staples.isSelected(), stapleAmount.getText(), paperclips.isSelected(),
-                paperclipAmount.getText(), other.isSelected(), otherItems.getText());
+        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), reqString.toString().trim(), "");
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
@@ -89,14 +91,10 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
 
     @FXML
     public void validateEntry() {
-
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).isSelected()) {
-                if (itemsAmount.get(i).getText().isBlank()) {
-                    submit.setDisable(true);
-                }
-            }
-        }
+        var validate = validateGeneric() || items.stream().filter(CheckBox::isSelected).toList().size() == 0;
+        for (int i = 0; i < items.size(); i++)
+            validate |= itemsAmount.get(i).getText().isBlank() && items.get(i).isSelected();
+        submit.setDisable(validate);
     }
 
     @FXML

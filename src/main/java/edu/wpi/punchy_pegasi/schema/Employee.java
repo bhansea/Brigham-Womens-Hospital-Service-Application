@@ -2,10 +2,6 @@ package edu.wpi.punchy_pegasi.schema;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +9,10 @@ public class Employee {
         private Long employeeID;
     private String firstName;
     private String lastName;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
     @lombok.RequiredArgsConstructor
     public enum Field {
         EMPLOYEE_ID("employeeID"),

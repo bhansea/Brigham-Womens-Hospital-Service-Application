@@ -1,45 +1,43 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.Facade;
-import edu.wpi.punchy_pegasi.generated.FlowerDeliveryRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
-import edu.wpi.punchy_pegasi.schema.RequestEntry;
+import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import lombok.AllArgsConstructor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class HomePageController {
     @FXML
     private VBox tableContainer;
 
     @FXML
-    MFXTableView<RequestEntry> requestTable;
+    MFXTableView<GenericRequestEntry> requestTable;
 
     private Facade facade = App.getSingleton().getFacade();
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         showServiceRequestTable();
         initRequestTable();
     }
 
-    public void showServiceRequestTable() {
+    private void showServiceRequestTable() {
         requestTable.setVisible(true);
         requestTable.setManaged(true);
     }
 
-    public void initRequestTable() {
+    private void initRequestTable() {
         var employeeID = App.getSingleton().getAccount().getEmployeeID();
         List<RequestEntry> requestEntries = new ArrayList<>();
         requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
@@ -47,13 +45,34 @@ public class HomePageController {
         requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
         requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
 
-        ObservableList<RequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream().filter(e-> Objects.equals(e.getStaffAssignment(), employeeID)).toList());
+        var locationNames = facade.getAllLocationName();
+        var employees = facade.getAllEmployee();
 
-        for (RequestEntry.Field field : Arrays.stream(RequestEntry.Field.values()).filter(v -> v != RequestEntry.Field.SERVICE_ID).toList()) {
-            MFXTableColumn<RequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
-            col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
-            requestTable.getTableColumns().add(col);
-        }
+
+        ObservableList<GenericRequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream()
+                .filter(e -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel() || Objects.equals(e.getStaffAssignment(), employeeID))
+                .map(re -> new GenericRequestEntry(
+                        locationNames.getOrDefault(re.getLocationName(), new LocationName(null, "Unknown location", "", null)).getLongName(),
+                        employees.getOrDefault(re.getStaffAssignment(), new Employee(0L, "Unknown", "Employee")).getFullName(),
+                        re.getAdditionalNotes(),
+                        re.getStatus(),
+                        Arrays.stream(TableType.values())
+                                .filter(tt -> tt.getClazz() == re.getClass())
+                                .findFirst()
+                                .orElseGet(() -> TableType.GENERIC)))
+                .toList());
+
+        MFXTableColumn<GenericRequestEntry> locationCol = new MFXTableColumn<>("Location", true);
+        MFXTableColumn<GenericRequestEntry> employeeCol = new MFXTableColumn<>("Employee", true);
+        MFXTableColumn<GenericRequestEntry> additionalCol = new MFXTableColumn<>("Additional Notes", true);
+        MFXTableColumn<GenericRequestEntry> statusCol = new MFXTableColumn<>("Status", true);
+        MFXTableColumn<GenericRequestEntry> typeCol = new MFXTableColumn<>("Request Type", true);
+        locationCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.location));
+        employeeCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.assigned));
+        additionalCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.additionalNotes));
+        statusCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.status));
+        typeCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.tableType));
+        requestTable.getTableColumns().addAll(locationCol, employeeCol, additionalCol, statusCol, typeCol);
         requestTable.setItems(requestList);
         requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
         requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
@@ -67,6 +86,15 @@ public class HomePageController {
         });
         thread.setDaemon(true);
         thread.start();
+    }
+
+    @AllArgsConstructor
+    private class GenericRequestEntry {
+        String location;
+        String assigned;
+        String additionalNotes;
+        RequestEntry.Status status;
+        TableType tableType;
     }
 
     @FXML

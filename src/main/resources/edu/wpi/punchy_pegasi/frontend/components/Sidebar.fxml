@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<BorderPane maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
+<BorderPane maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
    <center>
       <VBox fx:id="sidebar" spacing="25.0" style="-fx-background-color: #00458E; -fx-border-radius: 6;" styleClass="sideBar" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>

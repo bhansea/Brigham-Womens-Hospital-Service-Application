@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.intellij.lang.annotations.Language;
 
 public enum TableType {
-    NODES(edu.wpi.punchy_pegasi.generator.schema.Node.class, """
+    NODES(edu.wpi.punchy_pegasi.schema.Node.class, """
 DO $$
 BEGIN
   IF to_regclass('teamp.nodes') IS NULL THEN
@@ -21,7 +21,7 @@ BEGIN
   END IF;
 END $$;
 """),
-    EDGES(edu.wpi.punchy_pegasi.generator.schema.Edge.class, """
+    EDGES(edu.wpi.punchy_pegasi.schema.Edge.class, """
 DO $$
 BEGIN
   IF to_regclass('teamp.edges') IS NULL THEN
@@ -36,7 +36,7 @@ BEGIN
   END IF;
 END $$;
 """),
-    MOVES(edu.wpi.punchy_pegasi.generator.schema.Move.class, """
+    MOVES(edu.wpi.punchy_pegasi.schema.Move.class, """
 DO $$
 BEGIN
   IF to_regclass('teamp.moves') IS NULL THEN
@@ -52,7 +52,7 @@ BEGIN
   END IF;
 END $$;
 """),
-    LOCATIONNAMES(edu.wpi.punchy_pegasi.generator.schema.LocationName.class, """
+    LOCATIONNAMES(edu.wpi.punchy_pegasi.schema.LocationName.class, """
 DO $$
 BEGIN
   IF to_regclass('teamp.locationnames') IS NULL THEN
@@ -68,7 +68,7 @@ BEGIN
   END IF;
 END $$;
 """),
-    GENERIC(edu.wpi.punchy_pegasi.generator.schema.GenericRequestEntry.class, """
+    GENERIC(edu.wpi.punchy_pegasi.schema.GenericRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.generic
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS teamp.generic
 );
 """)
 ,
-    FOODREQUESTS(edu.wpi.punchy_pegasi.generator.schema.FoodServiceRequestEntry.class, """
+    FOODREQUESTS(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.foodrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS teamp.foodrequests
 );
 """)
 ,
-    FLOWERREQUESTS(edu.wpi.punchy_pegasi.generator.schema.FlowerDeliveryRequestEntry.class, """
+    FLOWERREQUESTS(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 );
 """)
 ,
-    CONFERENCEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.ConferenceRoomEntry.class, """
+    CONFERENCEREQUESTS(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 );
 """)
 ,
-    FURNITUREREQUESTS(edu.wpi.punchy_pegasi.generator.schema.FurnitureRequestEntry.class, """
+    FURNITUREREQUESTS(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 );
 """)
 ,
-    OFFICEREQUESTS(edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class, """
+    OFFICEREQUESTS(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS teamp.officerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS teamp.officerequests
 );
 """)
 ,
-    EMPLOYEES(edu.wpi.punchy_pegasi.generator.schema.Employee.class, """
+    EMPLOYEES(edu.wpi.punchy_pegasi.schema.Employee.class, """
 DO $$
 BEGIN
   IF to_regclass('teamp.employees') IS NULL THEN
@@ -165,7 +165,7 @@ BEGIN
   END IF;
 END $$;
 """),
-    ACCOUNTS(edu.wpi.punchy_pegasi.generator.schema.Account.class, """
+    ACCOUNTS(edu.wpi.punchy_pegasi.schema.Account.class, """
 DO $$
 BEGIN
   IF to_regclass('teamp.accounts') IS NULL THEN

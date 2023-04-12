@@ -108,8 +108,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     @FXML
     public void submitEntry(){
         requestEntry = new FurnitureRequestEntry(
-                locationName.getItems().get(0).getUuid(),
-                staffAssignment.getItems().get(0).getEmployeeID(),
+                locationName.getSelectedItem().getUuid(),
+                staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
                 furniture.getItems());
         facade.saveFurnitureRequestEntry(requestEntry);

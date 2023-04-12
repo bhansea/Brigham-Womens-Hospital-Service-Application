@@ -68,8 +68,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
         //makes sure shared fields aren't empty
         requestEntry = entry = new FoodServiceRequestEntry(
-                locationName.getItems().get(0).getUuid(),
-                staffAssignment.getItems().get(0).getEmployeeID(),
+                locationName.getSelectedItem().getUuid(),
+                staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
                 mealDropdown.getSelectedItem(),
                 tempDropdown.getSelectedItem(),
