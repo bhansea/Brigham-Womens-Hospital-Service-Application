@@ -34,8 +34,8 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
             FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
@@ -61,8 +61,8 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),
@@ -85,8 +85,8 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
                     (java.lang.String)rs.getObject("patientName"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("flowerSize"),

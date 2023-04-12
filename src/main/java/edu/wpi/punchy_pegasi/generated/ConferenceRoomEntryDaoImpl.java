@@ -33,8 +33,8 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             rs.next();
             ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
@@ -59,8 +59,8 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
@@ -82,8 +82,8 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),

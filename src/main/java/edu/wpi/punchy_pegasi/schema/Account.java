@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -10,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 public class Account {
     private String username;
     private String password;
-        private Long employeeID;
+    
+    private Long employeeID;
     private AccountType accountType;
 
         public enum AccountType {
