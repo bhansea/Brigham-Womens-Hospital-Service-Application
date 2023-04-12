@@ -1,9 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
-import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.backend.pathfinding.CartesianHeuristic;
-import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
-import edu.wpi.punchy_pegasi.backend.pathfinding.Palgo;
 import edu.wpi.punchy_pegasi.frontend.DragController;
 import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
@@ -17,6 +13,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.util.StringConverter;
@@ -38,6 +35,8 @@ public class AdminMapController {
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
     private IMap<HospitalFloor> map;
+    @FXML
+    private BorderPane root;
     @FXML
     private MFXProgressBar commitProgress;
     @FXML
@@ -73,12 +72,16 @@ public class AdminMapController {
     };
 
     private Optional<Circle> drawNode(Node node, String color) {
-        var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", null));
-        return map.drawNode(node, color, location.getShortName(), location.getLongName() + "\nNode ID: " + node.getNodeID().toString());
+        var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", LocationName.NodeType.HALL));
+        var locationType = location.getNodeType();
+        var shortLabel = locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
+        return map.drawNode(node, color, shortLabel ? location.getShortName() : "", location.getLongName() + "\nNode ID: " + node.getNodeID().toString());
     }
 
     @FXML
     private void initialize() {
+        map = new HospitalMap(floors);
+        root.setCenter(map.getMapNode());
         setEditingNodes(false);
         load();
     }
@@ -168,10 +171,13 @@ public class AdminMapController {
         commitButton.setVisible(editing);
         commitProgress.setManaged(editing);
         commitProgress.setVisible(editing);
+        editButton.setVisible(!editing);
+        editButton.setManaged(!editing);
+
+        // if you are editing
+        if (editing) commitProgress.setProgress(0);
 
         // if you are done editing
         if (!editing) map.clearMap();
-        editButton.setVisible(!editing);
-        editButton.setManaged(!editing);
     }
 }

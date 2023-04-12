@@ -16,6 +16,8 @@ import java.util.Objects;
 
 public class SidebarController implements PropertyChangeListener {
     @FXML
+    HBox editMapPage;
+    @FXML
     HBox home;
     @FXML
     VBox serviceRequestDropDown;
@@ -136,6 +138,10 @@ public class SidebarController implements PropertyChangeListener {
 
         adminPage.setOnMouseClicked(e -> {
             App.getSingleton().navigate(Screen.ADMIN_PAGE);
+        });
+
+        editMapPage.setOnMouseClicked(e -> {
+            App.getSingleton().navigate(Screen.EDIT_MAP_PAGE);
         });
 
         signagePage.setOnMouseClicked(e -> {

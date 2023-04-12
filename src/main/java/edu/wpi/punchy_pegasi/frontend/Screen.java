@@ -15,7 +15,8 @@ import java.util.function.Function;
 public enum Screen {
     HOME("Home", "frontend/views/HomePage.fxml", Account.AccountType.STAFF),
     SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.STAFF),
-    MAP_PAGE("Map", "frontend/views/MapPage.fxml", Account.AccountType.STAFF),
+    MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.STAFF),
+    EDIT_MAP_PAGE("Edit Map", "frontend/views/EditMap.fxml", Account.AccountType.ADMIN),
     LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE),
     FLOWER_DELIVERY_REQUEST("Request Flower Delivery", "frontend/requests/FlowerDeliveryRequest.fxml", Account.AccountType.STAFF, FlowerDeliveryRequestController::create),
     ADMIN_PAGE("Admin Page", "frontend/requests/AdminPage.fxml", Account.AccountType.ADMIN),

@@ -3,6 +3,9 @@ package edu.wpi.punchy_pegasi.frontend.map;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.animations.Bobbing;
 import edu.wpi.punchy_pegasi.schema.Node;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -18,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.robot.Robot;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
@@ -194,8 +198,10 @@ public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
         shortNameTooltip.setVisible(true);
 
         floor.nodeCanvas.getChildren().add(circle);
-        floor.tooltipCanvas.getChildren().add(toolTip);
-        floor.tooltipCanvas.getChildren().add(shortNameTooltip);
+        if (!hoverText.isBlank())
+            floor.tooltipCanvas.getChildren().add(toolTip);
+        if (!labelText.isBlank())
+            floor.tooltipCanvas.getChildren().add(shortNameTooltip);
         return Optional.of(circle);
     }
 
