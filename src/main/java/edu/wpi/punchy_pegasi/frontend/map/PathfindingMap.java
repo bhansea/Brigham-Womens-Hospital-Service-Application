@@ -19,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -62,7 +61,7 @@ public class PathfindingMap {
     private Map<Long, Move> movesByNodeID = new HashMap<>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
 
-    private StringConverter<Node> nodeToLocation = new StringConverter<>() {
+    private final StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
         public String toString(Node node) {
             var location = nodeToLocation(node);
@@ -76,15 +75,14 @@ public class PathfindingMap {
         }
     };
     private ObservableList<Node> filteredNodes;
+    private final AtomicBoolean startSelected = new AtomicBoolean(false);
+    private final AtomicBoolean endSelected = new AtomicBoolean(false);
+    private final AtomicBoolean selectingGraphically = new AtomicBoolean(false);
 
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", null));
         return map.drawNode(node, color, location.getShortName(), location.getLongName());
     }
-
-    private AtomicBoolean startSelected = new AtomicBoolean(false);
-    private AtomicBoolean endSelected = new AtomicBoolean(false);
-    private AtomicBoolean selectingGraphically = new AtomicBoolean(false);
 
     @FXML
     private void initialize() {
@@ -96,10 +94,10 @@ public class PathfindingMap {
         nodeStartCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
         nodeStartCombo.setConverter(nodeToLocation);
         nodeStartCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if(newPropertyValue && !selectingGraphically.get()) {
+            if (newPropertyValue && !selectingGraphically.get()) {
                 startSelected.set(true);
                 endSelected.set(false);
-                Platform.runLater(()-> {
+                Platform.runLater(() -> {
                     selectGraphically.setText("Select Start Graphically");
                     selectGraphically.setDisable(false);
                 });
@@ -109,10 +107,10 @@ public class PathfindingMap {
         nodeEndCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
         nodeEndCombo.setConverter(nodeToLocation);
         nodeEndCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if(newPropertyValue) {
+            if (newPropertyValue) {
                 startSelected.set(false);
                 endSelected.set(true);
-                Platform.runLater(()-> {
+                Platform.runLater(() -> {
                     selectGraphically.setText("Select End Graphically");
                     selectGraphically.setDisable(false);
                 });
@@ -129,15 +127,16 @@ public class PathfindingMap {
         if (move == null) return Optional.empty();
         return Optional.ofNullable(locationsByLongName.get(move));
     }
+
     @FXML
     private void graphicalSelect() {
-        if(selectingGraphically.compareAndExchange(false, true)) return;
+        if (selectingGraphically.compareAndExchange(false, true)) return;
         nodeStartCombo.setDisable(true);
         nodeEndCombo.setDisable(true);
         pathfindButton.setDisable(true);
         selectGraphicallyCancel.setVisible(true);
         selectGraphicallyCancel.setManaged(true);
-        selectGraphicallyCancel.setOnAction(e->{
+        selectGraphicallyCancel.setOnAction(e -> {
             selectGraphicallyCancel.setOnAction(null);
             nodeStartCombo.setDisable(false);
             nodeEndCombo.setDisable(false);
@@ -145,15 +144,16 @@ public class PathfindingMap {
             selectGraphicallyCancel.setVisible(false);
             selectGraphicallyCancel.setManaged(false);
             selectingGraphically.set(false);
+            map.clearMap();
         });
         filteredNodes.forEach(n -> {
             var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();
             point.setOnMouseClicked(e -> {
-                if(startSelected.get())
+                if (startSelected.get())
                     nodeStartCombo.selectItem(n);
-                else if(endSelected.get())
+                else if (endSelected.get())
                     nodeEndCombo.selectItem(n);
                 selectGraphicallyCancel.fire();
             });

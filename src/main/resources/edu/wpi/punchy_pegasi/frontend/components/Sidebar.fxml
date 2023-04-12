@@ -1,75 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<BorderPane maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
-   <center>
-      <VBox fx:id="sidebar" spacing="25.0" style="-fx-background-color: #00458E; -fx-border-radius: 6;" styleClass="sideBar" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
-         <children>
-            <VBox fx:id="accountInfo">
-               <HBox spacing="10">
-                  <children>
-                     <VBox HBox.hgrow="NEVER">
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css"
+            xmlns="http://javafx.com/javafx/"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
+    <center>
+        <VBox fx:id="sidebar" spacing="25.0" style="-fx-background-color: #00458E; -fx-border-radius: 6;"
+              styleClass="sideBar" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+            <children>
+                <VBox fx:id="accountInfo">
+                    <HBox spacing="10">
                         <children>
-                           <ImageView fx:id="profileImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true"
-                                      preserveRatio="true"/>
+                            <VBox HBox.hgrow="NEVER">
+                                <children>
+                                    <ImageView fx:id="profileImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true"
+                                               preserveRatio="true"/>
+                                </children>
+                            </VBox>
+                            <VBox HBox.hgrow="NEVER" alignment="CENTER_LEFT">
+                                <children>
+                                    <Label fx:id="nameText" text="Ryan Nguyen" textFill="WHITE">
+                                        <font>
+                                            <Font size="20.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label fx:id="roleText" text="Admin" textFill="WHITE">
+                                        <font>
+                                            <Font size="15.0"/>
+                                        </font>
+                                    </Label>
+                                </children>
+                            </VBox>
                         </children>
-                     </VBox>
-                     <VBox HBox.hgrow="NEVER" alignment="CENTER_LEFT">
-                        <children>
-                           <Label fx:id="nameText" text="Ryan Nguyen" textFill="WHITE">
-                              <font>
-                                 <Font size="20.0"/>
-                              </font>
-                           </Label>
-                           <Label fx:id="roleText" text="Admin" textFill="WHITE">
-                              <font>
-                                 <Font size="15.0"/>
-                              </font>
-                           </Label>
-                        </children>
-                     </VBox>
-                  </children>
-                  <padding>
-                     <Insets right="10" left="10" bottom="10"/>
-                  </padding>
-               </HBox>
-               <Line endX="256.0" startX="0.0" stroke="#012D5A"/>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
-               <children>
-                  <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS" />
-                  <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="button" fx:id="loginLogout">
-                     <children>
-                        <Region styleClass="icon">
-                           <shape>
-                              <SVGPath>
-                                 <content>
-                              M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z
-                           </content>
-                              </SVGPath>
-                           </shape>
-                        </Region>
-                        <Label text="Logout" textFill="WHITE" fx:id="loginLogoutText">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets left="25.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-         <padding>
-            <Insets bottom="30.0" top="10.0" />
-         </padding>
-      </VBox>
-   </center>
+                        <padding>
+                            <Insets right="10" left="10" bottom="10"/>
+                        </padding>
+                    </HBox>
+                    <Line endX="256.0" startX="0.0" stroke="#012D5A"/>
+                </VBox>
+                <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS"/>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="button" fx:id="loginLogout">
+                            <children>
+                                <Region styleClass="icon">
+                                    <shape>
+                                        <SVGPath>
+                                            <content>
+                                                M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z
+                                            </content>
+                                        </SVGPath>
+                                    </shape>
+                                </Region>
+                                <Label text="Logout" textFill="WHITE" fx:id="loginLogoutText">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets left="25.0"/>
+                            </padding>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="30.0" top="10.0"/>
+            </padding>
+        </VBox>
+    </center>
 </BorderPane>

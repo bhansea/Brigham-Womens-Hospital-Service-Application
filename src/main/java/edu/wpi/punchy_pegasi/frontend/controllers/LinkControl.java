@@ -12,12 +12,6 @@ import java.io.IOException;
 public class LinkControl extends HBox {
     @FXML
     public Button button;
-
-    @FXML
-    public void onMouseClick() {
-        onClick.run();
-    }
-
     private Runnable onClick;
 
     public LinkControl() {
@@ -34,6 +28,11 @@ public class LinkControl extends HBox {
         setOnClick(onClick);
     }
 
+    @FXML
+    public void onMouseClick() {
+        onClick.run();
+    }
+
     public void initialize() {
     }
 
@@ -41,19 +40,19 @@ public class LinkControl extends HBox {
         return button.textProperty();
     }
 
-    public void setText(String text) {
-        textProperty().set(text);
-    }
-
     public String getText() {
         return textProperty().get();
     }
 
-    public void setOnClick(Runnable onClick) {
-        this.onClick = onClick;
+    public void setText(String text) {
+        textProperty().set(text);
     }
 
     public Runnable getOnClick() {
         return onClick;
+    }
+
+    public void setOnClick(Runnable onClick) {
+        this.onClick = onClick;
     }
 }

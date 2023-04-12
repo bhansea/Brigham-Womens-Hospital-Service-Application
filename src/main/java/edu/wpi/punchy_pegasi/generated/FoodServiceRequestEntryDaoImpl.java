@@ -32,17 +32,17 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS, "serviceID", key)) {
             rs.next();
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("foodSelection"),
-                    (java.lang.String)rs.getObject("tempType"),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    (java.lang.String)rs.getObject("beverage"),
-                    (java.lang.String)rs.getObject("dietaryRestrictions"),
-                    (java.lang.String)rs.getObject("patientName"));
+                    (java.util.UUID) rs.getObject("serviceID"),
+                    (java.lang.Long) rs.getObject("locationName"),
+                    (java.lang.Long) rs.getObject("staffAssignment"),
+                    (java.lang.String) rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                    (java.lang.String) rs.getObject("foodSelection"),
+                    (java.lang.String) rs.getObject("tempType"),
+                    java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
+                    (java.lang.String) rs.getObject("beverage"),
+                    (java.lang.String) rs.getObject("dietaryRestrictions"),
+                    (java.lang.String) rs.getObject("patientName"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -61,17 +61,17 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS, Arrays.stream(params).map(FoodServiceRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("foodSelection"),
-                    (java.lang.String)rs.getObject("tempType"),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    (java.lang.String)rs.getObject("beverage"),
-                    (java.lang.String)rs.getObject("dietaryRestrictions"),
-                    (java.lang.String)rs.getObject("patientName"));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        (java.lang.String) rs.getObject("foodSelection"),
+                        (java.lang.String) rs.getObject("tempType"),
+                        java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
+                        (java.lang.String) rs.getObject("beverage"),
+                        (java.lang.String) rs.getObject("dietaryRestrictions"),
+                        (java.lang.String) rs.getObject("patientName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -87,17 +87,17 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS)) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("foodSelection"),
-                    (java.lang.String)rs.getObject("tempType"),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    (java.lang.String)rs.getObject("beverage"),
-                    (java.lang.String)rs.getObject("dietaryRestrictions"),
-                    (java.lang.String)rs.getObject("patientName"));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        (java.lang.String) rs.getObject("foodSelection"),
+                        (java.lang.String) rs.getObject("tempType"),
+                        java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
+                        (java.lang.String) rs.getObject("beverage"),
+                        (java.lang.String) rs.getObject("dietaryRestrictions"),
+                        (java.lang.String) rs.getObject("patientName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

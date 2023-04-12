@@ -36,16 +36,16 @@ class NodeDaoImplTest {
     void get() {
         Node node = new Node(100L, 500, 500, "L1", "testBuilding");
         Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
-        try{
-            pdbController.insertQuery(TableType.NODES,fields, values);
+        try {
+            pdbController.insertQuery(TableType.NODES, fields, values);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         Optional<Node> results = dao.get(node.getNodeID());
         Node daoresult = results.get();
-        assertEquals(daoresult,node);
-        try{
-            pdbController.deleteQuery(TableType.NODES,"nodeID", node.getNodeID());
+        assertEquals(daoresult, node);
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -57,9 +57,9 @@ class NodeDaoImplTest {
         Node node2 = new Node(101L, 500, 500, "L1", "testBuilding");
         Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
         Object[] values2 = new Object[]{node2.getNodeID(), node2.getXcoord(), node2.getYcoord(), node2.getFloor(), node2.getBuilding()};
-        try{
-            pdbController.insertQuery(TableType.NODES,fields, values);
-            pdbController.insertQuery(TableType.NODES,fields, values2);
+        try {
+            pdbController.insertQuery(TableType.NODES, fields, values);
+            pdbController.insertQuery(TableType.NODES, fields, values2);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -68,11 +68,11 @@ class NodeDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.NODES, "building", "testBuilding")) {
             while (rs.next()) {
                 Node req = new Node(
-                        (java.lang.Long)rs.getObject("nodeID"),
-                        (java.lang.Integer)rs.getObject("xcoord"),
-                        (java.lang.Integer)rs.getObject("ycoord"),
-                        (java.lang.String)rs.getObject("floor"),
-                        (java.lang.String)rs.getObject("building"));
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.Integer) rs.getObject("xcoord"),
+                        (java.lang.Integer) rs.getObject("ycoord"),
+                        (java.lang.String) rs.getObject("floor"),
+                        (java.lang.String) rs.getObject("building"));
                 if (req != null)
                     map.put(req.getNodeID(), req);
             }
@@ -81,9 +81,9 @@ class NodeDaoImplTest {
         }
         assertEquals(map.get(node.getNodeID()), results.get(node.getNodeID()));
         assertEquals(map.get(node2.getNodeID()), results.get(node2.getNodeID()));
-        try{
-            pdbController.deleteQuery(TableType.NODES,"nodeID", node.getNodeID());
-            pdbController.deleteQuery(TableType.NODES,"nodeID", node2.getNodeID());
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node2.getNodeID());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -157,24 +157,24 @@ class NodeDaoImplTest {
     void delete() {
         Node node = new Node(100L, 500, 500, "L1", "testBuilding");
         Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
-        try{
-            pdbController.insertQuery(TableType.NODES,fields, values);
+        try {
+            pdbController.insertQuery(TableType.NODES, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert node";
+            assert false : "Failed to insert node";
         }
 
-        try{
+        try {
             pdbController.searchQuery(TableType.NODES, "nodeID", node.getNodeID());
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to find node";
+            assert false : "Failed to find node";
         }
 
         dao.delete(node);
 
-        try{
+        try {
             pdbController.searchQuery(TableType.NODES, "nodeID", node.getNodeID());
         } catch (PdbController.DatabaseException e) {
-            assert true: "Node was deleted successfully";
+            assert true : "Node was deleted successfully";
         }
     }
 }

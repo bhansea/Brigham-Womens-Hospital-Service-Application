@@ -43,9 +43,9 @@ class MoveDaoImplTest {
         }
         Optional<Move> results = dao.get(move.getUuid());
         Move daoresult = results.get();
-        assertEquals(daoresult,move);
-        try{
-            pdbController.deleteQuery(TableType.MOVES,"uuid", move.getUuid());
+        assertEquals(daoresult, move);
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -68,10 +68,10 @@ class MoveDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.MOVES, "longName", "testLong")) {
             while (rs.next()) {
                 Move req = new Move(
-                        (java.lang.Long)rs.getObject("uuid"),
-                        (java.lang.Long)rs.getObject("nodeID"),
-                        (java.lang.String)rs.getObject("longName"),
-                        (java.lang.String)rs.getObject("date"));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("date"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -80,9 +80,9 @@ class MoveDaoImplTest {
         }
         assertEquals(map.get(move.getUuid()), results.get(move.getUuid()));
         assertEquals(map.get(move2.getUuid()), results.get(move2.getUuid()));
-        try{
-            pdbController.deleteQuery(TableType.MOVES,"uuid", move.getUuid());
-            pdbController.deleteQuery(TableType.MOVES,"uuid", move2.getUuid());
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move2.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +111,7 @@ class MoveDaoImplTest {
             try {
                 pdbController.deleteQuery(TableType.MOVES, "uuid", uuid);
             } catch (PdbController.DatabaseException e) {
-                assert false: "Failed to delete from database";
+                assert false : "Failed to delete from database";
             }
         }
         assertEquals(refMap, resultMap);
@@ -148,21 +148,21 @@ class MoveDaoImplTest {
         try {
             pdbController.insertQuery(TableType.MOVES, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert test data";
+            assert false : "Failed to insert test data";
         }
 
-        try{
+        try {
             var result = pdbController.searchQuery(TableType.MOVES, "uuid", move.getUuid());
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to delete test data";
+            assert false : "Failed to delete test data";
         }
 
         dao.delete(move);
 
-        try{
+        try {
             var result = pdbController.searchQuery(TableType.MOVES, "uuid", move.getUuid());
         } catch (PdbController.DatabaseException e) {
-            assert true: "Test data deleted successfully";
+            assert true : "Test data deleted successfully";
         }
     }
 }

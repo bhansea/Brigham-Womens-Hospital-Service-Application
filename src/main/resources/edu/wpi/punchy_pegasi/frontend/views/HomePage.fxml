@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import io.github.palexdev.materialfx.controls.MFXTableView?>
-<?import javafx.scene.control.Button?>
-<BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css"
-            xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
+            stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">

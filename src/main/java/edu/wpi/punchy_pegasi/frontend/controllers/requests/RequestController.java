@@ -34,23 +34,23 @@ public abstract class RequestController<T extends RequestEntry> {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @FXML
     protected T requestEntry;
-
-    @FXML
-    MFXFilterComboBox<LocationName> locationName;
-    @FXML
-    MFXFilterComboBox<Employee> staffAssignment;
     @FXML
     protected TextField additionalNotes;
     @FXML
     protected Button submit;
     @FXML
     protected VBox inputContainer;
-    @FXML private HBox componentHolder;
     @FXML
     protected VBox requestInfoContainer;
-
     @FXML
     protected Label headerText;
+    @FXML
+    MFXFilterComboBox<LocationName> locationName;
+    @FXML
+    MFXFilterComboBox<Employee> staffAssignment;
+    @FXML
+    private HBox componentHolder;
+
     public static BorderPane create(RequestController controller, String path) {
         try {
             Parent l = App.getSingleton().loadWithCache(path, controller);
@@ -94,8 +94,7 @@ public abstract class RequestController<T extends RequestEntry> {
         staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
         locationName.setOnAction(p -> validateEntry());
         staffAssignment.setOnAction(p -> validateEntry());
-        var employeeToName = new StringConverter<Employee>()
-        {
+        var employeeToName = new StringConverter<Employee>() {
 
             @Override
             public String toString(Employee employee) {
@@ -108,7 +107,7 @@ public abstract class RequestController<T extends RequestEntry> {
                 return null;
             }
         };
-        var locationToLongName = new StringConverter<LocationName>(){
+        var locationToLongName = new StringConverter<LocationName>() {
 
             @Override
             public String toString(LocationName object) {
@@ -123,8 +122,8 @@ public abstract class RequestController<T extends RequestEntry> {
         };
         staffAssignment.setConverter(employeeToName);
         locationName.setConverter(locationToLongName);
-        staffAssignment.setOnAction(e-> validateEntry());
-        locationName.setOnAction(e-> validateEntry());
+        staffAssignment.setOnAction(e -> validateEntry());
+        locationName.setOnAction(e -> validateEntry());
         for (var node : new TextField[]{locationName, staffAssignment, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);
@@ -136,7 +135,7 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (locationName.getSelectedItem()  == null || staffAssignment.getSelectedItem() == null);
+        return (locationName.getSelectedItem() == null || staffAssignment.getSelectedItem() == null);
     }
 
     protected void clearGeneric() {
@@ -156,34 +155,34 @@ public abstract class RequestController<T extends RequestEntry> {
         HBox hbox = new HBox();
         Label label = new Label("Patient Name");
         inputContainer.getChildren().add(0, hbox);
-        inputContainer.getChildren().add(0,label);
+        inputContainer.getChildren().add(0, label);
         hbox.getChildren().add(0, field);
         hbox.setAlignment(Pos.CENTER);
         label.setFont(new Font(DEFAULT_FULLNAME, 24));
         label.setAlignment(Pos.CENTER_LEFT);
-        label.setTextFill(Color.color(1,1,1));
+        label.setTextFill(Color.color(1, 1, 1));
         field.setPromptText("Enter Patient Name");
         field.setAlignment(Pos.CENTER_LEFT);
         field.setFont(new Font(DEFAULT_FULLNAME, 24));
-        inputContainer.setPadding(new Insets(20,20,20,20));
+        inputContainer.setPadding(new Insets(20, 20, 20, 20));
         inputContainer.setSpacing(6);
-        hbox.setPadding(new Insets(0,0,0,0));
+        hbox.setPadding(new Insets(0, 0, 0, 0));
         field.setOnKeyTyped(a -> validateEntry());
     }
 
     @FXML
-    protected void addLabel(Label label){
+    protected void addLabel(Label label) {
         HBox hbox = new HBox();
         Label total = new Label("Total:");
-        requestInfoContainer.getChildren().add(0,hbox);
+        requestInfoContainer.getChildren().add(0, hbox);
         hbox.getChildren().add(0, total);
-        hbox.getChildren().add(1,label);
+        hbox.getChildren().add(1, label);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setPadding(new Insets(10,0,0,0));
+        hbox.setPadding(new Insets(10, 0, 0, 0));
         label.setFont(new Font(DEFAULT_FULLNAME, 24));
         total.setFont(new Font(DEFAULT_FULLNAME, 24));
-        total.setTextFill(Color.color(1,1,1));
-        label.setTextFill(Color.color(1,1,1));
+        total.setTextFill(Color.color(1, 1, 1));
+        label.setTextFill(Color.color(1, 1, 1));
         hbox.setSpacing(150);
         requestInfoContainer.setManaged(true);
         requestInfoContainer.setVisible(true);

@@ -15,7 +15,7 @@ public class Graph<K, T extends INode> {
         for (var entry : connections) {
             var startNode = nodes.get(entry.getValue0());
             var endNode = nodes.get(entry.getValue1());
-            if(startNode == null || endNode == null)
+            if (startNode == null || endNode == null)
                 continue;
             this.connections.get(nodes.get(entry.getValue0())).add(nodes.get(entry.getValue1()));
             this.connections.get(nodes.get(entry.getValue1())).add(nodes.get(entry.getValue0()));

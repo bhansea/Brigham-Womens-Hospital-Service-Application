@@ -15,7 +15,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -24,20 +23,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class PdbController {
 
-    @AllArgsConstructor
-    @Getter
-    public enum Source {
-        Wong("database.cs.wpi.edu", 5432, "teampdb", "teamp", "teamp130"),
-        Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130"),
-        Local("localhost", 54321, "postgres", "", "");
-        private String url;
-        private int port;
-        private String database;
-        private String username;
-        private String password;
-    }
-    private Connection connection;
     public final Source source;
+    private final Connection connection;
     public PdbController(Source source) throws SQLException, ClassNotFoundException {
         this.source = source;
         Class.forName("org.postgresql.Driver");
@@ -156,6 +143,7 @@ public class PdbController {
             throw new DatabaseException("SQL error");
         }
     }
+
     public String getDeleteQuery(TableType tableType, String[] field, Object[] value) throws DatabaseException {
         if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
         var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
@@ -167,7 +155,7 @@ public class PdbController {
     public int[] executeDeletes(List<String> deleteQueries) throws DatabaseException {
         try {
             var statement = connection.createStatement();
-            for(var query : deleteQueries)
+            for (var query : deleteQueries)
                 statement.addBatch(query);
             return statement.executeBatch();
         } catch (SQLException e) {
@@ -308,6 +296,19 @@ public class PdbController {
                 }
             }
         }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public enum Source {
+        Wong("database.cs.wpi.edu", 5432, "teampdb", "teamp", "teamp130"),
+        Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130"),
+        Local("localhost", 54321, "postgres", "", "");
+        private String url;
+        private int port;
+        private String database;
+        private String username;
+        private String password;
     }
 
     public class DatabaseException extends Exception {

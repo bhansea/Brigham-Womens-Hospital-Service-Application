@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @Slf4j
 class EdgeDaoImplTest {
 
@@ -36,16 +37,16 @@ class EdgeDaoImplTest {
     void get() {
         Edge edge = new Edge(123123L, 123123L, 123123L);
         Object[] values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
-        try{
+        try {
             pdbController.insertQuery(TableType.EDGES, fields, values);
-        } catch (PdbController.DatabaseException e){
+        } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         Optional<Edge> results = dao.get(edge.getUuid());
         Edge daoresult = results.get();
-        assertEquals(daoresult,edge);
+        assertEquals(daoresult, edge);
         try {
-            pdbController.deleteQuery(TableType.EDGES,"uuid", edge.getUuid());
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -57,10 +58,10 @@ class EdgeDaoImplTest {
         var edge2 = new Edge(12312345L, 123123L, 123123L);
         var values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
         var values2 = new Object[]{edge2.getUuid(), edge2.getStartNode(), edge2.getEndNode()};
-        try{
+        try {
             pdbController.insertQuery(TableType.EDGES, fields, values);
-            pdbController.insertQuery(TableType.EDGES,fields,values2);
-        } catch (PdbController.DatabaseException e){
+            pdbController.insertQuery(TableType.EDGES, fields, values2);
+        } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         var results = dao.get(Edge.Field.START_NODE, 123123L);
@@ -68,20 +69,20 @@ class EdgeDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.EDGES, Edge.Field.START_NODE.getColName(), 123123L)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                        (java.lang.Long)rs.getObject("uuid"),
-                        (java.lang.Long)rs.getObject("startNode"),
-                        (java.lang.Long)rs.getObject("endNode"));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("startNode"),
+                        (java.lang.Long) rs.getObject("endNode"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        assertEquals(map.get(edge.getUuid()),results.get(edge.getUuid()));
-        assertEquals(map.get(edge2.getUuid()),results.get(edge2.getUuid()));
+        assertEquals(map.get(edge.getUuid()), results.get(edge.getUuid()));
+        assertEquals(map.get(edge2.getUuid()), results.get(edge2.getUuid()));
         try {
-            pdbController.deleteQuery(TableType.EDGES,"uuid", edge.getUuid());
-            pdbController.deleteQuery(TableType.EDGES,"uuid", edge2.getUuid());
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge2.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -164,14 +165,14 @@ class EdgeDaoImplTest {
         try {
             pdbController.insertQuery(TableType.EDGES, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert edge";
+            assert false : "Failed to insert edge";
             throw new RuntimeException(e);
         }
 
         try {
             pdbController.searchQuery(TableType.EDGES, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to find edge";
+            assert false : "Failed to find edge";
             throw new RuntimeException(e);
         }
 
@@ -180,7 +181,7 @@ class EdgeDaoImplTest {
         try {
             pdbController.searchQuery(TableType.EDGES, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert true: "Successfully deleted edge";
+            assert true : "Successfully deleted edge";
         }
 
     }

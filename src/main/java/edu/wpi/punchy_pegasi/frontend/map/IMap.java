@@ -11,9 +11,13 @@ import java.util.Optional;
 
 public interface IMap<Layer> {
     double getZoom();
+
     void setZoom(double zoomScale);
+
     void enableMove(boolean enabled);
+
     javafx.scene.Node getMapNode();
+
     @FXML
     void clearMap();
 

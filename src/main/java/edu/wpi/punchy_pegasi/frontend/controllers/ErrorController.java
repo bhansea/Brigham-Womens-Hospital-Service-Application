@@ -22,19 +22,21 @@ public class ErrorController {
     }
 
     @FXML
-    private void showError(){
+    private void showError() {
         errorView.setVisible(true);
         errorView.setManaged(true);
     }
+
     @FXML
-    private void copyError(){
+    private void copyError() {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
         content.putString(errorMessage.getText());
         clipboard.setContent(content);
     }
+
     @FXML
-    private void sendError(){
+    private void sendError() {
         // TODO: Implement remote error destination
     }
 }

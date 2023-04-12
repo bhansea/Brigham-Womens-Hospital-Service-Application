@@ -7,108 +7,114 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
+            xmlns="http://javafx.com/javafx/">
     <center>
-      <VBox spacing="16.0" style="-fx-background-color: white;">
-         <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
-                            <font>
-                                <Font name="System Bold" size="24.0" />
-                            </font>
-                        </Text>
-            <HBox spacing="200.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox spacing="32.0" HBox.hgrow="ALWAYS">
-                     <children>
-                         <VBox>
-                             <children>
-                                 <HBox>
-                                     <children>
-                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select A Flower Type ">
-                                             <font>
-                                                 <Font size="18.0"/>
-                                             </font>
-                                         </Text>
-                                         <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
-                                     </children>
-                                 </HBox>
-                                 <MFXComboBox fx:id="flowerTypeComboBox" alignment="TOP_LEFT" prefHeight="50.0"
-                                              prefWidth="450.0" promptText="Flower Types">
-                                     <font>
-                                         <Font size="16.0"/>
-                                     </font>
-                                 </MFXComboBox>
-                             </children>
-                         </VBox>
-                         <VBox>
-                             <children>
-                                 <HBox>
-                                     <children>
-                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Flower Size">
-                                             <font>
-                                                 <Font size="18.0"/>
-                                             </font>
-                                         </Text>
-                                         <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text=" *"/>
-                                     </children>
-                                 </HBox>
-                                 <MFXComboBox fx:id="flowerSize" alignment="TOP_LEFT" prefHeight="50.0"
-                                              prefWidth="450.0"
-                                              promptText="Flower Sizes">
-                                     <font>
-                                         <Font size="16.0"/>
-                                     </font>
-                                 </MFXComboBox>
-                             </children>
-                         </VBox>
-                        <VBox>
-                           <children>
-                               <HBox>
-                                   <children>
-                                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Flower Amount">
-                                           <font>
-                                               <Font size="18.0"/>
-                                           </font>
-                                       </Text>
-                                       <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text=" *"/>
-                                   </children>
-                               </HBox>
-                               <HBox>
-                                   <children>
-                                       <TextField fx:id="flowerAmountField" promptText="Flower Amount"
-                                                  HBox.hgrow="ALWAYS">
-                                           <font>
-                                               <Font size="16.0"/>
-                                           </font>
-                                       </TextField>
-                                   </children>
-                               </HBox>
-                           </children>
+        <VBox spacing="16.0" style="-fx-background-color: white;">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "
+                      wrappingWidth="575.7366981506348">
+                    <font>
+                        <Font name="System Bold" size="24.0"/>
+                    </font>
+                </Text>
+                <HBox spacing="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox spacing="32.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox>
+                                    <children>
+                                        <HBox>
+                                            <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                                      text="Select A Flower Type ">
+                                                    <font>
+                                                        <Font size="18.0"/>
+                                                    </font>
+                                                </Text>
+                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
+                                            </children>
+                                        </HBox>
+                                        <MFXComboBox fx:id="flowerTypeComboBox" alignment="TOP_LEFT" prefHeight="50.0"
+                                                     prefWidth="450.0" promptText="Flower Types">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </MFXComboBox>
+                                    </children>
+                                </VBox>
+                                <VBox>
+                                    <children>
+                                        <HBox>
+                                            <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                                      text="Select a Flower Size">
+                                                    <font>
+                                                        <Font size="18.0"/>
+                                                    </font>
+                                                </Text>
+                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text=" *"/>
+                                            </children>
+                                        </HBox>
+                                        <MFXComboBox fx:id="flowerSize" alignment="TOP_LEFT" prefHeight="50.0"
+                                                     prefWidth="450.0"
+                                                     promptText="Flower Sizes">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </MFXComboBox>
+                                    </children>
+                                </VBox>
+                                <VBox>
+                                    <children>
+                                        <HBox>
+                                            <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                                      text="Select a Flower Amount">
+                                                    <font>
+                                                        <Font size="18.0"/>
+                                                    </font>
+                                                </Text>
+                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text=" *"/>
+                                            </children>
+                                        </HBox>
+                                        <HBox>
+                                            <children>
+                                                <TextField fx:id="flowerAmountField" promptText="Flower Amount"
+                                                           HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font size="16.0"/>
+                                                    </font>
+                                                </TextField>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
                         </VBox>
-                     </children>
-                  </VBox>
-                            <VBox alignment="TOP_CENTER" spacing="32.0">
-                     <children>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/flower-bouquet.jpg" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                           <opaqueInsets>
-                               <Insets/>
-                           </opaqueInsets>
+                        <VBox alignment="TOP_CENTER" spacing="32.0">
+                            <children>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../assets/flower-bouquet.jpg"/>
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                </VBox>
+                            </children>
                         </VBox>
-                     </children>
-                            </VBox>
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
-         </padding>
-      </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0"/>
+            </padding>
+        </VBox>
     </center>
 </BorderPane>

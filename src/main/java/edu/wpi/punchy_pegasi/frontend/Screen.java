@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.function.Function;
 
 @Slf4j
@@ -29,6 +28,7 @@ public enum Screen {
     private final String readable;
     @Getter
     private final Account.AccountType shield;
+
     Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction) {
         this.path = path;
         this.readable = readable;

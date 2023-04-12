@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
-<fx:root type="javafx.scene.layout.HBox"
+<fx:root xmlns:fx="http://javafx.com/fxml"
+         type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml"
          onMouseClicked="#onMouseClick"
          maxHeight="44" minHeight="44"
          styleClass="link-parent">

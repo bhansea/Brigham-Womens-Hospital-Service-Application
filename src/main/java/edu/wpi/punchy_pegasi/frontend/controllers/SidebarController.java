@@ -30,18 +30,18 @@ public class SidebarController implements PropertyChangeListener {
     @FXML
     HBox loginLogout;
     @FXML
-    private VBox sidebar;
-    @FXML
-    private Label loginLogoutText;
-    @FXML
     ImageView profileImage;
     @FXML
     Label nameText;
     @FXML
     Label roleText;
     @FXML
+    private VBox sidebar;
+    @FXML
+    private Label loginLogoutText;
+    @FXML
     private VBox accountInfo;
-    private ObservableList<SidebarItem> sidebarItems = FXCollections.observableArrayList(
+    private final ObservableList<SidebarItem> sidebarItems = FXCollections.observableArrayList(
             new SidebarItem(Screen.HOME, "M19.469 12.594l3.625 3.313c0.438 0.406 0.313 0.719-0.281 0.719h-2.719v8.656c0 0.594-0.5 1.125-1.094 1.125h-4.719v-6.063c0-0.594-0.531-1.125-1.125-1.125h-2.969c-0.594 0-1.125 0.531-1.125 1.125v6.063h-4.719c-0.594 0-1.125-0.531-1.125-1.125v-8.656h-2.688c-0.594 0-0.719-0.313-0.281-0.719l10.594-9.625c0.438-0.406 1.188-0.406 1.656 0l2.406 2.156v-1.719c0-0.594 0.531-1.125 1.125-1.125h2.344c0.594 0 1.094 0.531 1.094 1.125v5.875z"),
             new SidebarItem("Service Requests", "M27 29h-4v-21h4c1.104 0 2 0.896 2 2v17c0 1.104-0.896 2-2 2zM10 8v0-2c0-1.105 0.896-2 2-2h7c1.104 0 2 0.895 2 2v23h-11v-21zM12 8h7c0 0 0-0.448 0-1 0-0.553-0.448-1-1-1h-5c-0.553 0-1 0.447-1 1 0 0.552 0 1 0 1zM2 27v-17c0-1.104 0.896-2 2-2h4v21h-4c-1.104 0-2-0.896-2-2z", Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
             new SidebarItem(Screen.MAP_PAGE, "M390.54,55.719C353.383,18.578,304.696,0,255.993,0c-48.688,0-97.391,18.578-134.547,55.719 c-59.219,59.219-74.641,149.563-36.094,218.875C129.586,354.109,255.993,512,255.993,512s126.422-157.891,170.656-237.406 C465.195,205.281,449.773,114.938,390.54,55.719z M255.993,305.844c-63.813,0-115.563-51.75-115.563-115.547 c0-63.859,51.75-115.609,115.563-115.609c63.828,0,115.578,51.75,115.578,115.609C371.571,254.094,319.821,305.844,255.993,305.844 z"),
@@ -111,6 +111,13 @@ public class SidebarController implements PropertyChangeListener {
             else
                 App.getSingleton().setAccount(null);
         });
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (Objects.equals(evt.getPropertyName(), "account")) {
+            setAccount((Account) evt.getNewValue());
+        }
     }
 
     private class SidebarItem {
@@ -194,13 +201,6 @@ public class SidebarController implements PropertyChangeListener {
                 }
             });
             return container;
-        }
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (Objects.equals(evt.getPropertyName(), "account")) {
-            setAccount((Account) evt.getNewValue());
         }
     }
 }

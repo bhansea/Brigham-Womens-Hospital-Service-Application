@@ -1,16 +1,16 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.LocationName;
-import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,16 +35,16 @@ class LocationNameDaoImplTest {
     @Test
     void get() {
         LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
-        Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
-        try{
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        try {
             pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         Optional<LocationName> results = dao.get(location.getUuid());
         LocationName daoresult = results.get();
-        assertEquals(daoresult,location);
-        try{
+        assertEquals(daoresult, location);
+        try {
             pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
@@ -55,9 +55,9 @@ class LocationNameDaoImplTest {
     void testGet() {
         LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
         LocationName location2 = new LocationName(101L, "testName", "testName", LocationName.NodeType.HALL);
-        Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
-        Object[] values2 = new Object[]{location2.getUuid(), location2.getLongName(),location2.getShortName(),location2.getNodeType()};
-        try{
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        Object[] values2 = new Object[]{location2.getUuid(), location2.getLongName(), location2.getShortName(), location2.getNodeType()};
+        try {
             pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values);
             pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values2);
         } catch (PdbController.DatabaseException e) {
@@ -68,10 +68,10 @@ class LocationNameDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.LOCATIONNAMES, "shortName", "testName")) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                        (java.lang.Long)rs.getObject("uuid"),
-                        (java.lang.String)rs.getObject("longName"),
-                        (java.lang.String)rs.getObject("shortName"),
-                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("shortName"),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -80,7 +80,7 @@ class LocationNameDaoImplTest {
         }
         assertEquals(map.get(location.getUuid()), results.get(location.getUuid()));
         assertEquals(map.get(location2.getUuid()), results.get(location2.getUuid()));
-        try{
+        try {
             pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
             pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location2.getUuid());
         } catch (PdbController.DatabaseException e) {
@@ -112,7 +112,7 @@ class LocationNameDaoImplTest {
             try {
                 pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", uuid);
             } catch (PdbController.DatabaseException e) {
-                assert false: "Failed to delete from database";
+                assert false : "Failed to delete from database";
             }
         }
         assertEquals(refMap, resultMap);
@@ -158,24 +158,24 @@ class LocationNameDaoImplTest {
     @Test
     void delete() {
         LocationName location = new LocationName(100L, "testLName", "testSName", LocationName.NodeType.HALL);
-        Object[] values = new Object[]{location.getUuid(), location.getLongName(),location.getShortName(),location.getNodeType()};
-        try{
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        try {
             pdbController.insertQuery(TableType.LOCATIONNAMES, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert into database";
+            assert false : "Failed to insert into database";
         }
-        try{
+        try {
             pdbController.searchQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to search database";
+            assert false : "Failed to search database";
         }
 
         dao.delete(location);
 
-        try{
+        try {
             pdbController.searchQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
         } catch (PdbController.DatabaseException e) {
-            assert true: "Successfully deleted from database";
+            assert true : "Successfully deleted from database";
         }
     }
 }

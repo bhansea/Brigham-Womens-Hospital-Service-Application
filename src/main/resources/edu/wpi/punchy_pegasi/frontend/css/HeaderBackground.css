@@ -5,6 +5,7 @@
     -fx-background-size: cover, auto;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 1.0, 0.0, 3.0);
 }
+
 .header-logo-overlay {
     -fx-alignment: CENTER;
     -fx-background-color: #FFFFFF3a;

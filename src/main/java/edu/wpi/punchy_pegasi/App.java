@@ -49,24 +49,14 @@ public class App extends Application {
     private Scene scene;
     @Getter
     private Account account = new Account("", "", 0L, Account.AccountType.NONE);
-    public void setAccount(Account account) {
-        if(account == null){
-            navigate(Screen.LOGIN);
-            account = new Account("", "", 0L, Account.AccountType.NONE);
-        }
-        support.firePropertyChange("account", this.account, account);
-        this.account = account;
-    }
+    @Getter
+    private FXMLLoader loader = new FXMLLoader();
 
     private static void showError(Thread t, Throwable e) {
         log.error("An unexpected error occurred in " + t, e);
         if (Platform.isFxApplicationThread()) {
             showErrorDialog(e);
         }
-    }
-
-    public void exit() {
-        Platform.exit();
     }
 
     private static void showErrorDialog(Throwable e) {
@@ -83,6 +73,19 @@ public class App extends Application {
         } catch (IOException exc) {
             exc.printStackTrace();
         }
+    }
+
+    public void setAccount(Account account) {
+        if (account == null) {
+            navigate(Screen.LOGIN);
+            account = new Account("", "", 0L, Account.AccountType.NONE);
+        }
+        support.firePropertyChange("account", this.account, account);
+        this.account = account;
+    }
+
+    public void exit() {
+        Platform.exit();
     }
 
     public void setCurrentScreen(Screen value) {
@@ -104,17 +107,14 @@ public class App extends Application {
         log.info("Starting Up");
     }
 
-    @Getter
-    private FXMLLoader loader = new FXMLLoader();
-
     @Override
     public void stop() {
         log.info("Shutting Down");
     }
 
     public void navigate(final Screen screen) {
-        if(screen == null) return;
-        if(account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()){
+        if (screen == null) return;
+        if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
             getViewPane().setCenter(screen.get());
             setCurrentScreen(screen);
         }
@@ -191,7 +191,7 @@ public class App extends Application {
 
     public <T> T loadWithCache(String path, Object root, Object controller) throws IOException {
         var resource = App.class.getResource(path);
-        if(resource == null){
+        if (resource == null) {
             log.error("Could not find file {}", path);
             throw new IOException("No such file");
         }

@@ -29,18 +29,30 @@ import java.util.Comparator;
 public class AdminPageController {
 
     public HBox buttonContainer;
-    @FXML Button displayButton;
-    @FXML MFXComboBox<String> displayTableTypeComboBox;
-    @FXML MFXTableView<Node> nodeTable;
-    @FXML MFXTableView<LocationName> locationTable;
-    @FXML MFXTableView<Edge> edgeTable;
-    @FXML MFXTableView<Move> moveTable;
-    @FXML MFXTableView<ConferenceRoomEntry> conferenceRoomServiceRequestTable;
-    @FXML MFXTableView<OfficeServiceRequestEntry> officeServiceRequestTable;
-    @FXML MFXTableView<FurnitureRequestEntry> furnitureServiceRequestTable;
-    @FXML MFXTableView<FoodServiceRequestEntry> foodServiceRequestTable;
-    @FXML MFXTableView<FlowerDeliveryRequestEntry> flowerServiceRequestTable;
-    @FXML MFXComboBox<String> tableTypesComboBox;
+    @FXML
+    Button displayButton;
+    @FXML
+    MFXComboBox<String> displayTableTypeComboBox;
+    @FXML
+    MFXTableView<Node> nodeTable;
+    @FXML
+    MFXTableView<LocationName> locationTable;
+    @FXML
+    MFXTableView<Edge> edgeTable;
+    @FXML
+    MFXTableView<Move> moveTable;
+    @FXML
+    MFXTableView<ConferenceRoomEntry> conferenceRoomServiceRequestTable;
+    @FXML
+    MFXTableView<OfficeServiceRequestEntry> officeServiceRequestTable;
+    @FXML
+    MFXTableView<FurnitureRequestEntry> furnitureServiceRequestTable;
+    @FXML
+    MFXTableView<FoodServiceRequestEntry> foodServiceRequestTable;
+    @FXML
+    MFXTableView<FlowerDeliveryRequestEntry> flowerServiceRequestTable;
+    @FXML
+    MFXComboBox<String> tableTypesComboBox;
     @FXML
     MFXTextField servSearchBar;
 
@@ -57,7 +69,6 @@ public class AdminPageController {
     String filePath = "";
     File selectedFile = new File("");
     File selectedDir = new File("");
-
 
 
     // @FXML MFXButton back;
@@ -416,7 +427,7 @@ public class AdminPageController {
         FlowerDeliveryRequestEntryDaoImpl flowerDaoImpl = new FlowerDeliveryRequestEntryDaoImpl();
         ObservableList<FlowerDeliveryRequestEntry> flowerList = FXCollections.observableArrayList(flowerDaoImpl.getAll().values());
 
-        for (FlowerDeliveryRequestEntry.Field field: FlowerDeliveryRequestEntry.Field.values()) {
+        for (FlowerDeliveryRequestEntry.Field field : FlowerDeliveryRequestEntry.Field.values()) {
             MFXTableColumn<FlowerDeliveryRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(FlowerDeliveryRequestEntry::getServiceID));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             flowerServiceRequestTable.getTableColumns().add(col);
@@ -428,7 +439,7 @@ public class AdminPageController {
         FoodServiceRequestEntryDaoImpl foodDaoImpl = new FoodServiceRequestEntryDaoImpl();
         ObservableList<FoodServiceRequestEntry> foodList = FXCollections.observableArrayList(foodDaoImpl.getAll().values());
 
-        for (FoodServiceRequestEntry.Field field: FoodServiceRequestEntry.Field.values()) {
+        for (FoodServiceRequestEntry.Field field : FoodServiceRequestEntry.Field.values()) {
             MFXTableColumn<FoodServiceRequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             foodServiceRequestTable.getTableColumns().add(col);
@@ -440,7 +451,7 @@ public class AdminPageController {
         ConferenceRoomEntryDaoImpl conferenceDaoImpl = new ConferenceRoomEntryDaoImpl();
         ObservableList<ConferenceRoomEntry> conferenceList = FXCollections.observableArrayList(conferenceDaoImpl.getAll().values());
 
-        for (ConferenceRoomEntry.Field field: ConferenceRoomEntry.Field.values()) {
+        for (ConferenceRoomEntry.Field field : ConferenceRoomEntry.Field.values()) {
             MFXTableColumn<ConferenceRoomEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(ConferenceRoomEntry::getServiceID));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             conferenceRoomServiceRequestTable.getTableColumns().add(col);
@@ -452,7 +463,7 @@ public class AdminPageController {
         OfficeServiceRequestEntryDaoImpl officeDaoImpl = new OfficeServiceRequestEntryDaoImpl();
         ObservableList<OfficeServiceRequestEntry> officeList = FXCollections.observableArrayList(officeDaoImpl.getAll().values());
 
-        for (OfficeServiceRequestEntry.Field field: OfficeServiceRequestEntry.Field.values()) {
+        for (OfficeServiceRequestEntry.Field field : OfficeServiceRequestEntry.Field.values()) {
             MFXTableColumn<OfficeServiceRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(OfficeServiceRequestEntry::getServiceID));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             officeServiceRequestTable.getTableColumns().add(col);
@@ -464,7 +475,7 @@ public class AdminPageController {
         FurnitureRequestEntryDaoImpl furnitureDaoImpl = new FurnitureRequestEntryDaoImpl();
         ObservableList<FurnitureRequestEntry> furnitureList = FXCollections.observableArrayList(furnitureDaoImpl.getAll().values());
 
-        for (FurnitureRequestEntry.Field field: FurnitureRequestEntry.Field.values()) {
+        for (FurnitureRequestEntry.Field field : FurnitureRequestEntry.Field.values()) {
             MFXTableColumn<FurnitureRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(FurnitureRequestEntry::getServiceID));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             furnitureServiceRequestTable.getTableColumns().add(col);
@@ -476,7 +487,7 @@ public class AdminPageController {
         NodeDaoImpl nodeDaoImpl = new NodeDaoImpl();
         ObservableList<Node> nodeList = FXCollections.observableArrayList(nodeDaoImpl.getAll().values());
 
-        for (Node.Field field: Node.Field.values()) {
+        for (Node.Field field : Node.Field.values()) {
             MFXTableColumn<Node> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(Node::getNodeID));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             nodeTable.getTableColumns().add(col);
@@ -488,7 +499,7 @@ public class AdminPageController {
         EdgeDaoImpl edgeDaoImpl = new EdgeDaoImpl();
         ObservableList<Edge> edgeList = FXCollections.observableArrayList(edgeDaoImpl.getAll().values());
 
-        for (Edge.Field field: Edge.Field.values()) {
+        for (Edge.Field field : Edge.Field.values()) {
             MFXTableColumn<Edge> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(Edge::getUuid));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             edgeTable.getTableColumns().add(col);
@@ -500,7 +511,7 @@ public class AdminPageController {
         MoveDaoImpl moveDaoImpl = new MoveDaoImpl();
         ObservableList<Move> moveList = FXCollections.observableArrayList(moveDaoImpl.getAll().values());
 
-        for (Move.Field field: Move.Field.values()) {
+        for (Move.Field field : Move.Field.values()) {
             MFXTableColumn<Move> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(Move::getUuid));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             moveTable.getTableColumns().add(col);
@@ -512,13 +523,14 @@ public class AdminPageController {
         LocationNameDaoImpl locationDaoImpl = new LocationNameDaoImpl();
         ObservableList<LocationName> locationList = FXCollections.observableArrayList(locationDaoImpl.getAll().values());
 
-        for (LocationName.Field field: LocationName.Field.values()) {
+        for (LocationName.Field field : LocationName.Field.values()) {
             MFXTableColumn<LocationName> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(LocationName::getUuid));
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             locationTable.getTableColumns().add(col);
         }
         locationTable.setItems(locationList);
     }
+
     public void initTables() {
 
         initFlowerTable();

@@ -1,7 +1,9 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.*;
+import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
+import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 class FurnitureRequestEntryDaoImplTest {
@@ -29,13 +31,14 @@ class FurnitureRequestEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     void get() {
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
         FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         Object[] values = new Object[]{furniture.getServiceID(), furniture.getLocationName(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
-        try{
+        try {
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
@@ -43,7 +46,7 @@ class FurnitureRequestEntryDaoImplTest {
         Optional<FurnitureRequestEntry> results = dao.get(furniture.getServiceID());
         FurnitureRequestEntry daoresult = results.get();
         assertEquals(daoresult, furniture);
-        try{
+        try {
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture.getServiceID());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
@@ -58,7 +61,7 @@ class FurnitureRequestEntryDaoImplTest {
         FurnitureRequestEntry furniture2 = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         Object[] values = new Object[]{furniture.getServiceID(), furniture.getLocationName(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
         Object[] values2 = new Object[]{furniture2.getServiceID(), furniture2.getLocationName(), furniture2.getStaffAssignment(), furniture2.getAdditionalNotes(), furniture2.getStatus(), furniture2.getSelectFurniture()};
-        try{
+        try {
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values2);
         } catch (PdbController.DatabaseException e) {
@@ -69,12 +72,12 @@ class FurnitureRequestEntryDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.FURNITUREREQUESTS, "additionalNotes", "testNotes")) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                        (java.util.UUID)rs.getObject("serviceID"),
-                        (java.lang.String)rs.getObject("roomNumber"),
-                        (java.lang.String)rs.getObject("staffAssignment"),
-                        (java.lang.String)rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.String) rs.getObject("roomNumber"),
+                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -83,7 +86,7 @@ class FurnitureRequestEntryDaoImplTest {
         }
         assertEquals(map.get(furniture.getServiceID()), results.get(furniture.getServiceID()));
         assertEquals(map.get(furniture2.getServiceID()), results.get(furniture2.getServiceID()));
-        try{
+        try {
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture.getServiceID());
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture2.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -93,7 +96,7 @@ class FurnitureRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var values0 = new Object[] {
+        var values0 = new Object[]{
                 UUID.randomUUID(),
                 "0",
                 "staff0",
@@ -101,7 +104,7 @@ class FurnitureRequestEntryDaoImplTest {
                 RequestEntry.Status.PROCESSING,
                 List.of("item1", "item2")
         };
-        var values1 = new Object[] {
+        var values1 = new Object[]{
                 UUID.randomUUID(),
                 "1",
                 "staff1",
@@ -109,7 +112,7 @@ class FurnitureRequestEntryDaoImplTest {
                 RequestEntry.Status.PROCESSING,
                 List.of("item1", "item2")
         };
-        var values2 = new Object[] {
+        var values2 = new Object[]{
                 UUID.randomUUID(),
                 "2",
                 "staff2",
@@ -118,7 +121,7 @@ class FurnitureRequestEntryDaoImplTest {
                 List.of("item1", "item2")
         };
 
-        var valuesSet = new Object[][] {
+        var valuesSet = new Object[][]{
                 values0,
                 values1,
                 values2
@@ -148,7 +151,7 @@ class FurnitureRequestEntryDaoImplTest {
             try {
                 pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
             } catch (PdbController.DatabaseException e) {
-                assert false: "Failed to delete from database";
+                assert false : "Failed to delete from database";
             }
         }
         assertEquals(refMap, resultMap);
@@ -206,7 +209,7 @@ class FurnitureRequestEntryDaoImplTest {
                 List.of("item1", "item2")
         );
 
-        var values = new Object[] {
+        var values = new Object[]{
                 furnitureRequest.getServiceID(),
                 furnitureRequest.getLocationName(),
                 furnitureRequest.getStaffAssignment(),
@@ -218,13 +221,13 @@ class FurnitureRequestEntryDaoImplTest {
         try {
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert into database";
+            assert false : "Failed to insert into database";
         }
 
         try {
             pdbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequest.getServiceID());
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to search database";
+            assert false : "Failed to search database";
         }
 
         dao.delete(furnitureRequest);
@@ -232,7 +235,7 @@ class FurnitureRequestEntryDaoImplTest {
         try {
             pdbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequest.getServiceID());
         } catch (PdbController.DatabaseException e) {
-            assert true: "Successfully deleted from database";
+            assert true : "Successfully deleted from database";
         }
     }
 }

@@ -22,7 +22,7 @@ public class DragController {
     private EventHandler<MouseEvent> setAnchor;
     private EventHandler<MouseEvent> updatePositionOnDrag;
     private EventHandler<MouseEvent> commitPositionOnRelease;
-    private int cycleStatus = INACTIVE;
+    private final int cycleStatus = INACTIVE;
     private BooleanProperty isDraggable;
     @Setter
     private Consumer<Node> onMove;
@@ -32,13 +32,6 @@ public class DragController {
     private Consumer<Node> onEnd;
     @Setter
     private Supplier<Double> scaleSupplier = () -> 1.0;
-
-    private double getScale() {
-        if(scaleSupplier == null)
-            return 1;
-        var scale = scaleSupplier.get();
-        return scale == null ? 1 : scale;
-    }
 
     public DragController(Node target) {
         this(target, false);
@@ -50,6 +43,14 @@ public class DragController {
         createDraggableProperty();
         this.isDraggable.set(isDraggable);
     }
+
+    private double getScale() {
+        if (scaleSupplier == null)
+            return 1;
+        var scale = scaleSupplier.get();
+        return scale == null ? 1 : scale;
+    }
+
     private void createHandlers() {
         setAnchor = event -> {
             if (event.isPrimaryButtonDown()) {
@@ -58,7 +59,7 @@ public class DragController {
                 layoutX = target.getLayoutX();
                 layoutY = target.getLayoutY();
                 target.setCursor(Cursor.CLOSED_HAND);
-                if(onStart != null) onStart.accept(target);
+                if (onStart != null) onStart.accept(target);
             }
         };
         updatePositionOnDrag = event -> {

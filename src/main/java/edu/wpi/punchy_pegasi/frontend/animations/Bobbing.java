@@ -2,13 +2,9 @@ package edu.wpi.punchy_pegasi.frontend.animations;
 
 import animatefx.animation.AnimateFXInterpolator;
 import animatefx.animation.AnimationFX;
-import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.DoublePropertyBase;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
 import javafx.util.Duration;
 

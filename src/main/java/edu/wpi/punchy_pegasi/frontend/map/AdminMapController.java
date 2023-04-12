@@ -34,6 +34,7 @@ public class AdminMapController {
         put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
+    private final AtomicBoolean commiting = new AtomicBoolean();
     private IMap<HospitalFloor> map;
     @FXML
     private BorderPane root;
@@ -51,13 +52,11 @@ public class AdminMapController {
     private Map<Long, Edge> edges;
     private Map<Long, LocationName> locations;
     private Map<Long, Move> moves;
-
-    private Set<Node> editedNodes = ConcurrentHashMap.newKeySet();
-    private final AtomicBoolean commiting = new AtomicBoolean();
+    private final Set<Node> editedNodes = ConcurrentHashMap.newKeySet();
     private Map<Long, Move> movesByNodeID = new HashMap<>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
 
-    private StringConverter<Node> nodeToLocation = new StringConverter<>() {
+    private final StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
         public String toString(Node node) {
             var location = nodeToLocation(node);

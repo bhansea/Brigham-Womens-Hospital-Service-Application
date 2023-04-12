@@ -2,8 +2,8 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,10 +32,10 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         try (var rs = dbController.searchQuery(TableType.MOVES, "uuid", key)) {
             rs.next();
             Move req = new Move(
-                    (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.Long)rs.getObject("nodeID"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("date"));
+                    (java.lang.Long) rs.getObject("uuid"),
+                    (java.lang.Long) rs.getObject("nodeID"),
+                    (java.lang.String) rs.getObject("longName"),
+                    (java.lang.String) rs.getObject("date"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -54,10 +54,10 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         try (var rs = dbController.searchQuery(TableType.MOVES, Arrays.stream(params).map(Move.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Move req = new Move(
-                    (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.Long)rs.getObject("nodeID"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("date"));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("date"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -73,10 +73,10 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         try (var rs = dbController.searchQuery(TableType.MOVES)) {
             while (rs.next()) {
                 Move req = new Move(
-                    (java.lang.Long)rs.getObject("uuid"),
-                    (java.lang.Long)rs.getObject("nodeID"),
-                    (java.lang.String)rs.getObject("longName"),
-                    (java.lang.String)rs.getObject("date"));
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("date"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

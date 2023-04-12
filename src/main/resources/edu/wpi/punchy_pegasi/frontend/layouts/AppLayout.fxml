@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LayoutController"
             style="-fx-background-color: #F1F1F1;">
     <top>
@@ -15,6 +15,6 @@
         </ScrollPane>
     </center>
     <left>
-        <fx:include source="../components/Sidebar.fxml" />
+        <fx:include source="../components/Sidebar.fxml"/>
     </left>
 </BorderPane>

@@ -32,12 +32,12 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", key)) {
             rs.next();
             FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    (java.util.UUID) rs.getObject("serviceID"),
+                    (java.lang.Long) rs.getObject("locationName"),
+                    (java.lang.Long) rs.getObject("staffAssignment"),
+                    (java.lang.String) rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                    java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -56,12 +56,12 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, Arrays.stream(params).map(FurnitureRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -77,12 +77,12 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

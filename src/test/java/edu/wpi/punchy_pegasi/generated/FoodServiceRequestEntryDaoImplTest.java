@@ -1,18 +1,16 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FoodServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -66,26 +64,26 @@ class FoodServiceRequestEntryDaoImplTest {
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT,"testStaff");
+        var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, "testStaff");
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
         try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, "staffAssignment", "testStaff")) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                        (java.util.UUID)rs.getObject("serviceID"),
-                        (java.lang.String)rs.getObject("roomNumber"),
-                        (java.lang.String)rs.getObject("staffAssignment"),
-                        (java.lang.String)rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        (java.lang.String)rs.getObject("foodSelection"),
-                        (java.lang.String)rs.getObject("tempType"),
-                        Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                        (java.lang.String)rs.getObject("dietaryRestrictions"),
-                        (java.lang.String)rs.getObject("patientName"));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.String) rs.getObject("roomNumber"),
+                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        (java.lang.String) rs.getObject("foodSelection"),
+                        (java.lang.String) rs.getObject("tempType"),
+                        Collections.singletonList(rs.getArray("additionalItems").getArray()),
+                        (java.lang.String) rs.getObject("dietaryRestrictions"),
+                        (java.lang.String) rs.getObject("patientName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
-            assert false: e.getMessage();
+            assert false : e.getMessage();
         }
         assertEquals(map.get(food.getServiceID()), results.get(food.getServiceID()));
         assertEquals(map.get(food2.getServiceID()), results.get(food2.getServiceID()));
@@ -111,26 +109,26 @@ class FoodServiceRequestEntryDaoImplTest {
                 throw new RuntimeException(e);
             }
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    (java.util.UUID)values[0],
-                    (java.lang.String)values[1],
-                    (java.lang.String)values[2],
-                    (java.lang.String)values[3],
-                    (RequestEntry.Status)values[4],
-                    (java.lang.String)values[5],
-                    (java.lang.String)values[6],
-                    Arrays.asList((String[])values[7]),
-                    (java.lang.String)values[8],
-                    (java.lang.String)values[9]);
-            refMap.put(req.getServiceID(),req);
+                    (java.util.UUID) values[0],
+                    (java.lang.String) values[1],
+                    (java.lang.String) values[2],
+                    (java.lang.String) values[3],
+                    (RequestEntry.Status) values[4],
+                    (java.lang.String) values[5],
+                    (java.lang.String) values[6],
+                    Collections.singletonList(values[7]),
+                    (java.lang.String) values[8],
+                    (java.lang.String) values[9]);
+            refMap.put(req.getServiceID(), req);
         }
 
         Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
 
-        for(var key : resultMap.keySet()) {
+        for (var key : resultMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", key);
             } catch (PdbController.DatabaseException e) {
-                assert false: e.getMessage();
+                assert false : e.getMessage();
             }
         }
         assertEquals(refMap, resultMap);
@@ -204,7 +202,7 @@ class FoodServiceRequestEntryDaoImplTest {
             try {
                 pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
             } catch (PdbController.DatabaseException e) {
-                assert false: "Failed to insert test data";
+                assert false : "Failed to insert test data";
             }
             FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(
                     (UUID) values[0],
@@ -226,7 +224,7 @@ class FoodServiceRequestEntryDaoImplTest {
             try {
                 pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
             } catch (PdbController.DatabaseException e) {
-                assert false: "Failed to delete test data";
+                assert false : "Failed to delete test data";
             }
         }
 

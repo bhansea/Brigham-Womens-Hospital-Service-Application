@@ -32,11 +32,11 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
         try (var rs = dbController.searchQuery(TableType.GENERIC, "serviceID", key)) {
             rs.next();
             GenericRequestEntry req = new GenericRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
+                    (java.util.UUID) rs.getObject("serviceID"),
+                    (java.lang.Long) rs.getObject("locationName"),
+                    (java.lang.Long) rs.getObject("staffAssignment"),
+                    (java.lang.String) rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -55,11 +55,11 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
         try (var rs = dbController.searchQuery(TableType.GENERIC, Arrays.stream(params).map(GenericRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -75,11 +75,11 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
         try (var rs = dbController.searchQuery(TableType.GENERIC)) {
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

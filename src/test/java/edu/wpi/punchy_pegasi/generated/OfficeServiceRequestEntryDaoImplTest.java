@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -14,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OfficeServiceRequestEntryDaoImplTest {
     static PdbController pdbController;
@@ -32,20 +31,21 @@ class OfficeServiceRequestEntryDaoImplTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     void get() {
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
-        try{
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeName()};
+        try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         Optional<OfficeServiceRequestEntry> results = dao.get(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
-        assertEquals(daoresult,office);
+        assertEquals(daoresult, office);
         try {
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS,"serviceID", office.getServiceID());
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -53,11 +53,11 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(),office0.getOfficeRequest(), office0.getEmployeeName()};
-        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(),office1.getOfficeRequest(), office1.getEmployeeName()};
-        try{
+        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeRequest(), office0.getEmployeeName()};
+        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeRequest(), office1.getEmployeeName()};
+        try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values0);
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values1);
         } catch (PdbController.DatabaseException e) {
@@ -68,26 +68,26 @@ class OfficeServiceRequestEntryDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, OfficeServiceRequestEntry.Field.ROOM_NUMBER.getColName(), "testRoom")) {
             while (rs.next()) {
                 var req = new OfficeServiceRequestEntry(
-                        (UUID)rs.getObject("serviceID"),
-                        (String)rs.getObject("roomNumber"),
-                        (String)rs.getObject("staffAssignment"),
-                        (String)rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        (String)rs.getObject("officeRequest"),
-                        (String)rs.getObject("employeeName"));
+                        (UUID) rs.getObject("serviceID"),
+                        (String) rs.getObject("roomNumber"),
+                        (String) rs.getObject("staffAssignment"),
+                        (String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        (String) rs.getObject("officeRequest"),
+                        (String) rs.getObject("employeeName"));
                 if (req != null) {
                     map.put(req.getServiceID(), req);
                 }
             }
         } catch (PdbController.DatabaseException | SQLException e) {
-            assert false: e.getMessage();
+            assert false : e.getMessage();
         }
 
         assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
         assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
-        try{
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS,"serviceID", office0.getServiceID());
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS,"serviceID", office1.getServiceID());
+        try {
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office0.getServiceID());
+            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office1.getServiceID());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -97,9 +97,9 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var value0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName"};
-        var value1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName"};
-        var value2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName"};
+        var value0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
+        var value1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
+        var value2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
         var valueSet = new Object[][]{value0, value1, value2};
 
         var refMap = new HashMap<UUID, OfficeServiceRequestEntry>();
@@ -109,7 +109,7 @@ class OfficeServiceRequestEntryDaoImplTest {
             try {
                 pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, value);
             } catch (PdbController.DatabaseException e) {
-                assert false: e.getMessage();
+                assert false : e.getMessage();
             }
         }
         Map<UUID, OfficeServiceRequestEntry> resultMap = dao.getAll();
@@ -117,7 +117,7 @@ class OfficeServiceRequestEntryDaoImplTest {
             try {
                 pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", key);
             } catch (PdbController.DatabaseException e) {
-                assert false: e.getMessage();
+                assert false : e.getMessage();
             }
         }
 
@@ -127,7 +127,7 @@ class OfficeServiceRequestEntryDaoImplTest {
     @Test
     void save() {
         UUID uuid = UUID.randomUUID();
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         dao.save(office);
         Optional<OfficeServiceRequestEntry> results = dao.get(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
@@ -142,10 +142,10 @@ class OfficeServiceRequestEntryDaoImplTest {
     @Test
     void update() {
         UUID uuid = UUID.randomUUID();
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         dao.save(office);
 
-        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.DONE,"testOffices", "updatedTestName");
+        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.DONE, "testOffices", "updatedTestName");
         OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.ROOM_NUMBER, OfficeServiceRequestEntry.Field.STATUS, OfficeServiceRequestEntry.Field.EMPLOYEE_NAME};
         dao.update(updatedOffice, fields);
 
@@ -161,26 +161,26 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(),"110", "testStaff", "testNotes", RequestEntry.Status.PROCESSING,"testOffices", "testName");
-        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(),office.getOfficeRequest(), office.getEmployeeName()};
-        try{
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), "110", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeName()};
+        try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert into database";
+            assert false : "Failed to insert into database";
         }
 
-        try{
+        try {
             pdbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to search database";
+            assert false : "Failed to search database";
         }
 
         dao.delete(office);
 
-        try{
+        try {
             pdbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
         } catch (PdbController.DatabaseException e) {
-            assert true: "Successfully deleted from database";
+            assert true : "Successfully deleted from database";
         }
     }
 }

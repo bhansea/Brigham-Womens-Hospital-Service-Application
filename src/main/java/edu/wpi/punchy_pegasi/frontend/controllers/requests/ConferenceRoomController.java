@@ -2,7 +2,6 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.generated.ConferenceRoomEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
@@ -10,8 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
-
-import java.net.URL;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
@@ -21,13 +18,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXComboBox<String> endTime;
     @FXML
     MFXDatePicker calendar;
-
-
-    public static BorderPane create(String path) {
-        return RequestController.create(new ConferenceRoomController(), path);
-    }
-
-    private ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
+    private final ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
             "2:00am", "2:30am",
             "3:00am", "3:30am",
             "4:00am", "4:30am",
@@ -52,14 +43,19 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
             "10:00pm", "10:30pm",
             "11:00pm", "11:30pm");
 
+    public static BorderPane create(String path) {
+        return RequestController.create(new ConferenceRoomController(), path);
+    }
+
     @FXML
     public void init() {
         beginningTime.setItems(timeList);
         endTime.setItems(timeList);
         endTime.setDisable(true);
         submit.setDisable(true);
-        beginningTime.setOnAction(e->validateEntry());
-        endTime.setOnAction(e-> validateEntry());
+        beginningTime.setOnAction(e -> validateField());
+        endTime.setOnAction(e -> validateField());
+        calendar.setOnAction(e -> validateEntry());
         setHeaderText("Conference Room Request");
     }
 
@@ -81,15 +77,16 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
 
     @Override
     protected void validateEntry() {
-        boolean val = validateGeneric() || !timeCheck();
+        boolean val = validateGeneric() || !timeCheck() || calendar.getValue() == null;
         submit.setDisable(val);
     }
 
     //will check to make sure that the end time is after the beginning time
     public boolean timeCheck() {
+
         String btHolder = beginningTime.getSelectedItem();
         String etHolder = endTime.getSelectedItem();
-        return timeList.indexOf(btHolder) < timeList.indexOf(etHolder);
+        return btHolder != null && etHolder != null && timeList.indexOf(btHolder) < timeList.indexOf(etHolder);
     }
 
     @FXML

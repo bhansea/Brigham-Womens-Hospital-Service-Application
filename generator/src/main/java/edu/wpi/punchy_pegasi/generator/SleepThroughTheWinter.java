@@ -113,6 +113,8 @@ public class  SleepThroughTheWinter {
             else if (List.class.isAssignableFrom(type))
                 constructor.append("java.util.Arrays.asList((")//.append(type.getCanonicalName())
                         .append("String[])rs.getArray(\"").append(column).append("\").getArray())");
+            else if (type.equals(LocalDate.class))
+                constructor.append("rs.getDate(\"").append(column).append("\").toLocalDate()");
             else
                 constructor.append("(").append(type.getCanonicalName())
                         .append(")rs.getObject(\"").append(column).append("\")");

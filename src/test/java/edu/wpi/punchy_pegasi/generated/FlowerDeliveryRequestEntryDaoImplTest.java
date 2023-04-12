@@ -8,14 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 class FlowerDeliveryRequestEntryDaoImplTest {
@@ -38,7 +39,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void get() {
-        FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
@@ -57,8 +58,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
-        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
         var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType()};
         try {
@@ -72,15 +73,15 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, "patientName", "testPatient")) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                        (java.util.UUID)rs.getObject("serviceID"),
-                        (java.lang.String)rs.getObject("patientName"),
-                        (java.lang.String)rs.getObject("roomNumber"),
-                        (java.lang.String)rs.getObject("staffAssignment"),
-                        (java.lang.String)rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        (java.lang.String)rs.getObject("flowerSize"),
-                        (java.lang.String)rs.getObject("flowerAmount"),
-                        (java.lang.String)rs.getObject("flowerType"));
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.String) rs.getObject("patientName"),
+                        (java.lang.String) rs.getObject("roomNumber"),
+                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        (java.lang.String) rs.getObject("flowerSize"),
+                        (java.lang.String) rs.getObject("flowerAmount"),
+                        (java.lang.String) rs.getObject("flowerType"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

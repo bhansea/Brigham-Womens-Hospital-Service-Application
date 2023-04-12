@@ -13,7 +13,8 @@ import java.beans.PropertyChangeListener;
 
 public class HeaderController implements PropertyChangeListener {
     public StackPane headerStackpane;
-    @FXML HBox navButtonContainer;
+    @FXML
+    HBox navButtonContainer;
     @FXML
     private Button exitButton;
     @FXML

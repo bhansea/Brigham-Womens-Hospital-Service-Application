@@ -2,20 +2,20 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> implements PropertyChangeListener {
     FoodServiceRequestEntry entry;
@@ -88,7 +88,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void validateEntry() {
-        boolean validate = validateGeneric() || patientName.getText().isBlank() || mealDropdown.getSelectedItem() == null || tempDropdown.getSelectedItem() == null;
+        boolean validate = validateGeneric() || patientName.getText().isBlank() || mealDropdown.getSelectedItem() == null || tempDropdown.getSelectedItem() == null || beverageDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 

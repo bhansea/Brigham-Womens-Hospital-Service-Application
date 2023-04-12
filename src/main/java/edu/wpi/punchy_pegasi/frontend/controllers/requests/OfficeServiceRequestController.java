@@ -48,6 +48,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
     }
+
     @FXML
     @Override
     public void init() {
@@ -67,8 +68,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         itemsAmount.add(paperclipAmount);
         itemsAmount.add(otherItems);
 
-        items.forEach(i-> i.setOnAction(e->validateEntry()));
-        itemsAmount.forEach(i-> i.setOnKeyTyped(e->validateEntry()));
+        items.forEach(i -> i.setOnAction(e -> validateEntry()));
+        itemsAmount.forEach(i -> i.setOnKeyTyped(e -> validateEntry()));
     }
 
     @FXML

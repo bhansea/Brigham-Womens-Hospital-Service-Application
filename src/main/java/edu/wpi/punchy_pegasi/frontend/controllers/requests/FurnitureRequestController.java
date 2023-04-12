@@ -2,66 +2,41 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.generated.ConferenceRoomEntryDaoImpl;
-import edu.wpi.punchy_pegasi.generated.FurnitureRequestEntryDaoImpl;
-import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
-import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
-import lombok.Data;
 import lombok.Value;
-import org.controlsfx.control.CheckComboBox;
-import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
-import java.util.*;
+import java.util.Comparator;
 
 public class FurnitureRequestController extends RequestController<FurnitureRequestEntry> {
-    @Value
-    class FurnitureCartItem{
-        public String furnitureType;;
-        public Integer number;
-    }
-
     @FXML
     MFXComboBox<String> furniture;
-
     @FXML
     MFXComboBox<Integer> amountOfFurniture;
-
     @FXML
     private MFXButton toCart;
-
     @FXML
     private MFXTableView<FurnitureCartItem> furnTable;
-
-    private ObservableList<String> furnitureList =
-            FXCollections.observableArrayList("Desk","Bed","Lamp","Chair",
-                    "Office Chair","Pillow", "Picture Frame", "Rug", "Bench", "Blanket", "Night Stand");
-
-    private ObservableList<Integer> amountList = FXCollections.observableArrayList(1,2,3,4,5,6,7,8,9,10);
-
-    private ObservableList<FurnitureCartItem> itemList = FXCollections.observableArrayList(new FurnitureCartItem("", 0));
+    private final ObservableList<String> furnitureList =
+            FXCollections.observableArrayList("Desk", "Bed", "Lamp", "Chair",
+                    "Office Chair", "Pillow", "Picture Frame", "Rug", "Bench", "Blanket", "Night Stand");
+    private final ObservableList<Integer> amountList = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    private final ObservableList<FurnitureCartItem> itemList = FXCollections.observableArrayList(new FurnitureCartItem("", 0));
 
     public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);
     }
 
     @FXML
-    public void init(){
+    public void init() {
         furniture.setItems(furnitureList);
         amountOfFurniture.setItems(amountList);
         submit.setDisable(true);
@@ -89,24 +64,24 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         return furniture;
     }
 
-    public String getStringFurn(){
+    public String getStringFurn() {
         return furniture.getValue();
     }
 
     @FXML
-    public void tableEntry(FurnitureCartItem item){
+    public void tableEntry(FurnitureCartItem item) {
     }
 
     @FXML
-    public void clickToCart(){
-        if(furniture.getSelectedItem() == null || amountOfFurniture.getSelectedItem() == null) return;
+    public void clickToCart() {
+        if (furniture.getSelectedItem() == null || amountOfFurniture.getSelectedItem() == null) return;
         itemList.add(new FurnitureCartItem(furniture.getSelectedItem(), amountOfFurniture.getSelectedItem()));
         furnTable.setItems(itemList);
         furnTable.update();
     }
 
     @FXML
-    public void submitEntry(){
+    public void submitEntry() {
         requestEntry = new FurnitureRequestEntry(
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
@@ -117,9 +92,15 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     }
 
     @FXML
-    public void validateEntry(){
+    public void validateEntry() {
         boolean val = validateGeneric() || furniture.getItems() == null;
         submit.setDisable(val);
+    }
+
+    @Value
+    class FurnitureCartItem {
+        public String furnitureType;
+        public Integer number;
     }
 
 }

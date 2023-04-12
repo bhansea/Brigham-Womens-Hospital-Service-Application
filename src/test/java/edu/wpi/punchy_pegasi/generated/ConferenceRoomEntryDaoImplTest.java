@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.DefaultTest;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
@@ -19,6 +18,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @Slf4j
 class ConferenceRoomEntryDaoImplTest {
     static PdbController pdbController;
@@ -43,17 +43,17 @@ class ConferenceRoomEntryDaoImplTest {
     void get() {
         ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testLocation", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         Object[] values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
-        try{
+        try {
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
-        } catch (PdbController.DatabaseException e){
+        } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         Optional<ConferenceRoomEntry> results = dao.get(room.getServiceID());
         ConferenceRoomEntry daoresult = results.get();
         assertEquals(daoresult, room);
-        try{
+        try {
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room.getServiceID());
-        } catch(PdbController.DatabaseException e){
+        } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
     }
@@ -64,10 +64,10 @@ class ConferenceRoomEntryDaoImplTest {
         var room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         var values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
         var values2 = new Object[]{room2.getServiceID(), room2.getLocationName(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
-        try{
+        try {
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values2);
-        } catch (PdbController.DatabaseException e){
+        } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
         var results = dao.get(ConferenceRoomEntry.Field.LOCATION_NAME, "testRoom");
@@ -75,13 +75,13 @@ class ConferenceRoomEntryDaoImplTest {
         try (var rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, ConferenceRoomEntry.Field.LOCATION_NAME.getColName(), "testRoom")) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
-                        (java.util.UUID)rs.getObject("serviceID"),
-                        (java.lang.String)rs.getObject("roomNumber"),
-                        (java.lang.String)rs.getObject("staffAssignment"),
-                        (java.lang.String)rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                        (java.lang.String)rs.getObject("beginningTime"),
-                        (java.lang.String)rs.getObject("endTime"),
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.String) rs.getObject("roomNumber"),
+                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.String) rs.getObject("additionalNotes"),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+                        (java.lang.String) rs.getObject("beginningTime"),
+                        (java.lang.String) rs.getObject("endTime"),
                         LocalDate.now());
                 if (req != null)
                     map.put(req.getServiceID(), req);
@@ -91,17 +91,17 @@ class ConferenceRoomEntryDaoImplTest {
         }
         assertEquals(map.get(room.getServiceID()), results.get(room.getServiceID()));
         assertEquals(map.get(room2.getServiceID()), results.get(room2.getServiceID()));
-        try{
+        try {
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room.getServiceID());
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room2.getServiceID());
-        } catch(PdbController.DatabaseException e){
+        } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
     void getAll() {
-        var values0 = new Object[] {
+        var values0 = new Object[]{
                 UUID.randomUUID(),
                 "testRoomNum0",
                 "testStaff0",
@@ -111,7 +111,7 @@ class ConferenceRoomEntryDaoImplTest {
                 "endTime0",
                 LocalDate.now()
         };
-        var values1 = new Object[] {
+        var values1 = new Object[]{
                 UUID.randomUUID(),
                 "testRoomNum1",
                 "testStaff1",
@@ -121,7 +121,7 @@ class ConferenceRoomEntryDaoImplTest {
                 "endTime1",
                 LocalDate.now()
         };
-        var values2 = new Object[] {
+        var values2 = new Object[]{
                 UUID.randomUUID(),
                 "testRoomNum2",
                 "testStaff2",
@@ -132,10 +132,10 @@ class ConferenceRoomEntryDaoImplTest {
                 LocalDate.now()
         };
 
-        var valuesSet = new Object[][] {values0, values1, values2};
+        var valuesSet = new Object[][]{values0, values1, values2};
         var refMap = new HashMap<UUID, ConferenceRoomEntry>();
 
-        for(var values : valuesSet) {
+        for (var values : valuesSet) {
             try {
                 pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
             } catch (PdbController.DatabaseException e) {
@@ -212,7 +212,7 @@ class ConferenceRoomEntryDaoImplTest {
                         "beginTime",
                         "endTime");
 
-        var values = new Object[] {
+        var values = new Object[]{
                 conferenceRoom.getServiceID(),
                 conferenceRoom.getLocationName(),
                 conferenceRoom.getStaffAssignment(),
@@ -225,14 +225,14 @@ class ConferenceRoomEntryDaoImplTest {
         try {
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to insert into database";
+            assert false : "Failed to insert into database";
             log.error("Failed to insert into database", e);
         }
 
         try {
             ResultSet rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoom.getServiceID());
         } catch (PdbController.DatabaseException e) {
-            assert false: "Failed to find the entry in the database";
+            assert false : "Failed to find the entry in the database";
             log.error("Failed to find the entry in the database", e);
         }
 
@@ -241,7 +241,7 @@ class ConferenceRoomEntryDaoImplTest {
         try {
             ResultSet rs = pdbController.searchQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoom.getServiceID());
         } catch (PdbController.DatabaseException e) {
-            assert true: "Successfully deleted the entry from the database";
+            assert true : "Successfully deleted the entry from the database";
             assertTrue(e.getMessage().contains("SQL error"));
         }
     }

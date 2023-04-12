@@ -32,9 +32,9 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES, "employeeID", key)) {
             rs.next();
             Employee req = new Employee(
-                    (java.lang.Long)rs.getObject("employeeID"),
-                    (java.lang.String)rs.getObject("firstName"),
-                    (java.lang.String)rs.getObject("lastName"));
+                    (java.lang.Long) rs.getObject("employeeID"),
+                    (java.lang.String) rs.getObject("firstName"),
+                    (java.lang.String) rs.getObject("lastName"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -53,9 +53,9 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES, Arrays.stream(params).map(Employee.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Employee req = new Employee(
-                    (java.lang.Long)rs.getObject("employeeID"),
-                    (java.lang.String)rs.getObject("firstName"),
-                    (java.lang.String)rs.getObject("lastName"));
+                        (java.lang.Long) rs.getObject("employeeID"),
+                        (java.lang.String) rs.getObject("firstName"),
+                        (java.lang.String) rs.getObject("lastName"));
                 if (req != null)
                     map.put(req.getEmployeeID(), req);
             }
@@ -71,9 +71,9 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES)) {
             while (rs.next()) {
                 Employee req = new Employee(
-                    (java.lang.Long)rs.getObject("employeeID"),
-                    (java.lang.String)rs.getObject("firstName"),
-                    (java.lang.String)rs.getObject("lastName"));
+                        (java.lang.Long) rs.getObject("employeeID"),
+                        (java.lang.String) rs.getObject("firstName"),
+                        (java.lang.String) rs.getObject("lastName"));
                 if (req != null)
                     map.put(req.getEmployeeID(), req);
             }

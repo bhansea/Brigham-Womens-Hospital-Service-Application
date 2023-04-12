@@ -17,12 +17,12 @@ import java.util.*;
 @Slf4j
 public class HomePageController {
     @FXML
-    private VBox tableContainer;
-
-    @FXML
     MFXTableView<GenericRequestEntry> requestTable;
-
-    private Facade facade = App.getSingleton().getFacade();
+    @FXML
+    private VBox tableContainer;
+    private final Facade facade = App.getSingleton().getFacade();
+    private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
+    private final Map<Long, Employee> employees = facade.getAllEmployee();
 
     @FXML
     private void initialize() {
@@ -34,9 +34,6 @@ public class HomePageController {
         requestTable.setVisible(show);
         requestTable.setManaged(show);
     }
-
-    private Map<Long, LocationName> locationNames = facade.getAllLocationName();
-    private Map<Long, Employee> employees = facade.getAllEmployee();
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;
@@ -82,6 +79,11 @@ public class HomePageController {
         requestTable.autosizeColumnsOnInitialization();
     }
 
+    @FXML
+    private void resizeColumns() {
+        requestTable.autosizeColumns();
+    }
+
     private class GenericRequestEntry {
         RequestEntry originalEntry;
         String location;
@@ -101,10 +103,5 @@ public class HomePageController {
                     .findFirst()
                     .orElseGet(() -> TableType.GENERIC);
         }
-    }
-
-    @FXML
-    private void resizeColumns() {
-        requestTable.autosizeColumns();
     }
 }

@@ -15,7 +15,7 @@
                      ignoreExceptions="false">
             <PatternLayout pattern="${FILE}"/>
             <Policies>
-                <OnStartupTriggeringPolicy />
+                <OnStartupTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="20 MB"/>
             </Policies>
             <DefaultRolloverStrategy max="100"/>

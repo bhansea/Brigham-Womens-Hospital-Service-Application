@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -26,6 +25,7 @@ class HospitalFloor {
     Group nodeCanvas = new Group();
     Group tooltipCanvas = new Group();
     ImageView imageView = new ImageView();
+
     void init() {
         tooltipCanvas.setPickOnBounds(false);
         root.getChildren().addAll(imageView, lineCanvas, nodeCanvas, tooltipCanvas);
