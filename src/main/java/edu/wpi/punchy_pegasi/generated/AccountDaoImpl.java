@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Field> {
+public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.Field> {
 
     static String[] fields = {"username", "password", "employeeID", "accountType"};
     private final PdbController dbController;
@@ -28,8 +28,8 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
     }
 
     @Override
-    public Optional<Account> get(java.lang.Long key) {
-        try (var rs = dbController.searchQuery(TableType.ACCOUNTS, "employeeID", key)) {
+    public Optional<Account> get(java.lang.String key) {
+        try (var rs = dbController.searchQuery(TableType.ACCOUNTS, "username", key)) {
             rs.next();
             Account req = new Account(
                     (java.lang.String)rs.getObject("username"),
@@ -44,13 +44,13 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
     }
 
     @Override
-    public Map<java.lang.Long, Account> get(Account.Field column, Object value) {
+    public Map<java.lang.String, Account> get(Account.Field column, Object value) {
         return get(new Account.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.Long, Account> get(Account.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.Long, Account>();
+    public Map<java.lang.String, Account> get(Account.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.String, Account>();
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS, Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Account req = new Account(
@@ -59,7 +59,7 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
                     (java.lang.Long)rs.getObject("employeeID"),
                     edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String)rs.getObject("accountType")));
                 if (req != null)
-                    map.put(req.getEmployeeID(), req);
+                    map.put(req.getUsername(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -68,8 +68,8 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
     }
 
     @Override
-    public Map<java.lang.Long, Account> getAll() {
-        var map = new HashMap<java.lang.Long, Account>();
+    public Map<java.lang.String, Account> getAll() {
+        var map = new HashMap<java.lang.String, Account>();
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
@@ -78,7 +78,7 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
                     (java.lang.Long)rs.getObject("employeeID"),
                     edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String)rs.getObject("accountType")));
                 if (req != null)
-                    map.put(req.getEmployeeID(), req);
+                    map.put(req.getUsername(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -102,7 +102,7 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
         if (params.length < 1)
             return;
         try {
-            dbController.updateQuery(TableType.ACCOUNTS, "employeeID", account.getEmployeeID(), Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(account)).toArray());
+            dbController.updateQuery(TableType.ACCOUNTS, "username", account.getUsername(), Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(account)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -111,7 +111,7 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
     @Override
     public void delete(Account account) {
         try {
-            dbController.deleteQuery(TableType.ACCOUNTS, "employeeID", account.getEmployeeID());
+            dbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
