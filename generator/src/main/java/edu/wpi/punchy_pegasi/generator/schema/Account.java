@@ -15,10 +15,13 @@ public class Account {
     private Long employeeID;
     private AccountType accountType;
 
+        @RequiredArgsConstructor
         public enum AccountType {
-            NONE,
-            ADMIN,
-            STAFF;
+            NONE(0),
+            ADMIN(2),
+            STAFF(1);
+            @Getter
+            private final int shieldLevel;
         }
 
 }

@@ -49,9 +49,16 @@ public class App extends Application {
     private Screen currentScreen;
     @Getter
     private Scene scene;
-    @Getter@Setter
-    private Account account = null;
-
+    @Getter
+    private Account account = new Account("", "", 0L, Account.AccountType.NONE);
+    public void setAccount(Account account) {
+        if(account == null){
+            navigate(Screen.LOGIN);
+            account = new Account("", "", 0L, Account.AccountType.NONE);
+        }
+        support.firePropertyChange("account", this.account, account);
+        this.account = account;
+    }
 
     private static void showError(Thread t, Throwable e) {
         log.error("An unexpected error occurred in " + t, e);
@@ -108,10 +115,10 @@ public class App extends Application {
     }
 
     public void navigate(final Screen screen) {
-        if(screen != Screen.LOGIN && account == null)
-            return;
-        getViewPane().setCenter(screen.get());
-        setCurrentScreen(screen);
+        if(account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()){
+            getViewPane().setCenter(screen.get());
+            setCurrentScreen(screen);
+        }
     }
 
     public void loadStylesheet(String resourcePath) {

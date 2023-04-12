@@ -15,7 +15,7 @@
    <center>
       <VBox spacing="25.0" style="-fx-background-color: #00458E; -fx-border-radius: 6;" styleClass="sideBar" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>
-            <HBox>
+            <HBox fx:id="accountInfo">
                <children>
                   <VBox HBox.hgrow="ALWAYS">
                      <children>

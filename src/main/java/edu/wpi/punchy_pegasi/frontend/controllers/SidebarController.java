@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.schema.Account;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -9,28 +10,61 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
-public class SidebarController {
-    @FXML HBox home;
-    @FXML VBox serviceRequestDropDown;
-    @FXML Label conferenceRoomText;
-    @FXML Label officeSuppliesText;
-    @FXML Label furnitureText;
-    @FXML Label flowersText;
-    @FXML Label mealText;
-    @FXML HBox serviceRequests;
-    @FXML HBox map;
-    @FXML HBox adminPage;
-    @FXML HBox signagePage;
-    @FXML HBox logout;
-    @FXML ImageView profileImage;
-    @FXML Label nameText;
-    @FXML Label roleText;
+public class SidebarController implements PropertyChangeListener {
+    @FXML
+    HBox home;
+    @FXML
+    VBox serviceRequestDropDown;
+    @FXML
+    Label conferenceRoomText;
+    @FXML
+    Label officeSuppliesText;
+    @FXML
+    Label furnitureText;
+    @FXML
+    Label flowersText;
+    @FXML
+    Label mealText;
+    @FXML
+    HBox serviceRequests;
+    @FXML
+    HBox map;
+    @FXML
+    HBox adminPage;
+    @FXML
+    HBox signagePage;
+    @FXML
+    HBox logout;
+    @FXML
+    ImageView profileImage;
+    @FXML
+    Label nameText;
+    @FXML
+    Label roleText;
+    @FXML
+    private HBox accountInfo;
+
+    private void setAccount(Account account) {
+        if (account == null) {
+            accountInfo.setManaged(false);
+            accountInfo.setVisible(false);
+            return;
+        }
+        accountInfo.setManaged(true);
+        accountInfo.setVisible(true);
+        nameText.setText(account.getUsername());
+        roleText.setText(account.getAccountType().name());
+    }
 
     public void initialize() {
+        App.getSingleton().addPropertyChangeListener(this);
+        setAccount(App.getSingleton().getAccount());
 
-        Image defaultImage = new Image (Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/bwhlogo.png")));
+        Image defaultImage = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/bwhlogo.png")));
         profileImage.imageProperty().set(defaultImage);
 
         serviceRequestDropDown.setVisible(false);
@@ -113,10 +147,8 @@ public class SidebarController {
         });
 
         logout.setOnMouseClicked(e -> {
-            App.getSingleton().exit();
+            App.getSingleton().setAccount(null);
         });
-
-
         serviceRequests.onMouseClickedProperty().set(e -> {
             if (serviceRequestDropDown.isVisible()) {
                 serviceRequestDropDown.setVisible(false);
@@ -126,12 +158,13 @@ public class SidebarController {
                 serviceRequestDropDown.setManaged(true);
             }
         });
-
-
-
-
     }
 
-
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (Objects.equals(evt.getPropertyName(), "account")) {
+            setAccount((Account) evt.getNewValue());
+        }
+    }
 }
 
