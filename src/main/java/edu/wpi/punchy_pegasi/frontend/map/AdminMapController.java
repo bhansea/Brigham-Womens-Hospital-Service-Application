@@ -5,7 +5,6 @@ import edu.wpi.punchy_pegasi.backend.pathfinding.CartesianHeuristic;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Palgo;
 import edu.wpi.punchy_pegasi.frontend.DragController;
-import edu.wpi.punchy_pegasi.frontend.authentication.AccountType;
 import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
 import edu.wpi.punchy_pegasi.generated.MoveDaoImpl;
@@ -103,7 +102,6 @@ public class AdminMapController {
 
     @FXML
     private void editNodes() {
-        if (App.getSingleton().getAccountType() != AccountType.ADMIN) return;
         setEditingNodes(true);
         map.clearMap();
         var nodePoints = nodes.values().stream().map(n -> {
