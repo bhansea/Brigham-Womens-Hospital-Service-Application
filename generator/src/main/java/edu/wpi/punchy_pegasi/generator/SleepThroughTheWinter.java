@@ -18,12 +18,13 @@ import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class SleepThroughTheWinter {
+public class  SleepThroughTheWinter {
 
     /**
      * Returns a list containing one parameter name for each argument accepted
@@ -160,6 +161,7 @@ public class SleepThroughTheWinter {
         put(String.class, "varchar");
         put(UUID.class, "uuid DEFAULT uuid_generate_v4()");
         put(List.class, "varchar ARRAY");
+        put(LocalDate.class, "date");
     }};
 
     private static boolean fieldIsID(Field field){

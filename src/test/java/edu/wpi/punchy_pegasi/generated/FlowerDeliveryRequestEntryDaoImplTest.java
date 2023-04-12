@@ -39,7 +39,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
     @Test
     void get() {
         FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
-        Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getRoomNumber(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
+        Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
@@ -59,8 +59,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
     void testGet() {
         var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(),"testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
-        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getRoomNumber(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
-        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getRoomNumber(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType()};
+        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
+        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
             pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values2);
@@ -217,7 +217,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         var values = new Object[]{
                 flowerEntry.getServiceID(),
                 flowerEntry.getPatientName(),
-                flowerEntry.getRoomNumber(),
+                flowerEntry.getLocationName(),
                 flowerEntry.getStaffAssignment(),
                 flowerEntry.getAdditionalNotes(),
                 flowerEntry.getStatus(),
