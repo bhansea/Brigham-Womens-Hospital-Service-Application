@@ -429,7 +429,7 @@ public class AdminPageController {
         ObservableList<FoodServiceRequestEntry> foodList = FXCollections.observableArrayList(foodDaoImpl.getAll().values());
 
         for (FoodServiceRequestEntry.Field field: FoodServiceRequestEntry.Field.values()) {
-            MFXTableColumn<FoodServiceRequestEntry> col = new MFXTableColumn<>(field.getColName(), true, Comparator.comparing(FoodServiceRequestEntry::getServiceID));
+            MFXTableColumn<FoodServiceRequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
             col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
             foodServiceRequestTable.getTableColumns().add(col);
         }

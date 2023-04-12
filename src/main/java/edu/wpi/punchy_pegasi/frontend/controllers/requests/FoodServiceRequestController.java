@@ -41,7 +41,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
         addTextField(patientName);
-        addTotal(price);
+        addLabel(price);
+        setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
     }
@@ -60,7 +61,15 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         }
 
         //makes sure shared fields aren't empty
-        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, ((RadioButton) temp.getSelectedToggle()).getId(), dietaryRestrictions.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(
+                locationName.getItems().get(0).getUuid(),
+                staffAssignment.getItems().get(0).getEmployeeID(),
+                additionalNotes.getText(),
+                mealDropdown.getSelectedItem(),
+                ((RadioButton) temp.getSelectedToggle()).getId(),
+                extras,
+                dietaryRestrictions.getText(),
+                patientName.getText());
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

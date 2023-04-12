@@ -33,8 +33,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
             rs.next();
             GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
             return Optional.ofNullable(req);
@@ -56,8 +56,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
                 if (req != null)
@@ -76,8 +76,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
                 if (req != null)

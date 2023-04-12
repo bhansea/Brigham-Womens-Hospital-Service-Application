@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
+import edu.wpi.punchy_pegasi.schema.Employee;
+import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.collections.FXCollections;
@@ -17,9 +19,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 import lombok.extern.slf4j.Slf4j;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -35,28 +36,35 @@ public abstract class RequestController<T extends RequestEntry> {
     protected T requestEntry;
 
     @FXML
-    MFXFilterComboBox<String> locationName;
+    MFXFilterComboBox<LocationName> locationName;
     @FXML
-    protected TextField staffAssignment;
+    MFXFilterComboBox<Employee> staffAssignment;
     @FXML
     protected TextField additionalNotes;
     @FXML
     protected Button submit;
     @FXML
     protected VBox inputContainer;
+    @FXML private HBox componentHolder;
     @FXML
-    protected VBox totalContainer;
+    protected VBox requestInfoContainer;
 
+    @FXML
+    protected Label headerText;
     public static BorderPane create(RequestController controller, String path) {
         try {
             Parent l = App.getSingleton().loadWithCache(path, controller);
             BorderPane g = App.getSingleton().loadWithCache("frontend/layouts/Request.fxml", controller);
-            g.setCenter(l);
+            controller.componentHolder.getChildren().add(l);
             return g;
         } catch (IOException e) {
             log.error("create error", e);
             return null;
         }
+    }
+
+    protected void setHeaderText(String headerText) {
+        this.headerText.setText(headerText);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -82,7 +90,37 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
-        locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().map(v->v.getLongName()).toList()));
+        locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
+        staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
+        var employeeToName = new StringConverter<Employee>()
+        {
+
+            @Override
+            public String toString(Employee employee) {
+                if (employee == null) return "";
+                return employee.getFirstName() + " " + employee.getLastName();
+            }
+
+            @Override
+            public Employee fromString(String string) {
+                return null;
+            }
+        };
+        var locationToLongName = new StringConverter<LocationName>(){
+
+            @Override
+            public String toString(LocationName object) {
+                if (object == null) return "";
+                return object.getLongName();
+            }
+
+            @Override
+            public LocationName fromString(String string) {
+                return null;
+            }
+        };
+        staffAssignment.setConverter(employeeToName);
+        locationName.setConverter(locationToLongName);
         for (var node : new TextField[]{locationName, staffAssignment, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);
@@ -128,18 +166,20 @@ public abstract class RequestController<T extends RequestEntry> {
     }
 
     @FXML
-    protected void addTotal(Label price){
+    protected void addLabel(Label label){
         HBox hbox = new HBox();
         Label total = new Label("Total:");
-        totalContainer.getChildren().add(0,hbox);
+        requestInfoContainer.getChildren().add(0,hbox);
         hbox.getChildren().add(0, total);
-        hbox.getChildren().add(1,price);
+        hbox.getChildren().add(1,label);
         hbox.setAlignment(Pos.CENTER);
         hbox.setPadding(new Insets(10,0,0,0));
-        price.setFont(new Font(DEFAULT_FULLNAME, 24));
+        label.setFont(new Font(DEFAULT_FULLNAME, 24));
         total.setFont(new Font(DEFAULT_FULLNAME, 24));
         total.setTextFill(Color.color(1,1,1));
-        price.setTextFill(Color.color(1,1,1));
+        label.setTextFill(Color.color(1,1,1));
         hbox.setSpacing(150);
+        requestInfoContainer.setManaged(true);
+        requestInfoContainer.setVisible(true);
     }
 }
