@@ -4,7 +4,6 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
-import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +24,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     MFXComboBox<String> mealDropdown, tempDropdown, beverageDropdown;
     @FXML
-    MFXCheckbox utensils, napkins, straw;
-    @FXML
-    Label mealName;
+    CheckBox utensils, napkins, straw;
 
     TextField patientName = new TextField();
 
@@ -89,14 +86,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         utensils.setSelected(false);
         straw.setSelected(false);
         beverageDropdown.clear();
-        mealName.setText("Meal Name");
     }
 
-    @FXML
-    public void updateLabelEntry() {
-        validateEntry();
-        mealName.setText(mealDropdown.getSelectedItem());
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

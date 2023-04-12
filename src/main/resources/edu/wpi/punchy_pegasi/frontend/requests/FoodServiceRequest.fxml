@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,197 +14,151 @@
 
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
-        <VBox spacing="30.0">
-            <children>
-                <VBox style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label prefHeight="35.0" prefWidth="504.0" text="Fields marked with an asterisk (*) are required">
+      <VBox spacing="16.0" style="-fx-background-color: white;">
+         <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
                             <font>
-                                <Font size="24.0" />
+                                <Font name="System Bold" size="24.0" />
                             </font>
-                            <VBox.margin>
-                                <Insets left="10.0" />
-                            </VBox.margin>
-                        </Label>
-                  <VBox spacing="16.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                        </Text>
+            <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox spacing="32.0" HBox.hgrow="ALWAYS">
                      <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
-                                        <font>
-                                            <Font name="System Bold" size="24.0" />
-                                        </font>
-                                    </Text>
-                        <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+                        <VBox>
                            <children>
-                              <VBox spacing="32.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <VBox>
-                                       <children>
-                                                      <HBox>
-                                                          <children>
-                                                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select A Meal ">
-                                                                  <font>
-                                                                      <Font size="18.0" />
-                                                                  </font>
-                                                              </Text>
-                                                              <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
-                                                          </children>
-                                                      </HBox>
-                                          <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#updateLabelEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </MFXComboBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
                                           <HBox>
-                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Temperature Type">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
-                                             </children>
+                                              <children>
+                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select A Meal ">
+                                                      <font>
+                                                          <Font size="18.0" />
+                                                      </font>
+                                                  </Text>
+                                                  <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                                              </children>
                                           </HBox>
-                                          <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Temperature Type">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </MFXComboBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox spacing="10.0">
-                                       <children>
-                                          <HBox>
-                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Additional Items">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
-                                          <HBox spacing="50.0">
-                                             <children>
-                                                <MFXCheckbox fx:id="utensils" text="Utensils">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                </MFXCheckbox>
-                                                <MFXCheckbox fx:id="napkins" text="Napkins">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                </MFXCheckbox>
-                                                <MFXCheckbox fx:id="straw" text="Straw">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                </MFXCheckbox>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <HBox>
-                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Beverage">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
-                                          <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="Beverages">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </MFXComboBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <HBox>
-                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fill in Dietary Restrictions">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Text>
-                                             </children>
-                                          </HBox>
-                                          <HBox>
-                                             <children>
-                                                <TextArea fx:id="dietaryRestrictions" prefHeight="90.0" prefWidth="450.0" promptText="Allergies, Gluten Free, etc." wrapText="true">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font></TextArea>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
-                                        <VBox alignment="TOP_CENTER" spacing="32.0">
-                                 <children>
-                                    <VBox alignment="CENTER">
-                                       <children>
-                                          <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/mealPicture.jpeg" />
-                                             </image>
-                                          </ImageView>
-                                          <VBox alignment="CENTER" style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;">
-                                             <children>
-                                                <Label fx:id="mealName" text="Meal Name">
-                                                   <font>
-                                                      <Font size="24.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets left="30.0" right="30.0" />
-                                             </VBox.margin>
-                                          </VBox>
-                                       </children>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                    </VBox>
-                                 </children>
-                                        </VBox>
+                              <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#updateLabelEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </MFXComboBox>
                            </children>
-                        </HBox>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Temperature Type">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
+                                 </children>
+                              </HBox>
+                              <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Temperature Type">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </MFXComboBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="10.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Additional Items">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="50.0">
+                                 <children>
+                                    <CheckBox fx:id="utensils" mnemonicParsing="false" text="Utensils">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </CheckBox>
+                                    <CheckBox fx:id="napkins" mnemonicParsing="false" text="Napkins">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </CheckBox>
+                                    <CheckBox fx:id="straw" mnemonicParsing="false" text="Straw">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </CheckBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Beverage">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="Beverages">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </MFXComboBox>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fill in Dietary Restrictions">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <TextArea fx:id="dietaryRestrictions" prefHeight="90.0" prefWidth="450.0" promptText="Allergies, Gluten Free, etc." wrapText="true">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextArea>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
-                     <padding>
-                        <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
-                     </padding>
                   </VBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </VBox>
-            </children>
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
+                            <VBox alignment="TOP_CENTER" spacing="32.0">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/mealPicture.jpeg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </children>
+                            </VBox>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
+         </padding>
+      </VBox>
     </center>
-    <top>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Meal Request" BorderPane.alignment="TOP_LEFT">
-            <font>
-                <Font name="System Bold" size="28.0" />
-            </font>
-            <BorderPane.margin>
-                <Insets left="20.0" />
-            </BorderPane.margin>
-        </Text>
-    </top>
 </BorderPane>
