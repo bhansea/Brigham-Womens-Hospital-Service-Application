@@ -46,6 +46,11 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
+
+        mealDropdown.setOnAction(e -> validateEntry());
+        tempDropdown.setOnAction(e -> validateEntry());
+        beverageDropdown.setOnAction(e -> validateEntry());
+        dietaryRestrictions.setOnKeyTyped(e -> validateEntry());
     }
 
     @FXML

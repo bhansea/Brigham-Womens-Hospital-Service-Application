@@ -12,28 +12,30 @@
     <center>
       <VBox spacing="16.0" style="-fx-background-color: white;">
          <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
-                            <font>
-                                <Font name="System Bold" size="24.0" />
-                            </font>
-                        </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "
+                  wrappingWidth="575.7366981506348">
+               <font>
+                  <Font name="System Bold" size="24.0"/>
+               </font>
+            </Text>
             <HBox spacing="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox spacing="32.0" HBox.hgrow="ALWAYS">
                      <children>
                         <VBox>
                            <children>
-                                          <HBox>
-                                              <children>
-                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select A Meal ">
-                                                      <font>
-                                                          <Font size="18.0" />
-                                                      </font>
-                                                  </Text>
-                                                  <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />
-                                              </children>
-                                          </HBox>
-                              <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Meals">
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select A Meal ">
+                                       <font>
+                                          <Font size="18.0"/>
+                                       </font>
+                                    </Text>
+                                    <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
+                                 </children>
+                              </HBox>
+                              <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0"
+                                           promptText="Meals">
                                  <font>
                                     <Font size="16.0"/>
                                  </font>
@@ -52,7 +54,8 @@
                                     <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
                                  </children>
                               </HBox>
-                              <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" onAction="#validateEntry" prefHeight="50.0" prefWidth="450.0" promptText="Temperature Type">
+                              <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0"
+                                           promptText="Temperature Type">
                                  <font>
                                     <Font size="16.0"/>
                                  </font>
@@ -133,7 +136,7 @@
                         </VBox>
                      </children>
                   </VBox>
-                            <VBox alignment="TOP_RIGHT" spacing="32.0">
+                  <VBox alignment="TOP_RIGHT" spacing="32.0">
                      <children>
                         <VBox alignment="TOP_RIGHT">
                            <children>
