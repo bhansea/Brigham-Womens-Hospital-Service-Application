@@ -91,7 +91,8 @@ CREATE TABLE IF NOT EXISTS teamp.foodrequests
   tempType varchar,
   additionalItems varchar ARRAY,
   dietaryRestrictions varchar,
-  patientName varchar
+  patientName varchar,
+  beverage varchar
 );
 """)
 ,

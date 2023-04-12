@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.text.Text?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController">
+    <left>
+        <VBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets topRightBottomLeft="10"/>
+            </padding>
+            <VBox alignment="CENTER" spacing="10" fx:id="editing">
+                <MFXButton text="Edit Node Locations" onMouseClicked="#editNodes" fx:id="editButton"/>
+                <MFXButton text="Done Editing Nodes" onMouseClicked="#doneEditingNodes" fx:id="doneEditingButton"/>
+                <MFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton" />
+                <MFXProgressBar fx:id="commitProgress" maxWidth="Infinity" progress="0">
+                    <padding>
+                        <Insets topRightBottomLeft="5"/>
+                    </padding>
+                </MFXProgressBar>
+            </VBox>
+        </VBox>
+    </left>
+</BorderPane>

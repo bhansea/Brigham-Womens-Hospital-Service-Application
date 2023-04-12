@@ -92,6 +92,8 @@ public abstract class RequestController<T extends RequestEntry> {
         if (!isLoaded()) return;
         locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
         staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
+        locationName.setOnCommit(p -> validateEntry());
+        staffAssignment.setOnCommit(p -> validateEntry());
         var employeeToName = new StringConverter<Employee>()
         {
 
@@ -132,7 +134,7 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (locationName.getText().isBlank() || staffAssignment.getText().isBlank());
+        return (locationName.getSelectedItem()  == null || staffAssignment.getSelectedItem() == null);
     }
 
     protected void clearGeneric() {
@@ -156,13 +158,15 @@ public abstract class RequestController<T extends RequestEntry> {
         hbox.getChildren().add(0, field);
         hbox.setAlignment(Pos.CENTER);
         label.setFont(new Font(DEFAULT_FULLNAME, 24));
-        label.setAlignment(Pos.CENTER);
+        label.setAlignment(Pos.CENTER_LEFT);
         label.setTextFill(Color.color(1,1,1));
         field.setPromptText("Enter Patient Name");
-        field.setAlignment(Pos.CENTER);
+        field.setAlignment(Pos.CENTER_LEFT);
         field.setFont(new Font(DEFAULT_FULLNAME, 24));
         inputContainer.setPadding(new Insets(20,20,20,20));
+        inputContainer.setSpacing(6);
         hbox.setPadding(new Insets(0,0,0,0));
+        field.setOnAction(a -> validateEntry());
     }
 
     @FXML

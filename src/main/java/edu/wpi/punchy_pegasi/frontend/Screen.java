@@ -13,7 +13,7 @@ import java.util.function.Function;
 public enum Screen {
     HOME("Home", "frontend/views/HomePage.fxml"),
     SIGNAGE("Signage", "frontend/views/Signage.fxml"),
-    MAP_PAGE("Map", "frontend/views/MapPage.fxml"),
+    MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml"),
     LOGIN("Login", "frontend/views/Login.fxml"),
     FLOWER_DELIVERY_REQUEST("Request Flower Delivery", "frontend/requests/FlowerDeliveryRequest.fxml", FlowerDeliveryRequestController::create),
     ADMIN_PAGE("Admin Page", "frontend/requests/AdminPage.fxml"),
