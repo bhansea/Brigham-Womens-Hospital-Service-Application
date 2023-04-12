@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -75,7 +76,7 @@
                                           </MFXComboBox>
                                        </children>
                                     </VBox>
-                                    <VBox>
+                                    <VBox spacing="10.0">
                                        <children>
                                           <HBox>
                                              <children>
@@ -86,11 +87,25 @@
                                                 </Text>
                                              </children>
                                           </HBox>
-                                          <MFXComboBox fx:id="additionalItemsDropdown" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="450.0" promptText="End Time" text="Items">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </MFXComboBox>
+                                          <HBox spacing="50.0">
+                                             <children>
+                                                <MFXCheckbox fx:id="utensils" text="Utensils">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </MFXCheckbox>
+                                                <MFXCheckbox fx:id="napkins" text="Napkins">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </MFXCheckbox>
+                                                <MFXCheckbox fx:id="straw" text="Straw">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </MFXCheckbox>
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </VBox>
                                     <VBox>
@@ -124,7 +139,10 @@
                                           </HBox>
                                           <HBox>
                                              <children>
-                                                <TextArea fx:id="dietaryRestrictions" prefHeight="90.0" prefWidth="450.0" promptText="Allergies, Gluten Free, etc." wrapText="true" />
+                                                <TextArea fx:id="dietaryRestrictions" prefHeight="90.0" prefWidth="450.0" promptText="Allergies, Gluten Free, etc." wrapText="true">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font></TextArea>
                                              </children>
                                           </HBox>
                                        </children>

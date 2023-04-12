@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.generated.FoodServiceRequestEntryDaoImpl;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
+import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,22 +16,20 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> implements PropertyChangeListener {
     FoodServiceRequestEntry entry;
     @FXML
-    TextField dietaryRestrictions;
+    TextArea dietaryRestrictions;
     @FXML
-    CheckBox utensils, napkins, glass;
+    MFXComboBox<String> mealDropdown, tempDropdown, beverageDropdown;
     @FXML
-    MFXComboBox<String> mealDropdown;
-    @FXML
-    ToggleGroup temp;
+    MFXCheckbox utensils, napkins, straw;
     @FXML
     Label mealName;
 
-    TextField patientName = new TextField();
-    Label price = new Label("$0.00");
+    TextField patientName = new TextField("Enter Patient Name");
 
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);
@@ -41,7 +40,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
         addTextField(patientName);
-        addTotal(price);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
     }
@@ -55,12 +53,12 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         if (napkins.isSelected()) {
             extras.add("napkins");
         }
-        if (glass.isSelected()) {
-            extras.add("glass");
+        if (straw.isSelected()) {
+            extras.add("straw");
         }
 
         //makes sure shared fields aren't empty
-        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, ((RadioButton) temp.getSelectedToggle()).getId(), dietaryRestrictions.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, tempDropdown.getSelectedItem(), dietaryRestrictions.getText());
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
@@ -72,7 +70,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void validateEntry() {
-        boolean validate = validateGeneric() || temp.getSelectedToggle() == null || mealDropdown.getSelectedItem() == null;
+        boolean validate = validateGeneric() || mealDropdown.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 
@@ -81,10 +79,11 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         clearGeneric();
         mealDropdown.clear();
         dietaryRestrictions.clear();
+        tempDropdown.clear();
         napkins.setSelected(false);
         utensils.setSelected(false);
-        glass.setSelected(false);
-        temp.selectToggle(null);
+        straw.setSelected(false);
+        beverageDropdown.clear();
     }
 
     @FXML
