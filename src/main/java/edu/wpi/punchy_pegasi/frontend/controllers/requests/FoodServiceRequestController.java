@@ -42,10 +42,9 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         mealDropdown.setItems(mealList);
         addTextField(patientName);
         addLabel(price);
+        setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
-        setHeaderText("Food Service Request");
-
     }
 
     @FXML

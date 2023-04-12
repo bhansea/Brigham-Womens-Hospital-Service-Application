@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import com.sun.glass.ui.Screen;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Employee;
@@ -22,8 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import lombok.extern.slf4j.Slf4j;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -100,6 +97,7 @@ public abstract class RequestController<T extends RequestEntry> {
 
             @Override
             public String toString(Employee employee) {
+                if (employee == null) return "";
                 return employee.getFirstName() + " " + employee.getLastName();
             }
 
@@ -112,6 +110,7 @@ public abstract class RequestController<T extends RequestEntry> {
 
             @Override
             public String toString(LocationName object) {
+                if (object == null) return "";
                 return object.getLongName();
             }
 
