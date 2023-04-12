@@ -148,7 +148,38 @@ CREATE TABLE IF NOT EXISTS teamp.officerequests
   employeeName varchar
 );
 """)
-;
+,
+    EMPLOYEES(edu.wpi.punchy_pegasi.generator.schema.Employee.class, """
+DO $$
+BEGIN
+  IF to_regclass('teamp.employees') IS NULL THEN
+    CREATE SEQUENCE employees_id_seq;
+    CREATE TABLE teamp.employees
+    (
+      employeeID bigint DEFAULT nextval('employees_id_seq') PRIMARY KEY,
+      firstName varchar,
+      lastName varchar
+    );
+    ALTER SEQUENCE employees_id_seq OWNED BY teamp.employees.employeeID;
+  END IF;
+END $$;
+"""),
+    ACCOUNTS(edu.wpi.punchy_pegasi.generator.schema.Account.class, """
+DO $$
+BEGIN
+  IF to_regclass('teamp.accounts') IS NULL THEN
+    CREATE SEQUENCE accounts_id_seq;
+    CREATE TABLE teamp.accounts
+    (
+      username varchar,
+      password varchar,
+      employeeID bigint DEFAULT nextval('accounts_id_seq') PRIMARY KEY,
+      accountType varchar
+    );
+    ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.employeeID;
+  END IF;
+END $$;
+""");
     @Getter
     private final Class<?> clazz;
     @Getter

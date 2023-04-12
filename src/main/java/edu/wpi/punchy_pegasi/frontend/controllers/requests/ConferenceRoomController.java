@@ -100,8 +100,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         beginningTime.getText(),
                         endTime.getText(),
                         calendar.getValue());
-        ConferenceRoomEntryDaoImpl request = new ConferenceRoomEntryDaoImpl();
-        request.save(requestEntry);
+        App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
 

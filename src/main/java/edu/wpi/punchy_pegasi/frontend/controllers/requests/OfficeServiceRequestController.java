@@ -30,8 +30,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     public void submitEntry() {
         //makes sure shared fields aren't empty
         requestEntry = new OfficeServiceRequestEntry(locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), officeRequest.getText(), "");
-        OfficeServiceRequestEntryDaoImpl request = new OfficeServiceRequestEntryDaoImpl();
-        request.save(requestEntry);
+        App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
 
