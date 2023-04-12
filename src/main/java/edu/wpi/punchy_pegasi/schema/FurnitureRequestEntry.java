@@ -10,19 +10,19 @@ public class FurnitureRequestEntry extends RequestEntry {
 
     private final List<String> selectFurniture;
 
-    public FurnitureRequestEntry(String roomNumber, String staffAssignment, String additionalNotes, List<String> selectFurniture) {
-        this(UUID.randomUUID(), roomNumber, staffAssignment, additionalNotes, Status.PROCESSING, selectFurniture);
+    public FurnitureRequestEntry(String locationName, String staffAssignment, String additionalNotes, List<String> selectFurniture) {
+        this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, selectFurniture);
     }
 
-    public FurnitureRequestEntry(UUID serviceID, String roomNumber, String staffAssignment, String additionalNotes, Status status, List<String> selectFurniture) {
-        super(serviceID, roomNumber, staffAssignment, additionalNotes, status);
+    public FurnitureRequestEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, List<String> selectFurniture) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.selectFurniture = selectFurniture;
     }
 
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
-        ROOM_NUMBER("roomNumber"),
+        LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
@@ -36,7 +36,7 @@ public class FurnitureRequestEntry extends RequestEntry {
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
-            case ROOM_NUMBER -> getRoomNumber();
+            case LOCATION_NAME -> getLocationName();
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();

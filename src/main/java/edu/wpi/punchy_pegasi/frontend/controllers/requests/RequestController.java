@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import lombok.extern.slf4j.Slf4j;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -27,8 +29,9 @@ public abstract class RequestController<T extends RequestEntry> {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @FXML
     protected T requestEntry;
+
     @FXML
-    protected TextField roomNumber;
+    MFXComboBox<String> locationName;
     @FXML
     protected TextField staffAssignment;
     @FXML
@@ -65,7 +68,7 @@ public abstract class RequestController<T extends RequestEntry> {
     }
 
     protected boolean isLoaded() {
-        return roomNumber != null;
+        return submit != null;
     }
 
     // This is an alternative to the built-in propertyChange
@@ -75,7 +78,7 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
-        for (var node : new TextField[]{roomNumber, additionalNotes})
+        for (var node : new TextField[]{locationName, staffAssignment, additionalNotes})
             node.textProperty().addListener((obs, oldText, newText) -> {
                 support.firePropertyChange(node.getId() + "TextChanged", oldText, newText);
                 fieldChanged(node.getId() + "TextChanged", oldText, newText);
@@ -86,11 +89,11 @@ public abstract class RequestController<T extends RequestEntry> {
     public abstract void init();
 
     protected boolean validateGeneric() {
-        return (roomNumber.getText().isBlank() || staffAssignment.getText().isBlank());
+        return (locationName.getText().isBlank() || staffAssignment.getText().isBlank());
     }
 
     protected void clearGeneric() {
-        roomNumber.clear();
+        locationName.clear();
         staffAssignment.clear();
         additionalNotes.clear();
     }

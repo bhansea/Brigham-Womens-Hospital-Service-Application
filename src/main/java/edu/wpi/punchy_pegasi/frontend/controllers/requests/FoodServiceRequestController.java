@@ -60,7 +60,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         }
 
         //makes sure shared fields aren't empty
-        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), roomNumber.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, ((RadioButton) temp.getSelectedToggle()).getId(), dietaryRestrictions.getText());
+        requestEntry = entry = new FoodServiceRequestEntry(patientName.getText(), locationName.getText(), staffAssignment.getText(), additionalNotes.getText(), mealDropdown.getSelectedItem(), extras, ((RadioButton) temp.getSelectedToggle()).getId(), dietaryRestrictions.getText());
         FoodServiceRequestEntryDaoImpl request = new FoodServiceRequestEntryDaoImpl();
         request.save(requestEntry);
         App.getSingleton().navigate(Screen.HOME);

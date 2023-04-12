@@ -72,7 +72,7 @@ END $$;
 CREATE TABLE IF NOT EXISTS teamp.generic
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
+  locationName varchar,
   staffAssignment varchar,
   additionalNotes varchar,
   status varchar
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS teamp.generic
 CREATE TABLE IF NOT EXISTS teamp.foodrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
+  locationName varchar,
   staffAssignment varchar,
   additionalNotes varchar,
   status varchar,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS teamp.foodrequests
 CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
+  locationName varchar,
   staffAssignment varchar,
   additionalNotes varchar,
   status varchar,
@@ -114,12 +114,13 @@ CREATE TABLE IF NOT EXISTS teamp.flowerrequests
 CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
+  locationName varchar,
   staffAssignment varchar,
   additionalNotes varchar,
   status varchar,
   beginningTime varchar,
-  endTime varchar
+  endTime varchar,
+  date date
 );
 """)
 ,
@@ -127,7 +128,7 @@ CREATE TABLE IF NOT EXISTS teamp.conferencerequests
 CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
+  locationName varchar,
   staffAssignment varchar,
   additionalNotes varchar,
   status varchar,
@@ -139,7 +140,7 @@ CREATE TABLE IF NOT EXISTS teamp.furniturerequests
 CREATE TABLE IF NOT EXISTS teamp.officerequests
 (
   serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  roomNumber varchar,
+  locationName varchar,
   staffAssignment varchar,
   additionalNotes varchar,
   status varchar,

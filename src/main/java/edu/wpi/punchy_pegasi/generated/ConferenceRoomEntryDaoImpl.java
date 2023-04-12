@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, ConferenceRoomEntry, ConferenceRoomEntry.Field> {
 
-    static String[] fields = {"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date"};
     private final PdbController dbController;
 
     public ConferenceRoomEntryDaoImpl(PdbController dbController) {
@@ -33,12 +33,13 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             rs.next();
             ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("locationName"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
-                    (java.lang.String)rs.getObject("endTime"));
+                    (java.lang.String)rs.getObject("endTime"),
+                    (java.time.LocalDate)rs.getObject("date"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -58,12 +59,13 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("locationName"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
-                    (java.lang.String)rs.getObject("endTime"));
+                    (java.lang.String)rs.getObject("endTime"),
+                    (java.time.LocalDate)rs.getObject("date"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -80,12 +82,13 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("roomNumber"),
+                    (java.lang.String)rs.getObject("locationName"),
                     (java.lang.String)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("beginningTime"),
-                    (java.lang.String)rs.getObject("endTime"));
+                    (java.lang.String)rs.getObject("endTime"),
+                    (java.time.LocalDate)rs.getObject("date"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -97,7 +100,7 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
 
     @Override
     public void save(ConferenceRoomEntry conferenceRoomEntry) {
-        Object[] values = {conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getRoomNumber(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus(), conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime()};
+        Object[] values = {conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getLocationName(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus(), conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime(), conferenceRoomEntry.getDate()};
         try {
             dbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

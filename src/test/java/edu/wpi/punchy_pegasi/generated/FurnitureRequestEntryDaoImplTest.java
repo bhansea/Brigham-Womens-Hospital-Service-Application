@@ -34,7 +34,7 @@ class FurnitureRequestEntryDaoImplTest {
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
         FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
-        Object[] values = new Object[]{furniture.getServiceID(), furniture.getRoomNumber(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
+        Object[] values = new Object[]{furniture.getServiceID(), furniture.getLocationName(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
         try{
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
@@ -56,8 +56,8 @@ class FurnitureRequestEntryDaoImplTest {
         requestItems.add("testItems");
         FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         FurnitureRequestEntry furniture2 = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
-        Object[] values = new Object[]{furniture.getServiceID(), furniture.getRoomNumber(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
-        Object[] values2 = new Object[]{furniture2.getServiceID(), furniture2.getRoomNumber(), furniture2.getStaffAssignment(), furniture2.getAdditionalNotes(), furniture2.getStatus(), furniture2.getSelectFurniture()};
+        Object[] values = new Object[]{furniture.getServiceID(), furniture.getLocationName(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
+        Object[] values2 = new Object[]{furniture2.getServiceID(), furniture2.getLocationName(), furniture2.getStaffAssignment(), furniture2.getAdditionalNotes(), furniture2.getStatus(), furniture2.getSelectFurniture()};
         try{
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values2);
@@ -208,7 +208,7 @@ class FurnitureRequestEntryDaoImplTest {
 
         var values = new Object[] {
                 furnitureRequest.getServiceID(),
-                furnitureRequest.getRoomNumber(),
+                furnitureRequest.getLocationName(),
                 furnitureRequest.getStaffAssignment(),
                 furnitureRequest.getAdditionalNotes(),
                 furnitureRequest.getStatus(),
