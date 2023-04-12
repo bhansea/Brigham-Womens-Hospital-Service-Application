@@ -5,13 +5,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.scene.control.Button?>
 <BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css"
             xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
-        <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER"
-              HBox.hgrow="NEVER">
-            <VBox alignment="CENTER" spacing="10.0">
+        <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                 <Label text="WHAT CAN WE HELP YOU WITH?">
                     <font>
                         <Font name="System Bold" size="24.0"/>
@@ -20,7 +20,12 @@
                         <Insets topRightBottomLeft="10"/>
                     </padding>
                 </Label>
-                <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
+                <VBox VBox.vgrow="ALWAYS" fx:id="tableContainer">
+                    <padding>
+                        <Insets topRightBottomLeft="20"/>
+                    </padding>
+                    <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
+                </VBox>
             </VBox>
         </HBox>
     </center>

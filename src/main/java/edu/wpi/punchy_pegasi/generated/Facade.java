@@ -33,6 +33,7 @@ public class Facade {
 		accountDao = new AccountDaoImpl(dbController);
 
     }
+
 	public Optional<Node> getNode(java.lang.Long key) {
 		return nodeDao.get(key);
 	}

@@ -151,8 +151,8 @@ public class App extends Application {
             scene = new Scene(loadedLayout, 1280, 720);
             primaryStage.setScene(scene);
             primaryStage.show();
-            navigate(Screen.HOME);
             MFXThemeManager.addOn(scene, Themes.DEFAULT);
+            navigate(Screen.HOME);
             loadStylesheet("frontend/css/Default.css");
             new Thread(this::initDatabaseTables).start();
         } catch (IOException e) {

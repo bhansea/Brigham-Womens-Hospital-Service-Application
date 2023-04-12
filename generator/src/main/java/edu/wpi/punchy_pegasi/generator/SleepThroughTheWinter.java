@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generator;
 
 import edu.wpi.punchy_pegasi.generator.schema.Facade;
+import edu.wpi.punchy_pegasi.generator.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -251,27 +252,7 @@ public class  SleepThroughTheWinter {
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
-        var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == entryClass).findFirst();
-        if (typeOptional.isEmpty()) {
-            Files.writeString(schemaDestPath, sourceFileText);
-            throw new IllegalStateException("No table type found for " + entryClass.getCanonicalName());
-        }
-        var tt = typeOptional.get();
-
-        var idField = getIdField(entryClass);
-
-        var ClassText = entryClass.getSimpleName();
-        // set first letter lowercase
-        var classText = firstLower(ClassText);
-
-
         var classFields = getFieldsRecursively(entryClass);
-        var classFieldsText = classFields.stream().map(Field::getName).toList();
-        var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
-
-        var idFieldText = idField.getName();
-        var idFieldType = idField.getType().getCanonicalName();
-
 
         // gen schema
         var schemaFileText = sourceFileText  // remove @SchemaID annotations
@@ -285,8 +266,27 @@ public class  SleepThroughTheWinter {
                 .replaceAll("\\.generator\\.", ".").trim();
 
         Files.writeString(schemaDestPath, schemaFileText);
-
+        if(entryClass == RequestEntry.class) return;
         // gen impl
+        var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == entryClass).findFirst();
+        if (typeOptional.isEmpty()) {
+            Files.writeString(schemaDestPath, sourceFileText);
+            throw new IllegalStateException("No table type found for " + entryClass.getCanonicalName());
+        }
+        var tt = typeOptional.get();
+
+        var idField = getIdField(entryClass);
+
+        var ClassText = entryClass.getSimpleName();
+        // set first letter lowercase
+        var classText = firstLower(ClassText);
+
+        var classFieldsText = classFields.stream().map(Field::getName).toList();
+        var ClassFieldsGet = classFieldsText.stream().map(f -> classText + ".get" + firstUpper(f) + "()").toList();
+
+        var idFieldText = idField.getName();
+        var idFieldType = idField.getType().getCanonicalName();
+
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         var implFileText = template.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator", "edu.wpi.punchy_pegasi.generated")
                 .replaceAll("/\\*FacadeClassName\\*/", "")
@@ -466,6 +466,10 @@ public class  SleepThroughTheWinter {
         }
         generateFacade();
         generateTable();
+        try {
+            generateEntry(RequestEntry.class);
+        } catch (IllegalStateException ignored) {
+        }
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
                 generateEntry(clazz);
