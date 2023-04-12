@@ -11,7 +11,7 @@ public class ConferenceRoomEntry extends RequestEntry {
     private final String endTime;
     private final LocalDate date;
 
-    public ConferenceRoomEntry(UUID serviceID, String locationName, String staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime, LocalDate date) {
+    public ConferenceRoomEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime, LocalDate date) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.beginningTime = beginningTime;
         this.endTime = endTime;
@@ -19,7 +19,7 @@ public class ConferenceRoomEntry extends RequestEntry {
 
     }
 
-    public ConferenceRoomEntry(String locationName, String staffAssignment, String additionalNotes, String beginningTime, String endTime, LocalDate date) {
+    public ConferenceRoomEntry(Long locationName, Long staffAssignment, String additionalNotes, String beginningTime, String endTime, LocalDate date) {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
         this.beginningTime = beginningTime;
         this.endTime = endTime;

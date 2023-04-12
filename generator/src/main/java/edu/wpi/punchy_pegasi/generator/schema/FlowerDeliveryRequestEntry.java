@@ -11,7 +11,7 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     private final String flowerAmount;
     private final String patientName;
 
-    public FlowerDeliveryRequestEntry(UUID serviceID, String patientName, String locationName, String staffAssignment, String additionalNotes, Status status, String flowerSize, String flowerAmount, String flowerType) {
+    public FlowerDeliveryRequestEntry(UUID serviceID, String patientName, Long locationName, Long staffAssignment, String additionalNotes, Status status, String flowerSize, String flowerAmount, String flowerType) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.flowerSize = flowerSize;
         this.flowerAmount = flowerAmount;
@@ -19,7 +19,7 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
         this.patientName = patientName;
     }
 
-    public FlowerDeliveryRequestEntry(String patientName, String locationName, String staffAssignment, String additionalNotes, String flowerSize, String flowerAmount, String flowerType) {
+    public FlowerDeliveryRequestEntry(String patientName, Long locationName, Long staffAssignment, String additionalNotes, String flowerSize, String flowerAmount, String flowerType) {
         this(UUID.randomUUID(), patientName, locationName, staffAssignment, additionalNotes, Status.PROCESSING, flowerSize, flowerAmount, flowerType);
     }
 }

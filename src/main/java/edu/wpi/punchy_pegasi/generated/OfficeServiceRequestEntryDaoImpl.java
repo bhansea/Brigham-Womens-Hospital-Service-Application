@@ -33,8 +33,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
             rs.next();
             OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
@@ -58,8 +58,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
@@ -80,8 +80,8 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
                     (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.String)rs.getObject("locationName"),
-                    (java.lang.String)rs.getObject("staffAssignment"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
                     (java.lang.String)rs.getObject("additionalNotes"),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
                     (java.lang.String)rs.getObject("officeRequest"),
