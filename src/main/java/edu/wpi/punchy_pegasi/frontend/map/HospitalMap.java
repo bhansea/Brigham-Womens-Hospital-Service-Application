@@ -172,7 +172,7 @@ public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
 
         final boolean[] updated = {false, false};
         toolTip.boundsInParentProperty().addListener((v, o, n) -> {
-            if (!updated[0] && n.getHeight() > 40 && n.getWidth() > 0) {
+            if (!updated[0] && n.getHeight() > 20 && n.getWidth() > 0) {
                 updated[0] = true;
                 toolTip.setTranslateY(-(n.getHeight()));
                 toolTip.setTranslateX(-n.getWidth() / 2);

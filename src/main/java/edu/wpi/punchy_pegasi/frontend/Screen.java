@@ -14,13 +14,13 @@ import java.util.function.Function;
 @Slf4j
 public enum Screen {
     HOME("Home", "frontend/views/HomePage.fxml", Account.AccountType.STAFF),
-    SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.STAFF),
-    MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.STAFF),
+    SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.NONE),
+    MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.NONE),
     EDIT_MAP_PAGE("Edit Map", "frontend/views/EditMap.fxml", Account.AccountType.ADMIN),
     LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE),
     FLOWER_DELIVERY_REQUEST("Request Flower Delivery", "frontend/requests/FlowerDeliveryRequest.fxml", Account.AccountType.STAFF, FlowerDeliveryRequestController::create),
     ADMIN_PAGE("Admin Page", "frontend/requests/AdminPage.fxml", Account.AccountType.ADMIN),
-    OFFICE_SERVICE_REQUEST("Request office supplies", "frontend/requests/OfficeServiceRequest.fxml", Account.AccountType.STAFF, OfficeServiceRequestController::create),
+    OFFICE_SERVICE_REQUEST("Request Office Supplies", "frontend/requests/OfficeServiceRequest.fxml", Account.AccountType.STAFF, OfficeServiceRequestController::create),
     FOOD_SERVICE_REQUEST("Request Food Delivery", "frontend/requests/FoodServiceRequest.fxml", Account.AccountType.STAFF, FoodServiceRequestController::create),
     CONFERENCE_ROOM_SERVICE_REQUEST("Request Conference Room", "frontend/requests/ConferenceRoomRequest.fxml", Account.AccountType.STAFF, ConferenceRoomController::create),
     FURNITURE_DELIVERY_SERVICE_REQUEST("Request Furniture Delivery", "frontend/requests/FurnitureDeliveryRequest.fxml", Account.AccountType.STAFF, FurnitureRequestController::create);
@@ -31,7 +31,7 @@ public enum Screen {
     private final Account.AccountType shield;
     Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction) {
         this.path = path;
-        this.readable = readable.toUpperCase();
+        this.readable = readable;
         this.createFunction = createFunction;
         this.shield = shield;
     }

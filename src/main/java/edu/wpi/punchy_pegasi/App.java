@@ -115,6 +115,7 @@ public class App extends Application {
     }
 
     public void navigate(final Screen screen) {
+        if(screen == null) return;
         if(account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()){
             getViewPane().setCenter(screen.get());
             setCurrentScreen(screen);

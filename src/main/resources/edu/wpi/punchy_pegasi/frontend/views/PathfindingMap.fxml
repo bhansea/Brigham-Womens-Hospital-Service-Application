@@ -14,7 +14,7 @@
             <padding>
                 <Insets topRightBottomLeft="10"/>
             </padding>
-            <VBox alignment="CENTER" spacing="10" fx:id="pathfinding">
+            <VBox alignment="CENTER" spacing="10" fx:id="pathfinding" prefWidth="300">
                 <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
                 <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"
                                    HBox.hgrow="ALWAYS"/>
@@ -22,9 +22,10 @@
                     <padding>
                         <Insets topRightBottomLeft="5"/>
                     </padding>
-                    <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"/>
-                    <MFXButton text="Find path" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+                    <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect" fx:id="selectGraphically"/>
+                    <MFXButton text="Cancel" fx:id="selectGraphicallyCancel"/>
                 </HBox>
+                <MFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
                 <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
             </VBox>
         </VBox>

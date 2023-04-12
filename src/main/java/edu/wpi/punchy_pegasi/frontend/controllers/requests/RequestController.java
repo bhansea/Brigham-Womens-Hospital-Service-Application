@@ -138,8 +138,8 @@ public abstract class RequestController<T extends RequestEntry> {
     }
 
     protected void clearGeneric() {
-        locationName.clear();
-        staffAssignment.clear();
+        locationName.clearSelection();
+        staffAssignment.clearSelection();
         additionalNotes.clear();
     }
 

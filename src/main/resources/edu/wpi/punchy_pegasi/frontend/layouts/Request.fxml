@@ -53,93 +53,91 @@
         </BorderPane>
     </center>
     <right>
-        <VBox spacing="20.0" BorderPane.alignment="CENTER"
-              style="-fx-background-color: #004693; -fx-background-radius: 6;">
-            <children>
-                <VBox fx:id="inputContainer" prefWidth="338.0" spacing="16.0" VBox.vgrow="ALWAYS">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <children>
-                        <VBox spacing="6.0">
-                            <children>
-                                <Label alignment="TOP_LEFT" text="Location Name" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </Label>
-                                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED"
-                                                   floatingText="Location Name" prefHeight="51.0" prefWidth="298.0"
-                                                   promptText="Location Names">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </MFXFilterComboBox>
-                            </children>
-                        </VBox>
-                        <VBox spacing="6.0">
-                            <children>
-                                <Label text="Staff Assignment" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </Label>
-                                <MFXFilterComboBox fx:id="staffAssignment" floatMode="DISABLED"
-                                                   floatingText="Employee Name" prefHeight="51.0" prefWidth="298.0"
-                                                   promptText="Employee Name">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </MFXFilterComboBox>
-                            </children>
-                        </VBox>
-                        <VBox spacing="6.0">
-                            <children>
-                                <Label text="Additional Notes" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </Label>
-                                <TextField fx:id="additionalNotes" alignment="TOP_LEFT" prefHeight="370.0"
-                                           promptText="Additional Notes">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </VBox>
-
-                    </children>
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="30.0"/>
-                    </padding>
-                </VBox>
-                <VBox fx:id="requestInfoContainer"/>
-                <HBox spacing="20" alignment="CENTER">
-                    <children>
-                        <Button fx:id="clear" onMouseClicked="#clearEntry"
-                                style="-fx-background-color: white; -fx-background-radius: 6; -fx-text-fill: #111111;"
-                                text="Clear" textAlignment="CENTER" textFill="WHITE">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </Button>
-                        <Button fx:id="submit" onMouseClicked="#submitEntry"
-                                style="-fx-background-color: #F6BD38; -fx-background-radius: 6; -fx-text-fill: #111111;"
-                                text="Submit" textAlignment="CENTER" textFill="WHITE">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </Button>
-                    </children>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                    </padding>
-                </HBox>
-            </children>
+        <VBox>
+            <VBox spacing="20.0" BorderPane.alignment="CENTER"
+                  style="-fx-background-color: #004693; -fx-background-radius: 6;">
+                <children>
+                    <VBox fx:id="inputContainer" prefWidth="338.0" spacing="16.0" VBox.vgrow="ALWAYS">
+                        <opaqueInsets>
+                            <Insets/>
+                        </opaqueInsets>
+                        <children>
+                            <VBox spacing="6.0">
+                                <children>
+                                    <Label alignment="TOP_LEFT" text="Location Name" textFill="WHITE">
+                                        <font>
+                                            <Font size="24.0"/>
+                                        </font>
+                                    </Label>
+                                    <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED"
+                                                       floatingText="Location Name" prefHeight="51.0" prefWidth="298.0"
+                                                       promptText="Location Names">
+                                        <font>
+                                            <Font size="24.0"/>
+                                        </font>
+                                    </MFXFilterComboBox>
+                                </children>
+                            </VBox>
+                            <VBox spacing="6.0">
+                                <children>
+                                    <Label text="Staff Assignment" textFill="WHITE">
+                                        <font>
+                                            <Font size="24.0"/>
+                                        </font>
+                                    </Label>
+                                    <MFXFilterComboBox fx:id="staffAssignment" floatMode="DISABLED"
+                                                       floatingText="Employee Name" prefHeight="51.0" prefWidth="298.0"
+                                                       promptText="Employee Name">
+                                        <font>
+                                            <Font size="24.0"/>
+                                        </font>
+                                    </MFXFilterComboBox>
+                                </children>
+                            </VBox>
+                            <VBox spacing="6.0">
+                                <children>
+                                    <Label text="Additional Notes" textFill="WHITE">
+                                        <font>
+                                            <Font size="24.0"/>
+                                        </font>
+                                    </Label>
+                                    <TextField fx:id="additionalNotes" alignment="TOP_LEFT" prefHeight="370.0"
+                                               promptText="Additional Notes">
+                                        <font>
+                                            <Font size="24.0"/>
+                                        </font>
+                                    </TextField>
+                                </children>
+                            </VBox>
+                        </children>
+                        <padding>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="30.0"/>
+                        </padding>
+                    </VBox>
+                    <VBox fx:id="requestInfoContainer"/>
+                    <HBox spacing="20" alignment="CENTER">
+                        <children>
+                            <Button fx:id="clear" onMouseClicked="#clearEntry"
+                                    style="-fx-background-color: white; -fx-background-radius: 6; -fx-text-fill: #111111;"
+                                    text="Clear" textAlignment="CENTER" textFill="WHITE">
+                                <font>
+                                    <Font size="24.0"/>
+                                </font>
+                            </Button>
+                            <Button fx:id="submit" onMouseClicked="#submitEntry"
+                                    style="-fx-background-color: #F6BD38; -fx-background-radius: 6; -fx-text-fill: #111111;"
+                                    text="Submit" textAlignment="CENTER" textFill="WHITE">
+                                <font>
+                                    <Font size="24.0"/>
+                                </font>
+                            </Button>
+                        </children>
+                        <padding>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                        </padding>
+                    </HBox>
+                </children>
+            </VBox>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>

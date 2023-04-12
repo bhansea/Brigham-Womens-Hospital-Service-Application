@@ -1,10 +1,8 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.CartesianHeuristic;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Palgo;
-import edu.wpi.punchy_pegasi.frontend.DragController;
 import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
 import edu.wpi.punchy_pegasi.generated.MoveDaoImpl;
@@ -19,33 +17,31 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
-import net.kurobako.gesturefx.GesturePane;
 import org.javatuples.Pair;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class PathfindingMap {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
-        put("00", new HospitalFloor("frontend/assets/map/00_thegroundfloor.png", "Ground Layer", "00"));
         put("L1", new HospitalFloor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
         put("L2", new HospitalFloor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
+        put("00", new HospitalFloor("frontend/assets/map/00_thegroundfloor.png", "Ground Layer", "00"));
         put("1", new HospitalFloor("frontend/assets/map/01_thefirstfloor.png", "First Layer", "1"));
         put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
+    @FXML
+    private MFXButton selectGraphicallyCancel;
+    @FXML
+    private MFXButton selectGraphically;
     @FXML
     private BorderPane root;
     private IMap<HospitalFloor> map;
@@ -83,8 +79,12 @@ public class PathfindingMap {
 
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", null));
-        return map.drawNode(node, color, location.getShortName(), location.getLongName() + "\nNode ID: " + node.getNodeID().toString());
+        return map.drawNode(node, color, location.getShortName(), location.getLongName());
     }
+
+    private AtomicBoolean startSelected = new AtomicBoolean(false);
+    private AtomicBoolean endSelected = new AtomicBoolean(false);
+    private AtomicBoolean selectingGraphically = new AtomicBoolean(false);
 
     @FXML
     private void initialize() {
@@ -92,12 +92,35 @@ public class PathfindingMap {
         root.setCenter(map.getMapNode());
         load();
 
-        nodeStartCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
         nodeStartCombo.setItems(filteredNodes);
+        nodeStartCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
         nodeStartCombo.setConverter(nodeToLocation);
+        nodeStartCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if(newPropertyValue && !selectingGraphically.get()) {
+                startSelected.set(true);
+                endSelected.set(false);
+                Platform.runLater(()-> {
+                    selectGraphically.setText("Select Start Graphically");
+                    selectGraphically.setDisable(false);
+                });
+            }
+        });
         nodeEndCombo.setItems(filteredNodes);
         nodeEndCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
         nodeEndCombo.setConverter(nodeToLocation);
+        nodeEndCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if(newPropertyValue) {
+                startSelected.set(false);
+                endSelected.set(true);
+                Platform.runLater(()-> {
+                    selectGraphically.setText("Select End Graphically");
+                    selectGraphically.setDisable(false);
+                });
+            }
+        });
+        selectGraphically.setDisable(true);
+        selectGraphicallyCancel.setVisible(false);
+        selectGraphicallyCancel.setManaged(false);
     }
 
     private Optional<LocationName> nodeToLocation(Node node) {
@@ -106,29 +129,33 @@ public class PathfindingMap {
         if (move == null) return Optional.empty();
         return Optional.ofNullable(locationsByLongName.get(move));
     }
-
     @FXML
     private void graphicalSelect() {
-        nodeStartCombo.clearSelection();
-        nodeEndCombo.clearSelection();
+        if(selectingGraphically.compareAndExchange(false, true)) return;
         nodeStartCombo.setDisable(true);
         nodeEndCombo.setDisable(true);
         pathfindButton.setDisable(true);
+        selectGraphicallyCancel.setVisible(true);
+        selectGraphicallyCancel.setManaged(true);
+        selectGraphicallyCancel.setOnAction(e->{
+            selectGraphicallyCancel.setOnAction(null);
+            nodeStartCombo.setDisable(false);
+            nodeEndCombo.setDisable(false);
+            pathfindButton.setDisable(false);
+            selectGraphicallyCancel.setVisible(false);
+            selectGraphicallyCancel.setManaged(false);
+            selectingGraphically.set(false);
+        });
         filteredNodes.forEach(n -> {
             var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();
             point.setOnMouseClicked(e -> {
-                point.setStroke(Color.valueOf("#00FFFF"));
-                var startSet = nodeStartCombo.getSelectedItem() != null;
-                if (!startSet) nodeStartCombo.selectItem(n);
-                else {
+                if(startSelected.get())
+                    nodeStartCombo.selectItem(n);
+                else if(endSelected.get())
                     nodeEndCombo.selectItem(n);
-                    pathFindWithSelectedNodes();
-                    nodeStartCombo.setDisable(false);
-                    nodeEndCombo.setDisable(false);
-                    pathfindButton.setDisable(false);
-                }
+                selectGraphicallyCancel.fire();
             });
         });
     }

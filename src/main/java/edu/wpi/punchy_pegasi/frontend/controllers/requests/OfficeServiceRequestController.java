@@ -42,7 +42,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     TextField paperclipAmount;
     @FXML
     TextField otherItems;
-    ArrayList<CheckBox> items;
+    ArrayList<CheckBox> items = new ArrayList<>();
     ArrayList<TextField> itemsAmount;
 
     public static BorderPane create(String path) {
