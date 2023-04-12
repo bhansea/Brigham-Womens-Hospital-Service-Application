@@ -1,37 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
 <?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
+        <BorderPane style="-fx-background-color: #f1f1f1;">
+            <center>
+                <VBox spacing="30.0">
+                    <children>
+                        <VBox style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label text="Fields marked with an asterisk (*) are required">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="10.0"/>
+                                    </VBox.margin>
+                                </Label>
+                                <VBox VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS"
+                                              fx:id="componentHolder">
+
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets/>
+                    </BorderPane.margin>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    </padding>
+                </VBox>
+            </center>
+            <top>
+                <Label BorderPane.alignment="TOP_LEFT" fx:id="headerText">
+                    <font>
+                        <Font name="System Bold" size="28.0"/>
+                    </font>
+                    <BorderPane.margin>
+                        <Insets left="20.0"/>
+                    </BorderPane.margin>
+                </Label>
+            </top>
+        </BorderPane>
     </center>
     <right>
         <VBox spacing="20.0" BorderPane.alignment="CENTER">
             <children>
-                <VBox fx:id="inputContainer" prefWidth="338.0" spacing="16.0" style="-fx-background-color: #004693; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
+                <VBox fx:id="inputContainer" prefWidth="338.0" spacing="16.0"
+                      style="-fx-background-color: #004693; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
                     <children>
                         <VBox spacing="6.0">
                             <children>
                                 <Label alignment="TOP_LEFT" text="Location Name" textFill="WHITE">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </Label>
-                                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" floatingText="Location Name" prefHeight="51.0" prefWidth="298.0" promptText="Location Names">
+                                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED"
+                                                   floatingText="Location Name" prefHeight="51.0" prefWidth="298.0"
+                                                   promptText="Location Names">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </MFXFilterComboBox>
                             </children>
@@ -40,67 +78,71 @@
                             <children>
                                 <Label text="Staff Assignment" textFill="WHITE">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </Label>
-                                <TextField fx:id="staffAssignment" alignment="TOP_LEFT" onKeyReleased="#validateEntry" promptText="Enter Staff Member">
+                                <TextField fx:id="staffAssignment" alignment="TOP_LEFT" onKeyReleased="#validateEntry"
+                                           promptText="Enter Staff Member">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </TextField>
                             </children>
                         </VBox>
-                        <VBox spacing="6.0">
+                        <VBox spacing="6.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label text="Additional Notes" textFill="WHITE">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </Label>
-                                <TextField fx:id="additionalNotes" alignment="TOP_LEFT" prefHeight="370.0" promptText="Additional Notes">
+                                <TextField fx:id="additionalNotes" alignment="TOP_LEFT" prefHeight="370.0"
+                                           promptText="Additional Notes">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </TextField>
                             </children>
                         </VBox>
-                        <HBox prefHeight="82.0" prefWidth="298.0" VBox.vgrow="NEVER">
-                            <children>
-                                <Button fx:id="clear" onMouseClicked="#clearEntry" prefHeight="51.0" prefWidth="90.0" style="-fx-background-color: white; -fx-background-radius: 6; -fx-text-fill: #111111;" text="Clear" textAlignment="CENTER" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                    <HBox.margin>
-                                        <Insets right="100.0" />
-                                    </HBox.margin>
-                                </Button>
-                                <Button fx:id="submit" onMouseClicked="#submitEntry" style="-fx-background-color: #F6BD38; -fx-background-radius: 6; -fx-text-fill: #111111;" text="Submit" textAlignment="CENTER" textFill="WHITE">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                    <HBox.margin>
-                                        <Insets />
-                                    </HBox.margin>
-                                </Button>
-                            </children>
-                            <opaqueInsets>
-                                <Insets right="5.0" />
-                            </opaqueInsets>
-                            <VBox.margin>
-                                <Insets top="20.0" />
-                            </VBox.margin>
-                        </HBox>
                     </children>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="30.0"/>
                     </padding>
+                    <VBox fx:id="requestInfoContainer" style="-fx-background-color: #004693; -fx-background-radius: 6;" visible="false" managed="false"/>
+                    <HBox prefHeight="82.0" prefWidth="298.0" VBox.vgrow="NEVER">
+                        <children>
+                            <Button fx:id="clear" onMouseClicked="#clearEntry" prefHeight="51.0" prefWidth="90.0"
+                                    style="-fx-background-color: white; -fx-background-radius: 6; -fx-text-fill: #111111;"
+                                    text="Clear" textAlignment="CENTER" textFill="WHITE">
+                                <font>
+                                    <Font size="24.0"/>
+                                </font>
+                                <HBox.margin>
+                                    <Insets right="100.0"/>
+                                </HBox.margin>
+                            </Button>
+                            <Button fx:id="submit" onMouseClicked="#submitEntry"
+                                    style="-fx-background-color: #F6BD38; -fx-background-radius: 6; -fx-text-fill: #111111;"
+                                    text="Submit" textAlignment="CENTER" textFill="WHITE">
+                                <font>
+                                    <Font size="24.0"/>
+                                </font>
+                                <HBox.margin>
+                                    <Insets/>
+                                </HBox.margin>
+                            </Button>
+                        </children>
+                        <opaqueInsets>
+                            <Insets right="5.0"/>
+                        </opaqueInsets>
+                        <VBox.margin>
+                            <Insets top="20.0"/>
+                        </VBox.margin>
+                    </HBox>
                 </VBox>
             </children>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
         </VBox>
     </right>

@@ -24,6 +24,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @Override
     public void init() {
         validateEntry();
+        setHeaderText("Office Supplies Request");
     }
 
     @FXML

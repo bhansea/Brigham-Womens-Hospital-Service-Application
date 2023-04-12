@@ -37,9 +37,11 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void init() {
         ObservableList<String> flowerTypesList = FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
         flowerTypeComboBox.setItems(flowerTypesList);
-        addTotal(price);
+        addLabel(price);
         addTextField(patientName);
         submit.setDisable(true);
+        setHeaderText("Flower Delivery Request");
+
     }
 
     @FXML
