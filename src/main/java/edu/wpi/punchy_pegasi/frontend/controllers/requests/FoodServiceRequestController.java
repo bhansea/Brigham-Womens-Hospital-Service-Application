@@ -41,9 +41,11 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
         addTextField(patientName);
-        addTotal(price);
+        addLabel(price);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
+        setHeaderText("Food Service Request");
+
     }
 
     @FXML

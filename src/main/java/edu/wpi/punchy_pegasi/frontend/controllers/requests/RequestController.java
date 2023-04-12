@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
+import com.sun.glass.ui.Screen;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Employee;
@@ -47,19 +48,26 @@ public abstract class RequestController<T extends RequestEntry> {
     protected Button submit;
     @FXML
     protected VBox inputContainer;
+    @FXML private HBox componentHolder;
     @FXML
-    protected VBox totalContainer;
+    protected VBox requestInfoContainer;
 
+    @FXML
+    protected Label headerText;
     public static BorderPane create(RequestController controller, String path) {
         try {
             Parent l = App.getSingleton().loadWithCache(path, controller);
             BorderPane g = App.getSingleton().loadWithCache("frontend/layouts/Request.fxml", controller);
-            g.setCenter(l);
+            controller.componentHolder.getChildren().add(l);
             return g;
         } catch (IOException e) {
             log.error("create error", e);
             return null;
         }
+    }
+
+    protected void setHeaderText(String headerText) {
+        this.headerText.setText(headerText);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -159,18 +167,20 @@ public abstract class RequestController<T extends RequestEntry> {
     }
 
     @FXML
-    protected void addTotal(Label price){
+    protected void addLabel(Label label){
         HBox hbox = new HBox();
         Label total = new Label("Total:");
-        totalContainer.getChildren().add(0,hbox);
+        requestInfoContainer.getChildren().add(0,hbox);
         hbox.getChildren().add(0, total);
-        hbox.getChildren().add(1,price);
+        hbox.getChildren().add(1,label);
         hbox.setAlignment(Pos.CENTER);
         hbox.setPadding(new Insets(10,0,0,0));
-        price.setFont(new Font(DEFAULT_FULLNAME, 24));
+        label.setFont(new Font(DEFAULT_FULLNAME, 24));
         total.setFont(new Font(DEFAULT_FULLNAME, 24));
         total.setTextFill(Color.color(1,1,1));
-        price.setTextFill(Color.color(1,1,1));
+        label.setTextFill(Color.color(1,1,1));
         hbox.setSpacing(150);
+        requestInfoContainer.setManaged(true);
+        requestInfoContainer.setVisible(true);
     }
 }
