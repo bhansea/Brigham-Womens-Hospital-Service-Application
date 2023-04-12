@@ -4,31 +4,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css"
+            xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER"
               HBox.hgrow="NEVER">
-            <children>
-                <VBox alignment="CENTER" spacing="10.0">
-                    <children>
-                        <Label text="WHAT CAN WE HELP YOU WITH?">
-                            <font>
-                                <Font name="System Bold" size="24.0"/>
-                            </font>
-                            <padding>
-                                <Insets topRightBottomLeft="10"/>
-                            </padding>
-                        </Label>
-                        <VBox alignment="CENTER" spacing="10.0"
-                              style="-fx-background-color: #D9D9D9; -fx-background-radius: 6;"
-                              fx:id="otherPages">
-                            <padding>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                            </padding>
-                        </VBox>
-                    </children>
-                </VBox>
-            </children>
+            <VBox alignment="CENTER" spacing="10.0">
+                <Label text="WHAT CAN WE HELP YOU WITH?">
+                    <font>
+                        <Font name="System Bold" size="24.0"/>
+                    </font>
+                    <padding>
+                        <Insets topRightBottomLeft="10"/>
+                    </padding>
+                </Label>
+                <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
+            </VBox>
         </HBox>
     </center>
 </BorderPane>
