@@ -18,14 +18,9 @@ import java.net.URL;
 
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
     @FXML
-    MFXComboBox<String> flowerTypeComboBox;
+    MFXComboBox<String> flowerTypeComboBox, flowerSize;
     @FXML
     TextField flowerAmountField;
-    @FXML
-    ToggleGroup flowerSizeGroup;
-    @FXML
-    Label flowerName;
-
     TextField patientName = new TextField();
     Label price = new Label("$0.00");
 
@@ -37,6 +32,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void init() {
         ObservableList<String> flowerTypesList = FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
         flowerTypeComboBox.setItems(flowerTypesList);
+        ObservableList<String> flowerSizeList = FXCollections.observableArrayList("Small", "Medium", "Large");
+        flowerSize.setItems(flowerSizeList);
         addLabel(price);
         addTextField(patientName);
         submit.setDisable(true);
@@ -47,14 +44,14 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     public void submitEntry() {
         requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getItems().get(0).getUuid(),
-                staffAssignment.getItems().get(0).getEmployeeID(),additionalNotes.getText(), ((RadioButton) flowerSizeGroup.getSelectedToggle()).getId(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
+                staffAssignment.getItems().get(0).getEmployeeID(),additionalNotes.getText(), flowerSize.getSelectedItem(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem());
         App.getSingleton().getFacade().saveFlowerDeliveryRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
 
     @FXML
     public void validateEntry() {
-        boolean validate = validateGeneric() || flowerAmountField.getText().isBlank() || flowerSizeGroup.getSelectedToggle() == null || flowerTypeComboBox.getSelectedItem() == null;
+        boolean validate = validateGeneric() || patientName.getText().isBlank() || flowerAmountField.getText().isBlank() || flowerSize.getSelectedItem() == null || flowerTypeComboBox.getSelectedItem() == null;
         submit.setDisable(validate);
     }
 
@@ -62,13 +59,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void clearEntry() {
         clearGeneric();
         flowerAmountField.clear();
-        flowerTypeComboBox.clear();
-        flowerSizeGroup.selectToggle(null);
-    }
-
-    @FXML
-    public void updateLabelEntry() {
-        validateEntry();
-        flowerName.setText(flowerTypeComboBox.getSelectedItem());
+        flowerTypeComboBox.clearSelection();
+        patientName.clear();
+        flowerSize.clearSelection();
     }
 }
