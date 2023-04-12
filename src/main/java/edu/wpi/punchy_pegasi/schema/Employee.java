@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -10,7 +11,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class Employee {
-        private Long employeeID;
+    
+    private Long employeeID;
     private String firstName;
     private String lastName;
     @lombok.RequiredArgsConstructor

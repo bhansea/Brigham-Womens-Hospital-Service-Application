@@ -6,15 +6,11 @@ import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Palgo;
 import edu.wpi.punchy_pegasi.frontend.DragController;
 import edu.wpi.punchy_pegasi.frontend.animations.Bobbing;
-import edu.wpi.punchy_pegasi.frontend.authentication.AccountType;
 import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
 import edu.wpi.punchy_pegasi.generated.MoveDaoImpl;
 import edu.wpi.punchy_pegasi.generated.NodeDaoImpl;
-import edu.wpi.punchy_pegasi.schema.Edge;
-import edu.wpi.punchy_pegasi.schema.LocationName;
-import edu.wpi.punchy_pegasi.schema.Move;
-import edu.wpi.punchy_pegasi.schema.Node;
+import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
@@ -186,7 +182,7 @@ public class MapPageController {
 
     @FXML
     private void editNodes() {
-        if (App.getSingleton().getAccountType() != AccountType.ADMIN) return;
+        if (App.getSingleton().getAccount() == null || App.getSingleton().getAccount().getAccountType() != Account.AccountType.ADMIN) return;
         setEditingNodes(true);
         clearCanvas();
         var nodePoints = nodes.values().stream().map(n -> {
