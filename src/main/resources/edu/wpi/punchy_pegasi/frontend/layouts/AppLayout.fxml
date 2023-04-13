@@ -6,13 +6,17 @@
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LayoutController"
             style="-fx-background-color: #F1F1F1;">
-    <top>
-        <fx:include source="../components/Header.fxml"/>
-    </top>
     <center>
-        <ScrollPane fitToHeight="true" fitToWidth="true">
-            <BorderPane fx:id="ViewPane"/>
-        </ScrollPane>
+        <BorderPane>
+<!--            <top>-->
+<!--                <fx:include source="../components/Header.fxml"/>-->
+<!--            </top>-->
+            <center>
+                <ScrollPane fitToHeight="true" fitToWidth="true">
+                    <BorderPane fx:id="ViewPane"/>
+                </ScrollPane>
+            </center>
+        </BorderPane>
     </center>
     <left>
         <fx:include source="../components/Sidebar.fxml"/>

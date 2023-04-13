@@ -62,7 +62,7 @@ public enum TableType {
                   uuid bigint DEFAULT nextval('locationnames_id_seq') PRIMARY KEY,
                   longName varchar,
                   shortName varchar,
-                  nodeType varchar
+                  nodeType varchar NOT NULL
                 );
                 ALTER SEQUENCE locationnames_id_seq OWNED BY teamp.locationnames.uuid;
               END IF;
@@ -75,7 +75,7 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar
+              status varchar NOT NULL
             );
             """),
     FOODREQUESTS(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.class, """
@@ -85,7 +85,7 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar,
+              status varchar NOT NULL,
               foodSelection varchar,
               tempType varchar,
               additionalItems varchar ARRAY,
@@ -101,7 +101,7 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar,
+              status varchar NOT NULL,
               flowerSize varchar,
               flowerType varchar,
               flowerAmount varchar,
@@ -115,10 +115,10 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar,
+              status varchar NOT NULL,
               beginningTime varchar,
               endTime varchar,
-              date date
+              date date NOT NULL
             );
             """),
     FURNITUREREQUESTS(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.class, """
@@ -128,7 +128,7 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar,
+              status varchar NOT NULL,
               selectFurniture varchar ARRAY
             );
             """),
@@ -139,7 +139,7 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar,
+              status varchar NOT NULL,
               officeRequest varchar,
               employeeName varchar
             );
@@ -169,7 +169,7 @@ public enum TableType {
                   username varchar PRIMARY KEY,
                   password varchar,
                   employeeID bigint,
-                  accountType varchar
+                  accountType varchar NOT NULL
                 );
                 ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.username;
               END IF;

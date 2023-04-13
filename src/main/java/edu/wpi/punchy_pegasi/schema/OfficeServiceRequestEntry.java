@@ -18,19 +18,6 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     public OfficeServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String officeRequest, String employeeName) {
         this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, officeRequest, employeeName);
     }
-
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case SERVICE_ID -> getServiceID();
-            case LOCATION_NAME -> getLocationName();
-            case STAFF_ASSIGNMENT -> getStaffAssignment();
-            case ADDITIONAL_NOTES -> getAdditionalNotes();
-            case STATUS -> getStatus();
-            case OFFICE_REQUEST -> getOfficeRequest();
-            case EMPLOYEE_NAME -> getEmployeeName();
-        };
-    }
-
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
@@ -46,6 +33,18 @@ public class OfficeServiceRequestEntry extends RequestEntry {
         public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID();
+            case LOCATION_NAME -> getLocationName();
+            case STAFF_ASSIGNMENT -> getStaffAssignment();
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus();
+            case OFFICE_REQUEST -> getOfficeRequest();
+            case EMPLOYEE_NAME -> getEmployeeName();
+        };
     }
 
 }

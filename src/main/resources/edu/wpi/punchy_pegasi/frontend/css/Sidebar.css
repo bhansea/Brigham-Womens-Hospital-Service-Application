@@ -2,9 +2,11 @@
     -fx-background-color: white;
     -height: 20;
     -fx-min-height: -height;
+    -fx-pref-height: -height;
     -fx-max-height: -height;
     -width: 20;
     -fx-min-width: -width;
+    -fx-pref-width: -width;
     -fx-max-width: -width;
     -fx-scale-x: 1;
     -fx-scale-y: 1;
@@ -20,6 +22,8 @@
 
 .button {
     -fx-background-color: #00458E;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
 }
 
 .sideBar {

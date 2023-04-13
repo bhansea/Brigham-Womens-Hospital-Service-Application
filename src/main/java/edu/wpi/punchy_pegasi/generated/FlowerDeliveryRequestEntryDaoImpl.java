@@ -32,15 +32,15 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS, "serviceID", key)) {
             rs.next();
             FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                    (java.util.UUID) rs.getObject("serviceID"),
-                    (java.lang.String) rs.getObject("patientName"),
-                    (java.lang.Long) rs.getObject("locationName"),
-                    (java.lang.Long) rs.getObject("staffAssignment"),
-                    (java.lang.String) rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                    (java.lang.String) rs.getObject("flowerSize"),
-                    (java.lang.String) rs.getObject("flowerAmount"),
-                    (java.lang.String) rs.getObject("flowerType"));
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("patientName"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("flowerSize"),
+                    (java.lang.String)rs.getObject("flowerAmount"),
+                    (java.lang.String)rs.getObject("flowerType"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -59,15 +59,15 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS, Arrays.stream(params).map(FlowerDeliveryRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                        (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.String) rs.getObject("patientName"),
-                        (java.lang.Long) rs.getObject("locationName"),
-                        (java.lang.Long) rs.getObject("staffAssignment"),
-                        (java.lang.String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("flowerSize"),
-                        (java.lang.String) rs.getObject("flowerAmount"),
-                        (java.lang.String) rs.getObject("flowerType"));
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("patientName"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("flowerSize"),
+                    (java.lang.String)rs.getObject("flowerAmount"),
+                    (java.lang.String)rs.getObject("flowerType"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -83,15 +83,15 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                        (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.String) rs.getObject("patientName"),
-                        (java.lang.Long) rs.getObject("locationName"),
-                        (java.lang.Long) rs.getObject("staffAssignment"),
-                        (java.lang.String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("flowerSize"),
-                        (java.lang.String) rs.getObject("flowerAmount"),
-                        (java.lang.String) rs.getObject("flowerType"));
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.String)rs.getObject("patientName"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("flowerSize"),
+                    (java.lang.String)rs.getObject("flowerAmount"),
+                    (java.lang.String)rs.getObject("flowerType"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

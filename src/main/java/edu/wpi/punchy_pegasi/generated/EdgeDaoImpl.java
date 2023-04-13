@@ -32,9 +32,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         try (var rs = dbController.searchQuery(TableType.EDGES, "uuid", key)) {
             rs.next();
             Edge req = new Edge(
-                    (java.lang.Long) rs.getObject("uuid"),
-                    (java.lang.Long) rs.getObject("startNode"),
-                    (java.lang.Long) rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -53,9 +53,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         try (var rs = dbController.searchQuery(TableType.EDGES, Arrays.stream(params).map(Edge.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                        (java.lang.Long) rs.getObject("uuid"),
-                        (java.lang.Long) rs.getObject("startNode"),
-                        (java.lang.Long) rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -71,9 +71,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         try (var rs = dbController.searchQuery(TableType.EDGES)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                        (java.lang.Long) rs.getObject("uuid"),
-                        (java.lang.Long) rs.getObject("startNode"),
-                        (java.lang.Long) rs.getObject("endNode"));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.Long)rs.getObject("startNode"),
+                    (java.lang.Long)rs.getObject("endNode"));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

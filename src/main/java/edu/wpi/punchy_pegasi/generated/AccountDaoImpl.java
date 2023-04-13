@@ -32,10 +32,10 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS, "username", key)) {
             rs.next();
             Account req = new Account(
-                    (java.lang.String) rs.getObject("username"),
-                    (java.lang.String) rs.getObject("password"),
-                    (java.lang.Long) rs.getObject("employeeID"),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String) rs.getObject("accountType")));
+                    (java.lang.String)rs.getObject("username"),
+                    (java.lang.String)rs.getObject("password"),
+                    (java.lang.Long)rs.getObject("employeeID"),
+                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String)rs.getObject("accountType")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -54,10 +54,10 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS, Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Account req = new Account(
-                        (java.lang.String) rs.getObject("username"),
-                        (java.lang.String) rs.getObject("password"),
-                        (java.lang.Long) rs.getObject("employeeID"),
-                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String) rs.getObject("accountType")));
+                    (java.lang.String)rs.getObject("username"),
+                    (java.lang.String)rs.getObject("password"),
+                    (java.lang.Long)rs.getObject("employeeID"),
+                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String)rs.getObject("accountType")));
                 if (req != null)
                     map.put(req.getUsername(), req);
             }
@@ -73,10 +73,10 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                        (java.lang.String) rs.getObject("username"),
-                        (java.lang.String) rs.getObject("password"),
-                        (java.lang.Long) rs.getObject("employeeID"),
-                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String) rs.getObject("accountType")));
+                    (java.lang.String)rs.getObject("username"),
+                    (java.lang.String)rs.getObject("password"),
+                    (java.lang.Long)rs.getObject("employeeID"),
+                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String)rs.getObject("accountType")));
                 if (req != null)
                     map.put(req.getUsername(), req);
             }

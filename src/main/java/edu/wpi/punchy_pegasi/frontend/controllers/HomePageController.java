@@ -47,7 +47,7 @@ public class HomePageController {
         requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
         requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
         requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
-
+        requestEntries.addAll(facade.getAllFoodServiceRequestEntry().values());
 
         ObservableList<GenericRequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream()
                 .filter(e -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel() || Objects.equals(e.getStaffAssignment(), employeeID))
