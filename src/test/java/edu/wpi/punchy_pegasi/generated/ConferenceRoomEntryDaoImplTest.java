@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,7 +42,9 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void get() {
-        ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), "testLocation", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
+        var locName = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         Object[] values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
         try {
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
@@ -60,8 +63,12 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var room = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
-        var room2 = new ConferenceRoomEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
+        var locName0 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff0 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var locName1 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff1 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var room = new ConferenceRoomEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
+        var room2 = new ConferenceRoomEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         var values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
         var values2 = new Object[]{room2.getServiceID(), room2.getLocationName(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
         try {
@@ -76,8 +83,8 @@ class ConferenceRoomEntryDaoImplTest {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.String) rs.getObject("roomNumber"),
-                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.Long) rs.getObject("roomNumber"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
                         (java.lang.String) rs.getObject("beginningTime"),
@@ -101,10 +108,16 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var locName0 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff0 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var locName1 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff1 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var locName2 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff2 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
         var values0 = new Object[]{
                 UUID.randomUUID(),
-                "testRoomNum0",
-                "testStaff0",
+                locName0,
+                staff0,
                 "testNotes0",
                 RequestEntry.Status.PROCESSING,
                 "beginTime0",
@@ -113,8 +126,8 @@ class ConferenceRoomEntryDaoImplTest {
         };
         var values1 = new Object[]{
                 UUID.randomUUID(),
-                "testRoomNum1",
-                "testStaff1",
+                locName1,
+                staff1,
                 "testNotes1",
                 RequestEntry.Status.PROCESSING,
                 "beginTime1",
@@ -123,8 +136,8 @@ class ConferenceRoomEntryDaoImplTest {
         };
         var values2 = new Object[]{
                 UUID.randomUUID(),
-                "testRoomNum2",
-                "testStaff2",
+                locName2,
+                staff2,
                 "testNotes2",
                 RequestEntry.Status.PROCESSING,
                 "beginTime2",
@@ -142,8 +155,8 @@ class ConferenceRoomEntryDaoImplTest {
                 assert false : e.getMessage();
             }
             var uuid = (UUID) values[0];
-            var locName = (String) values[1];
-            var staff = (String) values[2];
+            var locName = (java.lang.Long) values[1];
+            var staff = (java.lang.Long) values[2];
             var notes = (String) values[3];
             var status = (RequestEntry.Status) values[4];
             var beginTime = (String) values[5];
@@ -168,7 +181,10 @@ class ConferenceRoomEntryDaoImplTest {
     void save() {
         var dao = new ConferenceRoomEntryDaoImpl(pdbController);
         UUID uuid = UUID.randomUUID();
-        ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        var locName = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var date = LocalDate.now();
+        ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", date);
         dao.save(conference);
         Optional<ConferenceRoomEntry> results = dao.get(uuid);
         ConferenceRoomEntry daoresult = results.get();
@@ -183,11 +199,16 @@ class ConferenceRoomEntryDaoImplTest {
     @Test
     void update() {
         UUID uuid = UUID.randomUUID();
-        ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
+        var locName = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var date = LocalDate.now();
+        ConferenceRoomEntry conference = new ConferenceRoomEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", date);
         dao.save(conference);
 
-        ConferenceRoomEntry updatedConference = new ConferenceRoomEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd");
-        ConferenceRoomEntry.Field[] fields = {ConferenceRoomEntry.Field.ROOM_NUMBER};
+        var updatedLocName = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var updatedStaff = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        ConferenceRoomEntry updatedConference = new ConferenceRoomEntry(uuid, updatedLocName, updatedStaff, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", date);
+        ConferenceRoomEntry.Field[] fields = {ConferenceRoomEntry.Field.LOCATION_NAME, ConferenceRoomEntry.Field.STAFF_ASSIGNMENT};
         dao.update(updatedConference, fields);
 
         Optional<ConferenceRoomEntry> results = dao.get(uuid);
@@ -202,15 +223,19 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void delete() {
+        var locName = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var staff = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var date = LocalDate.now();
         ConferenceRoomEntry conferenceRoom =
                 new ConferenceRoomEntry(
                         UUID.randomUUID(),
-                        "testRoomNum",
-                        "testStaff",
+                        locName,
+                        staff,
                         "testNotes",
                         RequestEntry.Status.PROCESSING,
                         "beginTime",
-                        "endTime");
+                        "endTime",
+                        date);
 
         var values = new Object[]{
                 conferenceRoom.getServiceID(),

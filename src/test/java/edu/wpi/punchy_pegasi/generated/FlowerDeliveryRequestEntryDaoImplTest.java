@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,7 +40,9 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void get() {
-        FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
@@ -58,8 +61,12 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
-        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType()};
         var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType()};
         try {
@@ -75,8 +82,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
                         (java.lang.String) rs.getObject("patientName"),
-                        (java.lang.String) rs.getObject("roomNumber"),
-                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.Long) rs.getObject("roomNumber"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
                         (java.lang.String) rs.getObject("flowerSize"),
@@ -100,11 +107,17 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var locName2 = ThreadLocalRandom.current().nextLong();
+        var staff2 = ThreadLocalRandom.current().nextLong();
         var values0 = new Object[]{
                 UUID.randomUUID(),
                 "testPatient0",
-                "testRoomNum0",
-                "testStaff0",
+                locName0,
+                staff0,
                 "testNotes0",
                 RequestEntry.Status.PROCESSING,
                 "testSmall0",
@@ -114,8 +127,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         var values1 = new Object[]{
                 UUID.randomUUID(),
                 "testPatient1",
-                "testRoomNum1",
-                "testStaff1",
+                locName1,
+                staff1,
                 "testNotes1",
                 RequestEntry.Status.PROCESSING,
                 "testSmall1",
@@ -125,8 +138,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
         var values2 = new Object[]{
                 UUID.randomUUID(),
                 "testPatient2",
-                "testRoomNum2",
-                "testStaff2",
+                locName2,
+                staff2,
                 "testNotes2",
                 RequestEntry.Status.PROCESSING,
                 "testSmall2",
@@ -145,8 +158,8 @@ class FlowerDeliveryRequestEntryDaoImplTest {
             }
             var uuid = (UUID) values[0];
             var patientName = (String) values[1];
-            var roomNumber = (String) values[2];
-            var staffAssignment = (String) values[3];
+            var roomNumber = (Long) values[2];
+            var staffAssignment = (Long) values[3];
             var additionalNotes = (String) values[4];
             var status = (RequestEntry.Status) values[5];
             var flowerSize = (String) values[6];
@@ -168,8 +181,10 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void save() {
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
         UUID uuid = UUID.randomUUID();
-        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         dao.save(fdre);
         Optional<FlowerDeliveryRequestEntry> results = dao.get(uuid);
         FlowerDeliveryRequestEntry daoresult = results.get();
@@ -183,11 +198,15 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void update() {
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        var updatedLocName = ThreadLocalRandom.current().nextLong();
+        var updatedStaff = ThreadLocalRandom.current().nextLong();
         UUID uuid = UUID.randomUUID();
-        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         dao.save(fdre);
 
-        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", "testRoomNum", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test2", "testTulip");
+        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", updatedLocName, updatedStaff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test2", "testTulip");
         FlowerDeliveryRequestEntry.Field[] fields = {FlowerDeliveryRequestEntry.Field.FLOWER_AMOUNT};
         dao.update(updatedFdre, fields);
 
@@ -203,12 +222,14 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void delete() {
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
         FlowerDeliveryRequestEntry flowerEntry =
                 new FlowerDeliveryRequestEntry(
                         UUID.randomUUID(),
                         "testPatient",
-                        "testRoomNum",
-                        "testStaff",
+                        locName,
+                        staff,
                         "testNotes",
                         RequestEntry.Status.PROCESSING,
                         "testSmall",

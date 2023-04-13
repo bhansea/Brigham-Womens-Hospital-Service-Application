@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,9 +32,11 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void get() {
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
         List<String> additionalItems = new ArrayList<>();
         additionalItems.add("testItems");
-        FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
         Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
@@ -54,8 +57,12 @@ class FoodServiceRequestEntryDaoImplTest {
     void testGet() {
         List<String> additionalItems = new ArrayList<>();
         additionalItems.add("testItems");
-        var food = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
-        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var food = new FoodServiceRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
+        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
         var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
         var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getDietaryRestrictions(), food2.getPatientName()};
         try {
@@ -70,13 +77,14 @@ class FoodServiceRequestEntryDaoImplTest {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.String) rs.getObject("roomNumber"),
-                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.Long) rs.getObject("roomNumber"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
                         (java.lang.String) rs.getObject("foodSelection"),
                         (java.lang.String) rs.getObject("tempType"),
-                        Collections.singletonList(rs.getArray("additionalItems").getArray()),
+                        Collections.singletonList((String)rs.getArray("additionalItems").getArray()),
+                        (java.lang.String) rs.getObject("beverage"),
                         (java.lang.String) rs.getObject("dietaryRestrictions"),
                         (java.lang.String) rs.getObject("patientName"));
                 if (req != null)
@@ -97,11 +105,18 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var values0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
-        var values1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
-        var values2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", new String[]{"testItems"}, "testRestrictions", "testPatient"};
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var locName2 = ThreadLocalRandom.current().nextLong();
+        var staff2 = ThreadLocalRandom.current().nextLong();
+        var values0 = new Object[]{UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", "testItems", "juice", "testRestrictions", "testPatient"};
+        var values1 = new Object[]{UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", "testItems", "juice", "testRestrictions", "testPatient"};
+        var values2 = new Object[]{UUID.randomUUID(), locName2, staff2, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", "testItems", "juice", "testRestrictions", "testPatient"};
         var valuesSet = new Object[][]{values0, values1, values2};
         var refMap = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
+
         for (var values : valuesSet) {
             try {
                 pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
@@ -110,15 +125,16 @@ class FoodServiceRequestEntryDaoImplTest {
             }
             FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                     (java.util.UUID) values[0],
-                    (java.lang.String) values[1],
-                    (java.lang.String) values[2],
+                    (java.lang.Long) values[1],
+                    (java.lang.Long) values[2],
                     (java.lang.String) values[3],
                     (RequestEntry.Status) values[4],
                     (java.lang.String) values[5],
                     (java.lang.String) values[6],
-                    Collections.singletonList(values[7]),
+                    Collections.singletonList((String)values[7]),
                     (java.lang.String) values[8],
-                    (java.lang.String) values[9]);
+                    (java.lang.String) values[9],
+                    (java.lang.String) values[10]);
             refMap.put(req.getServiceID(), req);
         }
 
@@ -140,10 +156,14 @@ class FoodServiceRequestEntryDaoImplTest {
         UUID uuid = UUID.randomUUID();
         List<String> additionalItems = new ArrayList<>();
         additionalItems.add("testItems");
-        FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
         dao.save(fsre);
 
-        FoodServiceRequestEntry updatedFsre = new FoodServiceRequestEntry(uuid, "testRoom", "updatedTestStaff", "testNotes", RequestEntry.Status.DONE, "testFood", "testTemp", additionalItems, "testRestrictions", "testPatient");
+        var updatedLocName = ThreadLocalRandom.current().nextLong();
+        var updatedStaff = ThreadLocalRandom.current().nextLong();
+        FoodServiceRequestEntry updatedFsre = new FoodServiceRequestEntry(uuid, updatedLocName, updatedStaff, "testNotes", RequestEntry.Status.DONE, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
         FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, FoodServiceRequestEntry.Field.STATUS};
         dao.update(updatedFsre, fields);
 
@@ -161,8 +181,8 @@ class FoodServiceRequestEntryDaoImplTest {
     void update() {
         var values0 = new Object[]{
                 UUID.randomUUID(),
-                "123",
-                "testStaff0",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "testNode0",
                 RequestEntry.Status.PROCESSING,
                 "testFood0",
@@ -173,8 +193,8 @@ class FoodServiceRequestEntryDaoImplTest {
         };
         var values1 = new Object[]{
                 UUID.randomUUID(),
-                "123",
-                "testStaff1",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "testNode1",
                 RequestEntry.Status.PROCESSING,
                 "testFood1",
@@ -185,8 +205,8 @@ class FoodServiceRequestEntryDaoImplTest {
         };
         var values2 = new Object[]{
                 UUID.randomUUID(),
-                "123",
-                "testStaff2",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "testNode2",
                 RequestEntry.Status.PROCESSING,
                 "testFood2",
@@ -206,15 +226,16 @@ class FoodServiceRequestEntryDaoImplTest {
             }
             FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(
                     (UUID) values[0],
-                    (String) values[1],
-                    (String) values[2],
+                    (Long) values[1],
+                    (Long) values[2],
                     (String) values[3],
                     (RequestEntry.Status) values[4],
                     (String) values[5],
                     (String) values[6],
                     (List<String>) values[7],
                     (String) values[8],
-                    (String) values[9]
+                    (String) values[9],
+                    (String) values[10]
             );
             refMap.put(fsre.getServiceID(), fsre);
         }
@@ -235,13 +256,14 @@ class FoodServiceRequestEntryDaoImplTest {
     void delete() {
         FoodServiceRequestEntry foodRequest = new FoodServiceRequestEntry(
                 UUID.randomUUID(),
-                "123",
-                "testStaff",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "testNode",
                 RequestEntry.Status.PROCESSING,
                 "testFood",
                 "100",
                 List.of("item1", "item2"),
+                "juice",
                 "restrictions",
                 "patientName"
         );

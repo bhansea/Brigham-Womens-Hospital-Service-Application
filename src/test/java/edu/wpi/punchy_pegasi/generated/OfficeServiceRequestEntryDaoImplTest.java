@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,7 +35,7 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void get() {
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeName()};
         try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
@@ -53,8 +54,10 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
-        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeRequest(), office0.getEmployeeName()};
         Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeRequest(), office1.getEmployeeName()};
         try {
@@ -63,14 +66,14 @@ class OfficeServiceRequestEntryDaoImplTest {
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        var results = dao.get(OfficeServiceRequestEntry.Field.ROOM_NUMBER, "testRoom");
+        var results = dao.get(OfficeServiceRequestEntry.Field.LOCATION_NAME, locName0);
         var map = new HashMap<UUID, OfficeServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, OfficeServiceRequestEntry.Field.ROOM_NUMBER.getColName(), "testRoom")) {
+        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, OfficeServiceRequestEntry.Field.LOCATION_NAME.getColName(), locName0)) {
             while (rs.next()) {
                 var req = new OfficeServiceRequestEntry(
                         (UUID) rs.getObject("serviceID"),
-                        (String) rs.getObject("roomNumber"),
-                        (String) rs.getObject("staffAssignment"),
+                        (Long) rs.getObject("locationName"),
+                        (Long) rs.getObject("staffAssignment"),
                         (String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
                         (String) rs.getObject("officeRequest"),
@@ -97,14 +100,14 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void getAll() {
-        var value0 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
-        var value1 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
-        var value2 = new Object[]{UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
+        var value0 = new Object[]{UUID.randomUUID(),ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
+        var value1 = new Object[]{UUID.randomUUID(),ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
+        var value2 = new Object[]{UUID.randomUUID(),ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName"};
         var valueSet = new Object[][]{value0, value1, value2};
 
         var refMap = new HashMap<UUID, OfficeServiceRequestEntry>();
         for (var value : valueSet) {
-            var office = new OfficeServiceRequestEntry((UUID) value[0], (String) value[1], (String) value[2], (String) value[3], (RequestEntry.Status) value[4], (String) value[5], (String) value[6]);
+            var office = new OfficeServiceRequestEntry((UUID) value[0], (Long) value[1], (Long) value[2], (String) value[3], (RequestEntry.Status) value[4], (String) value[5], (String) value[6]);
             refMap.put(office.getServiceID(), office);
             try {
                 pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, value);
@@ -127,7 +130,7 @@ class OfficeServiceRequestEntryDaoImplTest {
     @Test
     void save() {
         UUID uuid = UUID.randomUUID();
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         dao.save(office);
         Optional<OfficeServiceRequestEntry> results = dao.get(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
@@ -142,11 +145,11 @@ class OfficeServiceRequestEntryDaoImplTest {
     @Test
     void update() {
         UUID uuid = UUID.randomUUID();
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         dao.save(office);
 
-        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, "updatedTestRoom", "testStaff", "testNotes", RequestEntry.Status.DONE, "testOffices", "updatedTestName");
-        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.ROOM_NUMBER, OfficeServiceRequestEntry.Field.STATUS, OfficeServiceRequestEntry.Field.EMPLOYEE_NAME};
+        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.DONE, "testOffices", "updatedTestName");
+        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.LOCATION_NAME, OfficeServiceRequestEntry.Field.STATUS, OfficeServiceRequestEntry.Field.EMPLOYEE_NAME};
         dao.update(updatedOffice, fields);
 
         Optional<OfficeServiceRequestEntry> results = dao.get(office.getServiceID());
@@ -161,7 +164,7 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @Test
     void delete() {
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), "110", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName");
         Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeName()};
         try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
