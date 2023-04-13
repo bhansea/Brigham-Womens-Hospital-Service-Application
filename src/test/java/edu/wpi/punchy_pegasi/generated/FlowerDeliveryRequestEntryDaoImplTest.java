@@ -28,7 +28,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "patientName", "roomNumber", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
+        fields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
         pdbController = new PdbController(Config.source);
         dao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
         try {
@@ -82,7 +82,7 @@ class FlowerDeliveryRequestEntryDaoImplTest {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
                         (java.lang.String) rs.getObject("patientName"),
-                        (java.lang.Long) rs.getObject("roomNumber"),
+                        (java.lang.Long) rs.getObject("locationName"),
                         (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
@@ -158,14 +158,14 @@ class FlowerDeliveryRequestEntryDaoImplTest {
             }
             var uuid = (UUID) values[0];
             var patientName = (String) values[1];
-            var roomNumber = (Long) values[2];
+            var locationName = (Long) values[2];
             var staffAssignment = (Long) values[3];
             var additionalNotes = (String) values[4];
             var status = (RequestEntry.Status) values[5];
             var flowerSize = (String) values[6];
             var flowerAmount = (String) values[7];
             var flowerType = (String) values[8];
-            var entry = new FlowerDeliveryRequestEntry(uuid, patientName, roomNumber, staffAssignment, additionalNotes, status, flowerSize, flowerAmount, flowerType);
+            var entry = new FlowerDeliveryRequestEntry(uuid, patientName, locationName, staffAssignment, additionalNotes, status, flowerSize, flowerAmount, flowerType);
             refMap.put(uuid, entry);
         }
         Map<UUID, FlowerDeliveryRequestEntry> resultMap = dao.getAll();

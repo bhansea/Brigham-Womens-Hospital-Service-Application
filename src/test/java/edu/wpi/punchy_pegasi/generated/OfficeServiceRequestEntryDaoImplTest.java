@@ -23,7 +23,7 @@ class OfficeServiceRequestEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
+        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
         pdbController = new PdbController(Config.source);
         dao = new OfficeServiceRequestEntryDaoImpl(pdbController);
         try {

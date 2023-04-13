@@ -23,7 +23,7 @@ class FurnitureRequestEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
+        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
         pdbController = new PdbController(Config.source);
         dao = new FurnitureRequestEntryDaoImpl(pdbController);
         try {
@@ -80,7 +80,7 @@ class FurnitureRequestEntryDaoImplTest {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.Long) rs.getObject("roomNumber"),
+                        (java.lang.Long) rs.getObject("locationName"),
                         (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),

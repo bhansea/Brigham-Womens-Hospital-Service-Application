@@ -20,7 +20,7 @@ class FoodServiceRequestEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName"};
+        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName"};
         pdbController = new PdbController(Config.source);
         dao = new FoodServiceRequestEntryDaoImpl(pdbController);
         try {
@@ -63,32 +63,33 @@ class FoodServiceRequestEntryDaoImplTest {
         var staff1 = ThreadLocalRandom.current().nextLong();
         var food = new FoodServiceRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
         var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
-        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
-        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getDietaryRestrictions(), food2.getPatientName()};
+        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getBeverage(), food.getDietaryRestrictions(), food.getPatientName()};
+        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getBeverage(), food2.getDietaryRestrictions(), food2.getPatientName()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values2);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, "testStaff");
+        var results = dao.get(FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, staff0);
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, "staffAssignment", "testStaff")) {
+        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, "staffAssignment", staff0)) {
             while (rs.next()) {
+                String myCol = rs.getString("additionalItems");
+                List<String> myColumnList = Arrays.asList(myCol.split(","));
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.Long) rs.getObject("roomNumber"),
+                        (java.lang.Long) rs.getObject("locationName"),
                         (java.lang.Long) rs.getObject("staffAssignment"),
-                        (java.lang.String) rs.getObject("additionalNotes"),
+                        rs.getObject("additionalNotes", String.class),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
                         (java.lang.String) rs.getObject("foodSelection"),
                         (java.lang.String) rs.getObject("tempType"),
-                        Collections.singletonList((String)rs.getArray("additionalItems").getArray()),
+                        myColumnList,
                         (java.lang.String) rs.getObject("beverage"),
                         (java.lang.String) rs.getObject("dietaryRestrictions"),
                         (java.lang.String) rs.getObject("patientName"));
-                if (req != null)
-                    map.put(req.getServiceID(), req);
+                map.put(req.getServiceID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             assert false : e.getMessage();
@@ -111,9 +112,10 @@ class FoodServiceRequestEntryDaoImplTest {
         var staff1 = ThreadLocalRandom.current().nextLong();
         var locName2 = ThreadLocalRandom.current().nextLong();
         var staff2 = ThreadLocalRandom.current().nextLong();
-        var values0 = new Object[]{UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", "testItems", "juice", "testRestrictions", "testPatient"};
-        var values1 = new Object[]{UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", "testItems", "juice", "testRestrictions", "testPatient"};
-        var values2 = new Object[]{UUID.randomUUID(), locName2, staff2, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", "testItems", "juice", "testRestrictions", "testPatient"};
+        var additionalItem = "testItems";
+        var values0 = new Object[]{UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", List.of(additionalItem), "juice", "testRestrictions", "testPatient"};
+        var values1 = new Object[]{UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", List.of(additionalItem), "juice", "testRestrictions", "testPatient"};
+        var values2 = new Object[]{UUID.randomUUID(), locName2, staff2, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", List.of(additionalItem), "juice", "testRestrictions", "testPatient"};
         var valuesSet = new Object[][]{values0, values1, values2};
         var refMap = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
 
@@ -131,7 +133,7 @@ class FoodServiceRequestEntryDaoImplTest {
                     (RequestEntry.Status) values[4],
                     (java.lang.String) values[5],
                     (java.lang.String) values[6],
-                    Collections.singletonList((String)values[7]),
+                    (List<String>) values[7],
                     (java.lang.String) values[8],
                     (java.lang.String) values[9],
                     (java.lang.String) values[10]);
@@ -161,25 +163,33 @@ class FoodServiceRequestEntryDaoImplTest {
         FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
         dao.save(fsre);
 
-        var updatedLocName = ThreadLocalRandom.current().nextLong();
-        var updatedStaff = ThreadLocalRandom.current().nextLong();
-        FoodServiceRequestEntry updatedFsre = new FoodServiceRequestEntry(uuid, updatedLocName, updatedStaff, "testNotes", RequestEntry.Status.DONE, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
-        FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.STAFF_ASSIGNMENT, FoodServiceRequestEntry.Field.STATUS};
-        dao.update(updatedFsre, fields);
-
         Optional<FoodServiceRequestEntry> results = dao.get(uuid);
         FoodServiceRequestEntry daoresult = results.get();
-        assertEquals(updatedFsre, daoresult);
         try {
             pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
+        assertEquals(fsre, daoresult);
     }
 
     @Test
     void update() {
-        var values0 = new Object[]{
+        UUID uuid = UUID.randomUUID();
+        FoodServiceRequestEntry foodRequest = new FoodServiceRequestEntry(
+                uuid,
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
+                "testNode0",
+                RequestEntry.Status.PROCESSING,
+                "testFood0",
+                "100",
+                List.of("item1", "item2"),
+                "Juice",
+                "restrictions0",
+                "patientName0"
+        );
+        FoodServiceRequestEntry updateFoodRequest = new FoodServiceRequestEntry(
                 UUID.randomUUID(),
                 ThreadLocalRandom.current().nextLong(),
                 ThreadLocalRandom.current().nextLong(),
@@ -188,68 +198,33 @@ class FoodServiceRequestEntryDaoImplTest {
                 "testFood0",
                 "100",
                 List.of("item1", "item2"),
+                "Apple Juice",
                 "restrictions0",
                 "patientName0"
-        };
-        var values1 = new Object[]{
-                UUID.randomUUID(),
-                ThreadLocalRandom.current().nextLong(),
-                ThreadLocalRandom.current().nextLong(),
-                "testNode1",
-                RequestEntry.Status.PROCESSING,
-                "testFood1",
-                "100",
-                List.of("item1", "item2"),
-                "restrictions1",
-                "patientName1"
-        };
-        var values2 = new Object[]{
-                UUID.randomUUID(),
-                ThreadLocalRandom.current().nextLong(),
-                ThreadLocalRandom.current().nextLong(),
-                "testNode2",
-                RequestEntry.Status.PROCESSING,
-                "testFood2",
-                "100",
-                List.of("item1", "item2"),
-                "restrictions2",
-                "patientName2"
-        };
-        var valueSets = new Object[][]{values0, values1, values2};
-        var refMap = new HashMap<UUID, FoodServiceRequestEntry>();
-
-        for (Object[] values : valueSets) {
-            try {
-                pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
-            } catch (PdbController.DatabaseException e) {
-                assert false : "Failed to insert test data";
-            }
-            FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(
-                    (UUID) values[0],
-                    (Long) values[1],
-                    (Long) values[2],
-                    (String) values[3],
-                    (RequestEntry.Status) values[4],
-                    (String) values[5],
-                    (String) values[6],
-                    (List<String>) values[7],
-                    (String) values[8],
-                    (String) values[9],
-                    (String) values[10]
-            );
-            refMap.put(fsre.getServiceID(), fsre);
+        );
+        try {
+            pdbController.insertQuery(TableType.FOODREQUESTS, fields, new Object[]{
+                    foodRequest.getServiceID(),
+                    foodRequest.getLocationName(),
+                    foodRequest.getStaffAssignment(),
+                    foodRequest.getAdditionalNotes(),
+                    foodRequest.getStatus(),
+                    foodRequest.getFoodSelection(),
+                    foodRequest.getTempType(),
+                    foodRequest.getAdditionalItems(),
+                    foodRequest.getBeverage(),
+                    foodRequest.getDietaryRestrictions(),
+                    foodRequest.getPatientName()
+            });
+        } catch (PdbController.DatabaseException e) {
+            assert false : e.getMessage();
         }
-        Map<UUID, FoodServiceRequestEntry> resultMap = dao.getAll();
-        assert resultMap.equals(refMap);
-        for (var uuid : refMap.keySet()) {
-            try {
-                pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
-            } catch (PdbController.DatabaseException e) {
-                assert false : "Failed to delete test data";
-            }
-        }
-
-
+        FoodServiceRequestEntry.Field[] updateFields = {
+                FoodServiceRequestEntry.Field.BEVERAGE
+        };
+        dao.update(updateFoodRequest, updateFields);
+        Optional<FoodServiceRequestEntry> fsrq = dao.get(uuid);
+        assertEquals(fsrq, updateFoodRequest);
     }
 
     @Test

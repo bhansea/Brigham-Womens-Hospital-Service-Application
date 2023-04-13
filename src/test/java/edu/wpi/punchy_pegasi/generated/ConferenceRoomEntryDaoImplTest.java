@@ -30,7 +30,7 @@ class ConferenceRoomEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
+        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
         pdbController = new PdbController(Config.source);
         dao = new ConferenceRoomEntryDaoImpl(pdbController);
         try {
@@ -63,10 +63,10 @@ class ConferenceRoomEntryDaoImplTest {
 
     @Test
     void testGet() {
-        var locName0 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
-        var staff0 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
-        var locName1 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
-        var staff1 = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
         var room = new ConferenceRoomEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         var room2 = new ConferenceRoomEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         var values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
