@@ -103,7 +103,7 @@ public class SidebarController implements PropertyChangeListener {
         Image defaultImage = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/bwhlogo.png")));
         profileImage.imageProperty().set(defaultImage);
 
-        sidebar.getChildren().addAll(1, sidebarItems.stream().map(v -> v.node).toList());
+        sidebar.getChildren().addAll(0, sidebarItems.stream().map(v -> v.node).toList());
 
         loginLogout.setOnMouseClicked(e -> {
             if (App.getSingleton().getAccount().getAccountType() == Account.AccountType.NONE)
@@ -118,6 +118,11 @@ public class SidebarController implements PropertyChangeListener {
         if (Objects.equals(evt.getPropertyName(), "account")) {
             setAccount((Account) evt.getNewValue());
         }
+    }
+
+    @FXML
+    private void exit() {
+        App.getSingleton().exit();
     }
 
     private class SidebarItem {
@@ -150,7 +155,6 @@ public class SidebarController implements PropertyChangeListener {
             container.setAlignment(Pos.CENTER_LEFT);
             container.setSpacing(10);
             container.getStyleClass().add("button");
-            container.setPadding(new Insets(0, 0, 0, 25));
             var label = new Label(screen != null ? screen.getReadable() : dropdownText);
             label.setTextFill(Color.valueOf("#FFFFFF"));
             label.setFont(new Font(20));
