@@ -162,7 +162,7 @@ public class  SleepThroughTheWinter {
         put(String.class, "varchar");
         put(UUID.class, "uuid DEFAULT uuid_generate_v4()");
         put(List.class, "varchar ARRAY");
-        put(LocalDate.class, "date");
+        put(LocalDate.class, "date NOT NULL");
     }};
 
     private static boolean fieldIsID(Field field){
@@ -183,7 +183,7 @@ public class  SleepThroughTheWinter {
                             : " PRIMARY KEY"
                     : "";
             if (f.getType().isEnum())
-                return "" + f.getName() + " varchar" + appendText;
+                return "" + f.getName() + " varchar" + appendText + " NOT NULL";
             return "" + f.getName() + " " + classToPostgres.get(f.getType()) + appendText;
         }).toList();
 

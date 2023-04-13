@@ -2,8 +2,8 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,13 +32,13 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", key)) {
             rs.next();
             OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                    (java.util.UUID) rs.getObject("serviceID"),
-                    (java.lang.Long) rs.getObject("locationName"),
-                    (java.lang.Long) rs.getObject("staffAssignment"),
-                    (java.lang.String) rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                    (java.lang.String) rs.getObject("officeRequest"),
-                    (java.lang.String) rs.getObject("employeeName"));
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -57,13 +57,13 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, Arrays.stream(params).map(OfficeServiceRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                        (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.Long) rs.getObject("locationName"),
-                        (java.lang.Long) rs.getObject("staffAssignment"),
-                        (java.lang.String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("officeRequest"),
-                        (java.lang.String) rs.getObject("employeeName"));
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -79,13 +79,13 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                        (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.Long) rs.getObject("locationName"),
-                        (java.lang.Long) rs.getObject("staffAssignment"),
-                        (java.lang.String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("officeRequest"),
-                        (java.lang.String) rs.getObject("employeeName"));
+                    (java.util.UUID)rs.getObject("serviceID"),
+                    (java.lang.Long)rs.getObject("locationName"),
+                    (java.lang.Long)rs.getObject("staffAssignment"),
+                    (java.lang.String)rs.getObject("additionalNotes"),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
+                    (java.lang.String)rs.getObject("officeRequest"),
+                    (java.lang.String)rs.getObject("employeeName"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

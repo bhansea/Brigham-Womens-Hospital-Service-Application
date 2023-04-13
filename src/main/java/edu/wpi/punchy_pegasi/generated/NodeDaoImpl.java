@@ -2,8 +2,8 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.Node;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +32,11 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
         try (var rs = dbController.searchQuery(TableType.NODES, "nodeID", key)) {
             rs.next();
             Node req = new Node(
-                    (java.lang.Long) rs.getObject("nodeID"),
-                    (java.lang.Integer) rs.getObject("xcoord"),
-                    (java.lang.Integer) rs.getObject("ycoord"),
-                    (java.lang.String) rs.getObject("floor"),
-                    (java.lang.String) rs.getObject("building"));
+                    (java.lang.Long)rs.getObject("nodeID"),
+                    (java.lang.Integer)rs.getObject("xcoord"),
+                    (java.lang.Integer)rs.getObject("ycoord"),
+                    (java.lang.String)rs.getObject("floor"),
+                    (java.lang.String)rs.getObject("building"));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -55,11 +55,11 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
         try (var rs = dbController.searchQuery(TableType.NODES, Arrays.stream(params).map(Node.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Node req = new Node(
-                        (java.lang.Long) rs.getObject("nodeID"),
-                        (java.lang.Integer) rs.getObject("xcoord"),
-                        (java.lang.Integer) rs.getObject("ycoord"),
-                        (java.lang.String) rs.getObject("floor"),
-                        (java.lang.String) rs.getObject("building"));
+                    (java.lang.Long)rs.getObject("nodeID"),
+                    (java.lang.Integer)rs.getObject("xcoord"),
+                    (java.lang.Integer)rs.getObject("ycoord"),
+                    (java.lang.String)rs.getObject("floor"),
+                    (java.lang.String)rs.getObject("building"));
                 if (req != null)
                     map.put(req.getNodeID(), req);
             }
@@ -75,11 +75,11 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
         try (var rs = dbController.searchQuery(TableType.NODES)) {
             while (rs.next()) {
                 Node req = new Node(
-                        (java.lang.Long) rs.getObject("nodeID"),
-                        (java.lang.Integer) rs.getObject("xcoord"),
-                        (java.lang.Integer) rs.getObject("ycoord"),
-                        (java.lang.String) rs.getObject("floor"),
-                        (java.lang.String) rs.getObject("building"));
+                    (java.lang.Long)rs.getObject("nodeID"),
+                    (java.lang.Integer)rs.getObject("xcoord"),
+                    (java.lang.Integer)rs.getObject("ycoord"),
+                    (java.lang.String)rs.getObject("floor"),
+                    (java.lang.String)rs.getObject("building"));
                 if (req != null)
                     map.put(req.getNodeID(), req);
             }

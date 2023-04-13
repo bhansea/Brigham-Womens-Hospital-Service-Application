@@ -2,8 +2,8 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.LocationName;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,10 +32,10 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, "uuid", key)) {
             rs.next();
             LocationName req = new LocationName(
-                    (java.lang.Long) rs.getObject("uuid"),
-                    (java.lang.String) rs.getObject("longName"),
-                    (java.lang.String) rs.getObject("shortName"),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -54,10 +54,10 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, Arrays.stream(params).map(LocationName.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                        (java.lang.Long) rs.getObject("uuid"),
-                        (java.lang.String) rs.getObject("longName"),
-                        (java.lang.String) rs.getObject("shortName"),
-                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -73,10 +73,10 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                        (java.lang.Long) rs.getObject("uuid"),
-                        (java.lang.String) rs.getObject("longName"),
-                        (java.lang.String) rs.getObject("shortName"),
-                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                    (java.lang.Long)rs.getObject("uuid"),
+                    (java.lang.String)rs.getObject("longName"),
+                    (java.lang.String)rs.getObject("shortName"),
+                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String)rs.getObject("nodeType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
