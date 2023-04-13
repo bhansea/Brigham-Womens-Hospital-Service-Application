@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,7 +23,7 @@ class FurnitureRequestEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "roomNumber", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
+        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
         pdbController = new PdbController(Config.source);
         dao = new FurnitureRequestEntryDaoImpl(pdbController);
         try {
@@ -36,7 +37,9 @@ class FurnitureRequestEntryDaoImplTest {
     void get() {
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
-        FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         Object[] values = new Object[]{furniture.getServiceID(), furniture.getLocationName(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
         try {
             pdbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
@@ -57,8 +60,12 @@ class FurnitureRequestEntryDaoImplTest {
     void testGet() {
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
-        FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
-        FurnitureRequestEntry furniture2 = new FurnitureRequestEntry(UUID.randomUUID(), "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        FurnitureRequestEntry furniture = new FurnitureRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        FurnitureRequestEntry furniture2 = new FurnitureRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         Object[] values = new Object[]{furniture.getServiceID(), furniture.getLocationName(), furniture.getStaffAssignment(), furniture.getAdditionalNotes(), furniture.getStatus(), furniture.getSelectFurniture()};
         Object[] values2 = new Object[]{furniture2.getServiceID(), furniture2.getLocationName(), furniture2.getStaffAssignment(), furniture2.getAdditionalNotes(), furniture2.getStatus(), furniture2.getSelectFurniture()};
         try {
@@ -73,8 +80,8 @@ class FurnitureRequestEntryDaoImplTest {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
                         (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.String) rs.getObject("roomNumber"),
-                        (java.lang.String) rs.getObject("staffAssignment"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
                         Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
@@ -98,24 +105,24 @@ class FurnitureRequestEntryDaoImplTest {
     void getAll() {
         var values0 = new Object[]{
                 UUID.randomUUID(),
-                "0",
-                "staff0",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "additionalNotes0",
                 RequestEntry.Status.PROCESSING,
                 List.of("item1", "item2")
         };
         var values1 = new Object[]{
                 UUID.randomUUID(),
-                "1",
-                "staff1",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "additionalNotes1",
                 RequestEntry.Status.PROCESSING,
                 List.of("item1", "item2")
         };
         var values2 = new Object[]{
                 UUID.randomUUID(),
-                "2",
-                "staff2",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "additionalNotes2",
                 RequestEntry.Status.PROCESSING,
                 List.of("item1", "item2")
@@ -136,8 +143,8 @@ class FurnitureRequestEntryDaoImplTest {
             }
             var furnRequests = new FurnitureRequestEntry(
                     (UUID) objects[0],
-                    (String) objects[1],
-                    (String) objects[2],
+                    (Long) objects[1],
+                    (Long) objects[2],
                     (String) objects[3],
                     (RequestEntry.Status) objects[4],
                     (List<String>) objects[5]
@@ -163,7 +170,9 @@ class FurnitureRequestEntryDaoImplTest {
         UUID uuid = UUID.randomUUID();
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
-        FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         dao.save(fdre);
         Optional<FurnitureRequestEntry> results = dao.get(uuid);
         FurnitureRequestEntry daoresult = results.get();
@@ -181,10 +190,14 @@ class FurnitureRequestEntryDaoImplTest {
         UUID uuid = UUID.randomUUID();
         List<String> requestItems = new ArrayList<>();
         requestItems.add("testItems");
-        FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, "testRoom", "testStaff", "testNotes", RequestEntry.Status.PROCESSING, requestItems);
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         dao.save(fdre);
 
-        FurnitureRequestEntry updatedFdre = new FurnitureRequestEntry(uuid, "testRoom", "testStaff", "updatedTestNotes", RequestEntry.Status.NONE, requestItems);
+        var updateLocName = ThreadLocalRandom.current().nextLong();
+        var updateStaff = ThreadLocalRandom.current().nextLong();
+        FurnitureRequestEntry updatedFdre = new FurnitureRequestEntry(uuid, updateLocName, updateStaff, "updatedTestNotes", RequestEntry.Status.NONE, requestItems);
         FurnitureRequestEntry.Field[] fields = {FurnitureRequestEntry.Field.ADDITIONAL_NOTES, FurnitureRequestEntry.Field.STATUS};
         dao.update(updatedFdre, fields);
 
@@ -202,8 +215,8 @@ class FurnitureRequestEntryDaoImplTest {
     void delete() {
         FurnitureRequestEntry furnitureRequest = new FurnitureRequestEntry(
                 UUID.randomUUID(),
-                "roomNum",
-                "staff",
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
                 "additionalNotes",
                 RequestEntry.Status.PROCESSING,
                 List.of("item1", "item2")
