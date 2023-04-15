@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -27,12 +28,19 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 public class App extends Application {
     @Getter
     private static App singleton;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private boolean development = false;
     @Getter
     private PdbController pdb;
     @Getter
@@ -115,27 +123,102 @@ public class App extends Application {
     public void navigate(final Screen screen) {
         if (screen == null) return;
         if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
-            getViewPane().setCenter(screen.get());
-            setCurrentScreen(screen);
+            var loadingThread = new Thread(()->{
+                var loaded = screen.get();
+                Platform.runLater(()->{
+                    setCurrentScreen(screen);
+                    getViewPane().setCenter(loaded);
+                });
+            });
+            loadingThread.setDaemon(true);
+            loadingThread.start();
         }
     }
 
+    private Optional<URL> resolveResource(String resourcePath) {
+        if (development) {
+            try {
+                var resource = Paths.get(System.getProperty("user.dir"), "src/main/resources/edu/wpi/punchy_pegasi", resourcePath);
+                if (Files.exists(resource))
+                    return Optional.of(resource.toUri().toURL());
+            } catch (MalformedURLException e) {
+                return Optional.empty();
+            }
+        } else {
+            var resource = App.class.getResource(resourcePath);
+            if (resource != null)
+                return Optional.of(resource);
+        }
+        return Optional.empty();
+    }
+
+
     public void loadStylesheet(String resourcePath) {
-        var resource = App.class.getResource(resourcePath);
-        if (resource != null)
-            scene.getStylesheets().add(resource.toExternalForm());
+        var resource = resolveResource(resourcePath);
+        if (resource.isPresent()) {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(resource.get().toExternalForm());
+        }
+    }
+
+    private void registerRecursive(WatchService watchService, final Path root) throws IOException {
+        Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                dir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         Thread.setDefaultUncaughtExceptionHandler(App::showError);
         this.primaryStage = primaryStage;
+        var genericResource = this.getClass().getResource("");
+        if(genericResource != null && Objects.equals(genericResource.getProtocol(), "file"))
+            development = true;
 
         final BorderPane loadedSplash = loadWithCache("frontend/views/Splash.fxml");
         final SplashController splashController = loader.getController();
         scene = new Scene(loadedSplash, 600, 400);
-        MFXThemeManager.addOn(scene, Themes.DEFAULT);
-        loadStylesheet("frontend/css/Default.css");
+        loadStylesheet("frontend/css/DefaultTheme.css");
+
+        if (development) {
+            var hotloadCSS = new Thread(() -> {
+                try {
+                    WatchService watchService = FileSystems.getDefault().newWatchService();
+                    Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/edu/wpi/punchy_pegasi/frontend");
+
+                    registerRecursive(watchService, path);
+
+                    var reloadCSS = new Debouncer<String>(s -> {
+                        Platform.runLater(() -> loadStylesheet("frontend/css/DefaultTheme.css"));
+                        System.out.println("Hot-loaded CSS: " + s);
+                    }, 1000);
+                    var reloadFXML = new Debouncer<String>(s ->{
+                        Platform.runLater(() -> navigate(currentScreen));
+                        System.out.println("Hot-loaded FXML: " + s);
+                    }, 1000);
+                    WatchKey key;
+                    while ((key = watchService.take()) != null) {
+                        for (WatchEvent<?> event : key.pollEvents()) {
+                            var context = event.context().toString();
+                            if (context.contains(".css"))
+                                reloadCSS.call(context);
+                            if (context.contains(".fxml"))
+                                reloadFXML.call(context);
+                        }
+                        key.reset();
+                    }
+                } catch (Exception e) {
+                    log.error("Error with hotloading css", e);
+                }
+            });
+            hotloadCSS.setDaemon(true);
+            hotloadCSS.start();
+        }
+
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
 
@@ -159,11 +242,10 @@ public class App extends Application {
             viewPane = layoutController.getViewPane();
 
             scene = new Scene(loadedLayout, 1280, 720);
+            loadStylesheet("frontend/css/DefaultTheme.css");
             primaryStage.setScene(scene);
             primaryStage.show();
             navigate(Screen.LOGIN);
-            MFXThemeManager.addOn(scene, Themes.DEFAULT);
-            loadStylesheet("frontend/css/Default.css");
             new Thread(this::initDatabaseTables).start();
         } catch (IOException e) {
             log.error("Failed to load application ", e);
@@ -190,15 +272,15 @@ public class App extends Application {
     }
 
     public <T> T loadWithCache(String path, Object root, Object controller) throws IOException {
-        var resource = App.class.getResource(path);
-        if (resource == null) {
+        var resource = resolveResource(path);
+        if (resource.isEmpty()) {
             log.error("Could not find file {}", path);
             throw new IOException("No such file");
         }
         loader = new FXMLLoader();
         loader.setRoot(root);
         loader.setController(controller);
-        loader.setLocation(resource);
+        loader.setLocation(resource.get());
         return loader.load();
     }
 }

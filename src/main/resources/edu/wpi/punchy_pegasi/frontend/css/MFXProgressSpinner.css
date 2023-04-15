@@ -16,18 +16,24 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+.mfx-progress-spinner:determinate .arc {
+	-fx-stroke: #0F9D58;
+}
 
+.mfx-progress-spinner .percentage {
+	-fx-font-family: "Nunito Sans SemiBold";
+	-fx-font-smoothing-type: gray;
+	-fx-text-fill: -mfx-text-he;
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-progress-spinner:determinate .percentage {
+	-fx-fill: #4d4d4d;
+}
+
+.mfx-progress-spinner:disabled .arc {
+	visibility: hidden;
+}
+
+.mfx-progress-spinner:disabled .track {
+	-fx-stroke: #bcbcbc;
 }

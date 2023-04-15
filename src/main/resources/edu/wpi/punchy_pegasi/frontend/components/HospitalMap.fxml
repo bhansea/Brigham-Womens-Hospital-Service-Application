@@ -18,8 +18,7 @@
                 <padding>
                     <Insets topRightBottomLeft="20.0"/>
                 </padding>
-                <VBox VBox.vgrow="ALWAYS"
-                      style="-fx-border-color: black; -fx-border-style: solid inside; -fx-border-width: 3; -fx-border-radius: 3">
+                <VBox VBox.vgrow="ALWAYS">
                     <GesturePane VBox.vgrow="ALWAYS" fitHeight="false" fitWidth="false"
                                  style="-fx-background-color: #D9D9D9"
                                  fx:id="gesturePane" maxScale="1.0" minScale="0.1" prefWidth="400" prefHeight="400">

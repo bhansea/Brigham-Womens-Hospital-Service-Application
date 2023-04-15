@@ -16,18 +16,24 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+.mfx-tree-cell {
+	-fx-padding: 0px 0px 0px 5px;
+	-fx-background-radius: 7px;
+}
 
+.mfx-tree-cell .mfx-checkbox .box .mark {
+	-mfx-description: "mfx-variant3-mark";
+	-mfx-size: 8;
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-tree-cell .mfx-ripple-generator {
+	-mfx-ripple-color: rgba(0, 190, 0, 0.3);
+}
+
+.mfx-tree-cell:selected {
+	-fx-background-color: lightgray;
+}
+
+.mfx-tree-cell * {
+	-fx-font-smoothing-type: gray;
 }

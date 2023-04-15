@@ -16,18 +16,28 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+.mfx-legacy-table-row {
+	-fx-background-insets: 0.0;
+	-fx-text-fill: black;
+	-fx-padding: 0 -3 0 3;
 
+	-mfx-hover-color: rgba(50, 150, 255, 0.15);
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-legacy-table-row:odd,
+.mfx-legacy-table-row:even {
+	-fx-background-color: white;
+}
+
+.mfx-legacy-table-row:filled:hover,
+.mfx-legacy-table-row:selected .label {
+	-fx-text-fill: black;
+}
+
+.table-row-cell .text {
+	-fx-fill: -fx-text-background-color;
+}
+
+.table-row-cell:selected .text {
+	-fx-fill: black;
 }

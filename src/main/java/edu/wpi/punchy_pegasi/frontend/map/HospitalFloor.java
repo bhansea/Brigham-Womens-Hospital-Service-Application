@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.map;
 
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -19,7 +20,7 @@ class HospitalFloor {
     final String path;
     final String humanReadableName;
     final String identifier;
-    MFXButton button = new MFXButton();
+    PFXButton button = new PFXButton();
     Group root = new Group();
     Group lineCanvas = new Group();
     Group nodeCanvas = new Group();

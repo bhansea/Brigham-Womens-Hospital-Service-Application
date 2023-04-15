@@ -1,0 +1,58 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "MFXComboBox.css";
+@import "MFXColors.css";
+
+.mfx-filter-combo-box {
+	-mfx-caret-visible: true;
+}
+
+.mfx-filter-combo-box:popup {
+	-mfx-caret-visible: false;
+	-mfx-editable: false;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-max-height: 200;
+}
+
+.mfx-filter-combo-box .combo-popup .search-container {
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: #ebebeb;
+	-fx-border-radius: 5;
+	-fx-padding: 10 5 5 5;
+}
+
+.mfx-filter-combo-box .combo-popup .search-field {
+	-mfx-gap: 0;
+	-mfx-float-mode: disabled;
+	-fx-padding: 5;
+	-fx-display-caret: false;
+}
+
+.mfx-filter-combo-box .combo-popup .search-field,
+.mfx-filter-combo-box .combo-popup .search-field:focus-within {
+	-fx-border-width: 1;
+	-fx-background-insets: 0;
+	-fx-border-color: lightgray;
+}
+

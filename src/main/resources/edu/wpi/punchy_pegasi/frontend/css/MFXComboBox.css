@@ -16,18 +16,33 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+@import "Fonts.css";
+@import "MFXTextField.css";
 
+.mfx-combo-box {
+	-mfx-track-color: rgb(230, 230, 230);
+	-mfx-thumb-color: rgb(137, 137, 137);
+	-mfx-thumb-hover-color: rgb(89, 88, 91);
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+	-mfx-gap: 0;
+	-fx-padding: 3 5 3 5;
+}
+
+.mfx-combo-box .caret .mfx-ripple-generator {
+	-mfx-ripple-color: rgba(24, 50, 238, 0.1);
+	-mfx-ripple-radius: 14;
+}
+
+.mfx-combo-box:focus-within .caret .mfx-font-icon {
+	-mfx-color: -mfx-main;
+}
+
+.mfx-combo-box .combo-popup .virtual-flow {
+	-fx-background-radius: 5;
+	-fx-border-color: #ebebeb;
+	-fx-border-radius: 5;
+}
+
+.mfx-combo-box:disabled .caret .mfx-font-icon {
+	-mfx-color: #bcbcbc;
 }

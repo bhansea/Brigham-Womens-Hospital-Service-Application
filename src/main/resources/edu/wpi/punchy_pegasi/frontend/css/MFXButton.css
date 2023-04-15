@@ -16,18 +16,25 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+@import "Fonts.css";
+@import "MFXColors.css";
 
+.mfx-button {
+	-fx-font-family: "Nunito Sans";
+	-fx-text-fill: -mfx-text-he;
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-button:armed,
+.mfx-button:hover,
+.mfx-button:focused,
+.mfx-button {
+	/*-fx-background-radius: 3px;*/
+	/*-fx-background-insets: 0px;*/
+	/*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);*/
+}
+
+.mfx-button,
+.mfx-button:armed,
+.mfx-button:focused {
+	-fx-background-color: white;
 }

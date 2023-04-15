@@ -16,18 +16,24 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+@import "MFXScrollPane.css";
 
-
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-context-menu .line-separator {
+	-fx-stroke: #e1e1e1;
+	-fx-stroke-width: 0.5;
 }
+
+.mfx-context-menu .mfx-scroll-pane {
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-background-insets: 1;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-padding: 5;
+	-fx-max-height: 300;
+}
+
+.mfx-context-menu .mfx-scroll-pane .viewport {
+	-fx-background-color: transparent;
+}
+

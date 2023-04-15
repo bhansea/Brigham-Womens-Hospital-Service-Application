@@ -16,18 +16,41 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+@import "Fonts.css";
+@import "MFXColors.css";
 
+.mfx-stepper-toggle #circle {
+	-fx-fill: white;
+	-fx-stroke: #EBEBEB;
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-stepper-toggle .mfx-text-field {
+	-mfx-float-mode: disabled;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-font-family: "Nunito Sans SemiBold";
+	-fx-font-size: 14;
+	-fx-pref-width: 100;
+	-fx-alignment: CENTER;
+}
+
+.mfx-stepper-toggle:selected #circle {
+	-fx-stroke: -mfx-purple;
+}
+
+.mfx-stepper-toggle:selected .mfx-text-field {
+	-fx-text-fill: -mfx-purple;
+}
+
+.mfx-stepper-toggle:completed #circle {
+	-fx-stroke: -mfx-purple;
+	-fx-fill: -mfx-purple;
+}
+
+.mfx-stepper-toggle:invalid #circle {
+	-fx-stroke: -mfx-red;
+}
+
+.mfx-stepper-toggle:invalid .mfx-text-field {
+	-fx-text-fill: -mfx-red;
 }

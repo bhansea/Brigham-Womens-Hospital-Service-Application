@@ -7,11 +7,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
+<?import javafx.geometry.Insets?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
             stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
-    <center>
-        <VBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">
+    <right>
+        <VBox alignment="CENTER_LEFT" style="-fx-background-color: #ffffff" BorderPane.alignment="CENTER">
             <children>
                 <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
@@ -52,7 +55,7 @@
                                         style="-fx-background-color: #012D5A; -fx-text-fill: #ffffff; -fx-background-radius: 25;"
                                         text="Log in">
                                     <font>
-                                        <Font name="Palatino Linotype" size="39.0"/>
+                                        <Font name="Nunito Sans" size="30.0"/>
                                     </font>
                                 </Button>
                             </children>
@@ -60,6 +63,9 @@
                     </children>
                 </VBox>
             </children>
+            <padding>
+                <Insets topRightBottomLeft="10"/>
+            </padding>
         </VBox>
-    </center>
+    </right>
 </BorderPane>

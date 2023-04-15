@@ -16,18 +16,21 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+.mfx-list-view {
+	-mfx-track-color: rgb(230, 230, 230);
+	-mfx-thumb-color: rgb(137, 137, 137);
+	-mfx-thumb-hover-color: rgb(89, 88, 91);
+}
 
+.mfx-list-view .virtual-flow .scroll-bar .track {
+	-fx-background-color: -mfx-track-color;
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-list-view .virtual-flow .scroll-bar .thumb {
+	-fx-background-color: -mfx-thumb-color;
+}
+
+.mfx-list-view .virtual-flow .scroll-bar .thumb:pressed,
+.mfx-list-view .virtual-flow .scroll-bar .thumb:hover {
+	-fx-background-color: -mfx-thumb-hover-color;
 }

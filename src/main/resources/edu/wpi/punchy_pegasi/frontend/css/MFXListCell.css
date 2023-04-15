@@ -16,18 +16,35 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-* {
-	-mfx-blue: #2196f3;
-	-mfx-charcoal: #445055;
-	-mfx-green: #4caf50;
-	-mfx-onyx: #353935;
-	-mfx-orange: #ff9800;
-	-mfx-purple: #7a0ed9;
-	-mfx-red: #EF6E6B;
-	-mfx-yellow: #FFEA00;
+@import "Fonts.css";
+@import "MFXColors.css";
 
+.mfx-list-cell {
+	-fx-background-color: white;
+	-fx-border-color: white;
+	-fx-padding: 5;
+}
 
-	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
-	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
-	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
+.mfx-list-cell:hover {
+	-fx-background-color: #F5F5F5;
+	-fx-border-color: #F5F5F5;
+}
+
+.mfx-list-cell:selected {
+	-fx-background-color: #E1E1E1;
+	-fx-border-color: #E1E1E1;
+}
+
+.mfx-list-cell:empty {
+	-fx-background-color: white;
+	-fx-border-color: white;
+}
+
+.mfx-list-cell .data-label {
+	-fx-font-family: "Nunito Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-list-cell .mfx-ripple-generator {
+	-mfx-ripple-color: #C8C8C8;
 }

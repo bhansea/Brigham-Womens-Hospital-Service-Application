@@ -1,0 +1,9 @@
+@import "Fonts.css";
+
+.pfx-icon {
+    -fx-font-family: "Material Icons";
+}
+
+.pfx-icon:outlined {
+    -fx-font-family: "Material Icons Outlined Regular";
+}

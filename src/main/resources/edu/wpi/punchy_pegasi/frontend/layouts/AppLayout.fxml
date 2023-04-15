@@ -4,8 +4,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LayoutController"
-            style="-fx-background-color: #F1F1F1;">
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LayoutController">
     <center>
         <BorderPane>
 <!--            <top>-->

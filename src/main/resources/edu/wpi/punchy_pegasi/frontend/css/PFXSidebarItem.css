@@ -1,0 +1,44 @@
+@import "Fonts.css";
+
+.pfx-sidebar-item {
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-background-size: 5;
+    -fx-background-radius: 0;
+    -fx-font-size: 30;
+
+    -fx-border-style: solid inside;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-color: transparent;
+}
+
+.pfx-sidebar-item PFXIcon {
+    -fx-fill: -pfx-navy;
+}
+.pfx-sidebar-item Label {
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-sidebar-item:selected {
+    -fx-border-color: -pfx-accent;
+}
+.pfx-sidebar-item:selected Label {
+    -fx-text-fill: -pfx-accent;
+}
+
+.pfx-sidebar-item:selected PFXIcon {
+    -fx-fill: -pfx-accent;
+}
+
+.pfx-sidebar-item:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.18);
+}
+
+.pfx-sidebar-item:hover:selected {
+    -fx-background-color: derive(-pfx-accent-light, -5%);
+}

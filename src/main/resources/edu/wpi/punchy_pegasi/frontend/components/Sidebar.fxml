@@ -7,9 +7,11 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css"
+<?import javafx.scene.Group?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0"
             xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController"
+            fx:id="root">
     <center>
         <VBox styleClass="sideBar">
             <VBox fx:id="accountInfo">
@@ -23,12 +25,12 @@
                         </VBox>
                         <VBox HBox.hgrow="NEVER" alignment="CENTER_LEFT">
                             <children>
-                                <Label fx:id="nameText" text="Ryan Nguyen" textFill="WHITE">
+                                <Label fx:id="nameText" style="-fx-text-fill: -pfx-navy">
                                     <font>
                                         <Font size="20.0"/>
                                     </font>
                                 </Label>
-                                <Label fx:id="roleText" text="Admin" textFill="WHITE">
+                                <Label fx:id="roleText" style="-fx-text-fill: -pfx-navy">
                                     <font>
                                         <Font size="15.0"/>
                                     </font>
@@ -37,10 +39,13 @@
                         </VBox>
                     </children>
                     <padding>
-                        <Insets topRightBottomLeft="10"/>
+                        <Insets bottom="10"/>
                     </padding>
                 </HBox>
-                <Line endX="256.0" startX="0.0" stroke="#012D5A"/>
+                <Line endX="236.0" startX="20.0" stroke="#012D5A"/>
+                <padding>
+                    <Insets right="20" left="20" top="10"/>
+                </padding>
             </VBox>
             <VBox fx:id="sidebar" spacing="10.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
                 <children>
@@ -82,9 +87,6 @@
                         </children>
                     </HBox>
                 </children>
-                <padding>
-                    <Insets top="20" left="20" bottom="20"/>
-                </padding>
             </VBox>
         </VBox>
     </center>
