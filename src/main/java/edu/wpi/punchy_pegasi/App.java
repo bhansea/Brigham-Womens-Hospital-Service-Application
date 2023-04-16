@@ -156,7 +156,6 @@ public class App extends Application {
     public void loadStylesheet(String resourcePath) {
         var resource = resolveResource(resourcePath);
         if (resource.isPresent()) {
-            scene.getStylesheets().clear();
             scene.getStylesheets().add(resource.get().toExternalForm());
         }
     }
@@ -193,7 +192,10 @@ public class App extends Application {
                     registerRecursive(watchService, path);
 
                     var reloadCSS = new Debouncer<String>(s -> {
-                        Platform.runLater(() -> loadStylesheet("frontend/css/DefaultTheme.css"));
+                        Platform.runLater(() -> {
+                            scene.getStylesheets().clear();
+                            loadStylesheet("frontend/css/DefaultTheme.css");
+                        });
                         System.out.println("Hot-loaded CSS: " + s);
                     }, 1000);
                     var reloadFXML = new Debouncer<String>(s ->{

@@ -15,9 +15,9 @@
     <center>
         <VBox styleClass="sideBar">
             <VBox fx:id="accountInfo">
-                <HBox spacing="10">
+                <HBox>
                     <children>
-                        <VBox HBox.hgrow="NEVER">
+                        <VBox HBox.hgrow="NEVER" styleClass="accountImage">
                             <children>
                                 <ImageView fx:id="profileImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
                                            preserveRatio="true"/>
@@ -38,9 +38,6 @@
                             </children>
                         </VBox>
                     </children>
-                    <padding>
-                        <Insets bottom="10"/>
-                    </padding>
                 </HBox>
                 <Line endX="236.0" startX="20.0" stroke="#012D5A"/>
                 <padding>
