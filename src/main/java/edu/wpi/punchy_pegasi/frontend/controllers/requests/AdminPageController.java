@@ -17,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -82,7 +81,6 @@ public class AdminPageController {
         ObservableList<String> tableTypes = FXCollections.observableArrayList("Nodes", "Edges", "Moves", "Location Names");
         tableTypesComboBox.setItems(tableTypes);
 
-        Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         fileChooser.setTitle("File Chooser");
@@ -119,7 +117,7 @@ public class AdminPageController {
         importButton.setOnAction(e -> {
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
             fileChooser.getExtensionFilters().add(extFilter);
-            selectedFile = fileChooser.showOpenDialog(stage);
+            selectedFile = fileChooser.showOpenDialog(App.getSingleton().getPopupStage());
 
             if (selectedFile != null && tableTypesComboBox.getSelectedItem() != null) {
                 filePath = selectedFile.getAbsolutePath();
@@ -157,7 +155,7 @@ public class AdminPageController {
         });
 
         exportButton.setOnAction(e -> {
-            selectedDir = directoryChooser.showDialog(stage);
+            selectedDir = directoryChooser.showDialog(App.getSingleton().getPopupStage());
             fileText.setText(selectedDir.getAbsolutePath());
 
             while (selectedDir != null) {

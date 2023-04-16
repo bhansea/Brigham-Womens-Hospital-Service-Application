@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.components;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialIcons;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -26,7 +27,7 @@ public class PFXSidebarItem extends HBox {
 
     private BooleanProperty selected = new SimpleBooleanProperty();
 
-    public PFXSidebarItem(Screen screen, MaterialIcons icon) {
+    public PFXSidebarItem(Screen screen, MaterialSymbols icon) {
         super();
         this.dropdown = false;
         this.screen = screen;
@@ -36,7 +37,7 @@ public class PFXSidebarItem extends HBox {
         setSelected(false);
     }
 
-    public PFXSidebarItem(String text, MaterialIcons icon, List<Screen> dropdownItems) {
+    public PFXSidebarItem(String text, MaterialSymbols icon, List<Screen> dropdownItems) {
         super();
         this.dropdown = true;
         this.screen = null;

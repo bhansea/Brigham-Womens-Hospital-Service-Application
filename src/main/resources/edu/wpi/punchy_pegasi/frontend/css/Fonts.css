@@ -112,13 +112,13 @@
 }
 
 @font-face {
-	font-family: "Material Icons";
+	font-family: "Material Symbols Rounded Regular";
 	font-display: block;
-	src: url("../fonts/MaterialDesignIcons/MaterialIcons-Regular.ttf") format('truetype');
+	src: url("../fonts/MaterialDesignIcons/MaterialSymbolsRounded.ttf") format('truetype');
 }
 
 @font-face {
-	font-family: "Material Icons Outlined Regular";
+	font-family: "Material Symbols Rounded Filled";
 	font-display: block;
-	src: url("../fonts/MaterialDesignIcons/MaterialIconsOutlined-Regular.otf") format('opentype');
+	src: url("../fonts/MaterialDesignIcons/MaterialSymbolsRounded-Filled.ttf") format('truetype');
 }

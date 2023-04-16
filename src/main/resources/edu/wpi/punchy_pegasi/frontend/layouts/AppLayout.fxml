@@ -2,14 +2,12 @@
 
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LayoutController">
+<?import edu.wpi.punchy_pegasi.frontend.controllers.SidebarController?>
+<fx:root type="javafx.scene.layout.BorderPane"
+         xmlns:fx="http://javafx.com/fxml"
+         xmlns="http://javafx.com/javafx">
     <center>
         <BorderPane>
-<!--            <top>-->
-<!--                <fx:include source="../components/Header.fxml"/>-->
-<!--            </top>-->
             <center>
                 <ScrollPane fitToHeight="true" fitToWidth="true">
                     <BorderPane fx:id="ViewPane"/>
@@ -18,6 +16,6 @@
         </BorderPane>
     </center>
     <left>
-        <fx:include source="../components/Sidebar.fxml"/>
+        <SidebarController/>
     </left>
-</BorderPane>
+</fx:root>

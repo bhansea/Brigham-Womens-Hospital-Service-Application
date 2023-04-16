@@ -7,7 +7,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Debouncer<T> {
-    private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService sched = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread t = new Thread(r, "Debouncer");
+        t.setDaemon(true);
+        return t;
+    });
     private final ConcurrentHashMap<T, TimerTask> delayedMap = new ConcurrentHashMap<T, TimerTask>();
     private final Consumer<T> callback;
     private final int interval;

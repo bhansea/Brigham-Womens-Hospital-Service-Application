@@ -6,7 +6,7 @@ import javafx.scene.text.Text;
 
 public class PFXIcon extends Text {
     private static final PseudoClass OUTLINED_PSEUDO_CLASS = PseudoClass.getPseudoClass("outlined");
-    private final ObjectProperty<MaterialIcons> icon = new SimpleObjectProperty<>();
+    private final ObjectProperty<MaterialSymbols> icon = new SimpleObjectProperty<>();
     private final DoubleProperty size = new SimpleDoubleProperty();
     private final BooleanProperty outlined = new SimpleBooleanProperty();
 
@@ -15,26 +15,26 @@ public class PFXIcon extends Text {
         this.getStyleClass().add("pfx-icon");
     }
 
-    public PFXIcon(MaterialIcons icon) {
+    public PFXIcon(MaterialSymbols icon) {
         this();
         this.setIcon(icon);
     }
 
-    public PFXIcon(MaterialIcons icon, double size) {
+    public PFXIcon(MaterialSymbols icon, double size) {
         this();
         this.setIcon(icon);
         this.setSize(size);
     }
 
-    public final ObjectProperty<MaterialIcons> iconProperty() {
+    public final ObjectProperty<MaterialSymbols> iconProperty() {
         return icon;
     }
 
-    public final MaterialIcons getIcon() {
+    public final MaterialSymbols getIcon() {
         return icon.get();
     }
 
-    public final void setIcon(MaterialIcons icon) {
+    public final void setIcon(MaterialSymbols icon) {
         this.setText(icon.getUnicode());
         this.icon.set(icon);
     }

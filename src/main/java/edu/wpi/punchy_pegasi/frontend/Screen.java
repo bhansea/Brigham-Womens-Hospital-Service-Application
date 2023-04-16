@@ -42,7 +42,7 @@ public enum Screen {
 
     private static Parent defaultCreate(String path) {
         try {
-            return App.getSingleton().loadWithCache(path);
+            return App.getSingleton().loadWithCache(path).getRoot();
         } catch (IOException e) {
             log.error("Error in screen", e);
             throw new RuntimeException(e);

@@ -3,7 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXSidebarItem;
-import edu.wpi.punchy_pegasi.frontend.icons.MaterialIcons;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.schema.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,10 +18,11 @@ import javafx.scene.layout.VBox;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class SidebarController implements PropertyChangeListener {
+public class SidebarController extends BorderPane implements PropertyChangeListener {
     @FXML
     HBox loginLogout;
     @FXML
@@ -36,14 +37,32 @@ public class SidebarController implements PropertyChangeListener {
     private Label loginLogoutText;
     @FXML
     private VBox accountInfo;
+
     private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
-            new PFXSidebarItem(Screen.HOME, MaterialIcons.HOME),
-            new PFXSidebarItem("Service Requests", MaterialIcons.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
-            new PFXSidebarItem(Screen.MAP_PAGE, MaterialIcons.MAP),
-            new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialIcons.ADMIN_PANEL_SETTINGS),
-            new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialIcons.REBASE_EDIT),
-            new PFXSidebarItem(Screen.SIGNAGE, MaterialIcons.SIGNPOST)
+            new PFXSidebarItem(Screen.HOME, MaterialSymbols.HOME),
+            new PFXSidebarItem("Service Requests", MaterialSymbols.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
+            new PFXSidebarItem(Screen.MAP_PAGE, MaterialSymbols.MAP),
+            new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialSymbols.ADMIN_PANEL_SETTINGS),
+            new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
+            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
     );
+
+    public SidebarController() {
+        super();
+        try {
+            App.getSingleton().loadWithCache("frontend/components/Sidebar.fxml", this, this);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public void reload() {
+        try {
+            App.getSingleton().loadWithCache("frontend/components/Sidebar.fxml", this, this);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
     @FXML
     private BorderPane root;
 

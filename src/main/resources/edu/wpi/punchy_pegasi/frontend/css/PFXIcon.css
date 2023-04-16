@@ -1,9 +1,9 @@
 @import "Fonts.css";
 
 .pfx-icon {
-    -fx-font-family: "Material Icons";
+    -fx-font-family: "Material Symbols Rounded Filled";
 }
 
 .pfx-icon:outlined {
-    -fx-font-family: "Material Icons Outlined Regular";
+    -fx-font-family: "Material Symbols Rounded Regular";
 }

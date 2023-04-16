@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
@@ -7,11 +8,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.Group?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0"
-            xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController"
-            fx:id="root">
+<fx:root type="javafx.scene.layout.BorderPane"
+         xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0"
+         xmlns="http://javafx.com/javafx/">
     <center>
         <VBox styleClass="sideBar">
             <VBox fx:id="accountInfo">
@@ -87,4 +86,4 @@
             </VBox>
         </VBox>
     </center>
-</BorderPane>
+</fx:root>
