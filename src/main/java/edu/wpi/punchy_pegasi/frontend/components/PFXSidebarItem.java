@@ -9,7 +9,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 
 import java.util.List;
@@ -17,22 +19,40 @@ import java.util.List;
 @Getter
 public class PFXSidebarItem extends HBox {
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
+    private static final PseudoClass EXPANDED_PSEUDO_CLASS = PseudoClass.getPseudoClass("expanded");
     private final ObjectProperty<MaterialSymbols> icon = new SimpleObjectProperty<>();
     private final StringProperty text = new SimpleStringProperty();
     private final BooleanProperty selected = new SimpleBooleanProperty();
+    private final BooleanProperty expanded = new SimpleBooleanProperty();
     private boolean dropdown;
     private String dropdownText;
-    private final PFXIcon pfxIcon = new PFXIcon();
-    private final Label label = new Label();
+    private HBox container = new HBox();
+    private PFXIcon pfxIcon = new PFXIcon();
+    private VBox expandedInfo = new VBox();
     private Screen screen;
     private ObservableList<Screen> dropdownItems;
 
 
     public PFXSidebarItem() {
         super();
-        getChildren().addAll(pfxIcon, label);
+        getStyleClass().add("pfx-sidebar-container");
+        getChildren().add(container);
+        container.getStyleClass().add("pfx-sidebar-item");
+        container.getChildren().addAll(pfxIcon, expandedInfo);
+        var label = new Label();
+        label.textOverrunProperty().set(OverrunStyle.CLIP);
+        getExpandedInfo().getChildren().add(label);
         label.textProperty().bind(this.textProperty());
-        getStyleClass().add("pfx-sidebar-item");
+        setExpanded(true);
+    }
+
+    public PFXSidebarItem(MaterialSymbols icon) {
+        super();
+        getStyleClass().add("pfx-sidebar-container");
+        getChildren().add(container);
+        container.getStyleClass().add("pfx-sidebar-item");
+        container.getChildren().addAll(pfxIcon, expandedInfo);
+        setExpanded(true);
     }
 
     public PFXSidebarItem(Screen screen, MaterialSymbols icon) {
@@ -44,6 +64,14 @@ public class PFXSidebarItem extends HBox {
         this.dropdownText = "";
         normal();
         setSelected(false);
+    }
+
+    public VBox getExpandedInfo() {
+        return this.expandedInfo;
+    }
+
+    public void setExpandedInfo(VBox expandedInfo) {
+        this.expandedInfo = expandedInfo;
     }
 
     public PFXSidebarItem(String text, MaterialSymbols icon, List<Screen> dropdownItems) {
@@ -93,8 +121,25 @@ public class PFXSidebarItem extends HBox {
 
     public void setSelected(boolean value) {
         pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, value);
+        container.pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, value);
         pfxIcon.setOutlined(!value);
         this.selected.set(value);
+    }
+
+    public BooleanProperty expandedProperty() {
+        return this.expanded;
+    }
+
+    public boolean getExpanded() {
+        return this.expanded.get();
+    }
+
+    public void setExpanded(boolean value) {
+        pseudoClassStateChanged(EXPANDED_PSEUDO_CLASS, value);
+        container.pseudoClassStateChanged(EXPANDED_PSEUDO_CLASS, value);
+        expandedInfo.setVisible(value);
+        expandedInfo.setManaged(value);
+        this.expanded.set(value);
     }
 
     private void normal() {
@@ -103,6 +148,7 @@ public class PFXSidebarItem extends HBox {
 
     private void dropdown() {
         normal();
+        return;
 
 //        var vbox = new VBox();
 //        getChildren().add(vbox);
