@@ -111,59 +111,45 @@ public class Facade {
 	public Map<java.lang.Long, LocationName> getAllLocationName() {
 		return locationNameDao.getAll();
 	}
-
 	public void saveLocationName(LocationName locationName) {
 		locationNameDao.save(locationName);
 	}
-
 	public void updateLocationName(LocationName locationName, LocationName.Field[] params) {
 		locationNameDao.update(locationName, params);
 	}
-
 	public void deleteLocationName(LocationName locationName) {
 		locationNameDao.delete(locationName);
 	}
-
 	public Optional<RequestEntry> getRequestEntry(java.util.UUID key) {
 		return requestEntryDao.get(key);
 	}
-
 	public Map<java.util.UUID, RequestEntry> getRequestEntry(RequestEntry.Field column, Object value) {
 		return requestEntryDao.get(column, value);
 	}
-
 	public Map<java.util.UUID, RequestEntry> getRequestEntry(RequestEntry.Field[] params, Object[] value) {
 		return requestEntryDao.get(params, value);
 	}
-
 	public Map<java.util.UUID, RequestEntry> getAllRequestEntry() {
 		return requestEntryDao.getAll();
 	}
-
 	public void saveRequestEntry(RequestEntry requestEntry) {
 		requestEntryDao.save(requestEntry);
 	}
-
 	public void updateRequestEntry(RequestEntry requestEntry, RequestEntry.Field[] params) {
 		requestEntryDao.update(requestEntry, params);
 	}
-
 	public void deleteRequestEntry(RequestEntry requestEntry) {
 		requestEntryDao.delete(requestEntry);
 	}
-
 	public Optional<FoodServiceRequestEntry> getFoodServiceRequestEntry(java.util.UUID key) {
 		return foodServiceRequestEntryDao.get(key);
 	}
-
 	public Map<java.util.UUID, FoodServiceRequestEntry> getFoodServiceRequestEntry(FoodServiceRequestEntry.Field column, Object value) {
 		return foodServiceRequestEntryDao.get(column, value);
 	}
-
 	public Map<java.util.UUID, FoodServiceRequestEntry> getFoodServiceRequestEntry(FoodServiceRequestEntry.Field[] params, Object[] value) {
 		return foodServiceRequestEntryDao.get(params, value);
 	}
-
 	public Map<java.util.UUID, FoodServiceRequestEntry> getAllFoodServiceRequestEntry() {
 		return foodServiceRequestEntryDao.getAll();
 	}

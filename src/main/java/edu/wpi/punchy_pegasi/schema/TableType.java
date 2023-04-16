@@ -82,7 +82,7 @@ public enum TableType {
             CREATE TABLE IF NOT EXISTS teamp.generic
             (
               
-            ) INHERITS teamp.(requests);
+            ) INHERITS (teamp.requests);
             """),
     FOODREQUESTS(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.foodrequests
@@ -93,7 +93,7 @@ public enum TableType {
               dietaryRestrictions varchar,
               patientName varchar,
               beverage varchar
-            ) INHERITS teamp.(requests);
+            ) INHERITS (teamp.requests);
             """),
     FLOWERREQUESTS(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.flowerrequests
@@ -102,7 +102,7 @@ public enum TableType {
               flowerType varchar,
               flowerAmount varchar,
               patientName varchar
-            ) INHERITS teamp.(requests);
+            ) INHERITS (teamp.requests);
             """),
     CONFERENCEREQUESTS(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.conferencerequests
@@ -110,20 +110,20 @@ public enum TableType {
               beginningTime varchar,
               endTime varchar,
               date date NOT NULL
-            ) INHERITS teamp.(requests);
+            ) INHERITS (teamp.requests);
             """),
     FURNITUREREQUESTS(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.furniturerequests
             (
               selectFurniture varchar ARRAY
-            ) INHERITS teamp.(requests);
+            ) INHERITS (teamp.requests);
             """),
     OFFICEREQUESTS(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.officerequests
             (
               officeRequest varchar,
               employeeName varchar
-            ) INHERITS teamp.(requests);
+            ) INHERITS (teamp.requests);
             """),
     EMPLOYEES(edu.wpi.punchy_pegasi.schema.Employee.class, """
             DO $$

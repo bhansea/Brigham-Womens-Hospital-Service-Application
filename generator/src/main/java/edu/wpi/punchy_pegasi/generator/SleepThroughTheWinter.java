@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generator;
 
-import edu.wpi.punchy_pegasi.generator.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -109,15 +108,15 @@ public class  SleepThroughTheWinter {
             constructor.append("                    ");
             if (type.isEnum())
                 constructor.append(type.getCanonicalName())
-                        .append(".valueOf((String)rs.getObject(\"").append(column).append("\"))");
+                        .append(".valueOf(rs.getString(\"").append(column).append("\"))");
             else if (List.class.isAssignableFrom(type))
                 constructor.append("java.util.Arrays.asList((")//.append(type.getCanonicalName())
                         .append("String[])rs.getArray(\"").append(column).append("\").getArray())");
-            else if (type.equals(LocalDate.class))
+            else if (type.equals(Date.class))
                 constructor.append("rs.getDate(\"").append(column).append("\").toLocalDate()");
             else
-                constructor.append("(").append(type.getCanonicalName())
-                        .append(")rs.getObject(\"").append(column).append("\")");
+                constructor.append("rs.getObject(\"").append(column).append("\", ")
+                        .append(type.getCanonicalName()).append(".class)");
             constructor.append(",\n");
 
         }
@@ -178,7 +177,7 @@ public class  SleepThroughTheWinter {
         var parentTable = Arrays.stream(TableType.values()).filter(t -> t.getClazz() == parentClass).toList();
 
         var inheritanceString = parentClass != null && parentTable.size() == 1
-                ? " INHERITS teamp.(" + parentTable.get(0).name().toLowerCase() + ")"
+                ? " INHERITS (teamp." + parentTable.get(0).name().toLowerCase() + ")"
                 : "";
 
         var classFields = inheritanceString.isBlank()

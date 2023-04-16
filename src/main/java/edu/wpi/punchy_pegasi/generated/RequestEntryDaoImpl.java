@@ -2,8 +2,8 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +32,11 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         try (var rs = dbController.searchQuery(TableType.REQUESTS, "serviceID", key)) {
             rs.next();
             RequestEntry req = new RequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -55,11 +55,11 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         try (var rs = dbController.searchQuery(TableType.REQUESTS, Arrays.stream(params).map(RequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 RequestEntry req = new RequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -75,11 +75,11 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         try (var rs = dbController.searchQuery(TableType.REQUESTS)) {
             while (rs.next()) {
                 RequestEntry req = new RequestEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
