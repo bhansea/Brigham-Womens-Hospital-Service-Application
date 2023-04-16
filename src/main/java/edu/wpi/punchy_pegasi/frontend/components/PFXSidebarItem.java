@@ -26,8 +26,8 @@ public class PFXSidebarItem extends HBox {
     private final BooleanProperty expanded = new SimpleBooleanProperty();
     private boolean dropdown;
     private String dropdownText;
-    private HBox container = new HBox();
-    private PFXIcon pfxIcon = new PFXIcon();
+    private final HBox container = new HBox();
+    private final PFXIcon pfxIcon = new PFXIcon();
     private VBox expandedInfo = new VBox();
     private Screen screen;
     private ObservableList<Screen> dropdownItems;
@@ -66,14 +66,6 @@ public class PFXSidebarItem extends HBox {
         setSelected(false);
     }
 
-    public VBox getExpandedInfo() {
-        return this.expandedInfo;
-    }
-
-    public void setExpandedInfo(VBox expandedInfo) {
-        this.expandedInfo = expandedInfo;
-    }
-
     public PFXSidebarItem(String text, MaterialSymbols icon, List<Screen> dropdownItems) {
         this();
         this.dropdown = true;
@@ -84,6 +76,14 @@ public class PFXSidebarItem extends HBox {
         this.dropdownItems = FXCollections.observableList(dropdownItems);
         dropdown();
         setSelected(false);
+    }
+
+    public VBox getExpandedInfo() {
+        return this.expandedInfo;
+    }
+
+    public void setExpandedInfo(VBox expandedInfo) {
+        this.expandedInfo = expandedInfo;
     }
 
     public final ObjectProperty<MaterialSymbols> iconProperty() {
@@ -148,7 +148,6 @@ public class PFXSidebarItem extends HBox {
 
     private void dropdown() {
         normal();
-        return;
 
 //        var vbox = new VBox();
 //        getChildren().add(vbox);

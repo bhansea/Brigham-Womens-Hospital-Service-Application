@@ -23,15 +23,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class SidebarController extends VBox implements PropertyChangeListener {
-    @FXML
-    private PFXAccount pfxAccount;
-    @FXML
-    private PFXSidebarItem logout;
-
-    private int maxWidth = 256;
-
-    private Boolean expanded = null;
-
     private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
             new PFXSidebarItem(Screen.HOME, MaterialSymbols.HOME),
             new PFXSidebarItem("Service Requests", MaterialSymbols.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
@@ -40,6 +31,14 @@ public class SidebarController extends VBox implements PropertyChangeListener {
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
             new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
     );
+    @FXML
+    private PFXAccount pfxAccount;
+    @FXML
+    private PFXSidebarItem logout;
+    private final int maxWidth = 256;
+    private Boolean expanded = null;
+    @FXML
+    private BorderPane root;
 
     public SidebarController() {
         super();
@@ -56,8 +55,6 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         pfxAccount.setOnMouseClicked(e -> setSelected(null));
         logout.setOnMouseClicked(e -> App.getSingleton().setAccount(null));
     }
-    @FXML
-    private BorderPane root;
 
     private void setAccount(Account account) {
         sidebarItems.forEach(s -> {
