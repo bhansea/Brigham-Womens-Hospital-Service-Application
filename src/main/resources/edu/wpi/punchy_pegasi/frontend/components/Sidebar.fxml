@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXSidebarItem?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0" stylesheets="@../css/Sidebar.css"
-            xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SidebarController">
+<fx:root type="javafx.scene.layout.BorderPane"
+         xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0"
+         xmlns="http://javafx.com/javafx/">
     <center>
         <VBox styleClass="sideBar">
             <VBox fx:id="accountInfo">
-                <HBox spacing="10">
+                <HBox>
                     <children>
-                        <VBox HBox.hgrow="NEVER">
+                        <VBox HBox.hgrow="NEVER" styleClass="accountImage">
                             <children>
                                 <ImageView fx:id="profileImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
                                            preserveRatio="true"/>
@@ -23,12 +23,12 @@
                         </VBox>
                         <VBox HBox.hgrow="NEVER" alignment="CENTER_LEFT">
                             <children>
-                                <Label fx:id="nameText" text="Ryan Nguyen" textFill="WHITE">
+                                <Label fx:id="nameText" style="-fx-text-fill: -pfx-navy">
                                     <font>
                                         <Font size="20.0"/>
                                     </font>
                                 </Label>
-                                <Label fx:id="roleText" text="Admin" textFill="WHITE">
+                                <Label fx:id="roleText" style="-fx-text-fill: -pfx-navy">
                                     <font>
                                         <Font size="15.0"/>
                                     </font>
@@ -36,56 +36,19 @@
                             </children>
                         </VBox>
                     </children>
-                    <padding>
-                        <Insets topRightBottomLeft="10"/>
-                    </padding>
                 </HBox>
-                <Line endX="256.0" startX="0.0" stroke="#012D5A"/>
+                <Line endX="236.0" startX="20.0" stroke="#012D5A"/>
+                <padding>
+                    <Insets right="20" left="20" top="10"/>
+                </padding>
             </VBox>
             <VBox fx:id="sidebar" spacing="10.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
                 <children>
                     <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS"/>
-                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="button" fx:id="loginLogout">
-                        <children>
-                            <Region styleClass="icon">
-                                <shape>
-                                    <SVGPath>
-                                        <content>
-                                            M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z
-                                        </content>
-                                    </SVGPath>
-                                </shape>
-                            </Region>
-                            <Label text="Logout" textFill="WHITE" fx:id="loginLogoutText">
-                                <font>
-                                    <Font size="20.0"/>
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="button">
-                        <children>
-                            <Region styleClass="icon">
-                                <shape>
-                                    <SVGPath>
-                                        <content>
-                                            M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z
-                                        </content>
-                                    </SVGPath>
-                                </shape>
-                            </Region>
-                            <Label text="Exit" textFill="WHITE" onMouseClicked="#exit">
-                                <font>
-                                    <Font size="20.0"/>
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
+                    <PFXSidebarItem icon="LOGOUT" fx:id="loginLogout"/>
+                    <PFXSidebarItem icon="EXIT_TO_APP" text="Exit" onMouseClicked="#exit"/>
                 </children>
-                <padding>
-                    <Insets top="20" left="20" bottom="20"/>
-                </padding>
             </VBox>
         </VBox>
     </center>
-</BorderPane>
+</fx:root>

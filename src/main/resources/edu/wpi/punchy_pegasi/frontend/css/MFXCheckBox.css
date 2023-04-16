@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "Fonts.css";
+@import "MFXColors.css";
+
+.mfx-checkbox {
+	-mfx-main: #6200EE;
+	-mfx-secondary: #424242;
+
+	-fx-font-family: "Nunito Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-checkbox .box {
+	-fx-background-color: transparent;
+	-fx-background-radius: 2;
+
+	-fx-border-color: -mfx-secondary;
+	-fx-border-radius: 2;
+	-fx-border-width: 1.5;
+
+	-fx-padding: 2;
+}
+
+.mfx-checkbox .box .mark {
+    visibility: hidden;
+    -mfx-color: white;
+    -mfx-description: "fas-check";
+    -mfx-size: 12;
+}
+
+.mfx-checkbox .ripple-container {
+	-fx-padding: 4;
+}
+
+.mfx-checkbox .ripple-container .mfx-ripple-generator {
+	-mfx-animation-speed: 1.5;
+	-mfx-ripple-color: derive(-mfx-main, 110%);
+	-mfx-ripple-radius: 16;
+}
+
+.mfx-checkbox:selected .box,
+.mfx-checkbox:indeterminate .box {
+	-fx-background-color: -mfx-main;
+	-fx-border-color: -mfx-main;
+}
+
+.mfx-checkbox:selected .box .mark {
+	visibility: visible;
+}
+
+.mfx-checkbox:selected:disabled .box,
+.mfx-checkbox:indeterminate:disabled .box {
+	-fx-background-color: -mfx-secondary;
+	-fx-border-color: -mfx-secondary;
+}
+
+.mfx-checkbox:indeterminate .box .mark {
+    visibility: visible;
+    -mfx-description: "fas-minus";
+}
+

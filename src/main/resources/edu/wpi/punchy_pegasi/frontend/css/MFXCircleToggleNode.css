@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "Fonts.css";
+@import "MFXTextField.css";
+
+.mfx-circle-toggle-node {
+	-mfx-unselected-color: white;
+	-mfx-selected-color: #EDEDED;
+	-mfx-unselected-border-color: #E1E1E1;
+	-mfx-selected-border-color: #E1E1E1;
+}
+
+.mfx-circle-toggle-node,
+.mfx-circle-toggle-node:armed,
+.mfx-circle-toggle-node:hover,
+.mfx-circle-toggle-node:focused,
+.mfx-circle-toggle-node:selected,
+.mfx-circle-toggle-node:focused:selected {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-background-insets: 0;
+}
+
+.mfx-circle-toggle-node .circle {
+	-fx-fill: -mfx-unselected-color;
+	-fx-stroke: -mfx-unselected-border-color;
+}
+
+.mfx-circle-toggle-node:selected .circle {
+	-fx-fill: -mfx-selected-color;
+	-fx-stroke: -mfx-selected-border-color;
+}
+
+.mfx-circle-toggle-node .mfx-text-field {
+	-mfx-float-mode: disabled;
+	-mfx-gap: 0;
+
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
