@@ -22,7 +22,7 @@ public class GenericRequestEntry extends RequestEntry {
         STATUS("status");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.GenericRequestEntry ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.GenericRequestEntry ref){
             return ref.getFromField(this);
         }
     }
