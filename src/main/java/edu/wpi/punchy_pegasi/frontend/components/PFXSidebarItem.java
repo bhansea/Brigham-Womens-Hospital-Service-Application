@@ -2,11 +2,9 @@ package edu.wpi.punchy_pegasi.frontend.components;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.frontend.icons.MaterialIcons;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
@@ -19,33 +17,70 @@ import java.util.List;
 @Getter
 public class PFXSidebarItem extends HBox {
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
-    private final boolean dropdown;
-    private final String dropdownText;
-    private final PFXIcon icon;
-    private final Screen screen;
+    private final ObjectProperty<MaterialSymbols> icon = new SimpleObjectProperty<>();
+    private final StringProperty text = new SimpleStringProperty();
+    private final BooleanProperty selected = new SimpleBooleanProperty();
+    private boolean dropdown;
+    private String dropdownText;
+    private PFXIcon pfxIcon = new PFXIcon();
+    private Label label = new Label();
+    private Screen screen;
     private ObservableList<Screen> dropdownItems;
 
-    private BooleanProperty selected = new SimpleBooleanProperty();
+
+    public PFXSidebarItem() {
+        super();
+        getChildren().addAll(pfxIcon, label);
+        label.textProperty().bind(this.textProperty());
+        getStyleClass().add("pfx-sidebar-item");
+    }
 
     public PFXSidebarItem(Screen screen, MaterialSymbols icon) {
-        super();
+        this();
         this.dropdown = false;
         this.screen = screen;
-        this.icon = new PFXIcon(icon);
+        setIcon(icon);
+        setText(screen.getReadable());
         this.dropdownText = "";
         normal();
         setSelected(false);
     }
 
     public PFXSidebarItem(String text, MaterialSymbols icon, List<Screen> dropdownItems) {
-        super();
+        this();
         this.dropdown = true;
         this.screen = null;
-        this.icon = new PFXIcon(icon);
+        setIcon(icon);
+        setText(text);
         this.dropdownText = text;
         this.dropdownItems = FXCollections.observableList(dropdownItems);
         dropdown();
         setSelected(false);
+    }
+
+    public final ObjectProperty<MaterialSymbols> iconProperty() {
+        return icon;
+    }
+
+    public final MaterialSymbols getIcon() {
+        return icon.get();
+    }
+
+    public final void setIcon(MaterialSymbols icon) {
+        pfxIcon.setIcon(icon);
+        this.icon.set(icon);
+    }
+
+    public final StringProperty textProperty() {
+        return text;
+    }
+
+    public final String getText() {
+        return text.get();
+    }
+
+    public final void setText(String text) {
+        this.text.set(text);
     }
 
     public BooleanProperty selectedProperty() {
@@ -58,14 +93,11 @@ public class PFXSidebarItem extends HBox {
 
     public void setSelected(boolean value) {
         pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, value);
-        icon.setOutlined(!value);
+        pfxIcon.setOutlined(!value);
         this.selected.set(value);
     }
 
     private void normal() {
-        var label = new Label(screen != null ? screen.getReadable() : dropdownText);
-        getChildren().addAll(icon, label);
-        getStyleClass().add("pfx-sidebar-item");
         setOnMouseClicked(e -> App.getSingleton().navigate(screen));
     }
 

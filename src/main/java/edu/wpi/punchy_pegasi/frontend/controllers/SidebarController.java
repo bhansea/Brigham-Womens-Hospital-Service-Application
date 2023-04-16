@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class SidebarController extends BorderPane implements PropertyChangeListener {
     @FXML
-    HBox loginLogout;
+    PFXSidebarItem loginLogout;
     @FXML
     ImageView profileImage;
     @FXML
@@ -33,8 +33,6 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
     Label roleText;
     @FXML
     private VBox sidebar;
-    @FXML
-    private Label loginLogoutText;
     @FXML
     private VBox accountInfo;
 
@@ -101,13 +99,15 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
         if (account.getAccountType() == Account.AccountType.NONE) {
             accountInfo.setManaged(false);
             accountInfo.setVisible(false);
-            loginLogoutText.setText("Login");
+            loginLogout.setText("Login");
+            loginLogout.setIcon(MaterialSymbols.LOGIN);
             return;
         }
 
         accountInfo.setManaged(true);
         accountInfo.setVisible(true);
-        loginLogoutText.setText("Logout");
+        loginLogout.setText("Logout");
+        loginLogout.setIcon(MaterialSymbols.LOGOUT);
         nameText.setText(account.getUsername());
         roleText.setText(account.getAccountType().name());
     }
