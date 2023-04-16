@@ -32,14 +32,14 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, "serviceID", key)) {
             rs.next();
             ConferenceRoomEntry req = new ConferenceRoomEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("beginningTime"),
-                    (java.lang.String)rs.getObject("endTime"),
-                    rs.getDate("date").toLocalDate());
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("beginningTime", java.lang.String.class),
+                    rs.getObject("endTime", java.lang.String.class),
+                    rs.getObject("date", java.time.LocalDate.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -58,14 +58,14 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, Arrays.stream(params).map(ConferenceRoomEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("beginningTime"),
-                    (java.lang.String)rs.getObject("endTime"),
-                    rs.getDate("date").toLocalDate());
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("beginningTime", java.lang.String.class),
+                        rs.getObject("endTime", java.lang.String.class),
+                        rs.getObject("date", java.time.LocalDate.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -81,14 +81,14 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS)) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
-                    (java.util.UUID)rs.getObject("serviceID"),
-                    (java.lang.Long)rs.getObject("locationName"),
-                    (java.lang.Long)rs.getObject("staffAssignment"),
-                    (java.lang.String)rs.getObject("additionalNotes"),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String)rs.getObject("status")),
-                    (java.lang.String)rs.getObject("beginningTime"),
-                    (java.lang.String)rs.getObject("endTime"),
-                    rs.getDate("date").toLocalDate());
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("beginningTime", java.lang.String.class),
+                        rs.getObject("endTime", java.lang.String.class),
+                        rs.getObject("date", java.time.LocalDate.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

@@ -36,12 +36,10 @@ public class Node implements INode {
         BUILDING("building");
         @lombok.Getter
         private final String colName;
-
         public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref) {
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case NODE_ID -> getNodeID();

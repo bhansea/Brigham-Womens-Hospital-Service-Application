@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generator;
 
-import edu.wpi.punchy_pegasi.generator.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.generator.schema.TableType;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -109,15 +108,15 @@ public class  SleepThroughTheWinter {
             constructor.append("                    ");
             if (type.isEnum())
                 constructor.append(type.getCanonicalName())
-                        .append(".valueOf((String)rs.getObject(\"").append(column).append("\"))");
+                        .append(".valueOf(rs.getString(\"").append(column).append("\"))");
             else if (List.class.isAssignableFrom(type))
                 constructor.append("java.util.Arrays.asList((")//.append(type.getCanonicalName())
                         .append("String[])rs.getArray(\"").append(column).append("\").getArray())");
-            else if (type.equals(LocalDate.class))
+            else if (type.equals(Date.class))
                 constructor.append("rs.getDate(\"").append(column).append("\").toLocalDate()");
             else
-                constructor.append("(").append(type.getCanonicalName())
-                        .append(")rs.getObject(\"").append(column).append("\")");
+                constructor.append("rs.getObject(\"").append(column).append("\", ")
+                        .append(type.getCanonicalName()).append(".class)");
             constructor.append(",\n");
 
         }
@@ -174,8 +173,20 @@ public class  SleepThroughTheWinter {
         var clazz = tt.getClazz();
         var tableName = "teamp." + tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
-        var classFields = getFieldsRecursively(clazz);
-        var idField = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).findFirst().get();
+        var parentClass = clazz.getSuperclass().equals(Object.class) ? null : clazz.getSuperclass();
+        var parentTable = Arrays.stream(TableType.values()).filter(t -> t.getClazz() == parentClass).toList();
+
+        var inheritanceString = parentClass != null && parentTable.size() == 1
+                ? " INHERITS (teamp." + parentTable.get(0).name().toLowerCase() + ")"
+                : "";
+
+        var classFields = inheritanceString.isBlank()
+                ? getFieldsRecursively(clazz)
+                : Arrays.stream(clazz.getDeclaredFields()).toList();
+
+
+//        var classFields = getFieldsRecursively(clazz);
+        var idField = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).findFirst();
         var tableColumns = classFields.stream().map(f -> {
             var appendText = fieldIsID(f) ?
                     f.getType() == Long.class ?
@@ -187,16 +198,7 @@ public class  SleepThroughTheWinter {
             return "" + f.getName() + " " + classToPostgres.get(f.getType()) + appendText;
         }).toList();
 
-        if (idField.getType() == UUID.class)
-            return String.format("""
-                    %s(%s.class, \"\"\"
-                    CREATE TABLE IF NOT EXISTS %s
-                    (
-                      %s
-                    );
-                    \"\"\")
-                    """, tt.name(), clazz.getCanonicalName(), tableName, String.join(",\n  ", tableColumns));
-        else
+        if (idField.isPresent() && idField.get().getType() == Long.class)
             return String.format("""
                     %1$s(%2$s.class, \"\"\"
                     DO $$
@@ -210,7 +212,19 @@ public class  SleepThroughTheWinter {
                         ALTER SEQUENCE %4$s OWNED BY %3$s.%6$s;
                       END IF;
                     END $$;
-                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.getName());
+                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName());
+        else
+            return String.format("""
+                            %s(%s.class, \"\"\"
+                            CREATE TABLE IF NOT EXISTS %s
+                            (
+                              %s
+                            )%s;
+                            \"\"\")
+                            """, tt.name(), clazz.getCanonicalName(),
+                    tableName,
+                    String.join(",\n  ", tableColumns),
+                    inheritanceString);
     }
 
     private static Class getClass(String className, String packageName) {
@@ -265,7 +279,6 @@ public class  SleepThroughTheWinter {
                 .replaceAll("\\.generator\\.", ".").trim();
 
         Files.writeString(schemaDestPath, schemaFileText);
-        if(entryClass == RequestEntry.class) return;
         // gen impl
         var typeOptional = Arrays.stream(TableType.values()).filter(tt -> tt.getClazz() == entryClass).findFirst();
         if (typeOptional.isEmpty()) {
@@ -465,10 +478,6 @@ public class  SleepThroughTheWinter {
         }
         generateFacade();
         generateTable();
-        try {
-            generateEntry(RequestEntry.class);
-        } catch (IllegalStateException ignored) {
-        }
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
                 generateEntry(clazz);

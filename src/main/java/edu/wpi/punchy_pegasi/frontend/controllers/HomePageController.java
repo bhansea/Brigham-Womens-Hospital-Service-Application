@@ -12,7 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 public class HomePageController {
@@ -42,12 +45,7 @@ public class HomePageController {
 
     private void initRequestTable() {
         var employeeID = App.getSingleton().getAccount().getEmployeeID();
-        List<RequestEntry> requestEntries = new ArrayList<>();
-        requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
-        requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
-        requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
-        requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
-        requestEntries.addAll(facade.getAllFoodServiceRequestEntry().values());
+        List<RequestEntry> requestEntries = facade.getAllRequestEntry().values().stream().toList();
 
         ObservableList<GenericRequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream()
                 .filter(e -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel() || Objects.equals(e.getStaffAssignment(), employeeID))

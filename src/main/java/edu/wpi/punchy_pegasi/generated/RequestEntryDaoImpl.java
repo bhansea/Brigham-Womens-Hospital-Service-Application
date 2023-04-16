@@ -2,8 +2,8 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,24 +14,24 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericRequestEntry, GenericRequestEntry.Field> {
+public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, RequestEntry.Field> {
 
     static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status"};
     private final PdbController dbController;
 
-    public GenericRequestEntryDaoImpl(PdbController dbController) {
+    public RequestEntryDaoImpl(PdbController dbController) {
         this.dbController = dbController;
     }
 
-    public GenericRequestEntryDaoImpl() {
+    public RequestEntryDaoImpl() {
         this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
-    public Optional<GenericRequestEntry> get(java.util.UUID key) {
-        try (var rs = dbController.searchQuery(TableType.GENERIC, "serviceID", key)) {
+    public Optional<RequestEntry> get(java.util.UUID key) {
+        try (var rs = dbController.searchQuery(TableType.REQUESTS, "serviceID", key)) {
             rs.next();
-            GenericRequestEntry req = new GenericRequestEntry(
+            RequestEntry req = new RequestEntry(
                     rs.getObject("serviceID", java.util.UUID.class),
                     rs.getObject("locationName", java.lang.Long.class),
                     rs.getObject("staffAssignment", java.lang.Long.class),
@@ -45,16 +45,16 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
     }
 
     @Override
-    public Map<java.util.UUID, GenericRequestEntry> get(GenericRequestEntry.Field column, Object value) {
-        return get(new GenericRequestEntry.Field[]{column}, new Object[]{value});
+    public Map<java.util.UUID, RequestEntry> get(RequestEntry.Field column, Object value) {
+        return get(new RequestEntry.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.util.UUID, GenericRequestEntry> get(GenericRequestEntry.Field[] params, Object[] value) {
-        var map = new HashMap<java.util.UUID, GenericRequestEntry>();
-        try (var rs = dbController.searchQuery(TableType.GENERIC, Arrays.stream(params).map(GenericRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
+    public Map<java.util.UUID, RequestEntry> get(RequestEntry.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, RequestEntry>();
+        try (var rs = dbController.searchQuery(TableType.REQUESTS, Arrays.stream(params).map(RequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
-                GenericRequestEntry req = new GenericRequestEntry(
+                RequestEntry req = new RequestEntry(
                         rs.getObject("serviceID", java.util.UUID.class),
                         rs.getObject("locationName", java.lang.Long.class),
                         rs.getObject("staffAssignment", java.lang.Long.class),
@@ -70,11 +70,11 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
     }
 
     @Override
-    public Map<java.util.UUID, GenericRequestEntry> getAll() {
-        var map = new HashMap<java.util.UUID, GenericRequestEntry>();
-        try (var rs = dbController.searchQuery(TableType.GENERIC)) {
+    public Map<java.util.UUID, RequestEntry> getAll() {
+        var map = new HashMap<java.util.UUID, RequestEntry>();
+        try (var rs = dbController.searchQuery(TableType.REQUESTS)) {
             while (rs.next()) {
-                GenericRequestEntry req = new GenericRequestEntry(
+                RequestEntry req = new RequestEntry(
                         rs.getObject("serviceID", java.util.UUID.class),
                         rs.getObject("locationName", java.lang.Long.class),
                         rs.getObject("staffAssignment", java.lang.Long.class),
@@ -90,10 +90,10 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
     }
 
     @Override
-    public void save(GenericRequestEntry genericRequestEntry) {
-        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getLocationName(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
+    public void save(RequestEntry requestEntry) {
+        Object[] values = {requestEntry.getServiceID(), requestEntry.getLocationName(), requestEntry.getStaffAssignment(), requestEntry.getAdditionalNotes(), requestEntry.getStatus()};
         try {
-            dbController.insertQuery(TableType.GENERIC, fields, values);
+            dbController.insertQuery(TableType.REQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -101,20 +101,20 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
     }
 
     @Override
-    public void update(GenericRequestEntry genericRequestEntry, GenericRequestEntry.Field[] params) {
+    public void update(RequestEntry requestEntry, RequestEntry.Field[] params) {
         if (params.length < 1)
             return;
         try {
-            dbController.updateQuery(TableType.GENERIC, "serviceID", genericRequestEntry.getServiceID(), Arrays.stream(params).map(GenericRequestEntry.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(genericRequestEntry)).toArray());
+            dbController.updateQuery(TableType.REQUESTS, "serviceID", requestEntry.getServiceID(), Arrays.stream(params).map(RequestEntry.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(requestEntry)).toArray());
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
     }
 
     @Override
-    public void delete(GenericRequestEntry genericRequestEntry) {
+    public void delete(RequestEntry requestEntry) {
         try {
-            dbController.deleteQuery(TableType.GENERIC, "serviceID", genericRequestEntry.getServiceID());
+            dbController.deleteQuery(TableType.REQUESTS, "serviceID", requestEntry.getServiceID());
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }

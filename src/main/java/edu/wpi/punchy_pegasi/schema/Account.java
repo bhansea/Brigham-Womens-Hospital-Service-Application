@@ -35,7 +35,6 @@ public class Account {
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case USERNAME -> getUsername();

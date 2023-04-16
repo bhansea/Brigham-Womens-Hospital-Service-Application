@@ -1,7 +1,8 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.*;
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.*;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ public class Facade {
 	private final EdgeDaoImpl edgeDao;
 	private final MoveDaoImpl moveDao;
 	private final LocationNameDaoImpl locationNameDao;
+	private final RequestEntryDaoImpl requestEntryDao;
 	private final FoodServiceRequestEntryDaoImpl foodServiceRequestEntryDao;
 	private final FlowerDeliveryRequestEntryDaoImpl flowerDeliveryRequestEntryDao;
 	private final ConferenceRoomEntryDaoImpl conferenceRoomEntryDao;
@@ -24,6 +26,7 @@ public class Facade {
 		edgeDao = new EdgeDaoImpl(dbController);
 		moveDao = new MoveDaoImpl(dbController);
 		locationNameDao = new LocationNameDaoImpl(dbController);
+		requestEntryDao = new RequestEntryDaoImpl(dbController);
 		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(dbController);
 		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(dbController);
 		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(dbController);
@@ -116,6 +119,27 @@ public class Facade {
 	}
 	public void deleteLocationName(LocationName locationName) {
 		locationNameDao.delete(locationName);
+	}
+	public Optional<RequestEntry> getRequestEntry(java.util.UUID key) {
+		return requestEntryDao.get(key);
+	}
+	public Map<java.util.UUID, RequestEntry> getRequestEntry(RequestEntry.Field column, Object value) {
+		return requestEntryDao.get(column, value);
+	}
+	public Map<java.util.UUID, RequestEntry> getRequestEntry(RequestEntry.Field[] params, Object[] value) {
+		return requestEntryDao.get(params, value);
+	}
+	public Map<java.util.UUID, RequestEntry> getAllRequestEntry() {
+		return requestEntryDao.getAll();
+	}
+	public void saveRequestEntry(RequestEntry requestEntry) {
+		requestEntryDao.save(requestEntry);
+	}
+	public void updateRequestEntry(RequestEntry requestEntry, RequestEntry.Field[] params) {
+		requestEntryDao.update(requestEntry, params);
+	}
+	public void deleteRequestEntry(RequestEntry requestEntry) {
+		requestEntryDao.delete(requestEntry);
 	}
 	public Optional<FoodServiceRequestEntry> getFoodServiceRequestEntry(java.util.UUID key) {
 		return foodServiceRequestEntryDao.get(key);
