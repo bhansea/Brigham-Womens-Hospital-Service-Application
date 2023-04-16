@@ -37,7 +37,7 @@ public class ConferenceRoomEntry extends RequestEntry {
         DATE("date");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref){
             return ref.getFromField(this);
         }
     }

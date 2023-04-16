@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -8,19 +9,20 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Account {
+    
     private String username;
     private String password;
     private Long employeeID;
     private AccountType accountType;
 
-    @RequiredArgsConstructor
-    public enum AccountType {
-        NONE(0),
-        ADMIN(2),
-        STAFF(1);
-        @Getter
-        private final int shieldLevel;
-    }
+        @RequiredArgsConstructor
+        public enum AccountType {
+            NONE(0),
+            ADMIN(2),
+            STAFF(1);
+            @Getter
+            private final int shieldLevel;
+        }
 
     @lombok.RequiredArgsConstructor
     public enum Field {
@@ -30,8 +32,7 @@ public class Account {
         ACCOUNT_TYPE("accountType");
         @lombok.Getter
         private final String colName;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref){
             return ref.getFromField(this);
         }
     }

@@ -1,12 +1,14 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Employee {
-        private Long employeeID;
+    
+    private Long employeeID;
     private String firstName;
     private String lastName;
 
@@ -20,7 +22,7 @@ public class Employee {
         LAST_NAME("lastName");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref){
             return ref.getFromField(this);
         }
     }

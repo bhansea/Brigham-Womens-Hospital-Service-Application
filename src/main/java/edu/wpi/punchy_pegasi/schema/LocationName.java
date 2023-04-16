@@ -1,12 +1,14 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class LocationName {
-        private Long uuid;
+    
+    private Long uuid;
     private String longName;
     private String shortName;
     private NodeType nodeType;
@@ -32,7 +34,7 @@ public class LocationName {
         NODE_TYPE("nodeType");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref){
             return ref.getFromField(this);
         }
     }

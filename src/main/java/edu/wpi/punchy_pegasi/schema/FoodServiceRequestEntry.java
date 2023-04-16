@@ -48,7 +48,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
         BEVERAGE("beverage");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
             return ref.getFromField(this);
         }
     }

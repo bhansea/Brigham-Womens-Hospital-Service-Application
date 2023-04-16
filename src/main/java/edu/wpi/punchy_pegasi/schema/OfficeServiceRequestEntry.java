@@ -29,7 +29,7 @@ public class OfficeServiceRequestEntry extends RequestEntry {
         EMPLOYEE_NAME("employeeName");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
             return ref.getFromField(this);
         }
     }
