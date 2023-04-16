@@ -28,7 +28,7 @@ import java.io.IOException;
 
 @Slf4j
 public abstract class RequestController<T extends RequestEntry> {
-    private static String DEFAULT_FONT = "Nunito Sans Regular";
+    private static final String DEFAULT_FONT = "Nunito Sans Regular";
     protected final Facade facade = App.getSingleton().getFacade();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @FXML

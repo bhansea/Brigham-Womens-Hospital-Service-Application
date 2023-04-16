@@ -3,7 +3,6 @@ package edu.wpi.punchy_pegasi.frontend.map;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.image.Image;

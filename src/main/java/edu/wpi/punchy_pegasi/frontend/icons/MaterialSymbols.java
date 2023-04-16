@@ -1,4 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.icons;
+
 public enum MaterialSymbols {
     _10K("\ue951"),
     _10MP("\ue952"),
@@ -3022,9 +3023,11 @@ public enum MaterialSymbols {
     ZOOM_OUT("\ue900"),
     ZOOM_OUT_MAP("\ue56b");
     private final String unicode;
+
     MaterialSymbols(String unicode) {
         this.unicode = unicode;
     }
+
     public String getUnicode() {
         return unicode;
     }

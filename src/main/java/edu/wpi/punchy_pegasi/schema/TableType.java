@@ -148,6 +148,13 @@ public enum TableType {
               employeeID bigint,
               accountType varchar NOT NULL
             );
+            """),
+    SIGNAGE(edu.wpi.punchy_pegasi.schema.Signage.class, """
+            CREATE TABLE IF NOT EXISTS teamp.signage
+            (
+              longName varchar PRIMARY KEY,
+              directionType varchar NOT NULL
+            );
             """);
     @Getter
     private final Class<?> clazz;

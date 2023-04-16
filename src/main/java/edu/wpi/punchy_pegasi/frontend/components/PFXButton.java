@@ -5,25 +5,12 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 
 public class PFXButton extends MFXButton {
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
-    private BooleanProperty selected = new SimpleBooleanProperty();
+    private final BooleanProperty selected = new SimpleBooleanProperty();
 
-    public BooleanProperty selectedProperty() {
-        return this.selected;
-    }
-
-    public boolean getSelected() {
-        return this.selected.get();
-    }
-
-    public void setSelected(boolean value) {
-        pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, value);
-        this.selected.set(value);
-    }
     public PFXButton() {
         super();
         this.getStyleClass().add("pfx-button");
@@ -46,5 +33,18 @@ public class PFXButton extends MFXButton {
      */
     public PFXButton(String text, Node graphic) {
         super(text, graphic);
+    }
+
+    public BooleanProperty selectedProperty() {
+        return this.selected;
+    }
+
+    public boolean getSelected() {
+        return this.selected.get();
+    }
+
+    public void setSelected(boolean value) {
+        pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, value);
+        this.selected.set(value);
     }
 }

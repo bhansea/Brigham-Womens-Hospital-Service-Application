@@ -17,6 +17,11 @@ import lombok.Value;
 import java.util.Comparator;
 
 public class FurnitureRequestController extends RequestController<FurnitureRequestEntry> {
+    private final ObservableList<String> furnitureList =
+            FXCollections.observableArrayList("Desk", "Bed", "Lamp", "Chair",
+                    "Office Chair", "Pillow", "Picture Frame", "Rug", "Bench", "Blanket", "Night Stand");
+    private final ObservableList<Integer> amountList = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    private final ObservableList<FurnitureCartItem> itemList = FXCollections.observableArrayList(new FurnitureCartItem("", 0));
     @FXML
     MFXComboBox<String> furniture;
     @FXML
@@ -25,11 +30,6 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     private MFXButton toCart;
     @FXML
     private MFXTableView<FurnitureCartItem> furnTable;
-    private final ObservableList<String> furnitureList =
-            FXCollections.observableArrayList("Desk", "Bed", "Lamp", "Chair",
-                    "Office Chair", "Pillow", "Picture Frame", "Rug", "Bench", "Blanket", "Night Stand");
-    private final ObservableList<Integer> amountList = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-    private final ObservableList<FurnitureCartItem> itemList = FXCollections.observableArrayList(new FurnitureCartItem("", 0));
 
     public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);

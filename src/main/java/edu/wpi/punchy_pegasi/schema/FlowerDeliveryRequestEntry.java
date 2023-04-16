@@ -22,6 +22,21 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     public FlowerDeliveryRequestEntry(String patientName, Long locationName, Long staffAssignment, String additionalNotes, String flowerSize, String flowerAmount, String flowerType) {
         this(UUID.randomUUID(), patientName, locationName, staffAssignment, additionalNotes, Status.PROCESSING, flowerSize, flowerAmount, flowerType);
     }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID();
+            case LOCATION_NAME -> getLocationName();
+            case STAFF_ASSIGNMENT -> getStaffAssignment();
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus();
+            case FLOWER_SIZE -> getFlowerSize();
+            case FLOWER_TYPE -> getFlowerType();
+            case FLOWER_AMOUNT -> getFlowerAmount();
+            case PATIENT_NAME -> getPatientName();
+        };
+    }
+
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
@@ -35,22 +50,10 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
         PATIENT_NAME("patientName");
         @lombok.Getter
         private final String colName;
+
         public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref) {
             return ref.getFromField(this);
         }
-    }
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case SERVICE_ID -> getServiceID();
-            case LOCATION_NAME -> getLocationName();
-            case STAFF_ASSIGNMENT -> getStaffAssignment();
-            case ADDITIONAL_NOTES -> getAdditionalNotes();
-            case STATUS -> getStatus();
-            case FLOWER_SIZE -> getFlowerSize();
-            case FLOWER_TYPE -> getFlowerType();
-            case FLOWER_AMOUNT -> getFlowerAmount();
-            case PATIENT_NAME -> getPatientName();
-        };
     }
 
 }

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXSidebarItem?>
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
-<fx:root type="javafx.scene.layout.VBox"
-         xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1"
+         type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/"
          styleClass="sideBar">
     <PFXAccount fx:id="pfxAccount"/>
