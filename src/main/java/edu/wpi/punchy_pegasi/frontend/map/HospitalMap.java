@@ -99,10 +99,10 @@ public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
     public void show(HospitalFloor floor) {
         currentFloor = floor;
         floor.root.setVisible(true);
-        floor.button.setStyle("-fx-background-color: -pp-light-blue; -fx-text-fill: black");
+        floor.button.setSelected(true);
         floors.values().stream().filter(f -> !Objects.equals(f.identifier, floor.identifier)).forEach(f -> {
+            f.button.setSelected(false);
             f.root.setVisible(false);
-            f.button.setStyle("-fx-background-color: -pp-dark-blue; -fx-text-fill: white");
         });
     }
 

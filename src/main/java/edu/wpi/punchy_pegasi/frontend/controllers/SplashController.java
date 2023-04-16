@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
@@ -61,7 +62,12 @@ public class SplashController {
         if (onConnection == null) return false;
         var thread = new Thread(() -> {
             try {
-                PdbController.Source source = PdbController.Source.Wong;
+                var genericResource = this.getClass().getResource("");
+                PdbController.Source source;
+                if(genericResource != null && Objects.equals(genericResource.getProtocol(), "jar"))
+                    source = PdbController.Source.Wong;
+                else
+                    source = PdbController.Source.Blake;
                 while (!attemptDataBaseConnection(source)) {
                     source = null;
                     while (source == null) {

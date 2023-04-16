@@ -26,10 +26,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
-import static com.sun.javafx.font.FontFactory.DEFAULT_FULLNAME;
-
 @Slf4j
 public abstract class RequestController<T extends RequestEntry> {
+    private static String DEFAULT_FONT = "Nunito Sans Regular";
     protected final Facade facade = App.getSingleton().getFacade();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @FXML
@@ -53,8 +52,8 @@ public abstract class RequestController<T extends RequestEntry> {
 
     public static BorderPane create(RequestController controller, String path) {
         try {
-            Parent l = App.getSingleton().loadWithCache(path, controller);
-            BorderPane g = App.getSingleton().loadWithCache("frontend/layouts/Request.fxml", controller);
+            Parent l = App.getSingleton().loadWithCache(path, controller).getRoot();
+            BorderPane g = App.getSingleton().loadWithCache("frontend/layouts/Request.fxml", controller).getRoot();
             controller.componentHolder.getChildren().add(l);
             return g;
         } catch (IOException e) {
@@ -158,12 +157,12 @@ public abstract class RequestController<T extends RequestEntry> {
         inputContainer.getChildren().add(0, label);
         hbox.getChildren().add(0, field);
         hbox.setAlignment(Pos.CENTER);
-        label.setFont(new Font(DEFAULT_FULLNAME, 24));
+        label.setFont(new Font(DEFAULT_FONT, 24));
         label.setAlignment(Pos.CENTER_LEFT);
         label.setTextFill(Color.color(1, 1, 1));
         field.setPromptText("Enter Patient Name");
         field.setAlignment(Pos.CENTER_LEFT);
-        field.setFont(new Font(DEFAULT_FULLNAME, 24));
+        field.setFont(new Font(DEFAULT_FONT, 24));
         inputContainer.setPadding(new Insets(20, 20, 20, 20));
         inputContainer.setSpacing(6);
         hbox.setPadding(new Insets(0, 0, 0, 0));
@@ -179,8 +178,8 @@ public abstract class RequestController<T extends RequestEntry> {
         hbox.getChildren().add(1, label);
         hbox.setAlignment(Pos.CENTER);
         hbox.setPadding(new Insets(10, 0, 0, 0));
-        label.setFont(new Font(DEFAULT_FULLNAME, 24));
-        total.setFont(new Font(DEFAULT_FULLNAME, 24));
+        label.setFont(new Font(DEFAULT_FONT, 24));
+        total.setFont(new Font(DEFAULT_FONT, 24));
         total.setTextFill(Color.color(1, 1, 1));
         label.setTextFill(Color.color(1, 1, 1));
         hbox.setSpacing(150);

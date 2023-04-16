@@ -1,0 +1,124 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+@font-face {
+	font-family: 'Nunito Sans Black';
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-Black.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Nunito Sans Black Italic';
+	font-weight: 900;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-BlackItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Nunito Sans Bold';
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Nunito Sans Bold Italic';
+	font-weight: bold;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Nunito Sans SemiBold';
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Nunito Sans SemiBold Italic';
+	font-weight: 500;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-SemiBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'NunitoSans Regular';
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-Regular.ttf') format('truetype');
+}
+
+
+@font-face {
+	font-family: 'Nunito Sans Italic';
+	font-weight: normal;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-Italic.ttf') format('truetype');
+}
+
+
+@font-face {
+	font-family: 'Nunito Sans Light';
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-Light.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Nunito Sans Light Italic';
+	font-weight: 300;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-LightItalic.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Nunito Sans ExtraLight';
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-Light.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Nunito Sans ExtraLight Italic';
+	font-weight: 100;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/NunitoSans/NunitoSans-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: "Material Symbols Rounded Regular";
+	font-display: block;
+	src: url("../fonts/MaterialDesignIcons/MaterialSymbolsRounded.ttf") format('truetype');
+}
+
+@font-face {
+	font-family: "Material Symbols Rounded Filled";
+	font-display: block;
+	src: url("../fonts/MaterialDesignIcons/MaterialSymbolsRounded-Filled.ttf") format('truetype');
+}
