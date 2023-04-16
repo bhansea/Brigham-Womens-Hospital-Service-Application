@@ -37,7 +37,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                    java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -56,12 +56,12 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, Arrays.stream(params).map(FurnitureRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -77,12 +77,12 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

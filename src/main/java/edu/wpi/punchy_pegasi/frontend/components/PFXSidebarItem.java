@@ -22,8 +22,8 @@ public class PFXSidebarItem extends HBox {
     private final BooleanProperty selected = new SimpleBooleanProperty();
     private boolean dropdown;
     private String dropdownText;
-    private PFXIcon pfxIcon = new PFXIcon();
-    private Label label = new Label();
+    private final PFXIcon pfxIcon = new PFXIcon();
+    private final Label label = new Label();
     private Screen screen;
     private ObservableList<Screen> dropdownItems;
 
@@ -103,7 +103,6 @@ public class PFXSidebarItem extends HBox {
 
     private void dropdown() {
         normal();
-        return;
 
 //        var vbox = new VBox();
 //        getChildren().add(vbox);

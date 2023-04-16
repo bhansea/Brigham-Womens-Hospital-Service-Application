@@ -37,6 +37,9 @@ public class PathfindingMap {
         put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
+    private final AtomicBoolean startSelected = new AtomicBoolean(false);
+    private final AtomicBoolean endSelected = new AtomicBoolean(false);
+    private final AtomicBoolean selectingGraphically = new AtomicBoolean(false);
     @FXML
     private MFXButton selectGraphicallyCancel;
     @FXML
@@ -60,7 +63,6 @@ public class PathfindingMap {
     private Map<Long, Move> moves;
     private Map<Long, Move> movesByNodeID = new HashMap<>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
-
     private final StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
         public String toString(Node node) {
@@ -75,9 +77,6 @@ public class PathfindingMap {
         }
     };
     private ObservableList<Node> filteredNodes;
-    private final AtomicBoolean startSelected = new AtomicBoolean(false);
-    private final AtomicBoolean endSelected = new AtomicBoolean(false);
-    private final AtomicBoolean selectingGraphically = new AtomicBoolean(false);
 
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", null));
@@ -172,7 +171,7 @@ public class PathfindingMap {
             var move = movesByNodeID.get(v.getNodeID());
             if (move == null) return false;
             var location = locationsByLongName.get(move.getLongName());
-            if(location == null) return false;
+            if (location == null) return false;
             var locationType = location.getNodeType();
             return locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
         }).sorted(Comparator.comparing(Node::getNodeID)).toList());

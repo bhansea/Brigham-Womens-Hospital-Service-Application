@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.beans.PropertyChangeEvent;
@@ -23,6 +22,14 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class SidebarController extends BorderPane implements PropertyChangeListener {
+    private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
+            new PFXSidebarItem(Screen.HOME, MaterialSymbols.HOME),
+            new PFXSidebarItem("Service Requests", MaterialSymbols.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
+            new PFXSidebarItem(Screen.MAP_PAGE, MaterialSymbols.MAP),
+            new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialSymbols.ADMIN_PANEL_SETTINGS),
+            new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
+            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
+    );
     @FXML
     PFXSidebarItem loginLogout;
     @FXML
@@ -35,15 +42,8 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
     private VBox sidebar;
     @FXML
     private VBox accountInfo;
-
-    private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
-            new PFXSidebarItem(Screen.HOME, MaterialSymbols.HOME),
-            new PFXSidebarItem("Service Requests", MaterialSymbols.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
-            new PFXSidebarItem(Screen.MAP_PAGE, MaterialSymbols.MAP),
-            new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialSymbols.ADMIN_PANEL_SETTINGS),
-            new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
-            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
-    );
+    @FXML
+    private BorderPane root;
 
     public SidebarController() {
         super();
@@ -61,8 +61,6 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
             throw new RuntimeException(exception);
         }
     }
-    @FXML
-    private BorderPane root;
 
     private void setAccount(Account account) {
         sidebarItems.forEach(s -> {

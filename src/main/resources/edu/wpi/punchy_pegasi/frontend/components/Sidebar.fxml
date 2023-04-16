@@ -7,8 +7,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<fx:root type="javafx.scene.layout.BorderPane"
-         xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0"
+<fx:root xmlns:fx="http://javafx.com/fxml/1"
+         type="javafx.scene.layout.BorderPane" maxWidth="256.0" minWidth="256.0"
          xmlns="http://javafx.com/javafx/">
     <center>
         <VBox styleClass="sideBar">

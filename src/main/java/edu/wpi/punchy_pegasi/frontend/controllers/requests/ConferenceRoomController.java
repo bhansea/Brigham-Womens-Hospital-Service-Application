@@ -12,12 +12,6 @@ import javafx.scene.layout.BorderPane;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
-    @FXML
-    MFXComboBox<String> beginningTime;
-    @FXML
-    MFXComboBox<String> endTime;
-    @FXML
-    MFXDatePicker calendar;
     private final ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
             "2:00am", "2:30am",
             "3:00am", "3:30am",
@@ -42,6 +36,12 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
             "9:00pm", "9:30pm",
             "10:00pm", "10:30pm",
             "11:00pm", "11:30pm");
+    @FXML
+    MFXComboBox<String> beginningTime;
+    @FXML
+    MFXComboBox<String> endTime;
+    @FXML
+    MFXDatePicker calendar;
 
     public static BorderPane create(String path) {
         return RequestController.create(new ConferenceRoomController(), path);

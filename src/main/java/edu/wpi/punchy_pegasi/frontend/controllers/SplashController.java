@@ -64,7 +64,7 @@ public class SplashController {
             try {
                 var genericResource = this.getClass().getResource("");
                 PdbController.Source source;
-                if(genericResource != null && Objects.equals(genericResource.getProtocol(), "jar"))
+                if (genericResource != null && Objects.equals(genericResource.getProtocol(), "jar"))
                     source = PdbController.Source.Wong;
                 else
                     source = PdbController.Source.Blake;

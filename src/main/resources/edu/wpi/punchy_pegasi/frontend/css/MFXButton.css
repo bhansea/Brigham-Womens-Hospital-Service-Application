@@ -20,21 +20,21 @@
 @import "MFXColors.css";
 
 .mfx-button {
-	-fx-font-family: "Nunito Sans";
-	-fx-text-fill: -mfx-text-he;
+    -fx-font-family: "Nunito Sans";
+    -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-button:armed,
 .mfx-button:hover,
 .mfx-button:focused,
 .mfx-button {
-	/*-fx-background-radius: 3px;*/
-	/*-fx-background-insets: 0px;*/
-	/*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);*/
+    /*-fx-background-radius: 3px;*/
+    /*-fx-background-insets: 0px;*/
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);*/
 }
 
 .mfx-button,
 .mfx-button:armed,
 .mfx-button:focused {
-	-fx-background-color: white;
+    -fx-background-color: white;
 }

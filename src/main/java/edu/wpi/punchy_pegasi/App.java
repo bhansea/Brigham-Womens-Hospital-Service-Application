@@ -49,18 +49,6 @@ public class App extends Application {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @Getter
     private final Stage popupStage = new Stage();
-    @Getter
-    private PdbController pdb;
-    @Getter
-    private Facade facade;
-    @Getter
-    private Stage primaryStage;
-    @Getter
-    private Screen currentScreen;
-    @Getter
-    private Scene scene;
-    @Getter
-    private Account account = new Account("", "", 0L, Account.AccountType.NONE);
     private final List<LoadedFXML> loadedFXML = new ArrayList<>();
     private final Debouncer<String> fxmlDebouncer = new Debouncer<>(s -> {
         loadedFXML.stream().filter(l -> l.path.toExternalForm().endsWith(s)).forEach(fxml -> Platform.runLater(() -> {
@@ -73,6 +61,18 @@ public class App extends Application {
         }));
         System.out.println("Hot-loaded FXML: " + s);
     }, 250);
+    @Getter
+    private PdbController pdb;
+    @Getter
+    private Facade facade;
+    @Getter
+    private Stage primaryStage;
+    @Getter
+    private Screen currentScreen;
+    @Getter
+    private Scene scene;
+    @Getter
+    private Account account = new Account("", "", 0L, Account.AccountType.NONE);
     @Getter
     private boolean development = false;
     private final Debouncer<String> cssDebouncer = new Debouncer<>(s -> {
@@ -89,6 +89,22 @@ public class App extends Application {
     private static void showError(Thread t, Throwable e) {
         log.error("An unexpected error occurred in " + t, e);
         if (Platform.isFxApplicationThread()) showErrorDialog(e);
+    }
+
+    private static void showErrorDialog(Throwable e) {
+        var errorMsg = new StringWriter();
+        e.printStackTrace(new PrintWriter(errorMsg));
+        var dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        var loader = new FXMLLoader(App.class.getResource("frontend/components/Error.fxml"));
+        try {
+            Parent root = loader.load();
+            ((ErrorController) loader.getController()).setErrorText(errorMsg.toString());
+            dialog.setScene(new Scene(root, 600, 400));
+            dialog.show();
+        } catch (IOException exc) {
+            exc.printStackTrace();
+        }
     }
 
     public void setAccount(Account account) {
@@ -126,22 +142,6 @@ public class App extends Application {
     @Override
     public void stop() {
         log.info("Shutting Down");
-    }
-
-    private static void showErrorDialog(Throwable e) {
-        var errorMsg = new StringWriter();
-        e.printStackTrace(new PrintWriter(errorMsg));
-        var dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        var loader = new FXMLLoader(App.class.getResource("frontend/components/Error.fxml"));
-        try {
-            Parent root = loader.load();
-            ((ErrorController) loader.getController()).setErrorText(errorMsg.toString());
-            dialog.setScene(new Scene(root, 600, 400));
-            dialog.show();
-        } catch (IOException exc) {
-            exc.printStackTrace();
-        }
     }
 
     public synchronized void navigate(final Screen screen) {
@@ -286,9 +286,9 @@ public class App extends Application {
     }
 
     private static class LoadedFXML {
-        private URL path;
+        private final URL path;
         @Getter
-        private FXMLLoader fxmlLoader;
+        private final FXMLLoader fxmlLoader;
 
         public LoadedFXML(URL path, Node root, Object controller) {
             fxmlLoader = new FXMLLoader();

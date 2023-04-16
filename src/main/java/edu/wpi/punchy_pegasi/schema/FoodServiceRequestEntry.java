@@ -33,6 +33,23 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.patientName = patientName;
         this.beverage = beverage;
     }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID();
+            case LOCATION_NAME -> getLocationName();
+            case STAFF_ASSIGNMENT -> getStaffAssignment();
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus();
+            case FOOD_SELECTION -> getFoodSelection();
+            case TEMP_TYPE -> getTempType();
+            case ADDITIONAL_ITEMS -> getAdditionalItems();
+            case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
+            case PATIENT_NAME -> getPatientName();
+            case BEVERAGE -> getBeverage();
+        };
+    }
+
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
@@ -48,24 +65,10 @@ public class FoodServiceRequestEntry extends RequestEntry {
         BEVERAGE("beverage");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
             return ref.getFromField(this);
         }
-    }
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case SERVICE_ID -> getServiceID();
-            case LOCATION_NAME -> getLocationName();
-            case STAFF_ASSIGNMENT -> getStaffAssignment();
-            case ADDITIONAL_NOTES -> getAdditionalNotes();
-            case STATUS -> getStatus();
-            case FOOD_SELECTION -> getFoodSelection();
-            case TEMP_TYPE -> getTempType();
-            case ADDITIONAL_ITEMS -> getAdditionalItems();
-            case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
-            case PATIENT_NAME -> getPatientName();
-            case BEVERAGE -> getBeverage();
-        };
     }
 
 }
