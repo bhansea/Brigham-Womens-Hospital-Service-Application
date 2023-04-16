@@ -4,17 +4,23 @@
     -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
     -fx-background-color: transparent;
-    -fx-padding: 10;
+    -fx-padding: 3 10;
     -fx-spacing: 10;
     -fx-background-size: 5;
-    -fx-background-radius: 0;
+    -fx-background-radius: 5;
     -fx-font-size: 30;
 
-    -fx-border-style: solid inside;
+    -fx-border-style: segments(0, 35, 0) phase 27.5 inside line-cap round;
     -fx-border-width: 0 0 0 7.5;
     -fx-border-color: transparent;
-    -fx-border-radius: 1;
 }
+
+
+.pfx-sidebar-container {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 10;
+}
+
 
 .pfx-sidebar-item PFXIcon {
     -fx-fill: -pfx-navy;
@@ -36,10 +42,10 @@
     -fx-fill: -pfx-accent;
 }
 
-.pfx-sidebar-item:hover {
+.pfx-sidebar-container:hover {
     -fx-background-color: rgba(0, 0, 0, 0.18);
 }
 
-.pfx-sidebar-item:hover:selected {
+.pfx-sidebar-container:selected:hover {
     -fx-background-color: derive(-pfx-accent-light, -5%);
 }
