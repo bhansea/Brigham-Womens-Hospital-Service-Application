@@ -224,6 +224,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         Thread.setDefaultUncaughtExceptionHandler(App::showError);
         this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Brigham and Women's Hospital");
         var genericResource = this.getClass().getResource("");
         if (genericResource != null && Objects.equals(genericResource.getProtocol(), "file")) development = true;
 
