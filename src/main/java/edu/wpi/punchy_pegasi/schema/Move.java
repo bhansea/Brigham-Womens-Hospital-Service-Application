@@ -18,12 +18,10 @@ public class Move {
         DATE("date");
         @lombok.Getter
         private final String colName;
-
         public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref) {
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();

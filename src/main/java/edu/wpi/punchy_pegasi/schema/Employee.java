@@ -20,12 +20,10 @@ public class Employee {
         LAST_NAME("lastName");
         @lombok.Getter
         private final String colName;
-
         public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref) {
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case EMPLOYEE_ID -> getEmployeeID();

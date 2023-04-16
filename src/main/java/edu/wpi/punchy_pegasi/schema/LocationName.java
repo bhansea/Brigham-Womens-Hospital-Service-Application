@@ -32,12 +32,10 @@ public class LocationName {
         NODE_TYPE("nodeType");
         @lombok.Getter
         private final String colName;
-
         public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref) {
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();

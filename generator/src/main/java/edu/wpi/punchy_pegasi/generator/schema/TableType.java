@@ -8,6 +8,7 @@ public enum TableType {
     EDGES(Edge.class, ""),
     MOVES(Move.class, ""),
     LOCATIONNAMES(LocationName.class, ""),
+    REQUESTS(RequestEntry.class, ""),
     GENERIC(GenericRequestEntry.class, ""),
     FOODREQUESTS(FoodServiceRequestEntry.class, ""),
     FLOWERREQUESTS(FlowerDeliveryRequestEntry.class, ""),

@@ -68,8 +68,8 @@ public enum TableType {
               END IF;
             END $$;
             """),
-    GENERIC(edu.wpi.punchy_pegasi.schema.GenericRequestEntry.class, """
-            CREATE TABLE IF NOT EXISTS teamp.generic
+    REQUESTS(edu.wpi.punchy_pegasi.schema.RequestEntry.class, """
+            CREATE TABLE IF NOT EXISTS teamp.requests
             (
               serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
               locationName bigint,
@@ -78,71 +78,52 @@ public enum TableType {
               status varchar NOT NULL
             );
             """),
+    GENERIC(edu.wpi.punchy_pegasi.schema.GenericRequestEntry.class, """
+            CREATE TABLE IF NOT EXISTS teamp.generic
+            (
+              
+            ) INHERITS teamp.(requests);
+            """),
     FOODREQUESTS(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.foodrequests
             (
-              serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-              locationName bigint,
-              staffAssignment bigint,
-              additionalNotes varchar,
-              status varchar NOT NULL,
               foodSelection varchar,
               tempType varchar,
               additionalItems varchar ARRAY,
               dietaryRestrictions varchar,
               patientName varchar,
               beverage varchar
-            );
+            ) INHERITS teamp.(requests);
             """),
     FLOWERREQUESTS(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.flowerrequests
             (
-              serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-              locationName bigint,
-              staffAssignment bigint,
-              additionalNotes varchar,
-              status varchar NOT NULL,
               flowerSize varchar,
               flowerType varchar,
               flowerAmount varchar,
               patientName varchar
-            );
+            ) INHERITS teamp.(requests);
             """),
     CONFERENCEREQUESTS(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.conferencerequests
             (
-              serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-              locationName bigint,
-              staffAssignment bigint,
-              additionalNotes varchar,
-              status varchar NOT NULL,
               beginningTime varchar,
               endTime varchar,
               date date NOT NULL
-            );
+            ) INHERITS teamp.(requests);
             """),
     FURNITUREREQUESTS(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.furniturerequests
             (
-              serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-              locationName bigint,
-              staffAssignment bigint,
-              additionalNotes varchar,
-              status varchar NOT NULL,
               selectFurniture varchar ARRAY
-            );
+            ) INHERITS teamp.(requests);
             """),
     OFFICEREQUESTS(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS teamp.officerequests
             (
-              serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-              locationName bigint,
-              staffAssignment bigint,
-              additionalNotes varchar,
-              status varchar NOT NULL,
               officeRequest varchar,
               employeeName varchar
-            );
+            ) INHERITS teamp.(requests);
             """),
     EMPLOYEES(edu.wpi.punchy_pegasi.schema.Employee.class, """
             DO $$
@@ -160,20 +141,13 @@ public enum TableType {
             END $$;
             """),
     ACCOUNTS(edu.wpi.punchy_pegasi.schema.Account.class, """
-            DO $$
-            BEGIN
-              IF to_regclass('teamp.accounts') IS NULL THEN
-                CREATE SEQUENCE accounts_id_seq;
-                CREATE TABLE teamp.accounts
-                (
-                  username varchar PRIMARY KEY,
-                  password varchar,
-                  employeeID bigint,
-                  accountType varchar NOT NULL
-                );
-                ALTER SEQUENCE accounts_id_seq OWNED BY teamp.accounts.username;
-              END IF;
-            END $$;
+            CREATE TABLE IF NOT EXISTS teamp.accounts
+            (
+              username varchar PRIMARY KEY,
+              password varchar,
+              employeeID bigint,
+              accountType varchar NOT NULL
+            );
             """);
     @Getter
     private final Class<?> clazz;

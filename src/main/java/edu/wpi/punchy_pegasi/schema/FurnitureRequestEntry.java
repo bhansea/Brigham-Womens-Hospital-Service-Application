@@ -29,12 +29,10 @@ public class FurnitureRequestEntry extends RequestEntry {
         SELECT_FURNITURE("selectFurniture");
         @lombok.Getter
         private final String colName;
-
         public Object getValue(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref) {
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
