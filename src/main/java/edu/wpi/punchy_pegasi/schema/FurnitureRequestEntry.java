@@ -19,17 +19,6 @@ public class FurnitureRequestEntry extends RequestEntry {
         this.selectFurniture = selectFurniture;
     }
 
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case SERVICE_ID -> getServiceID();
-            case LOCATION_NAME -> getLocationName();
-            case STAFF_ASSIGNMENT -> getStaffAssignment();
-            case ADDITIONAL_NOTES -> getAdditionalNotes();
-            case STATUS -> getStatus();
-            case SELECT_FURNITURE -> getSelectFurniture();
-        };
-    }
-
     @lombok.RequiredArgsConstructor
     public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry> {
         SERVICE_ID("serviceID"),
@@ -44,6 +33,17 @@ public class FurnitureRequestEntry extends RequestEntry {
         public Object getValue(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID();
+            case LOCATION_NAME -> getLocationName();
+            case STAFF_ASSIGNMENT -> getStaffAssignment();
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus();
+            case SELECT_FURNITURE -> getSelectFurniture();
+        };
     }
 
 }
