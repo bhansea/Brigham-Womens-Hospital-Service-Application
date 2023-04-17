@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Account {
-
     private String username;
     private String password;
     private Long employeeID;
@@ -34,7 +32,7 @@ public class Account {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account> {
         USERNAME("username"),
         PASSWORD("password"),
         EMPLOYEE_ID("employeeID"),

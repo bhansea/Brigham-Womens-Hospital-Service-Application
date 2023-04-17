@@ -137,7 +137,8 @@ public class  SleepThroughTheWinter {
         return
                 """
                             @lombok.RequiredArgsConstructor
-                            public enum Field {
+                            public enum Field implements IField< """ + clazz.getCanonicalName() +"""
+                        >{
                         """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
                         ;
                                 @lombok.Getter
@@ -171,13 +172,13 @@ public class  SleepThroughTheWinter {
 
     private static String generateTableInit(TableType tt){
         var clazz = tt.getClazz();
-        var tableName = "teamp." + tt.name().toLowerCase();
+        var tableName = tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
         var parentClass = clazz.getSuperclass().equals(Object.class) ? null : clazz.getSuperclass();
         var parentTable = Arrays.stream(TableType.values()).filter(t -> t.getClazz() == parentClass).toList();
 
         var inheritanceString = parentClass != null && parentTable.size() == 1
-                ? " INHERITS (teamp." + parentTable.get(0).name().toLowerCase() + ")"
+                ? " INHERITS (" + parentTable.get(0).name().toLowerCase() + ")"
                 : "";
 
         var classFields = inheritanceString.isBlank()
@@ -212,7 +213,7 @@ public class  SleepThroughTheWinter {
                         ALTER SEQUENCE %4$s OWNED BY %3$s.%6$s;
                       END IF;
                     END $$;
-                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName());
+                    \"\"\", %2$s.Field.class)""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName());
         else
             return String.format("""
                             %s(%s.class, \"\"\"
@@ -220,7 +221,7 @@ public class  SleepThroughTheWinter {
                             (
                               %s
                             )%s;
-                            \"\"\")
+                            \"\"\", %2$s.Field.class)
                             """, tt.name(), clazz.getCanonicalName(),
                     tableName,
                     String.join(",\n  ", tableColumns),

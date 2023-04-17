@@ -1,13 +1,11 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Employee {
-
     private Long employeeID;
     private String firstName;
     private String lastName;
@@ -25,7 +23,7 @@ public class Employee {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Employee> {
         EMPLOYEE_ID("employeeID"),
         FIRST_NAME("firstName"),
         LAST_NAME("lastName");

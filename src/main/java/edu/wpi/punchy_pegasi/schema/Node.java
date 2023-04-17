@@ -1,13 +1,11 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Node implements INode {
-
     private Long nodeID;
     private Integer xcoord;
     private Integer ycoord;
@@ -41,7 +39,7 @@ public class Node implements INode {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node> {
         NODE_ID("nodeID"),
         XCOORD("xcoord"),
         YCOORD("ycoord"),

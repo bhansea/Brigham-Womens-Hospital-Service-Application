@@ -40,7 +40,7 @@ public class ConferenceRoomEntry extends RequestEntry {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),

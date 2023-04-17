@@ -1,13 +1,11 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class LocationName {
-
     private Long uuid;
     private String longName;
     private String shortName;
@@ -38,7 +36,7 @@ public class LocationName {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName> {
         UUID("uuid"),
         LONG_NAME("longName"),
         SHORT_NAME("shortName"),

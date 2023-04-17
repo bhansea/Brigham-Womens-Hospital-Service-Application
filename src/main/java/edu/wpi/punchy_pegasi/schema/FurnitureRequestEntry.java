@@ -31,7 +31,7 @@ public class FurnitureRequestEntry extends RequestEntry {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
