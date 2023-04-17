@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Edge;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -435,34 +436,197 @@ class FacadeTest {
 
     @Test
     void getMove() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        try {
+            pdbController.insertQuery(TableType.MOVES, moveFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Move> results = facade.getMove(move.getUuid());
+        Move daoresult = results.get();
+        assertEquals(daoresult, move);
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetMove() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Move move2 = new Move(101L, 1005L, "testLong", "testDate");
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
+        try {
+            pdbController.insertQuery(TableType.MOVES, moveFields, values);
+            pdbController.insertQuery(TableType.MOVES, moveFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = facade.getMove(Move.Field.LONG_NAME, "testLong");
+        var map = new HashMap<java.lang.Long, Move>();
+        try (var rs = pdbController.searchQuery(TableType.MOVES, "longName", "testLong")) {
+            while (rs.next()) {
+                Move req = new Move(
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("date"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(move.getUuid()), results.get(move.getUuid()));
+        assertEquals(map.get(move2.getUuid()), results.get(move2.getUuid()));
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move2.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetMove1() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate0");
+        Move move2 = new Move(101L, 1000L, "testLongName", "testDate1");
+        Move move3 = new Move(102L, 1005L, "testLongName", "testDate2");
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
+        Object[] values3 = new Object[]{move3.getUuid(), move3.getNodeID(), move3.getLongName(), move3.getDate()};
+        try {
+            pdbController.insertQuery(TableType.MOVES, moveFields, values);
+            pdbController.insertQuery(TableType.MOVES, moveFields, values2);
+            pdbController.insertQuery(TableType.MOVES, moveFields, values3);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Move.Field[] fields = {Move.Field.LONG_NAME, Move.Field.NODE_ID};
+        Object[] searchValues = new Object[]{"testLongName", 1005L};
+        String[] searchFields = new String[]{"longName", "nodeID"};
+        var results = facade.getMove(fields, searchValues);
+        var map = new HashMap<java.lang.Long, Move>();
+        try (var rs = pdbController.searchQuery(TableType.MOVES, searchFields, searchValues)) {
+            while (rs.next()) {
+                Move req = new Move(
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("nodeID"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("date"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(move.getUuid()), results.get(move.getUuid()));
+        assertEquals(map.get(move2.getUuid()), results.get(move2.getUuid()));
+        assertEquals(map.get(move3.getUuid()), results.get(move3.getUuid()));
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move2.getUuid());
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move3.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAllMove() {
+        var values0 = new Object[]{100L, 1005L, "testLong", "testDate"};
+        var values1 = new Object[]{101L, 1006L, "testLong1", "testDate1"};
+        var values2 = new Object[]{102L, 1007L, "testLong2", "testDate2"};
+        var valueSet = new Object[][]{values0, values1, values2};
+
+        var refMap = new HashMap<Long, Move>();
+        for (Object[] values : valueSet) {
+            var move = new Move((Long) values[0], (Long) values[1], (String) values[2], (String) values[3]);
+            refMap.put(move.getUuid(), move);
+            try {
+                pdbController.insertQuery(TableType.MOVES, moveFields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Map<Long, Move> resultMap = facade.getAllMove();
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.MOVES, "uuid", uuid);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
     void saveMove() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        facade.saveMove(move);
+        Move updatedMove = new Move(100L, 1005L, "updatedTestLong", "updatedTestDate");
+        Move.Field[] fields = {Move.Field.LONG_NAME, Move.Field.DATE};
+        facade.updateMove(updatedMove, fields);
+        Optional<Move> results = facade.getMove(move.getUuid());
+        Move daoresult = results.get();
+        assertEquals(updatedMove, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void updateMove() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        facade.saveMove(move);
+        Move updatedMove = new Move(100L, 1500L, "updatedTestLong", "testDate");
+        Move.Field[] fields = {Move.Field.UUID, Move.Field.NODE_ID, Move.Field.LONG_NAME, Move.Field.DATE};
+        facade.updateMove(updatedMove, fields);
+
+        Optional<Move> results = facade.getMove(move.getUuid());
+        Move daoresult = results.get();
+        assertEquals(updatedMove, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteMove() {
+        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        try {
+            pdbController.insertQuery(TableType.MOVES, moveFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert test data";
+        }
+
+        try {
+            var result = pdbController.searchQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to delete test data";
+        }
+
+        facade.deleteMove(move);
+
+        try {
+            var result = pdbController.searchQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Test data deleted successfully";
+        }
     }
 
     @Test
     void getLocationName() {
+
     }
 
     @Test
