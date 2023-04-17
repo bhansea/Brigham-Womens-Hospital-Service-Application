@@ -15,6 +15,7 @@ public class DragController {
     private final Node target;
     private final int ACTIVE = 1;
     private final int INACTIVE = 0;
+    private final int cycleStatus = INACTIVE;
     private double anchorX;
     private double anchorY;
     private double layoutX;
@@ -22,7 +23,6 @@ public class DragController {
     private EventHandler<MouseEvent> setAnchor;
     private EventHandler<MouseEvent> updatePositionOnDrag;
     private EventHandler<MouseEvent> commitPositionOnRelease;
-    private final int cycleStatus = INACTIVE;
     private BooleanProperty isDraggable;
     @Setter
     private Consumer<Node> onMove;

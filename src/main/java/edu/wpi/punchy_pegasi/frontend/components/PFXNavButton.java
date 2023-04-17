@@ -6,6 +6,7 @@ import javafx.scene.layout.Region;
 public class PFXNavButton extends HBox {
 
     public Region icon;
+
     public PFXNavButton(String text, Character icon) {
 
         super();

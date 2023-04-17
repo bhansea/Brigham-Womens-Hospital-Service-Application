@@ -20,6 +20,7 @@ import java.util.Map;
 public class LoginController {
 
     private final PdbController pdb = App.getSingleton().getPdb();
+    private final Facade facade = new Facade(pdb);
     @FXML
     public Label invalidText;
     @FXML
@@ -30,7 +31,6 @@ public class LoginController {
     private Label usernameBox;
     @FXML
     private MFXPasswordField passwordBox;
-    private final Facade facade = new Facade(pdb);
 
     @FXML
     private void initialize() {

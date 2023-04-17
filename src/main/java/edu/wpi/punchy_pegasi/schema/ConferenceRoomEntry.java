@@ -25,6 +25,7 @@ public class ConferenceRoomEntry extends RequestEntry {
         this.endTime = endTime;
         this.date = date;
     }
+
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
@@ -37,10 +38,12 @@ public class ConferenceRoomEntry extends RequestEntry {
         DATE("date");
         @lombok.Getter
         private final String colName;
+
         public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();

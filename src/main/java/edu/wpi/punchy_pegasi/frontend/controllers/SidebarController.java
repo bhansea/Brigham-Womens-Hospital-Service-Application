@@ -1,20 +1,20 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.ChangeSize;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAccount;
 import edu.wpi.punchy_pegasi.frontend.components.PFXSidebarItem;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.schema.Account;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,20 +22,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class SidebarController extends BorderPane implements PropertyChangeListener {
-    @FXML
-    PFXSidebarItem loginLogout;
-    @FXML
-    ImageView profileImage;
-    @FXML
-    Label nameText;
-    @FXML
-    Label roleText;
-    @FXML
-    private VBox sidebar;
-    @FXML
-    private VBox accountInfo;
-
+public class SidebarController extends VBox implements PropertyChangeListener {
     private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
             new PFXSidebarItem(Screen.HOME, MaterialSymbols.HOME),
             new PFXSidebarItem("Service Requests", MaterialSymbols.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
@@ -44,6 +31,14 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
             new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
     );
+    @FXML
+    private PFXAccount pfxAccount;
+    @FXML
+    private PFXSidebarItem logout;
+    private final int maxWidth = 256;
+    private Boolean expanded = null;
+    @FXML
+    private BorderPane root;
 
     public SidebarController() {
         super();
@@ -52,17 +47,14 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+        setMaxWidth(maxWidth);
+        var clipper = new Rectangle();
+        clipper.widthProperty().bind(widthProperty());
+        clipper.heightProperty().bind(heightProperty());
+        setClip(clipper);
+        pfxAccount.setOnMouseClicked(e -> setSelected(null));
+        logout.setOnMouseClicked(e -> App.getSingleton().setAccount(null));
     }
-
-    public void reload() {
-        try {
-            App.getSingleton().loadWithCache("frontend/components/Sidebar.fxml", this, this);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-    @FXML
-    private BorderPane root;
 
     private void setAccount(Account account) {
         sidebarItems.forEach(s -> {
@@ -95,22 +87,25 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
                 }
             }
         });
-
-        if (account.getAccountType() == Account.AccountType.NONE) {
-            accountInfo.setManaged(false);
-            accountInfo.setVisible(false);
-            loginLogout.setText("Login");
-            loginLogout.setIcon(MaterialSymbols.LOGIN);
-            return;
-        }
-
-        accountInfo.setManaged(true);
-        accountInfo.setVisible(true);
-        loginLogout.setText("Logout");
-        loginLogout.setIcon(MaterialSymbols.LOGOUT);
-        nameText.setText(account.getUsername());
-        roleText.setText(account.getAccountType().name());
+        var loggedIn = account.getAccountType() != Account.AccountType.NONE;
+        logout.setVisible(loggedIn);
+        logout.setManaged(loggedIn);
     }
+
+    @FXML
+    private void toggleExpand() {
+        setExpanded(!expanded);
+    }
+
+    private synchronized void setExpanded(boolean expanded) {
+        if (this.expanded != null && this.expanded == expanded) return;
+        this.expanded = expanded;
+        Platform.runLater(() ->
+                ChangeSize.changeWidth(this, expanded ? maxWidth : getMinWidth(), e -> {
+                })
+        );
+    }
+
 
     private void setSelected(PFXSidebarItem item) {
         sidebarItems.forEach(d -> d.setSelected(d == item));
@@ -120,18 +115,9 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
         App.getSingleton().addPropertyChangeListener(this);
         setAccount(App.getSingleton().getAccount());
 
-        Image defaultImage = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/bwhlogo.png")));
-        profileImage.imageProperty().set(defaultImage);
-
-        sidebar.getChildren().addAll(0, sidebarItems);
+        getChildren().addAll(1, sidebarItems);
         sidebarItems.forEach(s -> s.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> setSelected(s)));
-
-        loginLogout.setOnMouseClicked(e -> {
-            if (App.getSingleton().getAccount().getAccountType() == Account.AccountType.NONE)
-                App.getSingleton().navigate(Screen.LOGIN);
-            else
-                App.getSingleton().setAccount(null);
-        });
+        setExpanded(false);
     }
 
     @Override
@@ -139,11 +125,6 @@ public class SidebarController extends BorderPane implements PropertyChangeListe
         if (Objects.equals(evt.getPropertyName(), "account")) {
             setAccount((Account) evt.getNewValue());
         }
-    }
-
-    @FXML
-    private void exit() {
-        App.getSingleton().exit();
     }
 }
 

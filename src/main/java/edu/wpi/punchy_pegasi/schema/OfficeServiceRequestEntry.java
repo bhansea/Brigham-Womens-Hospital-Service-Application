@@ -18,6 +18,7 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     public OfficeServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String officeRequest, String employeeName) {
         this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, officeRequest, employeeName);
     }
+
     @lombok.RequiredArgsConstructor
     public enum Field {
         SERVICE_ID("serviceID"),
@@ -29,10 +30,12 @@ public class OfficeServiceRequestEntry extends RequestEntry {
         EMPLOYEE_NAME("employeeName");
         @lombok.Getter
         private final String colName;
+
         public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();

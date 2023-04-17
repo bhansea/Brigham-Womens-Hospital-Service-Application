@@ -1,54 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXSidebarItem?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<fx:root type="javafx.scene.layout.BorderPane"
-         xmlns:fx="http://javafx.com/fxml/1" maxWidth="256.0" minWidth="256.0"
-         xmlns="http://javafx.com/javafx/">
-    <center>
-        <VBox styleClass="sideBar">
-            <VBox fx:id="accountInfo">
-                <HBox>
-                    <children>
-                        <VBox HBox.hgrow="NEVER" styleClass="accountImage">
-                            <children>
-                                <ImageView fx:id="profileImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
-                                           preserveRatio="true"/>
-                            </children>
-                        </VBox>
-                        <VBox HBox.hgrow="NEVER" alignment="CENTER_LEFT">
-                            <children>
-                                <Label fx:id="nameText" style="-fx-text-fill: -pfx-navy">
-                                    <font>
-                                        <Font size="20.0"/>
-                                    </font>
-                                </Label>
-                                <Label fx:id="roleText" style="-fx-text-fill: -pfx-navy">
-                                    <font>
-                                        <Font size="15.0"/>
-                                    </font>
-                                </Label>
-                            </children>
-                        </VBox>
-                    </children>
-                </HBox>
-                <Line endX="236.0" startX="20.0" stroke="#012D5A"/>
-                <padding>
-                    <Insets right="20" left="20" top="10"/>
-                </padding>
-            </VBox>
-            <VBox fx:id="sidebar" spacing="10.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
-                <children>
-                    <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS"/>
-                    <PFXSidebarItem icon="LOGOUT" fx:id="loginLogout"/>
-                    <PFXSidebarItem icon="EXIT_TO_APP" text="Exit" onMouseClicked="#exit"/>
-                </children>
-            </VBox>
-        </VBox>
-    </center>
+<?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1"
+         type="javafx.scene.layout.VBox"
+         xmlns="http://javafx.com/javafx/"
+         styleClass="sideBar">
+    <PFXAccount fx:id="pfxAccount"/>
+    <PFXIcon icon="EXPAND_CONTENT" onMouseClicked="#toggleExpand"/>
+    <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS"/>
+    <PFXSidebarItem icon="LOGOUT" text="Logout" fx:id="logout"/>
 </fx:root>

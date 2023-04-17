@@ -3,6 +3,7 @@
     -fx-text-fill: black;
     -fx-font-size: 16;
 }
+
 .pfx-button:selected {
     -fx-background-color: -pfx-accent;
     -fx-text-fill: white;

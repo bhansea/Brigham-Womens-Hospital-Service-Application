@@ -52,7 +52,7 @@ public class PFXIcon extends Text {
         this.size.set(size);
     }
 
-    public final BooleanProperty outlinedProperty(){
+    public final BooleanProperty outlinedProperty() {
         return outlined;
     }
 
