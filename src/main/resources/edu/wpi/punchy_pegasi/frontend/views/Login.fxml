@@ -13,57 +13,47 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
     <right>
         <VBox alignment="CENTER_LEFT" style="-fx-background-color: #ffffff" BorderPane.alignment="CENTER">
-            <children>
-                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label fx:id="invalidText" text="Invalid username/password" textFill="red" visible="false">
-                            <font>
-                                <Font size="14">
-                                </Font>
-                            </font>
-                        </Label>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <MFXTextFieldFocusable fx:id="usernameEnter" floatingText="Username"
-                                                       maxHeight="50.0" maxWidth="350.0" minHeight="0.0"
-                                                       onAction="#logIn" prefHeight="50.0" prefWidth="350.0"
-                                                       style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                                    <textFill>
-                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
-                                    </textFill>
-                                </MFXTextFieldFocusable>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0"
-                                                  maxWidth="350.0" minHeight="0.0" onAction="#logIn"
-                                                  prefHeight="50.0" prefWidth="350.0"
-                                                  style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                                    <textFill>
-                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
-                                    </textFill>
-                                </MFXPasswordField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <Button fx:id="logInButton" mnemonicParsing="false" onAction="#logIn" prefHeight="50.0"
-                                        prefWidth="350.0"
-                                        style="-fx-background-color: #012D5A; -fx-text-fill: #ffffff; -fx-background-radius: 25;"
-                                        text="Log in">
-                                    <font>
-                                        <Font name="Nunito Sans" size="30.0"/>
-                                    </font>
-                                </Button>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
-            </children>
             <padding>
                 <Insets topRightBottomLeft="10"/>
             </padding>
+            <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                <Label fx:id="invalidText" text="Invalid username/password" textFill="red" visible="false">
+                    <font>
+                        <Font size="14">
+                        </Font>
+                    </font>
+                </Label>
+                <HBox alignment="CENTER">
+                    <MFXTextFieldFocusable fx:id="usernameEnter" floatingText="Username"
+                                           maxHeight="50.0" maxWidth="350.0" minHeight="0.0"
+                                           onAction="#logIn" prefHeight="50.0" prefWidth="350.0"
+                                           style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                        <textFill>
+                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
+                        </textFill>
+                    </MFXTextFieldFocusable>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0"
+                                      maxWidth="350.0" minHeight="0.0" onAction="#logIn"
+                                      prefHeight="50.0" prefWidth="350.0"
+                                      style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                        <textFill>
+                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
+                        </textFill>
+                    </MFXPasswordField>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <Button fx:id="logInButton" mnemonicParsing="false" onAction="#logIn" prefHeight="50.0"
+                            prefWidth="350.0"
+                            style="-fx-background-color: #012D5A; -fx-text-fill: #ffffff; -fx-background-radius: 25;"
+                            text="Log in">
+                        <font>
+                            <Font name="Nunito Sans" size="30.0"/>
+                        </font>
+                    </Button>
+                </HBox>
+            </VBox>
         </VBox>
     </right>
 </BorderPane>
