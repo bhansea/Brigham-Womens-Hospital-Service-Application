@@ -2,7 +2,11 @@ package edu.wpi.punchy_pegasi.frontend.map;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.animations.Bobbing;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Node;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -13,10 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -25,7 +26,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import net.kurobako.gesturefx.GesturePane;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -33,24 +33,58 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
+public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private static final Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
     private final Map<String, HospitalFloor> floors;
-    @FXML
-    GesturePane gesturePane;
-    @FXML
-    HBox buttonContainer;
-    @FXML
-    StackPane maps;
+    private StackPane maps = new StackPane();
+    private GesturePane gesturePane = new GesturePane(maps);
+    private BorderPane overlay = new BorderPane();
+    private HBox overlayBottom = new HBox();
+    private HBox overlayTop = new HBox();
     private HospitalFloor currentFloor;
 
     public HospitalMap(Map<String, HospitalFloor> floors) {
         this.floors = floors;
-        try {
-            App.getSingleton().loadWithCache("frontend/components/HospitalMap.fxml", this, this);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        VBox.setVgrow(gesturePane, Priority.ALWAYS);
+        getChildren().addAll(new VBox(gesturePane), overlay);
+        maps.setAlignment(Pos.TOP_LEFT);
+        overlay.setPickOnBounds(false);
+        overlay.setBottom(overlayBottom);
+        overlayBottom.getStyleClass().add("hospital-map-overlay-bottom");
+        overlay.setTop(overlayTop);
+        gesturePane.getStyleClass().add("hospital-map-gesture-pane");
+        gesturePane.minScaleProperty().bind(new ObjectBinding<>() {
+            {
+                bind(gesturePane.widthProperty(), gesturePane.heightProperty());
+            }
+
+            @Override
+            protected Number computeValue() {
+                return Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+            }
+        });
+        gesturePane.setMaxScale(3.4);
+        gesturePane.zoomTo(.2, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
+        gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
+
+        var floorContainer = new HBox();
+        floors.values().forEach(HospitalFloor::init);
+        floors.values().forEach(f -> {
+            f.button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> show(f));
+            floorContainer.getChildren().add(f.button);
+            maps.getChildren().add(f.root);
+        });
+        var separator = new HBox();
+        HBox.setHgrow(separator, Priority.ALWAYS);
+        var zoomModal = new VBox();
+
+        zoomModal.getChildren().addAll(new PFXButton("", new PFXIcon(MaterialSymbols.ADD, 20)), new PFXButton("", new PFXIcon(MaterialSymbols.REMOVE, 20)));
+        zoomModal.getChildren().get(0).setOnMouseClicked(e->{
+
+        });
+        overlayBottom.getChildren().addAll(floorContainer, separator, zoomModal);
+
+        show(floors.get("1"));
     }
 
     @Override
@@ -69,8 +103,13 @@ public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
     }
 
     @Override
-    public javafx.scene.Node getMapNode() {
+    public javafx.scene.Node get() {
         return this;
+    }
+
+    @Override
+    public void addLayer(javafx.scene.Node n) {
+        getChildren().add(n);
     }
 
     @FXML
@@ -82,17 +121,6 @@ public class HospitalMap extends BorderPane implements IMap<HospitalFloor> {
     @FXML
     @Override
     public void initialize() {
-        gesturePane.zoomTo(.1, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
-        gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.ALWAYS);
-
-        floors.values().forEach(HospitalFloor::init);
-        floors.values().forEach(f -> {
-            f.button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> show(f));
-            buttonContainer.getChildren().add(f.button);
-            maps.getChildren().add(f.root);
-        });
-
-        show(floors.get("1"));
     }
 
     @Override

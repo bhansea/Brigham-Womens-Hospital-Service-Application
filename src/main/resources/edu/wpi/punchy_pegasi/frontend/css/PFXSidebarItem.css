@@ -45,9 +45,5 @@
 }
 
 .pfx-sidebar-container:hover {
-    -fx-background-color: rgba(0, 0, 0, 0.18);
-}
-
-.pfx-sidebar-container:selected:hover {
     -fx-background-color: derive(-pfx-accent-light, -5%);
 }

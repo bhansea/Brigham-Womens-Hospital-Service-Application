@@ -20,7 +20,6 @@
 @import "MFXColors.css";
 
 .mfx-button {
-    -fx-font-family: "Nunito Sans";
     -fx-text-fill: -mfx-text-he;
 }
 
@@ -28,8 +27,8 @@
 .mfx-button:hover,
 .mfx-button:focused,
 .mfx-button {
-    /*-fx-background-radius: 3px;*/
-    /*-fx-background-insets: 0px;*/
+    -fx-background-radius: 3px;
+    -fx-background-insets: 0px;
     /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);*/
 }
 

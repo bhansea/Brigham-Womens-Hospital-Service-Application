@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -38,23 +37,23 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
         };
     }
 
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<FlowerDeliveryRequestEntry> {
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        FLOWER_SIZE("flowerSize"),
-        FLOWER_TYPE("flowerType"),
-        FLOWER_AMOUNT("flowerAmount"),
-        PATIENT_NAME("patientName");
-        @lombok.Getter
-        private final String colName;
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry> {
+    SERVICE_ID("serviceID"),
+    LOCATION_NAME("locationName"),
+    STAFF_ASSIGNMENT("staffAssignment"),
+    ADDITIONAL_NOTES("additionalNotes"),
+    STATUS("status"),
+    FLOWER_SIZE("flowerSize"),
+    FLOWER_TYPE("flowerType"),
+    FLOWER_AMOUNT("flowerAmount"),
+    PATIENT_NAME("patientName");
+    @lombok.Getter
+    private final String colName;
 
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref) {
-            return ref.getFromField(this);
-        }
+    public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref) {
+        return ref.getFromField(this);
     }
+}
 
 }

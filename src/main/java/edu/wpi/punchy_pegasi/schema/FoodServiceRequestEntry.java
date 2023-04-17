@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.Getter;
 
 import java.util.List;
@@ -34,7 +33,6 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.patientName = patientName;
         this.beverage = beverage;
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -51,25 +49,25 @@ public class FoodServiceRequestEntry extends RequestEntry {
         };
     }
 
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<FoodServiceRequestEntry> {
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        FOOD_SELECTION("foodSelection"),
-        TEMP_TYPE("tempType"),
-        ADDITIONAL_ITEMS("additionalItems"),
-        DIETARY_RESTRICTIONS("dietaryRestrictions"),
-        PATIENT_NAME("patientName"),
-        BEVERAGE("beverage");
-        @lombok.Getter
-        private final String colName;
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry> {
+    SERVICE_ID("serviceID"),
+    LOCATION_NAME("locationName"),
+    STAFF_ASSIGNMENT("staffAssignment"),
+    ADDITIONAL_NOTES("additionalNotes"),
+    STATUS("status"),
+    FOOD_SELECTION("foodSelection"),
+    TEMP_TYPE("tempType"),
+    ADDITIONAL_ITEMS("additionalItems"),
+    DIETARY_RESTRICTIONS("dietaryRestrictions"),
+    PATIENT_NAME("patientName"),
+    BEVERAGE("beverage");
+    @lombok.Getter
+    private final String colName;
 
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
-            return ref.getFromField(this);
-        }
+    public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
+        return ref.getFromField(this);
     }
+}
 
 }
