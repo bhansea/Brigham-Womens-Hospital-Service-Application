@@ -22,3 +22,8 @@
     -fx-spacing: 10;
     -fx-alignment: CENTER;
 }
+
+.signage_font {
+    -fx-font-size: 30;
+    -fx-font: "Arial";
+}
