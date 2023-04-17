@@ -1,31 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.PathfindingMap"
             fx:id="root">
     <left>
-        <VBox alignment="CENTER" spacing="10">
-            <padding>
-                <Insets topRightBottomLeft="10"/>
-            </padding>
-            <VBox alignment="CENTER" spacing="10" fx:id="pathfinding" prefWidth="300">
+        <VBox fx:id="pathfinding" styleClass="pathfinding-overlay">
+            <VBox>
                 <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
-                <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"
-                                   HBox.hgrow="ALWAYS"/>
-                <HBox spacing="10" alignment="CENTER">
-                    <padding>
-                        <Insets topRightBottomLeft="5"/>
-                    </padding>
-                    <MFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
+                <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"/>
+                <HBox>
+                    <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
                                fx:id="selectGraphically"/>
-                    <MFXButton text="Cancel" fx:id="selectGraphicallyCancel"/>
+                    <PFXButton text="Cancel" fx:id="selectGraphicallyCancel"/>
                 </HBox>
-                <MFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+                <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
                 <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
             </VBox>
         </VBox>

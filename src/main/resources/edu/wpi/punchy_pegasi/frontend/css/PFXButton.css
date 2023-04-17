@@ -1,10 +1,38 @@
+
+.pfx-button:armed,
+.pfx-button:hover,
+.pfx-button:focused,
 .pfx-button {
     -fx-background-color: -pfx-primary;
+    -fx-background-radius: 6;
+    -fx-background-insets: 0;
     -fx-text-fill: black;
     -fx-font-size: 16;
+    -fx-font-family: "Nunito Sans Regular";
+    -fx-cursor: hand;
 }
-
 .pfx-button:selected {
     -fx-background-color: -pfx-accent;
-    -fx-text-fill: white;
+    -fx-text-fill: -pfx-text-opposite;
+}
+.pfx-button:selected:hover {
+    -fx-background-color: -pfx-accent;
+}
+.pfx-button:hover,
+.pfx-button:armed {
+    -fx-background-color: derive(-pfx-primary, -20%);
+}
+
+.pfx-button:focused {
+    -fx-background-color: -pfx-primary;
+}
+
+.pfx-button:focused:selected {
+    -fx-background-color: -pfx-accent;
+    -fx-text-fill: -pfx-text-opposite;
+}
+
+.pfx-button:focused:armed:selected {
+    -fx-background-color: derive(-pfx-accent, -20%);
+    -fx-text-fill: -pfx-text-opposite;
 }

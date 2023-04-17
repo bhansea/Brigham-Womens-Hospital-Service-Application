@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
+import edu.wpi.punchy_pegasi.schema.IField;
 import edu.wpi.punchy_pegasi.schema.Node;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -16,7 +17,9 @@ public interface IMap<Layer> {
 
     void enableMove(boolean enabled);
 
-    javafx.scene.Node getMapNode();
+    javafx.scene.Node get();
+
+    void addLayer(javafx.scene.Node n);
 
     @FXML
     void clearMap();
