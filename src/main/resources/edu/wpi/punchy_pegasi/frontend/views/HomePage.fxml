@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: #fffff" BorderPane.alignment="CENTER">
@@ -19,6 +20,7 @@
                         <Insets topRightBottomLeft="10" />
                     </padding>
                 </Label>
+                <PFXButton alignment="CENTER" stylesheets="@../css/PFXButton.css"/>
                 <VBox fx:id="tableContainer" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
