@@ -9,7 +9,7 @@
 
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
 
-<BorderPane stylesheets="@../css/Signage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SignageController">
     <BorderPane.margin>
         <Insets top="20.0"/>
     </BorderPane.margin>
