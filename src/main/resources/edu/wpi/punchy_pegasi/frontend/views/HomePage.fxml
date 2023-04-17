@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
-            stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
+
+<BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
-        <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <Label textAlignment="CENTER" text="Welcome back!&#13;Here are you outstanding service requests.">
+                <Label text="Welcome back! Here are your outstanding service requests." textAlignment="CENTER">
                     <font>
-                        <Font name="System Bold" size="24.0"/>
+                        <Font name="System Bold" size="18.0" />
                     </font>
                     <padding>
-                        <Insets topRightBottomLeft="10"/>
+                        <Insets topRightBottomLeft="10" />
                     </padding>
                 </Label>
-                <VBox VBox.vgrow="ALWAYS" fx:id="tableContainer">
+                <VBox fx:id="tableContainer" VBox.vgrow="ALWAYS">
                     <padding>
-                        <Insets topRightBottomLeft="20"/>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
-                    <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
                 </VBox>
             </VBox>
         </HBox>

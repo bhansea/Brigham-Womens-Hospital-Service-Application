@@ -1,6 +1,10 @@
-.home-background-image {
-    -fx-background-image: url("../assets/bwh-exterior-default.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: cover, auto;
-    -fx-background-color: transparent;
+/*.home-background-image {*/
+/*    -fx-background-image: url("../assets/bwh-exterior-default.png");*/
+/*    -fx-background-repeat: no-repeat;*/
+/*    -fx-background-size: cover, auto;*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+.home-background{
+    -fx-background-color: -px-primary;
 }

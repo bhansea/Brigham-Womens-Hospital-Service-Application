@@ -27,11 +27,11 @@ public class HomePageController {
     @FXML
     private VBox tableContainer;
 
-    @FXML
-    private void initialize() {
-        showServiceRequestTable(true);
-        initRequestTable();
-    }
+//    @FXML
+//    private void initialize() {
+//        showServiceRequestTable(true);
+//        initRequestTable();
+//    }
 
     private void showServiceRequestTable(boolean show) {
         requestTable.setVisible(show);
