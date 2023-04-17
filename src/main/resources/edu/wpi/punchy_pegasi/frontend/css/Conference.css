@@ -1,0 +1,76 @@
+@import "Fonts.css";
+
+.pfx-conference-room{
+
+
+}
+
+.pfx-conference-hbox-large{
+    -fx-padding-left: 20.0;
+    -fx-padding-top: 70.0;
+}
+.pfx-conference-hbox-med{
+    -fx-padding-left: 20.0;
+    -fx-padding-top: 50.0;
+}
+.pfx-conference-hbox-small{
+    -fx-padding-left: 20.0;
+    -fx-padding-top: 20.0;
+}
+
+.pfx-conference-dropDown MFXFilterComboBox{
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 16;
+    -fx-pref-width: 360.0;
+    -fx-pref-height: 50.0;
+    -fx-padding-left: 20.0;
+    -fx-padding-top: 5.0;
+}
+
+.pfx-conference-header{
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 24;
+    -fx-stroke-width: 0.0;
+    -fx-stroke-type: OUTSIDE;
+    -fx-padding-left: 15.0;
+    -fx-padding-top: 15.0;
+}
+
+.pfx-conference-subText{
+    -fx-font-family: "Nunito Sans Light";
+    -fx-font-size: 18;
+    -fx-stroke-type: OUTSIDE;
+    -fx-stroke-width: 0.0;
+}
+
+.pfx-conference-redstar{
+    -fx-fill: red;
+    -fx-stroke-type: OUTSIDE;
+    -fx-stroke-width: 0.0;
+    -fx-text: "*";
+}
+
+.pfx-conference-textField{
+    -fx-prompt-text-fill: "Number of Participants";
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-font-family: "Nunito Sans Light";
+    -fx-font-size: 16;
+}
+
+.pfx-conference-calendar{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.pfx-conference-vbox{
+    -fx-padding-bottom: 20.0;
+    -fx-padding-left: 20.0;
+    -fx-padding-right: 20.0;
+    -fx-padding-top: 20.0;
+}
