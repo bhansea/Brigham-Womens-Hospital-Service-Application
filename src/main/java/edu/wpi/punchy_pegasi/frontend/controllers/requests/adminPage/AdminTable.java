@@ -1,13 +1,15 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 
-import edu.wpi.punchy_pegasi.generator.schema.Node;
+import edu.wpi.punchy_pegasi.schema.IField;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -27,15 +29,23 @@ public class AdminTable<T> {
         this.getAll = getAll;
     }
 
-    public void init(){
-        ObservableList<T> tableList = FXCollections.observableList(getAll.get());
-
-        // Create columns
-        for (var field : Arrays.stream(tableType.getClazz().getFields()).filter(fld->fld.getName() == "Field").findFirst().get().getClass().getEnumConstants()) {
-//                MFXTableColumn<FlowerDeliveryRequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
-//                col.setRowCellFactory(p -> new MFXTableRowCell<>(field::getValue));
-//                tables.get(tableType.humanReadableName).getTable().getTableColumns().add(col);
-        }
+    public void init() {
+        var thread = new Thread(() -> {
+            var list2 = getAll.get();
+            Platform.runLater(() -> {
+                ObservableList<T> tableList = FXCollections.observableList(getAll.get());
+                table.setItems(tableList);
+                // Create columns
+                for (Object field : tableType.getFieldEnum().getEnumConstants()) {
+                    var iField = (IField<T>) field;
+                    MFXTableColumn<T> col = new MFXTableColumn<>(iField.getColName(), true);
+                    col.setRowCellFactory(p -> new MFXTableRowCell<>(iField::getValue));
+                    table.getTableColumns().add(col);
+                }
+            });
+        });
+        thread.setDaemon(true);
+        thread.start();
 
     }
 }

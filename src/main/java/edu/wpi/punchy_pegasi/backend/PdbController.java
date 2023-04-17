@@ -27,7 +27,7 @@ public class PdbController {
     private final Connection connection;
 
     public PdbController(Source source) throws SQLException, ClassNotFoundException {
-        this(source,"teamp");
+        this(source, "teamp");
     }
 
     public PdbController(Source source, String schema) throws SQLException, ClassNotFoundException {
@@ -37,10 +37,6 @@ public class PdbController {
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + schema + ";");
         connection.setSchema(schema);
-    }
-
-    public Connection exposeConnection(){
-        return this.connection;
     }
 
     private static String objectToPsqlString(Object o) {
@@ -57,6 +53,10 @@ public class PdbController {
         } else {
             return o.toString();
         }
+    }
+
+    public Connection exposeConnection() {
+        return this.connection;
     }
 
     public void initTableByType(TableType tableType) throws DatabaseException {

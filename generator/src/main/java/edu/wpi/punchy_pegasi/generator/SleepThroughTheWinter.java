@@ -137,7 +137,8 @@ public class  SleepThroughTheWinter {
         return
                 """
                             @lombok.RequiredArgsConstructor
-                            public enum Field {
+                            public enum Field implements IField< """ + clazz.getCanonicalName() +"""
+                        >{
                         """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
                         ;
                                 @lombok.Getter
@@ -212,7 +213,7 @@ public class  SleepThroughTheWinter {
                         ALTER SEQUENCE %4$s OWNED BY %3$s.%6$s;
                       END IF;
                     END $$;
-                    \"\"\")""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName());
+                    \"\"\", %2$s.Field.class)""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName());
         else
             return String.format("""
                             %s(%s.class, \"\"\"
@@ -220,7 +221,7 @@ public class  SleepThroughTheWinter {
                             (
                               %s
                             )%s;
-                            \"\"\")
+                            \"\"\", %2$s.Field.class)
                             """, tt.name(), clazz.getCanonicalName(),
                     tableName,
                     String.join(",\n  ", tableColumns),

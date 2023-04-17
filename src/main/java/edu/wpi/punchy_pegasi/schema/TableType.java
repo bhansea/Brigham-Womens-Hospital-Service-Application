@@ -20,7 +20,7 @@ public enum TableType {
                 ALTER SEQUENCE nodes_id_seq OWNED BY nodes.nodeID;
               END IF;
             END $$;
-            """),
+            """, edu.wpi.punchy_pegasi.schema.Node.Field.class),
     EDGES(edu.wpi.punchy_pegasi.schema.Edge.class, """
             DO $$
             BEGIN
@@ -35,7 +35,7 @@ public enum TableType {
                 ALTER SEQUENCE edges_id_seq OWNED BY edges.uuid;
               END IF;
             END $$;
-            """),
+            """, edu.wpi.punchy_pegasi.schema.Edge.Field.class),
     MOVES(edu.wpi.punchy_pegasi.schema.Move.class, """
             DO $$
             BEGIN
@@ -51,7 +51,7 @@ public enum TableType {
                 ALTER SEQUENCE moves_id_seq OWNED BY moves.uuid;
               END IF;
             END $$;
-            """),
+            """, edu.wpi.punchy_pegasi.schema.Move.Field.class),
     LOCATIONNAMES(edu.wpi.punchy_pegasi.schema.LocationName.class, """
             DO $$
             BEGIN
@@ -67,7 +67,7 @@ public enum TableType {
                 ALTER SEQUENCE locationnames_id_seq OWNED BY locationnames.uuid;
               END IF;
             END $$;
-            """),
+            """, edu.wpi.punchy_pegasi.schema.LocationName.Field.class),
     REQUESTS(edu.wpi.punchy_pegasi.schema.RequestEntry.class, """
             CREATE TABLE IF NOT EXISTS requests
             (
@@ -77,13 +77,13 @@ public enum TableType {
               additionalNotes varchar,
               status varchar NOT NULL
             );
-            """),
+            """, edu.wpi.punchy_pegasi.schema.RequestEntry.Field.class),
     GENERIC(edu.wpi.punchy_pegasi.schema.GenericRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS generic
             (
               
             ) INHERITS (requests);
-            """),
+            """, edu.wpi.punchy_pegasi.schema.GenericRequestEntry.Field.class),
     FOODREQUESTS(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS foodrequests
             (
@@ -94,7 +94,7 @@ public enum TableType {
               patientName varchar,
               beverage varchar
             ) INHERITS (requests);
-            """),
+            """, edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.Field.class),
     FLOWERREQUESTS(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS flowerrequests
             (
@@ -103,7 +103,7 @@ public enum TableType {
               flowerAmount varchar,
               patientName varchar
             ) INHERITS (requests);
-            """),
+            """, edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry.Field.class),
     CONFERENCEREQUESTS(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry.class, """
             CREATE TABLE IF NOT EXISTS conferencerequests
             (
@@ -111,20 +111,20 @@ public enum TableType {
               endTime varchar,
               date date NOT NULL
             ) INHERITS (requests);
-            """),
+            """, edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry.Field.class),
     FURNITUREREQUESTS(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS furniturerequests
             (
               selectFurniture varchar ARRAY
             ) INHERITS (requests);
-            """),
+            """, edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.Field.class),
     OFFICEREQUESTS(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry.class, """
             CREATE TABLE IF NOT EXISTS officerequests
             (
               officeRequest varchar,
               employeeName varchar
             ) INHERITS (requests);
-            """),
+            """, edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry.Field.class),
     EMPLOYEES(edu.wpi.punchy_pegasi.schema.Employee.class, """
             DO $$
             BEGIN
@@ -139,7 +139,7 @@ public enum TableType {
                 ALTER SEQUENCE employees_id_seq OWNED BY employees.employeeID;
               END IF;
             END $$;
-            """),
+            """, edu.wpi.punchy_pegasi.schema.Employee.Field.class),
     ACCOUNTS(edu.wpi.punchy_pegasi.schema.Account.class, """
             CREATE TABLE IF NOT EXISTS accounts
             (
@@ -148,21 +148,24 @@ public enum TableType {
               employeeID bigint,
               accountType varchar NOT NULL
             );
-            """),
+            """, edu.wpi.punchy_pegasi.schema.Account.Field.class),
     SIGNAGE(edu.wpi.punchy_pegasi.schema.Signage.class, """
             CREATE TABLE IF NOT EXISTS signage
             (
               longName varchar PRIMARY KEY,
               directionType varchar NOT NULL
             );
-            """);
+            """, edu.wpi.punchy_pegasi.schema.Signage.Field.class);
     @Getter
     private final Class<?> clazz;
     @Getter
     private final String tableSQL;
+    @Getter
+    private final Class<?> fieldEnum;
 
-    TableType(Class<?> clazz, @Language(value = "SQL") String tableSQL) {
+    TableType(Class<?> clazz, @Language(value = "SQL") String tableSQL, Class<?> fieldEnum) {
         this.clazz = clazz;
         this.tableSQL = tableSQL;
+        this.fieldEnum = fieldEnum;
     }
 }
