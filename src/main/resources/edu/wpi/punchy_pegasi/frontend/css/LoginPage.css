@@ -1,0 +1,20 @@
+.VBox-Login {
+    -fx-alignment: center-left;
+    -fx-padding: 200 200 200 0;
+}
+
+.VBox-login-White-Box {
+    -fx-alignment: center-left;
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 20;
+    -fx-background-radius: 20;
+    -fx-max-height: 230;
+}
+
+.Button-Login {
+    -fx-background-color: #012D5A;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 10;
+    -fx-font-size: 14;
+    -fx-font-family: "NunitoSans Regular";
+}
