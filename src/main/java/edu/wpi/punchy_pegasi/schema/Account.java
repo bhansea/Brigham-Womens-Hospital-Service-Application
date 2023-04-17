@@ -24,6 +24,15 @@ public class Account {
         private final int shieldLevel;
     }
 
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> getEmployeeID();
+            case ACCOUNT_TYPE -> getAccountType();
+        };
+    }
+
     @lombok.RequiredArgsConstructor
     public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account> {
         USERNAME("username"),

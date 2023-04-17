@@ -1,14 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Signage {
-
-    private String longName;
+        private String longName;
     private DirectionType directionType;
 
     public enum DirectionType {
