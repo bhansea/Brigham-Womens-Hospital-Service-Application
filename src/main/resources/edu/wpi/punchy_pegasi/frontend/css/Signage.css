@@ -1,29 +1,45 @@
-.right_arrow {
+.signage-right-arrow {
     -fx-font-size: 120;
-    -fx-fill: #00b5c0;
+    -fx-fill: #4A96C0;
 }
 
-.left_arrow {
+.signage-left-arrow {
     -fx-font-size: 120;
-    -fx-fill: #8D0088;
+    -fx-fill: #749E3E;
 }
 
-.up_arrow {
+.signage-up-arrow {
     -fx-font-size: 120;
-    -fx-fill: #0058AA;
+    -fx-fill: #C23EBE;
 }
 
-.down_arrow {
+.signage-down-arrow {
     -fx-font-size: 120;
-    -fx-fill: #C80090;
+    -fx-fill: #D78C1C;
 }
 
-.signage_list {
+.signage-list {
     -fx-spacing: 10;
     -fx-alignment: CENTER;
+    -fx-padding: 0 120 0 0;
 }
 
-.signage_font {
-    -fx-font-size: 30;
-    -fx-font: "Arial";
+.signage-body {
+    -fx-font-size: 25;
+    -fxspacing: 5;
+    -fx-font-family: "Nunito Sans Regular";
 }
+
+.signage-header {
+    -fx-background-radius: 6;
+    -fx-alignment: CENTER;
+    -fx-background-color: #DFDFDF;
+    -fx-font-size: 35;
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-padding: 10 0 10 0;
+}
+
+.signage-header-container {
+    -fx-padding: 0 20 0 20;
+}
+

@@ -10,73 +10,60 @@
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
 
 <BorderPane stylesheets="@../css/Signage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <BorderPane.margin>
+        <Insets top="20.0"/>
+    </BorderPane.margin>
     <top>
-        <HBox prefWidth="1144.0" style="-fx-background-color: F9BA00;" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-                <Insets top="20.0"/>
-            </BorderPane.margin>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Page">
-                <font>
-                    <Font name="System Bold" size="26.0"/>
-                </font>
-                <HBox.margin>
-                    <Insets bottom="10.0" left="480.0" top="10.0"/>
-                </HBox.margin>
-            </Text>
+        <HBox styleClass="signage-header-container">
+            <HBox styleClass="signage-header" HBox.hgrow="ALWAYS">
+                <Text text="Location Name"/>
+            </HBox>
         </HBox>
     </top>
     <center>
-        <VBox alignment="CENTER" prefHeight="437.0" prefWidth="1006.0" spacing="10.0">
+        <VBox alignment="CENTER" styleClass="signage-body">
             <children>
-                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                <HBox styleClass="signage-list">
                     <children>
-                        <PFXIcon icon="ARROW_CIRCLE_UP" outlined="true" styleClass="up_arrow"/>
+                        <PFXIcon icon="ARROW_CIRCLE_UP" outlined="true" styleClass="signage-up-arrow"/>
                         <VBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation" styleClass="signage_font">
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation" styleClass="signage_font">
-                                </Text>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
                             </children>
                         </VBox>
                     </children>
                 </HBox>
 
-                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                <HBox styleClass="signage-list">
                     <children>
-                        <PFXIcon icon="ARROW_CIRCLE_LEFT" outlined="true" styleClass="left_arrow"/>
-                            <VBox alignment="CENTER_LEFT" spacing="10.0" styleClass="signage_font">
-                                <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
-                                    </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
-                                    </Text>
-                                </children>
-                            </VBox>
-                    </children>
-                </HBox>
-                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <PFXIcon icon="ARROW_CIRCLE_RIGHT" outlined="true" styleClass="right_arrow"/>
-                        <VBox alignment="CENTER_LEFT" spacing="10.0" styleClass="signage_font">
+                        <PFXIcon icon="ARROW_CIRCLE_LEFT" outlined="true" styleClass="signage-left-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
-                                </Text>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
                             </children>
                         </VBox>
                     </children>
                 </HBox>
-                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                <HBox styleClass="signage-list">
                     <children>
-                        <PFXIcon icon="ARROW_CIRCLE_DOWN" outlined="true" styleClass="down_arrow"/>
-                        <VBox alignment="CENTER_LEFT" spacing="10.0" styleClass="signage_font">
+                        <PFXIcon icon="ARROW_CIRCLE_RIGHT" outlined="true" styleClass="signage-right-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
-                                </Text>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox styleClass="signage-list">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_DOWN" outlined="true" styleClass="signage-down-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
                             </children>
                         </VBox>
                     </children>
