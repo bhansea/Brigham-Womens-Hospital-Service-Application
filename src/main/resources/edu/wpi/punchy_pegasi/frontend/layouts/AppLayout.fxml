@@ -3,15 +3,23 @@
 <?import edu.wpi.punchy_pegasi.frontend.controllers.SidebarController?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import edu.wpi.punchy_pegasi.frontend.controllers.HeaderController?>
 <fx:root xmlns:fx="http://javafx.com/fxml"
          type="javafx.scene.layout.BorderPane"
          xmlns="http://javafx.com/javafx">
     <center>
         <BorderPane>
             <center>
-                <ScrollPane fitToHeight="true" fitToWidth="true">
-                    <BorderPane fx:id="ViewPane"/>
-                </ScrollPane>
+                <BorderPane>
+                    <center>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content">
+                            <BorderPane fx:id="ViewPane"/>
+                        </ScrollPane>
+                    </center>
+                    <top>
+                        <HeaderController/>
+                    </top>
+                </BorderPane>
             </center>
         </BorderPane>
     </center>

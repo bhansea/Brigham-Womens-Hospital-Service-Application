@@ -2,55 +2,53 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.schema.Account;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.Objects;
 
-public class HeaderController implements PropertyChangeListener {
-    public StackPane headerStackpane;
-    @FXML
-    HBox navButtonContainer;
-    @FXML
-    private Button exitButton;
-    @FXML
-    private Button homeButton;
+public class HeaderController extends HBox implements PropertyChangeListener {
 
-    @FXML
-    private void toHome(ActionEvent event) {
-        App.getSingleton().navigate(Screen.HOME);
-    }
+//    private final ObservableList<Node> headerItems = FXCollections.observableArrayList(
+//
+//    );
 
-    @FXML
-    private void exit() {
-        App.getSingleton().exit();
-    }
-
-    @FXML
-    private void initialize() {
-
+    public void initialize() {
         App.getSingleton().addPropertyChangeListener(this);
+        setAccount(App.getSingleton().getAccount());
 
-//        for (var entry : Screen.values()) {
-//            if (entry.name().toLowerCase().contains("request")
-//                || entry.name().toLowerCase().contains("home"))
-//                continue;
-//            Button button = new Button();
-//            button.setText(entry.getReadable());
-//            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #f1f1f1; -fx-font-size: 21");
-//            button.setOnMouseClicked(e -> {
-//                App.getSingleton().navigate(entry);
-//            });
-//            navButtonContainer.getChildren().add(button);
-//        }
+//        getChildren().addAll(1, headerItems);
+//        headerItems.forEach(s -> s.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> setSelected(s)));
+    }
+
+    public HeaderController() {
+        super();
+        try {
+            App.getSingleton().loadWithCache("frontend/components/Header.fxml", this, this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setAccount(Account account) {
+
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (Objects.equals(evt.getPropertyName(), "account")) {
+            setAccount((Account) evt.getNewValue());
+        }
 //        if (evt.getNewValue().equals(Screen.HOME)) {
 //            exitButton.setVisible(true);
 //            exitButton.setManaged(true);
