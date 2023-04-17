@@ -16,14 +16,14 @@
                             <BorderPane fx:id="ViewPane"/>
                         </ScrollPane>
                     </center>
-                    <top>
-                        <HeaderController/>
+                    <top >
+                        <HeaderController fx:id="topLayout"/>
                     </top>
                 </BorderPane>
             </center>
         </BorderPane>
     </center>
     <left>
-        <SidebarController/>
+        <SidebarController fx:id="leftLayout"/>
     </left>
 </fx:root>

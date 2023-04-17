@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.schema.Account;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,18 +18,16 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
 
+
+
 public class HeaderController extends HBox implements PropertyChangeListener {
 
-//    private final ObservableList<Node> headerItems = FXCollections.observableArrayList(
-//
-//    );
+    @FXML
+    MFXButton troll;
 
     public void initialize() {
         App.getSingleton().addPropertyChangeListener(this);
         setAccount(App.getSingleton().getAccount());
-
-//        getChildren().addAll(1, headerItems);
-//        headerItems.forEach(s -> s.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> setSelected(s)));
     }
 
     public HeaderController() {
@@ -49,16 +48,5 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         if (Objects.equals(evt.getPropertyName(), "account")) {
             setAccount((Account) evt.getNewValue());
         }
-//        if (evt.getNewValue().equals(Screen.HOME)) {
-//            exitButton.setVisible(true);
-//            exitButton.setManaged(true);
-//            homeButton.setVisible(false);
-//            homeButton.setManaged(false);
-//        } else {
-//            exitButton.setVisible(false);
-//            exitButton.setManaged(false);
-//            homeButton.setVisible(true);
-//            homeButton.setManaged(true);
-//        }
     }
 }
