@@ -818,7 +818,7 @@ public enum MaterialIcons {
     FLIP_TO_BACK("\uE882"),
     FLIP_TO_FRONT("\uE883"),
     FLOOD("\uEBE6"),
-//    FLOURESCENT("\uEC31"),
+    //    FLOURESCENT("\uEC31"),
     FLOURESCENT("\uF00D"),
     FLUORESCENT("\uEC31"),
     FLUTTER_DASH("\uE00B"),
@@ -2241,6 +2241,7 @@ public enum MaterialIcons {
     MaterialIcons(String unicode) {
         this.unicode = unicode;
     }
+
     public String getUnicode() {
         return unicode;
     }

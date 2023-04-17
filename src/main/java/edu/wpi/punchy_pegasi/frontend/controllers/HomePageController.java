@@ -19,13 +19,13 @@ import java.util.Objects;
 
 @Slf4j
 public class HomePageController {
+    private final Facade facade = App.getSingleton().getFacade();
+    private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
+    private final Map<Long, Employee> employees = facade.getAllEmployee();
     @FXML
     MFXTableView<GenericRequestEntry> requestTable;
     @FXML
     private VBox tableContainer;
-    private final Facade facade = App.getSingleton().getFacade();
-    private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
-    private final Map<Long, Employee> employees = facade.getAllEmployee();
 
     @FXML
     private void initialize() {

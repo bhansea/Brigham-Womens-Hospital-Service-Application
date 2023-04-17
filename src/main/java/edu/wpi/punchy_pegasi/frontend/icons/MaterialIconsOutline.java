@@ -2201,6 +2201,7 @@ public enum MaterialIconsOutline {
     MaterialIconsOutline(String unicode) {
         this.unicode = unicode;
     }
+
     public String getUnicode() {
         return unicode;
     }
