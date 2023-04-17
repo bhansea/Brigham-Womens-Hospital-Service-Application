@@ -33,7 +33,13 @@ public class PdbController {
         this.source = source;
         Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection("jdbc:postgresql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password);
+        var statement = connection.createStatement();
+        statement.execute("CREATE SCHEMA IF NOT EXISTS " + schema + ";");
         connection.setSchema(schema);
+    }
+
+    public Connection exposeConnection(){
+        return this.connection;
     }
 
     private static String objectToPsqlString(Object o) {

@@ -23,7 +23,7 @@ class NodeDaoImplTest {
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
         fields = new String[]{"nodeID", "xcoord", "ycoord", "floor", "building"};
-        pdbController = new PdbController(Config.source);
+        pdbController = new PdbController(Config.source, "test");
         dao = new NodeDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.NODES);
