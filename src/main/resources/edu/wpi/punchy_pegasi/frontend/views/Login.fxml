@@ -12,11 +12,8 @@
             stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
     <right>
-        <VBox alignment="CENTER_LEFT" style="-fx-background-color: #ffffff" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets topRightBottomLeft="10"/>
-            </padding>
-            <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+        <VBox stylesheets="@../css/LoginPage.css" styleClass="VBox-Login" BorderPane.alignment="CENTER">
+            <VBox styleClass="VBox-login-White-Box" VBox.vgrow="ALWAYS">
                 <Label fx:id="invalidText" text="Invalid username/password" textFill="red" visible="false">
                     <font>
                         <Font size="14">
@@ -33,7 +30,7 @@
                         </textFill>
                     </MFXTextFieldFocusable>
                 </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="80" prefWidth="200.0">
                     <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0"
                                       maxWidth="350.0" minHeight="0.0" onAction="#logIn"
                                       prefHeight="50.0" prefWidth="350.0"
@@ -43,14 +40,11 @@
                         </textFill>
                     </MFXPasswordField>
                 </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER">
                     <Button fx:id="logInButton" mnemonicParsing="false" onAction="#logIn" prefHeight="50.0"
-                            prefWidth="350.0"
-                            style="-fx-background-color: #012D5A; -fx-text-fill: #ffffff; -fx-background-radius: 25;"
+                            prefWidth="100"
+                            styleClass="Button-Login"
                             text="Log in">
-                        <font>
-                            <Font name="Nunito Sans" size="30.0"/>
-                        </font>
                     </Button>
                 </HBox>
             </VBox>
