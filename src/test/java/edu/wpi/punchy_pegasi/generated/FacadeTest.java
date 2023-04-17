@@ -368,14 +368,69 @@ class FacadeTest {
 
     @Test
     void saveEdge() {
+        Edge edge = new Edge(100L, 1005L, 1006L);
+        facade.saveEdge(edge);
+        Optional<Edge> results = facade.getEdge(edge.getUuid());
+        Edge daoresult = results.get();
+        assertEquals(edge, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void updateEdge() {
+        Edge edge = new Edge(100L, 1005L, 1006L);
+        facade.saveEdge(edge);
+
+        Edge updatedEdge = new Edge(100L, 2005L, 2006L);
+        Edge.Field[] fields = {Edge.Field.START_NODE, Edge.Field.END_NODE};
+        facade.updateEdge(updatedEdge, fields);
+
+        Optional<Edge> results = facade.getEdge(edge.getUuid());
+        Edge daoresult = results.get();
+        assertEquals(updatedEdge, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteEdge() {
+        long uuid = 1111;
+        long startNode = 2222;
+        long endNode = 3333;
+        Edge edge = new Edge(uuid, startNode, endNode);
+        var values = new Long[]{
+                edge.getUuid(),
+                edge.getStartNode(),
+                edge.getEndNode()
+        };
+        try {
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert edge";
+            throw new RuntimeException(e);
+        }
+
+        try {
+            pdbController.searchQuery(TableType.EDGES, edgeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to find edge";
+            throw new RuntimeException(e);
+        }
+
+        facade.deleteEdge(edge);
+
+        try {
+            pdbController.searchQuery(TableType.EDGES, edgeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Successfully deleted edge";
+        }
     }
 
     @Test
