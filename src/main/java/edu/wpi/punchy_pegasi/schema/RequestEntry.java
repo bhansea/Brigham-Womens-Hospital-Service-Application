@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +9,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class RequestEntry {
-        protected final UUID serviceID;
+
+    protected final UUID serviceID;
     protected final Long locationName;
     protected final Long staffAssignment;
     protected final String additionalNotes;
