@@ -18,24 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 class FacadeTest {
     static PdbController pdbController;
-    static NodeDaoImpl nodeDao;
-    static EdgeDaoImpl edgeDao;
-    static MoveDaoImpl moveDao;
-    static LocationNameDaoImpl locationNameDao;
-    static RequestEntryDaoImpl requestEntryDao;
-    static FoodServiceRequestEntryDaoImpl foodServiceRequestEntryDao;
-    static FlowerDeliveryRequestEntryDaoImpl flowerDeliveryRequestEntryDao;
-    static ConferenceRoomEntryDaoImpl conferenceRoomEntryDao;
-    static FurnitureRequestEntryDaoImpl furnitureRequestEntryDao;
-    static OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
-    static EmployeeDaoImpl employeeDao;
-    static AccountDaoImpl accountDao;
+    static Facade facade;
     static String[] nodeFields;
 
     @BeforeAll
     static void setUp() throws SQLException, ClassNotFoundException {
         nodeFields = new String[]{"nodeID", "xcoord", "ycoord", "floor", "building"};
         pdbController = new PdbController(Config.source, "test");
+        facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
             try {
                 pdbController.initTableByType(tt);
@@ -43,18 +33,6 @@ class FacadeTest {
                 log.error("Could not init table " + tt.name());
             }
         }
-        nodeDao = new NodeDaoImpl(pdbController);
-        edgeDao = new EdgeDaoImpl(pdbController);
-        moveDao = new MoveDaoImpl(pdbController);
-        locationNameDao = new LocationNameDaoImpl(pdbController);
-        requestEntryDao = new RequestEntryDaoImpl(pdbController);
-        foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(pdbController);
-        flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(pdbController);
-        conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(pdbController);
-        furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(pdbController);
-        officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(pdbController);
-        employeeDao = new EmployeeDaoImpl(pdbController);
-        accountDao = new AccountDaoImpl(pdbController);
 
     }
 
@@ -73,7 +51,7 @@ class FacadeTest {
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        Optional<Node> results = nodeDao.get(node.getNodeID());
+        Optional<Node> results = facade.getNode(node.getNodeID());
         Node daoresult = results.get();
         assertEquals(daoresult, node);
         try {
@@ -95,7 +73,7 @@ class FacadeTest {
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        var results = nodeDao.get(Node.Field.BUILDING, "testBuilding");
+        var results = facade.getNode(Node.Field.BUILDING, "testBuilding");
         var map = new HashMap<Long, Node>();
         try (var rs = pdbController.searchQuery(TableType.NODES, "building", "testBuilding")) {
             while (rs.next()) {
@@ -139,7 +117,7 @@ class FacadeTest {
         Node.Field[] fields = {Node.Field.BUILDING, Node.Field.XCOORD};
         Object[] searchValues = new Object[]{"testBuilding", 500};
         String[] searchFields = new String[]{"building", "xcoord"};
-        var results = nodeDao.get(fields, searchValues);
+        var results = facade.getNode(fields, searchValues);
         var map = new HashMap<Long, Node>();
         try (var rs = pdbController.searchQuery(TableType.NODES, searchFields, searchValues)) {
             while (rs.next()) {
@@ -185,7 +163,7 @@ class FacadeTest {
             refMap.put(node.getNodeID(), node);
         }
 
-        Map<Long, Node> resultMap = nodeDao.getAll();
+        Map<Long, Node> resultMap = facade.getAllNode();
         for (var key : resultMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.NODES, "nodeID", key);
@@ -198,18 +176,65 @@ class FacadeTest {
 
     @Test
     void saveNode() {
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        facade.saveNode(node);
+        Optional<Node> results = facade.getNode(node.getNodeID());
+        Node daoresult = results.get();
+        assertEquals(node, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void updateNode() {
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        facade.saveNode(node);
+
+        Node updatedNode = new Node(100L, 1500, 1500, "L2", "updatedTestBuilding");
+        Node.Field[] fields = {Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.FLOOR, Node.Field.BUILDING};
+        facade.updateNode(updatedNode, fields);
+
+        Optional<Node> results = facade.getNode(node.getNodeID());
+        Node daoresult = results.get();
+        assertEquals(updatedNode, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteNode() {
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
+        try {
+            pdbController.insertQuery(TableType.NODES, nodeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert node";
+        }
+
+        try {
+            pdbController.searchQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to find node";
+        }
+
+        facade.deleteNode(node);
+
+        try {
+            pdbController.searchQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Node was deleted successfully";
+        }
     }
 
     @Test
     void getEdge() {
+
     }
 
     @Test
