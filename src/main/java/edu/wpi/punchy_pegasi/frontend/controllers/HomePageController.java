@@ -33,10 +33,10 @@ public class HomePageController {
 //        initRequestTable();
 //    }
     // NEED PFX DROP DOWN FOR NOTIFICATIONS
-    private void showServiceRequestTable(boolean show) {
-        requestTable.setVisible(show);
-        requestTable.setManaged(show);
-    }
+//    private void showServiceRequestTable(boolean show) {
+//        requestTable.setVisible(show);
+//        requestTable.setManaged(show);
+//    }
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;
