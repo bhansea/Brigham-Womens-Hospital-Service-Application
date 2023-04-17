@@ -14,6 +14,7 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -238,8 +239,14 @@ public class App extends Application {
 //        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
 //        splashController.getConnection();
 
-        var testComponent = new PFXCardHorizontal();
-        scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
+        var testComponent = new PFXCardVertical();
+        VBox cont = new VBox();
+        HBox cont2 = new HBox();
+        cont.setAlignment(Pos.CENTER);
+        cont2.setAlignment(Pos.CENTER);
+        cont.getChildren().add(cont2);
+        cont2.getChildren().add(testComponent);
+        scene = new Scene(new BorderPane(cont), 1000, 1000);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
 

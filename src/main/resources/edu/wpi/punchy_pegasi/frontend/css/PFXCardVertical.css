@@ -4,32 +4,35 @@
     -fx-alignment: TOP_CENTER;
     -fx-padding: 10 10;
     -fx-background-color: -pfx-primary;
-    -fx-background-radius: 6;
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
 }
 
 .pfx-card-vertical-stats {
     -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
-    -fx-font-size: 30;
+    -fx-spacing: 20;
+    -fx-font-size: 24;
 }
 
 .pfx-card-vertical-imageBox {
     -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
-    -fx-font-size: 30;
 }
 
 .pfx-card-vertical-info {
     -fx-alignment: CENTER_LEFT;
     -fx-background-color: transparent;
+    -fx-spacing: 10;
     -fx-padding: 0 0 0 10;
 }
 
 .pfx-card-vertical-selection {
     -fx-alignment: CENTER_RIGHT;
     -fx-background-color: transparent;
+    -fx-spacing: 10;
     -fx-padding: 0 10 0 0;
 }
 
