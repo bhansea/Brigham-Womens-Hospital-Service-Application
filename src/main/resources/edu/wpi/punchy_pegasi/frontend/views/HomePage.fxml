@@ -9,7 +9,7 @@
 
 <BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
-        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" style="-fx-background-color: #fffff" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                 <Label text="Welcome back! Here are your outstanding service requests." textAlignment="CENTER">
                     <font>
