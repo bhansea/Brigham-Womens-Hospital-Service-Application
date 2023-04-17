@@ -1,0 +1,19 @@
+@import "Fonts.css";
+
+.pfx-picker-container {
+    -fx-alignment: TOP_CENTER;
+    -fx-background-color: -pfx-primary;
+    -fx-background-radius: 6;
+}
+
+.pfx-picker-container Label {
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-picker-container PFXButton {
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-text-fill: -pfx-navy;
+}

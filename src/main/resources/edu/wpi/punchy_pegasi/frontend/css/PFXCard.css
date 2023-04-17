@@ -3,7 +3,8 @@
 .pfx-card-container {
     -fx-alignment: TOP_CENTER;
     -fx-padding: 10 10;
-    -fx-background-color: -pfx-primary;
+    -fx-background-color: -pfx-navy-grey;
+    -fx-background-radius: 6;
 }
 
 .pfx-card-stats {
@@ -47,7 +48,7 @@
 }
 
 .pfx-card-container:hover {
-    -fx-background-color: rgba(0, 0, 0, 0.18);
+
 }
 
 .pfx-card-container:selected:hover {

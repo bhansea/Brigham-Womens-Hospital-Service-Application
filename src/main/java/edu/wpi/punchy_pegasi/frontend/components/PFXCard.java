@@ -12,6 +12,7 @@ public class PFXCard extends VBox {
     private final HBox stats = new HBox();
     private final VBox info = new VBox();
     private final VBox selection = new VBox();
+    private final PFXPicker picker = new PFXPicker();
 
     public PFXCard() {
         super();
@@ -29,12 +30,11 @@ public class PFXCard extends VBox {
         info.getStyleClass().add("pfx-card-info");
         selection.getStyleClass().add("pfx-card-selection");
 
-        var titleLabel = new Label("Title");
-        var subtitleLabel = new Label("Subtitle");
+        var titleLabel = new Label("Meal Name");
+        var subtitleLabel = new Label("A very nice meal");
         info.getChildren().addAll(titleLabel, subtitleLabel);
 
         var quantity = new Label("1");
-        var picker = new Label("Picker");
         selection.getChildren().addAll(quantity, picker);
     }
 }
