@@ -12,7 +12,7 @@
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: #fffff" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <Label text="Welcome back! Here are your outstanding service requests." textAlignment="CENTER">
+                <Label text="Welcome back! Check your service requests using the drop down menu." textAlignment="CENTER">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
