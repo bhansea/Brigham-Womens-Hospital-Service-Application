@@ -13,15 +13,6 @@ public class Account {
     private Long employeeID;
     private AccountType accountType;
 
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case USERNAME -> getUsername();
-            case PASSWORD -> getPassword();
-            case EMPLOYEE_ID -> getEmployeeID();
-            case ACCOUNT_TYPE -> getAccountType();
-        };
-    }
-
     @RequiredArgsConstructor
     public enum AccountType {
         NONE(0),
@@ -29,6 +20,15 @@ public class Account {
         STAFF(1);
         @Getter
         private final int shieldLevel;
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> getEmployeeID();
+            case ACCOUNT_TYPE -> getAccountType();
+        };
     }
 
     @lombok.RequiredArgsConstructor

@@ -25,7 +25,6 @@ public class ConferenceRoomEntry extends RequestEntry {
         this.endTime = endTime;
         this.date = date;
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -39,22 +38,22 @@ public class ConferenceRoomEntry extends RequestEntry {
         };
     }
 
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry> {
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        BEGINNING_TIME("beginningTime"),
-        END_TIME("endTime"),
-        DATE("date");
-        @lombok.Getter
-        private final String colName;
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry> {
+    SERVICE_ID("serviceID"),
+    LOCATION_NAME("locationName"),
+    STAFF_ASSIGNMENT("staffAssignment"),
+    ADDITIONAL_NOTES("additionalNotes"),
+    STATUS("status"),
+    BEGINNING_TIME("beginningTime"),
+    END_TIME("endTime"),
+    DATE("date");
+    @lombok.Getter
+    private final String colName;
 
-        public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref) {
-            return ref.getFromField(this);
-        }
+    public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref) {
+        return ref.getFromField(this);
     }
+}
 
 }

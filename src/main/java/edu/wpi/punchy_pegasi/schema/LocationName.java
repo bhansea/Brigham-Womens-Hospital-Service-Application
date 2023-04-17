@@ -6,20 +6,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LocationName {
-    private Long uuid;
+        private Long uuid;
     private String longName;
     private String shortName;
     private NodeType nodeType;
-
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case UUID -> getUuid();
-            case LONG_NAME -> getLongName();
-            case SHORT_NAME -> getShortName();
-            case NODE_TYPE -> getNodeType();
-        };
-    }
-
     public enum NodeType {
         HALL,
         ELEV,
@@ -47,6 +37,15 @@ public class LocationName {
         public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case UUID -> getUuid();
+            case LONG_NAME -> getLongName();
+            case SHORT_NAME -> getShortName();
+            case NODE_TYPE -> getNodeType();
+        };
     }
 
 }
