@@ -7,28 +7,69 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
+
+<BorderPane stylesheets="@../css/Signage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox alignment="CENTER" prefHeight="437.0" prefWidth="1006.0" spacing="10.0">
-            <HBox prefHeight="100.0" prefWidth="200.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <children>
+                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_UP" outlined="true" styleClass="up_arrow"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
+                            <font>
+                                <Font name="System Bold" size="26.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+
+                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_LEFT" outlined="true" styleClass="left_arrow"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
+                            <font>
+                                <Font name="System Bold" size="26.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_RIGHT" outlined="true" styleClass="right_arrow"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
+                            <font>
+                                <Font name="System Bold" size="26.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+                <HBox styleClass="signage_list" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_DOWN" outlined="true" styleClass="down_arrow"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Infomation">
+                            <font>
+                                <Font name="System Bold" size="26.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+            </children>
         </VBox>
     </center>
     <top>
-        <HBox prefWidth="1144.0" style="-fx-background-color: F6BD38;" BorderPane.alignment="CENTER">
+        <HBox prefWidth="1144.0" style="-fx-background-color: F9BA00;" BorderPane.alignment="CENTER">
             <BorderPane.margin>
-                <Insets top="20.0" />
+                <Insets top="20.0"/>
             </BorderPane.margin>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Page">
-                    <font>
-                        <Font name="System Bold" size="26.0" />
-                    </font>
-                    <HBox.margin>
-                        <Insets bottom="10.0" left="480.0" top="10.0" />
-                    </HBox.margin>
-                </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Page">
+                <font>
+                    <Font name="System Bold" size="26.0"/>
+                </font>
+                <HBox.margin>
+                    <Insets bottom="10.0" left="480.0" top="10.0"/>
+                </HBox.margin>
+            </Text>
         </HBox>
     </top>
 </BorderPane>
