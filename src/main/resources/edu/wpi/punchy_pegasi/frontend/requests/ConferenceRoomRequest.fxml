@@ -5,6 +5,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.control.TextField?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
             xmlns="http://javafx.com/javafx/">
     <center>
@@ -13,7 +14,7 @@
                 <VBox styleClass="pfx-conference-vbox">
                     <children>
                         <Text styleClass="pfx-conference-header" text="Please enter the following information: "/>
-                        <HBox styleClass="pfx-conference-hbox-med">
+                        <HBox styleClass="pfx-conference-hbox-small">
                             <children>
                                 <Text styleClass="pfx-conference-subText" text="Select a Beginning Time "/>
                                 <Text styleClass="pfx-conference-redstar"/>
@@ -27,52 +28,25 @@
                             </children>
                         </HBox>
                         <MFXComboBox fx:id="endTime" alignment="TOP_LEFT" onAction="#validateField"promptText="End Time"/>
-                        <!--                     <HBox>-->
-                        <!--                        <VBox.margin>-->
-                        <!--                           <Insets left="20.0" top="50.0" />-->
-                        <!--                        </VBox.margin>-->
-                        <!--                        <children>-->
-                        <!--                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter The Amount of Participants">-->
-                        <!--                              <font>-->
-                        <!--                                 <Font size="18.0" />-->
-                        <!--                              </font>-->
-                        <!--                           </Text>-->
-                        <!--                           <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*" />-->
-                        <!--                        </children>-->
-                        <!--                     </HBox>-->
-                        <!--                     <TextField fx:id="numberOfParticipants" maxWidth="450.1" promptText="Number of Participants" style="-fx-background-radius: 6; -fx-border-radius: 6;">-->
-                        <!--                        <VBox.margin>-->
-                        <!--                           <Insets left="20.0" top="5.0" />-->
-                        <!--                        </VBox.margin>-->
-                        <!--                        <font>-->
-                        <!--                           <Font size="16.0" />-->
-                        <!--                        </font>-->
-                        <!--                     </TextField>-->
-                    </children>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                    </padding>
-                </VBox>
-                <VBox>
-                    <children>
-                        <HBox>
-                            <VBox.margin>
-                                <Insets left="20.0" top="70.0"/>
-                            </VBox.margin>
+                        <HBox styleClass="pfx-conference-hbox-med">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Date ">
-                                    <font>
-                                        <Font size="18.0"/>
-                                    </font>
-                                </Text>
-                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
+                                <Text styleClass="pfx-conference-subText" text="Enter The Amount of Participants"/>
+                                <Text styleClass="pfx-conference-redstar"/>
                             </children>
                         </HBox>
-                        <MFXDatePicker fx:id="calendar" style="-fx-background-color: #ffffff;"/>
+                        <TextField styleClass="pfx-conference-textField" fx:id="numberOfParticipants"/>
                     </children>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                    </padding>
+                </VBox>
+                <VBox styleClass="pfx-conference-vbox">
+                    <children>
+                        <HBox styleClass="pfx-conference-hbox-large">
+                            <children>
+                                <Text styleClass="pfx-conference-subText" text="Select a Date "/>
+                                <Text styleClass="pfx-conference-redstar"/>
+                            </children>
+                        </HBox>
+                        <MFXDatePicker styleClass="pfx-conference-calendar" fx:id="calendar"/>
+                    </children>
                 </VBox>
             </children>
         </HBox>
