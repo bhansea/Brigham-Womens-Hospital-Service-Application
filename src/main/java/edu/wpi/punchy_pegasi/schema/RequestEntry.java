@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -31,7 +32,7 @@ public class RequestEntry {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry> {
+    public enum Field implements IField<RequestEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),

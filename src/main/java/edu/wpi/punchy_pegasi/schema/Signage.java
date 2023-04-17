@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -24,7 +25,7 @@ public class Signage {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Signage> {
+    public enum Field implements IField<Signage> {
         LONG_NAME("longName"),
         DIRECTION_TYPE("directionType");
         @lombok.Getter

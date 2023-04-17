@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -40,7 +41,7 @@ public class ConferenceRoomEntry extends RequestEntry {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry> {
+    public enum Field implements IField<ConferenceRoomEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),

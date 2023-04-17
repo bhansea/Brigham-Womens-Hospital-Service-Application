@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ public class Employee {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Employee> {
+    public enum Field implements IField<Employee> {
         EMPLOYEE_ID("employeeID"),
         FIRST_NAME("firstName"),
         LAST_NAME("lastName");

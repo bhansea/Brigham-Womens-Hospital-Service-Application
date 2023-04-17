@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
@@ -8,6 +9,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 class FacadeTest {
@@ -24,9 +28,11 @@ class FacadeTest {
     static OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
     static EmployeeDaoImpl employeeDao;
     static AccountDaoImpl accountDao;
+    static String[] nodeFields;
 
     @BeforeAll
     static void setUp() throws SQLException, ClassNotFoundException {
+        nodeFields = new String[]{"nodeID", "xcoord", "ycoord", "floor", "building"};
         pdbController = new PdbController(Config.source, "test");
         for (var tt : TableType.values()) {
             try {
@@ -58,6 +64,21 @@ class FacadeTest {
 
     @Test
     void getNode() {
+        Node node = new Node(100L, 500, 500, "L1", "testBuilding");
+        Object[] values = new Object[]{node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
+        try {
+            pdbController.insertQuery(TableType.NODES, nodeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Node> results = nodeDao.get(node.getNodeID());
+        Node daoresult = results.get();
+        assertEquals(daoresult, node);
+        try {
+            pdbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

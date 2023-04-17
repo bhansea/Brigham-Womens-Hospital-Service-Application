@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import edu.wpi.punchy_pegasi.generator.schema.IField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,7 +20,7 @@ public class Edge {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge> {
+    public enum Field implements IField<Edge> {
         UUID("uuid"),
         START_NODE("startNode"),
         END_NODE("endNode");
