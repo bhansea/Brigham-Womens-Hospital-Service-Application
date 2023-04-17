@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Employee {
-    
+
     private Long employeeID;
     private String firstName;
     private String lastName;
@@ -15,6 +15,7 @@ public class Employee {
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
     @lombok.RequiredArgsConstructor
     public enum Field {
         EMPLOYEE_ID("employeeID"),
@@ -22,10 +23,12 @@ public class Employee {
         LAST_NAME("lastName");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case EMPLOYEE_ID -> getEmployeeID();

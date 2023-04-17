@@ -20,6 +20,7 @@ public class Facade {
     private final OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
     private final EmployeeDaoImpl employeeDao;
     private final AccountDaoImpl accountDao;
+    private final SignageDaoImpl signageDao;
 
     public Facade(PdbController dbController) {
         nodeDao = new NodeDaoImpl(dbController);
@@ -34,6 +35,7 @@ public class Facade {
         officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(dbController);
         employeeDao = new EmployeeDaoImpl(dbController);
         accountDao = new AccountDaoImpl(dbController);
+        signageDao = new SignageDaoImpl(dbController);
 
     }
 
@@ -371,5 +373,33 @@ public class Facade {
 
     public void deleteAccount(Account account) {
         accountDao.delete(account);
+    }
+
+    public Optional<Signage> getSignage(java.lang.String key) {
+        return signageDao.get(key);
+    }
+
+    public Map<java.lang.String, Signage> getSignage(Signage.Field column, Object value) {
+        return signageDao.get(column, value);
+    }
+
+    public Map<java.lang.String, Signage> getSignage(Signage.Field[] params, Object[] value) {
+        return signageDao.get(params, value);
+    }
+
+    public Map<java.lang.String, Signage> getAllSignage() {
+        return signageDao.getAll();
+    }
+
+    public void saveSignage(Signage signage) {
+        signageDao.save(signage);
+    }
+
+    public void updateSignage(Signage signage, Signage.Field[] params) {
+        signageDao.update(signage, params);
+    }
+
+    public void deleteSignage(Signage signage) {
+        signageDao.delete(signage);
     }
 }

@@ -7,11 +7,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LocationName {
-    
+
     private Long uuid;
     private String longName;
     private String shortName;
     private NodeType nodeType;
+
     public enum NodeType {
         HALL,
         ELEV,
@@ -26,6 +27,7 @@ public class LocationName {
         SERV,
         BATH
     }
+
     @lombok.RequiredArgsConstructor
     public enum Field {
         UUID("uuid"),
@@ -34,10 +36,12 @@ public class LocationName {
         NODE_TYPE("nodeType");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
