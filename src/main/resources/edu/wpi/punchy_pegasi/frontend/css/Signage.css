@@ -1,0 +1,24 @@
+.right_arrow {
+    -fx-font-size: 120;
+    -fx-fill: #00b5c0;
+}
+
+.left_arrow {
+    -fx-font-size: 120;
+    -fx-fill: #8D0088;
+}
+
+.up_arrow {
+    -fx-font-size: 120;
+    -fx-fill: #0058AA;
+}
+
+.down_arrow {
+    -fx-font-size: 120;
+    -fx-fill: #C80090;
+}
+
+.signage_list {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+}
