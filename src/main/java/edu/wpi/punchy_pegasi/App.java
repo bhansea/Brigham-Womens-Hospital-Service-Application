@@ -2,7 +2,7 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCard;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
 import edu.wpi.punchy_pegasi.frontend.controllers.ErrorController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
@@ -237,7 +237,7 @@ public class App extends Application {
 //        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
 //        splashController.getConnection();
 
-        var testComponent = new PFXCard();
+        var testComponent = new PFXCardVertical();
         scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");

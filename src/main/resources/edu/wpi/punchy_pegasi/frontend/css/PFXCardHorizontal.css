@@ -1,56 +1,52 @@
 @import "Fonts.css";
 
-.pfx-card-container {
+.pfx-card-horizontal-container {
     -fx-alignment: TOP_CENTER;
     -fx-padding: 10 10;
-    -fx-background-color: -pfx-navy-grey;
+    -fx-background-color: -pfx-primary;
     -fx-background-radius: 6;
 }
 
-.pfx-card-stats {
+.pfx-card-horizontal-stats {
     -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
     -fx-font-size: 30;
 }
 
-.pfx-card-imageBox {
+.pfx-card-horizontal-imageBox {
     -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
     -fx-font-size: 30;
 }
 
-.pfx-card-info {
+.pfx-card-horizontal-info {
     -fx-alignment: CENTER_LEFT;
     -fx-background-color: transparent;
     -fx-padding: 0 0 0 10;
 }
 
-.pfx-card-selection {
+.pfx-card-horizontal-selection {
     -fx-alignment: CENTER_RIGHT;
     -fx-background-color: transparent;
     -fx-padding: 0 10 0 0;
 }
 
-.pfx-card-stats Label {
+.pfx-card-horizontal-stats Label {
     -fx-font-family: "Nunito Sans Light";
     -fx-background-color: transparent;
     -fx-text-fill: -pfx-navy;
 }
 
-.pfx-card-container:selected {
+.pfx-card-horizontal-container:selected {
     -fx-border-color: -pfx-accent;
 }
 
-.pfx-card-container:selected Label {
+.pfx-card-horizontal-container:selected Label {
     -fx-text-fill: -pfx-accent;
 }
 
-.pfx-card-container:hover {
+.pfx-card-horizontal-container:hover {
 
-}
-
-.pfx-card-container:selected:hover {
-    -fx-background-color: derive(-pfx-accent-light, -5%);
 }

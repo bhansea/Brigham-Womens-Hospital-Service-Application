@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class PFXCard extends VBox {
+public class PFXCardVertical extends VBox {
     private final VBox imageBox = new VBox();
     private final ImageView image = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/mealPicture.jpeg");
     private final HBox stats = new HBox();
@@ -14,21 +14,21 @@ public class PFXCard extends VBox {
     private final VBox selection = new VBox();
     private final PFXPicker picker = new PFXPicker();
 
-    public PFXCard() {
+    public PFXCardVertical() {
         super();
-        getStyleClass().add("pfx-card-container");
+        getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);
-        imageBox.getStyleClass().add("pfx-card-imageBox");
+        imageBox.getStyleClass().add("pfx-card-vertical-imageBox");
         imageBox.getChildren().add(image);
         HBox.setHgrow(stats, Priority.ALWAYS);
 
-        stats.getStyleClass().add("pfx-card-stats");
+        stats.getStyleClass().add("pfx-card-vertical-stats");
         HBox.setHgrow(info, Priority.ALWAYS);
         HBox.setHgrow(selection, Priority.ALWAYS);
         stats.getChildren().addAll(info, selection);
 
-        info.getStyleClass().add("pfx-card-info");
-        selection.getStyleClass().add("pfx-card-selection");
+        info.getStyleClass().add("pfx-card-vertical-info");
+        selection.getStyleClass().add("pfx-card-vertical-selection");
 
         var titleLabel = new Label("Meal Name");
         var subtitleLabel = new Label("A very nice meal");

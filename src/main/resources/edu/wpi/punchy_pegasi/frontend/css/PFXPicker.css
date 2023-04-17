@@ -1,8 +1,9 @@
 @import "Fonts.css";
 
 .pfx-picker-container {
-    -fx-alignment: TOP_CENTER;
-    -fx-background-color: -pfx-primary;
+    -fx-alignment: CENTER;
+    -fx-background-color: -pfx-navy-grey;
+    -fx-spacing: 20;
     -fx-background-radius: 6;
 }
 
@@ -15,5 +16,7 @@
 .pfx-picker-container PFXButton {
     -fx-font-family: "Nunito Sans Light";
     -fx-background-color: transparent;
+    -fx-font-size: 20;
     -fx-text-fill: -pfx-navy;
+    -fx-max-width: 999999;
 }
