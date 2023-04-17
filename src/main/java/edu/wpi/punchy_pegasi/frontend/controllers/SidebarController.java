@@ -31,11 +31,11 @@ public class SidebarController extends VBox implements PropertyChangeListener {
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
             new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
     );
+    private final int maxWidth = 256;
     @FXML
     private PFXAccount pfxAccount;
     @FXML
     private PFXSidebarItem logout;
-    private final int maxWidth = 256;
     private Boolean expanded = null;
     @FXML
     private BorderPane root;

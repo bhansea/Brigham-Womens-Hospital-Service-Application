@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
             xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.AdminPageController">
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminPageController">
     <center>
         <HBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
@@ -73,23 +73,8 @@
                         </VBox>
                     </children>
                 </VBox>
-                <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS">
-                    <children>
-                        <MFXTableView prefHeight="500" fx:id="flowerServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="foodServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="furnitureServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="officeServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="conferenceRoomServiceRequestTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="nodeTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="locationTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="edgeTable" VBox.vgrow="ALWAYS"/>
-                        <MFXTableView prefHeight="500" fx:id="moveTable" VBox.vgrow="ALWAYS"/>
-                    </children>
-                </VBox>
+                <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS" fx:id="tableContainer"/>
             </children>
-            <BorderPane.margin>
-                <Insets left="25.0" top="50.0" bottom="50.0"/>
-            </BorderPane.margin>
         </HBox>
     </center>
 </BorderPane>

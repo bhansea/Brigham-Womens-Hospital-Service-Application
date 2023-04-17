@@ -24,10 +24,10 @@ public class PFXSidebarItem extends HBox {
     private final StringProperty text = new SimpleStringProperty();
     private final BooleanProperty selected = new SimpleBooleanProperty();
     private final BooleanProperty expanded = new SimpleBooleanProperty();
-    private boolean dropdown;
-    private String dropdownText;
     private final HBox container = new HBox();
     private final PFXIcon pfxIcon = new PFXIcon();
+    private boolean dropdown;
+    private String dropdownText;
     private VBox expandedInfo = new VBox();
     private Screen screen;
     private ObservableList<Screen> dropdownItems;
