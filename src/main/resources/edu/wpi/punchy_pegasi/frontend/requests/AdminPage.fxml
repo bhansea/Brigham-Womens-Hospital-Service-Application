@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
             xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.AdminPageController">
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminPageController">
     <center>
         <HBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
