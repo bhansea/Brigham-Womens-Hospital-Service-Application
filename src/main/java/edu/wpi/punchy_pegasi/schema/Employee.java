@@ -16,14 +16,6 @@ public class Employee {
         return firstName + " " + lastName;
     }
 
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case EMPLOYEE_ID -> getEmployeeID();
-            case FIRST_NAME -> getFirstName();
-            case LAST_NAME -> getLastName();
-        };
-    }
-
     @lombok.RequiredArgsConstructor
     public enum Field {
         EMPLOYEE_ID("employeeID"),
@@ -35,6 +27,14 @@ public class Employee {
         public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case EMPLOYEE_ID -> getEmployeeID();
+            case FIRST_NAME -> getFirstName();
+            case LAST_NAME -> getLastName();
+        };
     }
 
 }

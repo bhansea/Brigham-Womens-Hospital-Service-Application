@@ -30,8 +30,8 @@ class ConferenceRoomEntryDaoImplTest {
 
     @BeforeAll
     static void init() throws SQLException, ClassNotFoundException {
-        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime"};
-        pdbController = new PdbController(Config.source);
+        fields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date"};
+        pdbController = new PdbController(Config.source, "test");
         dao = new ConferenceRoomEntryDaoImpl(pdbController);
         try {
             pdbController.initTableByType(TableType.CONFERENCEREQUESTS);

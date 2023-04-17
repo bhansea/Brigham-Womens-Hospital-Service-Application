@@ -11,13 +11,6 @@ public class Signage {
     private String longName;
     private DirectionType directionType;
 
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case LONG_NAME -> getLongName();
-            case DIRECTION_TYPE -> getDirectionType();
-        };
-    }
-
     public enum DirectionType {
         UP,
         DOWN,
@@ -35,6 +28,13 @@ public class Signage {
         public Object getValue(edu.wpi.punchy_pegasi.schema.Signage ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case LONG_NAME -> getLongName();
+            case DIRECTION_TYPE -> getDirectionType();
+        };
     }
 
 }

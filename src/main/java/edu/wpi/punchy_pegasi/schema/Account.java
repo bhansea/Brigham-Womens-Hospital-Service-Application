@@ -15,15 +15,6 @@ public class Account {
     private Long employeeID;
     private AccountType accountType;
 
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case USERNAME -> getUsername();
-            case PASSWORD -> getPassword();
-            case EMPLOYEE_ID -> getEmployeeID();
-            case ACCOUNT_TYPE -> getAccountType();
-        };
-    }
-
     @RequiredArgsConstructor
     public enum AccountType {
         NONE(0),
@@ -45,6 +36,15 @@ public class Account {
         public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> getEmployeeID();
+            case ACCOUNT_TYPE -> getAccountType();
+        };
     }
 
 }

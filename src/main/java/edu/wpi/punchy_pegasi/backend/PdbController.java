@@ -27,9 +27,20 @@ public class PdbController {
     private final Connection connection;
 
     public PdbController(Source source) throws SQLException, ClassNotFoundException {
+        this(source,"teamp");
+    }
+
+    public PdbController(Source source, String schema) throws SQLException, ClassNotFoundException {
         this.source = source;
         Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection("jdbc:postgresql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password);
+        var statement = connection.createStatement();
+        statement.execute("CREATE SCHEMA IF NOT EXISTS " + schema + ";");
+        connection.setSchema(schema);
+    }
+
+    public Connection exposeConnection(){
+        return this.connection;
     }
 
     private static String objectToPsqlString(Object o) {
@@ -87,7 +98,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
-            var query = "UPDATE teamp." + tableType.name().toLowerCase() + " SET ";
+            var query = "UPDATE " + tableType.name().toLowerCase() + " SET ";
             query += getFieldValueString(fields, values, " = ", ", ");
             query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
             return statement.executeUpdate(query);
@@ -110,7 +121,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
-            var query = "INSERT INTO teamp." + tableType.name().toLowerCase() + " (";
+            var query = "INSERT INTO " + tableType.name().toLowerCase() + " (";
             query += String.join(", ", fields);
             query += ") VALUES (";
             query += String.join(", ", Arrays.stream(values).map(PdbController::objectToPsqlString).toList());
@@ -135,7 +146,7 @@ public class PdbController {
         if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
-            var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
+            var query = "DELETE FROM " + tableType.name().toLowerCase() + " WHERE ";
             query += getFieldValueString(field, value, "=", " AND ");
             query += ";";
             return statement.executeUpdate(query);
@@ -147,7 +158,7 @@ public class PdbController {
 
     public String getDeleteQuery(TableType tableType, String[] field, Object[] value) throws DatabaseException {
         if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
-        var query = "DELETE FROM teamp." + tableType.name().toLowerCase() + " WHERE ";
+        var query = "DELETE FROM " + tableType.name().toLowerCase() + " WHERE ";
         query += getFieldValueString(field, value, "=", " AND ");
         query += ";";
         return query;
@@ -191,7 +202,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
-            var query = "SELECT * FROM teamp." + tableType.name().toLowerCase();
+            var query = "SELECT * FROM " + tableType.name().toLowerCase();
             if (fields.length > 0) {
                 query += " WHERE ";
                 query += getFieldValueString(fields, values, "=", " AND ");

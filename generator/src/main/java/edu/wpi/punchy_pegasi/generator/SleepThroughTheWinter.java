@@ -171,13 +171,13 @@ public class  SleepThroughTheWinter {
 
     private static String generateTableInit(TableType tt){
         var clazz = tt.getClazz();
-        var tableName = "teamp." + tt.name().toLowerCase();
+        var tableName = tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
         var parentClass = clazz.getSuperclass().equals(Object.class) ? null : clazz.getSuperclass();
         var parentTable = Arrays.stream(TableType.values()).filter(t -> t.getClazz() == parentClass).toList();
 
         var inheritanceString = parentClass != null && parentTable.size() == 1
-                ? " INHERITS (teamp." + parentTable.get(0).name().toLowerCase() + ")"
+                ? " INHERITS (" + parentTable.get(0).name().toLowerCase() + ")"
                 : "";
 
         var classFields = inheritanceString.isBlank()
