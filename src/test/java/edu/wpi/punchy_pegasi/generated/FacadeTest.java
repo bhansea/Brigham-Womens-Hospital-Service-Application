@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,16 @@ class FacadeTest {
     static PdbController pdbController;
     static Facade facade;
     static String[] nodeFields;
+    static String[] edgeFields;
+    static String[] moveFields;
+    static String[] locationNameFields;
 
     @BeforeAll
     static void setUp() throws SQLException, ClassNotFoundException {
         nodeFields = new String[]{"nodeID", "xcoord", "ycoord", "floor", "building"};
+        edgeFields = new String[]{"uuid", "startNode", "endNode"};
+        moveFields = new String[]{"uuid", "nodeID", "longName", "date"};
+        locationNameFields = new String[]{"uuid", "longName", "shortName", "nodeType"};
         pdbController = new PdbController(Config.source, "test");
         facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
@@ -234,19 +241,129 @@ class FacadeTest {
 
     @Test
     void getEdge() {
-
+        Edge edge = new Edge(123123L, 123123L, 123123L);
+        Object[] values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
+        try {
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Edge> results = facade.getEdge(edge.getUuid());
+        Edge daoresult = results.get();
+        assertEquals(daoresult, edge);
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetEdge() {
+        var edge = new Edge(1231234L, 123123L, 123123L);
+        var edge2 = new Edge(12312345L, 123123L, 123123L);
+        var values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
+        var values2 = new Object[]{edge2.getUuid(), edge2.getStartNode(), edge2.getEndNode()};
+        try {
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values);
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = facade.getEdge(Edge.Field.START_NODE, 123123L);
+        var map = new HashMap<Long, Edge>();
+        try (var rs = pdbController.searchQuery(TableType.EDGES, Edge.Field.START_NODE.getColName(), 123123L)) {
+            while (rs.next()) {
+                Edge req = new Edge(
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("startNode"),
+                        (java.lang.Long) rs.getObject("endNode"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(edge.getUuid()), results.get(edge.getUuid()));
+        assertEquals(map.get(edge2.getUuid()), results.get(edge2.getUuid()));
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge2.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetEdge1() {
+        var edge = new Edge(1231234L, 1L, 2L);
+        var edge2 = new Edge(12312345L, 2L, 2L);
+        var edge3 = new Edge(123123456L, 2L, 0L);
+        var values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
+        var values2 = new Object[]{edge2.getUuid(), edge2.getStartNode(), edge2.getEndNode()};
+        var values3 = new Object[]{edge3.getUuid(), edge3.getStartNode(), edge3.getEndNode()};
+        try {
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values);
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values2);
+            pdbController.insertQuery(TableType.EDGES, edgeFields, values3);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Edge.Field[] fields = {Edge.Field.START_NODE, Edge.Field.END_NODE};
+        Object[] searchValues = new Object[]{2L, 2L};
+        String[] searchFields = new String[]{"startNode", "endNode"};
+        var results = facade.getEdge(fields, searchValues);
+        var map = new HashMap<Long, Edge>();
+        try (var rs = pdbController.searchQuery(TableType.EDGES, searchFields, searchValues)) {
+            while (rs.next()) {
+                Edge req = new Edge(
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.Long) rs.getObject("startNode"),
+                        (java.lang.Long) rs.getObject("endNode"));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(edge.getUuid()), results.get(edge.getUuid()));
+        assertEquals(map.get(edge2.getUuid()), results.get(edge2.getUuid()));
+        assertEquals(map.get(edge3.getUuid()), results.get(edge3.getUuid()));
+        try {
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge.getUuid());
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge2.getUuid());
+            pdbController.deleteQuery(TableType.EDGES, "uuid", edge3.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAllEdge() {
+        var value0 = new Long[]{100L, 1005L, 1006L};
+        var value1 = new Long[]{101L, 1005L, 1007L};
+        var value2 = new Long[]{102L, 1005L, 1008L};
+        var valueSet = new Object[][]{value0, value1, value2};
+        var refMap = new HashMap<Long, Edge>();
+        for (Object[] values : valueSet) {
+            try {
+                pdbController.insertQuery(TableType.EDGES, edgeFields, values);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to insert edge";
+            }
+            Edge edge = new Edge((Long) values[0], (Long) values[1], (Long) values[2]);
+            refMap.put(edge.getUuid(), edge);
+        }
+
+        Map<Long, Edge> resultMap = facade.getAllEdge();
+        for (var uuid : refMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.EDGES, "uuid", uuid);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
