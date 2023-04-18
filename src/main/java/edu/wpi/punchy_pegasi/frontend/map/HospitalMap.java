@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Node;
+import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -16,6 +17,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -64,8 +66,13 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
             }
         });
         gesturePane.setMaxScale(3.4);
-        gesturePane.zoomTo(.2, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
+        gesturePane.zoomTo(gesturePane.getMinScale(), gesturePane.targetPointAtViewportCentre());
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
+
+        var spinner = new MFXProgressSpinner(-1);
+        spinner.setRadius(100);
+        spinner.setStyle("-fx-arc-width: 25;-fx-arc-height: 25");
+        maps.getChildren().add(new StackPane(new Rectangle(5000, 3400, Color.TRANSPARENT), spinner));
 
         var floorContainer = new HBox();
         floors.values().forEach(HospitalFloor::init);
@@ -78,11 +85,20 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         HBox.setHgrow(separator, Priority.ALWAYS);
         var zoomModal = new VBox();
 
-        zoomModal.getChildren().addAll(new PFXButton("", new PFXIcon(MaterialSymbols.ADD, 20)), new PFXButton("", new PFXIcon(MaterialSymbols.REMOVE, 20)));
-        zoomModal.getChildren().get(0).setOnMouseClicked(e->{
+        var zoomIn = new PFXButton("", new PFXIcon(MaterialSymbols.ADD, 20));
+        var zoomOut = new PFXButton("", new PFXIcon(MaterialSymbols.REMOVE, 20));
+        zoomIn.setOnAction(e -> gesturePane.zoomBy(gesturePane.getCurrentScale() , gesturePane.targetPointAtViewportCentre()));
+        zoomOut.setOnAction(e -> gesturePane.zoomBy(-gesturePane.getCurrentScale()*.5, gesturePane.targetPointAtViewportCentre()));
+        zoomModal.getChildren().addAll(zoomIn, zoomOut);
 
-        });
+        // TODO: Figure out what point to set as target
+//        gesturePane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+//            if (e.getButton().equals(MouseButton.PRIMARY))
+//                if (e.getClickCount() == 2)
+//                    gesturePane.zoomBy(gesturePane.getCurrentScale() * .5, new Point2D(e.getX(), e.getY()));
+//        });
         overlayBottom.getChildren().addAll(floorContainer, separator, zoomModal);
+        overlayBottom.setPickOnBounds(false);
 
         show(floors.get("1"));
     }

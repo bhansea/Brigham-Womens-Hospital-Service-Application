@@ -1,9 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
+import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.DragController;
-import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
-import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
-import edu.wpi.punchy_pegasi.generated.MoveDaoImpl;
 import edu.wpi.punchy_pegasi.generated.NodeDaoImpl;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
@@ -13,10 +11,12 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.util.StringConverter;
+import org.controlsfx.control.PopOver;
 import org.javatuples.Pair;
 
 import java.util.*;
@@ -81,30 +81,35 @@ public class AdminMapController {
     private void initialize() {
         map = new HospitalMap(floors);
         root.setCenter(map.get());
-        setEditingNodes(false);
-        load();
+        map.addLayer(editing);
+        editing.setPickOnBounds(false);
+        load(this::editNodes);
     }
 
     private Optional<LocationName> nodeToLocation(Node node) {
         if (node == null) return Optional.empty();
-        var move = movesByNodeID.get(node.getNodeID()).getLongName();
+        var move = movesByNodeID.get(node.getNodeID());
         if (move == null) return Optional.empty();
-        return Optional.ofNullable(locationsByLongName.get(move));
+        return Optional.ofNullable(locationsByLongName.get(move.getLongName()));
     }
 
-    private void load() {
-        nodes = new NodeDaoImpl().getAll();
-        edges = new EdgeDaoImpl().getAll();
-        moves = new MoveDaoImpl().getAll();
-        locations = new LocationNameDaoImpl().getAll();
+    private void load(Runnable callback) {
+        var thread = new Thread(() -> {
+            nodes = App.getSingleton().getFacade().getAllNode();
+            edges = App.getSingleton().getFacade().getAllEdge();
+            moves = App.getSingleton().getFacade().getAllMove();
+            locations = App.getSingleton().getFacade().getAllLocationName();
 
-        movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
-        locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
+            movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
+            locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
+
+            Platform.runLater(callback);
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
-    @FXML
     private void editNodes() {
-        setEditingNodes(true);
         map.clearMap();
         var nodePoints = nodes.values().stream().map(n -> {
             var pointOpt = drawNode(n, "#FFFF00");
@@ -112,7 +117,9 @@ public class AdminMapController {
             var point = pointOpt.get();
             point.setOnMouseClicked(e -> {
                 if (e.isSecondaryButtonDown()) {
-
+                    var popOver = new PopOver();
+                    popOver.getRoot().getStylesheets().add(App.getSingleton().resolveResource("frontend/components/DefaultTheme.css").get().toExternalForm());
+                    popOver.getRoot().getChildren().add(new Label());
                 }
             });
             DragController dragController = new DragController(point, true);
@@ -139,7 +146,6 @@ public class AdminMapController {
         if (commiting.compareAndExchange(false, true)) return;
         var totalEdited = editedNodes.size();
         commitButton.setDisable(true);
-        doneEditingButton.setDisable(true);
         commitProgress.setProgress(0);
         AtomicInteger counter = new AtomicInteger(0);
         var commitThread = new Thread(() -> {
@@ -148,35 +154,10 @@ public class AdminMapController {
                 Platform.runLater(() -> commitProgress.setProgress((double) counter.incrementAndGet() / totalEdited));
             });
             editedNodes.clear();
-            Platform.runLater(() -> {
-                commitButton.setDisable(false);
-                doneEditingButton.setDisable(false);
-            });
+            Platform.runLater(() -> commitButton.setDisable(false));
             commiting.set(false);
         });
         commitThread.setDaemon(true);
         commitThread.start();
-    }
-
-    @FXML
-    private void doneEditingNodes() {
-        setEditingNodes(false);
-    }
-
-    private void setEditingNodes(boolean editing) {
-        doneEditingButton.setVisible(editing);
-        doneEditingButton.setManaged(editing);
-        commitButton.setManaged(editing);
-        commitButton.setVisible(editing);
-        commitProgress.setManaged(editing);
-        commitProgress.setVisible(editing);
-        editButton.setVisible(!editing);
-        editButton.setManaged(!editing);
-
-        // if you are editing
-        if (editing) commitProgress.setProgress(0);
-
-        // if you are done editing
-        if (!editing) map.clearMap();
     }
 }

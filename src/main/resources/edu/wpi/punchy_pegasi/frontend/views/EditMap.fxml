@@ -10,13 +10,8 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
             fx:id="root">
     <left>
-        <VBox alignment="CENTER" spacing="10">
-            <padding>
-                <Insets topRightBottomLeft="10"/>
-            </padding>
-            <VBox alignment="CENTER" spacing="10" fx:id="editing">
-                <MFXButton text="Edit Node Locations" onMouseClicked="#editNodes" fx:id="editButton"/>
-                <MFXButton text="Done Editing Nodes" onMouseClicked="#doneEditingNodes" fx:id="doneEditingButton"/>
+        <VBox alignment="CENTER" spacing="10" fx:id="editing">
+            <VBox>
                 <MFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
                 <MFXProgressBar fx:id="commitProgress" maxWidth="Infinity" progress="0">
                     <padding>
