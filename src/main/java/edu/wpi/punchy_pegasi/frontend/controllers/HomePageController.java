@@ -94,24 +94,26 @@ public class HomePageController {
         String selectedOption = notificationComboBox.getValue();
         if(selectedOption != null){
             Stage window = new Stage();
-            switch(selectedOption){
-                case "Meals":
-                    // Open window for Meals
-                    break;
-                case "Flowers":
-                    // Open window for Flowers
-                    break;
-                case "Office Supplies":
-                    // Open window for Office
-                    break;
-                case "Conference Room":
-                    //Open window for Conference Room
-                    break;
-                case "Furniture":
-                    //open window for Furniture
-                default:
-                    break;
-            }
+            window.setTitle(selectedOption + "Window");
+            window.show();
+//            switch(selectedOption){
+//                case "Meals":
+//                    // Open window for Meals
+//                    break;
+//                case "Flowers":
+//                    // Open window for Flowers
+//                    break;
+//                case "Office Supplies":
+//                    // Open window for Office
+//                    break;
+//                case "Conference Room":
+//                    //Open window for Conference Room
+//                    break;
+//                case "Furniture":
+//                    //open window for Furniture
+//                default:
+//                    break;
+//            }
         }
     }
 
