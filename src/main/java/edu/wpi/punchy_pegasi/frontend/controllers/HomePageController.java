@@ -8,7 +8,9 @@ import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,9 @@ public class HomePageController {
     MFXTableView<GenericRequestEntry> requestTable;
     @FXML
     private VBox tableContainer;
+
+    @FXML
+    ComboBox notificationComboBox;
 
     @FXML
     private void initialize() {
@@ -101,5 +106,6 @@ public class HomePageController {
                     .findFirst()
                     .orElseGet(() -> TableType.GENERIC);
         }
+        public void openSelectedWindow(ActionEvent actionEvent){}
     }
 }
