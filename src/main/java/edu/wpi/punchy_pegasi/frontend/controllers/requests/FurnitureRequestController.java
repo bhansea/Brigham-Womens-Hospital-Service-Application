@@ -11,6 +11,7 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import lombok.Value;
 
@@ -23,13 +24,15 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     private final ObservableList<Integer> amountList = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     private final ObservableList<FurnitureCartItem> itemList = FXCollections.observableArrayList(new FurnitureCartItem("", 0));
     @FXML
-    MFXComboBox<String> furniture;
+    MFXComboBox<String> furniture = new MFXComboBox<>();
     @FXML
-    MFXComboBox<Integer> amountOfFurniture;
+    MFXComboBox<Integer> amountOfFurniture = new MFXComboBox<>();
     @FXML
     private MFXButton toCart;
     @FXML
-    private MFXTableView<FurnitureCartItem> furnTable;
+    private MFXTableView<FurnitureCartItem> furnTable = new MFXTableView<>();
+    @FXML
+    Label invalidText;
 
     public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);
@@ -37,6 +40,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
 
     @FXML
     public void init() {
+        invalidText.setVisible(false);
+        invalidText.setManaged(false);
         furniture.setItems(furnitureList);
         amountOfFurniture.setItems(amountList);
         submit.setDisable(true);
@@ -50,7 +55,6 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         furnTable.setItems(itemList);
         itemList.remove(0, 1);
         setHeaderText("Furniture Request");
-
     }
 
     @Override
@@ -86,6 +90,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
+                invalidText.getText(),
                 furniture.getItems());
         facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);

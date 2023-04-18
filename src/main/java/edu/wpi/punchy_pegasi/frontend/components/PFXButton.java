@@ -5,6 +5,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 
 public class PFXButton extends MFXButton {
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
@@ -14,6 +15,7 @@ public class PFXButton extends MFXButton {
     public PFXButton() {
         super();
         this.getStyleClass().add("pfx-button");
+        getRippleGenerator().setAutoClip(true);
     }
 
     /**

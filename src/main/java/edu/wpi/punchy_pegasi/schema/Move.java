@@ -7,26 +7,23 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Move {
-
+    
     private Long uuid;
     private Long nodeID;
     private String longName;
     private String date;
-
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move> {
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
         UUID("uuid"),
         NODE_ID("nodeID"),
         LONG_NAME("longName"),
         DATE("date");
         @lombok.Getter
         private final String colName;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref){
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();

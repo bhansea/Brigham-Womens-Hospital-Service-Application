@@ -29,7 +29,8 @@ class HospitalFloor {
     void init() {
         tooltipCanvas.setPickOnBounds(false);
         root.getChildren().addAll(imageView, lineCanvas, nodeCanvas, tooltipCanvas);
-        button.setText(this.humanReadableName);
+        button.setText(this.identifier);
+        button.getStyleClass().add("floor-selector");
         new Thread(this::loadImage).start();
     }
 

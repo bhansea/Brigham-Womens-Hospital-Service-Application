@@ -49,6 +49,8 @@ public abstract class RequestController<T extends RequestEntry> {
     MFXFilterComboBox<Employee> staffAssignment;
     @FXML
     private HBox componentHolder;
+    @FXML
+    public Label invalidText;
 
     public static BorderPane create(RequestController controller, String path) {
         try {
@@ -107,7 +109,6 @@ public abstract class RequestController<T extends RequestEntry> {
             }
         };
         var locationToLongName = new StringConverter<LocationName>() {
-
             @Override
             public String toString(LocationName object) {
                 if (object == null) return "";
