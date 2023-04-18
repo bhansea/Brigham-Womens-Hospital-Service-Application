@@ -76,7 +76,7 @@
                             </children>
                         </HBox>
                         <MFXButton fx:id="toCart" onAction="#clickToCart" prefHeight="25.0" prefWidth="100.0"
-                                   style="-fx-border-color: #f1f1f1; -fx-background-color: #ffffff;" text="To Cart">
+                                   style="-fx-border-color: #f1f1f1; -fx-background-color: -pfx-yellow;" text="To Cart">
                             <VBox.margin>
                                 <Insets left="20.0" top="5.0"/>
                             </VBox.margin>

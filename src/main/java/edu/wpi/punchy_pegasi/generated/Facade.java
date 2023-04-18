@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.*;
+import edu.wpi.punchy_pegasi.backend.PdbController;
 
 import java.util.Map;
 import java.util.Optional;

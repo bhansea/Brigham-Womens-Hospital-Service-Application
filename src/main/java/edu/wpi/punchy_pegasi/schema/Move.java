@@ -1,19 +1,20 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.generator.schema.IField;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Move {
-        private Long uuid;
+
+    private Long uuid;
     private Long nodeID;
     private String longName;
     private String date;
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<Move> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move> {
         UUID("uuid"),
         NODE_ID("nodeID"),
         LONG_NAME("longName"),

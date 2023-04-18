@@ -1,13 +1,14 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.generator.schema.IField;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Signage {
-        private String longName;
+
+    private String longName;
     private DirectionType directionType;
 
     public enum DirectionType {
@@ -18,7 +19,7 @@ public class Signage {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<Signage> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Signage> {
         LONG_NAME("longName"),
         DIRECTION_TYPE("directionType");
         @lombok.Getter
