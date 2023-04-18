@@ -45,6 +45,7 @@ class FacadeTest {
         furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
         officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
+        accountFields = new String[]{"username", "password", "employeeID", "accountType"};
         pdbController = new PdbController(Config.source, "test");
         facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
@@ -2359,30 +2360,185 @@ class FacadeTest {
 
     @Test
     void getAccount() {
-
+        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Object[] values = new Object[]{account.getUsername(), "testPassword", account.getEmployeeID(), account.getAccountType()};
+        try {
+            pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Account> results = facade.getAccount(account.getUsername());
+        Account daoresult = results.get();
+        assertEquals(daoresult, account);
+        try {
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetAccount() {
+        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account2 = new Account("testUsername1", "testPassword", 100L, Account.AccountType.ADMIN);
+        Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values2 = new Object[]{account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType()};
+        try {
+            pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
+            pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = facade.getAccount(Account.Field.EMPLOYEE_ID, 100L);
+        var map = new HashMap<String, Account>();
+        try (var rs = pdbController.searchQuery(TableType.ACCOUNTS, "employeeID", 100L)) {
+            while (rs.next()) {
+                Account req = new Account(
+                        (java.lang.String) rs.getObject("username"),
+                        (java.lang.String) rs.getObject("password"),
+                        (java.lang.Long) rs.getObject("employeeID"),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String) rs.getObject("accountType")));
+                if (req != null)
+                    map.put(req.getUsername(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(account.getUsername()), results.get(account.getUsername()));
+        assertEquals(map.get(account2.getUsername()), results.get(account2.getUsername()));
+        try {
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account2.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetAccount1() {
+        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account2 = new Account("testUsername1", "testPassword", 200L, Account.AccountType.STAFF);
+        Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values2 = new Object[]{account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType()};
+        try {
+            pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
+            pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Account.Field[] fields = {Account.Field.EMPLOYEE_ID, Account.Field.ACCOUNT_TYPE};
+        Object[] searchValues = new Object[]{"100L", "STAFF"};
+        String[] searchFields = new String[]{"employeeID", "accountType"};
+        var results = facade.getAccount(fields, searchValues);
+        var map = new HashMap<String, Account>();
+        try (var rs = pdbController.searchQuery(TableType.ACCOUNTS, searchFields, searchValues)) {
+            while (rs.next()) {
+                Account req = new Account(
+                        (java.lang.String) rs.getObject("username"),
+                        (java.lang.String) rs.getObject("password"),
+                        (java.lang.Long) rs.getObject("employeeID"),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String) rs.getObject("accountType")));
+                if (req != null)
+                    map.put(req.getUsername(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(account.getUsername()), results.get(account.getUsername()));
+        assertEquals(map.get(account2.getUsername()), results.get(account2.getUsername()));
+        try {
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account2.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAllAccount() {
+        var values0 = new Object[]{"username0", "password0", 100L, Account.AccountType.ADMIN};
+        var values1 = new Object[]{"username1", "password1", 101L, Account.AccountType.ADMIN};
+        var values2 = new Object[]{"username2", "password2", 102L, Account.AccountType.ADMIN};
+
+        var valueSet = new Object[][]{values0, values1, values2};
+
+        var refMap = new HashMap<String, Account>();
+        for (Object[] values : valueSet) {
+            var account = new Account((String) values[0], (String) values[1], (Long) values[2], (Account.AccountType) values[3]);
+            refMap.put(account.getUsername(), account);
+            try {
+                pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Map<String, Account> resultMap = facade.getAllAccount();
+        for (var username : resultMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.ACCOUNTS, "username", username);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
     void saveAccount() {
+        Long uuid = 100L;
+        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        facade.saveAccount(account);
+        Optional<Account> results = facade.getAccount(account.getUsername());
+        Account daoresult = results.get();
+        assertEquals(account, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void updateAccount() {
+        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        facade.saveAccount(account);
+
+        Account updatedAccount = new Account("testUsername", "testPassword", 100L, Account.AccountType.STAFF);
+        Account.Field[] fields = {Account.Field.ACCOUNT_TYPE};
+        facade.updateAccount(updatedAccount, fields);
+
+        Optional<Account> results = facade.getAccount(account.getUsername());
+        Account daoresult = results.get();
+        assertEquals(updatedAccount, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteAccount() {
+        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        try {
+            pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert into database";
+        }
+        try {
+            pdbController.searchQuery(TableType.ACCOUNTS, "username", account.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to search database";
+        }
+
+        facade.deleteAccount(account);
+
+        try {
+            pdbController.searchQuery(TableType.ACCOUNTS, "username", account.getUsername());
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Successfully deleted from database";
+        }
     }
 }
