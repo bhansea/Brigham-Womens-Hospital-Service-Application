@@ -39,6 +39,7 @@ class FacadeTest {
         edgeFields = new String[]{"uuid", "startNode", "endNode"};
         moveFields = new String[]{"uuid", "nodeID", "longName", "date"};
         locationNameFields = new String[]{"uuid", "longName", "shortName", "nodeType"};
+        requestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status"};
         foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName"};
         flowerDeliveryFields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
         conferenceRoomFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date"};
@@ -825,31 +826,251 @@ class FacadeTest {
 
     @Test
     void getRequestEntry() {
-
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        RequestEntry request = new RequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING);
+        Object[] values = new Object[]{request.getServiceID(), request.getLocationName(), request.getStaffAssignment(), request.getAdditionalNotes(), request.getStatus()};
+        try {
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<RequestEntry> results = facade.getRequestEntry(request.getServiceID());
+        RequestEntry daoresult = results.get();
+        assertEquals(daoresult, request);
+        try {
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetRequestEntry() {
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var request1 = new RequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING);
+        var request2 = new RequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING);
+        var values = new Object[]{request1.getServiceID(), request1.getLocationName(), request1.getStaffAssignment(), request1.getAdditionalNotes(), request1.getStatus()};
+        var values2 = new Object[]{request2.getServiceID(), request2.getLocationName(), request2.getStaffAssignment(), request2.getAdditionalNotes(), request2.getStatus()};
+        try {
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, values);
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = facade.getRequestEntry(RequestEntry.Field.STAFF_ASSIGNMENT, staff0);
+        var map = new HashMap<java.util.UUID, RequestEntry>();
+        try (var rs = pdbController.searchQuery(TableType.REQUESTS, "staffAssignment", staff0)) {
+            while (rs.next()) {
+                RequestEntry req = new RequestEntry(
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        rs.getObject("additionalNotes", String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")));
+                map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            assert false : e.getMessage();
+        }
+        assertEquals(map.get(request1.getServiceID()), results.get(request1.getServiceID()));
+        assertEquals(map.get(request2.getServiceID()), results.get(request2.getServiceID()));
+        try {
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request1.getServiceID());
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request2.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetRequestEntry1() {
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var request1 = new RequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING);
+        var request2 = new RequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING);
+        var values = new Object[]{request1.getServiceID(), request1.getLocationName(), request1.getStaffAssignment(), request1.getAdditionalNotes(), request1.getStatus()};
+        var values2 = new Object[]{request2.getServiceID(), request2.getLocationName(), request2.getStaffAssignment(), request2.getAdditionalNotes(), request2.getStatus()};
+        try {
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, values);
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        RequestEntry.Field[] fields = {RequestEntry.Field.ADDITIONAL_NOTES, RequestEntry.Field.STAFF_ASSIGNMENT};
+        Object[] searchValues = new Object[]{"testNotes1", staff0};
+        String[] searchFields = new String[]{"additionalNotes", "staffAssignment"};
+        var results = facade.getRequestEntry(fields, searchValues);
+        var map = new HashMap<java.util.UUID, RequestEntry>();
+        try (var rs = pdbController.searchQuery(TableType.REQUESTS, searchFields, searchValues)) {
+            while (rs.next()) {
+                RequestEntry req = new RequestEntry(
+                        (java.util.UUID) rs.getObject("serviceID"),
+                        (java.lang.Long) rs.getObject("locationName"),
+                        (java.lang.Long) rs.getObject("staffAssignment"),
+                        rs.getObject("additionalNotes", String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")));
+                map.put(req.getServiceID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            assert false : e.getMessage();
+        }
+        assertEquals(map.get(request1.getServiceID()), results.get(request1.getServiceID()));
+        assertEquals(map.get(request2.getServiceID()), results.get(request2.getServiceID()));
+        try {
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request1.getServiceID());
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request2.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAllRequestEntry() {
+        var locName0 = ThreadLocalRandom.current().nextLong();
+        var staff0 = ThreadLocalRandom.current().nextLong();
+        var locName1 = ThreadLocalRandom.current().nextLong();
+        var staff1 = ThreadLocalRandom.current().nextLong();
+        var locName2 = ThreadLocalRandom.current().nextLong();
+        var staff2 = ThreadLocalRandom.current().nextLong();
+        var values0 = new Object[]{UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING};
+        var values1 = new Object[]{UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING};
+        var values2 = new Object[]{UUID.randomUUID(), locName2, staff2, "testNotes", RequestEntry.Status.PROCESSING};
+        var valuesSet = new Object[][]{values0, values1, values2};
+        var refMap = new HashMap<java.util.UUID, RequestEntry>();
+
+        for (var values : valuesSet) {
+            try {
+                pdbController.insertQuery(TableType.REQUESTS, requestFields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+            RequestEntry req = new RequestEntry(
+                    (java.util.UUID) values[0],
+                    (java.lang.Long) values[1],
+                    (java.lang.Long) values[2],
+                    (java.lang.String) values[3],
+                    (RequestEntry.Status) values[4]);
+            refMap.put(req.getServiceID(), req);
+        }
+
+        Map<UUID, RequestEntry> resultMap = facade.getAllRequestEntry();
+
+        for (var key : resultMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.REQUESTS, "serviceID", key);
+            } catch (PdbController.DatabaseException e) {
+                assert false : e.getMessage();
+            }
+        }
+
+        assertEquals(refMap, resultMap);
     }
 
     @Test
     void saveRequestEntry() {
+        UUID uuid = UUID.randomUUID();
+        List<String> additionalItems = new ArrayList<>();
+        additionalItems.add("testItems");
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        RequestEntry fsre = new RequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING);
+        facade.saveRequestEntry(fsre);
+
+        Optional<RequestEntry> results = facade.getRequestEntry(uuid);
+        RequestEntry daoresult = results.get();
+        try {
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        assertEquals(fsre, daoresult);
     }
 
     @Test
     void updateRequestEntry() {
+        UUID uuid = UUID.randomUUID();
+        RequestEntry requestEntry = new RequestEntry(
+                uuid,
+                100L,
+                100L,
+                "testNode0",
+                RequestEntry.Status.PROCESSING
+        );
+        RequestEntry updatedRequestEntry = new RequestEntry(
+                uuid,
+                100L,
+                100L,
+                "testNode1",
+                RequestEntry.Status.PROCESSING
+        );
+        try {
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, new Object[]{
+                    requestEntry.getServiceID(),
+                    requestEntry.getLocationName(),
+                    requestEntry.getStaffAssignment(),
+                    requestEntry.getAdditionalNotes(),
+                    requestEntry.getStatus()
+            });
+        } catch (PdbController.DatabaseException e) {
+            assert false : e.getMessage();
+        }
+        RequestEntry.Field[] updateFields = {
+                RequestEntry.Field.ADDITIONAL_NOTES
+        };
+        facade.updateRequestEntry(updatedRequestEntry, updateFields);
+        Optional<RequestEntry> fsrq = facade.getRequestEntry(uuid);
+        RequestEntry daoresult = fsrq.get();
+        assertEquals(daoresult, updatedRequestEntry);
+        try {
+            pdbController.deleteQuery(TableType.REQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteRequestEntry() {
+        RequestEntry requestEntry = new RequestEntry(
+                UUID.randomUUID(),
+                ThreadLocalRandom.current().nextLong(),
+                ThreadLocalRandom.current().nextLong(),
+                "testNode",
+                RequestEntry.Status.PROCESSING
+        );
+
+
+        var values = new Object[]{
+                requestEntry.getServiceID(),
+                requestEntry.getLocationName(),
+                requestEntry.getStaffAssignment(),
+                requestEntry.getAdditionalNotes(),
+                requestEntry.getStatus()
+        };
+        try {
+            pdbController.insertQuery(TableType.REQUESTS, requestFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert test data";
+        }
+
+        try {
+            pdbController.searchQuery(TableType.REQUESTS, "serviceID", requestEntry.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to find test data";
+        }
+
+        facade.deleteRequestEntry(requestEntry);
+
+        try {
+            pdbController.searchQuery(TableType.REQUESTS, "serviceID", requestEntry.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Successfully deleted test data";
+        }
     }
 
     @Test
