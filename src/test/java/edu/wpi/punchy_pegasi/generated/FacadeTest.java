@@ -1,19 +1,15 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Edge;
-import edu.wpi.punchy_pegasi.schema.Move;
-import edu.wpi.punchy_pegasi.schema.Node;
-import edu.wpi.punchy_pegasi.schema.TableType;
+import edu.wpi.punchy_pegasi.schema.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,6 +21,14 @@ class FacadeTest {
     static String[] edgeFields;
     static String[] moveFields;
     static String[] locationNameFields;
+    static String[] requestFields;
+    static String[] foodServiceFields;
+    static String[] flowerDeliveryFields;
+    static String[] conferenceRoomFields;
+    static String[] furnitureRequestFields;
+    static String[] officeServiceFields;
+    static String[] employeeFields;
+    static String[] accountFields;
 
     @BeforeAll
     static void setUp() throws SQLException, ClassNotFoundException {
@@ -32,6 +36,11 @@ class FacadeTest {
         edgeFields = new String[]{"uuid", "startNode", "endNode"};
         moveFields = new String[]{"uuid", "nodeID", "longName", "date"};
         locationNameFields = new String[]{"uuid", "longName", "shortName", "nodeType"};
+        foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName"};
+        flowerDeliveryFields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
+        conferenceRoomFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date"};
+        furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
+        officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
         pdbController = new PdbController(Config.source, "test");
         facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
@@ -626,35 +635,192 @@ class FacadeTest {
 
     @Test
     void getLocationName() {
-
+        LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        try {
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<LocationName> results = facade.getLocationName(location.getUuid());
+        LocationName daoresult = results.get();
+        assertEquals(daoresult, location);
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetLocationName() {
+        LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
+        LocationName location2 = new LocationName(101L, "testName", "testName", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        Object[] values2 = new Object[]{location2.getUuid(), location2.getLongName(), location2.getShortName(), location2.getNodeType()};
+        try {
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values);
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = facade.getLocationName(LocationName.Field.SHORT_NAME, "testName");
+        var map = new HashMap<java.lang.Long, LocationName>();
+        try (var rs = pdbController.searchQuery(TableType.LOCATIONNAMES, "shortName", "testName")) {
+            while (rs.next()) {
+                LocationName req = new LocationName(
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("shortName"),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(location.getUuid()), results.get(location.getUuid()));
+        assertEquals(map.get(location2.getUuid()), results.get(location2.getUuid()));
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location2.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetLocationName1() {
+        LocationName location = new LocationName(100L, "testName", "testName", LocationName.NodeType.HALL);
+        LocationName location2 = new LocationName(101L, "testName", "testName", LocationName.NodeType.HALL);
+        LocationName location3 = new LocationName(102L, "testName1", "testName1", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        Object[] values2 = new Object[]{location2.getUuid(), location2.getLongName(), location2.getShortName(), location2.getNodeType()};
+        Object[] values3 = new Object[]{location3.getUuid(), location3.getLongName(), location3.getShortName(), location3.getNodeType()};
+        try {
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values);
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values2);
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values3);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        LocationName.Field[] fields = {LocationName.Field.LONG_NAME, LocationName.Field.SHORT_NAME};
+        Object[] searchValues = new Object[]{"testName1", "testName1"};
+        String[] searchFields = new String[]{"longName", "shortName"};
+        var results = facade.getLocationName(fields, searchValues);
+        var map = new HashMap<java.lang.Long, LocationName>();
+        try (var rs = pdbController.searchQuery(TableType.LOCATIONNAMES, searchFields, searchValues)) {
+            while (rs.next()) {
+                LocationName req = new LocationName(
+                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.String) rs.getObject("shortName"),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf((String) rs.getObject("nodeType")));
+                if (req != null)
+                    map.put(req.getUuid(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(location.getUuid()), results.get(location.getUuid()));
+        assertEquals(map.get(location2.getUuid()), results.get(location2.getUuid()));
+        assertEquals(map.get(location3.getUuid()), results.get(location3.getUuid()));
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location2.getUuid());
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", location3.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAllLocationName() {
+        var values0 = new Object[]{100L, "LongtestName0", "testName0", LocationName.NodeType.HALL};
+        var values1 = new Object[]{101L, "LongtestName1", "testName1", LocationName.NodeType.HALL};
+        var values2 = new Object[]{102L, "LongtestName2", "testName2", LocationName.NodeType.HALL};
+
+        var valueSet = new Object[][]{values0, values1, values2};
+
+        var refMap = new HashMap<Long, LocationName>();
+        for (Object[] values : valueSet) {
+            var location = new LocationName((Long) values[0], (String) values[1], (String) values[2], (LocationName.NodeType) values[3]);
+            refMap.put(location.getUuid(), location);
+            try {
+                pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Map<Long, LocationName> resultMap = facade.getAllLocationName();
+        for (var uuid : resultMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", uuid);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
     void saveLocationName() {
+        Long uuid = 100L;
+        LocationName ln = new LocationName(uuid, "testName", "testName", LocationName.NodeType.HALL);
+        facade.saveLocationName(ln);
+        Optional<LocationName> results = facade.getLocationName(ln.getUuid());
+        LocationName daoresult = results.get();
+        assertEquals(ln, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", ln.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void updateLocationName() {
+        Long uuid = 100L;
+        LocationName ln = new LocationName(uuid, "testName", "testName", LocationName.NodeType.HALL);
+        facade.saveLocationName(ln);
+        Optional<LocationName> results = facade.getLocationName(ln.getUuid());
+        LocationName daoresult = results.get();
+        assertEquals(ln, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", ln.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteLocationName() {
+        LocationName location = new LocationName(100L, "testLName", "testSName", LocationName.NodeType.HALL);
+        Object[] values = new Object[]{location.getUuid(), location.getLongName(), location.getShortName(), location.getNodeType()};
+        try {
+            pdbController.insertQuery(TableType.LOCATIONNAMES, locationNameFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert into database";
+        }
+        try {
+            pdbController.searchQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to search database";
+        }
+
+        facade.deleteLocationName(location);
+
+        try {
+            pdbController.searchQuery(TableType.LOCATIONNAMES, "uuid", location.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Successfully deleted from database";
+        }
     }
 
     @Test
     void getRequestEntry() {
+
     }
 
     @Test
@@ -683,6 +849,25 @@ class FacadeTest {
 
     @Test
     void getFoodServiceRequestEntry() {
+        var locName = ThreadLocalRandom.current().nextLong();
+        var staff = ThreadLocalRandom.current().nextLong();
+        List<String> additionalItems = new ArrayList<>();
+        additionalItems.add("testItems");
+        FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
+        Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
+        try {
+            pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<FoodServiceRequestEntry> results = facade.getFoodServiceRequestEntry(food.getServiceID());
+        FoodServiceRequestEntry daoresult = results.get();
+        assertEquals(daoresult, food);
+        try {
+            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food.getServiceID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

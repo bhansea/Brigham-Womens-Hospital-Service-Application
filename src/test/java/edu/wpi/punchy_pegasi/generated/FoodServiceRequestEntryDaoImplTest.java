@@ -37,7 +37,7 @@ class FoodServiceRequestEntryDaoImplTest {
         List<String> additionalItems = new ArrayList<>();
         additionalItems.add("testItems");
         FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient");
-        Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getDietaryRestrictions(), food.getPatientName()};
+        Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getBeverage(),food.getDietaryRestrictions(), food.getPatientName()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
@@ -149,6 +149,7 @@ class FoodServiceRequestEntryDaoImplTest {
                 assert false : e.getMessage();
             }
         }
+
         assertEquals(refMap, resultMap);
     }
 
@@ -178,8 +179,8 @@ class FoodServiceRequestEntryDaoImplTest {
         UUID uuid = UUID.randomUUID();
         FoodServiceRequestEntry foodRequest = new FoodServiceRequestEntry(
                 uuid,
-                ThreadLocalRandom.current().nextLong(),
-                ThreadLocalRandom.current().nextLong(),
+                100L,
+                100L,
                 "testNode0",
                 RequestEntry.Status.PROCESSING,
                 "testFood0",
@@ -190,9 +191,9 @@ class FoodServiceRequestEntryDaoImplTest {
                 "patientName0"
         );
         FoodServiceRequestEntry updateFoodRequest = new FoodServiceRequestEntry(
-                UUID.randomUUID(),
-                ThreadLocalRandom.current().nextLong(),
-                ThreadLocalRandom.current().nextLong(),
+                uuid,
+                100L,
+                100L,
                 "testNode0",
                 RequestEntry.Status.PROCESSING,
                 "testFood0",
@@ -224,7 +225,13 @@ class FoodServiceRequestEntryDaoImplTest {
         };
         dao.update(updateFoodRequest, updateFields);
         Optional<FoodServiceRequestEntry> fsrq = dao.get(uuid);
-        assertEquals(fsrq, updateFoodRequest);
+        FoodServiceRequestEntry daoresult = fsrq.get();
+        assertEquals(daoresult, updateFoodRequest);
+        try {
+            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -253,6 +260,7 @@ class FoodServiceRequestEntryDaoImplTest {
                 foodRequest.getFoodSelection(),
                 foodRequest.getTempType(),
                 foodRequest.getAdditionalItems(),
+                foodRequest.getBeverage(),
                 foodRequest.getDietaryRestrictions(),
                 foodRequest.getPatientName()
         };
