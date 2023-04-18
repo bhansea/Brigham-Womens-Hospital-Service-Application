@@ -1,0 +1,15 @@
+@import "Fonts.css";
+
+.pfx-tab-layout {
+    -fx-background-color: transparent;
+}
+
+.pfx-tab-stackpane{
+    -fx-background-color: transparent;
+}
+
+.pfx-tab-container {
+    -fx-background-color: -pfx-primary;
+    -fx-alignment: CENTER;
+    -fx-max-width: "-infinity";
+}

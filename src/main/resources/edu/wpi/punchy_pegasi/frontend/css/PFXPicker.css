@@ -1,0 +1,37 @@
+@import "Fonts.css";
+
+.pfx-picker-container {
+    -fx-alignment: CENTER;
+    -fx-background-color: -pfx-background;
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: -pfx-navy;
+    -fx-border-width: 1.5;
+}
+
+.pfx-picker-container Label {
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-picker-container PFXButton {
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+    -fx-max-width: 9999;
+    -fx-text-fill: -pfx-navy;
+}
+.pfx-picker-minus {
+    -fx-border-color: -pfx-navy;
+    -fx-border-width: 0 1.5 0 0;
+}
+.pfx-picker-plus {
+    -fx-border-color: -pfx-navy;
+    -fx-border-width: 0 0 0 1.5;
+}
+.pfx-picker-icon PFXIcon {
+    -fx-fill: -pfx-navy;
+}

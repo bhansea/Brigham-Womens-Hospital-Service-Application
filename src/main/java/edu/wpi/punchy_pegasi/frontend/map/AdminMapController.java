@@ -80,7 +80,7 @@ public class AdminMapController {
     @FXML
     private void initialize() {
         map = new HospitalMap(floors);
-        root.setCenter(map.getMapNode());
+        root.setCenter(map.get());
         setEditingNodes(false);
         load();
     }
