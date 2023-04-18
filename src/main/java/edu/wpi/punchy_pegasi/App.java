@@ -44,10 +44,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 public class App extends Application {
@@ -240,9 +237,6 @@ public class App extends Application {
         scene = new Scene(loader.getRoot(), 600, 400);
         splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
         splashController.getConnection();
-
-//        var testComponent = new PFXCardVertical("Mac and Cheese", "Delicious macaroni and cheese", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/mac-and-cheese.jpg"));
-//        scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
 

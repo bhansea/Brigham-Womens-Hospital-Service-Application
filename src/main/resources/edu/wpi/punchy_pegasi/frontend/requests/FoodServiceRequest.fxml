@@ -8,8 +8,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder?>
+
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="16.0" style="-fx-background-color: white;">
@@ -23,9 +23,9 @@
                       <children>
                           <VBox>
                               <children>
+                                  <PFXCardHolder fx:id="cardHolder"/>
                                   <HBox>
                                       <children>
-                                          <PFXCardHolder fx:id="cardHolder"/>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Beverage">
                                               <font>
                                                   <Font size="18.0" />

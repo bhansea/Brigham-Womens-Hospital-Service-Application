@@ -30,7 +30,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     MFXComboBox<String> beverageDropdown;
 
     TextField patientName = new TextField();
-
+    @FXML
     PFXCardHolder cardHolder;
 
     public static BorderPane create(String path) {
@@ -45,9 +45,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         PFXCardVertical card2 = new PFXCardVertical("Chicken and Rice", "Artisan-crafted meal", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/chicken-and-rice.jpg"));
         PFXCardVertical card3 = new PFXCardVertical("Meatloaf", "A delightful dish", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/meatloaf.jpg"));
         PFXCardVertical card4 = new PFXCardVertical("Steak", "Pan-seared goodness", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/steak.jpg"));
-        List<PFXCardVertical> test = new ArrayList<>();
-        test.add(card1);
-        cardHolder = new PFXCardHolder(test);
+        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4)));
 
         addTextField(patientName);
         setHeaderText("Food Service Request");
