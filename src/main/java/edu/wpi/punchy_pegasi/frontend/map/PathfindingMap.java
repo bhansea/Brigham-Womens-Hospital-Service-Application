@@ -1,8 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
-import edu.wpi.punchy_pegasi.backend.pathfinding.CartesianHeuristic;
-import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
-import edu.wpi.punchy_pegasi.backend.pathfinding.Palgo;
+import edu.wpi.punchy_pegasi.backend.pathfinding.*;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
 import edu.wpi.punchy_pegasi.generated.MoveDaoImpl;
@@ -41,9 +40,9 @@ public class PathfindingMap {
     private final AtomicBoolean endSelected = new AtomicBoolean(false);
     private final AtomicBoolean selectingGraphically = new AtomicBoolean(false);
     @FXML
-    private MFXButton selectGraphicallyCancel;
+    private PFXButton selectGraphicallyCancel;
     @FXML
-    private MFXButton selectGraphically;
+    private PFXButton selectGraphically;
     @FXML
     private BorderPane root;
     private IMap<HospitalFloor> map;
@@ -54,7 +53,7 @@ public class PathfindingMap {
     @FXML
     private MFXFilterComboBox<Node> nodeStartCombo;
     @FXML
-    private MFXButton pathfindButton;
+    private PFXButton pathfindButton;
     @FXML
     private Text pathfindStatus;
     private Map<Long, Node> nodes;
@@ -86,7 +85,9 @@ public class PathfindingMap {
     @FXML
     private void initialize() {
         map = new HospitalMap(floors);
-        root.setCenter(map.getMapNode());
+        root.setCenter(map.get());
+        map.addLayer(pathfinding);
+        pathfinding.setPickOnBounds(false);
         load();
 
         nodeStartCombo.setItems(filteredNodes);
@@ -190,9 +191,13 @@ public class PathfindingMap {
 
         var graph = new Graph<>(nodes, edgeList);
         var heuristic = new CartesianHeuristic();
-        var palgo = new Palgo<>(graph, heuristic, heuristic);
+        var dfs = new DFS<>(graph);
+        var bfs = new BFS<>(graph);
+        var AStar = new AStar<>(graph, heuristic, heuristic);
+        var palgo = new Palgo<>(graph, heuristic, heuristic, bfs);
+        palgo.setPathfinder(AStar);
         try {
-            var path = palgo.AStar(start, end).stream().toList();
+            var path = palgo.findPath(start,end).stream().toList();
             for (var floor : floors.values())
                 floor.clearFloor();
             String currentFloor = path.get(0).getFloor();

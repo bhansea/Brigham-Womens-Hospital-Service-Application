@@ -1,0 +1,47 @@
+@import "Fonts.css";
+
+.pfx-card-horizontal-container {
+    -fx-alignment: TOP_CENTER;
+    -fx-padding: 20 20;
+    -fx-background-color: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
+}
+
+.pfx-card-horizontal-stats {
+    -fx-cursor: hand;
+    -fx-alignment: TOP_LEFT;
+    -fx-background-color: transparent;
+    -fx-font-size: 24;
+}
+
+.pfx-card-horizontal-imageBox {
+    -fx-cursor: hand;
+    -fx-alignment: TOP_CENTER;
+    -fx-background-color: transparent;
+}
+
+.pfx-card-horizontal-selection {
+    -fx-alignment: BOTTOM_RIGHT;
+    -fx-background-color: transparent;
+    -fx-spacing: 20;
+    -fx-padding: 0 10 0 0;
+}
+
+.pfx-card-horizontal-stats Label {
+    -fx-background-color: transparent;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-card-horizontal-container:selected {
+    -fx-border-color: -pfx-accent;
+}
+
+.pfx-card-horizontal-container:selected Label {
+    -fx-text-fill: -pfx-accent;
+}
+
+.pfx-card-horizontal-container:hover {
+
+}

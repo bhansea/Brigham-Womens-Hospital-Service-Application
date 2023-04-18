@@ -1,0 +1,39 @@
+.floor-selector,
+.floor-selector:armed,
+.floor-selector:hover,
+.floor-selector:focused {
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+    -fx-background-radius: 30;
+    -fx-background-color: -pfx-background;
+}
+
+.hospital-map-overlay-bottom {
+    -fx-alignment: CENTER;
+}
+
+.hospital-map-overlay-bottom > HBox {
+    -fx-alignment: CENTER;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.hospital-map-overlay-bottom PFXButton {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 10, 0, 0.0, 0.0);
+}
+
+.hospital-map-overlay-bottom > VBox {
+    -fx-alignment: CENTER;
+    -fx-padding: 10;
+    -fx-spacing: 3;
+}
+
+.hospital-map-overlay-bottom > VBox > PFXButton {
+    -fx-alignment: CENTER;
+    -fx-padding: 1 3;
+}
+
+
+.hospital-map-gesture-pane {
+    -fx-background-color: #d6d8d5;
+}
