@@ -23,7 +23,7 @@
     <center>
         <VBox alignment="CENTER" styleClass="signage-body">
             <children>
-                <HBox styleClass="signage-list">
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                     <children>
                         <PFXIcon icon="ARROW_CIRCLE_UP" outlined="true" styleClass="signage-up-arrow"/>
                         <VBox alignment="CENTER_LEFT" spacing="10.0">
@@ -35,7 +35,7 @@
                     </children>
                 </HBox>
 
-                <HBox styleClass="signage-list">
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                     <children>
                         <PFXIcon icon="ARROW_CIRCLE_LEFT" outlined="true" styleClass="signage-left-arrow"/>
                         <VBox alignment="CENTER_LEFT" spacing="10.0">
@@ -46,7 +46,7 @@
                         </VBox>
                     </children>
                 </HBox>
-                <HBox styleClass="signage-list">
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                     <children>
                         <PFXIcon icon="ARROW_CIRCLE_RIGHT" outlined="true" styleClass="signage-right-arrow"/>
                         <VBox alignment="CENTER_LEFT" spacing="10.0">
@@ -57,7 +57,7 @@
                         </VBox>
                     </children>
                 </HBox>
-                <HBox styleClass="signage-list">
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                     <children>
                         <PFXIcon icon="ARROW_CIRCLE_DOWN" outlined="true" styleClass="signage-down-arrow"/>
                         <VBox alignment="CENTER_LEFT" spacing="10.0">
