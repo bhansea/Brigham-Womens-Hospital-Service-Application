@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.notifications.ConferenceNotifWindowController"
+            prefHeight="400.0" prefWidth="600.0">
+    <TableView>
+        <columns>
+            <TableColumn text="Name">
+                <cellValueFactory>
+                    <PropertyValueFactory property="name" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Date">
+                <cellValueFactory>
+                    <PropertyValueFactory property="date" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+    <PFXButton text="Close" layoutX="230" layoutY="170" stylesheets="@../css/PFXButton.css" onAction="#closeButtonAction" />
+
+</AnchorPane>
