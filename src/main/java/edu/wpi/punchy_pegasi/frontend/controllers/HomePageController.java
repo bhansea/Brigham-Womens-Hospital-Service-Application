@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +81,18 @@ public class HomePageController {
     @FXML
     private void resizeColumns() {
         requestTable.autosizeColumns();
+    }
+
+    public void openMealsNotifWindow(ActionEvent actionEvent) {
+    }
+
+    public void openFlowersNotifWindow(ActionEvent actionEvent) {
+    }
+
+    public void openFurnitureNotifWindow(ActionEvent actionEvent) {
+    }
+
+    public void openOfficeNotifWindow(ActionEvent actionEvent) {
     }
 
     private class GenericRequestEntry {
