@@ -1,0 +1,63 @@
+.sideBar {
+    -fx-background-color: -pfx-background;
+    -fx-border-radius: 0;
+    -fx-min-width: 85;
+    -fx-spacing: 15;
+    -fx-padding: 15 0;
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: -pfx-primary;
+}
+
+.sidebar-button:selected > .icon {
+    -fx-background-color: white;
+    -fx-spacing: 0;
+}
+
+.header {
+    -fx-alignment: CENTER;
+    -fx-background-color: -pfx-background;
+    -fx-padding: 5;
+}
+
+.header-left-container {
+    -fx-alignment: CENTER_LEFT;
+    -fx-max-width: 300;
+    -fx-pref-width: 300;
+}
+
+.header-left-container > HBox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: -pfx-primary;
+    -fx-background-radius: 40;
+    -fx-padding: 0 20;
+    -fx-spacing: 10;
+    -fx-font-size: 20;
+}
+
+.header-left-container > HBox > PFXIcon {
+    -fx-font-size: 30;
+}
+
+.header-right-container {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-min-width: 165;
+    -fx-padding: 0 20 0 0 ;
+}
+
+.header-right-container > PFXAccount {
+    -fx-font-size: 30;
+}
+
+#accountInfo > HBox {
+    -fx-spacing: 10;
+    -fx-padding: 0 0 10 0;
+}
+
+#profileImage {
+    -fx-alignment: CENTER_LEFT;
+}
+.layout-content {
+    -fx-background-color: transparent;
+}
+
+
