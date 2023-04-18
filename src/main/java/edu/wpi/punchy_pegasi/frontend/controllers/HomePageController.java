@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -87,6 +88,10 @@ public class HomePageController {
         requestTable.autosizeColumns();
     }
 
+    public void openSelectedWindow(ActionEvent actionEvent) {
+        //I GIVE UP BRO
+    }
+
     private class GenericRequestEntry {
         RequestEntry originalEntry;
         String location;
@@ -106,6 +111,31 @@ public class HomePageController {
                     .findFirst()
                     .orElseGet(() -> TableType.GENERIC);
         }
-        public void openSelectedWindow(ActionEvent actionEvent){}
+        public void openSelectedWindow(){
+            String selectedOption = (String) notificationComboBox.getValue();
+                if (selectedOption != null) {
+                    Stage stage = new Stage();
+                    // Create a new window based on the selected option
+                    switch (selectedOption) {
+                        case "Meals":
+                            // Open window for Option 1
+                            break;
+                        case "Flowers":
+                            // Open window for Option 2
+                            break;
+                        case "Office Supplies":
+                            // Open window for Option 3
+                            break;
+
+                        case "Conference Room":
+                            //Open window for Conference Room
+                            break;
+                        case "Furniture":
+                            //open window for Furniture
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
     }
-}

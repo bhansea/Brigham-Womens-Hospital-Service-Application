@@ -39,7 +39,7 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-
+                <PFXButton text = "Open Notifications" stylesheets="@../css/PFXButton.css"/>
                 <VBox fx:id="tableContainer" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
