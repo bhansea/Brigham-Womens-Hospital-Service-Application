@@ -18,22 +18,6 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     public OfficeServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText, String officeRequest, String employeeName) {
         this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText, officeRequest, employeeName);
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        INVALID_TEXT("invalidText"),
-        OFFICE_REQUEST("officeRequest"),
-        EMPLOYEE_NAME("employeeName");
-        @lombok.Getter
-        private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
-            return ref.getFromField(this);
-        }
-    }
 
     @lombok.RequiredArgsConstructor
     public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry> {
@@ -42,6 +26,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRe
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
+        INVALID_TEXT("invalidText"),
         OFFICE_REQUEST("officeRequest"),
         EMPLOYEE_NAME("employeeName");
         @lombok.Getter

@@ -22,24 +22,6 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     public FlowerDeliveryRequestEntry(String patientName, Long locationName, Long staffAssignment, String additionalNotes, String invalidText, String flowerSize, String flowerAmount, String flowerType) {
         this(UUID.randomUUID(), patientName, locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText, flowerSize, flowerAmount, flowerType);
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        INVALID_TEXT("invalidText"),
-        FLOWER_SIZE("flowerSize"),
-        FLOWER_TYPE("flowerType"),
-        FLOWER_AMOUNT("flowerAmount"),
-        PATIENT_NAME("patientName");
-        @lombok.Getter
-        private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
-            return ref.getFromField(this);
-        }
-    }
 
     @lombok.RequiredArgsConstructor
     public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry> {
@@ -48,6 +30,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryR
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
+        INVALID_TEXT("invalidText"),
         FLOWER_SIZE("flowerSize"),
         FLOWER_TYPE("flowerType"),
         FLOWER_AMOUNT("flowerAmount"),

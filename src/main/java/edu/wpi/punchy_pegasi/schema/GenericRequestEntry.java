@@ -13,20 +13,6 @@ public class GenericRequestEntry extends RequestEntry {
     public GenericRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText) {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText);
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        INVALID_TEXT("invalidText");
-        @lombok.Getter
-        private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.GenericRequestEntry ref){
-            return ref.getFromField(this);
-        }
-    }
 
     @lombok.RequiredArgsConstructor
     public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestEntry> {
@@ -34,7 +20,8 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestE
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        INVALID_TEXT("invalidText");
         @lombok.Getter
         private final String colName;
 

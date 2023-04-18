@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class RequestEntry {
-    
+
     protected final UUID serviceID;
     protected final Long locationName;
     protected final Long staffAssignment;
@@ -22,8 +22,9 @@ public class RequestEntry {
         PROCESSING,
         DONE
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry>{
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
@@ -32,10 +33,12 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry>{
         INVALID_TEXT("invalidText");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.RequestEntry ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.RequestEntry ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
