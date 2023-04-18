@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
@@ -44,6 +45,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     TextField otherItems;
     ArrayList<CheckBox> items = new ArrayList<>();
     ArrayList<TextField> itemsAmount = new ArrayList<>();
+    @FXML
+    Label invalidText;
 
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
@@ -52,6 +55,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     @Override
     public void init() {
+        invalidText.setVisible(false);
+        invalidText.setManaged(false);
         submit.setDisable(true);
         items.addAll(List.of(new CheckBox[]{pencils,
                 pens,

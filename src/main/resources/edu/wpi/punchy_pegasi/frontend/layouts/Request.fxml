@@ -67,12 +67,12 @@
                         <children>
                             <VBox spacing="6.0">
                                 <children>
+                           <Label fx:id="invalidText" text="INVALID: CONFERENCE ROOM TAKEN" textFill="RED" />
                                     <Label alignment="TOP_LEFT" text="Location Name" textFill="WHITE">
                                         <font>
                                             <Font size="24.0" />
                                         </font>
                                     </Label>
-                           <Label fx:id="invalidText" text="INVALID: CONFERENCE ROOM TAKEN" textFill="RED" />
                                     <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" floatingText="Location Name" prefHeight="51.0" prefWidth="298.0" promptText="Location Names">
                                         <font>
                                             <Font size="24.0" />

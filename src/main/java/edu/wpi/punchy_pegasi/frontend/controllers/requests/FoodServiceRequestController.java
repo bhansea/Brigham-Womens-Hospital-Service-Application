@@ -25,6 +25,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     MFXComboBox<String> mealDropdown, tempDropdown, beverageDropdown;
     @FXML
     CheckBox utensils, napkins, straw;
+    @FXML Label invalidText;
 
     TextField patientName = new TextField();
     Label price = new Label("$0.00");
@@ -35,6 +36,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void init() {
+        invalidText.setVisible(false);
+        invalidText.setManaged(false);
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
         ObservableList<String> beverageList = FXCollections.observableArrayList("Water", "Coffee", "Lemonade", "Milk", "Vitamin Water", "Dr. Pepper", "Chocolate Milk", "Apple Juice", "Orange Juice", "Cranberry Juice");
