@@ -2,8 +2,9 @@
 
 .pfx-card-vertical-container {
     -fx-alignment: TOP_CENTER;
-    -fx-padding: 10 10;
-    -fx-background-color: -pfx-primary;
+    -fx-padding: 20 20;
+    -fx-background-color: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
     -fx-spacing: 20;
     -fx-background-radius: 12;
 }

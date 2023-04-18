@@ -2,39 +2,34 @@
 
 .pfx-card-horizontal-container {
     -fx-alignment: TOP_CENTER;
-    -fx-padding: 10 10;
-    -fx-background-color: -pfx-primary;
-    -fx-background-radius: 6;
+    -fx-padding: 20 20;
+    -fx-background-color: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
 }
 
 .pfx-card-horizontal-stats {
     -fx-cursor: hand;
-    -fx-alignment: TOP_CENTER;
+    -fx-alignment: TOP_LEFT;
     -fx-background-color: transparent;
-    -fx-font-size: 30;
+    -fx-font-size: 24;
 }
 
 .pfx-card-horizontal-imageBox {
     -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
-    -fx-font-size: 30;
-}
-
-.pfx-card-horizontal-info {
-    -fx-alignment: CENTER_LEFT;
-    -fx-background-color: transparent;
-    -fx-padding: 0 0 0 10;
 }
 
 .pfx-card-horizontal-selection {
-    -fx-alignment: CENTER_RIGHT;
+    -fx-alignment: BOTTOM_RIGHT;
     -fx-background-color: transparent;
+    -fx-spacing: 20;
     -fx-padding: 0 10 0 0;
 }
 
 .pfx-card-horizontal-stats Label {
-    -fx-font-family: "Nunito Sans Light";
     -fx-background-color: transparent;
     -fx-text-fill: -pfx-navy;
 }

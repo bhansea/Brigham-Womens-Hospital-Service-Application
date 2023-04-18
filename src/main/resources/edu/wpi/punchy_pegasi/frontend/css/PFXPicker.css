@@ -2,7 +2,7 @@
 
 .pfx-picker-container {
     -fx-alignment: CENTER;
-    -fx-background-color: #909090;
+    -fx-background-color: -pfx-background;
     -fx-spacing: 20;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
