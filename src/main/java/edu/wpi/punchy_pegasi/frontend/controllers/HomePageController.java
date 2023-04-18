@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -31,13 +32,13 @@ public class HomePageController {
     private VBox tableContainer;
 
     @FXML
-    ComboBox notificationComboBox;
+    MFXComboBox<String> notificationComboBox;
 
-    @FXML
-    private void initialize() {
-        showServiceRequestTable(true);
-        initRequestTable();
-    }
+//    @FXML
+//    private void initialize() {
+//        showServiceRequestTable(true);
+//        initRequestTable();
+//    }
 
     private void showServiceRequestTable(boolean show) {
         requestTable.setVisible(show);
@@ -88,8 +89,30 @@ public class HomePageController {
         requestTable.autosizeColumns();
     }
 
-    public void openSelectedWindow(ActionEvent actionEvent) {
-        //I GIVE UP BRO
+    @FXML
+    private void openSelectedWindow() {
+        String selectedOption = notificationComboBox.getValue();
+        if(selectedOption != null){
+            Stage window = new Stage();
+            switch(selectedOption){
+                case "Meals":
+                    // Open window for Meals
+                    break;
+                case "Flowers":
+                    // Open window for Flowers
+                    break;
+                case "Office Supplies":
+                    // Open window for Office
+                    break;
+                case "Conference Room":
+                    //Open window for Conference Room
+                    break;
+                case "Furniture":
+                    //open window for Furniture
+                default:
+                    break;
+            }
+        }
     }
 
     private class GenericRequestEntry {
@@ -111,31 +134,8 @@ public class HomePageController {
                     .findFirst()
                     .orElseGet(() -> TableType.GENERIC);
         }
-        public void openSelectedWindow(){
-            String selectedOption = (String) notificationComboBox.getValue();
-                if (selectedOption != null) {
-                    Stage stage = new Stage();
-                    // Create a new window based on the selected option
-                    switch (selectedOption) {
-                        case "Meals":
-                            // Open window for Option 1
-                            break;
-                        case "Flowers":
-                            // Open window for Option 2
-                            break;
-                        case "Office Supplies":
-                            // Open window for Option 3
-                            break;
 
-                        case "Conference Room":
-                            //Open window for Conference Room
-                            break;
-                        case "Furniture":
-                            //open window for Furniture
-                        default:
-                            break;
-                    }
-                }
+
             }
         }
-    }
+
