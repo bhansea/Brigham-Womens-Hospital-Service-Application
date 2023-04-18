@@ -229,4 +229,57 @@ public class PathfindingMap {
             return "Path not found";
         }
     }
+
+    @FXML
+    private void sendRobotMessage() {
+        SerialPort comPort = SerialPort.getCommPorts()[1];
+        comPort.openPort();
+
+        byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
+        comPort.writeBytes(message, message.length);
+
+        for(int i=1;i<xCoords.size() - 1;i++) {
+            message = generateMessage("M", xCoords.get(i), yCoords.get(i));
+            comPort.writeBytes(message, message.length);
+        }
+
+        message = generateMessage("E", xCoords.get(-1), yCoords.get(-1));
+        comPort.writeBytes(message, message.length);
+    }
+
+    public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
+        byte[] strArray = str.getBytes();
+        byte[] tempStartArray = Integer.toString(startPos).getBytes();
+        byte[] tempEndArray = Integer.toString(endPos).getBytes();
+        byte[] startIntArray = {(byte)'0', (byte)'0', (byte)'0', (byte)'0'};
+        byte[] endIntArray = {(byte)'0', (byte)'0', (byte)'0', (byte)'0'};
+
+        for(int i=startIntArray.length - 1, j = tempStartArray.length - 1;j>=0;i--, j--) {
+            startIntArray[i] = tempStartArray[j];
+        }
+
+        for(int i=endIntArray.length - 1, j = tempEndArray.length - 1;j>=0;i--, j--) {
+            endIntArray[i] = tempEndArray[j];
+        }
+
+
+        byte[] result = new byte[strArray.length + startIntArray.length + endIntArray.length + 1];
+
+        int pos = 0;
+        for (byte element : strArray) {
+            result[pos] = element;
+            pos++;
+        }
+        for (byte element : startIntArray) {
+            result[pos] = element;
+            pos++;
+        }
+        for (byte element : endIntArray) {
+            result[pos] = element;
+            pos++;
+        }
+        result[result.length - 1] = '\n';
+
+        return result;
+    }
 }
