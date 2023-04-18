@@ -56,7 +56,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         endTime.setItems(timeList);
         endTime.setDisable(true);
         submit.setDisable(true);
-        calendar.showingProperty();
+        calendar.isShowing();
         beginningTime.setOnAction(e -> validateField());
         endTime.setOnAction(e -> validateField());
         calendar.setOnAction(e -> validateEntry());
@@ -102,7 +102,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         additionalNotes.getText(),
                         beginningTime.getText(),
                         endTime.getText(),
-                        calendar.getValue());
+                        calendar.getValue(),
+                        numberOfParticipants.getText());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

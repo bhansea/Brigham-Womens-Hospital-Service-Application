@@ -10,19 +10,21 @@ public class ConferenceRoomEntry extends RequestEntry {
     private final String beginningTime;
     private final String endTime;
     private final LocalDate date;
+    private final String amountOfParticipants;
 
-    public ConferenceRoomEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime, LocalDate date) {
+    public ConferenceRoomEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime, LocalDate date, String amountOfParticipants) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status);
         this.beginningTime = beginningTime;
         this.endTime = endTime;
         this.date = date;
-
+        this.amountOfParticipants = amountOfParticipants;
     }
 
-    public ConferenceRoomEntry(Long locationName, Long staffAssignment, String additionalNotes, String beginningTime, String endTime, LocalDate date) {
+    public ConferenceRoomEntry(Long locationName, Long staffAssignment, String additionalNotes, String beginningTime, String endTime, LocalDate date, String amountOfParticipants) {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
         this.beginningTime = beginningTime;
         this.endTime = endTime;
         this.date = date;
+        this.amountOfParticipants = amountOfParticipants;
     }
 }
