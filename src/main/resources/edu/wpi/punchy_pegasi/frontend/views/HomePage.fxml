@@ -28,7 +28,11 @@
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
-                    <PFXCardVertical stylesheets="@../css/PFXCardVertical.css"/>
+                    <HBox alignment="CENTER">
+                        <PFXCardVertical stylesheets="@../css/PFXCardVertical.css"/>
+                        <PFXCardVertical stylesheets="@../css/PFXCardVertical.css"/>
+                    </HBox>
+
                 </VBox>
             </VBox>
         </HBox>
