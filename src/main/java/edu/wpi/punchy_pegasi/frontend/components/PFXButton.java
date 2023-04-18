@@ -24,7 +24,8 @@ public class PFXButton extends MFXButton {
      * @param text A text string for its label.
      */
     public PFXButton(String text) {
-        super(text);
+        this();
+        setText(text);
     }
 
     /**

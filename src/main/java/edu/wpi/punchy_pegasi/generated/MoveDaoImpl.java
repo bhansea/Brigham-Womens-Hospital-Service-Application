@@ -35,7 +35,7 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
                     rs.getObject("uuid", java.lang.Long.class),
                     rs.getObject("nodeID", java.lang.Long.class),
                     rs.getObject("longName", java.lang.String.class),
-                    rs.getObject("date", java.lang.String.class));
+                    rs.getObject("date", java.time.LocalDate.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -57,7 +57,7 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
                         rs.getObject("uuid", java.lang.Long.class),
                         rs.getObject("nodeID", java.lang.Long.class),
                         rs.getObject("longName", java.lang.String.class),
-                        rs.getObject("date", java.lang.String.class));
+                        rs.getObject("date", java.time.LocalDate.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -76,7 +76,7 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
                         rs.getObject("uuid", java.lang.Long.class),
                         rs.getObject("nodeID", java.lang.Long.class),
                         rs.getObject("longName", java.lang.String.class),
-                        rs.getObject("date", java.lang.String.class));
+                        rs.getObject("date", java.time.LocalDate.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

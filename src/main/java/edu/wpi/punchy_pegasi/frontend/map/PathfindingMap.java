@@ -207,8 +207,8 @@ public class PathfindingMap {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.show(floors.get(endNode.getFloor()))));
-                    map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.show(floors.get(node.getFloor()))));
+                    map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
+                    map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(node.getFloor()))));
                     currentPath = new ArrayList<>();
                     currentFloor = node.getFloor();
                 }

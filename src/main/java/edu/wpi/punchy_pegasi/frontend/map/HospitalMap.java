@@ -17,7 +17,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -38,11 +37,11 @@ import java.util.stream.Stream;
 public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private static final Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
     private final Map<String, HospitalFloor> floors;
-    private StackPane maps = new StackPane();
-    private GesturePane gesturePane = new GesturePane(maps);
-    private BorderPane overlay = new BorderPane();
-    private HBox overlayBottom = new HBox();
-    private HBox overlayTop = new HBox();
+    private final StackPane maps = new StackPane();
+    private final GesturePane gesturePane = new GesturePane(maps);
+    private final BorderPane overlay = new BorderPane();
+    private final HBox overlayBottom = new HBox();
+    private final HBox overlayTop = new HBox();
     private HospitalFloor currentFloor;
 
     public HospitalMap(Map<String, HospitalFloor> floors) {
@@ -77,19 +76,22 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         var floorContainer = new HBox();
         floors.values().forEach(HospitalFloor::init);
         floors.values().forEach(f -> {
-            f.button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> show(f));
+            f.button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> showLayer(f));
             floorContainer.getChildren().add(f.button);
             maps.getChildren().add(f.root);
         });
+        floorContainer.getStyleClass().add("hospital-map-floor-container");
         var separator = new HBox();
         HBox.setHgrow(separator, Priority.ALWAYS);
         var zoomModal = new VBox();
+        zoomModal.setPickOnBounds(true);
 
-        var zoomIn = new PFXButton("", new PFXIcon(MaterialSymbols.ADD, 20));
-        var zoomOut = new PFXButton("", new PFXIcon(MaterialSymbols.REMOVE, 20));
-        zoomIn.setOnAction(e -> gesturePane.zoomBy(gesturePane.getCurrentScale() , gesturePane.targetPointAtViewportCentre()));
-        zoomOut.setOnAction(e -> gesturePane.zoomBy(-gesturePane.getCurrentScale()*.5, gesturePane.targetPointAtViewportCentre()));
+        var zoomIn = new PFXButton("", new PFXIcon(MaterialSymbols.ZOOM_IN, 30));
+        var zoomOut = new PFXButton("", new PFXIcon(MaterialSymbols.ZOOM_OUT, 30));
+        zoomIn.setOnAction(e -> gesturePane.zoomBy(gesturePane.getCurrentScale(), gesturePane.targetPointAtViewportCentre()));
+        zoomOut.setOnAction(e -> gesturePane.zoomBy(-gesturePane.getCurrentScale() * .5, gesturePane.targetPointAtViewportCentre()));
         zoomModal.getChildren().addAll(zoomIn, zoomOut);
+        zoomModal.getStyleClass().add("hospital-map-zoom-modal");
 
         // TODO: Figure out what point to set as target
 //        gesturePane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
@@ -97,10 +99,12 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 //                if (e.getClickCount() == 2)
 //                    gesturePane.zoomBy(gesturePane.getCurrentScale() * .5, new Point2D(e.getX(), e.getY()));
 //        });
+
         overlayBottom.getChildren().addAll(floorContainer, separator, zoomModal);
+        separator.setPickOnBounds(false);
         overlayBottom.setPickOnBounds(false);
 
-        show(floors.get("1"));
+        showLayer(floors.get("1"));
     }
 
     @Override
@@ -128,6 +132,13 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         getChildren().add(n);
     }
 
+    @Override
+    public Point2D getClickLocation(MouseEvent event) {
+        var x = event.getX() / gesturePane.getCurrentScaleX() - gesturePane.getCurrentX();
+        var y = event.getY() / gesturePane.getCurrentScaleY()  - gesturePane.getCurrentY();
+        return new Point2D(x, y);
+    }
+
     @FXML
     @Override
     public void clearMap() {
@@ -140,7 +151,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     }
 
     @Override
-    public void show(HospitalFloor floor) {
+    public void showLayer(HospitalFloor floor) {
         currentFloor = floor;
         floor.root.setVisible(true);
         floor.button.setSelected(true);
@@ -148,6 +159,11 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
             f.button.setSelected(false);
             f.root.setVisible(false);
         });
+    }
+
+    @Override
+    public HospitalFloor getLayer() {
+        return currentFloor;
     }
 
     @Override
@@ -291,7 +307,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     public void focusOn(Node node) {
         var floor = floors.get(node.getFloor());
         if (floor == null) return;
-        show(floor);
+        showLayer(floor);
         gesturePane.centreOn(new Point2D(node.getXcoord(), node.getYcoord()));
     }
 }

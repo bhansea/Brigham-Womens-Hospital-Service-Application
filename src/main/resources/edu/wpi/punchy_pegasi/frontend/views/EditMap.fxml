@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,14 +10,11 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
             fx:id="root">
     <left>
-        <VBox alignment="CENTER" spacing="10" fx:id="editing">
+        <VBox fx:id="editing" styleClass="editing-overlay">
             <VBox>
-                <MFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
-                <MFXProgressBar fx:id="commitProgress" maxWidth="Infinity" progress="0">
-                    <padding>
-                        <Insets topRightBottomLeft="5"/>
-                    </padding>
-                </MFXProgressBar>
+                <PFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
+                <MFXProgressBar fx:id="commitProgress" maxWidth="300" progress="0"/>
+                <VBox fx:id="changes"/>
             </VBox>
         </VBox>
     </left>
