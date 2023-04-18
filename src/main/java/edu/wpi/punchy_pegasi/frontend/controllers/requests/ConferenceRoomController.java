@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
@@ -42,6 +43,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXComboBox<String> endTime;
     @FXML
     MFXDatePicker calendar;
+    @FXML
+    TextField numberOfParticipants;
 
     public static BorderPane create(String path) {
         return RequestController.create(new ConferenceRoomController(), path);
@@ -53,6 +56,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         endTime.setItems(timeList);
         endTime.setDisable(true);
         submit.setDisable(true);
+        calendar.showingProperty();
         beginningTime.setOnAction(e -> validateField());
         endTime.setOnAction(e -> validateField());
         calendar.setOnAction(e -> validateEntry());
