@@ -10,13 +10,14 @@ public class PFXCardHorizontal extends HBox{
     private final VBox leftPane = new VBox();
     private final VBox rightPane = new VBox();
     private final ImageView image = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/mealPicture.jpeg");
+    private final VBox spacer = new VBox();
     private final PFXPicker picker = new PFXPicker();
     private final HBox selection = new HBox();
     private final VBox info = new VBox();
-    private final HBox spacer = new HBox();
     private final Label titleLabel;
     private final Label subtitleLabel;
     private final Label quantity;
+
 
     public PFXCardHorizontal(){
         super();
@@ -30,7 +31,7 @@ public class PFXCardHorizontal extends HBox{
         getStyleClass().add("pfx-card-horizontal-container");
         getChildren().addAll(leftPane, rightPane);
 
-        info.getChildren().addAll(titleLabel, subtitleLabel, selection);
+        info.getChildren().addAll(titleLabel, subtitleLabel);
 
         leftPane.getStyleClass().add("pfx-card-horizontal-imageBox");
         rightPane.getStyleClass().add("pfx-card-horizontal-stats");

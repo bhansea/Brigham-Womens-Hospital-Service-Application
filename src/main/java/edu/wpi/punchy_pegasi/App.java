@@ -239,7 +239,7 @@ public class App extends Application {
 //        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
 //        splashController.getConnection();
 
-        var testComponent = new PFXCardHorizontal();
+        var testComponent = new PFXCardVertical();
         VBox cont = new VBox();
         HBox cont2 = new HBox();
         cont.setAlignment(Pos.CENTER);
