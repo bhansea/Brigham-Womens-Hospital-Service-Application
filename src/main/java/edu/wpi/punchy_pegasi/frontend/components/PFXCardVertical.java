@@ -25,7 +25,7 @@ public class PFXCardVertical extends VBox {
         image.setFitWidth(350);
         titleLabel = new Label("Meal Name");
         subtitleLabel = new Label("A very nice meal");
-        quantity = new Label("5 Available");
+        quantity = new Label("0 Available");
 
         getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);
@@ -46,14 +46,14 @@ public class PFXCardVertical extends VBox {
         selection.getChildren().addAll(quantity, picker);
     }
 
-    public PFXCardVertical(Label title, Label subtitle, Label quantity, Image image) {
+    public PFXCardVertical(String title, String subtitle, int quantity, Image image) {
         super();
         this.image = new ImageView(image);
         this.image.setFitHeight(300);
         this.image.setFitWidth(500);
-        this.titleLabel = title;
-        this.subtitleLabel = subtitle;
-        this.quantity = quantity;
+        this.titleLabel = new Label(title);
+        this.subtitleLabel = new Label(subtitle);
+        this.quantity = new Label(Integer.toString(quantity));
 
         getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);

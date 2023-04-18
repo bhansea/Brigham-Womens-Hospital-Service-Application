@@ -19,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -234,17 +235,14 @@ public class App extends Application {
         var genericResource = this.getClass().getResource("");
         if (genericResource != null && Objects.equals(genericResource.getProtocol(), "file")) development = true;
 
-//        final var loader = loadWithCache("frontend/views/Splash.fxml");
-//        final SplashController splashController = loader.getController();
-//        scene = new Scene(loader.getRoot(), 600, 400);
-//        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
-//        splashController.getConnection();
-        List<PFXCardVertical> list = new ArrayList<PFXCardVertical>();
-        for(int i = 0;i<5;i++) {
-            list.add(new PFXCardVertical());
-        }
-        var testComponent = new PFXCardHolder(list);
-        scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
+        final var loader = loadWithCache("frontend/views/Splash.fxml");
+        final SplashController splashController = loader.getController();
+        scene = new Scene(loader.getRoot(), 600, 400);
+        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
+        splashController.getConnection();
+
+//        var testComponent = new PFXCardVertical("Mac and Cheese", "Delicious macaroni and cheese", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/mac-and-cheese.jpg"));
+//        scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
 
