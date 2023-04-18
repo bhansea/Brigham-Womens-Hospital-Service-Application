@@ -23,13 +23,13 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     private final ObservableList<Integer> amountList = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     private final ObservableList<FurnitureCartItem> itemList = FXCollections.observableArrayList(new FurnitureCartItem("", 0));
     @FXML
-    MFXComboBox<String> furniture;
+    MFXComboBox<String> furniture = new MFXComboBox<>();
     @FXML
-    MFXComboBox<Integer> amountOfFurniture;
+    MFXComboBox<Integer> amountOfFurniture = new MFXComboBox<>();
     @FXML
     private MFXButton toCart;
     @FXML
-    private MFXTableView<FurnitureCartItem> furnTable;
+    private MFXTableView<FurnitureCartItem> furnTable = new MFXTableView<>();
 
     public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);
@@ -50,7 +50,6 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         furnTable.setItems(itemList);
         itemList.remove(0, 1);
         setHeaderText("Furniture Request");
-
     }
 
     @Override
