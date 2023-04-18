@@ -2,6 +2,8 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
 import edu.wpi.punchy_pegasi.frontend.controllers.ErrorController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
@@ -12,10 +14,13 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -228,9 +233,21 @@ public class App extends Application {
         var genericResource = this.getClass().getResource("");
         if (genericResource != null && Objects.equals(genericResource.getProtocol(), "file")) development = true;
 
-        final var loader = loadWithCache("frontend/views/Splash.fxml");
-        final SplashController splashController = loader.getController();
-        scene = new Scene(loader.getRoot(), 600, 400);
+//        final var loader = loadWithCache("frontend/views/Splash.fxml");
+//        final SplashController splashController = loader.getController();
+//        scene = new Scene(loader.getRoot(), 600, 400);
+//        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
+//        splashController.getConnection();
+
+        var testComponent = new PFXCardHorizontal();
+        VBox cont = new VBox();
+        HBox cont2 = new HBox();
+        cont.setAlignment(Pos.CENTER);
+        cont2.setAlignment(Pos.CENTER);
+        cont.getChildren().add(cont2);
+        cont2.getChildren().add(testComponent);
+        scene = new Scene(new BorderPane(cont), 1000, 1000);
+
         loadStylesheet("frontend/css/DefaultTheme.css");
 
         if (development) {
@@ -262,8 +279,8 @@ public class App extends Application {
         this.primaryStage.show();
 
 
-        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
-        splashController.getConnection();
+        //splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
+        //splashController.getConnection();
     }
 
     public FXMLLoader loadWithCache(String path) throws IOException {
