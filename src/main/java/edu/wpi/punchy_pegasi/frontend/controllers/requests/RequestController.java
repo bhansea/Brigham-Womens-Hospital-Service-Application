@@ -107,7 +107,6 @@ public abstract class RequestController<T extends RequestEntry> {
             }
         };
         var locationToLongName = new StringConverter<LocationName>() {
-
             @Override
             public String toString(LocationName object) {
                 if (object == null) return "";

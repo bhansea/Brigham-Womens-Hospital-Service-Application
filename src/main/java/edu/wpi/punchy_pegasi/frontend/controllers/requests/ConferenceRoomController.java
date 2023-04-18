@@ -93,6 +93,28 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         return btHolder != null && etHolder != null && timeList.indexOf(btHolder) < timeList.indexOf(etHolder);
     }
 
+
+    /**
+     invalidText.setVisible(false);
+     String username = usernameEnter.getText();
+     String password = passwordBox.getText();
+     Account.Field[] fields = {Account.Field.USERNAME, Account.Field.PASSWORD};
+     Object[] values = {username, password};
+     Map<String, Account> map = facade.getAccount(fields, values);
+
+     if (map.size() > 0) {
+     App.getSingleton().setAccount(map.values().stream().findFirst().get());
+     App.getSingleton().navigate(Screen.HOME);
+     } else {
+     invalidText.setVisible(true);
+     usernameEnter.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
+     passwordBox.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
+     }
+     */
+    public void isTaken(){
+        App.getSingleton().getFacade().getConferenceRoomEntry(new ConferenceRoomEntry.Field[]{ ConferenceRoomEntry.Field.LOCATION_NAME }, new Object[] { locationName.getId() }).values().stream().toList();
+    }
+
     @FXML
     public void submitEntry() {
         requestEntry =
