@@ -61,6 +61,8 @@ public class PathfindingMap {
     private Map<Long, LocationName> locations;
     private Map<Long, Move> moves;
     private Map<Long, Move> movesByNodeID = new HashMap<>();
+    private ArrayList<Integer> xCoords = new ArrayList<Integer>();
+    private ArrayList<Integer> yCoords = new ArrayList<Integer>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
     private final StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
@@ -217,6 +219,11 @@ public class PathfindingMap {
             map.drawYouAreHere(path.get(0));
             drawNode(path.get(path.size() - 1), "#3cb043");
             map.focusOn(path.get(0));
+
+            for (Node node : path) {
+                xCoords.add((Integer)node.getFromField(Node.Field.XCOORD));
+                yCoords.add((Integer)node.getFromField(Node.Field.YCOORD));
+            }
             return "";
         } catch (IllegalStateException e) {
             return "Path not found";
