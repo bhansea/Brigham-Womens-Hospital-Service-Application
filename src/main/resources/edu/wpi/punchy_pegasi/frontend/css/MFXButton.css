@@ -35,5 +35,5 @@
 .mfx-button,
 .mfx-button:armed,
 .mfx-button:focused {
-    -fx-background-color: white;
+    -fx-background-color: transparent;
 }

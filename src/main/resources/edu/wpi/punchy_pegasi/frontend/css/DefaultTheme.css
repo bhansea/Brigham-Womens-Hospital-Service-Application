@@ -46,5 +46,10 @@
 @import "PFXColors.css";
 @import "PathfindingMap.css";
 @import "HospitalMap.css";
+@import "PFXTab.css";
+@import "PFXTabLayout.css";
 @import "Spinner.css";
 @import "Link.css";
+@import "PFXCardVertical.css";
+@import "PFXCardHorizontal.css";
+@import "PFXPicker.css";
