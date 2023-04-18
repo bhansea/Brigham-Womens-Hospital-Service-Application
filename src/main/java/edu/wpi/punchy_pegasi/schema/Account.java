@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Account {
+
     private String username;
     private String password;
     private Long employeeID;
@@ -22,15 +24,6 @@ public class Account {
         private final int shieldLevel;
     }
 
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case USERNAME -> getUsername();
-            case PASSWORD -> getPassword();
-            case EMPLOYEE_ID -> getEmployeeID();
-            case ACCOUNT_TYPE -> getAccountType();
-        };
-    }
-
     @lombok.RequiredArgsConstructor
     public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account> {
         USERNAME("username"),
@@ -43,6 +36,15 @@ public class Account {
         public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref) {
             return ref.getFromField(this);
         }
+    }
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> getEmployeeID();
+            case ACCOUNT_TYPE -> getAccountType();
+        };
     }
 
 }
