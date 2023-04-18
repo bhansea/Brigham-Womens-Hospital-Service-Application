@@ -239,8 +239,11 @@ public class App extends Application {
 //        scene = new Scene(loader.getRoot(), 600, 400);
 //        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
 //        splashController.getConnection();
-
-        var testComponent = new PFXCardHolder();
+        List<PFXCardVertical> list = new ArrayList<PFXCardVertical>();
+        for(int i = 0;i<5;i++) {
+            list.add(new PFXCardVertical());
+        }
+        var testComponent = new PFXCardHolder(list);
         scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
