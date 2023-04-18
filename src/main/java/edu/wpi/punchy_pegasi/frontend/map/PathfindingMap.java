@@ -242,7 +242,7 @@ public class PathfindingMap {
         SerialPort[] ports = SerialPort.getCommPorts();
 
         for(int i=0;i<ports.length;i++) {
-            if(ports[i].getDescriptivePortName()) {
+            if(ports[i].getDescriptivePortName().equals("")) {
                 comPort = ports[i];
             }
         }
