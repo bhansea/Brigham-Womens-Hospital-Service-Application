@@ -44,6 +44,7 @@ class FacadeTest {
         conferenceRoomFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date"};
         furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
         officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
+        employeeFields = new String[]{"employeeID", "firstName", "lastName"};
         pdbController = new PdbController(Config.source, "test");
         facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
@@ -2177,34 +2178,188 @@ class FacadeTest {
 
     @Test
     void getEmployee() {
+        Employee employee = new Employee(100L, "testName", "testName");
+        Object[] values = new Object[]{employee.getEmployeeID(), employee.getFirstName(), employee.getLastName()};
+        try {
+            pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Employee> results = facade.getEmployee(employee.getEmployeeID());
+        Employee daoresult = results.get();
+        assertEquals(daoresult, employee);
+        try {
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetEmployee() {
+        Employee employee = new Employee(100L, "testFirstName", "testLastName");
+        Employee employee2 = new Employee(101L, "testFirstName", "testLastName");
+        Object[] values = new Object[]{employee.getEmployeeID(), employee.getFirstName(), employee.getLastName()};
+        Object[] values2 = new Object[]{employee2.getEmployeeID(), employee2.getFirstName(), employee2.getLastName()};
+        try {
+            pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values);
+            pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        var results = facade.getEmployee(Employee.Field.FIRST_NAME, "testName");
+        var map = new HashMap<Long, Employee>();
+        try (var rs = pdbController.searchQuery(TableType.EMPLOYEES, "shortName", "testName")) {
+            while (rs.next()) {
+                Employee req = new Employee(
+                        (java.lang.Long) rs.getObject("employeeID"),
+                        (java.lang.String) rs.getObject("firstName"),
+                        (java.lang.String) rs.getObject("lastName"));
+                if (req != null)
+                    map.put(req.getEmployeeID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(employee.getEmployeeID()), results.get(employee.getEmployeeID()));
+        assertEquals(map.get(employee2.getEmployeeID()), results.get(employee2.getEmployeeID()));
+        try {
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee2.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void testGetEmployee1() {
+        Employee employee = new Employee(100L, "testFirstName1", "testLastName1");
+        Employee employee2 = new Employee(101L, "testFirstName2", "testLastName2");
+        Object[] values = new Object[]{employee.getEmployeeID(), employee.getFirstName(), employee.getLastName()};
+        Object[] values2 = new Object[]{employee2.getEmployeeID(), employee2.getFirstName(), employee2.getLastName()};
+        try {
+            pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values);
+            pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values2);
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        Employee.Field[] fields = {Employee.Field.FIRST_NAME, Employee.Field.LAST_NAME};
+        Object[] searchValues = new Object[]{"testFirstName1", "testFirstName2"};
+        String[] searchFields = new String[]{"staffAssignment", "employeeName"};
+        var results = facade.getEmployee(fields, searchValues);
+        var map = new HashMap<Long, Employee>();
+        try (var rs = pdbController.searchQuery(TableType.EMPLOYEES, searchFields, searchValues)) {
+            while (rs.next()) {
+                Employee req = new Employee(
+                        (java.lang.Long) rs.getObject("employeeID"),
+                        (java.lang.String) rs.getObject("firstName"),
+                        (java.lang.String) rs.getObject("lastName"));
+                if (req != null)
+                    map.put(req.getEmployeeID(), req);
+            }
+        } catch (PdbController.DatabaseException | SQLException e) {
+            log.error("", e);
+        }
+        assertEquals(map.get(employee.getEmployeeID()), results.get(employee.getEmployeeID()));
+        assertEquals(map.get(employee2.getEmployeeID()), results.get(employee2.getEmployeeID()));
+        try {
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee2.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getAllEmployee() {
+        var values0 = new Object[]{100L, "LongtestName0", "testName0"};
+        var values1 = new Object[]{101L, "LongtestName1", "testName1"};
+        var values2 = new Object[]{102L, "LongtestName2", "testName2"};
+
+        var valueSet = new Object[][]{values0, values1, values2};
+
+        var refMap = new HashMap<Long, Employee>();
+        for (Object[] values : valueSet) {
+            var employee = new Employee((Long) values[0], (String) values[1], (String) values[2]);
+            refMap.put(employee.getEmployeeID(), employee);
+            try {
+                pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values);
+            } catch (PdbController.DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Map<Long, Employee> resultMap = facade.getAllEmployee();
+        for (var employeeID : resultMap.keySet()) {
+            try {
+                pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employeeID);
+            } catch (PdbController.DatabaseException e) {
+                assert false : "Failed to delete from database";
+            }
+        }
+        assertEquals(refMap, resultMap);
     }
 
     @Test
     void saveEmployee() {
+        Employee employee = new Employee(100L, "testFirstName", "testLastName");
+        facade.saveEmployee(employee);
+        Optional<Employee> results = facade.getEmployee(employee.getEmployeeID());
+        Employee daoresult = results.get();
+        assertEquals(employee, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void updateEmployee() {
+        Employee employee = new Employee(100L, "testFirstName", "testLastName");
+        facade.saveEmployee(employee);
+
+        Employee updatedEmployee = new Employee(100L, "testFirstName", "updatedTestLastName");
+        Employee.Field[] fields = {Employee.Field.LAST_NAME};
+        facade.updateEmployee(updatedEmployee, fields);
+
+        Optional<Employee> results = facade.getEmployee(employee.getEmployeeID());
+        Employee daoresult = results.get();
+        assertEquals(updatedEmployee, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void deleteEmployee() {
+        Employee employee = new Employee(100L, "testLName", "testSName");
+        Object[] values = new Object[]{employee.getEmployeeID(), employee.getFirstName(), employee.getLastName()};
+        try {
+            pdbController.insertQuery(TableType.EMPLOYEES, employeeFields, values);
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to insert into database";
+        }
+        try {
+            pdbController.searchQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            assert false : "Failed to search database";
+        }
+
+        facade.deleteEmployee(employee);
+
+        try {
+            pdbController.searchQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
+        } catch (PdbController.DatabaseException e) {
+            assert true : "Successfully deleted from database";
+        }
     }
 
     @Test
     void getAccount() {
+
     }
 
     @Test
