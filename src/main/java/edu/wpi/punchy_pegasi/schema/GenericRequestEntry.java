@@ -6,12 +6,12 @@ import java.util.UUID;
 
 @Getter
 public class GenericRequestEntry extends RequestEntry {
-    public GenericRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status);
+    public GenericRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
     }
 
-    public GenericRequestEntry(Long locationName, Long staffAssignment, String additionalNotes) {
-        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
+    public GenericRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText);
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestEntry>{
@@ -19,7 +19,8 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestE
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        INVALID_TEXT("invalidText");
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.GenericRequestEntry ref){
@@ -33,6 +34,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestE
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case INVALID_TEXT -> getInvalidText();
         };
     }
 

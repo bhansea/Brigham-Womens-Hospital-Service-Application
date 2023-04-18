@@ -15,6 +15,7 @@ public class RequestEntry {
     protected final Long staffAssignment;
     protected final String additionalNotes;
     protected final Status status;
+    protected final String invalidText;
 
     public enum Status {
         NONE,
@@ -27,7 +28,8 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry>{
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status");
+        STATUS("status"),
+        INVALID_TEXT("invalidText");
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.RequestEntry ref){
@@ -41,6 +43,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry>{
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case INVALID_TEXT -> getInvalidText();
         };
     }
 

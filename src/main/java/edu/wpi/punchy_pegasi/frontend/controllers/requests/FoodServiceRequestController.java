@@ -71,6 +71,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
+                invalidText.getText(),
                 mealDropdown.getSelectedItem(),
                 tempDropdown.getSelectedItem(),
                 extras,

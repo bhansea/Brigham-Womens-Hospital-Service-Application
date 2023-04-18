@@ -49,6 +49,8 @@ public abstract class RequestController<T extends RequestEntry> {
     MFXFilterComboBox<Employee> staffAssignment;
     @FXML
     private HBox componentHolder;
+    @FXML
+    Label invalidText;
 
     public static BorderPane create(RequestController controller, String path) {
         try {
@@ -88,6 +90,7 @@ public abstract class RequestController<T extends RequestEntry> {
 
     @FXML
     protected final void initialize() {
+        invalidText.setVisible(false);
         if (!isLoaded()) return;
         locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
         staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));

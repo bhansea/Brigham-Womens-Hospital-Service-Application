@@ -14,8 +14,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final String patientName;
     private final String beverage;
 
-    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status);
+    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -24,8 +24,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.beverage = beverage;
     }
 
-    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
-        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
+    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -40,6 +40,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequ
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
+        INVALID_TEXT("invalidText"),
         FOOD_SELECTION("foodSelection"),
         TEMP_TYPE("tempType"),
         ADDITIONAL_ITEMS("additionalItems"),
@@ -59,6 +60,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequ
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case INVALID_TEXT -> getInvalidText();
             case FOOD_SELECTION -> getFoodSelection();
             case TEMP_TYPE -> getTempType();
             case ADDITIONAL_ITEMS -> getAdditionalItems();

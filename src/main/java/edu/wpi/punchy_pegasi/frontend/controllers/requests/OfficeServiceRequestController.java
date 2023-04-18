@@ -81,7 +81,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
                 reqString.append(items.get(i).getText()).append(" - ").append(itemsAmount.get(i)).append("; ");
 
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), reqString.toString().trim(), "");
+        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(),invalidText.getText(), reqString.toString().trim(), "");
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

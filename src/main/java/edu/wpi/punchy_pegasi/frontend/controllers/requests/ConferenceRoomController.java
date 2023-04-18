@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
+import java.util.List;
+
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
     private final ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
@@ -81,7 +83,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
 
     @Override
     protected void validateEntry() {
-        boolean val = validateGeneric() || !timeCheck() || calendar.getValue() == null;
+        boolean val = validateGeneric() || !timeCheck() || calendar.getValue() == null || !isTaken();
         submit.setDisable(val);
     }
 
@@ -111,8 +113,16 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
      passwordBox.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
      }
      */
-    public void isTaken(){
-        App.getSingleton().getFacade().getConferenceRoomEntry(new ConferenceRoomEntry.Field[]{ ConferenceRoomEntry.Field.LOCATION_NAME }, new Object[] { locationName.getId() }).values().stream().toList();
+    public boolean isTaken(){
+        List<ConferenceRoomEntry> tester = App.getSingleton().getFacade().getConferenceRoomEntry(new ConferenceRoomEntry.Field[]{ ConferenceRoomEntry.Field.LOCATION_NAME }, new Object[] { locationName.getSelectedItem().getUuid() }).values().stream().toList();
+        for(int i = 0; i < tester.size(); i++){
+            if(tester.get(i).equals(locationName.getSelectedItem().getUuid())){
+                invalidText.setVisible(true);
+                locationName.setStyle("-fx-border-color: red; -fx-text-fill: #000000");
+                return false;
+            }
+        }
+        return true;
     }
 
     @FXML
@@ -122,6 +132,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         locationName.getSelectedItem().getUuid(),
                         staffAssignment.getSelectedItem().getEmployeeID(),
                         additionalNotes.getText(),
+                        invalidText.getText(),
                         beginningTime.getText(),
                         endTime.getText(),
                         calendar.getValue(),

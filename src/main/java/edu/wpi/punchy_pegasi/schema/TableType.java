@@ -75,7 +75,8 @@ CREATE TABLE IF NOT EXISTS requests
   locationName bigint,
   staffAssignment bigint,
   additionalNotes varchar,
-  status varchar NOT NULL
+  status varchar NOT NULL,
+  invalidText varchar
 );
 """, edu.wpi.punchy_pegasi.schema.RequestEntry.Field.class)
 ,

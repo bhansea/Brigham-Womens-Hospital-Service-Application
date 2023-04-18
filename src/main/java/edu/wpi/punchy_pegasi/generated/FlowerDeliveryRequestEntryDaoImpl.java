@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerType", "flowerAmount", "patientName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "invalidText", "flowerSize", "flowerType", "flowerAmount", "patientName"};
     private final PdbController dbController;
 
     public FlowerDeliveryRequestEntryDaoImpl(PdbController dbController) {
@@ -38,6 +38,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("flowerSize", java.lang.String.class),
                     rs.getObject("flowerAmount", java.lang.String.class),
                     rs.getObject("flowerType", java.lang.String.class));
@@ -65,6 +66,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("flowerSize", java.lang.String.class),
                     rs.getObject("flowerAmount", java.lang.String.class),
                     rs.getObject("flowerType", java.lang.String.class));
@@ -89,6 +91,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("flowerSize", java.lang.String.class),
                     rs.getObject("flowerAmount", java.lang.String.class),
                     rs.getObject("flowerType", java.lang.String.class));
@@ -103,7 +106,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
+        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getInvalidText(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

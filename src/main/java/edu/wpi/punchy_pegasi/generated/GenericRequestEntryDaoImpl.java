@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericRequestEntry, GenericRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "invalidText"};
     private final PdbController dbController;
 
     public GenericRequestEntryDaoImpl(PdbController dbController) {
@@ -36,7 +36,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
                     rs.getObject("locationName", java.lang.Long.class),
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")));
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -59,7 +60,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
                     rs.getObject("locationName", java.lang.Long.class),
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")));
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -79,7 +81,8 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
                     rs.getObject("locationName", java.lang.Long.class),
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")));
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -91,7 +94,7 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
 
     @Override
     public void save(GenericRequestEntry genericRequestEntry) {
-        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getLocationName(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus()};
+        Object[] values = {genericRequestEntry.getServiceID(), genericRequestEntry.getLocationName(), genericRequestEntry.getStaffAssignment(), genericRequestEntry.getAdditionalNotes(), genericRequestEntry.getStatus(), genericRequestEntry.getInvalidText()};
         try {
             dbController.insertQuery(TableType.GENERIC, fields, values);
         } catch (PdbController.DatabaseException e) {

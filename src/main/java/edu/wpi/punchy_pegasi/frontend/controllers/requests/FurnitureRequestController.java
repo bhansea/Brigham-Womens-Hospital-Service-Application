@@ -85,6 +85,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
+                invalidText.getText(),
                 furniture.getItems());
         facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);

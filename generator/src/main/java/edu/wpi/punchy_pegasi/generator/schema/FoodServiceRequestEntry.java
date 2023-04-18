@@ -14,8 +14,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final String patientName;
     private final String beverage;
 
-    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status);
+    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -24,8 +24,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.beverage = beverage;
     }
 
-    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
-        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
+    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;

@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName", "beverage"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "invalidText", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName", "beverage"};
     private final PdbController dbController;
 
     public FoodServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -37,6 +37,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("foodSelection", java.lang.String.class),
                     rs.getObject("tempType", java.lang.String.class),
                     java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
@@ -66,6 +67,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("foodSelection", java.lang.String.class),
                     rs.getObject("tempType", java.lang.String.class),
                     java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
@@ -92,6 +94,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("foodSelection", java.lang.String.class),
                     rs.getObject("tempType", java.lang.String.class),
                     java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
@@ -109,7 +112,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getBeverage()};
+        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getInvalidText(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getBeverage()};
         try {
             dbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

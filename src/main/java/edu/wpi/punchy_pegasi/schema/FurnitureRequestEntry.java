@@ -10,12 +10,12 @@ public class FurnitureRequestEntry extends RequestEntry {
 
     private final List<String> selectFurniture;
 
-    public FurnitureRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, List<String> selectFurniture) {
-        this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, selectFurniture);
+    public FurnitureRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText, List<String> selectFurniture) {
+        this(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText, selectFurniture);
     }
 
-    public FurnitureRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, List<String> selectFurniture) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status);
+    public FurnitureRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText, List<String> selectFurniture) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
         this.selectFurniture = selectFurniture;
     }
 
@@ -26,6 +26,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureReques
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
+        INVALID_TEXT("invalidText"),
         SELECT_FURNITURE("selectFurniture");
         @lombok.Getter
         private final String colName;
@@ -40,6 +41,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureReques
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case INVALID_TEXT -> getInvalidText();
             case SELECT_FURNITURE -> getSelectFurniture();
         };
     }
