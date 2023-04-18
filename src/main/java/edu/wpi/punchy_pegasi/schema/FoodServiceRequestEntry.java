@@ -33,8 +33,9 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.patientName = patientName;
         this.beverage = beverage;
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry>{
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
@@ -49,10 +50,12 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequ
         BEVERAGE("beverage");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
