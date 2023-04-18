@@ -111,6 +111,7 @@ public class HomePageController {
 
     //IDK BESTIE,
         //WANT TO OPEN NEW WINDOW DEPENDING ON WHAT IS SELECTED IN COMBO BOX
+        //ALSO NEED TO DO THE CHARTS GAWDAMN
     }
 
     private class GenericRequestEntry {
