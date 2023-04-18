@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
+import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.*;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
@@ -190,14 +191,9 @@ public class PathfindingMap {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
 
         var graph = new Graph<>(nodes, edgeList);
-        var heuristic = new CartesianHeuristic();
-        var dfs = new DFS<>(graph);
-        var bfs = new BFS<>(graph);
-        var AStar = new AStar<>(graph, heuristic, heuristic);
-        var palgo = new Palgo<>(graph, heuristic, heuristic, bfs);
-        palgo.setPathfinder(AStar);
+        PathfindingSingleton.SINGLETON.setAlgorithm(new BFS<>());
         try {
-            var path = palgo.findPath(start,end).stream().toList();
+            var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
             for (var floor : floors.values())
                 floor.clearFloor();
             String currentFloor = path.get(0).getFloor();
