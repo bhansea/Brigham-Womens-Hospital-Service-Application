@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
@@ -10,9 +11,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +35,14 @@ public class HomePageController {
     MFXTableView<GenericRequestEntry> requestTable;
     @FXML
     private VBox tableContainer;
+
+    private ComboBox notificationComboBox;
+
+    @FXML
+    PFXButton openWindow;
+
+
+
 
 //    @FXML
 //    private void initialize() {
@@ -83,16 +99,18 @@ public class HomePageController {
         requestTable.autosizeColumns();
     }
 
-    public void openMealsNotifWindow(ActionEvent actionEvent) {
-    }
+    public void openSelectedWindow(ActionEvent actionEvent) throws IOException{
 
-    public void openFlowersNotifWindow(ActionEvent actionEvent) {
-    }
+            FXMLLoader notifLoader = new FXMLLoader();
+            BorderPane notifPane = notifLoader.load();
+            NotifController notifController = notifLoader.getController();
 
-    public void openFurnitureNotifWindow(ActionEvent actionEvent) {
-    }
 
-    public void openOfficeNotifWindow(ActionEvent actionEvent) {
+            Stage notificationStage = new Stage();
+            notificationStage.show();
+
+    //IDK BESTIE,
+        //WANT TO OPEN NEW WINDOW DEPENDING ON WHAT IS SELECTED IN COMBO BOX
     }
 
     private class GenericRequestEntry {
@@ -114,5 +132,6 @@ public class HomePageController {
                     .findFirst()
                     .orElseGet(() -> TableType.GENERIC);
         }
+
     }
 }

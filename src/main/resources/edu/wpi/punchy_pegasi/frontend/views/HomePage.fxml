@@ -13,6 +13,9 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
@@ -25,15 +28,18 @@
                         <Insets topRightBottomLeft="10" />
                     </padding>
                 </Label>
-                <MenuBar>
-                    <Menu text="Notifications">
-                        <MenuItem text="Meals" onAction="#openMealsNotifWindow"/>
-                        <MenuItem text="Flowers" onAction="#openFlowersNotifWindow"/>
-                        <MenuItem text="Furniture" onAction="#openFurnitureNotifWindow"/>
-                        <MenuItem text="Office Supplies" onAction="#openOfficeNotifWindow"/>
-                        <MenuItem text="Conference Room" onAction="#openMealsNotifWindow"/>
-                    </Menu>
-                </MenuBar>
+                <ComboBox fx:id="notificationComboBox" onAction="#openSelectedWindow">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Meals"/>
+                            <String fx:value="Flowers"/>
+                            <String fx:value="Conference Room"/>
+                            <String fx:value="Office Supplies"/>
+                            <String fx:value="Furniture"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <PFXButton text="open" stylesheets="@../css/PFXButton.css"/>
                 <VBox fx:id="tableContainer" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
