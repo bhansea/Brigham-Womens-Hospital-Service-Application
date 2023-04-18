@@ -1,0 +1,56 @@
+@import "Fonts.css";
+
+.pfx-card-vertical-container {
+    -fx-alignment: TOP_CENTER;
+    -fx-padding: 20 20;
+    -fx-background-color: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
+}
+
+.pfx-card-vertical-stats {
+    -fx-cursor: hand;
+    -fx-alignment: TOP_CENTER;
+    -fx-background-color: transparent;
+    -fx-spacing: 20;
+    -fx-font-size: 24;
+}
+
+.pfx-card-vertical-imageBox {
+    -fx-cursor: hand;
+    -fx-alignment: TOP_CENTER;
+    -fx-background-color: transparent;
+}
+
+.pfx-card-vertical-info {
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: transparent;
+    -fx-spacing: 10;
+    -fx-padding: 0 0 0 10;
+}
+
+.pfx-card-vertical-selection {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-background-color: transparent;
+    -fx-spacing: 10;
+    -fx-padding: 0 10 0 0;
+}
+
+.pfx-card-vertical-stats Label {
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-card-vertical-container:selected {
+    -fx-border-color: -pfx-accent;
+}
+
+.pfx-card-vertical-container:selected Label {
+    -fx-text-fill: -pfx-accent;
+}
+
+.pfx-card-vertical-container:hover {
+
+}

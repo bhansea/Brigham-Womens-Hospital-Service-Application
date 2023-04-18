@@ -19,13 +19,12 @@ import javafx.scene.shape.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class SidebarController extends VBox implements PropertyChangeListener {
     private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
             new PFXSidebarItem(Screen.HOME, MaterialSymbols.HOME),
-            new PFXSidebarItem("Service Requests", MaterialSymbols.WORK, Arrays.stream(Screen.values()).filter(v -> v.name().toLowerCase().contains("request")).toList()),
+            new PFXSidebarItem(Screen.SERVICE_REQUEST, MaterialSymbols.WORK),
             new PFXSidebarItem(Screen.MAP_PAGE, MaterialSymbols.MAP),
             new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialSymbols.ADMIN_PANEL_SETTINGS),
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
@@ -58,33 +57,14 @@ public class SidebarController extends VBox implements PropertyChangeListener {
 
     private void setAccount(Account account) {
         sidebarItems.forEach(s -> {
-            if (s.isDropdown()) {
-                var min = s.getDropdownItems().stream().mapToInt(s2 -> s2.getShield().getShieldLevel()).min();
-                if (min.isEmpty()) return;
-                if (min.getAsInt() > account.getAccountType().getShieldLevel()) {
-                    s.setVisible(false);
-                    s.setManaged(false);
-                } else {
-                    s.setVisible(true);
-                    s.setManaged(true);
-                    s.getDropdownItems().forEach(dI -> {
-                        if (account.getAccountType().getShieldLevel() < dI.getShield().getShieldLevel()) {
-                            //hide
-                        } else {
-                            //show
-                        }
-                    });
-                }
+            var screen = s.getScreen();
+            if (screen == null) return;
+            if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
+                s.setVisible(true);
+                s.setManaged(true);
             } else {
-                var screen = s.getScreen();
-                if (screen == null) return;
-                if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
-                    s.setVisible(true);
-                    s.setManaged(true);
-                } else {
-                    s.setVisible(false);
-                    s.setManaged(false);
-                }
+                s.setVisible(false);
+                s.setManaged(false);
             }
         });
         var loggedIn = account.getAccountType() != Account.AccountType.NONE;
