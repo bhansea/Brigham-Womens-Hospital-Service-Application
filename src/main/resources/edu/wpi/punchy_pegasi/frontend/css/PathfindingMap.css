@@ -1,0 +1,24 @@
+.pathfinding-overlay {
+    -fx-spacing: 10;
+    -fx-padding: 20;
+}
+.pathfinding-overlay > VBox {
+    -fx-alignment: CENTER;
+    -fx-max-width: 300;
+    -fx-spacing: 10;
+    -fx-padding: 10;
+    -fx-background-color: -pfx-background;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 10, 0, 0.0, 0.0);
+}
+
+.pathfinding-overlay > VBox > HBox {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+    -fx-padding: 5;
+}
+
+.pathfinding-overlay MFXButton {
+    -fx-background-color: -pfx-accent;
+    -fx-text-fill: -pfx-text-opposite;
+}

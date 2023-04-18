@@ -33,8 +33,8 @@
 }
 
 .pfx-sidebar-item:selected {
-    -fx-border-color: -pfx-accent;
-}
+     -fx-border-color: -pfx-accent;
+ }
 
 .pfx-sidebar-item:selected Label {
     -fx-text-fill: -pfx-accent;
