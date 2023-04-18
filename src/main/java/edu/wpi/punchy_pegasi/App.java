@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
@@ -233,11 +234,14 @@ public class App extends Application {
         var genericResource = this.getClass().getResource("");
         if (genericResource != null && Objects.equals(genericResource.getProtocol(), "file")) development = true;
 
-        final var loader = loadWithCache("frontend/views/Splash.fxml");
-        final SplashController splashController = loader.getController();
-        scene = new Scene(loader.getRoot(), 600, 400);
-        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
-        splashController.getConnection();
+//        final var loader = loadWithCache("frontend/views/Splash.fxml");
+//        final SplashController splashController = loader.getController();
+//        scene = new Scene(loader.getRoot(), 600, 400);
+//        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
+//        splashController.getConnection();
+
+        var testComponent = new PFXCardHolder();
+        scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
 
