@@ -233,20 +233,11 @@ public class App extends Application {
         var genericResource = this.getClass().getResource("");
         if (genericResource != null && Objects.equals(genericResource.getProtocol(), "file")) development = true;
 
-//        final var loader = loadWithCache("frontend/views/Splash.fxml");
-//        final SplashController splashController = loader.getController();
-//        scene = new Scene(loader.getRoot(), 600, 400);
-//        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
-//        splashController.getConnection();
-
-        var testComponent = new PFXCardHorizontal();
-        VBox cont = new VBox();
-        HBox cont2 = new HBox();
-        cont.setAlignment(Pos.CENTER);
-        cont2.setAlignment(Pos.CENTER);
-        cont.getChildren().add(cont2);
-        cont2.getChildren().add(testComponent);
-        scene = new Scene(new BorderPane(cont), 1000, 1000);
+        final var loader = loadWithCache("frontend/views/Splash.fxml");
+        final SplashController splashController = loader.getController();
+        scene = new Scene(loader.getRoot(), 600, 400);
+        splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
+        splashController.getConnection();
 
         loadStylesheet("frontend/css/DefaultTheme.css");
 
