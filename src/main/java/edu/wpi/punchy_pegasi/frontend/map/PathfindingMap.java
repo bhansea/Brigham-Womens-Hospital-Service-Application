@@ -44,6 +44,8 @@ public class PathfindingMap {
     @FXML
     private PFXButton selectGraphically;
     @FXML
+    private PFXButton robotButton;
+    @FXML
     private BorderPane root;
     private IMap<HospitalFloor> map;
     @FXML
@@ -119,6 +121,7 @@ public class PathfindingMap {
             }
         });
         selectGraphically.setDisable(true);
+        robotButton.setDisable(true);
         selectGraphicallyCancel.setVisible(false);
         selectGraphicallyCancel.setManaged(false);
     }
@@ -224,6 +227,7 @@ public class PathfindingMap {
                 xCoords.add((Integer)node.getFromField(Node.Field.XCOORD));
                 yCoords.add((Integer)node.getFromField(Node.Field.YCOORD));
             }
+            robotButton.setDisable(false);
             return "";
         } catch (IllegalStateException e) {
             return "Path not found";
@@ -232,7 +236,16 @@ public class PathfindingMap {
 
     @FXML
     private void sendRobotMessage() {
-        SerialPort comPort = SerialPort.getCommPorts()[1];
+        robotButton.setDisable(true);
+
+        SerialPort comPort;
+        SerialPort[] ports = SerialPort.getCommPorts();
+
+        for(int i=0;i<ports.length;i++) {
+            if(ports[i].getDescriptivePortName()) {
+                comPort = ports[i];
+            }
+        }
         comPort.openPort();
 
         byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
