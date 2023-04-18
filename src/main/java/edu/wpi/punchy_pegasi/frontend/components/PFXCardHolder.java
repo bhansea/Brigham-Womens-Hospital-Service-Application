@@ -14,7 +14,11 @@ public class PFXCardHolder extends BorderPane {
     public PFXCardHolder() {
         super();
         setCenter(scrollPane);
+        getStyleClass().add("pfx-cardholder-container");
         scrollPane.setContent(elements);
+        elements.getStyleClass().add("pfx-cardholder-container-gridpane");
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     }
 
@@ -22,6 +26,9 @@ public class PFXCardHolder extends BorderPane {
         super();
         setCenter(scrollPane);
         scrollPane.setContent(elements);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        elements.getStyleClass().add("pfx-cardholder-container-gridpane");
 
         int val = 0;
         for(int i=0;i<(int)Math.ceil(cards.size()/3.0);i++) {
