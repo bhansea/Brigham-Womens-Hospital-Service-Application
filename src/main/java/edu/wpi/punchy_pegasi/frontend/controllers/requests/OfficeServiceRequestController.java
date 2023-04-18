@@ -70,7 +70,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
 
         items.forEach(i -> i.setOnAction(e -> validateEntry()));
         itemsAmount.forEach(i -> i.setOnKeyTyped(e -> validateEntry()));
-    }
+        setHeaderText("Office Supplies Service Request");
+}
 
     @FXML
     public void submitEntry() {
