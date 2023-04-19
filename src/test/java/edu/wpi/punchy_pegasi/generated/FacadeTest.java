@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.sql.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,12 +40,12 @@ class FacadeTest {
         edgeFields = new String[]{"uuid", "startNode", "endNode"};
         moveFields = new String[]{"uuid", "nodeID", "longName", "date"};
         locationNameFields = new String[]{"uuid", "longName", "shortName", "nodeType"};
-        requestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status"};
-        foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName"};
-        flowerDeliveryFields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType"};
-        conferenceRoomFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date"};
-        furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture"};
-        officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeName"};
+        requestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID"};
+        foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName", "employeeID"};
+        flowerDeliveryFields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType", "employeeID"};
+        conferenceRoomFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date", "amountOfParticipants", "employeeID"};
+        furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture", "employeeID"};
+        officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeID"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
         accountFields = new String[]{"username", "password", "employeeID", "accountType"};
         pdbController = new PdbController(Config.source, "test");
@@ -451,7 +452,7 @@ class FacadeTest {
 
     @Test
     void getMove() {
-        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
         Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
         try {
             pdbController.insertQuery(TableType.MOVES, moveFields, values);
@@ -470,8 +471,8 @@ class FacadeTest {
 
     @Test
     void testGetMove() {
-        Move move = new Move(100L, 1005L, "testLong", "testDate");
-        Move move2 = new Move(101L, 1005L, "testLong", "testDate");
+        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
+        Move move2 = new Move(101L, 1005L, "testLong", LocalDate.now());
         Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
         Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
         try {
@@ -484,11 +485,13 @@ class FacadeTest {
         var map = new HashMap<java.lang.Long, Move>();
         try (var rs = pdbController.searchQuery(TableType.MOVES, "longName", "testLong")) {
             while (rs.next()) {
+                java.sql.Date dd = (java.sql.Date) rs.getObject("date");
+                LocalDate ld = dd.toLocalDate();
                 Move req = new Move(
                         (java.lang.Long) rs.getObject("uuid"),
                         (java.lang.Long) rs.getObject("nodeID"),
                         (java.lang.String) rs.getObject("longName"),
-                        (java.lang.String) rs.getObject("date"));
+                        ld);
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -507,9 +510,9 @@ class FacadeTest {
 
     @Test
     void testGetMove1() {
-        Move move = new Move(100L, 1005L, "testLong", "testDate0");
-        Move move2 = new Move(101L, 1000L, "testLongName", "testDate1");
-        Move move3 = new Move(102L, 1005L, "testLongName", "testDate2");
+        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
+        Move move2 = new Move(101L, 1000L, "testLongName", LocalDate.now());
+        Move move3 = new Move(102L, 1005L, "testLongName", LocalDate.now());
         Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
         Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
         Object[] values3 = new Object[]{move3.getUuid(), move3.getNodeID(), move3.getLongName(), move3.getDate()};
@@ -527,11 +530,13 @@ class FacadeTest {
         var map = new HashMap<java.lang.Long, Move>();
         try (var rs = pdbController.searchQuery(TableType.MOVES, searchFields, searchValues)) {
             while (rs.next()) {
+                java.sql.Date dd = (java.sql.Date) rs.getObject("date");
+                LocalDate ld = dd.toLocalDate();
                 Move req = new Move(
                         (java.lang.Long) rs.getObject("uuid"),
                         (java.lang.Long) rs.getObject("nodeID"),
                         (java.lang.String) rs.getObject("longName"),
-                        (java.lang.String) rs.getObject("date"));
+                        ld);
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -552,14 +557,14 @@ class FacadeTest {
 
     @Test
     void getAllMove() {
-        var values0 = new Object[]{100L, 1005L, "testLong", "testDate"};
-        var values1 = new Object[]{101L, 1006L, "testLong1", "testDate1"};
-        var values2 = new Object[]{102L, 1007L, "testLong2", "testDate2"};
+        var values0 = new Object[]{100L, 1005L, "testLong", LocalDate.now()};
+        var values1 = new Object[]{101L, 1006L, "testLong1", LocalDate.now()};
+        var values2 = new Object[]{102L, 1007L, "testLong2", LocalDate.now()};
         var valueSet = new Object[][]{values0, values1, values2};
 
         var refMap = new HashMap<Long, Move>();
         for (Object[] values : valueSet) {
-            var move = new Move((Long) values[0], (Long) values[1], (String) values[2], (String) values[3]);
+            var move = new Move((Long) values[0], (Long) values[1], (String) values[2], (LocalDate) values[3]);
             refMap.put(move.getUuid(), move);
             try {
                 pdbController.insertQuery(TableType.MOVES, moveFields, values);
@@ -581,9 +586,25 @@ class FacadeTest {
 
     @Test
     void saveMove() {
-        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Move move = new Move(100L, 1005L, "testLongName", LocalDate.now());
         facade.saveMove(move);
-        Move updatedMove = new Move(100L, 1005L, "updatedTestLong", "updatedTestDate");
+        Optional<Move> results = facade.getMove(move.getUuid());
+        Move daoresult = results.get();
+        assertEquals(move, daoresult);
+        try {
+            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
+        } catch (PdbController.DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void updateMove() {
+        LocalDate date = LocalDate.now();
+        Move move = new Move(100L, 1005L, "testLong", date);
+        facade.saveMove(move);
+        LocalDate updatedDate = LocalDate.now();
+        Move updatedMove = new Move(100L, 1005L, "updatedTestLong", updatedDate);
         Move.Field[] fields = {Move.Field.LONG_NAME, Move.Field.DATE};
         facade.updateMove(updatedMove, fields);
         Optional<Move> results = facade.getMove(move.getUuid());
@@ -597,26 +618,8 @@ class FacadeTest {
     }
 
     @Test
-    void updateMove() {
-        Move move = new Move(100L, 1005L, "testLong", "testDate");
-        facade.saveMove(move);
-        Move updatedMove = new Move(100L, 1500L, "updatedTestLong", "testDate");
-        Move.Field[] fields = {Move.Field.UUID, Move.Field.NODE_ID, Move.Field.LONG_NAME, Move.Field.DATE};
-        facade.updateMove(updatedMove, fields);
-
-        Optional<Move> results = facade.getMove(move.getUuid());
-        Move daoresult = results.get();
-        assertEquals(updatedMove, daoresult);
-        try {
-            pdbController.deleteQuery(TableType.MOVES, "uuid", move.getUuid());
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
     void deleteMove() {
-        Move move = new Move(100L, 1005L, "testLong", "testDate");
+        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
         Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
         try {
             pdbController.insertQuery(TableType.MOVES, moveFields, values);
@@ -1532,7 +1535,8 @@ class FacadeTest {
                 RequestEntry.Status.PROCESSING,
                 "testSmall0",
                 "test0",
-                "testTulip0"
+                "testTulip0",
+                100L
         };
         var values1 = new Object[]{
                 UUID.randomUUID(),
@@ -1543,7 +1547,8 @@ class FacadeTest {
                 RequestEntry.Status.PROCESSING,
                 "testSmall1",
                 "test1",
-                "testTulip1"
+                "testTulip1",
+                100L
         };
         var values2 = new Object[]{
                 UUID.randomUUID(),
@@ -1554,7 +1559,8 @@ class FacadeTest {
                 RequestEntry.Status.PROCESSING,
                 "testSmall2",
                 "test2",
-                "testTulip2"
+                "testTulip2",
+                100L
         };
 
         var valueSet = new Object[][]{values0, values1, values2};
@@ -2356,9 +2362,9 @@ class FacadeTest {
 
     @Test
     void getAllOfficeServiceRequestEntry() {
-        var value0 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName", 100L};
-        var value1 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName", 100L};
-        var value2 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", "testName", 100L};
+        var value0 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L};
+        var value1 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L};
+        var value2 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L};
         var valueSet = new Object[][]{value0, value1, value2};
 
         var refMap = new HashMap<UUID, OfficeServiceRequestEntry>();

@@ -71,7 +71,7 @@ END $$;
     REQUESTS(edu.wpi.punchy_pegasi.schema.RequestEntry.class, """
 CREATE TABLE IF NOT EXISTS requests
 (
-  serviceID uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  serviceID uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   locationName bigint,
   staffAssignment bigint,
   additionalNotes varchar,
