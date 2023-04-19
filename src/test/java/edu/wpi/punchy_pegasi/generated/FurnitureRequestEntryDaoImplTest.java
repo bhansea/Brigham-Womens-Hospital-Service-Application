@@ -194,10 +194,7 @@ class FurnitureRequestEntryDaoImplTest {
         var staff = ThreadLocalRandom.current().nextLong();
         FurnitureRequestEntry fdre = new FurnitureRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, requestItems);
         dao.save(fdre);
-
-        var updateLocName = ThreadLocalRandom.current().nextLong();
-        var updateStaff = ThreadLocalRandom.current().nextLong();
-        FurnitureRequestEntry updatedFdre = new FurnitureRequestEntry(uuid, updateLocName, updateStaff, "updatedTestNotes", RequestEntry.Status.NONE, requestItems);
+        FurnitureRequestEntry updatedFdre = new FurnitureRequestEntry(uuid, locName, staff, "updatedTestNotes", RequestEntry.Status.NONE, requestItems);
         FurnitureRequestEntry.Field[] fields = {FurnitureRequestEntry.Field.ADDITIONAL_NOTES, FurnitureRequestEntry.Field.STATUS};
         dao.update(updatedFdre, fields);
 

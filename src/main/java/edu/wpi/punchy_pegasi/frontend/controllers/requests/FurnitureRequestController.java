@@ -106,7 +106,9 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                new ArrayList<String>(Collections.singletonList(cardHolder.getChosenItems())));
+                furniture.getItems(),
+                // TODO: need a way to get the employeeID of the person making the request entry
+                1L);
         facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
