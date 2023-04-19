@@ -15,6 +15,8 @@
             <VBox>
                 <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
                 <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"/>
+                <MFXFilterComboBox text="Select Algorithm" onAction="#setAlgo"
+                                   fx:id="selectAlgo" maxWidth="Infinity"/>
                 <HBox>
                     <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
                                fx:id="selectGraphically"/>

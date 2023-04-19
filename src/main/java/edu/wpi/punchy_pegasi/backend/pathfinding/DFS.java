@@ -4,15 +4,9 @@ import edu.wpi.punchy_pegasi.schema.INode;
 
 import java.util.*;
 
-public class DFS<K, T extends INode> implements IPathFind<T> {
-    private final Graph<K, T> graph;
-
-    public DFS(Graph<K, T> graph) {
-        this.graph = graph;
-    }
-
+public class DFS<K, T extends INode> implements IPathFind<K, T> {
     @Override
-    public List<T> findPath(T from, T to) throws IllegalStateException {
+    public List<T> findPath(Graph<K, T> graph, T from, T to) throws IllegalStateException {
         Stack<RouteNode<T>> stack = new Stack<>();
         Map<T, RouteNode<T>> allNodes = new HashMap<>();
 

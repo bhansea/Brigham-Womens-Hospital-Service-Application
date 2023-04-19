@@ -44,6 +44,7 @@ public class PdbController {
     }
 
     public static String objectToPsqlString(Object o, boolean first) {
+        if(o == null) return "NULL";
         if (o instanceof String || o instanceof UUID || o instanceof LocalDate || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {

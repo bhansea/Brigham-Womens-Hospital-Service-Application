@@ -4,6 +4,8 @@ package edu.wpi.punchy_pegasi.schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class Move {

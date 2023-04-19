@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
@@ -18,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -42,10 +44,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 public class App extends Application {
@@ -170,7 +169,7 @@ public class App extends Application {
         }
     }
 
-    private Optional<URL> resolveResource(String resourcePath) {
+    public Optional<URL> resolveResource(String resourcePath) {
         if (development) {
             try {
                 var resource = Paths.get(System.getProperty("user.dir"), "src/main/resources/edu/wpi/punchy_pegasi", resourcePath);
