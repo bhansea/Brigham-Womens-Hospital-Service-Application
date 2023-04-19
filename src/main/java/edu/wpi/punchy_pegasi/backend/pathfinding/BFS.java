@@ -4,21 +4,16 @@ import edu.wpi.punchy_pegasi.schema.INode;
 
 import java.util.*;
 
-public class BFS<K, T extends INode> implements IPathFind<T> {
-    private final Graph<K, T> graph;
-
-    public BFS(Graph<K, T> graph) {
-        this.graph = graph;
-    }
-
+public class BFS<K, T extends INode> implements IPathFind<K, T> {
     @Override
-    public List<T> findPath(T from, T to) throws IllegalStateException {
+    public List<T> findPath(Graph<K, T> graph, T from, T to) throws IllegalStateException {
         Queue<RouteNode<T>> queue = new LinkedList<>();
         Map<T, RouteNode<T>> allNodes = new HashMap<>();
 
         var start = new RouteNode<>(from);
         queue.add(start);
         allNodes.put(from, start);
+
         while (!queue.isEmpty()) {
             var current = queue.poll();
             for (var adjNode : graph.getConnections(current.getCurrent())) {

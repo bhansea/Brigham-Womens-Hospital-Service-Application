@@ -1,130 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SignageController">
+<!--    <BorderPane.margin>-->
+<!--        <Insets top="20.0"/>-->
+<!--    </BorderPane.margin>-->
+    <top>
+<!--        <HBox styleClass="signage-header-container">-->
+<!--            <HBox styleClass="signage-header" HBox.hgrow="ALWAYS">-->
+<!--                <Text text="Location Name"/>-->
+<!--            </HBox>-->
+<!--        </HBox>-->
+    </top>
     <center>
-        <VBox alignment="CENTER" prefHeight="437.0" prefWidth="1006.0">
+        <VBox alignment="CENTER" styleClass="signage-body">
             <children>
-                <HBox alignment="CENTER" prefHeight="234.0" prefWidth="741.0" spacing="50.0">
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                     <children>
-                        <HBox alignment="CENTER">
+                        <PFXIcon icon="ARROW_CIRCLE_UP" outlined="true" styleClass="signage-up-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
-                                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../assets/arrow-signage-png.png"/>
-                                    </image>
-                                    <HBox.margin>
-                                        <Insets/>
-                                    </HBox.margin>
-                                </ImageView>
-                            </children>
-                            <padding>
-                                <Insets left="10.0"/>
-                            </padding>
-                        </HBox>
-                        <VBox style="-fx-background-color: #f1f1f1; -fx-background-radius: 6; -fx-border-color: F6BD38;">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="Watkins Clinics A &amp; B (this layer) " wrappingWidth="342.9054865837097">
-                                    <font>
-                                        <Font size="25.0"/>
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Watkins Clinics C (up to 3rd layer) "
-                                      wrappingWidth="348.9103088378906">
-                                    <font>
-                                        <Font size="25.0"/>
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="Rehabilitation Services (down to 1st layer)"
-                                      wrappingWidth="245.44366455078125">
-                                    <font>
-                                        <Font size="25.0"/>
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Text>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
                             </children>
                         </VBox>
-                        <VBox style="-fx-background-color: #f1f1f1; -fx-background-radius: 6; -fx-border-color: #F6BD38;">
+                    </children>
+                </HBox>
+
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_LEFT" outlined="true" styleClass="signage-left-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Information">
-                                    <font>
-                                        <Font size="25.0"/>
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shapiro Admitting">
-                                    <font>
-                                        <Font size="25.0"/>
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shapiro Procedural Check-in">
-                                    <font>
-                                        <Font size="25.0"/>
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Text>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
                             </children>
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </HBox.margin>
                         </VBox>
-                        <HBox alignment="CENTER">
+                    </children>
+                </HBox>
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_RIGHT" outlined="true" styleClass="signage-right-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
-                                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
-                                           rotate="180.0">
-                                    <image>
-                                        <Image url="@../assets/arrow-signage-png.png"/>
-                                    </image>
-                                    <HBox.margin>
-                                        <Insets/>
-                                    </HBox.margin>
-                                </ImageView>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
                             </children>
-                            <padding>
-                                <Insets right="10.0"/>
-                            </padding>
-                        </HBox>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
+                    <children>
+                        <PFXIcon icon="ARROW_CIRCLE_DOWN" outlined="true" styleClass="signage-down-arrow"/>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Text text="Information"/>
+                                <Text text="Information"/>
+                            </children>
+                        </VBox>
                     </children>
                 </HBox>
             </children>
         </VBox>
     </center>
-    <top>
-        <HBox prefWidth="1144.0" style="-fx-background-color: F6BD38;" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-                <Insets top="20.0"/>
-            </BorderPane.margin>
-            <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signage Page">
-                    <font>
-                        <Font size="36.0"/>
-                    </font>
-                    <HBox.margin>
-                        <Insets left="480.0"/>
-                    </HBox.margin>
-                </Text>
-            </children>
-        </HBox>
-    </top>
 </BorderPane>

@@ -11,15 +11,15 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     private final String flowerAmount;
     private final String patientName;
 
-    public FlowerDeliveryRequestEntry(UUID serviceID, String patientName, Long locationName, Long staffAssignment, String additionalNotes, Status status, String flowerSize, String flowerAmount, String flowerType) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status);
+    public FlowerDeliveryRequestEntry(UUID serviceID, String patientName, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText, String flowerSize, String flowerAmount, String flowerType) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
         this.flowerSize = flowerSize;
         this.flowerAmount = flowerAmount;
         this.flowerType = flowerType;
         this.patientName = patientName;
     }
 
-    public FlowerDeliveryRequestEntry(String patientName, Long locationName, Long staffAssignment, String additionalNotes, String flowerSize, String flowerAmount, String flowerType) {
-        this(UUID.randomUUID(), patientName, locationName, staffAssignment, additionalNotes, Status.PROCESSING, flowerSize, flowerAmount, flowerType);
+    public FlowerDeliveryRequestEntry(String patientName, Long locationName, Long staffAssignment, String additionalNotes, String invalidText, String flowerSize, String flowerAmount, String flowerType) {
+        this(UUID.randomUUID(), patientName, locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText, flowerSize, flowerAmount, flowerType);
     }
 }

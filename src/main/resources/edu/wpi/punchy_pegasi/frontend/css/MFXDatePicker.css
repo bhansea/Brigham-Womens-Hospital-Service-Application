@@ -52,14 +52,14 @@ Popup
     -fx-min-height: 300;
 }
 
-.mfx-date-picker .date-picker-popup .left-arrow:disabled,
-.mfx-date-picker .date-picker-popup .right-arrow:disabled {
+.mfx-date-picker .date-picker-popup .signage-left-arrow:disabled,
+.mfx-date-picker .date-picker-popup .signage-right-arrow:disabled {
     -fx-opacity: 0.5;
 }
 
 
-.mfx-date-picker .date-picker-popup .left-arrow .mfx-ripple-generator,
-.mfx-date-picker .date-picker-popup .right-arrow .mfx-ripple-generator {
+.mfx-date-picker .date-picker-popup .signage-left-arrow .mfx-ripple-generator,
+.mfx-date-picker .date-picker-popup .signage-right-arrow .mfx-ripple-generator {
     -mfx-ripple-color: #F0E9FF;
 }
 

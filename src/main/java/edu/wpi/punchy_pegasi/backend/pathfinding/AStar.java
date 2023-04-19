@@ -1,22 +1,16 @@
 package edu.wpi.punchy_pegasi.backend.pathfinding;
 
 import edu.wpi.punchy_pegasi.schema.INode;
+import jdk.jfr.Registered;
+import lombok.RequiredArgsConstructor;
 
 import java.util.*;
-
-public class AStar<K, T extends INode> implements IPathFind<T> {
-    private final Graph<K, T> graph;
+@RequiredArgsConstructor
+public class AStar<K, T extends INode> implements IPathFind<K, T> {
     private final IHeuristic<T> nextNodeScorer;
     private final IHeuristic<T> targetScorer;
-
-    public AStar(Graph<K, T> graph, IHeuristic<T> nextNodeScorer, IHeuristic<T> targetScorer) {
-        this.graph = graph;
-        this.nextNodeScorer = nextNodeScorer;
-        this.targetScorer = targetScorer;
-    }
-
     @Override
-    public List<T> findPath(T from, T to) throws IllegalStateException {
+    public List<T> findPath(Graph<K, T> graph, T from, T to) throws IllegalStateException {
         //Priority queue is required for O(Log(N))
         Queue<RouteNode<T>> queue = new PriorityQueue<>();
         Map<T, RouteNode<T>> allNodes = new HashMap<>();

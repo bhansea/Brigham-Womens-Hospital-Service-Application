@@ -14,8 +14,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
     private final String patientName;
     private final String beverage;
 
-    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status);
+    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -24,8 +24,8 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.beverage = beverage;
     }
 
-    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
-        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING);
+    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText);
         this.foodSelection = foodSelection;
         this.tempType = tempType;
         this.additionalItems = additionalItems;
@@ -33,6 +33,29 @@ public class FoodServiceRequestEntry extends RequestEntry {
         this.patientName = patientName;
         this.beverage = beverage;
     }
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry> {
+        SERVICE_ID("serviceID"),
+        LOCATION_NAME("locationName"),
+        STAFF_ASSIGNMENT("staffAssignment"),
+        ADDITIONAL_NOTES("additionalNotes"),
+        STATUS("status"),
+        INVALID_TEXT("invalidText"),
+        FOOD_SELECTION("foodSelection"),
+        TEMP_TYPE("tempType"),
+        ADDITIONAL_ITEMS("additionalItems"),
+        DIETARY_RESTRICTIONS("dietaryRestrictions"),
+        PATIENT_NAME("patientName"),
+        BEVERAGE("beverage");
+        @lombok.Getter
+        private final String colName;
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
+            return ref.getFromField(this);
+        }
+    }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -40,6 +63,7 @@ public class FoodServiceRequestEntry extends RequestEntry {
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
+            case INVALID_TEXT -> getInvalidText();
             case FOOD_SELECTION -> getFoodSelection();
             case TEMP_TYPE -> getTempType();
             case ADDITIONAL_ITEMS -> getAdditionalItems();
@@ -48,26 +72,5 @@ public class FoodServiceRequestEntry extends RequestEntry {
             case BEVERAGE -> getBeverage();
         };
     }
-
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry> {
-    SERVICE_ID("serviceID"),
-    LOCATION_NAME("locationName"),
-    STAFF_ASSIGNMENT("staffAssignment"),
-    ADDITIONAL_NOTES("additionalNotes"),
-    STATUS("status"),
-    FOOD_SELECTION("foodSelection"),
-    TEMP_TYPE("tempType"),
-    ADDITIONAL_ITEMS("additionalItems"),
-    DIETARY_RESTRICTIONS("dietaryRestrictions"),
-    PATIENT_NAME("patientName"),
-    BEVERAGE("beverage");
-    @lombok.Getter
-    private final String colName;
-
-    public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref) {
-        return ref.getFromField(this);
-    }
-}
 
 }

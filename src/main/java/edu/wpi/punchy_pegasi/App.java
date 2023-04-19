@@ -77,6 +77,9 @@ public class App extends Application {
     private Scene scene;
     @Getter
     private Account account = new Account("", "", 0L, Account.AccountType.NONE);
+
+    @Getter
+    private LayoutController layout;
     @Getter
     private boolean development = false;
     private final Debouncer<String> cssDebouncer = new Debouncer<>(s -> {
@@ -166,7 +169,7 @@ public class App extends Application {
         }
     }
 
-    private Optional<URL> resolveResource(String resourcePath) {
+    public Optional<URL> resolveResource(String resourcePath) {
         if (development) {
             try {
                 var resource = Paths.get(System.getProperty("user.dir"), "src/main/resources/edu/wpi/punchy_pegasi", resourcePath);
@@ -204,7 +207,7 @@ public class App extends Application {
         log.info("Application started with database {}", pdb.source);
         this.pdb = pdb;
         facade = new Facade(pdb);
-        final var layout = new LayoutController();
+        layout = new LayoutController();
         viewPane = layout.getViewPane();
         scene = new Scene(layout, 1280, 720);
         loadStylesheet("frontend/css/DefaultTheme.css");

@@ -10,20 +10,18 @@ public class Palgo<K, T extends INode> {
     private final Graph<K, T> graph;
     private final IHeuristic<T> nextNodeScorer;
     private final IHeuristic<T> targetScorer;
-    private IPathFind<T> pathfinder;
 
-    public Palgo(Graph<K, T> graph, IHeuristic<T> nextNodeScorer, IHeuristic<T> targetScorer, IPathFind<T> pathfinder) {
+    public Palgo(Graph<K, T> graph, IHeuristic<T> nextNodeScorer, IHeuristic<T> targetScorer) {
+        this(graph, nextNodeScorer, targetScorer, null);
+    }
+
+    public Palgo(Graph<K, T> graph, IHeuristic<T> nextNodeScorer, IHeuristic<T> targetScorer, IPathFind<K, T> pathfinder) {
         this.graph = graph;
         this.nextNodeScorer = nextNodeScorer;
         this.targetScorer = targetScorer;
-        this.pathfinder = pathfinder;
-    }
-
-    public void setPathfinder(IPathFind<T> pathfinder) {
-        this.pathfinder = pathfinder;
     }
 
     public List<T> findPath(T from, T to) throws IllegalStateException {
-        return pathfinder.findPath(from, to);
+        return null;
     }
 }

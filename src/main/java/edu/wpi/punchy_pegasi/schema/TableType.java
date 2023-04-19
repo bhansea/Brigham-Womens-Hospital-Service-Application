@@ -41,12 +41,12 @@ public enum TableType {
             BEGIN
               IF to_regclass('moves') IS NULL THEN
                 CREATE SEQUENCE moves_id_seq;
-                CREATE TABLE moves
+                CREATE TABLE moves  
                 (
                   uuid bigint DEFAULT nextval('moves_id_seq') PRIMARY KEY,
                   nodeID bigint,
                   longName varchar,
-                  date varchar
+                  date date NOT NULL
                 );
                 ALTER SEQUENCE moves_id_seq OWNED BY moves.uuid;
               END IF;
@@ -75,7 +75,8 @@ public enum TableType {
               locationName bigint,
               staffAssignment bigint,
               additionalNotes varchar,
-              status varchar NOT NULL
+              status varchar NOT NULL,
+              invalidText varchar
             );
             """, edu.wpi.punchy_pegasi.schema.RequestEntry.Field.class),
     GENERIC(edu.wpi.punchy_pegasi.schema.GenericRequestEntry.class, """
@@ -109,7 +110,8 @@ public enum TableType {
             (
               beginningTime varchar,
               endTime varchar,
-              date date NOT NULL
+              date date NOT NULL,
+              amountOfParticipants varchar
             ) INHERITS (requests);
             """, edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry.Field.class),
     FURNITUREREQUESTS(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.class, """

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.NotificationWindowController"
+            prefHeight="400.0" prefWidth="600.0">
+    <TableView>
+        <columns>
+            <TableColumn text="help me god"/>
+        </columns>
+    </TableView>
+    <PFXButton text="Close" stylesheets="@../css/PFXButton.css" onAction="#end"/>
+</AnchorPane>
