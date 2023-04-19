@@ -41,12 +41,12 @@ public enum TableType {
             BEGIN
               IF to_regclass('moves') IS NULL THEN
                 CREATE SEQUENCE moves_id_seq;
-                CREATE TABLE moves
+                CREATE TABLE moves  
                 (
                   uuid bigint DEFAULT nextval('moves_id_seq') PRIMARY KEY,
                   nodeID bigint,
                   longName varchar,
-                  date varchar
+                  date date NOT NULL
                 );
                 ALTER SEQUENCE moves_id_seq OWNED BY moves.uuid;
               END IF;
