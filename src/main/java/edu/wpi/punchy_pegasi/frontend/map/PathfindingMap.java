@@ -65,6 +65,7 @@ public class PathfindingMap {
     private Map<Long, Move> moves;
     private Map<Long, Move> movesByNodeID = new HashMap<>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
+    private String selectedAlgo;
     private final StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
         public String toString(Node node) {
@@ -192,9 +193,14 @@ public class PathfindingMap {
 
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
-
         var graph = new Graph<>(nodes, edgeList);
-        PathfindingSingleton.SINGLETON.setAlgorithm(new BFS<>());
+        if(selectedAlgo.equals("Depth-First Search")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(new DFS<>());
+        } else if(selectedAlgo.equals("Breadth-First Search")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(new BFS<>());
+        } else {
+            PathfindingSingleton.SINGLETON.setAlgorithm(new AStar<>(new CartesianHeuristic(), new CartesianHeuristic()));
+        }
         try {
             var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
             for (var floor : floors.values())
@@ -223,6 +229,6 @@ public class PathfindingMap {
     }
     @FXML
     private void setAlgo() {
-        selectAlgo.getSelectedItem();
+        selectedAlgo = selectAlgo.getSelectedItem();
     }
 }
