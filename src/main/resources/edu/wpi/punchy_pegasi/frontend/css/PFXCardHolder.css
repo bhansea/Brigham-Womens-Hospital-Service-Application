@@ -1,13 +1,23 @@
 @import "Fonts.css";
 
 .pfx-cardholder-container {
-
+    -fx-background-color: -pfx-background;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 
+.pfx-cardholder-scrollpane {
+    -fx-background-color: -pfx-background;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
 
 .pfx-cardholder-container-gridpane {
     -fx-padding: 20 20;
     -fx-spacing: 20;
     -fx-hgap: 20;
     -fx-vgap: 30;
+    -fx-background-color: -pfx-background;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
