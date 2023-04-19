@@ -1,12 +1,14 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Employee {
-        private Long employeeID;
+
+    private Long employeeID;
     private String firstName;
     private String lastName;
 

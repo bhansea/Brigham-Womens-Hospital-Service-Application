@@ -1,0 +1,87 @@
+@import "Fonts.css";
+
+.pfx-conference-room{
+
+}
+
+.pfx-conference-hbox-large{
+    /*-fx-padding-left: 20.0;*/
+    /*-fx-padding-top: 70.0;*/
+    /*-fx-padding: 20 0 0 70;*/
+}
+.pfx-conference-hbox-med{
+    /*-fx-padding-left: 20.0;*/
+    /*-fx-padding-top: 50.0;*/
+    /*-fx-padding: 20 0 0 50;*/
+}
+.pfx-conference-hbox-small{
+    /*-fx-padding-left: 20.0;*/
+    /*-fx-padding-top: 20.0;*/
+    /*-fx-padding: 20 0 0 20;*/
+}
+
+.pfx-conference-dropDown MFXFilterComboBox{
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 16;
+    -fx-pref-width: 360.0;
+    -fx-pref-height: 50.0;
+    -fx-text-size: 16;
+    /*-fx-padding: 5 20 5 20*/
+}
+
+.pfx-conference-header{
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 24;
+    /*-fx-stroke-width: 0.0;*/
+    /*-fx-stroke-type: OUTSIDE;*/
+    /*-fx-padding: 25 20 5 20;*/
+}
+
+.pfx-conference-subText{
+    -fx-font-family: "Nunito Sans Light";
+    -fx-font-size: 18;
+    -fx-alignment: CENTER_LEFT;
+    /*-fx-stroke-type: OUTSIDE;*/
+    /*-fx-stroke-width: 0.0;*/
+    /*-fx-padding: 20 20 5 0;*/
+}
+/* T R B L */
+.pfx-conference-redstar{
+    -fx-fill: red;
+    -fx-stroke-type: OUTSIDE;
+    -fx-stroke-width: 0.0;
+    /*-fx-text: "*";*/
+    /*-fx-padding: 0 0 0 0;*/
+}
+
+.pfx-conference-textField{
+    -fx-prompt-text-fill: "Number of Participants";
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-font-family: "Nunito Sans Light";
+    -fx-font-size: 16;
+    -fx-max-width: 350;
+    -fx-padding: 5 20 0 30;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.pfx-conference-calendar{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: "MONTH DATE, YEAR";
+}
+
+.pfx-conference-vbox{
+    /*-fx-padding: 20 20 20 20;*/
+    -fx-background-color: red;
+}
+
+.pfx-conference-vbox-right{
+    /*-fx-padding: 20 20 20 200;*/
+    -fx-background-color: blue;
+}

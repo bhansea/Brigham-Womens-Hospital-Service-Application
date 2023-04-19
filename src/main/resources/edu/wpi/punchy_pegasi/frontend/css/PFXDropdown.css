@@ -1,0 +1,33 @@
+.pfx-dropdown {
+    -fx-background-color: white;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.pfx-dropdown .text-field{
+    -fx-border-style: none;
+}
+
+.pfx-dropdown .arrow-button {
+    -fx-background-color: white;
+}
+
+.pfx-dropdown .arrow-button:hover {
+    -fx-background-color: -pfx-accent-light;
+}
+
+.pfx-dropdown .arrow {
+    -fx-background-color: -pfx-accent;
+}
+
+.pfx-dropdown .list-cell {
+    -fx-background-color: white;
+}
+
+.pfx-dropdown .list-cell:hover {
+    -fx-background-color: -pfx-accent;
+}
+
+.pfx-dropdown .list-cell:selected {
+    -fx-background-color: -pfx-accent;
+}

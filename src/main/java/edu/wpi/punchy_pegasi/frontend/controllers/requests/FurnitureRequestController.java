@@ -11,6 +11,7 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import lombok.Value;
 
@@ -30,6 +31,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     private MFXButton toCart;
     @FXML
     private MFXTableView<FurnitureCartItem> furnTable = new MFXTableView<>();
+    @FXML
+    Label invalidText;
 
     public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);
@@ -37,6 +40,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
 
     @FXML
     public void init() {
+        invalidText.setVisible(false);
+        invalidText.setManaged(false);
         furniture.setItems(furnitureList);
         amountOfFurniture.setItems(amountList);
         submit.setDisable(true);
@@ -85,6 +90,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
+                invalidText.getText(),
                 furniture.getItems());
         facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);

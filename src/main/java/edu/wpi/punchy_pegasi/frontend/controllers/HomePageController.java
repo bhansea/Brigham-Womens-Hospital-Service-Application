@@ -3,13 +3,17 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -28,10 +32,13 @@ public class HomePageController {
     private VBox tableContainer;
 
     @FXML
-    private void initialize() {
-        showServiceRequestTable(true);
-        initRequestTable();
-    }
+    MFXComboBox<String> notificationComboBox;
+
+//    @FXML
+//    private void initialize() {
+//        showServiceRequestTable(true);
+//        initRequestTable();
+//    }
 
     private void showServiceRequestTable(boolean show) {
         requestTable.setVisible(show);
@@ -82,6 +89,34 @@ public class HomePageController {
         requestTable.autosizeColumns();
     }
 
+    @FXML
+    private void openSelectedWindow() {
+        String selectedOption = notificationComboBox.getValue();
+        if(selectedOption != null){
+            Stage window = new Stage();
+            window.setTitle(selectedOption + "Window");
+            window.show();
+//            switch(selectedOption){
+//                case "Meals":
+//                    // Open window for Meals
+//                    break;
+//                case "Flowers":
+//                    // Open window for Flowers
+//                    break;
+//                case "Office Supplies":
+//                    // Open window for Office
+//                    break;
+//                case "Conference Room":
+//                    //Open window for Conference Room
+//                    break;
+//                case "Furniture":
+//                    //open window for Furniture
+//                default:
+//                    break;
+//            }
+        }
+    }
+
     private class GenericRequestEntry {
         RequestEntry originalEntry;
         String location;
@@ -101,5 +136,8 @@ public class HomePageController {
                     .findFirst()
                     .orElseGet(() -> TableType.GENERIC);
         }
-    }
-}
+
+
+            }
+        }
+
