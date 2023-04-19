@@ -13,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
 import javafx.scene.layout.VBox;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
