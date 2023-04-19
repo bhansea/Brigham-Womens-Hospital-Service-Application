@@ -13,6 +13,7 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -60,6 +61,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
+        container.setAlignment(Pos.CENTER);
     }
 
     @FXML
@@ -69,9 +71,9 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                cardHolder.getChosenMeals(),
+                cardHolder.getChosenItems(),
                 "",
-                new ArrayList<>(),
+                new ArrayList<>(List.of("")),
                 "",
                 "",
                 patientName.getText());
@@ -94,6 +96,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     public void clearEntry() {
         clearGeneric();
         patientName.clear();
+        cardHolder.clear();
     }
 
 

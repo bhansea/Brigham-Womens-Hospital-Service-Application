@@ -80,4 +80,8 @@ public class PFXCardVertical extends VBox {
     public String getTitle() {
         return titleLabel.getText();
     }
+
+    public void clearQuantity() {
+        picker.clearQuantity();
+    }
 }

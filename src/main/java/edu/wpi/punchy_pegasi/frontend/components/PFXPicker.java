@@ -49,4 +49,8 @@ public class PFXPicker extends HBox {
     public int getQuantity() {
         return Integer.parseInt(quantity.getText());
     }
+    public void clearQuantity() {
+        quantity.setText("0");
+        minus.setDisable(true);
+    }
 }
