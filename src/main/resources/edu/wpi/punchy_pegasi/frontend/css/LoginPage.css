@@ -9,7 +9,7 @@
     -fx-background-color: -pfx-text-opposite;
     -fx-padding: 20 50 20 50;
     -fx-background-radius: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 30, 0, 0.0, 0.0);
 }
 
 .PFXButton-Login,

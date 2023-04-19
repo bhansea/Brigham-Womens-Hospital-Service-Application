@@ -49,8 +49,6 @@ public abstract class RequestController<T extends RequestEntry> {
     MFXFilterComboBox<Employee> staffAssignment;
     @FXML
     private HBox componentHolder;
-    @FXML
-    public Label invalidText;
 
     public static BorderPane create(RequestController controller, String path) {
         try {

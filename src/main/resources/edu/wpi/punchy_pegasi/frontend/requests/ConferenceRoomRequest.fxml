@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane style="-fx-background-color: -pfx-background;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
 <center>
-    <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+    <HBox style="-fx-background-color: -pfx-background;" VBox.vgrow="ALWAYS">
         <children>
             <VBox>
                 <children>

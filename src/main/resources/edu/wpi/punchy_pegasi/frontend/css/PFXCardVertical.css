@@ -4,7 +4,7 @@
     -fx-alignment: TOP_CENTER;
     -fx-padding: 20 20;
     -fx-background-color: -pfx-background;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
     -fx-spacing: 20;
     -fx-background-radius: 12;
 }
@@ -14,7 +14,7 @@
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
     -fx-spacing: 20;
-    -fx-font-size: 24;
+    -fx-font-size: 20;
 }
 
 .pfx-card-vertical-imageBox {

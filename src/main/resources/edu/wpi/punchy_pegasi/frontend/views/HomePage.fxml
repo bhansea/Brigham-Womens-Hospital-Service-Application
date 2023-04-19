@@ -1,64 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXNavButton?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXDropdown?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXDropdown?>
-<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
-<BorderPane styleClass="home-background-image" stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
+            stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
-        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <Label text="Welcome back! Check your service requests using the drop down menu." textAlignment="CENTER">
+                <Label textAlignment="CENTER" text="Welcome back!&#13;Here are you outstanding service requests.">
                     <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="24.0"/>
                     </font>
                     <padding>
-                        <Insets topRightBottomLeft="10" />
+                        <Insets topRightBottomLeft="10"/>
                     </padding>
                 </Label>
-<!--                <PFXDropdown fx:id="notificationDropdown" stylesheets="@../css/PFXDropdown.css">-->
-<!--                    <items>-->
-<!--                        <FXCollections fx:factory="observableArrayList">-->
-<!--                            <String fx:value="Meals"/>-->
-<!--                            <String fx:value="Flowers"/>-->
-<!--                            <String fx:value="Conference Room"/>-->
-<!--                            <String fx:value="Office Supplies"/>-->
-<!--                            <String fx:value="Furniture"/>-->
-<!--                        </FXCollections>-->
-<!--                    </items>-->
-<!--                </PFXDropdown>-->
-                <MFXComboBox promptText="Select request type to see notifications." fx:id="notificationComboBox">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Meals"/>
-                            <String fx:value="Flowers"/>
-                            <String fx:value="Conference Room"/>
-                            <String fx:value="Office Supplies"/>
-                            <String fx:value="Furniture"/>
-                        </FXCollections>
-                    </items>
-                </MFXComboBox>
-                <PFXButton text = "Open Notifications" stylesheets="@../css/PFXButton.css" onAction="#openSelectedWindow"/>
-                <VBox fx:id="tableContainer" VBox.vgrow="ALWAYS">
+                <VBox VBox.vgrow="ALWAYS" fx:id="tableContainer">
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets topRightBottomLeft="20"/>
                     </padding>
-                    <HBox alignment="CENTER">
-                        <PFXCardVertical stylesheets="@../css/PFXCardVertical.css"/>
-                        <PFXCardVertical stylesheets="@../css/PFXCardVertical.css"/>
-                    </HBox>
+                    <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
                 </VBox>
             </VBox>
         </HBox>
