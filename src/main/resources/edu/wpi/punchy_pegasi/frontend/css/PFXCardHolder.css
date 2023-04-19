@@ -1,0 +1,13 @@
+@import "Fonts.css";
+
+.pfx-cardholder-container {
+
+}
+
+
+.pfx-cardholder-container-gridpane {
+    -fx-padding: 20 20;
+    -fx-spacing: 20;
+    -fx-hgap: 20;
+    -fx-vgap: 30;
+}
