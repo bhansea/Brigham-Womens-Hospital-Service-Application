@@ -9,12 +9,10 @@ import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +34,17 @@ public class HomePageController {
 
     @FXML
     MFXComboBox<String> notificationComboBox;
-    @FXML
-    private PieChart piechart;
+//    @FXML
+//    private PieChart piechart;
     @FXML
     private LineChart lineChart;
+
+//    public HomePageController(PieChart piechart) {
+//        this.piechart = piechart;
+//    }
+//    public HomePageController(LineChart lineChart){
+//        this.lineChart = lineChart;
+//    }
 
 //   @FXML
 //   private void initialize() {
@@ -52,9 +57,10 @@ public class HomePageController {
 //        requestTable.setManaged(show);
 //    }
     @FXML
-    private void init(){
+    private void initCharts() {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Placeholder Data");
+
         //Placeholder data
         series.getData().add(new XYChart.Data<>(1, 10));
         series.getData().add(new XYChart.Data<>(2, 20));
@@ -62,15 +68,17 @@ public class HomePageController {
         series.getData().add(new XYChart.Data<>(4, 40));
         series.getData().add(new XYChart.Data<>(5, 50));
 
-        lineChart.getData().add(series);
+       // this.lineChart.getData().add(series);
 
-        PieChart.Data slice1 = new PieChart.Data("Placeholder Category1", 50);
-        PieChart.Data slice2 = new PieChart.Data("Placeholder Category2", 20);
-        PieChart.Data slice3 = new PieChart.Data("Placeholder Category3", 30);
+//        PieChart.Data slice1 = new PieChart.Data("Placeholder Category1", 50);
+//        PieChart.Data slice2 = new PieChart.Data("Placeholder Category2", 20);
+//        PieChart.Data slice3 = new PieChart.Data("Placeholder Category3", 30);
 
-        piechart.getData().add(slice1);
-        piechart.getData().add(slice2);
-        piechart.getData().add(slice3);
+//        this.piechart.getData().addAll(slice1, slice2, slice3);
+//
+//        this.piechart.setVisible(true);
+
+        this.lineChart.setVisible(true);
 
     }
 

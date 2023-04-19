@@ -59,7 +59,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
                     <HBox alignment="CENTER">
-                        <PieChart fx:id="pie" />
+<!--                        <PieChart fx:id="pie" />-->
                         <LineChart fx:id="line">
                             <xAxis>
                                 <NumberAxis side="BOTTOM"/>
