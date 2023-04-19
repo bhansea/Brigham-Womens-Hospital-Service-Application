@@ -1,11 +1,11 @@
 @import "Fonts.css";
 
 .pfx-tab-layout {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
 }
 
 .pfx-tab-stackpane{
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
 }
 
 .pfx-tab-container {

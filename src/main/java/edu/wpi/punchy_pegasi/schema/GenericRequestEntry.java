@@ -6,30 +6,27 @@ import java.util.UUID;
 
 @Getter
 public class GenericRequestEntry extends RequestEntry {
-    public GenericRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String invalidText) {
-        super(serviceID, locationName, staffAssignment, additionalNotes, status, invalidText);
+    public GenericRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, Long employeeID) {
+        super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
     }
 
-    public GenericRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String invalidText) {
-        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, invalidText);
+    public GenericRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, Long employeeID) {
+        super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, employeeID);
     }
-
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestEntry> {
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.GenericRequestEntry>{
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
         ADDITIONAL_NOTES("additionalNotes"),
         STATUS("status"),
-        INVALID_TEXT("invalidText");
+        EMPLOYEE_ID("employeeID");
         @lombok.Getter
         private final String colName;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.GenericRequestEntry ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.GenericRequestEntry ref){
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -37,7 +34,7 @@ public class GenericRequestEntry extends RequestEntry {
             case STAFF_ASSIGNMENT -> getStaffAssignment();
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
-            case INVALID_TEXT -> getInvalidText();
+            case EMPLOYEE_ID -> getEmployeeID();
         };
     }
 

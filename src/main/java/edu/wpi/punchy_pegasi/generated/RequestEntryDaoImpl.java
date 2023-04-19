@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, RequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "invalidText"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID"};
     private final PdbController dbController;
 
     public RequestEntryDaoImpl(PdbController dbController) {
@@ -37,7 +37,7 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("invalidText", java.lang.String.class));
+                    rs.getObject("employeeID", java.lang.Long.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -56,12 +56,12 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         try (var rs = dbController.searchQuery(TableType.REQUESTS, Arrays.stream(params).map(RequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 RequestEntry req = new RequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("invalidText", java.lang.String.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -77,12 +77,12 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         try (var rs = dbController.searchQuery(TableType.REQUESTS)) {
             while (rs.next()) {
                 RequestEntry req = new RequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("invalidText", java.lang.String.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -94,7 +94,7 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
 
     @Override
     public void save(RequestEntry requestEntry) {
-        Object[] values = {requestEntry.getServiceID(), requestEntry.getLocationName(), requestEntry.getStaffAssignment(), requestEntry.getAdditionalNotes(), requestEntry.getStatus(), requestEntry.getInvalidText()};
+        Object[] values = {requestEntry.getServiceID(), requestEntry.getLocationName(), requestEntry.getStaffAssignment(), requestEntry.getAdditionalNotes(), requestEntry.getStatus(), requestEntry.getEmployeeID()};
         try {
             dbController.insertQuery(TableType.REQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
