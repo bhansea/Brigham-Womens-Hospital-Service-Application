@@ -8,7 +8,7 @@
     -fx-font-size: 30;
     -fx-font-family: "Nunito Sans Regular";
     -pfx-button-background: -pfx-background;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 10, 0, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
 
 .hospital-map-overlay-bottom {
@@ -34,7 +34,7 @@
 .hospital-map-zoom-modal PFXButton {
     -fx-padding: 0 3;
     -fx-background-color: -pfx-background;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 10, 0, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 5, 0, 0.0, 0.0);
 }
 .hospital-map-zoom-modal PFXButton:focused {
     -fx-background-color: -pfx-background;
