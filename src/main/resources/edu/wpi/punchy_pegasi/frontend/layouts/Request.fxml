@@ -23,7 +23,7 @@
                                         <Font size="24.0" />
                                     </font>
                                     <VBox.margin>
-                                        <Insets left="10.0" />
+                                        <Insets bottom="5.0" left="10.0" top="5.0" />
                                     </VBox.margin>
                                 </Label>
                                 <VBox VBox.vgrow="ALWAYS">
@@ -67,7 +67,6 @@
                         <children>
                             <VBox spacing="6.0">
                                 <children>
-                           <Label fx:id="invalidText" text="INVALID: CONFERENCE ROOM TAKEN" textFill="RED" />
                                     <Label alignment="TOP_LEFT" text="Location Name" textFill="WHITE">
                                         <font>
                                             <Font size="24.0" />

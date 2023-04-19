@@ -48,7 +48,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXDatePicker calendar;
     @FXML
     TextField numberOfParticipants;
-    @FXML Label invalidText;
 
     public static BorderPane create(String path) {
         return RequestController.create(new ConferenceRoomController(), path);
@@ -56,8 +55,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
 
     @FXML
     public void init() {
-        invalidText.setVisible(false);
-        invalidText.setManaged(false);
         beginningTime.setItems(timeList);
         endTime.setItems(timeList);
         endTime.setDisable(true);
@@ -87,7 +84,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
 
     @Override
     protected void validateEntry() {
-        boolean val = validateGeneric() || !timeCheck() || calendar.getValue() == null || !isTaken();
+        boolean val = validateGeneric() || !timeCheck() || calendar.getValue() == null;
         submit.setDisable(val);
     }
 
@@ -117,18 +114,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
      passwordBox.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
      }
      */
-    public boolean isTaken(){
-        List<ConferenceRoomEntry> tester = App.getSingleton().getFacade().getConferenceRoomEntry(new ConferenceRoomEntry.Field[]{ ConferenceRoomEntry.Field.LOCATION_NAME }, new Object[] { locationName.getSelectedItem().getUuid() }).values().stream().toList();
-        for(int i = 0; i < tester.size(); i++){
-            if(tester.get(i).equals(locationName.getSelectedItem().getUuid())){
-                invalidText.setVisible(true);
-                invalidText.setManaged(true);
-                locationName.setStyle("-fx-border-color: red; -fx-text-fill: #000000");
-                return false;
-            }
-        }
-        return true;
-    }
 
     @FXML
     public void submitEntry() {
@@ -137,11 +122,12 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         locationName.getSelectedItem().getUuid(),
                         staffAssignment.getSelectedItem().getEmployeeID(),
                         additionalNotes.getText(),
-                        invalidText.getText(),
                         beginningTime.getText(),
                         endTime.getText(),
                         calendar.getValue(),
-                        numberOfParticipants.getText());
+                        numberOfParticipants.getText(),
+                        // TODO: need a way to get the employeeID of the person making the request entry
+                        1L);
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

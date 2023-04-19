@@ -9,93 +9,22 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;"
             xmlns="http://javafx.com/javafx/">
     <center>
-        <HBox style="-fx-background-color: white;">
+        <VBox spacing="16.0" style="-fx-background-color: white;">
             <children>
-                <VBox>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Text>
+                <HBox>
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "
-                              wrappingWidth="575.7366981506348">
-                            <font>
-                                <Font name="System Bold" size="24.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets left="15.0" top="15.0"/>
-                            </VBox.margin>
-                        </Text>
-                        <HBox>
-                            <VBox.margin>
-                                <Insets left="20.0" top="40.0"/>
-                            </VBox.margin>
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Furniture "
-                                      wrappingWidth="129.06661224365234">
-                                    <font>
-                                        <Font size="18.0"/>
-                                    </font>
-                                </Text>
-                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
-                            </children>
-                        </HBox>
-                        <MFXComboBox fx:id="furniture" prefHeight="50.0" prefWidth="450.0"
-                                     style="-fx-background-color: -pfx-background;">
-                            <VBox.margin>
-                                <Insets left="20.0" top="5.0"/>
-                            </VBox.margin>
-                        </MFXComboBox>
-                        <HBox>
-                            <VBox.margin>
-                                <Insets left="20.0" top="20.0"/>
-                            </VBox.margin>
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Amount ">
-                                    <font>
-                                        <Font size="18.0"/>
-                                    </font>
-                                </Text>
-                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
-                            </children>
-                        </HBox>
-                        <MFXComboBox fx:id="amountOfFurniture" prefHeight="50.0" prefWidth="450.0"
-                                     style="-fx-background-color: -pfx-background;">
-                            <VBox.margin>
-                                <Insets left="20.0" top="5.0"/>
-                            </VBox.margin>
-                        </MFXComboBox>
-                        <HBox>
-                            <VBox.margin>
-                                <Insets left="20.0" top="20.0"/>
-                            </VBox.margin>
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add to Cart"
-                                      wrappingWidth="97.31086730957031">
-                                    <font>
-                                        <Font size="18.0"/>
-                                    </font>
-                                </Text>
-                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
-                            </children>
-                        </HBox>
-                        <MFXButton fx:id="toCart" onAction="#clickToCart" prefHeight="25.0" prefWidth="100.0"
-                                   style="-fx-border-color: -pfx-background; -fx-background-color: -pfx-yellow;" text="To Cart">
-                            <VBox.margin>
-                                <Insets left="20.0" top="5.0"/>
-                            </VBox.margin>
-                        </MFXButton>
+                        <VBox spacing="32.0" fx:id="container"/>
                     </children>
-                </VBox>
-                <VBox prefHeight="125.0" prefWidth="562.0">
-                    <children>
-                        <MFXTableView fx:id="furnTable" prefHeight="674.0" prefWidth="530.0">
-                            <padding>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                            </padding>
-                            <VBox.margin>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                            </VBox.margin>
-                        </MFXTableView>
-                    </children>
-                </VBox>
+                </HBox>
             </children>
-        </HBox>
+            <padding>
+                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
+            </padding>
+        </VBox>
     </center>
 </BorderPane>

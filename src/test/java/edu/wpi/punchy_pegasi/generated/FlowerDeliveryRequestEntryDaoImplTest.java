@@ -198,15 +198,11 @@ class FlowerDeliveryRequestEntryDaoImplTest {
 
     @Test
     void update() {
-        var locName = ThreadLocalRandom.current().nextLong();
-        var staff = ThreadLocalRandom.current().nextLong();
-        var updatedLocName = ThreadLocalRandom.current().nextLong();
-        var updatedStaff = ThreadLocalRandom.current().nextLong();
         UUID uuid = UUID.randomUUID();
-        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", 100L, 200L, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip");
         dao.save(fdre);
 
-        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", updatedLocName, updatedStaff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test2", "testTulip");
+        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", 100L, 200L, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test2", "testTulip");
         FlowerDeliveryRequestEntry.Field[] fields = {FlowerDeliveryRequestEntry.Field.FLOWER_AMOUNT};
         dao.update(updatedFdre, fields);
 

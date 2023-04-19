@@ -49,15 +49,15 @@ public class PFXCardHorizontal extends HBox{
 
     }
 
-    public PFXCardHorizontal(Label title, Label subtitle, Label quantity, Image image){
+    public PFXCardHorizontal(String title, String subtitle, String quantity, Image image){
         super();
         this.image = new ImageView(image);
         this.image.setFitHeight(400);
         this.image.setFitWidth(350);
-        titleLabel = title;
-        subtitleLabel = subtitle;
+        titleLabel = new Label(title);
+        subtitleLabel = new Label(subtitle);
         subtitleLabel.setWrapText(true);
-        this.quantity = quantity;
+        this.quantity = new Label(quantity);
         rightPane.getChildren().addAll(info, spacer, selection);
 
         getStyleClass().add("pfx-card-horizontal-container");

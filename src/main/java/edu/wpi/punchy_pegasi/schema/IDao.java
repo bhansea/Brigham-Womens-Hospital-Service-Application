@@ -7,7 +7,6 @@ public interface IDao<K, T, C> {
     Optional<T> get(K k);
 
     Map<K, T> get(C column, Object value);
-
     Map<K, T> get(C[] column, Object[] value);
 
     Map<K, T> getAll();
