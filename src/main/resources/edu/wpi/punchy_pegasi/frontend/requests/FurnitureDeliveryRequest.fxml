@@ -9,27 +9,22 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
             xmlns="http://javafx.com/javafx/">
     <center>
-        <HBox style="-fx-background-color: white;">
+        <VBox spacing="16.0" style="-fx-background-color: white;">
             <children>
-                <VBox>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Text>
+                <HBox>
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "
-                              wrappingWidth="575.7366981506348">
-                            <font>
-                                <Font name="System Bold" size="24.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets left="15.0" top="15.0"/>
-                            </VBox.margin>
-                        </Text>
-                        <HBox>
-                            <children>
-                                <VBox spacing="32.0" fx:id="container"/>
-                            </children>
-                        </HBox>
+                        <VBox spacing="32.0" fx:id="container"/>
                     </children>
-                </VBox>
+                </HBox>
             </children>
-        </HBox>
+            <padding>
+                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
+            </padding>
+        </VBox>
     </center>
 </BorderPane>
