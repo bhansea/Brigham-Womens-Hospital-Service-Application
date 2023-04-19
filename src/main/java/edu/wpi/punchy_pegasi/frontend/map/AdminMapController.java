@@ -35,13 +35,14 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.controlsfx.control.PopOver;
-import org.controlsfx.control.action.Action;
 import org.javatuples.Pair;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -55,7 +56,8 @@ public class AdminMapController {
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
     private final AtomicBoolean commiting = new AtomicBoolean();
-    private final Predicate<MouseEvent> isLeftClick = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown();
+    private final Predicate<MouseEvent> isLeftClick = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown() && !e.isShiftDown();
+    private final Predicate<MouseEvent> isLeftClickAndShift = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown() && e.isShiftDown();
     private final Predicate<MouseEvent> isRightClick = e -> e.getButton() == MouseButton.SECONDARY || (e.getButton() == MouseButton.PRIMARY && e.isControlDown());
     private final ObservableList<MapEdit> mapEdits = FXCollections.observableArrayList(new MapEdit(MapEdit.ActionType.ADD_NODE, null));
     private final ObservableList<javafx.scene.Node> mapEditsNodes = FXCollections.observableArrayList(new javafx.scene.Group());
@@ -107,21 +109,7 @@ public class AdminMapController {
         return map.drawNode(node, color, shortLabel ? location.getShortName() : "", location.getLongName() + "\nNode ID: " + node.getNodeID().toString());
     }
 
-    @FXML
-    private void initialize() {
-        map = new HospitalMap(floors);
-        root.setCenter(map.get());
-        map.addLayer(editing);
-        mapEdits.addListener((ListChangeListener<MapEdit>) c -> {
-            mapEditsNodes.clear();
-            mapEditsNodes.addAll(c.getList().stream().map(MapEdit::getGraphic).toList());
-        });
-        mapEdits.remove(0);
-        Bindings.bindContentBidirectional(mapEditsNodes, changes.getChildren());
-        editing.setPickOnBounds(false);
-        editing.getChildren().get(0).setPickOnBounds(true);
-        load(this::editNodes);
-    }
+    private Node firstNode, secondNode;
 
     private Optional<LocationName> nodeToLocation(Node node) {
         if (node == null) return Optional.empty();
@@ -146,11 +134,22 @@ public class AdminMapController {
         thread.start();
     }
 
-    private boolean commitMapEdits() {
-        for (var edit : mapEdits) {
-
-        }
-        return true;
+    @FXML
+    private void initialize() {
+        map = new HospitalMap(floors);
+        root.setCenter(map.get());
+        map.addLayer(editing);
+        mapEdits.addListener((ListChangeListener<MapEdit>) c -> {
+            Platform.runLater(() -> {
+                mapEditsNodes.clear();
+                mapEditsNodes.addAll(c.getList().stream().map(MapEdit::getGraphic).toList());
+            });
+        });
+        mapEdits.remove(0);
+        Bindings.bindContentBidirectional(mapEditsNodes, changes.getChildren());
+        editing.setPickOnBounds(false);
+        editing.getChildren().get(0).setPickOnBounds(true);
+        load(this::editNodes);
     }
 
     private PopOver nodeEditMenu(Node node) {
@@ -176,6 +175,7 @@ public class AdminMapController {
             node.setBuilding(buildingDropdown.getValue());
             nodePoints.get(node.getNodeID()).setFill(Color.YELLOW);
             popOver.setOnCloseRequest(null);
+            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), node.getNodeID())).findFirst().ifPresent(mapEdits::remove);
             mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, node));
         });
 
@@ -239,12 +239,37 @@ public class AdminMapController {
             if (!isRightClick.test(e)) return;
             nodeEditMenu(n).show(point);
         });
+
+        point.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if (!isLeftClickAndShift.test(e)) return;
+            if (firstNode == null) {
+                firstNode = n;
+                point.setStroke(Color.valueOf("#FF00FF"));
+                return;
+            }
+            if (n == firstNode)
+                return;
+            if (secondNode == null)
+                secondNode = n;
+            var newEdgeID = edges.values().stream().mapToLong(Edge::getUuid).max().orElse(0) + 5;
+            var newEdge = new Edge(newEdgeID, firstNode.getNodeID(), secondNode.getNodeID());
+            edges.put(newEdgeID, newEdge);
+            addEditableEdge(newEdge);
+            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge));
+            var startPoint = nodePoints.get(firstNode.getNodeID());
+            if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
+            var endPoint = nodePoints.get(secondNode.getNodeID());
+            if (endPoint != null) endPoint.setStroke(Color.valueOf("#000000"));
+            firstNode = secondNode = null;
+        });
         DragController dragController = new DragController(point, true);
         dragController.setScaleSupplier(() -> map.getZoom());
         dragController.setFilterMouseEvents(isLeftClick);
         dragController.setOnMove(node -> {
+            if (n.getXcoord() == (int) node.getLayoutX() && n.getYcoord() == (int) node.getLayoutY()) return;
             n.setXcoord((int) node.getLayoutX());
             n.setYcoord((int) node.getLayoutY());
+            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), n.getNodeID())).findFirst().ifPresent(mapEdits::remove);
             mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n));
         });
         dragController.setOnEnd(node -> map.enableMove(true));
@@ -261,10 +286,18 @@ public class AdminMapController {
         if (edgeLine.isEmpty()) return Optional.empty();
         // add right click event to edge to select it
         var edgeSelected = new AtomicBoolean(false);
+        AtomicReference<MapEdit> newEdge = new AtomicReference<>();
         edgeLine.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if (!isRightClick.test(e)) return;
-            edgeLine.get().setStroke(edgeSelected.get() ? Color.BLACK : Color.CYAN);
             edgeSelected.set(!edgeSelected.get());
+            edgeLine.get().setStroke(edgeSelected.get() ? Color.RED : Color.BLACK);
+            if (edgeSelected.get()) {
+                newEdge.set(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edge));
+                mapEdits.add(newEdge.get());
+            } else {
+                mapEdits.remove(newEdge.get());
+                newEdge.set(null);
+            }
         });
         edgeLines.put(startNode.getNodeID(), edgeLine.get());
         edgeLines.put(endNode.getNodeID(), edgeLine.get());
@@ -305,22 +338,32 @@ public class AdminMapController {
         commitProgress.setProgress(0);
         AtomicInteger counter = new AtomicInteger(0);
         var commitThread = new Thread(() -> {
-            mapEdits.forEach(e -> {
+            var mapEditsCopy = new ArrayList<>(mapEdits);
+            mapEditsCopy.forEach(e -> {
                 e.execute();
-                Platform.runLater(() ->{
+                Platform.runLater(() -> {
                     mapEdits.remove(e);
                     commitProgress.setProgress((double) counter.incrementAndGet() / totalEdited);
                 });
             });
-            mapEdits.clear();
-            Platform.runLater(() -> commitButton.setDisable(false));
+
+            Platform.runLater(() -> {
+                edgeLines.values().forEach(e->{
+                    if (e.getStroke() == Color.RED){
+                        e.setVisible(false);
+                        e.setManaged(false);
+                    }
+                });
+                mapEdits.clear();
+                commitButton.setDisable(false);
+            });
             commiting.set(false);
         });
         commitThread.setDaemon(true);
         commitThread.start();
     }
     @Getter
-    public class MapEdit {
+    public static class MapEdit {
         private final ActionType type;
         private final Object object;
 
@@ -329,7 +372,9 @@ public class AdminMapController {
         public MapEdit(ActionType type, Object object) {
             this.type = type;
             this.object = object;
-            this.graphic = new Label(type.name().replace("_", " "));
+
+
+            this.graphic = new Label(object == null ? "" : type.getName.apply(object));
         }
 
         public void execute() {
@@ -341,32 +386,36 @@ public class AdminMapController {
             ADD_NODE(o -> {
                 var node = (Node) o;
                 getFacade().saveNode(node);
-            }),
+            }, o -> "Added node " + ((Node) o).getNodeID()),
             EDIT_NODE(o -> {
                 var node = (Node) o;
                 getFacade().updateNode(node, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.BUILDING});
-            }),
+            }, o -> "Edited node " + ((Node) o).getNodeID()),
             REMOVE_NODE(o -> {
                 var node = (Node) o;
                 getFacade().deleteNode(node);
-            }),
+            }, o -> "Removed node " + ((Node) o).getNodeID()),
             ADD_EDGE(o -> {
                 var edge = (Edge) o;
                 getFacade().saveEdge(edge);
-            }),
+            }, o -> "Added edge"),
             REMOVE_EDGE(o -> {
                 var edge = (Edge) o;
                 getFacade().deleteEdge(edge);
-            }),
+            }, o -> "Removed edge"),
             ADD_MOVE(o -> {
                 var move = (Move) o;
                 getFacade().saveMove(move);
+            }, o -> {
+                var move = (Move) o;
+                return "Node " + move.getNodeID().toString() + " to " + move.getLongName() + " on " + move.getDate().toString();
             }),
             REMOVE_MOVE(o -> {
                 var move = (Move) o;
                 getFacade().deleteMove(move);
-            });
+            }, o -> "Move deleted");
             private final Consumer<Object> action;
+            public final Function<Object, String> getName;
         }
     }
 }
