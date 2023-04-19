@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminImportController"
+            >
+    <center>
+        <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" alignment="CENTER">
+            <children>
+                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
+                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="container" alignment="CENTER"/>
+                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

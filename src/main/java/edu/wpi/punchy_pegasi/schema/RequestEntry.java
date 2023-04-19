@@ -10,12 +10,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RequestEntry {
     
-    protected final UUID serviceID;
-    protected final Long locationName;
-    protected final Long staffAssignment;
-    protected final String additionalNotes;
-    protected final Status status;
-    protected final Long employeeID;
+    protected UUID serviceID;
+    protected Long locationName;
+    protected Long staffAssignment;
+    protected String additionalNotes;
+    protected Status status;
+    protected Long employeeID;
 
     public enum Status {
         NONE,

@@ -10,14 +10,14 @@ public class SignageController {
     private void initialize() {
         Platform.runLater(() -> {
             App.getSingleton().getPrimaryStage().setFullScreen(true);
-            App.getSingleton().getLayout().showLeftLayout(false);
-            App.getSingleton().getLayout().showTopLayout(false);
+//            App.getSingleton().getLayout().showLeftLayout(false);
+//            App.getSingleton().getLayout().showTopLayout(false);
         });
         App.getSingleton().getScene().setOnKeyTyped(event -> {
             if(event.getCode() == KeyCode.ESCAPE) {
                 App.getSingleton().getPrimaryStage().setFullScreen(false);
-                App.getSingleton().getLayout().showLeftLayout(true);
-                App.getSingleton().getLayout().showTopLayout(true);
+//                App.getSingleton().getLayout().showLeftLayout(true);
+//                App.getSingleton().getLayout().showTopLayout(true);
             }
         });
     }
