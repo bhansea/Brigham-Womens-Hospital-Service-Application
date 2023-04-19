@@ -45,4 +45,8 @@ public class PFXPicker extends HBox {
             }
         });
     }
+
+    public int getQuantity() {
+        return Integer.parseInt(quantity.getText());
+    }
 }

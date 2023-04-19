@@ -22,7 +22,7 @@ public class PFXCardVertical extends VBox {
         super();
         image = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/mealPicture.jpeg");
         image.setFitHeight(400);
-        image.setFitWidth(350);
+        image.setFitWidth(300);
         titleLabel = new Label("Meal Name");
         subtitleLabel = new Label("A very nice meal");
         quantity = new Label("0 Available");
@@ -50,7 +50,7 @@ public class PFXCardVertical extends VBox {
         super();
         this.image = new ImageView(image);
         this.image.setFitHeight(300);
-        this.image.setFitWidth(500);
+        this.image.setFitWidth(400);
         this.titleLabel = new Label(title);
         this.subtitleLabel = new Label(subtitle);
         this.quantity = new Label(Integer.toString(quantity));
@@ -71,5 +71,13 @@ public class PFXCardVertical extends VBox {
 
         info.getChildren().addAll(titleLabel, subtitleLabel);
         selection.getChildren().addAll(this.quantity, picker);
+    }
+
+    public int getQuantity() {
+        return picker.getQuantity();
+    }
+
+    public String getTitle() {
+        return titleLabel.getText();
     }
 }

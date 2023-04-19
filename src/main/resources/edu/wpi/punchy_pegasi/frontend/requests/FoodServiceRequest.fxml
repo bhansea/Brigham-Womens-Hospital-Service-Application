@@ -10,6 +10,8 @@
 <?import javafx.scene.text.Text?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder?>
 
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="16.0" style="-fx-background-color: white;">
@@ -19,51 +21,11 @@
                         <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                  <VBox spacing="32.0">
-                      <children>
-                          <VBox>
-                              <children>
-                                  <PFXCardHolder fx:id="cardHolder"/>
-                                  <HBox>
-                                      <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Beverage">
-                                              <font>
-                                                  <Font size="18.0" />
-                                              </font>
-                                          </Text>
-                                      </children>
-                                  </HBox>
-                                  <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefWidth="-Infinity" promptText="Beverages">
-                                      <font>
-                                          <Font size="16.0" />
-                                      </font>
-                                  </MFXComboBox>
-                              </children>
-                          </VBox>
-                          <VBox>
-                              <children>
-                                  <HBox>
-                                      <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fill in Dietary Restrictions">
-                                              <font>
-                                                  <Font size="18.0" />
-                                              </font>
-                                          </Text>
-                                      </children>
-                                  </HBox>
-                                  <HBox>
-                                      <children>
-                                          <TextArea fx:id="dietaryRestrictions" prefHeight="90.0" prefWidth="450.0" promptText="Allergies, Gluten Free, etc." wrapText="true">
-                                              <font>
-                                                  <Font size="16.0" />
-                                              </font>
-                                          </TextArea>
-                                      </children>
-                                  </HBox>
-                              </children>
-                          </VBox>
-                      </children>
-                  </VBox>
+                <HBox>
+                    <children>
+                        <VBox spacing="32.0" fx:id="container"/>
+                    </children>
+                </HBox>
             </children>
             <padding>
                 <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
