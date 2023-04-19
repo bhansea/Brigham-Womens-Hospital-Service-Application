@@ -14,8 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -146,12 +151,43 @@ public class HomePageController {
 //        requestTable.autosizeColumns();
 //    }
 
+   // TableView tableView = new TableView<>();
+
     @FXML
     private void openSelectedWindow() {
+        Rectangle placeholder = new Rectangle(300, 200, Color.BLACK);
+        Label labelPlaceHolder = new Label("Insert appropiate request table here.");
+        VBox vBox = new VBox(labelPlaceHolder, placeholder);
         String selectedOption = notificationComboBox.getValue();
         if(selectedOption != null){
             Stage window = new Stage();
-            System.out.print("Display " + selectedOption + "table here.");
+            if(selectedOption.equals("Meals")) {
+                Scene scene = new Scene(vBox);
+                window.setScene(scene);
+                window.show();
+            }
+            if(selectedOption.equals("Flowers")) {
+                Scene scene = new Scene(vBox);
+                window.setScene(scene);
+                window.show();
+            }
+            if(selectedOption.equals("Furniture")) {
+                Scene scene = new Scene(vBox);
+                window.setScene(scene);
+                window.show();
+            }
+            if(selectedOption.equals("Office Supplies")) {
+                Scene scene = new Scene(vBox);
+                window.setScene(scene);
+                window.show();
+            }
+            if(selectedOption.equals("Conference Room")) {
+                Scene scene = new Scene(vBox);
+                window.setScene(scene);
+                window.show();
+            }
+
+
             //displayTables(selectedOption);
 //            if(selectedOption == "Meals"){
 //                Scene scene = new Scene();
