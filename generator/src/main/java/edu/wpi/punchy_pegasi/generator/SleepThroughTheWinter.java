@@ -160,7 +160,7 @@ public class  SleepThroughTheWinter {
         put(Long.class, "bigint");
         put(Integer.class, "int");
         put(String.class, "varchar");
-        put(UUID.class, "uuid DEFAULT uuid_generate_v4()");
+        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
         put(List.class, "varchar ARRAY");
         put(LocalDate.class, "date NOT NULL");
     }};

@@ -23,7 +23,7 @@
                         </Label>
                         <VBox VBox.vgrow="ALWAYS">
                             <children>
-                                <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                <HBox style="-fx-background-color: -pfx-background;" VBox.vgrow="ALWAYS">
                                     <children>
                                         <!--                                            Stuff goes here-->
                                     </children>

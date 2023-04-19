@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;">
     <center>
-        <BorderPane style="-fx-background-color: #f1f1f1;">
+        <BorderPane style="-fx-background-color: -pfx-background;">
             <center>
                 <VBox spacing="30.0">
                     <children>
@@ -28,7 +28,7 @@
                                 </Label>
                                 <VBox VBox.vgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="componentHolder" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                        <HBox fx:id="componentHolder" style="-fx-background-color: -pfx-background;" VBox.vgrow="ALWAYS">
 
                                         </HBox>
                                     </children>
