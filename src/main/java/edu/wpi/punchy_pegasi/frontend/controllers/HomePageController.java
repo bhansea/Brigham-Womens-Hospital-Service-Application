@@ -10,9 +10,11 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +29,28 @@ public class HomePageController {
     private final Facade facade = App.getSingleton().getFacade();
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
+
     @FXML
     MFXTableView<GenericRequestEntry> requestTable;
+
     @FXML
     private VBox tableContainer;
+//    @FXML
+//    MFXTableView<String> meals;
+//
+//
+//    @FXML
+//    MFXTableView<String> flowers;
+//
+//    @FXML
+//    MFXTableView<String> furniture;
+//
+//    @FXML
+//    MFXTableView<String> office;
+
+//    @FXML
+//    MFXTableView<String> conference;
+
 
     @FXML
     MFXComboBox<String> notificationComboBox;
@@ -121,39 +141,76 @@ public class HomePageController {
         requestTable.autosizeColumnsOnInitialization();
     }
 
-    @FXML
-    private void resizeColumns() {
-        requestTable.autosizeColumns();
-    }
+//    @FXML
+//    private void resizeColumns() {
+//        requestTable.autosizeColumns();
+//    }
 
     @FXML
     private void openSelectedWindow() {
         String selectedOption = notificationComboBox.getValue();
         if(selectedOption != null){
             Stage window = new Stage();
-            window.setTitle(selectedOption + "Window");
+            System.out.print("Display " + selectedOption + "table here.");
+            //displayTables(selectedOption);
+//            if(selectedOption == "Meals"){
+//                Scene scene = new Scene();
+//            }
+//            if(selectedOption == "Flowers"){
+//
+//            }
+//            if(selectedOption == "Furniture"){
+//
+//            }
+//            if(selectedOption == "Office Supplies"){
+//
+//            }
+//            if(selectedOption == "Conference Room"){
+//
+//            }
+            window.setTitle(selectedOption + " Notification Window");
             //showServiceRequestTable(true);
             window.show();
-//            switch(selectedOption){
-//                case "Meals":
-//                    // Open window for Meals
-//                    break;
-//                case "Flowers":
-//                    // Open window for Flowers
-//                    break;
-//                case "Office Supplies":
-//                    // Open window for Office
-//                    break;
-//                case "Conference Room":
-//                    //Open window for Conference Room
-//                    break;
-//                case "Furniture":
-//                    //open window for Furniture
-//                default:
-//                    break;
-//            }
+
         }
     }
+//    private void displayTables(String type){
+//        if("Meals".equals(type)){
+//            meals.setVisible(true);
+//            office.setVisible(false);
+//            conference.setVisible(false);
+//            flowers.setVisible(false);
+//            furniture.setVisible(false);
+//        }
+//        else if("Office".equals(type)){
+//            meals.setVisible(false);
+//            office.setVisible(true);
+//            conference.setVisible(false);
+//            flowers.setVisible(false);
+//            furniture.setVisible(false);
+//        }
+//        else if("Conference".equals(type)){
+//            meals.setVisible(false);
+//            office.setVisible(false);
+//            conference.setVisible(true);
+//            flowers.setVisible(false);
+//            furniture.setVisible(false);
+//        }
+//        else if("Flowers".equals(type)){
+//            meals.setVisible(false);
+//            office.setVisible(false);
+//            conference.setVisible(false);
+//            flowers.setVisible(true);
+//            furniture.setVisible(false);
+//        }
+//        else if("Furniture".equals(type)){
+//            meals.setVisible(false);
+//            office.setVisible(false);
+//            conference.setVisible(false);
+//            flowers.setVisible(false);
+//            furniture.setVisible(true);
+//        }
+//    }
 
     private class GenericRequestEntry {
         RequestEntry originalEntry;
