@@ -74,7 +74,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 new ArrayList<>(List.of("")),
                 "",
                 "",
-                patientName.getText());
+                patientName.getText(), 1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

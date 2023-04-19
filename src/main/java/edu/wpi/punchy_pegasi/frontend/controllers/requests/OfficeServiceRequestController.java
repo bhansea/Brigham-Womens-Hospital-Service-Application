@@ -55,8 +55,6 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     @Override
     public void init() {
-        invalidText.setVisible(false);
-        invalidText.setManaged(false);
         submit.setDisable(true);
         items.addAll(List.of(new CheckBox[]{pencils,
                 pens,
@@ -86,7 +84,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
                 reqString.append(items.get(i).getText()).append(" - ").append(itemsAmount.get(i)).append("; ");
 
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(),invalidText.getText(), reqString.toString().trim(), "");
+        // TODO: need a way to get the employeeID of the person making the request entry
+        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), reqString.toString().trim(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

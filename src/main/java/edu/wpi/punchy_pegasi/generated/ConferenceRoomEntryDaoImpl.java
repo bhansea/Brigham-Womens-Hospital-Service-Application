@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, ConferenceRoomEntry, ConferenceRoomEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "invalidText", "beginningTime", "endTime", "date", "amountOfParticipants"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "beginningTime", "endTime", "date", "amountOfParticipants"};
     private final PdbController dbController;
 
     public ConferenceRoomEntryDaoImpl(PdbController dbController) {
@@ -37,11 +37,11 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("invalidText", java.lang.String.class),
                     rs.getObject("beginningTime", java.lang.String.class),
                     rs.getObject("endTime", java.lang.String.class),
                     rs.getObject("date", java.time.LocalDate.class),
-                    rs.getObject("amountOfParticipants", java.lang.String.class));
+                    rs.getObject("amountOfParticipants", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -60,16 +60,16 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, Arrays.stream(params).map(ConferenceRoomEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("invalidText", java.lang.String.class),
-                        rs.getObject("beginningTime", java.lang.String.class),
-                        rs.getObject("endTime", java.lang.String.class),
-                        rs.getObject("date", java.time.LocalDate.class),
-                        rs.getObject("amountOfParticipants", java.lang.String.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("beginningTime", java.lang.String.class),
+                    rs.getObject("endTime", java.lang.String.class),
+                    rs.getObject("date", java.time.LocalDate.class),
+                    rs.getObject("amountOfParticipants", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -85,16 +85,16 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS)) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("invalidText", java.lang.String.class),
-                        rs.getObject("beginningTime", java.lang.String.class),
-                        rs.getObject("endTime", java.lang.String.class),
-                        rs.getObject("date", java.time.LocalDate.class),
-                        rs.getObject("amountOfParticipants", java.lang.String.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("beginningTime", java.lang.String.class),
+                    rs.getObject("endTime", java.lang.String.class),
+                    rs.getObject("date", java.time.LocalDate.class),
+                    rs.getObject("amountOfParticipants", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -106,7 +106,7 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
 
     @Override
     public void save(ConferenceRoomEntry conferenceRoomEntry) {
-        Object[] values = {conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getLocationName(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus(), conferenceRoomEntry.getInvalidText(), conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime(), conferenceRoomEntry.getDate(), conferenceRoomEntry.getAmountOfParticipants()};
+        Object[] values = {conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getLocationName(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus(), conferenceRoomEntry.getEmployeeID(), conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime(), conferenceRoomEntry.getDate(), conferenceRoomEntry.getAmountOfParticipants()};
         try {
             dbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
