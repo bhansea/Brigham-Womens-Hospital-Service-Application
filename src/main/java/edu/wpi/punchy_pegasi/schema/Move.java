@@ -13,7 +13,7 @@ public class Move {
     private Long uuid;
     private Long nodeID;
     private String longName;
-    private String date;
+    private LocalDate date;
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
         UUID("uuid"),

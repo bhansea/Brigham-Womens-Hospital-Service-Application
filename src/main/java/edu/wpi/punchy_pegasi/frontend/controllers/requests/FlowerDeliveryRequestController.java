@@ -33,11 +33,6 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
 
     @FXML
     public void init() {
-        ObservableList<String> flowerTypesList = FXCollections.observableArrayList("Rose", "Tulip", "Lavender");
-        flowerTypeComboBox.setItems(flowerTypesList);
-        ObservableList<String> flowerSizeList = FXCollections.observableArrayList("Small", "Medium", "Large");
-        flowerSize.setItems(flowerSizeList);
-        addLabel(price);
         addTextField(patientName);
         submit.setDisable(true);
         setHeaderText("Flower Delivery Request");
@@ -55,7 +50,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     public void submitEntry() {
         // TODO: need a way to get the employeeID of the person making the request entry
-        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), flowerSize.getSelectedItem(), flowerAmountField.getText(), flowerTypeComboBox.getSelectedItem(), 1L);
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), "", "", "", 1L);
         App.getSingleton().getFacade().saveFlowerDeliveryRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
