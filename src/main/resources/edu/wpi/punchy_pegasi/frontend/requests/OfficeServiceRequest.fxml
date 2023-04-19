@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/">
     <center>
-        <HBox spacing="50.0" style="-fx-background-color: FFFFFF; -fx-background-radius: 6;"
+        <HBox spacing="50.0" style="-fx-background-color: -pfx-background; -fx-background-radius: 6;"
               BorderPane.alignment="CENTER">
             <padding>
                 <Insets topRightBottomLeft="20"/>

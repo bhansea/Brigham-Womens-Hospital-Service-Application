@@ -8,11 +8,11 @@
          type="javafx.scene.layout.BorderPane"
          xmlns="http://javafx.com/javafx">
     <center>
-        <BorderPane>
+        <BorderPane style="-fx-background-color: -pfx-background;">
             <center>
-                <BorderPane>
+                <BorderPane style="-fx-background-color: -pfx-background;">
                     <center>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content">
+                        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content" style="-fx-background-color: -pfx-background;">
                             <BorderPane fx:id="ViewPane"/>
                         </ScrollPane>
                     </center>

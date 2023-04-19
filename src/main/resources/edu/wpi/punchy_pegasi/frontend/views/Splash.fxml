@@ -9,7 +9,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SplashController"
-            style="-fx-background-color: #F1F1F1;">
+            style="-fx-background-color: -pfx-background;">
     <center>
         <VBox alignment="CENTER" spacing="10" fx:id="container">
             <Text fx:id="statusText" textAlignment="CENTER"/>

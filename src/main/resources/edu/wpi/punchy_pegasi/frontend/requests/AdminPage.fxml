@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;"
             xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminPageController">
     <center>
@@ -18,7 +18,7 @@
                             <children>
                                 <VBox alignment="CENTER" spacing="25" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                     <Label text="Select A Table Type to Import/Export" VBox.vgrow="ALWAYS"
-                                           style="-fx-text-fill:#f1f1f1;">
+                                           style="-fx-text-fill:-pfx-background;">
                                         <font>
                                             <Font size="20.0"/>
                                         </font>
@@ -53,7 +53,7 @@
                                 <Insets bottom="25.0" left="25.0" right="25.0"/>
                             </VBox.margin>
                             <Label text="Select A Table Type to Display" VBox.vgrow="ALWAYS"
-                                   style="-fx-text-fill:#f1f1f1;">
+                                   style="-fx-text-fill:-pfx-background;">
                                 <font>
                                     <Font size="20.0"/>
                                 </font>
