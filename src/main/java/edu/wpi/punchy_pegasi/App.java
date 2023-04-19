@@ -170,7 +170,7 @@ public class App extends Application {
         }
     }
 
-    private Optional<URL> resolveResource(String resourcePath) {
+    public Optional<URL> resolveResource(String resourcePath) {
         if (development) {
             try {
                 var resource = Paths.get(System.getProperty("user.dir"), "src/main/resources/edu/wpi/punchy_pegasi", resourcePath);

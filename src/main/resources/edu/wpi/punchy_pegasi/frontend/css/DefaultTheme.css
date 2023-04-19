@@ -44,8 +44,10 @@
 @import "PFXButton.css";
 @import "PFXSidebarItem.css";
 @import "PFXColors.css";
+@import "NodePopover.css";
 @import "PathfindingMap.css";
 @import "HospitalMap.css";
+@import "EditableMap.css";
 @import "PFXTab.css";
 @import "PFXTabLayout.css";
 @import "Spinner.css";
