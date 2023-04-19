@@ -41,8 +41,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     @FXML
     VBox container = new VBox();
 
-    StringBuilder meals = new StringBuilder();
-
 
     public static BorderPane create(String path) {
         return RequestController.create(new FoodServiceRequestController(), path);

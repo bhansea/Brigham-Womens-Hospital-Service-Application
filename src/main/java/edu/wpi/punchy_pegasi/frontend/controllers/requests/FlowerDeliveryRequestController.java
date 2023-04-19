@@ -26,7 +26,6 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     VBox container = new VBox();
 
-    StringBuilder flowers = new StringBuilder();
 
     public static BorderPane create(String path) {
         return RequestController.create(new FlowerDeliveryRequestController(), path);
