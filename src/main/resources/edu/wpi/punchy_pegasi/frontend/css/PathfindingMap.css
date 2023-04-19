@@ -9,7 +9,7 @@
     -fx-padding: 10;
     -fx-background-color: -pfx-background;
     -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 10, 0, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
 
 .pathfinding-overlay > VBox > HBox {
@@ -18,7 +18,7 @@
     -fx-padding: 5;
 }
 
-.pathfinding-overlay MFXButton {
-    -fx-background-color: -pfx-accent;
-    -fx-text-fill: -pfx-text-opposite;
+.pathfinding-overlay .pfx-button {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text-opposite;
 }

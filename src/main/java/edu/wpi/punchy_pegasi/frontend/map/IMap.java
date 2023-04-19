@@ -1,8 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
-import edu.wpi.punchy_pegasi.schema.IField;
 import edu.wpi.punchy_pegasi.schema.Node;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -21,13 +22,15 @@ public interface IMap<Layer> {
 
     void addLayer(javafx.scene.Node n);
 
-    @FXML
+    Point2D getClickLocation(MouseEvent event);
+
     void clearMap();
 
-    @FXML
     void initialize();
 
-    void show(Layer layer);
+    void showLayer(Layer layer);
+
+    Layer getLayer();
 
     void drawYouAreHere(Node node);
 

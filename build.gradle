@@ -38,6 +38,7 @@ dependencies {
 
             'org.javatuples:javatuples:1.2',
             'org.jetbrains:annotations:24.0.0',
+            'org.apache.commons:commons-collections4:4.4',
 
             'org.slf4j:slf4j-api:2.0.5',
             'org.apache.logging.log4j:log4j-api:2.20.0',
