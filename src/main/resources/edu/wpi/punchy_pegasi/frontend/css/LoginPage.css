@@ -12,10 +12,14 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 0.0, 0.0);
 }
 
-.Button-Login {
-    -fx-background-color: -pfx-navy;
-    -fx-text-fill: -pfx-text-opposite;
-    -fx-background-radius: 10;
-    -fx-font-size: 14;
-    -fx-font-family: "NunitoSans Regular";
+.PFXButton-Login,
+.PFXButton-Login:armed,
+.PFXButton-Login:focused,
+.PFXButton-Login:hover
+{
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text-opposite;
+    -fx-font-size: 16;
+    -fx-padding: 8 20;
+    -fx-background-radius: 12;
 }
