@@ -10,54 +10,22 @@
 <?import javafx.scene.text.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/">
     <center>
-        <HBox spacing="50.0" style="-fx-background-color: FFFFFF; -fx-background-radius: 6;"
-              BorderPane.alignment="CENTER">
-            <padding>
-                <Insets topRightBottomLeft="20"/>
-            </padding>
+        <VBox spacing="16.0" style="-fx-background-color: white;">
             <children>
-                <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Text>
+                <HBox>
                     <children>
-                        <Label minWidth="354.0" text="What office items do you need?">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </Label>
-                        <PFXCardVertical fx:id="pencils" >
-                    </PFXCardVertical>
-                        <PFXCardVertical fx:id="pens" >
-                        </PFXCardVertical>
-                        <PFXCardVertical fx:id="paper" >
-                        </PFXCardVertical>
-                        <PFXCardVertical fx:id="stapler" >
-                        </PFXCardVertical>
-                        <PFXCardVertical fx:id="staples" >
-                        </PFXCardVertical>
-                        <PFXCardVertical fx:id="paperclips" >
-                        </PFXCardVertical>
+                        <VBox spacing="32.0" fx:id="container"/>
                     </children>
-                </VBox>
-                <BorderPane>
-                    <center>
-                        <VBox alignment="CENTER">
-                            <padding>
-                                <Insets topRightBottomLeft="10"/>
-                            </padding>
-                            <HBox style="-fx-background-color: #00458E; -fx-background-radius: 6;" VBox.vgrow="NEVER">
-                                <padding>
-                                    <Insets topRightBottomLeft="10"/>
-                                </padding>
-                                <ImageView fitHeight="205.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
-                                           BorderPane.alignment="CENTER">
-                                    <image>
-                                        <Image url="@../assets/officeSuppliesPic.jpg"/>
-                                    </image>
-                                </ImageView>
-                            </HBox>
-                        </VBox>
-                    </center>
-                </BorderPane>
+                </HBox>
             </children>
-        </HBox>
+            <padding>
+                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
+            </padding>
+        </VBox>
     </center>
 </BorderPane>
