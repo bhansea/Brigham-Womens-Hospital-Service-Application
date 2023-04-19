@@ -2,171 +2,33 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
-            xmlns="http://javafx.com/javafx/">
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder?>
+
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<BorderPane style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="16.0" style="-fx-background-color: white;">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "
-                      wrappingWidth="575.7366981506348">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
                     <font>
-                        <Font name="System Bold" size="24.0"/>
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <HBox spacing="200.0" VBox.vgrow="ALWAYS">
+                <HBox>
                     <children>
-                        <VBox spacing="32.0" HBox.hgrow="ALWAYS">
-                            <children>
-                                <VBox>
-                                    <children>
-                                        <HBox>
-                                            <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select A Meal ">
-                                                    <font>
-                                                        <Font size="18.0"/>
-                                                    </font>
-                                                </Text>
-                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
-                                            </children>
-                                        </HBox>
-                                        <MFXComboBox fx:id="mealDropdown" alignment="TOP_LEFT" prefHeight="50.0"
-                                                     prefWidth="450.0"
-                                                     promptText="Meals">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </MFXComboBox>
-                                    </children>
-                                </VBox>
-                                <VBox>
-                                    <children>
-                                        <HBox>
-                                            <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                      text="Select a Temperature Type">
-                                                    <font>
-                                                        <Font size="18.0"/>
-                                                    </font>
-                                                </Text>
-                                                <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*"/>
-                                            </children>
-                                        </HBox>
-                                        <MFXComboBox fx:id="tempDropdown" alignment="TOP_LEFT" prefHeight="50.0"
-                                                     prefWidth="450.0"
-                                                     promptText="Temperature Type">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </MFXComboBox>
-                                    </children>
-                                </VBox>
-                                <VBox spacing="10.0">
-                                    <children>
-                                        <HBox>
-                                            <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                      text="Select Additional Items">
-                                                    <font>
-                                                        <Font size="18.0"/>
-                                                    </font>
-                                                </Text>
-                                            </children>
-                                        </HBox>
-                                        <HBox alignment="CENTER_LEFT" spacing="50.0">
-                                            <children>
-                                                <CheckBox fx:id="utensils" mnemonicParsing="false" text="Utensils">
-                                                    <font>
-                                                        <Font size="16.0"/>
-                                                    </font>
-                                                </CheckBox>
-                                                <CheckBox fx:id="napkins" mnemonicParsing="false" text="Napkins">
-                                                    <font>
-                                                        <Font size="16.0"/>
-                                                    </font>
-                                                </CheckBox>
-                                                <CheckBox fx:id="straw" mnemonicParsing="false" text="Straw">
-                                                    <font>
-                                                        <Font size="16.0"/>
-                                                    </font>
-                                                </CheckBox>
-                                            </children>
-                                        </HBox>
-                                    </children>
-                                </VBox>
-                                <VBox>
-                                    <children>
-                                        <HBox>
-                                            <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Beverage">
-                                                    <font>
-                                                        <Font size="18.0"/>
-                                                    </font>
-                                                </Text>
-                                            </children>
-                                        </HBox>
-                                        <MFXComboBox fx:id="beverageDropdown" alignment="TOP_LEFT" prefHeight="50.0"
-                                                     prefWidth="450.0" promptText="Beverages">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </MFXComboBox>
-                                    </children>
-                                </VBox>
-                                <VBox>
-                                    <children>
-                                        <HBox>
-                                            <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                      text="Fill in Dietary Restrictions">
-                                                    <font>
-                                                        <Font size="18.0"/>
-                                                    </font>
-                                                </Text>
-                                            </children>
-                                        </HBox>
-                                        <HBox>
-                                            <children>
-                                                <TextArea fx:id="dietaryRestrictions" prefHeight="90.0"
-                                                          prefWidth="450.0" promptText="Allergies, Gluten Free, etc."
-                                                          wrapText="true">
-                                                    <font>
-                                                        <Font size="16.0"/>
-                                                    </font>
-                                                </TextArea>
-                                            </children>
-                                        </HBox>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </VBox>
-                        <VBox alignment="TOP_RIGHT" spacing="32.0">
-                            <children>
-                                <VBox alignment="TOP_RIGHT">
-                                    <children>
-                                        <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true"
-                                                   preserveRatio="true">
-                                            <image>
-                                                <Image url="@../assets/mealPicture.jpeg"/>
-                                            </image>
-                                        </ImageView>
-                                    </children>
-                                    <opaqueInsets>
-                                        <Insets/>
-                                    </opaqueInsets>
-                                </VBox>
-                            </children>
-                        </VBox>
+                        <VBox spacing="32.0" fx:id="container"/>
                     </children>
                 </HBox>
             </children>
             <padding>
-                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0"/>
+                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
             </padding>
         </VBox>
     </center>

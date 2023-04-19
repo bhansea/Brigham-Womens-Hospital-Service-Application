@@ -35,6 +35,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         return RequestController.create(new OfficeServiceRequestController(), path);
     }
 
+    @FXML
     @Override
     public void init() {
         submit.setDisable(true);

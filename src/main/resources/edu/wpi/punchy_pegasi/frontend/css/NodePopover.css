@@ -1,0 +1,17 @@
+.node-popover {
+    -fx-background-color: -pfx-background;
+}
+
+.node-popover > Label {
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 20;
+}
+.node-popover-make-move {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text-opposite;
+}
+
+.node-popover-delete {
+    -pfx-button-background: red;
+    -pfx-button-text: -pfx-text-opposite;
+}

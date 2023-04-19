@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import lombok.Setter;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class DragController {
@@ -32,6 +33,8 @@ public class DragController {
     private Consumer<Node> onEnd;
     @Setter
     private Supplier<Double> scaleSupplier = () -> 1.0;
+    @Setter
+    private Predicate<MouseEvent> filterMouseEvents = event -> true;
 
     public DragController(Node target) {
         this(target, false);
@@ -53,6 +56,7 @@ public class DragController {
 
     private void createHandlers() {
         setAnchor = event -> {
+            if (!filterMouseEvents.test(event)) return;
             if (event.isPrimaryButtonDown()) {
                 anchorX = event.getSceneX();
                 anchorY = event.getSceneY();
@@ -63,10 +67,12 @@ public class DragController {
             }
         };
         updatePositionOnDrag = event -> {
+            if (!filterMouseEvents.test(event)) return;
             target.setLayoutX(layoutX + (event.getSceneX() - anchorX) / getScale());
             target.setLayoutY(layoutY + (event.getSceneY() - anchorY) / getScale());
         };
         commitPositionOnRelease = event -> {
+            if (!filterMouseEvents.test(event)) return;
             if (onEnd != null) onEnd.accept(target);
             if (onMove != null) onMove.accept(target);
             target.setCursor(Cursor.OPEN_HAND);

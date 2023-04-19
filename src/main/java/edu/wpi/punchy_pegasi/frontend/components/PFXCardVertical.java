@@ -22,10 +22,10 @@ public class PFXCardVertical extends VBox {
         super();
         image = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/mealPicture.jpeg");
         image.setFitHeight(400);
-        image.setFitWidth(350);
+        image.setFitWidth(300);
         titleLabel = new Label("Meal Name");
         subtitleLabel = new Label("A very nice meal");
-        quantity = new Label("5 Available");
+        quantity = new Label("0 Available");
 
         getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);
@@ -46,14 +46,14 @@ public class PFXCardVertical extends VBox {
         selection.getChildren().addAll(quantity, picker);
     }
 
-    public PFXCardVertical(Label title, Label subtitle, Label quantity, Image image) {
+    public PFXCardVertical(String title, String subtitle, int quantity, Image image) {
         super();
         this.image = new ImageView(image);
         this.image.setFitHeight(300);
-        this.image.setFitWidth(500);
-        this.titleLabel = title;
-        this.subtitleLabel = subtitle;
-        this.quantity = quantity;
+        this.image.setFitWidth(400);
+        this.titleLabel = new Label(title);
+        this.subtitleLabel = new Label(subtitle);
+        this.quantity = new Label(Integer.toString(quantity));
 
         getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);
@@ -71,5 +71,17 @@ public class PFXCardVertical extends VBox {
 
         info.getChildren().addAll(titleLabel, subtitleLabel);
         selection.getChildren().addAll(this.quantity, picker);
+    }
+
+    public int getQuantity() {
+        return picker.getQuantity();
+    }
+
+    public String getTitle() {
+        return titleLabel.getText();
+    }
+
+    public void clearQuantity() {
+        picker.clearQuantity();
     }
 }

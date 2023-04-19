@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,19 +10,11 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
             fx:id="root">
     <left>
-        <VBox alignment="CENTER" spacing="10">
-            <padding>
-                <Insets topRightBottomLeft="10"/>
-            </padding>
-            <VBox alignment="CENTER" spacing="10" fx:id="editing">
-                <MFXButton text="Edit Node Locations" onMouseClicked="#editNodes" fx:id="editButton"/>
-                <MFXButton text="Done Editing Nodes" onMouseClicked="#doneEditingNodes" fx:id="doneEditingButton"/>
-                <MFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
-                <MFXProgressBar fx:id="commitProgress" maxWidth="Infinity" progress="0">
-                    <padding>
-                        <Insets topRightBottomLeft="5"/>
-                    </padding>
-                </MFXProgressBar>
+        <VBox fx:id="editing" styleClass="editing-overlay">
+            <VBox>
+                <PFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
+                <MFXProgressBar fx:id="commitProgress" maxWidth="300" progress="0"/>
+                <VBox fx:id="changes"/>
             </VBox>
         </VBox>
     </left>

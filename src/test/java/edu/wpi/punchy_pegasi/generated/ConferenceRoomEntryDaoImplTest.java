@@ -45,7 +45,7 @@ class ConferenceRoomEntryDaoImplTest {
         var locName = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
         var staff = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
         ConferenceRoomEntry room = new ConferenceRoomEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
-        Object[] values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
+        Object[] values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime(), room.getDate()};
         try {
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {
@@ -69,8 +69,8 @@ class ConferenceRoomEntryDaoImplTest {
         var staff1 = ThreadLocalRandom.current().nextLong();
         var room = new ConferenceRoomEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
         var room2 = new ConferenceRoomEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testBeginning", "testEnd", LocalDate.now());
-        var values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime()};
-        var values2 = new Object[]{room2.getServiceID(), room2.getLocationName(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime()};
+        var values = new Object[]{room.getServiceID(), room.getLocationName(), room.getStaffAssignment(), room.getAdditionalNotes(), room.getStatus(), room.getBeginningTime(), room.getEndTime(), room.getDate()};
+        var values2 = new Object[]{room2.getServiceID(), room2.getLocationName(), room2.getStaffAssignment(), room2.getAdditionalNotes(), room2.getStatus(), room2.getBeginningTime(), room2.getEndTime(), room2.getDate()};
         try {
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
             pdbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values2);
@@ -244,7 +244,8 @@ class ConferenceRoomEntryDaoImplTest {
                 conferenceRoom.getAdditionalNotes(),
                 conferenceRoom.getStatus(),
                 conferenceRoom.getBeginningTime(),
-                conferenceRoom.getEndTime()
+                conferenceRoom.getEndTime(),
+                conferenceRoom.getDate()
         };
 
         try {
