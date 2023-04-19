@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f1f1f1;"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;"
             xmlns="http://javafx.com/javafx/">
     <center>
         <VBox spacing="16.0" style="-fx-background-color: white;">
