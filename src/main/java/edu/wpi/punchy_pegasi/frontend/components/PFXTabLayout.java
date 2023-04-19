@@ -2,11 +2,8 @@ package edu.wpi.punchy_pegasi.frontend.components;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.layout.*;
 import lombok.Getter;
-
-import java.util.Objects;
 
 
 public class PFXTabLayout extends BorderPane {
@@ -15,7 +12,7 @@ public class PFXTabLayout extends BorderPane {
     protected final HBox container = new HBox();
     @Getter
     protected ObservableList<PFXTab> tabGroup = FXCollections.observableArrayList();
-    protected ObservableList<Node> nodes = FXCollections.observableArrayList();
+
 
     public PFXTabLayout() {
         super();
@@ -32,13 +29,12 @@ public class PFXTabLayout extends BorderPane {
         this.setCenter(stackPane);
     }
 
-    public void setSelected(Node node) {
-        node.setVisible(true);
-        node.setManaged(true);
-
-        nodes.stream().filter(f -> !Objects.equals(f, node)).forEach(f -> {
-            f.setVisible(false);
-            f.setManaged(false);
+    public void setSelected(PFXTab pfxTab) {
+        tabGroup.forEach(t -> {
+            var is = t == pfxTab;
+            t.getNode().setManaged(is);
+            t.getNode().setVisible(is);
+            t.setSelected(is);
         });
     }
 
@@ -55,7 +51,6 @@ public class PFXTabLayout extends BorderPane {
     public void addTab(PFXTab tab) {
         this.tabGroup.add(tab);
         container.getChildren().add(tab);
-        nodes.add(tab.getNode());
         stackPane.getChildren().add(tab.getNode());
     }
 }

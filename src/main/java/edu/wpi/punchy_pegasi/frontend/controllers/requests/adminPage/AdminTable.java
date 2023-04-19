@@ -3,14 +3,19 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 import edu.wpi.punchy_pegasi.schema.IField;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class AdminTable<T> {
@@ -21,6 +26,10 @@ public class AdminTable<T> {
     final TableType tableType;
     @Getter
     final Supplier<List<T>> getAll;
+
+    @Getter
+    @Setter
+    private Consumer<T> rowClicked;
 
     public AdminTable(String humanReadableName, TableType tableType, Supplier<List<T>> getAll) {
         this.humanReadableName = humanReadableName;
@@ -39,9 +48,28 @@ public class AdminTable<T> {
                 for (Object field : tableType.getFieldEnum().getEnumConstants()) {
                     var iField = (IField<T>) field;
                     MFXTableColumn<T> col = new MFXTableColumn<>(iField.getColName(), true);
-                    col.setRowCellFactory(p -> new MFXTableRowCell<>(iField::getValue));
+                    col.setPickOnBounds(false);
+
+                    col.setRowCellFactory(p -> {
+                        var cell = new MFXTableRowCell<>(iField::getValue);
+                        cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e ->{
+                            if(!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                            if(rowClicked != null)
+                                rowClicked.accept(p);
+                        });
+                        return cell;
+                    });
                     table.getTableColumns().add(col);
                 }
+                table.setTableRowFactory(r -> {
+                    var row = new MFXTableRow<>(table, r);
+                    row.addEventFilter(MouseEvent.MOUSE_CLICKED, e ->{
+                        if(!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                        if(rowClicked != null)
+                            rowClicked.accept(r);
+                    });
+                    return row;
+                });
             });
         });
         thread.setDaemon(true);
