@@ -67,7 +67,6 @@
                         <children>
                             <VBox spacing="6.0">
                                 <children>
-                           <Label fx:id="invalidText" text="INVALID: CONFERENCE ROOM TAKEN" textFill="RED" />
                                     <Label alignment="TOP_LEFT" text="Location Name" textFill="WHITE">
                                         <font>
                                             <Font size="24.0" />
