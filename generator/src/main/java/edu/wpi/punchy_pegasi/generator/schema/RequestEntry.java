@@ -15,7 +15,7 @@ public class RequestEntry {
     protected final Long staffAssignment;
     protected final String additionalNotes;
     protected final Status status;
-    protected final String invalidText;
+    protected final Long employeeID;
 
     public enum Status {
         NONE,

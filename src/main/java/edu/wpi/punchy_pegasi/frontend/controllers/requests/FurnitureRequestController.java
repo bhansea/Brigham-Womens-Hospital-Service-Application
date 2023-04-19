@@ -40,8 +40,6 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
 
     @FXML
     public void init() {
-        invalidText.setVisible(false);
-        invalidText.setManaged(false);
         furniture.setItems(furnitureList);
         amountOfFurniture.setItems(amountList);
         submit.setDisable(true);
@@ -90,8 +88,9 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                invalidText.getText(),
-                furniture.getItems());
+                furniture.getItems(),
+                // TODO: need a way to get the employeeID of the person making the request entry
+                1L);
         facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

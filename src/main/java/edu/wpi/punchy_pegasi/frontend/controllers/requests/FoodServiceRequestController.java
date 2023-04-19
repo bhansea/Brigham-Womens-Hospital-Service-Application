@@ -36,8 +36,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     public void init() {
-        invalidText.setVisible(false);
-        invalidText.setManaged(false);
         ObservableList<String> mealList = FXCollections.observableArrayList("Mac and Cheese", "Steak", "Chicken and Rice", "Meatloaf");
         mealDropdown.setItems(mealList);
         ObservableList<String> beverageList = FXCollections.observableArrayList("Water", "Coffee", "Lemonade", "Milk", "Vitamin Water", "Dr. Pepper", "Chocolate Milk", "Apple Juice", "Orange Juice", "Cranberry Juice");
@@ -74,13 +72,14 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                invalidText.getText(),
                 mealDropdown.getSelectedItem(),
                 tempDropdown.getSelectedItem(),
                 extras,
                 beverageDropdown.getSelectedItem(),
                 dietaryRestrictions.getText(),
-                patientName.getText());
+                patientName.getText(),
+                // TODO: need a way to get the employeeID of the person making the request entry
+                1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
