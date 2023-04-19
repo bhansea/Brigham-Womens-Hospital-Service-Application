@@ -37,12 +37,23 @@ public class AdminTable<T> {
         this.tableType = tableType;
         this.getAll = getAll;
     }
+    public void reload(){
+        var thread = new Thread(() -> {
+            var list = getAll.get();
+            Platform.runLater(() -> {
+                ObservableList<T> tableList = FXCollections.observableList(list);
+                table.setItems(tableList);
+            });
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
 
     public void init() {
         var thread = new Thread(() -> {
-            var list2 = getAll.get();
+            var list = getAll.get();
             Platform.runLater(() -> {
-                ObservableList<T> tableList = FXCollections.observableList(getAll.get());
+                ObservableList<T> tableList = FXCollections.observableList(list);
                 table.setItems(tableList);
                 // Create columns
                 for (Object field : tableType.getFieldEnum().getEnumConstants()) {

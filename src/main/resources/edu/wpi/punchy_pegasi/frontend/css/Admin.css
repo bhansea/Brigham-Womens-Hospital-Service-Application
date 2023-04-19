@@ -1,6 +1,10 @@
+#viewTablePageContainer {
+    -fx-padding: 20;
+    -fx-background-radius: 20;
+}
 .admin-import-container {
     -fx-background-color: -pfx-accent-dark;
-    -fx-border-radius: 6;
+    -fx-background-radius: 20;
     -fx-alignment: BOTTOM_CENTER;
     -fx-padding: 30 0 30 0;
     -fx-max-width: 450;

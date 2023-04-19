@@ -117,8 +117,6 @@ public class AdminTableViewPageController {
         firstName.setText("First Name");
         lastName.setText("Last name");
 
-        employeeContainer.getChildren().add(employeeId);
-        employeeContainer.getChildren().add(employeeIdTextField);
         employeeContainer.getChildren().add(firstName);
         employeeContainer.getChildren().add(firstNameField);
         employeeContainer.getChildren().add(lastName);
@@ -139,32 +137,41 @@ public class AdminTableViewPageController {
         editContainer.getChildren().add(requestEditContainer);
         editContainer.getStyleClass().add("admin-edit-container");
 
-        currentTable.setRowClicked(r -> {
-            if (r instanceof RequestEntry) {
-                RequestEntry entry = (RequestEntry) r;
-                RequestEntry.Status status = null;
-
-                if (statusType.getSelectedItem() == "NONE") {
-                    status = RequestEntry.Status.NONE;
-                } else if (statusType.getSelectedItem() == "PROCESSING") {
-                    status = RequestEntry.Status.PROCESSING;
-                } else if (statusType.getSelectedItem() == "DONE") {
-                    status = RequestEntry.Status.DONE;
+        tables.values().forEach(t -> {
+            t.setRowClicked(r -> {
+                if (r instanceof RequestEntry) {
+                    RequestEntry entry = (RequestEntry) r;
+                    submitRequestEditButton.setOnAction(e -> {
+                        RequestEntry.Status status = null;
+                        if (statusType.getSelectedItem() == "NONE") {
+                            status = RequestEntry.Status.NONE;
+                        } else if (statusType.getSelectedItem() == "PROCESSING") {
+                            status = RequestEntry.Status.PROCESSING;
+                        } else if (statusType.getSelectedItem() == "DONE") {
+                            status = RequestEntry.Status.DONE;
+                        }
+                        if (status == null) return;
+                        entry.setStatus(status);
+                        facade.updateRequestEntry(entry, new RequestEntry.Field[]{RequestEntry.Field.STATUS});
+                        t.reload();
+                        t.table.update();
+                    });
+                } else if (r instanceof Employee) {
+                    Employee employee = (Employee) r;
+                    firstNameField.setText(employee.getFirstName());
+                    lastNameField.setText(employee.getLastName());
+                    submitEmployeeEditButton.setOnAction(e -> {
+                        var em = new Employee(((Employee) r).getEmployeeID(), firstNameField.getText(), lastNameField.getText());
+                        facade.updateEmployee(em, new Employee.Field[]{Employee.Field.FIRST_NAME, Employee.Field.LAST_NAME});
+                        t.reload();
+                        t.table.update();
+                    });
                 }
-
-                RequestEntry entry1 = new RequestEntry(entry.getServiceID(), null, null, null, status, null);
-                facade.updateRequestEntry(entry1, new RequestEntry.Field[]{RequestEntry.Field.STATUS});
-            } else if (r instanceof Employee) {
-                Employee employee = (Employee)r;
-                employeeIdTextField.setText(employee.getEmployeeID().toString());
-                firstNameField.setText(employee.getFirstName());
-                lastNameField.setText(employee.getLastName());
-
-            }
+            });
         });
 
         submitEmployeeEditButton.setOnAction(e -> {
-           if (currentTable.getRowClicked() instanceof Employee) {
+            if (currentTable.getRowClicked() instanceof Employee) {
                 // submit changes to edit a employee, or add new employee
 
             }
