@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
@@ -21,118 +23,18 @@
                                 <Font size="24.0"/>
                             </font>
                         </Label>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="pencils" minWidth="150.0" mnemonicParsing="false" text="Pencils"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="pencilAmount" minWidth="175.0" promptText="Enter amount"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="pens" minWidth="150.0" mnemonicParsing="false" text="Pens"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="penAmount" minWidth="175.0" promptText="Enter amount"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="paper" minWidth="150.0" mnemonicParsing="false" text="Paper"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="paperAmount" minWidth="175.0" promptText="Enter amount"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="stapler" minWidth="150.0" mnemonicParsing="false" text="Stapler"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="staplerAmount" minWidth="175.0" promptText="Enter amount"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="staples" minWidth="150.0" mnemonicParsing="false" text="Staples"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="stapleAmount" minWidth="175.0" promptText="Enter amount"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="paperclips" minWidth="150.0" mnemonicParsing="false" text="Paperclips"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="paperclipAmount" minWidth="175.0" promptText="Enter amount"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="50.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <CheckBox fx:id="other" minWidth="150.0" mnemonicParsing="false" text="Other"
-                                          HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </CheckBox>
-                                <TextField fx:id="otherItems" minWidth="175.0" promptText="Please specify"
-                                           HBox.hgrow="ALWAYS">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </TextField>
-                            </children>
-                        </HBox>
+                        <PFXCardVertical fx:id="pencils" >
+                    </PFXCardVertical>
+                        <PFXCardVertical fx:id="pens" >
+                        </PFXCardVertical>
+                        <PFXCardVertical fx:id="paper" >
+                        </PFXCardVertical>
+                        <PFXCardVertical fx:id="stapler" >
+                        </PFXCardVertical>
+                        <PFXCardVertical fx:id="staples" >
+                        </PFXCardVertical>
+                        <PFXCardVertical fx:id="paperclips" >
+                        </PFXCardVertical>
                     </children>
                 </VBox>
                 <BorderPane>
