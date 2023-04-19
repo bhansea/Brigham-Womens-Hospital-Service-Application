@@ -11,6 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -33,16 +36,42 @@ public class HomePageController {
 
     @FXML
     MFXComboBox<String> notificationComboBox;
+    @FXML
+    private PieChart piechart;
+    @FXML
+    private LineChart lineChart;
 
-//    @FXML
-//    private void initialize() {
-//        showServiceRequestTable(true);
-//        initRequestTable();
+//   @FXML
+//   private void initialize() {
+//       showServiceRequestTable(true);
+//       initRequestTable();
+//   }
+
+//    private void showServiceRequestTable(boolean show) {
+//        requestTable.setVisible(show);
+//        requestTable.setManaged(show);
 //    }
+    @FXML
+    private void init(){
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Placeholder Data");
+        //Placeholder data
+        series.getData().add(new XYChart.Data<>(1, 10));
+        series.getData().add(new XYChart.Data<>(2, 20));
+        series.getData().add(new XYChart.Data<>(3, 30));
+        series.getData().add(new XYChart.Data<>(4, 40));
+        series.getData().add(new XYChart.Data<>(5, 50));
 
-    private void showServiceRequestTable(boolean show) {
-        requestTable.setVisible(show);
-        requestTable.setManaged(show);
+        lineChart.getData().add(series);
+
+        PieChart.Data slice1 = new PieChart.Data("Placeholder Category1", 50);
+        PieChart.Data slice2 = new PieChart.Data("Placeholder Category2", 20);
+        PieChart.Data slice3 = new PieChart.Data("Placeholder Category3", 30);
+
+        piechart.getData().add(slice1);
+        piechart.getData().add(slice2);
+        piechart.getData().add(slice3);
+
     }
 
     private void rowClicked(GenericRequestEntry entry) {
@@ -95,6 +124,7 @@ public class HomePageController {
         if(selectedOption != null){
             Stage window = new Stage();
             window.setTitle(selectedOption + "Window");
+            //showServiceRequestTable(true);
             window.show();
 //            switch(selectedOption){
 //                case "Meals":
