@@ -3,10 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.components;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +17,15 @@ public class PFXCardHolder extends BorderPane {
         super();
         setCenter(scrollPane);
         getStyleClass().add("pfx-cardholder-container");
+        scrollPane.getStyleClass().add("pfx-cardholder-scrollpane");
         scrollPane.setContent(elements);
         elements.getStyleClass().add("pfx-cardholder-container-gridpane");
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         HBox.setHgrow(this, Priority.ALWAYS);
         HBox.setHgrow(scrollPane, Priority.ALWAYS);
-
+        scrollPane.setBorder(Border.EMPTY);
+        elements.setBorder(Border.EMPTY);
     }
 
     public PFXCardHolder(List<PFXCardVertical> cards) {
