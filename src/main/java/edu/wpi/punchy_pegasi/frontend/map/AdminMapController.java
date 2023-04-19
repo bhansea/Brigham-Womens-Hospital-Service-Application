@@ -320,7 +320,7 @@ public class AdminMapController {
         commitThread.start();
     }
     @Getter
-    public class MapEdit {
+    public static class MapEdit {
         private final ActionType type;
         private final Object object;
 

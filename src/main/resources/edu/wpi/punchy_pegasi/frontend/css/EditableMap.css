@@ -6,7 +6,7 @@
 .editing-overlay > VBox {
     -fx-alignment: CENTER;
     -fx-max-width: 300;
-    -fx-spacing: 20;
+    -fx-spacing: 15;
     -fx-padding: 20;
     -fx-background-color: -pfx-background;
     -fx-background-radius: 12;
@@ -14,7 +14,7 @@
 }
 #commitProgress {
     -fx-max-height: 20;
-    -fx-padding: 0;
+    -fx-padding: 10;
 }
 
 #changes {

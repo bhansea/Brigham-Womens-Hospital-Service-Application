@@ -45,7 +45,8 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        setMaxWidth(maxWidth);
+        setMaxWidth(getMinWidth());
+        setExpanded(false);
         var clipper = new Rectangle();
         clipper.widthProperty().bind(widthProperty());
         clipper.heightProperty().bind(heightProperty());
