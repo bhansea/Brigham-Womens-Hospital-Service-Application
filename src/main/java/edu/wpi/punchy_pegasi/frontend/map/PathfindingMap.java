@@ -120,6 +120,7 @@ public class PathfindingMap {
         selectGraphically.setDisable(true);
         selectGraphicallyCancel.setVisible(false);
         selectGraphicallyCancel.setManaged(false);
+        PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
     }
 
     private Optional<LocationName> nodeToLocation(Node node) {
@@ -194,13 +195,7 @@ public class PathfindingMap {
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
         var graph = new Graph<>(nodes, edgeList);
-        if(selectedAlgo.equals("Depth-First Search")){
-            PathfindingSingleton.SINGLETON.setAlgorithm(new DFS<>());
-        } else if(selectedAlgo.equals("Breadth-First Search")){
-            PathfindingSingleton.SINGLETON.setAlgorithm(new BFS<>());
-        } else {
-            PathfindingSingleton.SINGLETON.setAlgorithm(new AStar<>(new CartesianHeuristic(), new CartesianHeuristic()));
-        }
+
         try {
             var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
             for (var floor : floors.values())
@@ -211,7 +206,8 @@ public class PathfindingMap {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
+                    map.drawNode(node,"red", "","From Here");
+                    //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
                     map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(node.getFloor()))));
                     currentPath = new ArrayList<>();
                     currentFloor = node.getFloor();
@@ -230,5 +226,12 @@ public class PathfindingMap {
     @FXML
     private void setAlgo() {
         selectedAlgo = selectAlgo.getSelectedItem();
+        if(selectedAlgo.equals("Depth-First Search")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getDFS());
+        } else if(selectedAlgo.equals("Breadth-First Search")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getBFS());
+        } else {
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
+        }
     }
 }
