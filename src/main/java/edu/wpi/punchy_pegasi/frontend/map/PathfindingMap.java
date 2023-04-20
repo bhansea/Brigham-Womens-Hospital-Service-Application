@@ -257,14 +257,17 @@ public class PathfindingMap {
         }
 
         byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
+        //System.out.println(xCoords.get(0) + ", " + yCoords.get(0));
         comPort.writeBytes(message, message.length);
 
         for(int i=1;i<xCoords.size() - 1;i++) {
             message = generateMessage("M", xCoords.get(i), yCoords.get(i));
+            //System.out.println(xCoords.get(i) + ", " + yCoords.get(i));
             comPort.writeBytes(message, message.length);
         }
 
         message = generateMessage("E", xCoords.get(xCoords.size() - 1), yCoords.get(yCoords.size() - 1));
+        //System.out.println(xCoords.get(xCoords.size() - 1) + ", " + yCoords.get(yCoords.size() - 1));
         comPort.writeBytes(message, message.length);
     }
 
