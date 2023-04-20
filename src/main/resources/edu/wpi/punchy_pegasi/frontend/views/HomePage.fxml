@@ -15,7 +15,7 @@
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <Label textAlignment="CENTER" text="Welcome back!&#13;Here are you outstanding service requests.">
+                <Label textAlignment="CENTER" text="Welcome back!&#13;Here are your outstanding service requests. Use the drop down menu to see notifications.">
                     <font>
                         <Font name="System Bold" size="24.0"/>
                     </font>
