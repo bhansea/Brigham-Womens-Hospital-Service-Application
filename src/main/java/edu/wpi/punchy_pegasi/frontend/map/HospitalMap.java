@@ -171,13 +171,11 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         var floor = floors.get(node.getFloor());
         if (floor == null)
             return;
-        var img = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/you-are-here.jpg")));
-        var imgView = new ImageView(img);
-        imgView.setLayoutX(node.getXcoord() - 40);
-        imgView.setLayoutY(node.getYcoord() - 80);
-        imgView.setFitHeight(80);
-        imgView.setFitWidth(80);
-        floor.nodeCanvas.getChildren().add(imgView);
+        var icon = new PFXIcon(MaterialSymbols.LOCATION_ON, 60);
+        icon.setFill(Color.valueOf("#f40000"));
+        icon.setTranslateX(node.getXcoord() - 30);
+        icon.setTranslateY(node.getYcoord());
+        floor.nodeCanvas.getChildren().add(icon);
     }
 
     @Override
