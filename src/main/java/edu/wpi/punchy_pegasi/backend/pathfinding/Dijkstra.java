@@ -7,43 +7,44 @@ import java.util.*;
 
 @RequiredArgsConstructor
 public class Dijkstra<K, T extends INode> implements IPathFind<K, T> {
-    private final IHeuristic<T> nextNodeScorer;
+
+    private final IHeuristic<T> heuristic;
 
     @Override
     public List<T> findPath(Graph<K, T> graph, T from, T to) throws IllegalStateException {
-        Queue<RouteNode<T>> queue = new PriorityQueue<>();
-        Map<T, RouteNode<T>> allNodes = new HashMap<>();
+        Map<T, Double> costMap = new HashMap<>();
+        Map<T, T> parentMap = new HashMap<>();
+        PriorityQueue<T> queue = new PriorityQueue<>(Comparator.comparingDouble(costMap::get));
 
-        var start = new RouteNode<>(from, null, 0d, nextNodeScorer.computeCost(from, to));
-        queue.add(start);
-        allNodes.put(from, start);
+        costMap.put(from, 0.0);
+        queue.add(from);
 
         while (!queue.isEmpty()) {
-            var current = queue.poll();
-            if (current.getCurrent().equals(to))
-                return genRoute(allNodes, current);
-            for (var adjNode : graph.getConnections(current.getCurrent())) {
-                var nextNode = allNodes.getOrDefault(adjNode, new RouteNode<>(adjNode));
-                allNodes.put(adjNode, nextNode);
-
-                double newScore = current.getRouteScore() + nextNodeScorer.computeCost(current.getCurrent(), adjNode);
-                if (newScore < nextNode.getRouteScore()) {
-                    nextNode.setPrevious(current.getCurrent());
-                    nextNode.setRouteScore(newScore);
-                    queue.add(nextNode);
+            T current = queue.poll();
+            if (current.equals(to)) {
+                return getRoute(parentMap, to);
+            }
+            for (T neighbor : graph.getConnections(current)) {
+                double newCost = costMap.get(current) + heuristic.computeCost(current, neighbor);
+                if (!costMap.containsKey(neighbor) || newCost < costMap.get(neighbor)) {
+                    costMap.put(neighbor, newCost);
+                    parentMap.put(neighbor, current);
+                    queue.add(neighbor);
                 }
             }
         }
-        throw new IllegalStateException("No route found");
+        throw new IllegalStateException("Unable to find path");
     }
 
-    public List<T> genRoute(Map<T, RouteNode<T>> nodes, RouteNode<T> next) {
-        List<T> route = new ArrayList<T>();
-        var current = next;
-        do {
-            route.add(0, current.getCurrent());
-            current = nodes.get(current.getPrevious());
-        } while (current != null);
-        return route;
+    private List<T> getRoute(Map<T, T> parentMap, T to) {
+        List<T> path = new ArrayList<>();
+        T current = to;
+        while (parentMap.containsKey(current)) {
+            path.add(current);
+            current = parentMap.get(current);
+        }
+        path.add(current);
+        Collections.reverse(path);
+        return path;
     }
 }
