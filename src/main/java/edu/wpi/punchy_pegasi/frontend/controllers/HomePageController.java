@@ -30,6 +30,7 @@ public class HomePageController {
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
 
+    @FXML
     private MFXComboBox notificationComboBox;
 
     @FXML
@@ -63,6 +64,7 @@ public class HomePageController {
 //        requestTable.setManaged(show);
 //    }
 
+    @FXML
     private void openSelectedWindow() {
         String selectedOption = (String) notificationComboBox.getValue();
         if (selectedOption != null) {
