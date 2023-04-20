@@ -2,12 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.components.RequestPage"
-            prefHeight="400.0" prefWidth="600.0">
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.components.RequestPage">
     <center>
         <VBox spacing="30.0">
             <children>
@@ -15,15 +15,15 @@
                     <children>
                         <Label text="Fields marked with an asterisk (*) are required">
                             <font>
-                                <Font size="24.0"/>
+                                <Font size="24.0" />
                             </font>
                             <VBox.margin>
-                                <Insets left="10.0"/>
+                                <Insets bottom="5.0" left="10.0" top="5.0" />
                             </VBox.margin>
                         </Label>
                         <VBox VBox.vgrow="ALWAYS">
                             <children>
-                                <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                <HBox style="-fx-background-color: -pfx-background;" VBox.vgrow="ALWAYS">
                                     <children>
                                         <!--                                            Stuff goes here-->
                                     </children>
@@ -34,10 +34,10 @@
                 </VBox>
             </children>
             <BorderPane.margin>
-                <Insets/>
+                <Insets />
             </BorderPane.margin>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
         </VBox>
 

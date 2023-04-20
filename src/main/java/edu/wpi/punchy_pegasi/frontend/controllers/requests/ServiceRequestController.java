@@ -26,6 +26,7 @@ public class ServiceRequestController {
 
     public BorderPane container;
     PFXTabLayout layout = new PFXTabLayout();
+
     final List<Screen> screens = new ArrayList<>(){{
         add(Screen.FLOWER_DELIVERY_REQUEST);
         add(Screen.FOOD_SERVICE_REQUEST);
@@ -50,14 +51,13 @@ public class ServiceRequestController {
                     }
                     PFXTab tab = new PFXTab(screens.get(i).getReadable().replace("Request ", ""),nodes.get(i));
                     tab.setOnMouseClicked(e -> {
-                        layout.setSelected(tab.getNode());
+                        layout.setSelected(tab);
                         container.setCenter(layout);
                     });
                     layout.addTab(tab);
                 }
+                layout.setSelected(layout.getTabGroup().get(0));
                 container.setCenter(layout);
-
-                layout.setSelected(nodes.get(0));
             });
         });
         thread.setDaemon(true);

@@ -10,9 +10,15 @@
     -fx-background-radius: 5;
     -fx-font-size: 30;
 
-    -fx-border-style: segments(0, 35, 0) phase 27.5 inside line-cap round;
+    -fx-border-style: segments(0, 32.5, 0) phase 27.5 inside line-cap round;
     -fx-border-width: 0 0 0 7.5;
     -fx-border-color: transparent;
+}
+
+.pfx-sidebar-item Label{
+    -fx-padding: 8 0 0 0;
+    -fx-font-size: 14 ;
+    -fx-alignment: CENTER_LEFT;
 }
 
 

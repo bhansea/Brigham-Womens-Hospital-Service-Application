@@ -2,10 +2,13 @@
 .floor-selector:armed,
 .floor-selector:hover,
 .floor-selector:focused {
-    -fx-pref-width: 50;
-    -fx-pref-height: 50;
-    -fx-background-radius: 30;
-    -fx-background-color: -pfx-background;
+    -fx-pref-width: 80;
+    -fx-pref-height: 80;
+    -fx-background-radius: 40;
+    -fx-font-size: 30;
+    -fx-font-family: "Nunito Sans Regular";
+    -pfx-button-background: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
 
 .hospital-map-overlay-bottom {
@@ -18,21 +21,24 @@
     -fx-spacing: 10;
 }
 
-.hospital-map-overlay-bottom PFXButton {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 10, 0, 0.0, 0.0);
-}
-
-.hospital-map-overlay-bottom > VBox {
+.hospital-map-zoom-modal {
     -fx-alignment: CENTER;
     -fx-padding: 10;
-    -fx-spacing: 3;
+    -fx-spacing: 5;
 }
-
-.hospital-map-overlay-bottom > VBox > PFXButton {
+.hospital-map-zoom-modal PFXIcon {
     -fx-alignment: CENTER;
-    -fx-padding: 1 3;
+    -fx-font-size: 30;
 }
 
+.hospital-map-zoom-modal PFXButton {
+    -fx-padding: 0 3;
+    -fx-background-color: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 5, 0, 0.0, 0.0);
+}
+.hospital-map-zoom-modal PFXButton:focused {
+    -fx-background-color: -pfx-background;
+}
 
 .hospital-map-gesture-pane {
     -fx-background-color: #d6d8d5;

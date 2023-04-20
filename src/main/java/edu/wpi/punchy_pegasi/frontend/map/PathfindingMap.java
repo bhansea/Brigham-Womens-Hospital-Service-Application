@@ -1,16 +1,13 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
+import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.*;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.generated.EdgeDaoImpl;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
-import edu.wpi.punchy_pegasi.generated.MoveDaoImpl;
-import edu.wpi.punchy_pegasi.generated.NodeDaoImpl;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.Node;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -29,8 +26,8 @@ import java.util.stream.Collectors;
 
 public class PathfindingMap {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
-        put("L1", new HospitalFloor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
         put("L2", new HospitalFloor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
+        put("L1", new HospitalFloor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
 //        put("00", new HospitalFloor("frontend/assets/map/00_thegroundfloor.png", "Ground Layer", "00"));
         put("1", new HospitalFloor("frontend/assets/map/01_thefirstfloor.png", "First Layer", "1"));
         put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
@@ -43,6 +40,8 @@ public class PathfindingMap {
     private PFXButton selectGraphicallyCancel;
     @FXML
     private PFXButton selectGraphically;
+    @FXML
+    private MFXFilterComboBox<String> selectAlgo;
     @FXML
     private PFXButton robotButton;
     @FXML
@@ -66,6 +65,7 @@ public class PathfindingMap {
     private ArrayList<Integer> xCoords = new ArrayList<Integer>();
     private ArrayList<Integer> yCoords = new ArrayList<Integer>();
     private Map<String, LocationName> locationsByLongName = new HashMap<>();
+    private String selectedAlgo;
     private final StringConverter<Node> nodeToLocation = new StringConverter<>() {
         @Override
         public String toString(Node node) {
@@ -92,38 +92,40 @@ public class PathfindingMap {
         root.setCenter(map.get());
         map.addLayer(pathfinding);
         pathfinding.setPickOnBounds(false);
-        load();
-
-        nodeStartCombo.setItems(filteredNodes);
-        nodeStartCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
-        nodeStartCombo.setConverter(nodeToLocation);
-        nodeStartCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if (newPropertyValue && !selectingGraphically.get()) {
-                startSelected.set(true);
-                endSelected.set(false);
-                Platform.runLater(() -> {
-                    selectGraphically.setText("Select Start Graphically");
-                    selectGraphically.setDisable(false);
-                });
-            }
+        load(() -> {
+            nodeStartCombo.setItems(filteredNodes);
+            nodeStartCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
+            nodeStartCombo.setConverter(nodeToLocation);
+            nodeStartCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+                if (newPropertyValue && !selectingGraphically.get()) {
+                    startSelected.set(true);
+                    endSelected.set(false);
+                    Platform.runLater(() -> {
+                        selectGraphically.setText("Select Start Graphically");
+                        selectGraphically.setDisable(false);
+                    });
+                }
+            });
+            nodeEndCombo.setItems(filteredNodes);
+            nodeEndCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
+            nodeEndCombo.setConverter(nodeToLocation);
+            nodeEndCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+                if (newPropertyValue) {
+                    startSelected.set(false);
+                    endSelected.set(true);
+                    Platform.runLater(() -> {
+                        selectGraphically.setText("Select End Graphically");
+                        selectGraphically.setDisable(false);
+                    });
+                }
+            });
         });
-        nodeEndCombo.setItems(filteredNodes);
-        nodeEndCombo.setFilterFunction(s -> n -> nodeToLocation.toString(n).toLowerCase().contains(s.toLowerCase()));
-        nodeEndCombo.setConverter(nodeToLocation);
-        nodeEndCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if (newPropertyValue) {
-                startSelected.set(false);
-                endSelected.set(true);
-                Platform.runLater(() -> {
-                    selectGraphically.setText("Select End Graphically");
-                    selectGraphically.setDisable(false);
-                });
-            }
-        });
+        selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search"));
         selectGraphically.setDisable(true);
         robotButton.setDisable(true);
         selectGraphicallyCancel.setVisible(false);
         selectGraphicallyCancel.setManaged(false);
+        PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
     }
 
     private Optional<LocationName> nodeToLocation(Node node) {
@@ -165,22 +167,26 @@ public class PathfindingMap {
         });
     }
 
-    private void load() {
-        nodes = new NodeDaoImpl().getAll();
-        edges = new EdgeDaoImpl().getAll();
-        moves = new MoveDaoImpl().getAll();
-        locations = new LocationNameDaoImpl().getAll();
-
-        movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
-        locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
-        filteredNodes = FXCollections.observableArrayList(nodes.values().stream().filter(v -> {
-            var move = movesByNodeID.get(v.getNodeID());
-            if (move == null) return false;
-            var location = locationsByLongName.get(move.getLongName());
-            if (location == null) return false;
-            var locationType = location.getNodeType();
-            return locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
-        }).sorted(Comparator.comparing(Node::getNodeID)).toList());
+    private void load(Runnable callback) {
+        var thread = new Thread(() -> {
+            nodes = App.getSingleton().getFacade().getAllNode();
+            edges = App.getSingleton().getFacade().getAllEdge();
+            moves = App.getSingleton().getFacade().getAllMove();
+            locations = new LocationNameDaoImpl().getAll();
+            movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
+            locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
+            filteredNodes = FXCollections.observableArrayList(nodes.values().stream().filter(v -> {
+                var move = movesByNodeID.get(v.getNodeID());
+                if (move == null) return false;
+                var location = locationsByLongName.get(move.getLongName());
+                if (location == null) return false;
+                var locationType = location.getNodeType();
+                return locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
+            }).sorted(Comparator.comparing(Node::getNodeID)).toList());
+            Platform.runLater(callback);
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @FXML
@@ -193,16 +199,10 @@ public class PathfindingMap {
 
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
-
         var graph = new Graph<>(nodes, edgeList);
-        var heuristic = new CartesianHeuristic();
-        var dfs = new DFS<>(graph);
-        var bfs = new BFS<>(graph);
-        var AStar = new AStar<>(graph, heuristic, heuristic);
-        var palgo = new Palgo<>(graph, heuristic, heuristic, bfs);
-        palgo.setPathfinder(AStar);
+
         try {
-            var path = palgo.findPath(start,end).stream().toList();
+            var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
             for (var floor : floors.values())
                 floor.clearFloor();
             String currentFloor = path.get(0).getFloor();
@@ -211,8 +211,9 @@ public class PathfindingMap {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.show(floors.get(endNode.getFloor()))));
-                    map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.show(floors.get(node.getFloor()))));
+                    map.drawNode(node,"red", "","From Here");
+                    //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
+                    map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(node.getFloor()))));
                     currentPath = new ArrayList<>();
                     currentFloor = node.getFloor();
                 }
@@ -294,5 +295,16 @@ public class PathfindingMap {
         result[result.length - 1] = '\n';
 
         return result;
+    }
+    @FXML
+    private void setAlgo() {
+        selectedAlgo = selectAlgo.getSelectedItem();
+        if(selectedAlgo.equals("Depth-First Search")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getDFS());
+        } else if(selectedAlgo.equals("Breadth-First Search")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getBFS());
+        } else {
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
+        }
     }
 }

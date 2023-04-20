@@ -8,7 +8,11 @@ import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+
+import java.util.List;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
@@ -42,6 +46,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
     MFXComboBox<String> endTime;
     @FXML
     MFXDatePicker calendar;
+    @FXML
+    TextField numberOfParticipants;
 
     public static BorderPane create(String path) {
         return RequestController.create(new ConferenceRoomController(), path);
@@ -53,6 +59,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         endTime.setItems(timeList);
         endTime.setDisable(true);
         submit.setDisable(true);
+        calendar.isShowing();
         beginningTime.setOnAction(e -> validateField());
         endTime.setOnAction(e -> validateField());
         calendar.setOnAction(e -> validateEntry());
@@ -89,6 +96,25 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         return btHolder != null && etHolder != null && timeList.indexOf(btHolder) < timeList.indexOf(etHolder);
     }
 
+
+    /**
+     invalidText.setVisible(false);
+     String username = usernameEnter.getText();
+     String password = passwordBox.getText();
+     Account.Field[] fields = {Account.Field.USERNAME, Account.Field.PASSWORD};
+     Object[] values = {username, password};
+     Map<String, Account> map = facade.getAccount(fields, values);
+
+     if (map.size() > 0) {
+     App.getSingleton().setAccount(map.values().stream().findFirst().get());
+     App.getSingleton().navigate(Screen.HOME);
+     } else {
+     invalidText.setVisible(true);
+     usernameEnter.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
+     passwordBox.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
+     }
+     */
+
     @FXML
     public void submitEntry() {
         requestEntry =
@@ -98,7 +124,10 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         additionalNotes.getText(),
                         beginningTime.getText(),
                         endTime.getText(),
-                        calendar.getValue());
+                        calendar.getValue(),
+                        numberOfParticipants.getText(),
+                        // TODO: need a way to get the employeeID of the person making the request entry
+                        1L);
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

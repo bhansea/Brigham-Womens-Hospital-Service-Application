@@ -4,6 +4,8 @@ import edu.wpi.punchy_pegasi.generator.SchemaID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class Move {
@@ -11,5 +13,5 @@ public class Move {
     private Long uuid;
     private Long nodeID;
     private String longName;
-    private String date;
+    private LocalDate date;
 }

@@ -32,8 +32,6 @@ public class SidebarController extends VBox implements PropertyChangeListener {
     );
     private final int maxWidth = 256;
     @FXML
-    private PFXAccount pfxAccount;
-    @FXML
     private PFXSidebarItem logout;
     private Boolean expanded = null;
     @FXML
@@ -46,12 +44,13 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        setMaxWidth(maxWidth);
+        setMaxWidth(getMinWidth());
+        setExpanded(false);
         var clipper = new Rectangle();
         clipper.widthProperty().bind(widthProperty());
         clipper.heightProperty().bind(heightProperty());
         setClip(clipper);
-        pfxAccount.setOnMouseClicked(e -> setSelected(null));
+        //pfxAccount.setOnMouseClicked(e -> setSelected(null));
         logout.setOnMouseClicked(e -> App.getSingleton().setAccount(null));
     }
 

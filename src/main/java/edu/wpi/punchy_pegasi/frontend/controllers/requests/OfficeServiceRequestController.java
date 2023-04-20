@@ -1,49 +1,39 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
+
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
+import javafx.scene.layout.VBox;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
     @FXML
-    CheckBox pencils;
+    private PFXCardVertical pencils = new PFXCardVertical();
     @FXML
-    CheckBox pens;
+    private PFXCardVertical pens = new PFXCardVertical();
     @FXML
-    CheckBox paper;
+    private PFXCardVertical paper = new PFXCardVertical();
     @FXML
-    CheckBox stapler;
+    private PFXCardVertical stapler = new PFXCardVertical();
     @FXML
-    CheckBox staples;
+    PFXCardHolder cardHolder;
     @FXML
-    CheckBox paperclips;
-    @FXML
-    CheckBox other;
-    @FXML
-    TextField pencilAmount;
-    @FXML
-    TextField penAmount;
-    @FXML
-    TextField paperAmount;
-    @FXML
-    TextField staplerAmount;
-    @FXML
-    TextField stapleAmount;
-    @FXML
-    TextField paperclipAmount;
-    @FXML
-    TextField otherItems;
-    ArrayList<CheckBox> items = new ArrayList<>();
-    ArrayList<TextField> itemsAmount = new ArrayList<>();
+    VBox container = new VBox();
+
+    ArrayList<PFXCardVertical> items = new ArrayList<>();
 
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
@@ -53,35 +43,31 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @Override
     public void init() {
         submit.setDisable(true);
-        items.addAll(List.of(new CheckBox[]{pencils,
-                pens,
-                paper,
-                stapler,
-                staples,
-                paperclips,
-                other}));
-        itemsAmount.add(pencilAmount);
-        itemsAmount.add(penAmount);
-        itemsAmount.add(paperAmount);
-        itemsAmount.add(staplerAmount);
-        itemsAmount.add(stapleAmount);
-        itemsAmount.add(paperclipAmount);
-        itemsAmount.add(otherItems);
+        ImageView pencilPic = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/officeSupplies/colored-pencils.jpg");
+        pencils = new PFXCardVertical("Pencils", "wood and graphite", 50, pencilPic.getImage());
 
-        items.forEach(i -> i.setOnAction(e -> validateEntry()));
-        itemsAmount.forEach(i -> i.setOnKeyTyped(e -> validateEntry()));
+        ImageView penPic = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/officeSupplies/pen.jpg");
+        pens = new PFXCardVertical("Pens", "It has ink", 30, penPic.getImage());
+
+        ImageView paperPic = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/officeSupplies/paper.jpg");
+        paper = new PFXCardVertical("Paper", "Thin and soft", 100, paperPic.getImage());
+
+        ImageView staplerPic = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/officeSupplies/stapler.jpg");
+        stapler = new PFXCardVertical("Stapler", "Staples papers together", 5, staplerPic.getImage());
+
+        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(pencils, pens, paper, stapler)));
+
+        container.getChildren().add(cardHolder);
+        submit.setDisable(true);
+        this.addPropertyChangeListener(this);
+        container.setAlignment(Pos.CENTER);
         setHeaderText("Office Supplies Service Request");
 }
 
     @FXML
     public void submitEntry() {
-        StringBuilder reqString = new StringBuilder();
-        for (int i = 0; i < items.size(); i++)
-            if (items.get(i).isSelected())
-                reqString.append(items.get(i).getText()).append(" - ").append(itemsAmount.get(i)).append("; ");
-
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), reqString.toString().trim(), "");
+        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }
@@ -93,29 +79,14 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
 
     @FXML
     public void validateEntry() {
-        var validate = validateGeneric() || items.stream().filter(CheckBox::isSelected).toList().size() == 0;
-        for (int i = 0; i < items.size(); i++)
-            validate |= itemsAmount.get(i).getText().isBlank() && items.get(i).isSelected();
+        var validate = validateGeneric();
         submit.setDisable(validate);
     }
 
     @FXML
     public void clearEntry() {
         clearGeneric();
-        pencils.setSelected(false);
-        pencilAmount.clear();
-        pens.setSelected(false);
-        penAmount.clear();
-        paper.setSelected(false);
-        paperAmount.clear();
-        stapler.setSelected(false);
-        staplerAmount.clear();
-        staples.setSelected(false);
-        stapleAmount.clear();
-        paperclips.setSelected(false);
-        paperclipAmount.clear();
-        other.setSelected(false);
-        otherItems.clear();
+        cardHolder.clear();
     }
 
     @Override

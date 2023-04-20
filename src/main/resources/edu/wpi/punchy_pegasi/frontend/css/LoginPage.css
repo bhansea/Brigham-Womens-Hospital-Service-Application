@@ -1,20 +1,25 @@
 .VBox-Login {
-    -fx-alignment: center-left;
-    -fx-padding: 200 200 200 0;
+    -fx-alignment: center-right;
+    -fx-fill: always;
+    -fx-padding: 30 30 30 0;
 }
 
 .VBox-login-White-Box {
-    -fx-alignment: center-left;
-    -fx-background-color: #FFFFFF;
-    -fx-padding: 20;
+    -fx-alignment: center-right;
+    -fx-background-color: -pfx-text-opposite;
+    -fx-padding: 20 50 20 50;
     -fx-background-radius: 20;
-    -fx-max-height: 230;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 30, 0, 0.0, 0.0);
 }
 
-.Button-Login {
-    -fx-background-color: #012D5A;
-    -fx-text-fill: #FFFFFF;
-    -fx-background-radius: 10;
-    -fx-font-size: 14;
-    -fx-font-family: "NunitoSans Regular";
+.PFXButton-Login,
+.PFXButton-Login:armed,
+.PFXButton-Login:focused,
+.PFXButton-Login:hover
+{
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text-opposite;
+    -fx-font-size: 16;
+    -fx-padding: 8 20;
+    -fx-background-radius: 12;
 }
