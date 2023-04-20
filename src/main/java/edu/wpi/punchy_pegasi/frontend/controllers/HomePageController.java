@@ -1,15 +1,21 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -24,16 +30,80 @@ public class HomePageController {
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
 
-    @FXML
-    private void initialize() {
-        showServiceRequestTable(true);
-        initRequestTable();
-    }
+    private MFXComboBox notificationComboBox;
 
-    private void showServiceRequestTable(boolean show) {
-        requestTable.setVisible(show);
-        requestTable.setManaged(show);
+    @FXML
+    private LineChart lineChart;
+
+    @FXML
+    PFXButton openWindow;
+
+    @FXML
+    private void initializeLineChart(){
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Placeholder Name");
+
+        //place holder data
+        series.getData().add(new XYChart.Data<>(1, 10));
+        series.getData().add(new XYChart.Data<>(2, 20));
+        series.getData().add(new XYChart.Data<>(3, 30));
+        series.getData().add(new XYChart.Data<>(4, 40));
+        series.getData().add(new XYChart.Data<>(5, 50));
+
+        lineChart.getData().add(series);
     }
+//    @FXML
+//    private void initialize() {
+//        showServiceRequestTable(true);
+//        initRequestTable();
+//    }
+
+//    private void showServiceRequestTable(boolean show) {
+//        requestTable.setVisible(show);
+//        requestTable.setManaged(show);
+//    }
+
+    private void openSelectedWindow() {
+        String selectedOption = (String) notificationComboBox.getValue();
+        if (selectedOption != null) {
+            if (selectedOption.equals("Meals")) {
+                Stage window = new Stage();
+                Scene scene = new Scene(new MFXTableView<>());
+                window.setTitle(selectedOption + " Window");
+                window.setScene(scene);
+                window.show();
+            } else if (selectedOption.equals("Flowers")) {
+                Stage window = new Stage();
+                Scene scene = new Scene(new MFXTableView<>());
+                window.setTitle(selectedOption + " Window");
+                window.setScene(scene);
+                window.show();
+            } else if (selectedOption.equals("Conference Room")) {
+                Stage window = new Stage();
+                Scene scene = new Scene(new MFXTableView<>());
+                window.setTitle(selectedOption + " Window");
+                window.setScene(scene);
+                window.show();
+            } else if (selectedOption.equals("Office Supplies")) {
+                Stage window = new Stage();
+                Scene scene = new Scene(new MFXTableView<>());
+                window.setTitle(selectedOption + " Window");
+                window.setScene(scene);
+                window.show();
+            } else if (selectedOption.equals("Furniture")) {
+                Stage window = new Stage();
+                Scene scene = new Scene(new MFXTableView<>());
+                window.setTitle(selectedOption + " Window");
+                window.setScene(scene);
+                window.show();
+            }
+        }
+    }
+//            Stage window = new Stage();
+//            Scene scene = new Scene(new MFXTableView<>());
+//            window.setTitle(selectedOption + " Window");
+//            window.setScene(scene);
+//            window.show();
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;
