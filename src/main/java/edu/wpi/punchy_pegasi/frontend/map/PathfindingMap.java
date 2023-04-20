@@ -24,6 +24,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.fazecast.jSerialComm.*;
+
 public class PathfindingMap {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
         put("L2", new HospitalFloor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
@@ -239,15 +241,20 @@ public class PathfindingMap {
     private void sendRobotMessage() {
         robotButton.setDisable(true);
 
-        SerialPort comPort;
+        SerialPort comPort = null;
         SerialPort[] ports = SerialPort.getCommPorts();
 
         for(int i=0;i<ports.length;i++) {
-            if(ports[i].getDescriptivePortName().equals("")) {
+            if(ports[i].getPortDescription().equals("Pololu A-Star 32U4")) {
                 comPort = ports[i];
             }
         }
-        comPort.openPort();
+        try {
+            comPort.openPort();
+        } catch(Exception e) {
+            System.out.println("No port established!");
+            return;
+        }
 
         byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
         comPort.writeBytes(message, message.length);
@@ -257,7 +264,7 @@ public class PathfindingMap {
             comPort.writeBytes(message, message.length);
         }
 
-        message = generateMessage("E", xCoords.get(-1), yCoords.get(-1));
+        message = generateMessage("E", xCoords.get(xCoords.size() - 1), yCoords.get(yCoords.size() - 1));
         comPort.writeBytes(message, message.length);
     }
 
