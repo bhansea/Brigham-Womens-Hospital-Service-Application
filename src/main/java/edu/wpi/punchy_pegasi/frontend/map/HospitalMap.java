@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.map;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.animations.Bobbing;
+import edu.wpi.punchy_pegasi.frontend.animations.FollowPath;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
@@ -22,9 +23,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import net.kurobako.gesturefx.GesturePane;
 
 import java.util.List;
@@ -32,7 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private static final Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
@@ -135,7 +135,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     @Override
     public Point2D getClickLocation(MouseEvent event) {
         var x = event.getX() / gesturePane.getCurrentScaleX() - gesturePane.getCurrentX();
-        var y = event.getY() / gesturePane.getCurrentScaleY()  - gesturePane.getCurrentY();
+        var y = event.getY() / gesturePane.getCurrentScaleY() - gesturePane.getCurrentY();
         return new Point2D(x, y);
     }
 
@@ -171,13 +171,11 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         var floor = floors.get(node.getFloor());
         if (floor == null)
             return;
-        var img = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/you-are-here.jpg")));
-        var imgView = new ImageView(img);
-        imgView.setLayoutX(node.getXcoord() - 40);
-        imgView.setLayoutY(node.getYcoord() - 80);
-        imgView.setFitHeight(80);
-        imgView.setFitWidth(80);
-        floor.nodeCanvas.getChildren().add(imgView);
+        var icon = new PFXIcon(MaterialSymbols.LOCATION_ON, 60);
+        icon.setFill(Color.valueOf("#f40000"));
+        icon.setTranslateX(node.getXcoord() - 30);
+        icon.setTranslateY(node.getYcoord());
+        floor.nodeCanvas.getChildren().add(icon);
     }
 
     @Override
@@ -186,11 +184,23 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         var floor = floors.get(nodes.get(0).getFloor());
         if (floor == null || nodes.stream().map(Node::getFloor).collect(Collectors.toSet()).size() > 1)
             return;
-        var polyline = new Polyline();
-        polyline.setStroke(Color.valueOf("#FF000099"));
-        polyline.setStrokeWidth(10);
-        polyline.getPoints().addAll(nodes.stream().flatMap(n -> Stream.of(n.getXcoord(), n.getYcoord())).map(Double::valueOf).toList());
-        floor.lineCanvas.getChildren().add(0, polyline);
+        // create animated arrow which follows the path of the line
+        var totalDistance = 0.0;
+        for (int i = 0; i < nodes.size() - 1; i++)
+            totalDistance += Math.sqrt(Math.pow(nodes.get(i).getXcoord() - nodes.get(i + 1).getXcoord(), 2) + Math.pow(nodes.get(i).getYcoord() - nodes.get(i + 1).getYcoord(), 2));
+        var speed = 20;
+        var numArrows = (int) (totalDistance / 20); // one arrow every 20 image pixels
+        var totalTime = totalDistance * speed;
+        var timeSpacing = totalTime / numArrows;
+        var points = nodes.stream().map(n -> new Point2D(n.getXcoord(), n.getYcoord())).toList();
+        for (int i = 0; i < numArrows; i++) {
+            var arrow = new PFXIcon(MaterialSymbols.NEAR_ME, 20);
+            arrow.setStyle(arrow.getStyle() + ";-fx-fill: -pfx-navy;");
+            var animation = new FollowPath(arrow, points, -10, 10, 45, speed);
+            animation.getTimeline().jumpTo(Duration.millis(i * timeSpacing));
+            animation.play();
+            floor.lineCanvas.getChildren().add(0, arrow);
+        }
     }
 
     @Override
