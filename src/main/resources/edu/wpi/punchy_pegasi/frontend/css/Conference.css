@@ -1,37 +1,48 @@
 @import "Fonts.css";
 
-.pfx-conference-dropDown {
+.conference-dropDown {
     -fx-font-family: "Nunito Sans";
-    -fx-alignment: CENTER_LEFT;
     -fx-font-size: 18;
-    -fx-text-size: 18;
+    -fx-max-width: 200;
 }
 
-.pfx-conference-header {
+.conference-header {
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 24;
 }
 
-.pfx-conference-subText {
+.conference-subText {
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
-    -fx-alignment: CENTER_LEFT;
 }
 
-.pfx-conference-red-star {
+.conference-red-star {
     -fx-fill: red;
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
 }
 
-.pfx-conference-textField {
+.conference-textField {
     -fx-prompt-text-fill: "Number of Participants";
     -fx-background-radius: 6;
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
-    -fx-alignment: CENTER_LEFT;
 }
 
-.pfx-conference-calendar {
+.conference-calendar {
     -fx-prompt-text-fill: "MONTH DATE, YEAR";
+    -fx-font-size: 18;
+}
+
+.conference-form-sections {
+    -fx-padding: 10;
+    -fx-max-width: 300;
+}
+
+.conference-form-columns {
+    -fx-padding: 10 50 10 10;
+}
+
+.conference-form-section-titles {
+    -fx-padding: 10;
 }
