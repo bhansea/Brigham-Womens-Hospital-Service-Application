@@ -316,6 +316,7 @@ public class PdbController {
     public enum Source {
         Wong("database.cs.wpi.edu", 5432, "teampdb", "teamp", "teamp130"),
         Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130"),
+        AWS("softeng.cia6vosbcxst.us-east-2.rds.amazonaws.com", 5432, "teampdb", "teamp", "teamp130"),
         Local("localhost", 54321, "postgres", "", "");
         private String url;
         private int port;
