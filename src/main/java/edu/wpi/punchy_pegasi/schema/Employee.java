@@ -1,11 +1,15 @@
 package edu.wpi.punchy_pegasi.schema;
 
 
+import com.jsoniter.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import com.jsoniter.annotation.JsonCreator;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
     
     private Long employeeID;

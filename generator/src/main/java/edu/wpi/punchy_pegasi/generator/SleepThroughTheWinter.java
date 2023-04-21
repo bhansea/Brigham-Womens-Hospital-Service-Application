@@ -210,17 +210,18 @@ public class SleepThroughTheWinter {
                     ELSE
                       row = NEW;
                     END IF;
-                    output = jsonb_build_object('tableName', TG_RELNAME, 'action', TG_OP) || row_to_json(row);
+                    -- encode data as json inside a string
+                    output = jsonb_build_object('tableType', '%2$s', 'action', TG_OP, 'data', to_json(row_to_json(row)::text));
                     PERFORM pg_notify('%1$s_update',output::text);
                     RETURN NULL;
                     END;
                 $$ LANGUAGE plpgsql;
-                CREATE TRIGGER trigger_%1$s_update
+                CREATE OR REPLACE TRIGGER trigger_%1$s_update
                   AFTER INSERT OR UPDATE OR DELETE
                   ON %1$s
                   FOR EACH ROW
                   EXECUTE PROCEDURE notify_%1$s_update();
-                """, tableName);
+                """, tableName, tt.name());
 
         return idField.isPresent() && idField.get().getType() == Long.class ?
                 String.format("""

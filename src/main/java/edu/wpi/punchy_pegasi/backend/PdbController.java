@@ -3,9 +3,15 @@ package edu.wpi.punchy_pegasi.backend;
 
 import com.impossibl.postgres.api.jdbc.PGConnection;
 import com.impossibl.postgres.api.jdbc.PGNotificationListener;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.output.EncodingMode;
+import com.jsoniter.output.JsonStream;
+import com.jsoniter.spi.DecodingMode;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -24,12 +30,25 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class PdbController {
+    public enum PG_ACTION {
+        INSERT,
+        UPDATE,
+        DELETE
+    }
+    public static class Notification {
+        public TableType tableType;
+        public PG_ACTION action;
+        public String data;
+    }
     public final Source source;
     private final String schema;
     private final PGNotificationListener listener = new PGNotificationListener() {
         @Override
         public void notification(int processId, String channelName, String payload) {
             // payload will be in the form of ACTION:TABLE_NAME:ID
+            var notification = JsonIterator.deserialize(payload, Notification.class);
+            // case insensitive properties
+            var data = JsonIterator.deserialize(notification.data, notification.tableType.getClazz());
             PGNotificationListener.super.notification(processId, channelName, payload);
         }
 
@@ -48,7 +67,6 @@ public class PdbController {
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
         getConnection();
-        connection.addNotificationListener(listener);
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
         connection.setSchema(this.schema);
@@ -85,13 +103,22 @@ public class PdbController {
 
     private void getConnection() throws SQLException {
         if (connection == null) {
-            connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+            initConnection();
             return;
         }
         if (connection.isClosed() || !connection.isValid(500)) {
             connection.close();
-            connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
-            connection.setSchema(schema);
+            initConnection();
+        }
+    }
+
+    private void initConnection() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+        connection.addNotificationListener(listener);
+        connection.setSchema(schema);
+        var stmt = connection.createStatement();
+        for (var tableType : TableType.values()) {
+            stmt.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
         }
     }
 

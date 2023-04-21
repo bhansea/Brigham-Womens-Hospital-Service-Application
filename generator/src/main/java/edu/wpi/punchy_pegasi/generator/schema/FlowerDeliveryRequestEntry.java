@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
+import com.jsoniter.annotation.JsonCreator;
 import lombok.Getter;
 
 import java.util.UUID;
