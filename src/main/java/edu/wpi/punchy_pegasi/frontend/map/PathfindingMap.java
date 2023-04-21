@@ -255,7 +255,6 @@ public class PathfindingMap {
             System.out.println("No port established!");
             return;
         }
-        double multiplier = 0.05;
         byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
         System.out.println(xCoords.get(0) + ", " + yCoords.get(0));
         comPort.writeBytes(message, message.length);
