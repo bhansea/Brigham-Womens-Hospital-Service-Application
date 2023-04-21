@@ -116,7 +116,7 @@ public class PathfindingMap {
                 }
             });
         });
-        selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search"));
+        selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search", "Dijkstra"));
         selectGraphically.setDisable(true);
         selectGraphicallyCancel.setVisible(false);
         selectGraphicallyCancel.setManaged(false);
@@ -230,6 +230,8 @@ public class PathfindingMap {
             PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getDFS());
         } else if(selectedAlgo.equals("Breadth-First Search")){
             PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getBFS());
+        } else if(selectedAlgo.equals("Dijkstra")){
+            PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getDijkstra());
         } else {
             PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
         }

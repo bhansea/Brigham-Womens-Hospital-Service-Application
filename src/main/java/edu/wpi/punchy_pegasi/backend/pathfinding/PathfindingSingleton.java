@@ -12,4 +12,5 @@ public enum PathfindingSingleton {
     private AStar<Long, Node> aStar = new AStar<>(new CartesianHeuristic(), new CartesianHeuristic());
     private DFS<Long, Node> DFS = new DFS<>();
     private BFS<Long, Node> BFS = new BFS<>();
+    private Dijkstra<Long, Node> dijkstra = new Dijkstra<>(new CartesianHeuristic());
 }
