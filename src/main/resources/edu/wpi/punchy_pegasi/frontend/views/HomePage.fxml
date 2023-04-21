@@ -31,13 +31,22 @@
                 </MFXComboBox>
                 <HBox alignment="CENTER">
                    <StackPane>
+                       <padding>
+                           <Insets topRightBottomLeft="25"/>
+                       </padding>
                        <PFXCardVertical fx:id="placeholderAlerts" styleClass="home-page-card"/>
                    </StackPane>
                     <StackPane>
+                        <padding>
+                            <Insets topRightBottomLeft="25"/>
+                        </padding>
                         <PFXCardVertical fx:id="placeholderPie" styleClass="home-page-card"/>
                     </StackPane>
                     <StackPane>
-                        <MFXTableView fx:id="requestTable"/>
+                        <padding>
+                            <Insets topRightBottomLeft="25"/>
+                        </padding>
+                        <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
                     </StackPane>
                <opaqueInsets>
                   <Insets />
