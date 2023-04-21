@@ -44,14 +44,23 @@ public class HomePageController {
     @FXML
     @Getter
     @Setter
-    private LineChart lineChart = new LineChart<>(x, y);
+    private LineChart lineChart1 = new LineChart<>(x, y);
 
+    @FXML
+    @Getter
+    @Setter
+    private LineChart lineChart2 = new LineChart<>(x, y);
+
+    @FXML
+    @Getter
+    @Setter
+    private LineChart lineChart3 = new LineChart<>(x, y);
 
 //    @FXML
 //    PFXButton openWindow;
 
     @FXML
-    private void initializeLineChart(){
+    private void initializeLineCharts(){
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
         series1.setName("Placeholder Name 1");
 
@@ -62,7 +71,7 @@ public class HomePageController {
         series1.getData().add(new XYChart.Data<>(4, 40));
         series1.getData().add(new XYChart.Data<>(5, 50));
 
-        lineChart.getData().add(series1);
+        lineChart1.getData().add(series1);
 
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
         series1.setName("Placeholder Name 2");
@@ -74,7 +83,7 @@ public class HomePageController {
         series2.getData().add(new XYChart.Data<>(9, 1));
         series2.getData().add(new XYChart.Data<>(5, 5));
 
-        lineChart.getData().add(series2);
+        lineChart2.getData().add(series2);
 
         XYChart.Series<Number, Number> series3 = new XYChart.Series<>();
         series1.setName("Placeholder Name 3");
@@ -86,13 +95,17 @@ public class HomePageController {
         series3.getData().add(new XYChart.Data<>(70, 40));
         series3.getData().add(new XYChart.Data<>(77, 50));
 
-        lineChart.getData().add(series3);
+        lineChart3.getData().add(series3);
+
+
     }
 
     @FXML
     private void initialize() {
-        initializeLineChart();
-        getLineChart();
+        initializeLineCharts();
+        getLineChart1();
+        getLineChart2();
+        getLineChart3();
     }
 
 //    private void showServiceRequestTable(boolean show) {
