@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -13,9 +12,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -34,10 +36,19 @@ public class HomePageController {
     private MFXComboBox notificationComboBox;
 
     @FXML
-    private LineChart lineChart;
+    private NumberAxis x = new NumberAxis();
 
     @FXML
-    PFXButton openWindow;
+    private NumberAxis y = new NumberAxis();
+
+    @FXML
+    @Getter
+    @Setter
+    private LineChart lineChart = new LineChart<>(x, y);
+
+
+//    @FXML
+//    PFXButton openWindow;
 
     @FXML
     private void initializeLineChart(){
@@ -53,11 +64,12 @@ public class HomePageController {
 
         lineChart.getData().add(series);
     }
-//    @FXML
-//    private void initialize() {
-//        showServiceRequestTable(true);
-//        initRequestTable();
-//    }
+
+    @FXML
+    private void initialize() {
+        initializeLineChart();
+        getLineChart();
+    }
 
 //    private void showServiceRequestTable(boolean show) {
 //        requestTable.setVisible(show);

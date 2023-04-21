@@ -9,7 +9,7 @@
 <?import java.lang.String?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
             stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
