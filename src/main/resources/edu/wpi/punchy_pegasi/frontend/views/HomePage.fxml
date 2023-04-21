@@ -30,9 +30,15 @@
                     </items>
                 </MFXComboBox>
                 <HBox alignment="CENTER">
-                    <PFXCardVertical fx:id="placeholderAlerts" styleClass="home-page-card"/>
-                    <PFXCardVertical fx:id="placeholderPie" styleClass="home-page-card"/>
-                    <MFXTableView fx:id="requestTable"/>
+                   <StackPane>
+                       <PFXCardVertical fx:id="placeholderAlerts" styleClass="home-page-card"/>
+                   </StackPane>
+                    <StackPane>
+                        <PFXCardVertical fx:id="placeholderPie" styleClass="home-page-card"/>
+                    </StackPane>
+                    <StackPane>
+                        <MFXTableView fx:id="requestTable"/>
+                    </StackPane>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
