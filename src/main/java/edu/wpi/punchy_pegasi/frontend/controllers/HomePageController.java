@@ -76,6 +76,7 @@ public class HomePageController {
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
         series1.setName("Placeholder Name 2");
 
+
         //place holder data
         series2.getData().add(new XYChart.Data<>(5, 8));
         series2.getData().add(new XYChart.Data<>(2, 2));
