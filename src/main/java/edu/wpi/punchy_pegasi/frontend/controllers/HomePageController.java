@@ -52,17 +52,41 @@ public class HomePageController {
 
     @FXML
     private void initializeLineChart(){
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Placeholder Name");
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+        series1.setName("Placeholder Name 1");
 
         //place holder data
-        series.getData().add(new XYChart.Data<>(1, 10));
-        series.getData().add(new XYChart.Data<>(2, 20));
-        series.getData().add(new XYChart.Data<>(3, 30));
-        series.getData().add(new XYChart.Data<>(4, 40));
-        series.getData().add(new XYChart.Data<>(5, 50));
+        series1.getData().add(new XYChart.Data<>(1, 10));
+        series1.getData().add(new XYChart.Data<>(2, 20));
+        series1.getData().add(new XYChart.Data<>(3, 30));
+        series1.getData().add(new XYChart.Data<>(4, 40));
+        series1.getData().add(new XYChart.Data<>(5, 50));
 
-        lineChart.getData().add(series);
+        lineChart.getData().add(series1);
+
+        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+        series1.setName("Placeholder Name 2");
+
+        //place holder data
+        series2.getData().add(new XYChart.Data<>(5, 8));
+        series2.getData().add(new XYChart.Data<>(2, 2));
+        series2.getData().add(new XYChart.Data<>(3, 10));
+        series2.getData().add(new XYChart.Data<>(9, 1));
+        series2.getData().add(new XYChart.Data<>(5, 5));
+
+        lineChart.getData().add(series2);
+
+        XYChart.Series<Number, Number> series3 = new XYChart.Series<>();
+        series1.setName("Placeholder Name 3");
+
+        //place holder data
+        series3.getData().add(new XYChart.Data<>(7, 10));
+        series3.getData().add(new XYChart.Data<>(20, 20));
+        series3.getData().add(new XYChart.Data<>(57, 30));
+        series3.getData().add(new XYChart.Data<>(70, 40));
+        series3.getData().add(new XYChart.Data<>(77, 50));
+
+        lineChart.getData().add(series3);
     }
 
     @FXML

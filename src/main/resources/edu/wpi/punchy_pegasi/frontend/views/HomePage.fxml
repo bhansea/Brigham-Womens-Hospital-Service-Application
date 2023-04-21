@@ -1,55 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
-<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <Label textAlignment="CENTER" text="Welcome back!&#13;Use the drop down menu to see your outstanding service requests.">
+                <Label text="Welcome back!&#13;Use the drop down menu to see your outstanding service requests." textAlignment="CENTER">
                     <font>
-                        <Font name="System Bold" size="24.0"/>
+                        <Font name="System Bold" size="24.0" />
                     </font>
                     <padding>
-                        <Insets topRightBottomLeft="10"/>
+                        <Insets topRightBottomLeft="10" />
                     </padding>
                 </Label>
-                <MFXComboBox fx:id="notificationComboBox" promptText="Select request type" onAction="#openSelectedWindow">
+                <MFXComboBox fx:id="notificationComboBox" onAction="#openSelectedWindow" promptText="Select request type">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Meals"/>
-                            <String fx:value="Flowers"/>
-                            <String fx:value="Office Supplies"/>
-                            <String fx:value="Conference Room"/>
-                            <String fx:value="Furniture"/>
+                            <String fx:value="Meals" />
+                            <String fx:value="Flowers" />
+                            <String fx:value="Office Supplies" />
+                            <String fx:value="Conference Room" />
+                            <String fx:value="Furniture" />
                         </FXCollections>
                     </items>
                 </MFXComboBox>
                 <HBox alignment="CENTER">
                     <LineChart>
                         <xAxis>
-                            <NumberAxis fx:id="xAxis" label="X axis label" side="BOTTOM"/>
+                            <NumberAxis label="X axis label" side="BOTTOM" fx:id="xAxis1" />
                         </xAxis>
                         <yAxis>
-                            <NumberAxis fx:id="yAxis" label="Y axis label" side="LEFT"/>
+                            <NumberAxis fx:id="yAxis1" label="Y axis label" side="LEFT" />
                         </yAxis>
                     </LineChart>
-
+                    <LineChart>
+                        <xAxis>
+                            <NumberAxis label="X axis label" side="BOTTOM" fx:id="xAxis2" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="yAxis2" label="Y axis label" side="LEFT" />
+                        </yAxis>
+                    </LineChart>
+                    <LineChart>
+                        <xAxis>
+                            <NumberAxis label="X axis label" side="BOTTOM" fx:id="xAxis3" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="yAxis3" label="Y axis label" side="LEFT" />
+                        </yAxis>
+                    </LineChart>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets top="25.0" />
+               </padding>
                 </HBox>
-                <VBox VBox.vgrow="ALWAYS" fx:id="tableContainer">
-                    <padding>
-                        <Insets topRightBottomLeft="20"/>
-                    </padding>
-                </VBox>
             </VBox>
         </HBox>
 
