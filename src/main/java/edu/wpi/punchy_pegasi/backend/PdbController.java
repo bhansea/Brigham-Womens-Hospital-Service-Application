@@ -1,6 +1,8 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
+import com.impossibl.postgres.api.jdbc.PGConnection;
+import com.impossibl.postgres.api.jdbc.PGNotificationListener;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +26,18 @@ import java.util.regex.Pattern;
 public class PdbController {
 
     public final Source source;
-    private final Connection connection;
+    private final PGConnection connection;
+    private final PGNotificationListener listener = new PGNotificationListener() {
+        @Override
+        public void notification(int processId, String channelName, String payload) {
+            // payload will be in the form of ACTION:TABLE_NAME:ID
+            PGNotificationListener.super.notification(processId, channelName, payload);
+        }
+
+        @Override
+        public void closed() {
+        }
+    };
 
     public PdbController(Source source) throws SQLException, ClassNotFoundException {
         this(source, "teamp");
@@ -32,11 +45,13 @@ public class PdbController {
 
     public PdbController(Source source, String schema) throws SQLException, ClassNotFoundException {
         this.source = source;
-        Class.forName("org.postgresql.Driver");
-        connection = DriverManager.getConnection("jdbc:postgresql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password);
+        Class.forName("com.impossibl.postgres.jdbc.PGDriver");
+        connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+        connection.addNotificationListener(listener);
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + schema + ";");
         connection.setSchema(schema);
+        statement.close();
     }
 
     private static String objectToPsqlString(Object o) {
