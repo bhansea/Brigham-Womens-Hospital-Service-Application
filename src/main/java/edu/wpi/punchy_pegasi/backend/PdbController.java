@@ -1,6 +1,8 @@
 package edu.wpi.punchy_pegasi.backend;
 
 
+import com.impossibl.postgres.api.jdbc.PGConnection;
+import com.impossibl.postgres.api.jdbc.PGNotificationListener;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +24,20 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class PdbController {
-
     public final Source source;
-    private final Connection connection;
+    private final String schema;
+    private final PGNotificationListener listener = new PGNotificationListener() {
+        @Override
+        public void notification(int processId, String channelName, String payload) {
+            // payload will be in the form of ACTION:TABLE_NAME:ID
+            PGNotificationListener.super.notification(processId, channelName, payload);
+        }
+
+        @Override
+        public void closed() {
+        }
+    };
+    private PGConnection connection;
 
     public PdbController(Source source) throws SQLException, ClassNotFoundException {
         this(source, "teamp");
@@ -32,11 +45,13 @@ public class PdbController {
 
     public PdbController(Source source, String schema) throws SQLException, ClassNotFoundException {
         this.source = source;
-        Class.forName("org.postgresql.Driver");
-        connection = DriverManager.getConnection("jdbc:postgresql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password);
+        this.schema = schema;
+        Class.forName("com.impossibl.postgres.jdbc.PGDriver");
+        getConnection();
+        connection.addNotificationListener(listener);
         var statement = connection.createStatement();
-        statement.execute("CREATE SCHEMA IF NOT EXISTS " + schema + ";");
-        connection.setSchema(schema);
+        statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
+        connection.setSchema(this.schema);
     }
 
     private static String objectToPsqlString(Object o) {
@@ -44,7 +59,7 @@ public class PdbController {
     }
 
     public static String objectToPsqlString(Object o, boolean first) {
-        if(o == null) return "NULL";
+        if (o == null) return "NULL";
         if (o instanceof String || o instanceof UUID || o instanceof LocalDate || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {
@@ -53,6 +68,30 @@ public class PdbController {
             return (first ? "ARRAY" : "") + "[" + String.join(", ", Arrays.stream((Object[]) o).map(v -> objectToPsqlString(v, false)).toList()) + "]";
         } else {
             return o.toString();
+        }
+    }
+
+    public synchronized boolean reconnectOnError(SQLException e) {
+        if (e.getSQLState().equals("08006")) {
+            try {
+                getConnection();
+                return true;
+            } catch (SQLException e1) {
+                log.error("Failed to reconnect to database", e1);
+            }
+        }
+        return false;
+    }
+
+    private void getConnection() throws SQLException {
+        if (connection == null) {
+            connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+            return;
+        }
+        if (connection.isClosed() || !connection.isValid(500)) {
+            connection.close();
+            connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+            connection.setSchema(schema);
         }
     }
 
@@ -65,6 +104,10 @@ public class PdbController {
             initTable(tableType);
             log.info(tableType.name() + " table initialized");
         } catch (SQLException e) {
+            if (reconnectOnError(e)) {
+                initTableByType(tableType);
+                return;
+            }
             log.error("Failed to initialize " + tableType.name() + " table", e);
             throw new DatabaseException("SQL error");
         }
@@ -104,6 +147,7 @@ public class PdbController {
             query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
             return statement.executeUpdate(query);
         } catch (SQLException e) {
+            if (reconnectOnError(e)) return updateQuery(tableType, keyField, keyValue, fields, values);
             log.error("Failed to update node", e);
             throw new DatabaseException("SQL error");
         }
@@ -129,6 +173,7 @@ public class PdbController {
             query += ");";
             return statement.executeUpdate(query);
         } catch (SQLException e) {
+            if (reconnectOnError(e)) return insertQuery(tableType, fields, values);
             log.error("Failed to insert row", e);
             throw new DatabaseException("SQL error");
         }
@@ -152,6 +197,7 @@ public class PdbController {
             query += ";";
             return statement.executeUpdate(query);
         } catch (SQLException e) {
+            if (reconnectOnError(e)) return deleteQuery(tableType, field, value);
             log.error("Failed to delete node", e);
             throw new DatabaseException("SQL error");
         }
@@ -172,6 +218,7 @@ public class PdbController {
                 statement.addBatch(query);
             return statement.executeBatch();
         } catch (SQLException e) {
+            if (reconnectOnError(e)) return executeDeletes(deleteQueries);
             log.error("Failed to delete node", e);
             throw new DatabaseException("SQL error");
         }
@@ -211,6 +258,7 @@ public class PdbController {
             query += ";";
             return statement.executeQuery(query);
         } catch (SQLException e) {
+            if (reconnectOnError(e)) return searchQuery(tableType, fields, values);
             log.error("Failed to search node", e);
             throw new DatabaseException("SQL error");
         }
@@ -237,10 +285,16 @@ public class PdbController {
         try {
             exportToCSV(path, tableType);
             log.info("Exported table successfully");
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
+            if (reconnectOnError(e)) {
+                exportTable(path, tableType);
+                return;
+            }
             log.error("Failed to export table:", e);
-            if (e instanceof IOException) throw new DatabaseException("Failed to open selected file");
-            else if (e instanceof SQLException) throw new DatabaseException("Table does not exist");
+            throw new DatabaseException("Table does not exist");
+        } catch (IOException e) {
+            log.error("Failed to export table:", e);
+            throw new DatabaseException("Failed to open selected file");
         }
     }
 
@@ -254,18 +308,21 @@ public class PdbController {
             insertfromCSV(path, tableType);
             log.info("Imported table successfully");
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
+            if (reconnectOnError(e)) {
+                importTable(tableType, path);
+                return;
+            }
             log.error("Failed to import table:", e);
-            if (e instanceof IOException) {
-                throw new DatabaseException("Failed to open selected file");
-            } else if (e instanceof SQLException) {
-                if (e.getMessage().contains("violates unique constraint")) {
-                    throw new DatabaseException("One or more nodes in csv already exist");
-                } else if (Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
-                    throw new DatabaseException("CSV headers do not match table headers");
-                }
+            if (e.getMessage().contains("violates unique constraint")) {
+                throw new DatabaseException("One or more nodes in csv already exist");
+            } else if (Pattern.matches("[\\S\\s]*column.+does not exist[\\S\\s]*", e.getMessage())) {
+                throw new DatabaseException("CSV headers do not match table headers");
             }
             throw new DatabaseException("Table does not exist, CSV has incorrect headers");
+        } catch (IOException e) {
+            log.error("Failed to import table:", e);
+            throw new DatabaseException("Failed to open selected file");
         }
     }
 
@@ -317,7 +374,7 @@ public class PdbController {
         Wong("database.cs.wpi.edu", 5432, "teampdb", "teamp", "teamp130"),
         Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130"),
         AWS("softeng.cia6vosbcxst.us-east-2.rds.amazonaws.com", 5432, "teampdb", "teamp", "teamp130"),
-        Local("localhost", 54321, "postgres", "", "");
+        Local("localhost", 5432, "postgres", "username", "password");
         private String url;
         private int port;
         private String database;
