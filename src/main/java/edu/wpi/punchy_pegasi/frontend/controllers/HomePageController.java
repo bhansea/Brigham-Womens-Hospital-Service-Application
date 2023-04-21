@@ -15,6 +15,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,78 +36,21 @@ public class HomePageController {
     @FXML
     private MFXComboBox notificationComboBox;
 
-    @FXML
-    private NumberAxis x = new NumberAxis();
 
     @FXML
-    private NumberAxis y = new NumberAxis();
+    private Rectangle alertsPlaceholder;
 
     @FXML
-    @Getter
-    @Setter
-    private LineChart lineChart1 = new LineChart<>(x, y);
-
-    @FXML
-    @Getter
-    @Setter
-    private LineChart lineChart2 = new LineChart<>(x, y);
-
-    @FXML
-    @Getter
-    @Setter
-    private LineChart lineChart3 = new LineChart<>(x, y);
-
-//    @FXML
-//    PFXButton openWindow;
-
-    @FXML
-    private void initializeLineCharts(){
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        series1.setName("Placeholder Name 1");
-
-        //place holder data
-        series1.getData().add(new XYChart.Data<>(1, 10));
-        series1.getData().add(new XYChart.Data<>(2, 20));
-        series1.getData().add(new XYChart.Data<>(3, 30));
-        series1.getData().add(new XYChart.Data<>(4, 40));
-        series1.getData().add(new XYChart.Data<>(5, 50));
-
-        lineChart1.getData().add(series1);
-
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
-        series1.setName("Placeholder Name 2");
-
-
-        //place holder data
-        series2.getData().add(new XYChart.Data<>(5, 8));
-        series2.getData().add(new XYChart.Data<>(2, 2));
-        series2.getData().add(new XYChart.Data<>(3, 10));
-        series2.getData().add(new XYChart.Data<>(9, 1));
-        series2.getData().add(new XYChart.Data<>(5, 5));
-
-        lineChart2.getData().add(series2);
-
-        XYChart.Series<Number, Number> series3 = new XYChart.Series<>();
-        series1.setName("Placeholder Name 3");
-
-        //place holder data
-        series3.getData().add(new XYChart.Data<>(7, 10));
-        series3.getData().add(new XYChart.Data<>(20, 20));
-        series3.getData().add(new XYChart.Data<>(57, 30));
-        series3.getData().add(new XYChart.Data<>(70, 40));
-        series3.getData().add(new XYChart.Data<>(77, 50));
-
-        lineChart3.getData().add(series3);
-
-
+    private void initializeRectangle(){
+        alertsPlaceholder.setVisible(true);
     }
 
     @FXML
     private void initialize() {
-        initializeLineCharts();
-        getLineChart1();
-        getLineChart2();
-        getLineChart3();
+        initializeRectangle();
+        //initRequestTable();
+        //showServiceRequestTable(true);
+
     }
 
 //    private void showServiceRequestTable(boolean show) {
@@ -151,11 +95,7 @@ public class HomePageController {
             }
         }
     }
-//            Stage window = new Stage();
-//            Scene scene = new Scene(new MFXTableView<>());
-//            window.setTitle(selectedOption + " Window");
-//            window.setScene(scene);
-//            window.show();
+
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;

@@ -12,6 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.shape.Rectangle?>
 <BorderPane stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
@@ -36,30 +39,13 @@
                     </items>
                 </MFXComboBox>
                 <HBox alignment="CENTER">
-                    <LineChart>
-                        <xAxis>
-                            <NumberAxis label="X axis label" side="BOTTOM" fx:id="xAxis1" />
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis fx:id="yAxis1" label="Y axis label" side="LEFT" />
-                        </yAxis>
-                    </LineChart>
-                    <LineChart>
-                        <xAxis>
-                            <NumberAxis label="X axis label" side="BOTTOM" fx:id="xAxis2" />
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis fx:id="yAxis2" label="Y axis label" side="LEFT" />
-                        </yAxis>
-                    </LineChart>
-                    <LineChart>
-                        <xAxis>
-                            <NumberAxis label="X axis label" side="BOTTOM" fx:id="xAxis3" />
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis fx:id="yAxis3" label="Y axis label" side="LEFT" />
-                        </yAxis>
-                    </LineChart>
+                    <Rectangle fx:id="alertsPlaceholder" fill="crimson" />
+
+                    <PieChart fx:id="servRequestPie">
+
+                    </PieChart>
+                    <MFXTableView fx:id="requestTable">
+                    </MFXTableView>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
