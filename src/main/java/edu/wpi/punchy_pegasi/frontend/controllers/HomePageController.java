@@ -37,21 +37,21 @@ public class HomePageController {
     private MFXComboBox notificationComboBox;
 
 
-    @FXML
-    private Rectangle alertsPlaceholder;
 
-    @FXML
-    private void initializeRectangle(){
-        alertsPlaceholder.setVisible(true);
-    }
 
-    @FXML
-    private void initialize() {
-        initializeRectangle();
-        //initRequestTable();
-        //showServiceRequestTable(true);
+//    @FXML
+//    private void initializeRectangle(){
+//
+//
+//    }
 
-    }
+//    @FXML
+//    private void initialize() {
+//
+//        //initRequestTable();
+//        //showServiceRequestTable(true);
+//
+//    }
 
 //    private void showServiceRequestTable(boolean show) {
 //        requestTable.setVisible(show);
