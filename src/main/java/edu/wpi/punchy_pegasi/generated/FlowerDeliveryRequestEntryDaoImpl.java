@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -80,7 +83,7 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
     }
 
     @Override
-    public Map<java.util.UUID, FlowerDeliveryRequestEntry> getAll() {
+    public ObservableMap<java.util.UUID, FlowerDeliveryRequestEntry> getAll() {
         var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS)) {
             while (rs.next()) {
@@ -101,7 +104,12 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<FlowerDeliveryRequestEntry> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

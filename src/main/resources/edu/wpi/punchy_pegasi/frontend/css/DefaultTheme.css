@@ -52,7 +52,7 @@
 @import "PFXTab.css";
 @import "PFXTabLayout.css";
 @import "LoginPage.css";
-@import "HomePageBackground.css";
+@import "HomePage.css";
 @import "Spinner.css";
 @import "Link.css";
 @import "Signage.css";
@@ -62,3 +62,5 @@
 @import "PFXCardHolder.css";
 @import "Conference.css";
 @import "PFXDropdown.css";
+@import "PFXRequest.css";
+@import "PieChart.css";

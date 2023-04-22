@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -68,7 +71,7 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
     }
 
     @Override
-    public Map<java.lang.Long, LocationName> getAll() {
+    public ObservableMap<java.lang.Long, LocationName> getAll() {
         var map = new HashMap<java.lang.Long, LocationName>();
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES)) {
             while (rs.next()) {
@@ -83,7 +86,12 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<LocationName> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

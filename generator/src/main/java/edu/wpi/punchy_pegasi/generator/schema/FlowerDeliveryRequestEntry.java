@@ -1,15 +1,19 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
+import com.jsoniter.annotation.JsonCreator;
+import com.jsoniter.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class FlowerDeliveryRequestEntry extends RequestEntry {
-    private final String flowerSize;
-    private final String flowerType;
-    private final String flowerAmount;
-    private final String patientName;
+    private String flowerSize;
+    private String flowerType;
+    private String flowerAmount;
+    private String patientName;
 
     public FlowerDeliveryRequestEntry(UUID serviceID, String patientName, Long locationName, Long staffAssignment, String additionalNotes, Status status, String flowerSize, String flowerAmount, String flowerType, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
