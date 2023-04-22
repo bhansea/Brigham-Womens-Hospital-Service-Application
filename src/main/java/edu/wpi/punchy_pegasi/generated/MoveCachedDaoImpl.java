@@ -5,6 +5,10 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -15,13 +19,21 @@ import java.util.*;
 @Slf4j
 public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>, PropertyChangeListener {
 
-    static String[] fields = {"uuid", "nodeID", "longName", "date"};
+    static String[] fields = {"uuid", "nodeID", "locationID", "date"};
 
-    private final Map<java.lang.Long, Move> cache = new HashMap<>();
+    private final ObservableMap<java.lang.Long, Move> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<Move> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public MoveCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
+        cache.addListener((MapChangeListener<java.lang.Long, Move>) c -> {
+            if (c.wasRemoved()) {
+                list.remove(c.getValueRemoved());
+            } else if (c.wasAdded()) {
+                list.add(c.getValueAdded());
+            }
+        });
         initCache();
         this.dbController.addPropertyChangeListener(this);
     }
@@ -49,7 +61,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
                 Move req = new Move(
                     rs.getObject("uuid", java.lang.Long.class),
                     rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("longName", java.lang.String.class),
+                    rs.getObject("locationID", java.lang.Long.class),
                     rs.getObject("date", java.time.LocalDate.class));
                 add(req);
             }
@@ -83,13 +95,18 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
     }
 
     @Override
-    public Map<java.lang.Long, Move> getAll() {
+    public ObservableMap<java.lang.Long, Move> getAll() {
         return cache;
     }
 
     @Override
+    public ObservableList<Move> getAllAsList() {
+        return list;
+    }
+
+    @Override
     public void save(Move move) {
-        Object[] values = {move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        Object[] values = {move.getUuid(), move.getNodeID(), move.getLocationID(), move.getDate()};
         try {
             dbController.insertQuery(TableType.MOVES, fields, values);
 //            add(move);
@@ -127,7 +144,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
             var data = (Move) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
-                case DELETE -> delete(data);
+                case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
         }

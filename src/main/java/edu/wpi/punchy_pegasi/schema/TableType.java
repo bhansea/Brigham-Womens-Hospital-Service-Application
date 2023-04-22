@@ -89,7 +89,7 @@ BEGIN
     (
       uuid bigint DEFAULT nextval('moves_id_seq') PRIMARY KEY,
       nodeID bigint,
-      longName varchar,
+      locationID bigint,
       date date NOT NULL
     );
     ALTER SEQUENCE moves_id_seq OWNED BY moves.uuid;

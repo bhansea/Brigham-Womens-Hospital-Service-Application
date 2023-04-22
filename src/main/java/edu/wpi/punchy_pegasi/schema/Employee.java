@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import com.jsoniter.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.jsoniter.annotation.JsonCreator;
@@ -10,8 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Employee {
+    
     @com.jsoniter.annotation.JsonProperty("employeeid")
-        private Long employeeID;
+    private Long employeeID;
     @com.jsoniter.annotation.JsonProperty("firstname")
     private String firstName;
     @com.jsoniter.annotation.JsonProperty("lastname")

@@ -5,6 +5,10 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -17,11 +21,19 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
 
     static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "selectFurniture"};
 
-    private final Map<java.util.UUID, FurnitureRequestEntry> cache = new HashMap<>();
+    private final ObservableMap<java.util.UUID, FurnitureRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<FurnitureRequestEntry> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public FurnitureRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
+        cache.addListener((MapChangeListener<java.util.UUID, FurnitureRequestEntry>) c -> {
+            if (c.wasRemoved()) {
+                list.remove(c.getValueRemoved());
+            } else if (c.wasAdded()) {
+                list.add(c.getValueAdded());
+            }
+        });
         initCache();
         this.dbController.addPropertyChangeListener(this);
     }
@@ -86,8 +98,13 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
     }
 
     @Override
-    public Map<java.util.UUID, FurnitureRequestEntry> getAll() {
+    public ObservableMap<java.util.UUID, FurnitureRequestEntry> getAll() {
         return cache;
+    }
+
+    @Override
+    public ObservableList<FurnitureRequestEntry> getAllAsList() {
+        return list;
     }
 
     @Override
@@ -130,7 +147,7 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
             var data = (FurnitureRequestEntry) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
-                case DELETE -> delete(data);
+                case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
         }

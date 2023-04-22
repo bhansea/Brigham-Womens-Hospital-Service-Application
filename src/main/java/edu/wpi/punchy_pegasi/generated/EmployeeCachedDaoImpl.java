@@ -5,6 +5,10 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Employee;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -17,11 +21,19 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
 
     static String[] fields = {"employeeID", "firstName", "lastName"};
 
-    private final Map<java.lang.Long, Employee> cache = new HashMap<>();
+    private final ObservableMap<java.lang.Long, Employee> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<Employee> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public EmployeeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
+        cache.addListener((MapChangeListener<java.lang.Long, Employee>) c -> {
+            if (c.wasRemoved()) {
+                list.remove(c.getValueRemoved());
+            } else if (c.wasAdded()) {
+                list.add(c.getValueAdded());
+            }
+        });
         initCache();
         this.dbController.addPropertyChangeListener(this);
     }
@@ -82,8 +94,13 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
     }
 
     @Override
-    public Map<java.lang.Long, Employee> getAll() {
+    public ObservableMap<java.lang.Long, Employee> getAll() {
         return cache;
+    }
+
+    @Override
+    public ObservableList<Employee> getAllAsList() {
+        return list;
     }
 
     @Override
@@ -126,7 +143,7 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
             var data = (Employee) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
-                case DELETE -> delete(data);
+                case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
         }

@@ -5,6 +5,10 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -17,11 +21,19 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
 
     static String[] fields = {"uuid", "longName", "shortName", "nodeType"};
 
-    private final Map<java.lang.Long, LocationName> cache = new HashMap<>();
+    private final ObservableMap<java.lang.Long, LocationName> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<LocationName> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public LocationNameCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
+        cache.addListener((MapChangeListener<java.lang.Long, LocationName>) c -> {
+            if (c.wasRemoved()) {
+                list.remove(c.getValueRemoved());
+            } else if (c.wasAdded()) {
+                list.add(c.getValueAdded());
+            }
+        });
         initCache();
         this.dbController.addPropertyChangeListener(this);
     }
@@ -83,8 +95,13 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
     }
 
     @Override
-    public Map<java.lang.Long, LocationName> getAll() {
+    public ObservableMap<java.lang.Long, LocationName> getAll() {
         return cache;
+    }
+
+    @Override
+    public ObservableList<LocationName> getAllAsList() {
+        return list;
     }
 
     @Override
@@ -127,7 +144,7 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
             var data = (LocationName) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
-                case DELETE -> delete(data);
+                case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
         }

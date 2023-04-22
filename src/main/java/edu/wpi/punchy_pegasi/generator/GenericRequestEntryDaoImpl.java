@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -60,7 +63,7 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
     }
 
     @Override
-    public Map<String/*idFieldType*/, GenericRequestEntry> getAll/*FacadeClassName*/() {
+    public ObservableMap<String/*idFieldType*/, GenericRequestEntry> getAll/*FacadeClassName*/() {
         var map = new HashMap<String/*idFieldType*/, GenericRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.GENERIC)) {
             while (rs.next()) {
@@ -71,7 +74,12 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<GenericRequestEntry> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

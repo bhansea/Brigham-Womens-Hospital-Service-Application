@@ -3,6 +3,8 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.schema.*;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import java.util.Map;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import java.util.Optional;
 
 
@@ -37,6 +39,7 @@ public class Facade {
 		signageDao = new SignageCachedDaoImpl(dbController);
 
     }
+
 	public Optional<Node> getNode(java.lang.Long key) {
 		return nodeDao.get(key);
 	}
@@ -46,8 +49,11 @@ public class Facade {
 	public Map<java.lang.Long, Node> getNode(Node.Field[] params, Object[] value) {
 		return nodeDao.get(params, value);
 	}
-	public Map<java.lang.Long, Node> getAllNode() {
+	public ObservableMap<java.lang.Long, Node> getAllNode() {
 		return nodeDao.getAll();
+	}
+	public ObservableList<Node> getAllAsListNode() {
+		return nodeDao.getAllAsList();
 	}
 	public void saveNode(Node node) {
 		nodeDao.save(node);
@@ -67,8 +73,11 @@ public class Facade {
 	public Map<java.lang.Long, Edge> getEdge(Edge.Field[] params, Object[] value) {
 		return edgeDao.get(params, value);
 	}
-	public Map<java.lang.Long, Edge> getAllEdge() {
+	public ObservableMap<java.lang.Long, Edge> getAllEdge() {
 		return edgeDao.getAll();
+	}
+	public ObservableList<Edge> getAllAsListEdge() {
+		return edgeDao.getAllAsList();
 	}
 	public void saveEdge(Edge edge) {
 		edgeDao.save(edge);
@@ -88,8 +97,11 @@ public class Facade {
 	public Map<java.lang.Long, Move> getMove(Move.Field[] params, Object[] value) {
 		return moveDao.get(params, value);
 	}
-	public Map<java.lang.Long, Move> getAllMove() {
+	public ObservableMap<java.lang.Long, Move> getAllMove() {
 		return moveDao.getAll();
+	}
+	public ObservableList<Move> getAllAsListMove() {
+		return moveDao.getAllAsList();
 	}
 	public void saveMove(Move move) {
 		moveDao.save(move);
@@ -109,8 +121,11 @@ public class Facade {
 	public Map<java.lang.Long, LocationName> getLocationName(LocationName.Field[] params, Object[] value) {
 		return locationNameDao.get(params, value);
 	}
-	public Map<java.lang.Long, LocationName> getAllLocationName() {
+	public ObservableMap<java.lang.Long, LocationName> getAllLocationName() {
 		return locationNameDao.getAll();
+	}
+	public ObservableList<LocationName> getAllAsListLocationName() {
+		return locationNameDao.getAllAsList();
 	}
 	public void saveLocationName(LocationName locationName) {
 		locationNameDao.save(locationName);
@@ -130,8 +145,11 @@ public class Facade {
 	public Map<java.util.UUID, RequestEntry> getRequestEntry(RequestEntry.Field[] params, Object[] value) {
 		return requestEntryDao.get(params, value);
 	}
-	public Map<java.util.UUID, RequestEntry> getAllRequestEntry() {
+	public ObservableMap<java.util.UUID, RequestEntry> getAllRequestEntry() {
 		return requestEntryDao.getAll();
+	}
+	public ObservableList<RequestEntry> getAllAsListRequestEntry() {
+		return requestEntryDao.getAllAsList();
 	}
 	public void saveRequestEntry(RequestEntry requestEntry) {
 		requestEntryDao.save(requestEntry);
@@ -151,8 +169,11 @@ public class Facade {
 	public Map<java.util.UUID, FoodServiceRequestEntry> getFoodServiceRequestEntry(FoodServiceRequestEntry.Field[] params, Object[] value) {
 		return foodServiceRequestEntryDao.get(params, value);
 	}
-	public Map<java.util.UUID, FoodServiceRequestEntry> getAllFoodServiceRequestEntry() {
+	public ObservableMap<java.util.UUID, FoodServiceRequestEntry> getAllFoodServiceRequestEntry() {
 		return foodServiceRequestEntryDao.getAll();
+	}
+	public ObservableList<FoodServiceRequestEntry> getAllAsListFoodServiceRequestEntry() {
+		return foodServiceRequestEntryDao.getAllAsList();
 	}
 	public void saveFoodServiceRequestEntry(FoodServiceRequestEntry foodServiceRequestEntry) {
 		foodServiceRequestEntryDao.save(foodServiceRequestEntry);
@@ -172,8 +193,11 @@ public class Facade {
 	public Map<java.util.UUID, FlowerDeliveryRequestEntry> getFlowerDeliveryRequestEntry(FlowerDeliveryRequestEntry.Field[] params, Object[] value) {
 		return flowerDeliveryRequestEntryDao.get(params, value);
 	}
-	public Map<java.util.UUID, FlowerDeliveryRequestEntry> getAllFlowerDeliveryRequestEntry() {
+	public ObservableMap<java.util.UUID, FlowerDeliveryRequestEntry> getAllFlowerDeliveryRequestEntry() {
 		return flowerDeliveryRequestEntryDao.getAll();
+	}
+	public ObservableList<FlowerDeliveryRequestEntry> getAllAsListFlowerDeliveryRequestEntry() {
+		return flowerDeliveryRequestEntryDao.getAllAsList();
 	}
 	public void saveFlowerDeliveryRequestEntry(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
 		flowerDeliveryRequestEntryDao.save(flowerDeliveryRequestEntry);
@@ -193,8 +217,11 @@ public class Facade {
 	public Map<java.util.UUID, ConferenceRoomEntry> getConferenceRoomEntry(ConferenceRoomEntry.Field[] params, Object[] value) {
 		return conferenceRoomEntryDao.get(params, value);
 	}
-	public Map<java.util.UUID, ConferenceRoomEntry> getAllConferenceRoomEntry() {
+	public ObservableMap<java.util.UUID, ConferenceRoomEntry> getAllConferenceRoomEntry() {
 		return conferenceRoomEntryDao.getAll();
+	}
+	public ObservableList<ConferenceRoomEntry> getAllAsListConferenceRoomEntry() {
+		return conferenceRoomEntryDao.getAllAsList();
 	}
 	public void saveConferenceRoomEntry(ConferenceRoomEntry conferenceRoomEntry) {
 		conferenceRoomEntryDao.save(conferenceRoomEntry);
@@ -214,8 +241,11 @@ public class Facade {
 	public Map<java.util.UUID, FurnitureRequestEntry> getFurnitureRequestEntry(FurnitureRequestEntry.Field[] params, Object[] value) {
 		return furnitureRequestEntryDao.get(params, value);
 	}
-	public Map<java.util.UUID, FurnitureRequestEntry> getAllFurnitureRequestEntry() {
+	public ObservableMap<java.util.UUID, FurnitureRequestEntry> getAllFurnitureRequestEntry() {
 		return furnitureRequestEntryDao.getAll();
+	}
+	public ObservableList<FurnitureRequestEntry> getAllAsListFurnitureRequestEntry() {
+		return furnitureRequestEntryDao.getAllAsList();
 	}
 	public void saveFurnitureRequestEntry(FurnitureRequestEntry furnitureRequestEntry) {
 		furnitureRequestEntryDao.save(furnitureRequestEntry);
@@ -235,8 +265,11 @@ public class Facade {
 	public Map<java.util.UUID, OfficeServiceRequestEntry> getOfficeServiceRequestEntry(OfficeServiceRequestEntry.Field[] params, Object[] value) {
 		return officeServiceRequestEntryDao.get(params, value);
 	}
-	public Map<java.util.UUID, OfficeServiceRequestEntry> getAllOfficeServiceRequestEntry() {
+	public ObservableMap<java.util.UUID, OfficeServiceRequestEntry> getAllOfficeServiceRequestEntry() {
 		return officeServiceRequestEntryDao.getAll();
+	}
+	public ObservableList<OfficeServiceRequestEntry> getAllAsListOfficeServiceRequestEntry() {
+		return officeServiceRequestEntryDao.getAllAsList();
 	}
 	public void saveOfficeServiceRequestEntry(OfficeServiceRequestEntry officeServiceRequestEntry) {
 		officeServiceRequestEntryDao.save(officeServiceRequestEntry);
@@ -256,8 +289,11 @@ public class Facade {
 	public Map<java.lang.Long, Employee> getEmployee(Employee.Field[] params, Object[] value) {
 		return employeeDao.get(params, value);
 	}
-	public Map<java.lang.Long, Employee> getAllEmployee() {
+	public ObservableMap<java.lang.Long, Employee> getAllEmployee() {
 		return employeeDao.getAll();
+	}
+	public ObservableList<Employee> getAllAsListEmployee() {
+		return employeeDao.getAllAsList();
 	}
 	public void saveEmployee(Employee employee) {
 		employeeDao.save(employee);
@@ -277,8 +313,11 @@ public class Facade {
 	public Map<java.lang.String, Account> getAccount(Account.Field[] params, Object[] value) {
 		return accountDao.get(params, value);
 	}
-	public Map<java.lang.String, Account> getAllAccount() {
+	public ObservableMap<java.lang.String, Account> getAllAccount() {
 		return accountDao.getAll();
+	}
+	public ObservableList<Account> getAllAsListAccount() {
+		return accountDao.getAllAsList();
 	}
 	public void saveAccount(Account account) {
 		accountDao.save(account);
@@ -298,8 +337,11 @@ public class Facade {
 	public Map<java.lang.String, Signage> getSignage(Signage.Field[] params, Object[] value) {
 		return signageDao.get(params, value);
 	}
-	public Map<java.lang.String, Signage> getAllSignage() {
+	public ObservableMap<java.lang.String, Signage> getAllSignage() {
 		return signageDao.getAll();
+	}
+	public ObservableList<Signage> getAllAsListSignage() {
+		return signageDao.getAllAsList();
 	}
 	public void saveSignage(Signage signage) {
 		signageDao.save(signage);

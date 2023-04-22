@@ -31,9 +31,7 @@ public class SleepThroughTheWinter {
      * @param args
      * @throws IOException
      */
-    private static final boolean cachedMode = true;
-    private static final String daoImplSuffix = cachedMode ? "CachedDaoImpl" : "DaoImpl";
-    private static final String genericDaoImplPath = "src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntry" + daoImplSuffix + ".java";
+    private static boolean cachedMode = true;
     private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
         put(Long.class, "bigint");
         put(Integer.class, "int");
@@ -42,6 +40,14 @@ public class SleepThroughTheWinter {
         put(List.class, "varchar ARRAY");
         put(LocalDate.class, "date NOT NULL");
     }};
+
+    private static String daoImplSuffix() {
+        return cachedMode ? "CachedDaoImpl" : "DaoImpl";
+    }
+
+    private static String genericDaoImplPath() {
+        return "src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntry" + daoImplSuffix() + ".java";
+    }
 
     /**
      * Returns a list containing one parameter name for each argument accepted
@@ -297,8 +303,8 @@ public class SleepThroughTheWinter {
     private static void generateEntry(Class<?> entryClass) throws IOException, IllegalStateException {
         var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", entryClass.getSimpleName() + ".java");
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", entryClass.getSimpleName() + ".java");
-        var daoImplSourcePath = Paths.get(genericDaoImplPath);
-        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + daoImplSuffix +".java");
+        var daoImplSourcePath = Paths.get(genericDaoImplPath());
+        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + daoImplSuffix() + ".java");
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
@@ -376,7 +382,7 @@ public class SleepThroughTheWinter {
     }
 
     private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
-        var daoImplSourcePath = Paths.get(genericDaoImplPath);
+        var daoImplSourcePath = Paths.get(genericDaoImplPath());
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         StringBuilder resultText = new StringBuilder();
 
@@ -463,8 +469,8 @@ public class SleepThroughTheWinter {
                 var ClassName = clazz.getSimpleName();
                 if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
                 var className = firstLower(ClassName);
-                sbDaoDec.append("\tprivate final " + ClassName + daoImplSuffix + " " + className + "Dao;\n");
-                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix + "(dbController);\n");
+                sbDaoDec.append("\tprivate final " + ClassName + daoImplSuffix() + " " + className + "Dao;\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix() + "(dbController);\n");
             } catch (Exception e) {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
@@ -482,6 +488,8 @@ public class SleepThroughTheWinter {
                                 import edu.wpi.punchy_pegasi.schema.*;
                                 import edu.wpi.punchy_pegasi.backend.PdbController;
                                 import java.util.Map;
+                                import javafx.collections.ObservableList;
+                                import javafx.collections.ObservableMap;
                                 import java.util.Optional;
                                 """);
         StringBuilder sbTemplate = new StringBuilder();
@@ -505,21 +513,27 @@ public class SleepThroughTheWinter {
         if (!generatedFolder.exists()) generatedFolder.mkdir();
         var schemaSourceDir = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/");
         var schemaDestDir = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema/");
-        // default, copy files over
-        try (var fileWalk = Files.walk(schemaSourceDir)) {
-            for (var schemaSourceFile : fileWalk.filter(Files::isRegularFile).toList()) {
-                var schemaDestFile = schemaDestDir.resolve(schemaSourceDir.relativize(schemaSourceFile));
-                Files.writeString(schemaDestFile, new String(Files.readAllBytes(schemaSourceFile))
-                        .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema"));
+        for (boolean mode : new boolean[]{!cachedMode, cachedMode}) {
+            cachedMode = mode;
+            // default, copy files over
+            try (var fileWalk = Files.walk(schemaSourceDir)) {
+                for (var schemaSourceFile : fileWalk.filter(Files::isRegularFile).toList()) {
+                    var schemaDestFile = schemaDestDir.resolve(schemaSourceDir.relativize(schemaSourceFile));
+                    Files.writeString(schemaDestFile, new String(Files.readAllBytes(schemaSourceFile))
+                            .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema"));
+                }
             }
         }
         generateFacade();
         generateTable();
-        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
-            try {
-                generateEntry(clazz);
-            } catch (Exception e) {
-                System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
+        for (boolean mode : new boolean[]{!cachedMode, cachedMode}) {
+            cachedMode = mode;
+            for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
+                try {
+                    generateEntry(clazz);
+                } catch (Exception e) {
+                    System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
+                }
             }
         }
     }

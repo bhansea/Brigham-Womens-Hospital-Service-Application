@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -70,7 +73,7 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
     }
 
     @Override
-    public Map<java.lang.Long, Node> getAll() {
+    public ObservableMap<java.lang.Long, Node> getAll() {
         var map = new HashMap<java.lang.Long, Node>();
         try (var rs = dbController.searchQuery(TableType.NODES)) {
             while (rs.next()) {
@@ -86,7 +89,12 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Node> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

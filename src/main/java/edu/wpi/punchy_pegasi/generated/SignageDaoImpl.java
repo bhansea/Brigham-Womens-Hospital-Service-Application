@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Signage;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -64,7 +67,7 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
     }
 
     @Override
-    public Map<java.lang.String, Signage> getAll() {
+    public ObservableMap<java.lang.String, Signage> getAll() {
         var map = new HashMap<java.lang.String, Signage>();
         try (var rs = dbController.searchQuery(TableType.SIGNAGE)) {
             while (rs.next()) {
@@ -77,7 +80,12 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Signage> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override
