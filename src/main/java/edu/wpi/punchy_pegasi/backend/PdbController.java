@@ -3,11 +3,15 @@ package edu.wpi.punchy_pegasi.backend;
 
 import com.impossibl.postgres.api.jdbc.PGConnection;
 import com.impossibl.postgres.api.jdbc.PGNotificationListener;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.spi.JsoniterSpi;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,11 +29,13 @@ import java.util.regex.Pattern;
 @Slf4j
 public class PdbController {
     public final Source source;
-    private final String schema;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private final PGNotificationListener listener = new PGNotificationListener() {
         @Override
         public void notification(int processId, String channelName, String payload) {
-            // payload will be in the form of ACTION:TABLE_NAME:ID
+            var notification = JsonIterator.deserialize(payload, Notification.class);
+            var data = JsonIterator.deserialize(notification.data, notification.tableType.getClazz());
+            support.firePropertyChange(notification.tableType.name() + "_update", null, new DatabaseChangeEvent(notification.action, data));
             PGNotificationListener.super.notification(processId, channelName, payload);
         }
 
@@ -37,21 +43,25 @@ public class PdbController {
         public void closed() {
         }
     };
+    private final String schema;
     private PGConnection connection;
 
-    public PdbController(Source source) throws SQLException, ClassNotFoundException {
-        this(source, "teamp");
-    }
-
     public PdbController(Source source, String schema) throws SQLException, ClassNotFoundException {
+        //add uuid support
+        JsoniterSpi.registerTypeEncoder(UUID.class, (obj, stream) -> stream.writeVal(obj.toString()));
+        JsoniterSpi.registerTypeDecoder(UUID.class, iter -> UUID.fromString(iter.readString()));
         this.source = source;
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
         getConnection();
-        connection.addNotificationListener(listener);
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
         connection.setSchema(this.schema);
+        statement.close();
+    }
+
+    public PdbController(Source source) throws SQLException, ClassNotFoundException {
+        this(source, "teamp");
     }
 
     private static String objectToPsqlString(Object o) {
@@ -71,6 +81,14 @@ public class PdbController {
         }
     }
 
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
+    }
+
     public synchronized boolean reconnectOnError(SQLException e) {
         if (e.getSQLState().equals("08006")) {
             try {
@@ -85,14 +103,24 @@ public class PdbController {
 
     private void getConnection() throws SQLException {
         if (connection == null) {
-            connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+            initConnection();
             return;
         }
         if (connection.isClosed() || !connection.isValid(500)) {
             connection.close();
-            connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
-            connection.setSchema(schema);
+            initConnection();
         }
+    }
+
+    private void initConnection() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+        connection.addNotificationListener(listener);
+        connection.setSchema(schema);
+        var statement = connection.createStatement();
+        for (var tableType : TableType.values()) {
+            statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
+        }
+        statement.close();
     }
 
     public Connection exposeConnection() {
@@ -115,6 +143,7 @@ public class PdbController {
 
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
+        statement.closeOnCompletion();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
         var q = tableType.getTableSQL();
         statement.execute(q);
@@ -142,6 +171,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "UPDATE " + tableType.name().toLowerCase() + " SET ";
             query += getFieldValueString(fields, values, " = ", ", ");
             query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
@@ -166,6 +196,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "INSERT INTO " + tableType.name().toLowerCase() + " (";
             query += String.join(", ", fields);
             query += ") VALUES (";
@@ -192,6 +223,7 @@ public class PdbController {
         if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "DELETE FROM " + tableType.name().toLowerCase() + " WHERE ";
             query += getFieldValueString(field, value, "=", " AND ");
             query += ";";
@@ -214,6 +246,7 @@ public class PdbController {
     public int[] executeDeletes(List<String> deleteQueries) throws DatabaseException {
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             for (var query : deleteQueries)
                 statement.addBatch(query);
             return statement.executeBatch();
@@ -250,6 +283,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "SELECT * FROM " + tableType.name().toLowerCase();
             if (fields.length > 0) {
                 query += " WHERE ";
@@ -348,6 +382,7 @@ public class PdbController {
         sb.setLength(sb.length() - 1);
         sb.append("ON CONFLICT DO NOTHING;");
         var statement = connection.createStatement();
+        statement.closeOnCompletion();
         return statement.executeUpdate(sb.toString());
     }
 
@@ -368,6 +403,12 @@ public class PdbController {
         }
     }
 
+    public enum PG_ACTION {
+        INSERT,
+        UPDATE,
+        DELETE
+    }
+
     @AllArgsConstructor
     @Getter
     public enum Source {
@@ -380,6 +421,15 @@ public class PdbController {
         private String database;
         private String username;
         private String password;
+    }
+
+    private static class Notification {
+        public TableType tableType;
+        public PG_ACTION action;
+        public String data;
+    }
+
+    public record DatabaseChangeEvent(PG_ACTION action, Object data) {
     }
 
     public class DatabaseException extends Exception {

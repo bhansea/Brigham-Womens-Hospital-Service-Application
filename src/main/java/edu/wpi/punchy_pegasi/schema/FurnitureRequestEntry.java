@@ -1,14 +1,17 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class FurnitureRequestEntry extends RequestEntry {
 
-    private final List<String> selectFurniture;
+    @com.jsoniter.annotation.JsonProperty("selectfurniture")
+    private List<String> selectFurniture;
 
     public FurnitureRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, List<String> selectFurniture, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);

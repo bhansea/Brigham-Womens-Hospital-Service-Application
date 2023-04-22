@@ -16,11 +16,11 @@
         <children>
             <VBox>
                 <children>
-                    <Text styleClass="pfx-conference-header" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
-                        <VBox.margin>
-                            <Insets left="15.0" top="15.0" />
-                        </VBox.margin>
-                    </Text>
+<!--                    <Text styleClass="pfx-conference-header" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">-->
+<!--                        <VBox.margin>-->
+<!--                            <Insets left="15.0" top="15.0" />-->
+<!--                        </VBox.margin>-->
+<!--                    </Text>-->
                     <HBox>
                         <VBox.margin>
                             <Insets left="20.0" top="20.0" />

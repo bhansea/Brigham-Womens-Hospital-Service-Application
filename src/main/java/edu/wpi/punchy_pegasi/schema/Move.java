@@ -1,18 +1,22 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Move {
-    
-    private Long uuid;
+    @com.jsoniter.annotation.JsonProperty("uuid")
+        private Long uuid;
+    @com.jsoniter.annotation.JsonProperty("nodeid")
     private Long nodeID;
+    @com.jsoniter.annotation.JsonProperty("longname")
     private String longName;
+    @com.jsoniter.annotation.JsonProperty("date")
     private LocalDate date;
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
