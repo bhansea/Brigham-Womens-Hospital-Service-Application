@@ -5,6 +5,10 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -17,11 +21,19 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
 
     static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "beginningTime", "endTime", "date", "amountOfParticipants"};
 
-    private final Map<java.util.UUID, ConferenceRoomEntry> cache = new HashMap<>();
+    private final ObservableMap<java.util.UUID, ConferenceRoomEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<ConferenceRoomEntry> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public ConferenceRoomEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
+        cache.addListener((MapChangeListener<java.util.UUID, ConferenceRoomEntry>) c -> {
+            if (c.wasRemoved()) {
+                list.remove(c.getValueRemoved());
+            } else if (c.wasAdded()) {
+                list.add(c.getValueAdded());
+            }
+        });
         initCache();
         this.dbController.addPropertyChangeListener(this);
     }
@@ -89,8 +101,13 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
     }
 
     @Override
-    public Map<java.util.UUID, ConferenceRoomEntry> getAll() {
+    public ObservableMap<java.util.UUID, ConferenceRoomEntry> getAll() {
         return cache;
+    }
+
+    @Override
+    public ObservableList<ConferenceRoomEntry> getAllAsList() {
+        return list;
     }
 
     @Override
@@ -133,7 +150,7 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
             var data = (ConferenceRoomEntry) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
-                case DELETE -> delete(data);
+                case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
         }

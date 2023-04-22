@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocationName {
+    
     @com.jsoniter.annotation.JsonProperty("uuid")
-        private Long uuid;
+    private Long uuid;
     @com.jsoniter.annotation.JsonProperty("longname")
     private String longName;
     @com.jsoniter.annotation.JsonProperty("shortname")

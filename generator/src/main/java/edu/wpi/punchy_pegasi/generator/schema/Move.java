@@ -14,6 +14,6 @@ public class Move {
     @SchemaID
     private Long uuid;
     private Long nodeID;
-    private String longName;
+    private Long locationID;
     private LocalDate date;
 }

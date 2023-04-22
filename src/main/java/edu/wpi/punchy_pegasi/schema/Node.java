@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Node implements INode {
+    
     @com.jsoniter.annotation.JsonProperty("nodeid")
-        private Long nodeID;
+    private Long nodeID;
     @com.jsoniter.annotation.JsonProperty("xcoord")
     private Integer xcoord;
     @com.jsoniter.annotation.JsonProperty("ycoord")

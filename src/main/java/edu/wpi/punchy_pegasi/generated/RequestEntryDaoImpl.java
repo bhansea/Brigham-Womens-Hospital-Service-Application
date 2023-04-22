@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -72,7 +75,7 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
     }
 
     @Override
-    public Map<java.util.UUID, RequestEntry> getAll() {
+    public ObservableMap<java.util.UUID, RequestEntry> getAll() {
         var map = new HashMap<java.util.UUID, RequestEntry>();
         try (var rs = dbController.searchQuery(TableType.REQUESTS)) {
             while (rs.next()) {
@@ -89,7 +92,12 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<RequestEntry> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

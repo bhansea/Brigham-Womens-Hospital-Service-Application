@@ -7,6 +7,7 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.spi.JsoniterSpi;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +22,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -50,6 +52,10 @@ public class PdbController {
         //add uuid support
         JsoniterSpi.registerTypeEncoder(UUID.class, (obj, stream) -> stream.writeVal(obj.toString()));
         JsoniterSpi.registerTypeDecoder(UUID.class, iter -> UUID.fromString(iter.readString()));
+        JsoniterSpi.registerTypeEncoder(LocalDate.class, (obj, stream) -> stream.writeVal(obj.toString()));
+        JsoniterSpi.registerTypeDecoder(LocalDate.class, iter -> LocalDate.parse(iter.readString()));
+        JsoniterSpi.registerTypeEncoder(LocalDateTime.class, (obj, stream) -> stream.writeVal(obj.toString()));
+        JsoniterSpi.registerTypeDecoder(LocalDateTime.class, iter -> LocalDateTime.parse(iter.readString()));
         this.source = source;
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
@@ -143,10 +149,10 @@ public class PdbController {
 
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
-        statement.closeOnCompletion();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
         var q = tableType.getTableSQL();
         statement.execute(q);
+        statement.close();
     }
 
     private String getFieldValueString(String[] fields, Object[] values, String equator, String delimiter) {
@@ -195,8 +201,7 @@ public class PdbController {
     public int insertQuery(TableType tableType, String[] fields, Object[] values) throws DatabaseException {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
-            var statement = connection.createStatement();
-            statement.closeOnCompletion();
+            @Cleanup var statement = connection.createStatement();
             var query = "INSERT INTO " + tableType.name().toLowerCase() + " (";
             query += String.join(", ", fields);
             query += ") VALUES (";
@@ -222,8 +227,7 @@ public class PdbController {
     public int deleteQuery(TableType tableType, String[] field, Object[] value) throws DatabaseException {
         if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
         try {
-            var statement = connection.createStatement();
-            statement.closeOnCompletion();
+            @Cleanup var statement = connection.createStatement();
             var query = "DELETE FROM " + tableType.name().toLowerCase() + " WHERE ";
             query += getFieldValueString(field, value, "=", " AND ");
             query += ";";

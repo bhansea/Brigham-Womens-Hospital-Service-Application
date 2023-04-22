@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
+
 import lombok.*;
 
 import java.util.UUID;
@@ -8,8 +9,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestEntry {
+    
     @com.jsoniter.annotation.JsonProperty("serviceid")
-        protected UUID serviceID;
+    protected UUID serviceID;
     @com.jsoniter.annotation.JsonProperty("locationname")
     protected Long locationName;
     @com.jsoniter.annotation.JsonProperty("staffassignment")

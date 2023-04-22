@@ -5,6 +5,10 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -17,11 +21,19 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
 
     static String[] fields = {/*fields*/};
 
-    private final Map<String/*idFieldType*/, GenericRequestEntry> cache = new HashMap<>();
+    private final ObservableMap<String/*idFieldType*/, GenericRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<GenericRequestEntry> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public GenericRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
+        cache.addListener((MapChangeListener<String/*idFieldType*/, GenericRequestEntry>) c -> {
+            if (c.wasRemoved()) {
+                list.remove(c.getValueRemoved());
+            } else if (c.wasAdded()) {
+                list.add(c.getValueAdded());
+            }
+        });
         initCache();
         this.dbController.addPropertyChangeListener(this);
     }
@@ -79,8 +91,13 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
     }
 
     @Override
-    public Map<String/*idFieldType*/, GenericRequestEntry> getAll/*FacadeClassName*/() {
+    public ObservableMap<String/*idFieldType*/, GenericRequestEntry> getAll/*FacadeClassName*/() {
         return cache;
+    }
+
+    @Override
+    public ObservableList<GenericRequestEntry> getAllAsList/*FacadeClassName*/() {
+        return list;
     }
 
     @Override
@@ -123,7 +140,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
             var data = (GenericRequestEntry) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
-                case DELETE -> delete(data);
+                case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
         }

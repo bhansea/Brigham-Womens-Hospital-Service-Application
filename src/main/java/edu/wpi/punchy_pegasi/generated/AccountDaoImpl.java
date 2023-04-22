@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -68,7 +71,7 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
     }
 
     @Override
-    public Map<java.lang.String, Account> getAll() {
+    public ObservableMap<java.lang.String, Account> getAll() {
         var map = new HashMap<java.lang.String, Account>();
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
@@ -83,7 +86,12 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Account> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override
