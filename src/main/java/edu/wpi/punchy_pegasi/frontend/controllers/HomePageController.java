@@ -9,10 +9,14 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class HomePageController {
@@ -23,12 +27,111 @@ public class HomePageController {
     private final Facade facade = App.getSingleton().getFacade();
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
+    @FXML
+    private PieChart piechart;
+
+    //facade method to get field name and get the field back
+    //make an upadate = set item --  list, make the pie chart, set the items at the end
+
+    /**
+     *  public void reload(){
+     *         var thread = new Thread(() -> {
+     *             var list = getAll.get();
+     *             Platform.runLater(() -> {
+     *                 ObservableList<T> tableList = FXCollections.observableList(list);
+     *                 table.setItems(tableList);
+     *             });
+     *         });
+     *         thread.setDaemon(true);
+     *         thread.start();
+     *     }
+     */
 
     @FXML
     private void initialize() {
+        double dHold = countServiceRequestDONE().get();
+        double pHold = countServiceRequestPROCESS().get();
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Done",dHold),
+                new PieChart.Data("Processing",pHold));
+        piechart.getData().addAll(pieChartData);
+        piechart.setManaged(true);
+        tableContainer.getChildren().add(piechart);
+        Scene scene = new Scene(tableContainer, 500, 500);
+        Stage pstage = new Stage();
+        pstage.setTitle("Pie");
+        pstage.setScene(scene);
+        pstage.show();
         showServiceRequestTable(true);
+        requestTable.setManaged(false);
         initRequestTable();
     }
+
+    /*
+    List<RequestEntry> requestEntries = new ArrayList<>();
+        requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
+        requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
+        requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
+        requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
+        requestEntries.addAll(facade.getAllFoodServiceRequestEntry().values());
+
+        private void setAccount(Account account) {
+        sidebarItems.forEach(s -> {
+            var screen = s.getScreen();
+            if (screen == null) return;
+            if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
+                s.setVisible(true);
+                s.setManaged(true);
+            } else {
+                s.setVisible(false);
+                s.setManaged(false);
+            }
+        });
+        var loggedIn = account.getAccountType() != Account.AccountType.NONE;
+        logout.setVisible(loggedIn);
+        logout.setManaged(loggedIn);
+        }
+     */
+
+    private AtomicReference<Double> countServiceRequestDONE(){
+        AtomicReference<Double> done = new AtomicReference<>(0.0);
+        //AtomicReference<Double> proc = new AtomicReference<>(0.0);
+        List<RequestEntry> requestEntries = new ArrayList<>();
+        requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
+        requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
+        requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
+        requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
+        requestEntries.addAll(facade.getAllFoodServiceRequestEntry().values());
+
+        requestEntries.forEach(s -> {
+            var stat = s.getStatus();
+            if(stat == RequestEntry.Status.DONE){
+                done.updateAndGet(v -> new Double((double) (v + 1.0)));
+            }
+        });
+        return done;
+    }
+
+    private AtomicReference<Double> countServiceRequestPROCESS(){
+        //AtomicReference<Double> done = new AtomicReference<>(0.0);
+        AtomicReference<Double> proc = new AtomicReference<>(0.0);
+        List<RequestEntry> requestEntries = new ArrayList<>();
+        requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
+        requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
+        requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
+        requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
+        requestEntries.addAll(facade.getAllFoodServiceRequestEntry().values());
+
+        requestEntries.forEach(s -> {
+            var stat = s.getStatus();
+            if(stat == RequestEntry.Status.DONE){
+                proc.updateAndGet(v -> new Double((double) (v + 1.0)));
+            }
+        });
+        return proc;
+    }
+
+
 
     private void showServiceRequestTable(boolean show) {
         requestTable.setVisible(show);
