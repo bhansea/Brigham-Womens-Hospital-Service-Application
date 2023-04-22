@@ -5,8 +5,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.chart.PieChart?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
-            stylesheets="@../css/HomePageBackground.css" xmlns="http://javafx.com/javafx/"
+            stylesheets="@../css/PieChart.css" xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">
@@ -23,8 +24,11 @@
                     <padding>
                         <Insets topRightBottomLeft="20"/>
                     </padding>
-                    <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
+                    <MFXTableView fx:id="requestTable"/>
                 </VBox>
+                <VBox VBox.vgrow="ALWAYS" fx:id="pie">
+                    <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
+                    </VBox>
             </VBox>
         </HBox>
     </center>
