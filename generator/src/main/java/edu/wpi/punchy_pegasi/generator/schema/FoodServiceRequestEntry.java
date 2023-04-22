@@ -1,18 +1,20 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class FoodServiceRequestEntry extends RequestEntry {
-    private final String foodSelection;
-    private final String tempType;
-    private final List<String> additionalItems;
-    private final String dietaryRestrictions;
-    private final String patientName;
-    private final String beverage;
+    private String foodSelection;
+    private String tempType;
+    private List<String> additionalItems;
+    private String dietaryRestrictions;
+    private String patientName;
+    private String beverage;
 
     public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);

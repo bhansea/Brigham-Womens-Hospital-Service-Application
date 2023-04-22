@@ -14,7 +14,8 @@ dependencies {
     implementation (
             'org.ow2.asm:asm:9.5',
             'org.ow2.asm:asm-tree:9.5',
-            'org.jetbrains:annotations:24.0.0'
+            'org.jetbrains:annotations:24.0.0',
+            'com.jsoniter:jsoniter:0.9.23',
     )
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'

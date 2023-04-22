@@ -22,7 +22,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class  SleepThroughTheWinter {
+public class SleepThroughTheWinter {
+
+    /***
+     * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
+     * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
+     * parameter names which EXACTLY match the corresponding field names.
+     * @param args
+     * @throws IOException
+     */
+    private static final boolean cachedMode = true;
+    private static final String daoImplSuffix = cachedMode ? "CachedDaoImpl" : "DaoImpl";
+    private static final String genericDaoImplPath = "src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntry" + daoImplSuffix + ".java";
+    private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
+        put(Long.class, "bigint");
+        put(Integer.class, "int");
+        put(String.class, "varchar");
+        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
+        put(List.class, "varchar ARRAY");
+        put(LocalDate.class, "date NOT NULL");
+    }};
 
     /**
      * Returns a list containing one parameter name for each argument accepted
@@ -136,41 +155,32 @@ public class  SleepThroughTheWinter {
     private static String generateEnum(Class<?> clazz, List<Field> fields) {
         return
                 """
-                            @lombok.RequiredArgsConstructor
-                            public enum Field implements IField< """ + clazz.getCanonicalName() +"""
+                        @lombok.RequiredArgsConstructor
+                        public enum Field implements IField< """ + clazz.getCanonicalName() + """
                         >{
                         """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
                         ;
                                 @lombok.Getter
                                 private final String colName;
                                 public Object getValue(""" + clazz.getCanonicalName() + """
- ref){
-            return ref.getFromField(this);
-        }
-    }
-    public Object getFromField(Field field) {
-        return switch (field) {
-""" + "            " + String.join("            ", fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
-        };
-    }
-""";
+                         ref){
+                                    return ref.getFromField(this);
+                                }
+                            }
+                            public Object getFromField(Field field) {
+                                return switch (field) {
+                        """ + "            " + String.join("            ", fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
+                                };
+                            }
+                        """;
     }
 
-    private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
-        put(Long.class, "bigint");
-        put(Integer.class, "int");
-        put(String.class, "varchar");
-        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
-        put(List.class, "varchar ARRAY");
-        put(LocalDate.class, "date NOT NULL");
-    }};
-
-    private static boolean fieldIsID(Field field){
+    private static boolean fieldIsID(Field field) {
         // locate the @SchemaID annotation
         return Arrays.stream(field.getAnnotations()).anyMatch(a -> a.annotationType() == SchemaID.class);
     }
 
-    private static String generateTableInit(TableType tt){
+    private static String generateTableInit(TableType tt) {
         var clazz = tt.getClazz();
         var tableName = tt.name().toLowerCase();
         var sequenceName = tt.name().toLowerCase() + "_id_seq";
@@ -199,33 +209,59 @@ public class  SleepThroughTheWinter {
             return "" + f.getName() + " " + classToPostgres.get(f.getType()) + appendText;
         }).toList();
 
-        if (idField.isPresent() && idField.get().getType() == Long.class)
-            return String.format("""
-                    %1$s(%2$s.class, \"\"\"
-                    DO $$
+        var tableListener = String.format("""
+                CREATE OR REPLACE FUNCTION notify_%1$s_update() RETURNS TRIGGER AS $$
+                    DECLARE
+                        row RECORD;
+                    output JSONB;
                     BEGIN
-                      IF to_regclass('%3$s') IS NULL THEN
-                        CREATE SEQUENCE %4$s;
-                        CREATE TABLE %3$s
-                        (
-                          %5$s
-                        );
-                        ALTER SEQUENCE %4$s OWNED BY %3$s.%6$s;
-                      END IF;
-                    END $$;
-                    \"\"\", %2$s.Field.class)""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName());
-        else
-            return String.format("""
-                            %s(%s.class, \"\"\"
-                            CREATE TABLE IF NOT EXISTS %s
+                    IF (TG_OP = 'DELETE') THEN
+                      row = OLD;
+                    ELSE
+                      row = NEW;
+                    END IF;
+                    -- encode data as json inside a string
+                    output = jsonb_build_object('tableType', '%2$s', 'action', TG_OP, 'data', to_json(row_to_json(row)::text));
+                    PERFORM pg_notify('%1$s_update',output::text);
+                    RETURN NULL;
+                    END;
+                $$ LANGUAGE plpgsql;
+                CREATE OR REPLACE TRIGGER trigger_%1$s_update
+                  AFTER INSERT OR UPDATE OR DELETE
+                  ON %1$s
+                  FOR EACH ROW
+                  EXECUTE PROCEDURE notify_%1$s_update();
+                """, tableName, tt.name());
+
+        return idField.isPresent() && idField.get().getType() == Long.class ?
+                String.format("""
+                        %1$s(%2$s.class, \"\"\"
+                        DO $$
+                        BEGIN
+                          IF to_regclass('%3$s') IS NULL THEN
+                            CREATE SEQUENCE %4$s;
+                            CREATE TABLE %3$s
                             (
-                              %s
-                            )%s;
-                            \"\"\", %2$s.Field.class)
-                            """, tt.name(), clazz.getCanonicalName(),
-                    tableName,
-                    String.join(",\n  ", tableColumns),
-                    inheritanceString);
+                              %5$s
+                            );
+                            ALTER SEQUENCE %4$s OWNED BY %3$s.%6$s;
+                          END IF;
+                        END $$;
+                        %7$s
+                        \"\"\", %2$s.Field.class)""", tt.name(), clazz.getCanonicalName(), tableName, sequenceName, String.join(",\n      ", tableColumns), idField.get().getName(), tableListener)
+                : String.format("""
+                        %1$s(%2$s.class, \"\"\"
+                        CREATE TABLE IF NOT EXISTS %3$s
+                        (
+                          %4$s
+                        )%5$s;
+                        %6$s
+                        \"\"\", %2$s.Field.class)
+                        """, tt.name(), clazz.getCanonicalName(),
+                tableName,
+                String.join(",\n  ", tableColumns),
+                inheritanceString,
+                tableListener);
     }
 
     private static Class getClass(String className, String packageName) {
@@ -252,7 +288,7 @@ public class  SleepThroughTheWinter {
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", TableType.class.getSimpleName() + ".java");
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath));
 
-        for(var tt : TableType.values())
+        for (var tt : TableType.values())
             sourceFileText = sourceFileText.replaceFirst(tt.name() + "\\([^\\)]*\\)",
                     Matcher.quoteReplacement(generateTableInit(tt)));
         Files.writeString(schemaDestPath, sourceFileText.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema"));
@@ -261,8 +297,8 @@ public class  SleepThroughTheWinter {
     private static void generateEntry(Class<?> entryClass) throws IOException, IllegalStateException {
         var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", entryClass.getSimpleName() + ".java");
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", entryClass.getSimpleName() + ".java");
-        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
-        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + "DaoImpl.java");
+        var daoImplSourcePath = Paths.get(genericDaoImplPath);
+        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + daoImplSuffix +".java");
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
@@ -274,10 +310,17 @@ public class  SleepThroughTheWinter {
                 .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "").trim();
 
         var schemaLines = new ArrayList<>(schemaFileText.lines().toList());
-        schemaLines.add(schemaLines.size()-1, generateEnum(entryClass, classFields));
+        schemaLines.add(schemaLines.size() - 1, generateEnum(entryClass, classFields));
 
         schemaFileText = schemaLines.stream().reduce("", (a, b) -> a + "\n" + b)
-                .replaceAll("\\.generator\\.", ".").trim();
+                .replaceAll("\\.generator\\.", ".");
+
+        for (var field : classFields) {
+            schemaFileText = schemaFileText.replaceAll("(.*(private|protected|public).*" + field.getName() + ";)", "    @com.jsoniter.annotation.JsonProperty(\"" + field.getName().toLowerCase() + "\")\n$1");
+        }
+
+        schemaFileText = schemaFileText.trim();
+
 
         Files.writeString(schemaDestPath, schemaFileText);
         // gen impl
@@ -318,7 +361,7 @@ public class  SleepThroughTheWinter {
         Files.writeString(daoImplDestPath, implFileText);
     }
 
-    private static Field getIdField(Class<?> clazz) throws IllegalStateException{
+    private static Field getIdField(Class<?> clazz) throws IllegalStateException {
         var classFields = getFieldsRecursively(clazz);
         var idFields = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).toList(); // locate id field with @SchemaID
         if (idFields.size() < 1) {
@@ -333,7 +376,7 @@ public class  SleepThroughTheWinter {
     }
 
     private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
-        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
+        var daoImplSourcePath = Paths.get(genericDaoImplPath);
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         StringBuilder resultText = new StringBuilder();
 
@@ -366,7 +409,7 @@ public class  SleepThroughTheWinter {
 
             Matcher matcherArgs = args.matcher(fcnHeader);
             var argsField = "";
-            if (matcherArgs.find()){
+            if (matcherArgs.find()) {
                 argsField = matcherArgs.group(1);
             } else {
                 throw new IllegalStateException("No function args found for " + ClassName);
@@ -375,11 +418,11 @@ public class  SleepThroughTheWinter {
             var fcnArgs = "";
             var sb = new StringBuilder();
             Matcher matcherArgsName = argsName.matcher(argsField);
-            while (matcherArgsName.find()){
+            while (matcherArgsName.find()) {
                 sb.append(matcherArgsName.group(1)).append(", ");
             }
             if (sb.length() > 0)
-                fcnArgs = sb.substring(0, sb.length()-2);
+                fcnArgs = sb.substring(0, sb.length() - 2);
 
             Matcher matcherReturnType = returnType.matcher(fcnHeader);
             if (!matcherReturnType.find()) {
@@ -390,18 +433,18 @@ public class  SleepThroughTheWinter {
                             .append(fcnHeader)
                             .append("{\n")
                             .append(String.format("""
-                                           \t\t%1$s.%2$s(%3$s);
-                                           \t}
-                                           """, className+"Dao", fcnName, fcnArgs
+                                    \t\t%1$s.%2$s(%3$s);
+                                    \t}
+                                    """, className + "Dao", fcnName, fcnArgs
                             ));
                 } else {
                     resultText.append("\t")
                             .append(fcnHeader)
                             .append("{\n")
                             .append(String.format("""
-                                           \t\treturn %1$s.%2$s(%3$s);
-                                           \t}
-                                           """, className+"Dao", fcnName, fcnArgs
+                                    \t\treturn %1$s.%2$s(%3$s);
+                                    \t}
+                                    """, className + "Dao", fcnName, fcnArgs
                             ));
                 }
             }
@@ -409,19 +452,19 @@ public class  SleepThroughTheWinter {
         return resultText;
     }
 
-    private static void generateFacade() throws IOException, IllegalStateException{
+    private static void generateFacade() throws IOException, IllegalStateException {
         var facadeDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated/Facade.java");
         var facadeSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/Facade.java");
 
         StringBuilder sbDaoDec = new StringBuilder();
         StringBuilder sbDaoInit = new StringBuilder();
-        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()){
+        for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
                 var ClassName = clazz.getSimpleName();
                 if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
                 var className = firstLower(ClassName);
-                sbDaoDec.append("\tprivate final " + ClassName + "DaoImpl " + className + "Dao;\n");
-                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(dbController);\n");
+                sbDaoDec.append("\tprivate final " + ClassName + daoImplSuffix + " " + className + "Dao;\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix + "(dbController);\n");
             } catch (Exception e) {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
@@ -454,13 +497,6 @@ public class  SleepThroughTheWinter {
         Files.writeString(facadeDestPath, facadeFileText);
     }
 
-    /***
-     * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
-     * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
-     * parameter names which EXACTLY match the corresponding field names.
-     * @param args
-     * @throws IOException
-     */
     public static void main(String[] args) throws IOException {
         // generate destination folders
         var schemaFolder = new File("src/main/java/edu/wpi/punchy_pegasi/schema");
