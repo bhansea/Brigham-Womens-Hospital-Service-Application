@@ -58,7 +58,7 @@
     </center>
    <top>
        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background">
-          <Label text="Welcome back!&#13; Check out your outstanding notification requests." textAlignment="CENTER" BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background">
+          <Label text="Welcome back!&#13; Check your outstanding notification requests." textAlignment="CENTER" BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background">
               <font>
                   <Font name="System Bold" size="24.0" />
               </font>
