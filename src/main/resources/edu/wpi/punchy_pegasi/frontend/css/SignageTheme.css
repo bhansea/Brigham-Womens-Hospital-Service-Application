@@ -1,6 +1,6 @@
 * {
     -pfx-signage-text: #1c1c1c;
-    -pfx-signage-text-opposite: -pfx-text-opposite;
+    -pfx-signage-text-opposite: white;
     -pfx-signage-background: -pfx-background;
-    -pfx-signage-background-opposite: #1c1c1c;
+    -pfx-signage-background-opposite: -pfx-navy;
 }
