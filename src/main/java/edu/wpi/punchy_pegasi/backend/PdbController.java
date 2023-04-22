@@ -57,6 +57,7 @@ public class PdbController {
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
         connection.setSchema(this.schema);
+        statement.close();
     }
 
     public PdbController(Source source) throws SQLException, ClassNotFoundException {
@@ -115,10 +116,11 @@ public class PdbController {
         connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
         connection.addNotificationListener(listener);
         connection.setSchema(schema);
-        var stmt = connection.createStatement();
+        var statement = connection.createStatement();
         for (var tableType : TableType.values()) {
-            stmt.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
+            statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
         }
+        statement.close();
     }
 
     public Connection exposeConnection() {
@@ -141,6 +143,7 @@ public class PdbController {
 
     private void initTable(TableType tableType) throws SQLException {
         var statement = connection.createStatement();
+        statement.closeOnCompletion();
         statement.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"); // create uuid extension
         var q = tableType.getTableSQL();
         statement.execute(q);
@@ -168,6 +171,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "UPDATE " + tableType.name().toLowerCase() + " SET ";
             query += getFieldValueString(fields, values, " = ", ", ");
             query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
@@ -192,6 +196,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "INSERT INTO " + tableType.name().toLowerCase() + " (";
             query += String.join(", ", fields);
             query += ") VALUES (";
@@ -218,6 +223,7 @@ public class PdbController {
         if (field.length != value.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "DELETE FROM " + tableType.name().toLowerCase() + " WHERE ";
             query += getFieldValueString(field, value, "=", " AND ");
             query += ";";
@@ -240,6 +246,7 @@ public class PdbController {
     public int[] executeDeletes(List<String> deleteQueries) throws DatabaseException {
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             for (var query : deleteQueries)
                 statement.addBatch(query);
             return statement.executeBatch();
@@ -276,6 +283,7 @@ public class PdbController {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
             var statement = connection.createStatement();
+            statement.closeOnCompletion();
             var query = "SELECT * FROM " + tableType.name().toLowerCase();
             if (fields.length > 0) {
                 query += " WHERE ";
@@ -374,6 +382,7 @@ public class PdbController {
         sb.setLength(sb.length() - 1);
         sb.append("ON CONFLICT DO NOTHING;");
         var statement = connection.createStatement();
+        statement.closeOnCompletion();
         return statement.executeUpdate(sb.toString());
     }
 
