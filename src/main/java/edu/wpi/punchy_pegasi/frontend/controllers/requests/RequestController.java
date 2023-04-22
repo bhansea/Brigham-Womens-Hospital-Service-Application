@@ -89,6 +89,7 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
+        componentHolder.getStyleClass().add("pfx-request-component-holder");
         locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
         staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
         locationName.setOnAction(p -> validateEntry());
@@ -150,21 +151,21 @@ public abstract class RequestController<T extends RequestEntry> {
 
     @FXML
     protected void addTextField(TextField field) {
-        HBox hbox = new HBox();
+//        HBox hbox = new HBox();
         Label label = new Label("Patient Name");
-        inputContainer.getChildren().add(0, hbox);
+//        inputContainer.getChildren().add(0, hbox);
+        inputContainer.getChildren().add(0, field);
         inputContainer.getChildren().add(0, label);
-        hbox.getChildren().add(0, field);
-        hbox.setAlignment(Pos.CENTER);
-        label.setFont(new Font(DEFAULT_FONT, 24));
-        label.setAlignment(Pos.CENTER_LEFT);
-        label.setTextFill(Color.color(1, 1, 1));
+//        hbox.setAlignment(Pos.CENTER);
+//        label.setFont(new Font(DEFAULT_FONT, 18));
+//        label.setAlignment(Pos.CENTER_LEFT);
+//        label.setTextFill(Color.color(1, 1, 1));
         field.setPromptText("Enter Patient Name");
         field.setAlignment(Pos.CENTER_LEFT);
-        field.setFont(new Font(DEFAULT_FONT, 24));
-        inputContainer.setPadding(new Insets(20, 20, 20, 20));
-        inputContainer.setSpacing(6);
-        hbox.setPadding(new Insets(0, 0, 0, 0));
+//        inputContainer.setPadding(new Insets(20, 20, 20, 20));
+//        inputContainer.setSpacing(6);
+//        inputContainer.getStyleClass().add("pfx-request-bar");
+//        hbox.setPadding(new Insets(0, 0, 0, 0));
         field.setOnKeyTyped(a -> validateEntry());
     }
 

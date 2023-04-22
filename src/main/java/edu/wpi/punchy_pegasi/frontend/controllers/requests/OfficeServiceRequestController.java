@@ -61,7 +61,6 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
         container.setAlignment(Pos.CENTER);
-        setHeaderText("Office Supplies Service Request");
 }
 
     @FXML
