@@ -1,18 +1,18 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Account {
-    
-    private String username;
+    @com.jsoniter.annotation.JsonProperty("username")
+        private String username;
+    @com.jsoniter.annotation.JsonProperty("password")
     private String password;
+    @com.jsoniter.annotation.JsonProperty("employeeid")
     private Long employeeID;
+    @com.jsoniter.annotation.JsonProperty("accounttype")
     private AccountType accountType;
 
         @RequiredArgsConstructor

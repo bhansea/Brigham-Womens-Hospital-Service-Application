@@ -3,9 +3,11 @@ package edu.wpi.punchy_pegasi.generator.schema;
 import edu.wpi.punchy_pegasi.generator.SchemaID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Signage {
     @SchemaID
     private String longName;

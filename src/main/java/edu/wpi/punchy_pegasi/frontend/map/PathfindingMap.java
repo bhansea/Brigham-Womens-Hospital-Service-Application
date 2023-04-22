@@ -167,7 +167,7 @@ public class PathfindingMap {
             nodes = App.getSingleton().getFacade().getAllNode();
             edges = App.getSingleton().getFacade().getAllEdge();
             moves = App.getSingleton().getFacade().getAllMove();
-            locations = new LocationNameDaoImpl().getAll();
+            locations = App.getSingleton().getFacade().getAllLocationName();
             movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
             locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
             filteredNodes = FXCollections.observableArrayList(nodes.values().stream().filter(v -> {

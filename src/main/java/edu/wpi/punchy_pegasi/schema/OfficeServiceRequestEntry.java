@@ -1,12 +1,15 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class OfficeServiceRequestEntry extends RequestEntry {
-    private final String officeRequest;
+    @com.jsoniter.annotation.JsonProperty("officerequest")
+    private String officeRequest;
 
     public OfficeServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String officeRequest, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);

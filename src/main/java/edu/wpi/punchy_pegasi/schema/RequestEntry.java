@@ -1,20 +1,25 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class RequestEntry {
-    
-    protected UUID serviceID;
+    @com.jsoniter.annotation.JsonProperty("serviceid")
+        protected UUID serviceID;
+    @com.jsoniter.annotation.JsonProperty("locationname")
     protected Long locationName;
+    @com.jsoniter.annotation.JsonProperty("staffassignment")
     protected Long staffAssignment;
+    @com.jsoniter.annotation.JsonProperty("additionalnotes")
     protected String additionalNotes;
+    @Setter
+    @com.jsoniter.annotation.JsonProperty("status")
     protected Status status;
+    @com.jsoniter.annotation.JsonProperty("employeeid")
     protected Long employeeID;
 
     public enum Status {
