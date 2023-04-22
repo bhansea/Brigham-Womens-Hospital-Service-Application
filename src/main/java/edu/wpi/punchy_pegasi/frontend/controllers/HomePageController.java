@@ -33,17 +33,9 @@ public class HomePageController {
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
 
-    @FXML
-    private MFXComboBox notificationComboBox;
-
-
-
-
 //    @FXML
-//    private void initializeRectangle(){
-//
-//
-//    }
+//    private MFXComboBox notificationComboBox;
+
 
 //    @FXML
 //    private void initialize() {
@@ -58,44 +50,42 @@ public class HomePageController {
 //        requestTable.setManaged(show);
 //    }
 
-    @FXML
-    private void openSelectedWindow() {
-        String selectedOption = (String) notificationComboBox.getValue();
-        if (selectedOption != null) {
-            if (selectedOption.equals("Meals")) {
-                Stage window = new Stage();
-                Scene scene = new Scene(new MFXTableView<>());
-                window.setTitle(selectedOption + " Window");
-                window.setScene(scene);
-                window.show();
-            } else if (selectedOption.equals("Flowers")) {
-                Stage window = new Stage();
-                Scene scene = new Scene(new MFXTableView<>());
-                window.setTitle(selectedOption + " Window");
-                window.setScene(scene);
-                window.show();
-            } else if (selectedOption.equals("Conference Room")) {
-                Stage window = new Stage();
-                Scene scene = new Scene(new MFXTableView<>());
-                window.setTitle(selectedOption + " Window");
-                window.setScene(scene);
-                window.show();
-            } else if (selectedOption.equals("Office Supplies")) {
-                Stage window = new Stage();
-                Scene scene = new Scene(new MFXTableView<>());
-                window.setTitle(selectedOption + " Window");
-                window.setScene(scene);
-                window.show();
-            } else if (selectedOption.equals("Furniture")) {
-                Stage window = new Stage();
-                Scene scene = new Scene(new MFXTableView<>());
-                window.setTitle(selectedOption + " Window");
-                window.setScene(scene);
-                window.show();
-            }
-        }
-    }
-
+//    @FXML
+//    private void openSelectedWindow() {
+//        String selectedOption = (String) notificationComboBox.getValue();
+//        if (selectedOption != null) {
+//            if (selectedOption.equals("Meals")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Flowers")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Conference Room")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Office Supplies")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Furniture")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            }
+//        }
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;

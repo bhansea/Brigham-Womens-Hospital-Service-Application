@@ -19,17 +19,17 @@
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <MFXComboBox fx:id="notificationComboBox" onAction="#openSelectedWindow" promptText="Select request type">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Meals" />
-                            <String fx:value="Flowers" />
-                            <String fx:value="Office Supplies" />
-                            <String fx:value="Conference Room" />
-                            <String fx:value="Furniture" />
-                        </FXCollections>
-                    </items>
-                </MFXComboBox>
+<!--                <MFXComboBox fx:id="notificationComboBox" onAction="#openSelectedWindow" promptText="Select request type">-->
+<!--                    <items>-->
+<!--                        <FXCollections fx:factory="observableArrayList">-->
+<!--                            <String fx:value="Meals" />-->
+<!--                            <String fx:value="Flowers" />-->
+<!--                            <String fx:value="Office Supplies" />-->
+<!--                            <String fx:value="Conference Room" />-->
+<!--                            <String fx:value="Furniture" />-->
+<!--                        </FXCollections>-->
+<!--                    </items>-->
+<!--                </MFXComboBox>-->
                 <HBox alignment="CENTER">
                     <HBox alignment="CENTER">
                         <StackPane>
@@ -47,16 +47,6 @@
                             <PFXCardVertical fx:id="placeholderPie" styleClass="home-page-card"/>
                         </StackPane>
                     </HBox>
-                    <HBox alignment="CENTER">
-                        <StackPane>
-                            <padding>
-                                <Insets topRightBottomLeft="25"/>
-                            </padding>
-                            <PFXCardVertical>
-                                <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
-                            </PFXCardVertical>
-                        </StackPane>
-                    </HBox>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -69,7 +59,7 @@
 
     </center>
    <top>
-          <Label text="Welcome back!&#13;Use the drop down menu to see your outstanding service requests." textAlignment="CENTER" BorderPane.alignment="CENTER">
+          <Label text="Welcome back!&#13; Check out your outstanding notification requests." textAlignment="CENTER" BorderPane.alignment="CENTER">
               <font>
                   <Font name="System Bold" size="24.0" />
               </font>
@@ -78,4 +68,20 @@
               </padding>
           </Label>
    </top>
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background">
+            <HBox alignment="CENTER">
+                <padding>
+                    <Insets topRightBottomLeft="20" />
+                </padding>
+                <MFXTableView fx:id="alertsTable" stylesheets="@../css/MFXTableView.css"/>
+            </HBox>
+            <HBox>
+                <padding>
+                    <Insets topRightBottomLeft="20" />
+                </padding>
+                <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
+            </HBox>
+        </HBox>
+    </bottom>
 </BorderPane>
