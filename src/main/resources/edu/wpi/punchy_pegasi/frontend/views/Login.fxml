@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="login-page-background" xmlns="http://javafx.com/javafx/"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="login-page-background"  xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
     <right>
         <VBox styleClass="VBox-Login" BorderPane.alignment="CENTER">
