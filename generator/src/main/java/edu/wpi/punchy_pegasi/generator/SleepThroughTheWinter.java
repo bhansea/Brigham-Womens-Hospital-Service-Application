@@ -24,6 +24,16 @@ import java.util.stream.Collectors;
 
 public class SleepThroughTheWinter {
 
+    /***
+     * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
+     * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
+     * parameter names which EXACTLY match the corresponding field names.
+     * @param args
+     * @throws IOException
+     */
+    private static final boolean cachedMode = true;
+    private static final String daoImplSuffix = cachedMode ? "CachedDaoImpl" : "DaoImpl";
+    private static final String genericDaoImplPath = "src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntry" + daoImplSuffix + ".java";
     private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
         put(Long.class, "bigint");
         put(Integer.class, "int");
@@ -287,8 +297,8 @@ public class SleepThroughTheWinter {
     private static void generateEntry(Class<?> entryClass) throws IOException, IllegalStateException {
         var schemaSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema", entryClass.getSimpleName() + ".java");
         var schemaDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/schema", entryClass.getSimpleName() + ".java");
-        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
-        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + "DaoImpl.java");
+        var daoImplSourcePath = Paths.get(genericDaoImplPath);
+        var daoImplDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated", entryClass.getSimpleName() + daoImplSuffix +".java");
         var sourceFileText = new String(Files.readAllBytes(schemaSourcePath))
                 .replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator\\.schema", "edu.wpi.punchy_pegasi.schema");
 
@@ -303,7 +313,14 @@ public class SleepThroughTheWinter {
         schemaLines.add(schemaLines.size() - 1, generateEnum(entryClass, classFields));
 
         schemaFileText = schemaLines.stream().reduce("", (a, b) -> a + "\n" + b)
-                .replaceAll("\\.generator\\.", ".").trim();
+                .replaceAll("\\.generator\\.", ".");
+
+        for (var field : classFields) {
+            schemaFileText = schemaFileText.replaceAll("(.*(private|protected|public).*" + field.getName() + ";)", "    @com.jsoniter.annotation.JsonProperty(\"" + field.getName().toLowerCase() + "\")\n$1");
+        }
+
+        schemaFileText = schemaFileText.trim();
+
 
         Files.writeString(schemaDestPath, schemaFileText);
         // gen impl
@@ -359,7 +376,7 @@ public class SleepThroughTheWinter {
     }
 
     private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
-        var daoImplSourcePath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generator/GenericRequestEntryDaoImpl.java");
+        var daoImplSourcePath = Paths.get(genericDaoImplPath);
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         StringBuilder resultText = new StringBuilder();
 
@@ -446,8 +463,8 @@ public class SleepThroughTheWinter {
                 var ClassName = clazz.getSimpleName();
                 if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
                 var className = firstLower(ClassName);
-                sbDaoDec.append("\tprivate final " + ClassName + "DaoImpl " + className + "Dao;\n");
-                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + "DaoImpl(dbController);\n");
+                sbDaoDec.append("\tprivate final " + ClassName + daoImplSuffix + " " + className + "Dao;\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix + "(dbController);\n");
             } catch (Exception e) {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
@@ -480,13 +497,6 @@ public class SleepThroughTheWinter {
         Files.writeString(facadeDestPath, facadeFileText);
     }
 
-    /***
-     * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
-     * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
-     * parameter names which EXACTLY match the corresponding field names.
-     * @param args
-     * @throws IOException
-     */
     public static void main(String[] args) throws IOException {
         // generate destination folders
         var schemaFolder = new File("src/main/java/edu/wpi/punchy_pegasi/schema");

@@ -1,15 +1,18 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Edge {
-    
-    private Long uuid;
+    @com.jsoniter.annotation.JsonProperty("uuid")
+        private Long uuid;
+    @com.jsoniter.annotation.JsonProperty("startnode")
     private Long startNode;
+    @com.jsoniter.annotation.JsonProperty("endnode")
     private Long endNode;
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge>{

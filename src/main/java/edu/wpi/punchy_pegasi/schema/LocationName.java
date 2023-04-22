@@ -1,16 +1,20 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class LocationName {
-    
-    private Long uuid;
+    @com.jsoniter.annotation.JsonProperty("uuid")
+        private Long uuid;
+    @com.jsoniter.annotation.JsonProperty("longname")
     private String longName;
+    @com.jsoniter.annotation.JsonProperty("shortname")
     private String shortName;
+    @com.jsoniter.annotation.JsonProperty("nodetype")
     private NodeType nodeType;
     public enum NodeType {
         HALL,

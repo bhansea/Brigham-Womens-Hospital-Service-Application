@@ -4,16 +4,14 @@ package edu.wpi.punchy_pegasi.backend;
 import com.impossibl.postgres.api.jdbc.PGConnection;
 import com.impossibl.postgres.api.jdbc.PGNotificationListener;
 import com.jsoniter.JsonIterator;
-import com.jsoniter.output.EncodingMode;
-import com.jsoniter.output.JsonStream;
-import com.jsoniter.spi.DecodingMode;
+import com.jsoniter.spi.JsoniterSpi;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -30,25 +28,14 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class PdbController {
-    public enum PG_ACTION {
-        INSERT,
-        UPDATE,
-        DELETE
-    }
-    public static class Notification {
-        public TableType tableType;
-        public PG_ACTION action;
-        public String data;
-    }
     public final Source source;
-    private final String schema;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private final PGNotificationListener listener = new PGNotificationListener() {
         @Override
         public void notification(int processId, String channelName, String payload) {
-            // payload will be in the form of ACTION:TABLE_NAME:ID
             var notification = JsonIterator.deserialize(payload, Notification.class);
-            // case insensitive properties
             var data = JsonIterator.deserialize(notification.data, notification.tableType.getClazz());
+            support.firePropertyChange(notification.tableType.name() + "_update", null, new DatabaseChangeEvent(notification.action, data));
             PGNotificationListener.super.notification(processId, channelName, payload);
         }
 
@@ -56,13 +43,13 @@ public class PdbController {
         public void closed() {
         }
     };
+    private final String schema;
     private PGConnection connection;
 
-    public PdbController(Source source) throws SQLException, ClassNotFoundException {
-        this(source, "teamp");
-    }
-
     public PdbController(Source source, String schema) throws SQLException, ClassNotFoundException {
+        //add uuid support
+        JsoniterSpi.registerTypeEncoder(UUID.class, (obj, stream) -> stream.writeVal(obj.toString()));
+        JsoniterSpi.registerTypeDecoder(UUID.class, iter -> UUID.fromString(iter.readString()));
         this.source = source;
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
@@ -70,6 +57,10 @@ public class PdbController {
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
         connection.setSchema(this.schema);
+    }
+
+    public PdbController(Source source) throws SQLException, ClassNotFoundException {
+        this(source, "teamp");
     }
 
     private static String objectToPsqlString(Object o) {
@@ -87,6 +78,14 @@ public class PdbController {
         } else {
             return o.toString();
         }
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 
     public synchronized boolean reconnectOnError(SQLException e) {
@@ -395,6 +394,12 @@ public class PdbController {
         }
     }
 
+    public enum PG_ACTION {
+        INSERT,
+        UPDATE,
+        DELETE
+    }
+
     @AllArgsConstructor
     @Getter
     public enum Source {
@@ -407,6 +412,15 @@ public class PdbController {
         private String database;
         private String username;
         private String password;
+    }
+
+    private static class Notification {
+        public TableType tableType;
+        public PG_ACTION action;
+        public String data;
+    }
+
+    public record DatabaseChangeEvent(PG_ACTION action, Object data) {
     }
 
     public class DatabaseException extends Exception {

@@ -7,37 +7,36 @@ import java.util.Optional;
 
 
 public class Facade {
-	private final NodeDaoImpl nodeDao;
-	private final EdgeDaoImpl edgeDao;
-	private final MoveDaoImpl moveDao;
-	private final LocationNameDaoImpl locationNameDao;
-	private final RequestEntryDaoImpl requestEntryDao;
-	private final FoodServiceRequestEntryDaoImpl foodServiceRequestEntryDao;
-	private final FlowerDeliveryRequestEntryDaoImpl flowerDeliveryRequestEntryDao;
-	private final ConferenceRoomEntryDaoImpl conferenceRoomEntryDao;
-	private final FurnitureRequestEntryDaoImpl furnitureRequestEntryDao;
-	private final OfficeServiceRequestEntryDaoImpl officeServiceRequestEntryDao;
-	private final EmployeeDaoImpl employeeDao;
-	private final AccountDaoImpl accountDao;
-	private final SignageDaoImpl signageDao;
+	private final NodeCachedDaoImpl nodeDao;
+	private final EdgeCachedDaoImpl edgeDao;
+	private final MoveCachedDaoImpl moveDao;
+	private final LocationNameCachedDaoImpl locationNameDao;
+	private final RequestEntryCachedDaoImpl requestEntryDao;
+	private final FoodServiceRequestEntryCachedDaoImpl foodServiceRequestEntryDao;
+	private final FlowerDeliveryRequestEntryCachedDaoImpl flowerDeliveryRequestEntryDao;
+	private final ConferenceRoomEntryCachedDaoImpl conferenceRoomEntryDao;
+	private final FurnitureRequestEntryCachedDaoImpl furnitureRequestEntryDao;
+	private final OfficeServiceRequestEntryCachedDaoImpl officeServiceRequestEntryDao;
+	private final EmployeeCachedDaoImpl employeeDao;
+	private final AccountCachedDaoImpl accountDao;
+	private final SignageCachedDaoImpl signageDao;
 
     public Facade(PdbController dbController) {
-		nodeDao = new NodeDaoImpl(dbController);
-		edgeDao = new EdgeDaoImpl(dbController);
-		moveDao = new MoveDaoImpl(dbController);
-		locationNameDao = new LocationNameDaoImpl(dbController);
-		requestEntryDao = new RequestEntryDaoImpl(dbController);
-		foodServiceRequestEntryDao = new FoodServiceRequestEntryDaoImpl(dbController);
-		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryDaoImpl(dbController);
-		conferenceRoomEntryDao = new ConferenceRoomEntryDaoImpl(dbController);
-		furnitureRequestEntryDao = new FurnitureRequestEntryDaoImpl(dbController);
-		officeServiceRequestEntryDao = new OfficeServiceRequestEntryDaoImpl(dbController);
-		employeeDao = new EmployeeDaoImpl(dbController);
-		accountDao = new AccountDaoImpl(dbController);
-		signageDao = new SignageDaoImpl(dbController);
+		nodeDao = new NodeCachedDaoImpl(dbController);
+		edgeDao = new EdgeCachedDaoImpl(dbController);
+		moveDao = new MoveCachedDaoImpl(dbController);
+		locationNameDao = new LocationNameCachedDaoImpl(dbController);
+		requestEntryDao = new RequestEntryCachedDaoImpl(dbController);
+		foodServiceRequestEntryDao = new FoodServiceRequestEntryCachedDaoImpl(dbController);
+		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryCachedDaoImpl(dbController);
+		conferenceRoomEntryDao = new ConferenceRoomEntryCachedDaoImpl(dbController);
+		furnitureRequestEntryDao = new FurnitureRequestEntryCachedDaoImpl(dbController);
+		officeServiceRequestEntryDao = new OfficeServiceRequestEntryCachedDaoImpl(dbController);
+		employeeDao = new EmployeeCachedDaoImpl(dbController);
+		accountDao = new AccountCachedDaoImpl(dbController);
+		signageDao = new SignageCachedDaoImpl(dbController);
 
     }
-
 	public Optional<Node> getNode(java.lang.Long key) {
 		return nodeDao.get(key);
 	}

@@ -1,17 +1,22 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Node implements INode {
-    
-    private Long nodeID;
+    @com.jsoniter.annotation.JsonProperty("nodeid")
+        private Long nodeID;
+    @com.jsoniter.annotation.JsonProperty("xcoord")
     private Integer xcoord;
+    @com.jsoniter.annotation.JsonProperty("ycoord")
     private Integer ycoord;
+    @com.jsoniter.annotation.JsonProperty("floor")
     private String floor;
+    @com.jsoniter.annotation.JsonProperty("building")
     private String building;
 
     @Override
