@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.*;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
+import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.Move;
@@ -52,6 +53,8 @@ public class PathfindingMap {
     @FXML
     private VBox pathfinding;
     @FXML
+    private VBox robotInfo;
+    @FXML
     private MFXFilterComboBox<Node> nodeEndCombo;
     @FXML
     private MFXFilterComboBox<Node> nodeStartCombo;
@@ -93,6 +96,8 @@ public class PathfindingMap {
         map = new HospitalMap(floors);
         root.setCenter(map.get());
         map.addLayer(pathfinding);
+        map.addLayer(robotInfo);
+        robotInfo.setPickOnBounds(false);
         pathfinding.setPickOnBounds(false);
         load(() -> {
             nodeStartCombo.setItems(filteredNodes);
@@ -122,6 +127,14 @@ public class PathfindingMap {
                 }
             });
         });
+
+        // Check account status for admin features
+        if (App.getSingleton().getAccount().getAccountType().getShieldLevel() == Account.AccountType.ADMIN.getShieldLevel()) {
+            System.out.println("admin");
+        } else {
+            System.out.println("not admin");
+        }
+
         selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search", "Dijkstra"));
         selectGraphically.setDisable(true);
         robotButton.setDisable(true);

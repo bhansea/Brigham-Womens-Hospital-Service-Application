@@ -23,9 +23,15 @@
                     <PFXButton text="Cancel" fx:id="selectGraphicallyCancel"/>
                 </HBox>
                 <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
-                <PFXButton text="Start Robot" fx:id="robotButton" onMouseClicked="#sendRobotMessage"/>
                 <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
             </VBox>
         </VBox>
     </left>
+    <right>
+        <VBox fx:id="robotInfo" styleClass="pathfinding-overlay">
+            <VBox>
+                <PFXButton text="Start Robot" onMouseClicked="#sendRobotMessage" fx:id="robotButton"/>
+            </VBox>
+        </VBox>
+    </right>
 </BorderPane>
