@@ -32,7 +32,7 @@ public class SidebarController extends VBox implements PropertyChangeListener {
     );
     private final int maxWidth = 256;
     @FXML
-    private PFXSidebarItem logout;
+    private PFXSidebarItem exit;
     private Boolean expanded = null;
     @FXML
     private BorderPane root;
@@ -50,8 +50,7 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         clipper.widthProperty().bind(widthProperty());
         clipper.heightProperty().bind(heightProperty());
         setClip(clipper);
-        //pfxAccount.setOnMouseClicked(e -> setSelected(null));
-        logout.setOnMouseClicked(e -> App.getSingleton().setAccount(null));
+        exit.setOnMouseClicked(e -> App.getSingleton().exit());
     }
 
     private void setAccount(Account account) {
@@ -67,8 +66,6 @@ public class SidebarController extends VBox implements PropertyChangeListener {
             }
         });
         var loggedIn = account.getAccountType() != Account.AccountType.NONE;
-        logout.setVisible(loggedIn);
-        logout.setManaged(loggedIn);
     }
 
     @FXML
@@ -94,7 +91,7 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         App.getSingleton().addPropertyChangeListener(this);
         setAccount(App.getSingleton().getAccount());
 
-        getChildren().addAll(1, sidebarItems);
+        getChildren().addAll(0, sidebarItems);
         sidebarItems.forEach(s -> s.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> setSelected(s)));
         setExpanded(false);
     }
@@ -103,6 +100,8 @@ public class SidebarController extends VBox implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (Objects.equals(evt.getPropertyName(), "account")) {
             setAccount((Account) evt.getNewValue());
+        } else if (Objects.equals(evt.getPropertyName(), "page")) {
+            setSelected(sidebarItems.stream().filter(s -> s.getScreen() == evt.getNewValue()).findFirst().orElse(null));
         }
     }
 }

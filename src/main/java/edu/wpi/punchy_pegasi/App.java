@@ -157,6 +157,8 @@ public class App extends Application {
         if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
             getViewPane().setCenter(new PageLoading());
             loadingThread = new Thread(() -> {
+                getLayout().showTopLayout(true);
+                getLayout().showLeftLayout(true);
                 var loaded = screen.get();
                 if (!Thread.interrupted())
                     Platform.runLater(() -> {

@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.MFXTextFieldFocusable;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
@@ -12,8 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Slf4j
@@ -22,9 +26,11 @@ public class LoginController {
     private final PdbController pdb = App.getSingleton().getPdb();
     private final Facade facade = new Facade(pdb);
     @FXML
-    public Label invalidText;
+    private Label invalidText;
     @FXML
-    public MFXTextFieldFocusable usernameEnter;
+    private VBox quicknav;
+    @FXML
+    private MFXTextFieldFocusable usernameEnter;
     @FXML
     private Button logInButton;
     @FXML
@@ -34,12 +40,20 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        App.getSingleton().getLayout().showLeftLayout(false);
+        App.getSingleton().getLayout().showTopLayout(false);
         Platform.runLater(() -> {
             usernameEnter.requestFocus();
         });
+        Arrays.stream(Screen.values()).forEach(s -> {
+            if(s.getShield().getShieldLevel() > Account.AccountType.NONE.getShieldLevel() || s.equals(Screen.LOGIN)) return;
+            var button = new PFXButton(s.getReadable());
+            button.setOnAction(e -> App.getSingleton().navigate(s));
+            quicknav.getChildren().add(button);
+        });
     }
-
-    public void logIn(ActionEvent event) {
+    @FXML
+    private void logIn(ActionEvent event) {
         invalidText.setVisible(false);
         String username = usernameEnter.getText();
         String password = passwordBox.getText();

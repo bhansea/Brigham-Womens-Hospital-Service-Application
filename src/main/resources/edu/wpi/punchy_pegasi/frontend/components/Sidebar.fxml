@@ -10,8 +10,8 @@
          xmlns="http://javafx.com/javafx/"
          styleClass="sideBar">
     <VBox alignment="TOP_LEFT" VBox.vgrow="ALWAYS"/>
-    <VBox alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
-        <PFXIcon icon="EXPAND_CONTENT" onMouseClicked="#toggleExpand"/>
-    </VBox>
-    <PFXSidebarItem icon="LOGOUT" text="Logout" fx:id="logout"/>
+<!--    <VBox alignment="TOP_LEFT">-->
+<!--        <PFXIcon icon="EXPAND_CONTENT" onMouseClicked="#toggleExpand"/>-->
+<!--    </VBox>-->
+    <PFXSidebarItem icon="LOGOUT" text="Logout" fx:id="exit"/>
 </fx:root>

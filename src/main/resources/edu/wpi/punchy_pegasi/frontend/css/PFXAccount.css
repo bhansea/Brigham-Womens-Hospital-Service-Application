@@ -1,0 +1,12 @@
+.pfx-account {
+    -fx-alignment: CENTER;
+    -fx-spacing:5;
+}
+
+.pfx-account Label {
+    -fx-font-size: 18;
+}
+
+.pfx-account PFXIcon {
+    -fx-fill: -pfx-text;
+}
