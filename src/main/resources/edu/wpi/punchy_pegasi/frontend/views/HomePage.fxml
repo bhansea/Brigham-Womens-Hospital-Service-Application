@@ -43,17 +43,17 @@
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
                                             <VBox VBox.vgrow="ALWAYS" fx:id="pie">
-                                                <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
+                                                <PieChart fx:id="piechart" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
                                             </VBox>
                                         </StackPane>
                                     </HBox>
-                                    <HBox alignment="CENTER" maxHeight="Infinity">
+                                    <HBox alignment="CENTER">
                                         <StackPane HBox.hgrow="ALWAYS">
                                             <padding>
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
                                             <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
-                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS"/>
+                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" />
                                             </VBox>
                                         </StackPane>
                                     </HBox>
