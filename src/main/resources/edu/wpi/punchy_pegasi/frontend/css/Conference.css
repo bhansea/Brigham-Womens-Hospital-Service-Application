@@ -5,6 +5,9 @@
     -fx-font-size: 18;
     -fx-max-width: 200;
 }
+.conference-container {
+    -fx-padding: 10;
+}
 
 .conference-header {
     -fx-font-family: "Nunito Sans Bold";

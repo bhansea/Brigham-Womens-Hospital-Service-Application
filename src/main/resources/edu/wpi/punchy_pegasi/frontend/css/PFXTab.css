@@ -2,24 +2,25 @@
 
 .pfx-tab{
     -fx-background-color: transparent;
-    -fx-font-size: 20;
+    -fx-font-size: 18;
     -fx-padding: 10;
     -fx-alignment: CENTER;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: -pfx-secondary-light;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
 }
 
 .pfx-tab-text {
-    -fx-text-fill: -pfx-navy;
+    -fx-text-fill: -pfx-secondary;
 }
 
 .pfx-tab:selected {
-    -fx-border-width: 0 0 7.5 0;
+    -fx-border-width: 0 0 3 0;
     -fx-border-color: -pfx-accent;
 }
 
-.pfx-tab-text:selected{
-    -fx-text-fill: -pfx-accent;
+.pfx-tab:selected .pfx-tab-text{
+    -fx-text-fill: -pfx-navy;
 }
 
 .pfx-tab:hover {
