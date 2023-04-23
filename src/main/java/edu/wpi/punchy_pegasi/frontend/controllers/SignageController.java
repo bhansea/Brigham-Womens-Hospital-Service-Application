@@ -23,14 +23,6 @@ public class SignageController {
     private final Scene myScene = App.getSingleton().getScene();
 
     private final Facade facade = App.getSingleton().getFacade();
-
-
-    @FXML
-    private VBox signageBodyLeft;
-    @FXML
-    private HBox signageHeader;
-
-
     private final PFXIcon iconUp = new PFXIcon(MaterialSymbols.ARROW_UPWARD);
     private final PFXIcon iconDown = new PFXIcon(MaterialSymbols.ARROW_DOWNWARD);
     private final PFXIcon iconLeft = new PFXIcon(MaterialSymbols.ARROW_BACK);
@@ -40,7 +32,10 @@ public class SignageController {
     private final HBox signageHeaderLeft = new HBox();
     private final HBox signageHeaderRight = new HBox();
     private final Label signageDateTime = new Label();
-
+    @FXML
+    private VBox signageBodyLeft;
+    @FXML
+    private HBox signageHeader;
 
     private void updateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -67,7 +62,7 @@ public class SignageController {
         signageHeader.getStyleClass().add("signage-header");
     }
 
-    private void initIcons () {
+    private void initIcons() {
         iconUp.setOutlined(true);
         iconUp.getStyleClass().add("signage-icon");
         iconDown.setOutlined(true);
@@ -123,7 +118,7 @@ public class SignageController {
             App.getSingleton().getLayout().showTopLayout(false);
         });
         myScene.setOnKeyPressed(event -> {
-            if(event.getCode().equals(KeyCode.ESCAPE)) {
+            if (event.getCode().equals(KeyCode.ESCAPE)) {
                 switchTheme(false);
                 App.getSingleton().getPrimaryStage().setFullScreen(false);
                 App.getSingleton().getLayout().showLeftLayout(true);
@@ -134,30 +129,30 @@ public class SignageController {
 
     private Map<Signage.DirectionType, List<String>> loadSignage() {
         Map<Signage.DirectionType, List<String>> signageMap = new HashMap<>();
-        Map<String, Signage> allSignage =  facade.getAllSignage();
+        Map<String, Signage> allSignage = facade.getAllSignage();
         for (Map.Entry<String, Signage> entry : allSignage.entrySet()) {
             Signage.DirectionType directionType = entry.getValue().getDirectionType();
+            String locationName = entry.getValue().getLongName();
             switch (directionType) {
                 case UP -> {
-                    signageMap.computeIfAbsent(Signage.DirectionType.UP, k -> new ArrayList<>()).add(entry.getKey());
+                    signageMap.computeIfAbsent(Signage.DirectionType.UP, k -> new ArrayList<>()).add(locationName);
                 }
                 case DOWN -> {
-                    signageMap.computeIfAbsent(Signage.DirectionType.DOWN, k -> new ArrayList<>()).add(entry.getKey());
+                    signageMap.computeIfAbsent(Signage.DirectionType.DOWN, k -> new ArrayList<>()).add(locationName);
                 }
                 case LEFT -> {
-                    signageMap.computeIfAbsent(Signage.DirectionType.LEFT, k -> new ArrayList<>()).add(entry.getKey());
+                    signageMap.computeIfAbsent(Signage.DirectionType.LEFT, k -> new ArrayList<>()).add(locationName);
                 }
                 case RIGHT -> {
-                    signageMap.computeIfAbsent(Signage.DirectionType.RIGHT, k -> new ArrayList<>()).add(entry.getKey());
+                    signageMap.computeIfAbsent(Signage.DirectionType.RIGHT, k -> new ArrayList<>()).add(locationName);
                 }
                 case HERE -> {
-                    signageMap.computeIfAbsent(Signage.DirectionType.HERE, k -> new ArrayList<>()).add(entry.getKey());
+                    signageMap.computeIfAbsent(Signage.DirectionType.HERE, k -> new ArrayList<>()).add(locationName);
                 }
             }
         }
         return signageMap;
     }
-
 
 
     private void buildSignage(Map<Signage.DirectionType, List<String>> signageMap) {

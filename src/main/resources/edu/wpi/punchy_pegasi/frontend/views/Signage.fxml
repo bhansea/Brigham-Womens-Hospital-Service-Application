@@ -79,6 +79,9 @@
 <!--                    </HBox>-->
 <!--                </children>-->
             </VBox>
+            <VBox HBox.hgrow="ALWAYS" styleClass="signage-edit-vbox">
+                <PFXIcon icon="EDIT" outlined="true" styleClass="signage-edit-icon"/>
+            </VBox>
         </HBox>
 
     </center>
