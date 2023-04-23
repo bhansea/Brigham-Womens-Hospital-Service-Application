@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -26,26 +27,26 @@ public class PFXSidebarItem extends HBox {
     private VBox expandedInfo = new VBox();
     private Screen screen;
 
+    private final Label hoverName = new Label();
+
     public PFXSidebarItem() {
         super();
         getStyleClass().add("pfx-sidebar-container");
         getChildren().add(container);
         container.getStyleClass().add("pfx-sidebar-item");
-        container.getChildren().addAll(pfxIcon, expandedInfo);
+        expandedInfo.getStyleClass().add("pfx-sidebar-expanded-container");
         var label = new Label();
         label.textOverrunProperty().set(OverrunStyle.CLIP);
-        getExpandedInfo().getChildren().add(label);
+        expandedInfo.getChildren().add(label);
         label.textProperty().bind(this.textProperty());
         setExpanded(true);
-    }
-
-    public PFXSidebarItem(MaterialSymbols icon) {
-        super();
-        getStyleClass().add("pfx-sidebar-container");
-        getChildren().add(container);
-        container.getStyleClass().add("pfx-sidebar-item");
         container.getChildren().addAll(pfxIcon, expandedInfo);
-        setExpanded(true);
+//        hoverName.setStyle("-fx-background-color: red; -fx-background-radius: 20px; -fx-padding: 5px;");
+//        hoverName.setText("Testing");
+//        hoverName.setManaged(false);
+//        hoverName.setVisible(true);
+//        addEventFilter(MouseEvent.MOUSE_ENTERED, e -> hoverName.setVisible(true));
+//        addEventFilter(MouseEvent.MOUSE_EXITED, e -> hoverName.setVisible(false));
     }
 
     public PFXSidebarItem(Screen screen, MaterialSymbols icon) {

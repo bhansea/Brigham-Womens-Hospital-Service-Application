@@ -1,6 +1,10 @@
 .pfx-account {
     -fx-alignment: CENTER;
-    -fx-spacing:5;
+    -fx-spacing: 5;
+}
+
+.pfx-account-menu {
+    -fx-padding: 10 0;
 }
 
 .pfx-account Label {

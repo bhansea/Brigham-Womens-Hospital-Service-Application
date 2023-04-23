@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAccount;
 import edu.wpi.punchy_pegasi.frontend.components.PFXSidebarItem;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Account;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SidebarController extends VBox implements PropertyChangeListener {
     private final ObservableList<PFXSidebarItem> sidebarItems = FXCollections.observableArrayList(
@@ -30,12 +32,17 @@ public class SidebarController extends VBox implements PropertyChangeListener {
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
             new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
     );
-    private final int maxWidth = 256;
+    private double maxWidth = 256;
     @FXML
     private PFXSidebarItem exit;
     private Boolean expanded = null;
     @FXML
     private BorderPane root;
+    @FXML
+    private VBox navItems;
+    @FXML
+    private PFXIcon expandIcon;
+    private AtomicBoolean animating = new AtomicBoolean(false);
 
     public SidebarController() {
         super();
@@ -51,6 +58,11 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         clipper.heightProperty().bind(heightProperty());
         setClip(clipper);
         exit.setOnMouseClicked(e -> App.getSingleton().exit());
+        App.getSingleton().addPropertyChangeListener(this);
+        setAccount(App.getSingleton().getAccount());
+        navItems.getChildren().addAll(sidebarItems);
+        sidebarItems.forEach(s -> s.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> setSelected(s)));
+        expandIcon.onMouseClickedProperty().set(e -> setExpanded(!expanded));
     }
 
     private void setAccount(Account account) {
@@ -68,32 +80,25 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         var loggedIn = account.getAccountType() != Account.AccountType.NONE;
     }
 
-    @FXML
-    private void toggleExpand() {
-        setExpanded(!expanded);
-    }
-
-    private synchronized void setExpanded(boolean expanded) {
+    private void setExpanded(boolean expanded) {
         if (this.expanded != null && this.expanded == expanded) return;
+        if (animating.compareAndExchange(false, true)) return;
         this.expanded = expanded;
-        Platform.runLater(() ->
-                ChangeSize.changeWidth(this, expanded ? maxWidth : getMinWidth(), e -> {
-                })
-        );
+        if (expanded) sidebarItems.forEach(s -> s.setExpanded(true));
+        Platform.runLater(() -> {
+            if (!expanded)
+                maxWidth = getWidth();
+            ChangeSize.changeWidth(this, expanded ? maxWidth : getMinWidth(), e -> {
+                if (!expanded) sidebarItems.forEach(s -> s.setExpanded(false));
+                animating.set(false);
+                expandIcon.setIcon(expanded ? MaterialSymbols.FIRST_PAGE : MaterialSymbols.LAST_PAGE);
+            });
+        });
     }
 
 
     private void setSelected(PFXSidebarItem item) {
         sidebarItems.forEach(d -> d.setSelected(d == item));
-    }
-
-    public void initialize() {
-        App.getSingleton().addPropertyChangeListener(this);
-        setAccount(App.getSingleton().getAccount());
-
-        getChildren().addAll(0, sidebarItems);
-        sidebarItems.forEach(s -> s.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> setSelected(s)));
-        setExpanded(false);
     }
 
     @Override

@@ -22,9 +22,6 @@ import java.util.Map;
 
 @Slf4j
 public class LoginController {
-
-    private final PdbController pdb = App.getSingleton().getPdb();
-    private final Facade facade = new Facade(pdb);
     @FXML
     private Label invalidText;
     @FXML
@@ -40,8 +37,6 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        App.getSingleton().getLayout().showLeftLayout(false);
-        App.getSingleton().getLayout().showTopLayout(false);
         Platform.runLater(() -> {
             usernameEnter.requestFocus();
         });
@@ -59,7 +54,7 @@ public class LoginController {
         String password = passwordBox.getText();
         Account.Field[] fields = {Account.Field.USERNAME, Account.Field.PASSWORD};
         Object[] values = {username, password};
-        Map<String, Account> map = facade.getAccount(fields, values);
+        Map<String, Account> map = App.getSingleton().getFacade().getAccount(fields, values);
 
         if (map.size() > 0) {
             App.getSingleton().setAccount(map.values().stream().findFirst().get());

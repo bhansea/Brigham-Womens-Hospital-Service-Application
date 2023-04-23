@@ -37,7 +37,7 @@
 }
 
 .mfx-text-field .text-field {
-    -fx-highlight-fill: #ECE0FD; /* Selected text highlight */
+    -fx-highlight-fill: -pfx-accent-transparent; /* Selected text highlight */
     -fx-prompt-text-fill: -mfx-text-me; /* Prompt text color */
 }
 
