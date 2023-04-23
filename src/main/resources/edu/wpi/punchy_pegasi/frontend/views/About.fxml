@@ -9,12 +9,11 @@
 <?import javafx.scene.text.Font?>
 
 
-<!--fx:controller="edu.wpi.punchy_pegasi.frontend.views.About"-->
-
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.text.Text?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.AboutController"
             prefHeight="400.0" prefWidth="600.0"
             style="-fx-border-color: #0067b1;">
     <top>
