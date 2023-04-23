@@ -17,9 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -94,6 +94,7 @@ public class PathfindingMap {
     private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
+    private HBox container = new HBox();
 
     private LocalDate movesDate = LocalDate.now();
 
@@ -106,10 +107,12 @@ public class PathfindingMap {
     private void initialize() {
         map = new HospitalMap(floors);
         root.setCenter(map.get());
-        map.addLayer(pathfinding);
-        //map.addLayer()
+        container.getChildren().addAll(pathfinding, robotInfo);
+        map.addLayer(container);
+        HBox.setHgrow(pathfinding, Priority.ALWAYS);
         invalidText.setVisible(false);
         pathfinding.setPickOnBounds(false);
+        robotInfo.setPickOnBounds(false);
         load(() -> {
             var filteredSorted = locationsList.filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName));
             nodeStartCombo.setItems(filteredSorted);
