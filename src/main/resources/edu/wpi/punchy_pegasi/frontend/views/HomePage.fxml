@@ -12,6 +12,7 @@
 
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical?>
 
+<?import javafx.scene.chart.PieChart?>
 <BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
@@ -33,7 +34,9 @@
                             <padding>
                                 <Insets topRightBottomLeft="25"/>
                             </padding>
-                            <PFXCardVertical fx:id="placeholderAlerts" styleClass="home-page-card"/>
+                            <VBox VBox.vgrow="ALWAYS" fx:id="pie">
+                                <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
+                            </VBox>
                         </StackPane>
                     </HBox>
                     <HBox alignment="CENTER">
