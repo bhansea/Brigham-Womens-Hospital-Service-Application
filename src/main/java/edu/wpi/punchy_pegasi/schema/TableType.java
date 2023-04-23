@@ -459,6 +459,7 @@ BEGIN
     CREATE TABLE signage
     (
       uuid bigint DEFAULT nextval('signage_id_seq') PRIMARY KEY,
+      signName varchar,
       longName varchar,
       directionType varchar NOT NULL
     );

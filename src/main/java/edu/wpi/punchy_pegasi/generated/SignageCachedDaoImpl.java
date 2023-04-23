@@ -19,7 +19,7 @@ import java.util.*;
 @Slf4j
 public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signage.Field>, PropertyChangeListener {
 
-    static String[] fields = {"uuid", "longName", "directionType"};
+    static String[] fields = {"uuid", "signName", "longName", "directionType"};
 
     private final ObservableMap<java.lang.Long, Signage> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<Signage> list = FXCollections.observableArrayList();
@@ -56,6 +56,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
             while (rs.next()) {
                 Signage req = new Signage(
                     rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("signName", java.lang.String.class),
                     rs.getObject("longName", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 add(req);
@@ -101,7 +102,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
 
     @Override
     public void save(Signage signage) {
-        Object[] values = {signage.getUuid(), signage.getLongName(), signage.getDirectionType()};
+        Object[] values = {signage.getUuid(), signage.getSignName(), signage.getLongName(), signage.getDirectionType()};
         try {
             dbController.insertQuery(TableType.SIGNAGE, fields, values);
 //            add(signage);

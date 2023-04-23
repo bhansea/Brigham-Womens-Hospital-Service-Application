@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 public class SignageDaoImpl implements IDao<java.lang.Long, Signage, Signage.Field> {
 
-    static String[] fields = {"uuid", "longName", "directionType"};
+    static String[] fields = {"uuid", "signName", "longName", "directionType"};
     private final PdbController dbController;
 
     public SignageDaoImpl(PdbController dbController) {
@@ -32,6 +32,7 @@ public class SignageDaoImpl implements IDao<java.lang.Long, Signage, Signage.Fie
             rs.next();
             Signage req = new Signage(
                     rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("signName", java.lang.String.class),
                     rs.getObject("longName", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
             return Optional.ofNullable(req);
@@ -53,6 +54,7 @@ public class SignageDaoImpl implements IDao<java.lang.Long, Signage, Signage.Fie
             while (rs.next()) {
                 Signage req = new Signage(
                     rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("signName", java.lang.String.class),
                     rs.getObject("longName", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 if (req != null)
@@ -71,6 +73,7 @@ public class SignageDaoImpl implements IDao<java.lang.Long, Signage, Signage.Fie
             while (rs.next()) {
                 Signage req = new Signage(
                     rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("signName", java.lang.String.class),
                     rs.getObject("longName", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 if (req != null)
@@ -89,7 +92,7 @@ public class SignageDaoImpl implements IDao<java.lang.Long, Signage, Signage.Fie
 
     @Override
     public void save(Signage signage) {
-        Object[] values = {signage.getUuid(), signage.getLongName(), signage.getDirectionType()};
+        Object[] values = {signage.getUuid(), signage.getSignName(), signage.getLongName(), signage.getDirectionType()};
         try {
             dbController.insertQuery(TableType.SIGNAGE, fields, values);
         } catch (PdbController.DatabaseException e) {
