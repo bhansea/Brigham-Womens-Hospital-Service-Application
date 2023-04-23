@@ -14,6 +14,7 @@ public class InfoController {
     PFXTabLayout layout = new PFXTabLayout();
     final List<Screen> screens = new ArrayList<>(){{
         add(Screen.ABOUT);
+        add(Screen.CREDITS);
     }};
 
     public void initialize() {

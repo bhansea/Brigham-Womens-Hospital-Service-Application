@@ -41,7 +41,7 @@ public class LoginController {
             usernameEnter.requestFocus();
         });
         Arrays.stream(Screen.values()).forEach(s -> {
-            if(s.getShield().getShieldLevel() > Account.AccountType.NONE.getShieldLevel() || s.equals(Screen.LOGIN) || s.equals(Screen.ABOUT)) return;
+            if(s.getShield().getShieldLevel() > Account.AccountType.NONE.getShieldLevel() || s.equals(Screen.LOGIN) || s.equals(Screen.ABOUT) || s.equals(Screen.CREDITS)) return;
             var button = new PFXButton(s.getReadable());
             button.setOnAction(e -> App.getSingleton().navigate(s));
             quicknav.getChildren().add(button);
