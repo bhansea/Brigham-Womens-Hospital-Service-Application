@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.components;
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -10,6 +11,7 @@ public class PFXCardVerticalPlaceholder extends VBox {
     private final HBox stats = new HBox();
     private final VBox info = new VBox();
     private final VBox selection = new VBox();
+    //private final Label label = new Label();
     //private final PFXPicker picker = new PFXPicker();
     // private final Label titleLabel;
     //private final Label subtitleLabel;
@@ -23,12 +25,14 @@ public class PFXCardVerticalPlaceholder extends VBox {
 //        titleLabel = new Label("Meal Name");
 //        subtitleLabel = new Label("A very nice meal");
 //        quantity = new Label("0 Available");
+        Label label = new Label("Placeholder for Alerts");
 
         getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);
         imageBox.getStyleClass().add("pfx-card-vertical-imageBox");
         //imageBox.getChildren().add(image);
         HBox.setHgrow(stats, Priority.ALWAYS);
+
 
         stats.getStyleClass().add("pfx-card-vertical-stats");
         HBox.setHgrow(info, Priority.ALWAYS);
@@ -39,7 +43,7 @@ public class PFXCardVerticalPlaceholder extends VBox {
         selection.getStyleClass().add("pfx-card-vertical-selection");
 
 
-//        info.getChildren().addAll(titleLabel, subtitleLabel);
+        info.getChildren().addAll(label);
         //selection.getChildren().addAll(picker);
     }
 }
