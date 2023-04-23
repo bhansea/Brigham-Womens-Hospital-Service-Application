@@ -17,6 +17,7 @@
 <?import impl.org.controlsfx.skin.GridRow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardVerticalPlaceholder?>
 <BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
@@ -53,7 +54,7 @@
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
                                             <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
-                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" />
+                                                <PFXCardVerticalPlaceholder fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" />
                                             </VBox>
                                         </StackPane>
                                     </HBox>
