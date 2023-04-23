@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
@@ -30,6 +31,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     VBox container = new VBox();
     @FXML
     private BorderPane root;
+
+    PFXButton filter = new PFXButton("Filter Category");
 
 
     public static BorderPane create(String path) {
