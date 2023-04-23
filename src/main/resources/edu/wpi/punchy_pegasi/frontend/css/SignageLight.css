@@ -3,21 +3,21 @@
 
 .signage-icon {
     -fx-fill: -pfx-signage-text;
-    -fx-font-size: 50;
+}
+
+.signage-edit-icon {
+    -fx-fill: -pfx-signage-text;
 }
 
 .signage-icon-header {
     -fx-fill: -pfx-signage-text;
-    -fx-font-size: 55;
 }
 
 .signage-header Label {
     -fx-text-fill: -pfx-signage-text;
-    -fx-font-size: 30;
 }
 
 .signage-body-left Label {
-    -fx-font-family: "Nunito Sans Regular";
     -fx-text-fill: -pfx-signage-text;
 }
 

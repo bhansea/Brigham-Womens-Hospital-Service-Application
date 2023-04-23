@@ -11,14 +11,35 @@
     -fx-padding: 10 0 0 0;
 }
 
+.signage-icon {
+    -fx-font-size: 50;
+}
+
+.signage-icon-header {
+    -fx-font-size: 55;
+}
+
 .signage-text {
     -fx-font-size: 20;
     -fx-padding: 20 0 0 0;
 }
 
+.signage-edit-icon {
+    -fx-font-size: 40;
+}
+
+.signage-edit-vbox {
+    -fx-alignment: bottom-right;
+    -fx-padding: 0 10 10 0;
+}
+
 .signage-header {
     -fx-spacing: 20;
     -fx-padding: 15 50 15 50;
+}
+
+.signage-header Label {
+    -fx-font-size: 30;
 }
 
 .signage-header-left {
@@ -53,4 +74,8 @@
     -fxspacing: 5;
     -fx-font-family: "Nunito Sans Regular";
     -fx-padding: 30 0 20 100;
+}
+
+.signage-body-left Label {
+    -fx-font-family: "Nunito Sans Regular";
 }
