@@ -17,6 +17,7 @@ public class Signage {
         UP,
         DOWN,
         LEFT,
-        RIGHT
+        RIGHT,
+        HERE
     }
 }

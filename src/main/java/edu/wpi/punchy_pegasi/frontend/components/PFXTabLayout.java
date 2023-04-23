@@ -16,13 +16,14 @@ public class PFXTabLayout extends BorderPane {
 
     public PFXTabLayout() {
         super();
-        HBox.setHgrow(container, Priority.ALWAYS);
-        VBox.setVgrow(container, Priority.ALWAYS);
-        HBox.setHgrow(stackPane, Priority.ALWAYS);
-        VBox.setVgrow(stackPane, Priority.ALWAYS);
-        HBox.setHgrow(this, Priority.ALWAYS);
-        VBox.setVgrow(this, Priority.ALWAYS);
+//        HBox.setHgrow(container, Priority.ALWAYS);
+//        VBox.setVgrow(container, Priority.ALWAYS);
+//        HBox.setHgrow(stackPane, Priority.ALWAYS);
+//        VBox.setVgrow(stackPane, Priority.ALWAYS);
+//        HBox.setHgrow(this, Priority.ALWAYS);
+//        VBox.setVgrow(this, Priority.ALWAYS);
         getStyleClass().add("pfx-tab-layout");
+        container.getStyleClass().add("pfx-tab-container");
         stackPane.getStyleClass().add("pfx-tab-stackpane");
 
         this.setTop(container);

@@ -26,10 +26,6 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         this.dbController = dbController;
     }
 
-    public MoveDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Move> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.MOVES, "uuid", key)) {
@@ -57,10 +53,10 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         try (var rs = dbController.searchQuery(TableType.MOVES, Arrays.stream(params).map(Move.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Move req = new Move(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("locationID", java.lang.Long.class),
-                    rs.getObject("date", java.time.LocalDate.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("locationID", java.lang.Long.class),
+                        rs.getObject("date", java.time.LocalDate.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -76,10 +72,10 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         try (var rs = dbController.searchQuery(TableType.MOVES)) {
             while (rs.next()) {
                 Move req = new Move(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("locationID", java.lang.Long.class),
-                    rs.getObject("date", java.time.LocalDate.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("locationID", java.lang.Long.class),
+                        rs.getObject("date", java.time.LocalDate.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

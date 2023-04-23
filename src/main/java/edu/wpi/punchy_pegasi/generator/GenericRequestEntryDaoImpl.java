@@ -26,10 +26,6 @@ public class GenericRequestEntryDaoImpl implements IDao<String/*idFieldType*/, G
         this.dbController = dbController;
     }
 
-    public GenericRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<GenericRequestEntry> get/*FacadeClassName*/(String/*idFieldType*/ key) {
         try (var rs = dbController.searchQuery(TableType.GENERIC, ""/*idField*/, key)) {
