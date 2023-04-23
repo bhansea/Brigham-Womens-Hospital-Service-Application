@@ -28,11 +28,10 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
     public EmployeeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Employee>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -55,9 +54,9 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES)) {
             while (rs.next()) {
                 Employee req = new Employee(
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    rs.getObject("firstName", java.lang.String.class),
-                    rs.getObject("lastName", java.lang.String.class));
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        rs.getObject("firstName", java.lang.String.class),
+                        rs.getObject("lastName", java.lang.String.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

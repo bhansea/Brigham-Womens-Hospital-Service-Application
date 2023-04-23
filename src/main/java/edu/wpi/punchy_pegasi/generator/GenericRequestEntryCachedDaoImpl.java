@@ -28,11 +28,10 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
     public GenericRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<String/*idFieldType*/, GenericRequestEntry>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);

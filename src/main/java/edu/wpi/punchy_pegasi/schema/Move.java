@@ -20,18 +20,21 @@ public class Move {
     private Long locationID;
     @com.jsoniter.annotation.JsonProperty("date")
     private LocalDate date;
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move> {
         UUID("uuid"),
         NODE_ID("nodeID"),
         LOCATION_ID("locationID"),
         DATE("date");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();

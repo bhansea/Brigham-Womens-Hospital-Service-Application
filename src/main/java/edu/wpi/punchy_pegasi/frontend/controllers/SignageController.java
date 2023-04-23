@@ -82,6 +82,9 @@ public class SignageController {
                         );
                     }
                 }
+                if (c.wasUpdated()) {
+                    ;
+                }
             }
         });
         //init the vBox

@@ -28,11 +28,10 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
     public NodeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Node>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -55,11 +54,11 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         try (var rs = dbController.searchQuery(TableType.NODES)) {
             while (rs.next()) {
                 Node req = new Node(
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("xcoord", java.lang.Integer.class),
-                    rs.getObject("ycoord", java.lang.Integer.class),
-                    rs.getObject("floor", java.lang.String.class),
-                    rs.getObject("building", java.lang.String.class));
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("xcoord", java.lang.Integer.class),
+                        rs.getObject("ycoord", java.lang.Integer.class),
+                        rs.getObject("floor", java.lang.String.class),
+                        rs.getObject("building", java.lang.String.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

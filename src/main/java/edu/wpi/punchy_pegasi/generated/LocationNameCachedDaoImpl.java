@@ -28,11 +28,10 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
     public LocationNameCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, LocationName>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -55,10 +54,10 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("longName", java.lang.String.class),
-                    rs.getObject("shortName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("longName", java.lang.String.class),
+                        rs.getObject("shortName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

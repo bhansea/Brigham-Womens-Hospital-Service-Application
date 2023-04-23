@@ -28,11 +28,10 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
     public RequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.util.UUID, RequestEntry>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -55,12 +54,12 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         try (var rs = dbController.searchQuery(TableType.REQUESTS)) {
             while (rs.next()) {
                 RequestEntry req = new RequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

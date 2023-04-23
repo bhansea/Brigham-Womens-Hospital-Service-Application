@@ -28,11 +28,10 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
     public AccountCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Account>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -55,11 +54,11 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

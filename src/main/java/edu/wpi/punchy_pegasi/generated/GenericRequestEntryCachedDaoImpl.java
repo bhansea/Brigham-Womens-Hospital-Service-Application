@@ -28,11 +28,10 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<java.util.UUID, Ge
     public GenericRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.util.UUID, GenericRequestEntry>) c -> {
-            if (c.wasRemoved()) {
+            if (c.wasRemoved())
                 list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
+            if (c.wasAdded())
                 list.add(c.getValueAdded());
-            }
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -55,12 +54,12 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<java.util.UUID, Ge
         try (var rs = dbController.searchQuery(TableType.GENERIC)) {
             while (rs.next()) {
                 GenericRequestEntry req = new GenericRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
