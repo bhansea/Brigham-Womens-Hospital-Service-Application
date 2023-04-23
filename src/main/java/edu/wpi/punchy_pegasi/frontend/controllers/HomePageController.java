@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -34,10 +35,13 @@ public class HomePageController {
     private final Facade facade = App.getSingleton().getFacade();
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
-    @FXML
-    private VBox pie;
+//    @FXML
+//    private VBox pie;
     @FXML
     private PieChart piechart = new PieChart();
+
+    @FXML
+    private PFXCardVertical placeholderAlerts = new PFXCardVertical();
 //    @FXML
 //    private MFXComboBox notificationComboBox;
 
@@ -52,6 +56,9 @@ public class HomePageController {
                 new PieChart.Data("Processing",processing));
         piechart.setData(pieChartData);
         piechart.setTitle("Service Request");
+
+        placeholderAlerts.setMaxHeight(Double.MAX_VALUE);
+
         //pie.getChildren().add(piechart);
         //Scene scene = new Scene(pie, 500, 500);
         //Stage pstage = new Stage();

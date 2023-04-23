@@ -32,40 +32,38 @@
                     <RowConstraints vgrow="ALWAYS"/>
                 </rowConstraints>
                 <children>
-                    <Pane>
-                        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background"
-                              BorderPane.alignment="CENTER"
-                              GridPane.rowIndex="0" maxHeight="Infinity">
-                            <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER" style="-fx-background-color: -pfx-background"
+                          BorderPane.alignment="CENTER"
+                          GridPane.rowIndex="0" maxHeight="Infinity">
+                        <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER">
                                 <HBox alignment="CENTER">
-                                    <HBox alignment="CENTER">
-                                        <StackPane>
-                                            <padding>
-                                                <Insets topRightBottomLeft="25"/>
-                                            </padding>
-                                            <VBox VBox.vgrow="ALWAYS" fx:id="pie">
-                                                <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
-                                            </VBox>
-                                        </StackPane>
-                                    </HBox>
-                                    <HBox alignment="CENTER" maxHeight="Infinity">
-                                        <StackPane HBox.hgrow="ALWAYS">
-                                            <padding>
-                                                <Insets topRightBottomLeft="25"/>
-                                            </padding>
-                                            <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
-                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card"
-                                                                 VBox.vgrow="ALWAYS"/>
-                                            </VBox>
-                                        </StackPane>
-                                    </HBox>
-                                    <padding>
-                                        <Insets top="25.0"/>
-                                    </padding>
+                                    <StackPane>
+                                        <padding>
+                                            <Insets topRightBottomLeft="25"/>
+                                        </padding>
+                                        <VBox VBox.vgrow="ALWAYS" fx:id="pie">
+                                            <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </StackPane>
                                 </HBox>
-                            </VBox>
-                        </HBox>
-                    </Pane>
+                                <HBox alignment="CENTER" maxHeight="Infinity">
+                                    <StackPane HBox.hgrow="ALWAYS">
+                                        <padding>
+                                            <Insets topRightBottomLeft="25"/>
+                                        </padding>
+                                        <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
+                                            <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card"
+                                                             VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </StackPane>
+                                </HBox>
+                                <padding>
+                                    <Insets top="25.0"/>
+                                </padding>
+                            </HBox>
+                        </VBox>
+                    </HBox>
                     <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" GridPane.rowIndex="1">
                         <padding>
                             <Insets topRightBottomLeft="20"/>
