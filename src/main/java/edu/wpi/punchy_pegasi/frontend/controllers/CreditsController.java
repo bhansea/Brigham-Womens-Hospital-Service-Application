@@ -23,6 +23,9 @@ public class CreditsController {
     private void initialize(){
         resources.add(new Resource("Source 1", "an image", new Hyperlink("https://docs.oracle.com/javafx/2/ui_controls/hyperlink.htm")));
         resources.add(new Resource("Source 2", "an icon", new Hyperlink("https://www.freecodecamp.org/news/java-operator-and-or-logical-operators/")));
+        resources.add(new Resource("Source 3", "an icon", new Hyperlink("https://www.freecodecamp.org/news/java-operator-and-or-logical-operators/")));
+        resources.add(new Resource("Source 4", "an image", new Hyperlink("https://docs.oracle.com/javafx/2/ui_controls/hyperlink.htm")));
+
         int rowIndex = 1;
         for (Resource resource : resources) {
             Label nameLabel = new Label(resource.getName());
