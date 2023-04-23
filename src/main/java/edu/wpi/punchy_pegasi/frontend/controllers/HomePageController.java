@@ -40,8 +40,6 @@ public class HomePageController {
     @FXML
     private PieChart piechart = new PieChart();
 
-    @FXML
-    private PFXCardVertical placeholderAlerts = new PFXCardVertical();
 //    @FXML
 //    private MFXComboBox notificationComboBox;
 
@@ -56,8 +54,8 @@ public class HomePageController {
                 new PieChart.Data("Processing",processing));
         piechart.setData(pieChartData);
         piechart.setTitle("Service Request");
+        piechart.setLegendVisible(false);
 
-        placeholderAlerts.setMaxHeight(Double.MAX_VALUE);
 
         //pie.getChildren().add(piechart);
         //Scene scene = new Scene(pie, 500, 500);

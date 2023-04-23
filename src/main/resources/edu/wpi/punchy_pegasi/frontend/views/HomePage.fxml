@@ -17,64 +17,63 @@
 <?import impl.org.controlsfx.skin.GridRow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.Pane?>
 <BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
-        <StackPane style="-fx-background-color: -pfx-background">
-            <GridPane>
-                <columnConstraints>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints vgrow="ALWAYS"/>
-                    <RowConstraints vgrow="ALWAYS"/>
-                </rowConstraints>
-                <children>
-                    <HBox alignment="CENTER" style="-fx-background-color: -pfx-background"
-                          BorderPane.alignment="CENTER"
-                          GridPane.rowIndex="0" maxHeight="Infinity">
-                        <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                            <HBox alignment="CENTER">
+        <StackPane>
+            <HBox alignment="CENTER" style="-fx-background-color: -pfx-background">
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="ALWAYS"/>
+                        <RowConstraints vgrow="ALWAYS"/>
+                    </rowConstraints>
+                    <children>
+                        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background"
+                              BorderPane.alignment="CENTER"
+                              GridPane.rowIndex="0" maxHeight="Infinity">
+                            <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                 <HBox alignment="CENTER">
-                                    <StackPane>
-                                        <padding>
-                                            <Insets topRightBottomLeft="25"/>
-                                        </padding>
-                                        <VBox VBox.vgrow="ALWAYS" fx:id="pie">
-                                            <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
-                                        </VBox>
-                                    </StackPane>
+                                    <HBox alignment="CENTER">
+                                        <StackPane>
+                                            <padding>
+                                                <Insets topRightBottomLeft="25"/>
+                                            </padding>
+                                            <VBox VBox.vgrow="ALWAYS" fx:id="pie">
+                                                <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
+                                            </VBox>
+                                        </StackPane>
+                                    </HBox>
+                                    <HBox alignment="CENTER" maxHeight="Infinity">
+                                        <StackPane HBox.hgrow="ALWAYS">
+                                            <padding>
+                                                <Insets topRightBottomLeft="25"/>
+                                            </padding>
+                                            <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
+                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS"/>
+                                            </VBox>
+                                        </StackPane>
+                                    </HBox>
+                                    <padding>
+                                        <Insets top="25.0"/>
+                                    </padding>
                                 </HBox>
-                                <HBox alignment="CENTER" maxHeight="Infinity">
-                                    <StackPane HBox.hgrow="ALWAYS">
-                                        <padding>
-                                            <Insets topRightBottomLeft="25"/>
-                                        </padding>
-                                        <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
-                                            <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card"
-                                                             VBox.vgrow="ALWAYS"/>
-                                        </VBox>
-                                    </StackPane>
-                                </HBox>
-                                <padding>
-                                    <Insets top="25.0"/>
-                                </padding>
-                            </HBox>
-                        </VBox>
-                    </HBox>
-                    <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" GridPane.rowIndex="1">
-                        <padding>
-                            <Insets topRightBottomLeft="20"/>
-                        </padding>
-                        <StackPane>
-                            <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
-                        </StackPane>
-                    </HBox>
-                </children>
-            </GridPane>
-            <!--            </HBox>-->
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" GridPane.rowIndex="1">
+                            <padding>
+                                <Insets topRightBottomLeft="20"/>
+                            </padding>
+                            <StackPane>
+                                <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
+                            </StackPane>
+                        </HBox>
+                    </children>
+                </GridPane>
+            </HBox>
         </StackPane>
     </center>
     <top>
