@@ -186,6 +186,11 @@ public class SleepThroughTheWinter {
         return Arrays.stream(field.getAnnotations()).anyMatch(a -> a.annotationType() == SchemaID.class);
     }
 
+    private static boolean fieldIsUnique(Field field) {
+        // locate the @Unique annotation
+        return Arrays.stream(field.getAnnotations()).anyMatch(a -> a.annotationType() == Unique.class);
+    }
+
     private static String generateTableInit(TableType tt) {
         var clazz = tt.getClazz();
         var tableName = tt.name().toLowerCase();
@@ -205,14 +210,15 @@ public class SleepThroughTheWinter {
 //        var classFields = getFieldsRecursively(clazz);
         var idField = classFields.stream().filter(SleepThroughTheWinter::fieldIsID).findFirst();
         var tableColumns = classFields.stream().map(f -> {
-            var appendText = fieldIsID(f) ?
+            var keyText = fieldIsID(f) ?
                     f.getType() == Long.class ?
                             " DEFAULT nextval('" + sequenceName + "') PRIMARY KEY"
                             : " PRIMARY KEY"
                     : "";
+            var uniqueText = fieldIsUnique(f) ? " UNIQUE" : "";
             if (f.getType().isEnum())
-                return "" + f.getName() + " varchar" + appendText + " NOT NULL";
-            return "" + f.getName() + " " + classToPostgres.get(f.getType()) + appendText;
+                return "" + f.getName() + " varchar" + keyText + " NOT NULL";
+            return "" + f.getName() + " " + classToPostgres.get(f.getType()) + uniqueText + keyText;
         }).toList();
 
         var tableListener = String.format("""
@@ -311,9 +317,11 @@ public class SleepThroughTheWinter {
         var classFields = getFieldsRecursively(entryClass);
 
         // gen schema
-        var schemaFileText = sourceFileText  // remove @SchemaID annotations
-                .replaceAll("@SchemaID[.\n]*", "")
-                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "").trim();
+        var schemaFileText = sourceFileText // remove @SchemaID annotations
+//                .replaceAll("@SchemaID[.\n]*", "")
+//                .replaceAll("@Unique[.\n]*", "")
+                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "import edu\\.wpi\\.punchy_pegasi\\.backend\\.SchemaID;\n")
+                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.Unique;[.\n]*", "import edu\\.wpi\\.punchy_pegasi\\.backend\\.Unique;\n").trim();
 
         var schemaLines = new ArrayList<>(schemaFileText.lines().toList());
         schemaLines.add(schemaLines.size() - 1, generateEnum(entryClass, classFields));
@@ -349,6 +357,7 @@ public class SleepThroughTheWinter {
         var idFieldText = idField.getName();
         var idFieldType = idField.getType().getCanonicalName();
 
+
         var template = new String(Files.readAllBytes(daoImplSourcePath));
         var implFileText = template.replaceAll("edu\\.wpi\\.punchy_pegasi\\.generator", "edu.wpi.punchy_pegasi.generated")
                 .replaceAll("/\\*FacadeClassName\\*/", "")
@@ -380,6 +389,22 @@ public class SleepThroughTheWinter {
         }
         return idFields.get(0);
     }
+
+//    private static boolean checkUniqueFields(Class<?> clazz) throws IllegalStateException {
+//        var classFields = getFieldsRecursively(clazz);
+//        var uniqueFields = classFields.stream().filter(SleepThroughTheWinter::fieldIsUnique).toList(); // locate id field with @Unique
+//        if(uniqueFields.size() < 1){
+//            return false;
+//        } else{
+//            return true;
+//        }
+//    }
+
+//    private static List<Field> getUniqueFields(Class<?> clazz) throws IllegalStateException {
+//        var classFields = getFieldsRecursively(clazz);
+//        var uniqueFields = classFields.stream().filter(SleepThroughTheWinter::fieldIsUnique).toList(); // locate id field with @Unique
+//        return uniqueFields;
+//    }
 
     private static StringBuilder generateFacadeEntry(Class<?> entryClass) throws IOException, IllegalStateException {
         var daoImplSourcePath = Paths.get(genericDaoImplPath());
