@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
+import edu.wpi.punchy_pegasi.frontend.components.PFXPopup;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -17,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.Value;
 
 import java.util.*;
@@ -109,7 +111,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 // TODO: need a way to get the employeeID of the person making the request entry
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
-        App.getSingleton().navigate(Screen.HOME);
+        Stage stage = App.getSingleton().getPrimaryStage();
+        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
     }
 
     @FXML

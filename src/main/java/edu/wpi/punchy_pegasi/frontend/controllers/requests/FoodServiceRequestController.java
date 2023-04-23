@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
+import edu.wpi.punchy_pegasi.frontend.components.PFXPopup;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
@@ -22,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.Value;
 
 import java.beans.PropertyChangeEvent;
@@ -75,7 +77,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 "",
                 patientName.getText(), 1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
-        App.getSingleton().navigate(Screen.HOME);
+        Stage stage = App.getSingleton().getPrimaryStage();
+        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
     }
 
     @Override

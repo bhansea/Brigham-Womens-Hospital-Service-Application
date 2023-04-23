@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
+import edu.wpi.punchy_pegasi.frontend.components.PFXPopup;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
@@ -17,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import javax.print.attribute.standard.ColorSupported;
 import java.util.ArrayList;
@@ -62,7 +64,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         // TODO: need a way to get the employeeID of the person making the request entry
         requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), "", "", "", 1L);
         App.getSingleton().getFacade().saveFlowerDeliveryRequestEntry(requestEntry);
-        App.getSingleton().navigate(Screen.HOME);
+        Stage stage = App.getSingleton().getPrimaryStage();
+        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
     }
 
     @FXML
