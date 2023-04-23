@@ -28,7 +28,7 @@
     -fx-alignment: CENTER_RIGHT;
 }
 
-.signage-text-Here {
+.signage-label-Here {
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 40;
 }

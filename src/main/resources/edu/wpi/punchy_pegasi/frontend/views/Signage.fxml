@@ -21,7 +21,7 @@
                 <children>
                     <HBox styleClass="signage-header-left">
                         <PFXIcon icon="DISTANCE" outlined="true" styleClass="signage-icon-header"/>
-                        <Text text="Stop Here Location Name" styleClass="signage-text-Here"/>
+                        <Label fx:id="labelHERE" styleClass="signage-label-Here"/>
                     </HBox>
                     <HBox styleClass="signage-header-right" HBox.hgrow="ALWAYS">
                         <PFXIcon icon="SCHEDULE" outlined="true" styleClass="signage-icon-header"/>
@@ -40,11 +40,9 @@
                     <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                         <children>
                             <PFXIcon fx:id="direction" icon="ARROW_UPWARD" outlined="true" styleClass="signage-icon"/>
-                            <VBox spacing="10.0" styleClass="signage-text">
-                                <children>
-                                    <Label fx:id="labelFWD" text="PLACEHOLDER"/>
-                                </children>
-                            </VBox>
+
+                            <Label fx:id="labelUP"/>
+
                         </children>
                     </HBox>
                     <Separator/>
@@ -53,7 +51,7 @@
                             <PFXIcon icon="ARROW_FORWARD" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Label text="Information"/>
+                                    <Label fx:id="labelRGT"/>
                                 </children>
                             </VBox>
                         </children>
@@ -64,7 +62,7 @@
                             <PFXIcon icon="ARROW_BACK" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Label text="Information"/>
+                                    <Label fx:id="labelLFT"/>
                                 </children>
                             </VBox>
                         </children>
@@ -75,7 +73,7 @@
                             <PFXIcon icon="ARROW_DOWNWARD" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Label text="Information"/>
+                                    <Label fx:id="labelDOWN"/>
                                 </children>
                             </VBox>
                         </children>
