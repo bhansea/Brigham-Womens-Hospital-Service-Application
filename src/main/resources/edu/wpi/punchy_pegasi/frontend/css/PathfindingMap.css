@@ -22,3 +22,8 @@
     -pfx-button-background: -pfx-accent;
     -pfx-button-text: -pfx-text-opposite;
 }
+
+.pathfinding-overlay .pfx-button-cancel {
+    -pfx-button-background: -pfx-danger;
+    -pfx-button-text: -pfx-text;
+}
