@@ -81,36 +81,39 @@ public class SignageController {
         iconTime.getStyleClass().add("signage-icon-header");
     }
 
-    private Timer configTimer(final int value, final long intervalMill) {
+    private void configTimer(final long interuptPeriodMill) {
         long currTime = System.currentTimeMillis();
-        Timer timer = new Timer("Timer" + value, true);
+        long startDelay = interuptPeriodMill - (currTime % interuptPeriodMill);
+        Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
             public void run() {
                 Platform.runLater(() -> {
                     updateTime();
                 });
             }
-        }, currTime%intervalMill, intervalMill);
-        return timer;
+        }, startDelay, interuptPeriodMill);
     }
 
     @FXML
     private void initialize() {
-        configTimer(0, 1000);
+        configTimer(1000);
         initIcons();
         initHeader();
 
         Signage newSignageD = new Signage("Location Name Down 0", Signage.DirectionType.DOWN);
         Signage newSignageU = new Signage("Location Name Up 0", Signage.DirectionType.UP);
         Signage newSignageD1 = new Signage("Location Name Down 1", Signage.DirectionType.DOWN);
+        Signage newSignageHere = new Signage("Location Name Here", Signage.DirectionType.HERE);
         facade.saveSignage(newSignageD);
         facade.saveSignage(newSignageU);
         facade.saveSignage(newSignageD1);
+        facade.saveSignage(newSignageHere);
         buildSignage(loadSignage());
 
         facade.deleteSignage(newSignageD);
         facade.deleteSignage(newSignageU);
         facade.deleteSignage(newSignageD1);
+        facade.deleteSignage(newSignageHere);
 
         Platform.runLater(() -> {
             switchTheme(true);
