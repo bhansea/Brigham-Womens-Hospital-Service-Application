@@ -320,8 +320,8 @@ public class SleepThroughTheWinter {
         var schemaFileText = sourceFileText // remove @SchemaID annotations
 //                .replaceAll("@SchemaID[.\n]*", "")
 //                .replaceAll("@Unique[.\n]*", "")
-                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "import edu\\.wpi\\.punchy_pegasi\\.backend\\.SchemaID;\n")
-                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.Unique;[.\n]*", "import edu\\.wpi\\.punchy_pegasi\\.backend\\.Unique;\n").trim();
+                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.SchemaID;[.\n]*", "import edu.wpi.punchy_pegasi.backend.SchemaID;")
+                .replaceAll("import edu\\.wpi\\.punchy_pegasi\\.generator\\.Unique;[.\n]*", "import edu.wpi.punchy_pegasi.backend.Unique;").trim();
 
         var schemaLines = new ArrayList<>(schemaFileText.lines().toList());
         schemaLines.add(schemaLines.size() - 1, generateEnum(entryClass, classFields));
