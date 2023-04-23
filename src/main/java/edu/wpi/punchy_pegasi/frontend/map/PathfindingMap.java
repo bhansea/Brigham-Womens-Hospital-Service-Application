@@ -112,6 +112,7 @@ public class PathfindingMap {
         HBox.setHgrow(pathfinding, Priority.ALWAYS);
         invalidText.setVisible(false);
         robotInfo.setVisible(false);
+        container.setPickOnBounds(false);
         pathfinding.setPickOnBounds(false);
         robotInfo.setPickOnBounds(false);
         load(() -> {
