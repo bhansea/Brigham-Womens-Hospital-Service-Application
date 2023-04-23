@@ -21,8 +21,7 @@ public class PFXTab extends VBox {
 
     public PFXTab() {
         super();
-        HBox.setHgrow(this, Priority.ALWAYS);
-        VBox.setVgrow(this, Priority.ALWAYS);
+        HBox.setHgrow(this, Priority.NEVER);
         this.getStyleClass().add("pfx-tab");
         getChildren().add(label);
         label.getStyleClass().add("pfx-tab-text");

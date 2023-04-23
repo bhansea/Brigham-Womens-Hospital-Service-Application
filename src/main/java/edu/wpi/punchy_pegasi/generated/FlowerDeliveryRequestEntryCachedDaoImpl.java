@@ -38,10 +38,6 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public FlowerDeliveryRequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
         if (!cache.containsKey(flowerDeliveryRequestEntry.getServiceID()))
             cache.put(flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry);
@@ -59,16 +55,16 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("patientName", java.lang.String.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("flowerSize", java.lang.String.class),
-                    rs.getObject("flowerAmount", java.lang.String.class),
-                    rs.getObject("flowerType", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("patientName", java.lang.String.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("flowerSize", java.lang.String.class),
+                        rs.getObject("flowerAmount", java.lang.String.class),
+                        rs.getObject("flowerType", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

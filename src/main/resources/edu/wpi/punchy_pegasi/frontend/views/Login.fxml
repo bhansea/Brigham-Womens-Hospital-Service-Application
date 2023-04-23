@@ -8,42 +8,59 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="login-page-background"  xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
-    <right>
-        <VBox styleClass="VBox-Login" BorderPane.alignment="CENTER">
-            <VBox styleClass="VBox-login-White-Box" VBox.vgrow="ALWAYS">
-                <Label fx:id="invalidText" text="Invalid username/password" textFill="red" visible="false">
-                    <font>
-                        <Font size="14">
-                        </Font>
-                    </font>
-                </Label>
-                <HBox alignment="CENTER">
-                    <MFXTextFieldFocusable fx:id="usernameEnter" floatingText="Username"
-                                           maxHeight="50.0" maxWidth="300" minHeight="0.0"
-                                           onAction="#logIn" prefHeight="50.0" prefWidth="300"
-                                           style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                        <textFill>
-                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
-                        </textFill>
-                    </MFXTextFieldFocusable>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="80" prefWidth="200.0">
-                    <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0"
-                                      maxWidth="300" minHeight="0.0" onAction="#logIn" prefHeight="50.0" prefWidth="300"
-                                      style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
-                        <textFill>
-                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
-                        </textFill>
-                    </MFXPasswordField>
-                </HBox>
-                <HBox alignment="CENTER">
-                    <PFXButton fx:id="logInButton" mnemonicParsing="false" onAction="#logIn"
-                               styleClass="PFXButton-Login" text="Log in">
-                    </PFXButton>
-                </HBox>
-            </VBox>
+<?import javafx.scene.control.Separator?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" styleClass="login-page-background" xmlns="http://javafx.com/javafx/"
+           fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
+    <VBox styleClass="login-page-white-layer"/>
+    <HBox>
+        <VBox HBox.hgrow="ALWAYS"/>
+        <VBox styleClass="VBox-Login">
+            <BorderPane VBox.vgrow="ALWAYS" styleClass="VBox-login-White-Box">
+                <center>
+                    <VBox alignment="CENTER">
+                        <Label fx:id="invalidText" text="Invalid username/password" textFill="red" visible="false">
+                            <font>
+                                <Font size="14">
+                                </Font>
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER">
+                            <MFXTextFieldFocusable fx:id="usernameEnter" floatingText="Username"
+                                                   maxHeight="50.0" maxWidth="300" minHeight="0.0"
+                                                   onAction="#logIn" prefHeight="50.0" prefWidth="300"
+                                                   style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                                <textFill>
+                                    <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
+                                </textFill>
+                            </MFXTextFieldFocusable>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="80" prefWidth="200.0">
+                            <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0"
+                                              maxWidth="300" minHeight="0.0" onAction="#logIn" prefHeight="50.0"
+                                              prefWidth="300"
+                                              style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                                <textFill>
+                                    <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
+                                </textFill>
+                            </MFXPasswordField>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                            <PFXButton fx:id="logInButton" mnemonicParsing="false" onAction="#logIn"
+                                       styleClass="PFXButton-Login" text="Log in">
+                            </PFXButton>
+                        </HBox>
+                    </VBox>
+                </center>
+                <bottom>
+                    <VBox styleClass="login-quicknav">
+                        <HBox alignment="CENTER">
+                            <Label textAlignment="CENTER" text="Quick Navigation"/>
+                        </HBox>
+                        <Separator/>
+                        <VBox alignment="CENTER" fx:id="quicknav"/>
+                    </VBox>
+                </bottom>
+            </BorderPane>
         </VBox>
-    </right>
-</BorderPane>
+    </HBox>
+</StackPane>

@@ -43,6 +43,11 @@ public class PdbController {
 
         @Override
         public void closed() {
+            try {
+                getConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     };
     private final String schema;

@@ -4,6 +4,9 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.PathfindingSingleton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
+import edu.wpi.punchy_pegasi.schema.Account;
+import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.Move;
@@ -14,8 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -24,9 +28,10 @@ import org.javatuples.Pair;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
 
-import static edu.wpi.punchy_pegasi.frontend.map.AdminMapController.*;
+import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
+
+import com.fazecast.jSerialComm.*;
 
 public class PathfindingMap {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
@@ -54,14 +59,20 @@ public class PathfindingMap {
     @FXML
     private PFXButton selectGraphicallyCancel;
     @FXML
+    private Label invalidText;
+    @FXML
     private PFXButton selectGraphically;
     @FXML
     private MFXFilterComboBox<String> selectAlgo;
+    @FXML
+    private PFXButton robotButton;
     @FXML
     private BorderPane root;
     private IMap<HospitalFloor> map;
     @FXML
     private VBox pathfinding;
+    @FXML
+    private VBox robotInfo;
     @FXML
     private MFXFilterComboBox<LocationName> nodeEndCombo;
     @FXML
@@ -78,9 +89,12 @@ public class PathfindingMap {
     private ObservableList<Edge> edgesList;
     private ObservableList<LocationName> locationsList;
     private ObservableList<Move> movesList;
+    private ArrayList<Integer> xCoords = new ArrayList<Integer>();
+    private ArrayList<Integer> yCoords = new ArrayList<Integer>();
     private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
+    private HBox container = new HBox();
 
     private LocalDate movesDate = LocalDate.now();
 
@@ -89,13 +103,18 @@ public class PathfindingMap {
         if(location.isEmpty()) return Optional.empty();
         return map.drawNode(node, color, location.get(0).getShortName(), String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)));
     }
-    private final Predicate<LocationName> isDestination = location ->  location.getNodeType() != LocationName.NodeType.HALL && location.getNodeType() != LocationName.NodeType.STAI && location.getNodeType() != LocationName.NodeType.ELEV;
     @FXML
     private void initialize() {
         map = new HospitalMap(floors);
         root.setCenter(map.get());
-        map.addLayer(pathfinding);
+        map.addLayer(container);
+        container.getChildren().addAll(pathfinding, robotInfo);
+        HBox.setHgrow(pathfinding, Priority.ALWAYS);
+        invalidText.setVisible(false);
+        robotInfo.setVisible(false);
+        container.setPickOnBounds(false);
         pathfinding.setPickOnBounds(false);
+        robotInfo.setPickOnBounds(false);
         load(() -> {
             var filteredSorted = locationsList.filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName));
             nodeStartCombo.setItems(filteredSorted);
@@ -125,8 +144,15 @@ public class PathfindingMap {
                 }
             });
         });
+
+        // Check account status for admin features
+        if (App.getSingleton().getAccount().getAccountType().getShieldLevel() == Account.AccountType.ADMIN.getShieldLevel()) {
+            robotInfo.setVisible(true);
+        }
+
         selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search", "Dijkstra"));
         selectGraphically.setDisable(true);
+        robotButton.setDisable(true);
         selectGraphicallyCancel.setVisible(false);
         selectGraphicallyCancel.setManaged(false);
         PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
@@ -185,8 +211,8 @@ public class PathfindingMap {
             movesList = App.getSingleton().getFacade().getAllAsListMove();
             locationsList = App.getSingleton().getFacade().getAllAsListLocationName();
             // TODO: Rerun when moves Date changes
-            nodeToLocation = getNodeLocations(nodes, locations, moves, movesDate);
-            locationToNode = getLocationNode(nodes, locations, moves, movesDate);
+            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, movesDate);
+            locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, movesDate);
             Platform.runLater(callback);
         });
         thread.setDaemon(true);
@@ -230,12 +256,88 @@ public class PathfindingMap {
             map.drawYouAreHere(path.get(0));
             drawNode(path.get(path.size() - 1), "#3cb043");
             map.focusOn(path.get(0));
+
+            for (Node node : path) {
+                xCoords.add((Integer)node.getFromField(Node.Field.XCOORD));
+                yCoords.add((Integer)node.getFromField(Node.Field.YCOORD));
+            }
+            robotButton.setDisable(false);
             return "";
         } catch (IllegalStateException e) {
             return "Path not found";
         }
     }
 
+
+    @FXML
+    private void sendRobotMessage() {
+        SerialPort comPort = null;
+        SerialPort[] ports = SerialPort.getCommPorts();
+
+        for(int i=0;i<ports.length;i++) {
+            if(ports[i].getPortDescription().equals("Pololu A-Star 32U4")) {
+                comPort = ports[i];
+            }
+        }
+        try {
+            comPort.openPort();
+            robotButton.setDisable(true);
+            invalidText.setVisible(false);
+        } catch(Exception e) {
+            invalidText.setVisible(true);
+            return;
+        }
+        byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
+        System.out.println(xCoords.get(0) + ", " + yCoords.get(0));
+        comPort.writeBytes(message, message.length);
+
+        for(int i=1;i<xCoords.size() - 1;i++) {
+            message = generateMessage("M", xCoords.get(i), yCoords.get(i));
+            System.out.println(xCoords.get(i) + ", " + yCoords.get(i));
+            comPort.writeBytes(message, message.length);
+        }
+
+        message = generateMessage("E", xCoords.get(xCoords.size() - 1), yCoords.get(yCoords.size() - 1));
+        System.out.println(xCoords.get(xCoords.size() - 1) + ", " + yCoords.get(yCoords.size() - 1));
+        comPort.writeBytes(message, message.length);
+        comPort.closePort();
+    }
+
+    public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
+        byte[] strArray = str.getBytes();
+        byte[] tempStartArray = Integer.toString(startPos).getBytes();
+        byte[] tempEndArray = Integer.toString(endPos).getBytes();
+        byte[] startIntArray = {(byte)'0', (byte)'0', (byte)'0', (byte)'0'};
+        byte[] endIntArray = {(byte)'0', (byte)'0', (byte)'0', (byte)'0'};
+
+        for(int i=startIntArray.length - 1, j = tempStartArray.length - 1;j>=0;i--, j--) {
+            startIntArray[i] = tempStartArray[j];
+        }
+
+        for(int i=endIntArray.length - 1, j = tempEndArray.length - 1;j>=0;i--, j--) {
+            endIntArray[i] = tempEndArray[j];
+        }
+
+
+        byte[] result = new byte[strArray.length + startIntArray.length + endIntArray.length + 1];
+
+        int pos = 0;
+        for (byte element : strArray) {
+            result[pos] = element;
+            pos++;
+        }
+        for (byte element : startIntArray) {
+            result[pos] = element;
+            pos++;
+        }
+        for (byte element : endIntArray) {
+            result[pos] = element;
+            pos++;
+        }
+        result[result.length - 1] = '\n';
+
+        return result;
+    }
     @FXML
     private void setAlgo() {
         selectedAlgo = selectAlgo.getSelectedItem();
