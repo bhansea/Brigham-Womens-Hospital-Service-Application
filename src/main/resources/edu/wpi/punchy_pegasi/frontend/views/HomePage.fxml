@@ -48,9 +48,6 @@
                                             <VBox VBox.vgrow="ALWAYS" fx:id="pie" styleClass="pie-chart-box" spacing="2">
                                                 <PieChart fx:id="piechart" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
                                                           maxHeight="400" maxWidth="400" layoutY="5" layoutX="5">
-                                                    <VBox.margin>
-                                                        <Insets top="0" right="0" bottom="0" left="0" />
-                                                    </VBox.margin>
                                                 </PieChart>
                                             </VBox>
                                         </StackPane>
