@@ -42,7 +42,7 @@
                             <PFXIcon fx:id="direction" icon="ARROW_UPWARD" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Label text="PLACEHOLDER"/>
+                                    <Label fx:id="labelFWD" text="PLACEHOLDER"/>
                                 </children>
                             </VBox>
                         </children>

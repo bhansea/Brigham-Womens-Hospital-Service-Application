@@ -62,6 +62,8 @@
 @import "LoginPage.css";
 @import "PathfindingMap.css";
 @import "SignageTheme.css";
+@import "SignageDark.css";
+@import "SignageLight.css";
 /* Misc */
 @import "Spinner.css";
 @import "Scrollbar.css";
