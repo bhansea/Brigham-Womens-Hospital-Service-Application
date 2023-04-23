@@ -26,10 +26,6 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         this.dbController = dbController;
     }
 
-    public EdgeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Edge> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.EDGES, "uuid", key)) {
@@ -56,9 +52,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         try (var rs = dbController.searchQuery(TableType.EDGES, Arrays.stream(params).map(Edge.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("startNode", java.lang.Long.class),
-                    rs.getObject("endNode", java.lang.Long.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("startNode", java.lang.Long.class),
+                        rs.getObject("endNode", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -74,9 +70,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         try (var rs = dbController.searchQuery(TableType.EDGES)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("startNode", java.lang.Long.class),
-                    rs.getObject("endNode", java.lang.Long.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("startNode", java.lang.Long.class),
+                        rs.getObject("endNode", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

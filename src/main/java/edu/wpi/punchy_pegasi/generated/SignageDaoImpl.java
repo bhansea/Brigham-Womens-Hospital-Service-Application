@@ -26,10 +26,6 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
         this.dbController = dbController;
     }
 
-    public SignageDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Signage> get(java.lang.String key) {
         try (var rs = dbController.searchQuery(TableType.SIGNAGE, "longName", key)) {
@@ -55,8 +51,8 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
         try (var rs = dbController.searchQuery(TableType.SIGNAGE, Arrays.stream(params).map(Signage.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Signage req = new Signage(
-                    rs.getObject("longName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
+                        rs.getObject("longName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 if (req != null)
                     map.put(req.getLongName(), req);
             }
@@ -72,8 +68,8 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
         try (var rs = dbController.searchQuery(TableType.SIGNAGE)) {
             while (rs.next()) {
                 Signage req = new Signage(
-                    rs.getObject("longName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
+                        rs.getObject("longName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 if (req != null)
                     map.put(req.getLongName(), req);
             }

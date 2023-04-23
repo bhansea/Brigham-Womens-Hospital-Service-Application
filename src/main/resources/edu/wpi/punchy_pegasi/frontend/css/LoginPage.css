@@ -3,18 +3,13 @@
     -fx-fill: always;
     -fx-padding: 30 30 30 0;
 }
-/*.login-page-background{*/
-/*    -fx-background-image: url("../assets/bwh-exterior-default.png");*/
-/*    -fx-background-repeat: no-repeat;*/
-/*    -fx-background-size: cover, auto;*/
-/*    !*-fx-opacity: 0.5;*!*/
-/*}*/
-
-/*.login-image{*/
-/*    -fx-opacity: 0.5;*/
-/*    -fx-background-size: cover;*/
-/*    -fx-background-repeat: no-repeat;*/
+.login-page-background{
+    -fx-background-image: url("../assets/bwh-exterior-default.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+    -fx-opacity: 0.5;
 }
+
 .VBox-login-White-Box {
     -fx-alignment: center-right;
     -fx-background-color: -pfx-text-opposite;
