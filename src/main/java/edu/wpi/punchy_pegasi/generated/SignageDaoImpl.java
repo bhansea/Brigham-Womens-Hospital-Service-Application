@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Signage;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
 
     public SignageDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public SignageDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -52,8 +51,8 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
         try (var rs = dbController.searchQuery(TableType.SIGNAGE, Arrays.stream(params).map(Signage.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Signage req = new Signage(
-                    rs.getObject("longName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
+                        rs.getObject("longName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 if (req != null)
                     map.put(req.getLongName(), req);
             }
@@ -64,20 +63,25 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
     }
 
     @Override
-    public Map<java.lang.String, Signage> getAll() {
+    public ObservableMap<java.lang.String, Signage> getAll() {
         var map = new HashMap<java.lang.String, Signage>();
         try (var rs = dbController.searchQuery(TableType.SIGNAGE)) {
             while (rs.next()) {
                 Signage req = new Signage(
-                    rs.getObject("longName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
+                        rs.getObject("longName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 if (req != null)
                     map.put(req.getLongName(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Signage> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

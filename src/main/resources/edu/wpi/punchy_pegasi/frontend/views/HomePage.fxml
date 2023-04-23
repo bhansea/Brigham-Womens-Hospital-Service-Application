@@ -1,35 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXTableView?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical?>
+
 <?import javafx.scene.chart.PieChart?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="home-background-image"
-            stylesheets="@../css/PieChart.css" xmlns="http://javafx.com/javafx/"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
+<BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
-        <HBox alignment="CENTER" style="-fx-background-color: #ffffff88" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" BorderPane.alignment="CENTER">
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                <Label textAlignment="CENTER" text="Welcome back!&#13;Here are you outstanding service requests.">
-                    <font>
-                        <Font name="System Bold" size="24.0"/>
-                    </font>
-                    <padding>
-                        <Insets topRightBottomLeft="10"/>
-                    </padding>
-                </Label>
-                <VBox VBox.vgrow="ALWAYS" fx:id="tableContainer">
-                    <padding>
-                        <Insets topRightBottomLeft="20"/>
-                    </padding>
-                    <MFXTableView fx:id="requestTable"/>
-                </VBox>
-                <VBox VBox.vgrow="ALWAYS" fx:id="pie">
-                    <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
-                    </VBox>
+<!--                <MFXComboBox fx:id="notificationComboBox" onAction="#openSelectedWindow" promptText="Select request type">-->
+<!--                    <items>-->
+<!--                        <FXCollections fx:factory="observableArrayList">-->
+<!--                            <String fx:value="Meals" />-->
+<!--                            <String fx:value="Flowers" />-->
+<!--                            <String fx:value="Office Supplies" />-->
+<!--                            <String fx:value="Conference Room" />-->
+<!--                            <String fx:value="Furniture" />-->
+<!--                        </FXCollections>-->
+<!--                    </items>-->
+<!--                </MFXComboBox>-->
+                <HBox alignment="CENTER">
+                    <HBox alignment="CENTER">
+                        <StackPane>
+                            <padding>
+                                <Insets topRightBottomLeft="25"/>
+                            </padding>
+                            <VBox VBox.vgrow="ALWAYS" fx:id="pie">
+                                <PieChart fx:id="piechart" VBox.vgrow="ALWAYS"/>
+                            </VBox>
+                        </StackPane>
+                    </HBox>
+                    <HBox alignment="CENTER">
+                        <StackPane>
+                            <padding>
+                                <Insets topRightBottomLeft="25"/>
+                            </padding>
+                            <PFXCardVertical fx:id="placeholderPie" styleClass="home-page-card"/>
+                        </StackPane>
+                    </HBox>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets top="25.0" />
+               </padding>
+                </HBox>
             </VBox>
         </HBox>
+
     </center>
+   <top>
+       <HBox alignment="CENTER" style="-fx-background-color: -pfx-background">
+          <Label text="Welcome back!&#13; Check your outstanding service requests." textAlignment="CENTER" BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background">
+              <font>
+                  <Font name="Nunito Sans" size="24.0" />
+              </font>
+              <padding>
+                  <Insets topRightBottomLeft="10" />
+              </padding>
+          </Label>
+       </HBox>
+   </top>
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: pfx-background">
+            <padding>
+                <Insets topRightBottomLeft="20"/>
+            </padding>
+            <StackPane>
+                <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
+            </StackPane>
+        </HBox>
+    </bottom>
 </BorderPane>

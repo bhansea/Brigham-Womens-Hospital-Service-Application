@@ -59,7 +59,6 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         furnTable.getTableColumns().addAll(typeCol, numCol);
         furnTable.setItems(itemList);
         itemList.remove(0, 1);
-        setHeaderText("Furniture Request");
 
         PFXCardVertical card1 = new PFXCardVertical("Bed", "Sturdy mattress", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/bed.jpg"));
         PFXCardVertical card2 = new PFXCardVertical("Office Chair", "Great comfort", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/officechair.jpg"));

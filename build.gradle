@@ -49,6 +49,7 @@ dependencies {
             'com.oracle.database.jdbc:ojdbc8:21.9.0.0',
 
             'com.impossibl.pgjdbc-ng:pgjdbc-ng:0.8.9',
+            'com.jsoniter:jsoniter:0.9.23',
 
             'de.mkammerer:argon2-jvm:2.11',
             'com.github.hervegirod:fxsvgimage:1.1',

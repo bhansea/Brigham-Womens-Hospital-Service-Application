@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -23,10 +26,6 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         this.dbController = dbController;
     }
 
-    public FurnitureRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<FurnitureRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", key)) {
@@ -37,7 +36,7 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()),
+                    java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()),
                     rs.getObject("employeeID", java.lang.Long.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -57,13 +56,13 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, Arrays.stream(params).map(FurnitureRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -74,25 +73,30 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
     }
 
     @Override
-    public Map<java.util.UUID, FurnitureRequestEntry> getAll() {
+    public ObservableMap<java.util.UUID, FurnitureRequestEntry> getAll() {
         var map = new HashMap<java.util.UUID, FurnitureRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<FurnitureRequestEntry> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override
