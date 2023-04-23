@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.GridPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.AboutController"
@@ -19,9 +19,9 @@
     <top>
         <VBox alignment="CENTER_LEFT" spacing="10.0">
             <children>
-                <Label text="ABOUT" style="-fx-font-weight: 900;" textFill="#0067B1" >
+                <Label text="ABOUT" style="-fx-font-weight: 900; " textFill="#0067B1" >
                     <font>
-                        <Font name="Nunito Sans" size="16.0" />
+                        <Font name="Nunito Sans" size="14.0" />
                     </font>
                     <padding>
                         <Insets top="25" left="50" />
@@ -31,7 +31,7 @@
                     <Text>
                         This application represents the work of 10 WPI undergraduate students in partial fulfillment of the requirements for CS3733-D23 Software Engineering.
                         <font>
-                            <Font name="Nunito Sans" size="20.0" />
+                            <Font name="Nunito Sans" size="18.0" />
                         </font>
                     </Text>
                     <padding>
@@ -40,36 +40,63 @@
                 </TextFlow>
                 <Label text="MEET THE TEAM" style="-fx-font-weight: 900;" textFill="#0067B1" >
                     <font>
-                        <Font name="Nunito Sans" size="16.0" />
+                        <Font name="Nunito Sans" size="14.0" />
                     </font>
                     <padding>
                         <Insets top="25" left="50" />
                     </padding>
                 </Label>
             </children>
-            <VBox spacing="10" style="-fx-border-color: #0067b1;">
-                <children>
-                    <HBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-border-color: #0067b1;">
-                        <children>
-                            <Text>
-                                Blake Bruell
-                                <font>
-                                    <Font name="Nunito Sans" size="20.0" />
-                                </font>
-                            </Text>
-                        </children>
-                        <Text>
-                            Lead Software Engineer
-                            <font>
-                                <Font name="Nunito Sans" size="20.0" />
-                            </font>
-                        </Text>
-                        <children>
+            <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" style="-fx-font-family: Nunito Sans; -fx-font-size: 16;">
+                <Label alignment="CENTER_LEFT" text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
+                <Label alignment="CENTER" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
+                <Label alignment="CENTER_RIGHT" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
 
-                        </children>
-                    </HBox>
-                </children>
-            </VBox>
+                <Label text="Blake Bruell" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label text="Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="babruell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+
+                <Label text="Charlotte Carter" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label text="Document Analyst" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label text="ccarter@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+
+                <Label text="Brittany Ficarra" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <Label text="FE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="bcficarra@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+
+                <Label text="Brandon Luong" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <Label text="BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label text="bvluon@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+
+                <Label text="Cooper Mann" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                <Label text="Scrum Master" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label text="cpmann@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+
+                <Label text="Arnav Mishra" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                <Label text="BE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <Label text="amishra2@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+
+                <Label text="Ryan Nguyen" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                <Label text="FE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <Label text="rnguyen@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+
+                <Label text="Piper O' Connell" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                <Label text="Project Manager" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <Label text="proconnell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+
+                <Label text="Gabe Ward" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+                <Label text="Product Owner" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                <Label text="gward@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+
+                <Label text="Tommy Wang" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+                <Label text="FE and BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                <Label text="wwang8@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+
+                <padding>
+                    <Insets top="25" left="50"/>
+                </padding>
+            </GridPane>
+
         </VBox>
     </top>
 </BorderPane>
