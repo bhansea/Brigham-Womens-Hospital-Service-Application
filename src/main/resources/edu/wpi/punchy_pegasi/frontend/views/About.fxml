@@ -14,10 +14,9 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.AboutController"
-            prefHeight="400.0" prefWidth="600.0"
-            style="-fx-border-color: #0067b1;">
+            prefHeight="400.0" prefWidth="600.0">
     <center>
-        <VBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #F1F1F1">
             <children>
                 <VBox style="-fx-background-color: -pfx-background" spacing="10">
                     <Label text="ABOUT" style="-fx-font-weight: 900;" textFill="#0067B1" >
@@ -30,8 +29,9 @@
                     </Label>
                     <TextFlow prefWidth="600">
                         <Text>
-                            This application represents the work of 10 WPI undergraduate students in partial fulfillment of the requirements for CS3733-D23 Software Engineering.
-                            As a whole, our group worked together to effectively communicate, collaborate, and support each other in order to achieve a common goal. We shared ideas, provided constructive feedback to each other, and took on different roles and responsibilities in order to accomplish the group’s objectives.
+                            This application is in collaboration with Brigham &amp; Women's Hospital and represents the work of 10 WPI undergraduate students in partial fulfillment of the requirements for CS3733-D23 Software Engineering.
+                            As a whole, our group worked together effectively to communicate, apply Agile development methodologies, and fulfill software requirements in Java. We shared ideas, provided constructive feedback to each other, and took on different roles and responsibilities in order to accomplish the objectives of the project.
+                            The software systems we created were used to inform the hospital representatives about potential features, user interfaces, or design approaches that they might consider implementing.
                             <font>
                                 <Font name="Nunito Sans" size="18.0" />
                             </font>
@@ -112,15 +112,24 @@
                     <TextFlow prefWidth="600">
                         <Text>
                             Our team would like to acknowledge the following people and organization for their contributions to this project:
-                            - asdfasd
                             <font>
                                 <Font name="Nunito Sans" size="18.0" />
                             </font>
                         </Text>
                         <padding>
-                            <Insets top="5" left="50" bottom="25"/>
+                            <Insets top="5" left="50"/>
                         </padding>
                     </TextFlow>
+                    <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" style="-fx-font-family: Nunito Sans; -fx-font-size: 16; -fx-text-fill: black;">
+                        <Label text="-  The WPI Computer Science Department for providing us with this opportunity." GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label text="-  Professor Wilson Wong for organizing this project and providing timely feedback for our numerous iterations." GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label text="-  Our coach, Qui Nguyen, for providing us with valuable guidance." GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label text="-  Brigham &amp; Women's Hospital for the opportunity to work with them." GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <Label text="-  The representative from Brigham &amp; Women's Hospital, Andrew Shinn, for their time and input." GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <padding>
+                            <Insets top="5" left="50" bottom="25"/>
+                        </padding>
+                    </GridPane>
                 </VBox>
             </children>
         </VBox>
