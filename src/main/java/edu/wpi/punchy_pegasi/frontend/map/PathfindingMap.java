@@ -17,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -57,6 +58,8 @@ public class PathfindingMap {
     };
     @FXML
     private PFXButton selectGraphicallyCancel;
+    @FXML
+    private Label invalidText;
     @FXML
     private PFXButton selectGraphically;
     @FXML
@@ -104,8 +107,8 @@ public class PathfindingMap {
         map = new HospitalMap(floors);
         root.setCenter(map.get());
         map.addLayer(pathfinding);
-        map.addLayer(robotInfo);
-        robotInfo.setPickOnBounds(false);
+        //map.addLayer()
+        invalidText.setVisible(false);
         pathfinding.setPickOnBounds(false);
         load(() -> {
             var filteredSorted = locationsList.filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName));
@@ -265,8 +268,6 @@ public class PathfindingMap {
 
     @FXML
     private void sendRobotMessage() {
-        robotButton.setDisable(true);
-
         SerialPort comPort = null;
         SerialPort[] ports = SerialPort.getCommPorts();
 
@@ -277,8 +278,10 @@ public class PathfindingMap {
         }
         try {
             comPort.openPort();
+            robotButton.setDisable(true);
+            invalidText.setVisible(false);
         } catch(Exception e) {
-            System.out.println("No port established!");
+            invalidText.setVisible(true);
             return;
         }
         byte[] message = generateMessage("S", xCoords.get(0), yCoords.get(0));
