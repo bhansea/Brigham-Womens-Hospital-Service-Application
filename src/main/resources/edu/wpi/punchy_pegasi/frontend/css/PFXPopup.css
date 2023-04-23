@@ -2,12 +2,16 @@
     -fx-background-color: -pfx-background;
     -fx-background-radius: 6;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
+    -fx-alignment: center;
+    -fx-padding: 50;
 }
 
-.pfx-popup .button {
+.pfx-popup .pfx-button {
     -fx-background-color: -pfx-accent;
+    -fx-text-fill: -pfx-background;
 }
 
 .pfx-popup .label {
-    -fx-font-size: 18;
+    -fx-font-size: 24;
+    -fx-padding: 0 0 10 0;
 }

@@ -3,9 +3,9 @@ package edu.wpi.punchy_pegasi.frontend.components;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
@@ -14,20 +14,22 @@ public class PFXPopup extends Application {
 
     public void start(Stage stage) {
         Popup popup = new Popup();
+        VBox vBox = new VBox();
         Label label = new Label();
         label.setText(text);
-        label.setMinWidth(300);
-        label.setMinHeight(300);
-        label.setStyle("-fx-background-color: -pfx-background; -fx-font-size: 25; -fx-font-weight: bold;");
-        label.setPadding(new Insets(20));
-        popup.getContent().add(label);
-        Button exit = new Button("Exit");
-        popup.getContent().add(exit);
+        PFXButton exit = new PFXButton("Exit");
+        vBox.getChildren().add(label);
+        vBox.getChildren().add(exit);
+        vBox.getStyleClass().add("pfx-popup");
+        popup.getContent().add(vBox);
+        popup.setAutoHide(true);
+        popup.setHideOnEscape(true);
         popup.show(stage);
-        exit.setOnAction(event -> {
+        popup.setOnHidden(event -> {
             popup.hide();
             App.getSingleton().navigate(Screen.HOME);
         });
+        exit.setOnAction(event -> popup.hide());
     }
 
     public PFXPopup(Stage stage, String text) {

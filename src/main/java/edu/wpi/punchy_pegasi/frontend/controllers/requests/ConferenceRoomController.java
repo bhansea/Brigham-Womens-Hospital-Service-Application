@@ -130,7 +130,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         Stage stage = App.getSingleton().getPrimaryStage();
-        String test = "Your request has been submitted!";
-        PFXPopup pfxPopup = new PFXPopup(stage, test);
+        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
     }
 }
