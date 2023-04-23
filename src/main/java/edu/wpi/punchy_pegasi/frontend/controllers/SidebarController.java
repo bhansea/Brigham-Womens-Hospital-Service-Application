@@ -28,7 +28,8 @@ public class SidebarController extends VBox implements PropertyChangeListener {
             new PFXSidebarItem(Screen.MAP_PAGE, MaterialSymbols.MAP),
             new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialSymbols.ADMIN_PANEL_SETTINGS),
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
-            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
+            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST),
+            new PFXSidebarItem(Screen.ABOUT, MaterialSymbols.QUESTION_MARK)
     );
     private final int maxWidth = 256;
     @FXML

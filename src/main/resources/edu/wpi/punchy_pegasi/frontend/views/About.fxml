@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<!--fx:controller="edu.wpi.punchy_pegasi.frontend.views.About"-->
+
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0"
+            style="-fx-border-color: #0067b1;">
+    <top>
+        <VBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <Label text="ABOUT" style="-fx-font-weight: 900;" textFill="#0067B1" >
+                    <font>
+                        <Font name="Nunito Sans" size="16.0" />
+                    </font>
+                    <padding>
+                        <Insets top="25" left="50" />
+                    </padding>
+                </Label>
+                <TextFlow prefWidth="600">
+                    <Text>
+                        This application represents the work of 10 WPI undergraduate students in partial fulfillment of the requirements for CS3733-D23 Software Engineering.
+                        <font>
+                            <Font name="Nunito Sans" size="20.0" />
+                        </font>
+                    </Text>
+                    <padding>
+                        <Insets top="25" left="50"/>
+                    </padding>
+                </TextFlow>
+                <Label text="MEET THE TEAM" style="-fx-font-weight: 900;" textFill="#0067B1" >
+                    <font>
+                        <Font name="Nunito Sans" size="16.0" />
+                    </font>
+                    <padding>
+                        <Insets top="25" left="50" />
+                    </padding>
+                </Label>
+            </children>
+            <VBox spacing="10" style="-fx-border-color: #0067b1;">
+                <children>
+                    <HBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-border-color: #0067b1;">
+                        <children>
+                            <Text>
+                                Blake Bruell
+                                <font>
+                                    <Font name="Nunito Sans" size="20.0" />
+                                </font>
+                            </Text>
+                        </children>
+                        <Text>
+                            Lead Software Engineer
+                            <font>
+                                <Font name="Nunito Sans" size="20.0" />
+                            </font>
+                        </Text>
+                        <children>
+
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+        </VBox>
+    </top>
+</BorderPane>
