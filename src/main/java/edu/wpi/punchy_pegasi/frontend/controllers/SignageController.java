@@ -69,7 +69,7 @@ public class SignageController {
                 if (c.wasAdded()) {
                     for (Signage signage : c.getAddedSubList()) {
                         var hbox = new HBox(new Label(signage.getLongName()));
-                        hbox.setId(signage.getLongName());
+                        hbox.setId(signage.getUuid().toString());
                         Platform.runLater(() ->
                                 vBox.getChildren().add(hbox)
                         );
@@ -78,7 +78,7 @@ public class SignageController {
                 if (c.wasRemoved()) {
                     for (Signage signage : c.getRemoved()) {
                         Platform.runLater(() ->
-                                vBox.getChildren().removeIf(node -> node.getId().equals(signage.getLongName()))
+                                vBox.getChildren().removeIf(node -> node.getId().equals(signage.getUuid().toString()))
                         );
                     }
                 }
@@ -289,6 +289,8 @@ public class SignageController {
             signageBodyLeft.getChildren().add(signageHB);
             signageBodyLeft.getStyleClass().add("signage-body-left");
             Separator separator = new Separator();
+            separator.visibleProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
+            separator.managedProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
             signageBodyLeft.getChildren().add(separator);
         }
         signageBodyLeft.getChildren().remove(signageBodyLeft.getChildren().size() - 1);  // remove the last separator
