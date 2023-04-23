@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
 import edu.wpi.punchy_pegasi.generator.SchemaID;
+import edu.wpi.punchy_pegasi.generator.Unique;
 import lombok.*;
 
 @Data
@@ -8,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 public class Account {
     @SchemaID
+    private Long uuid;
+    @Unique
     private String username;
     private String password;
     private Long employeeID;
