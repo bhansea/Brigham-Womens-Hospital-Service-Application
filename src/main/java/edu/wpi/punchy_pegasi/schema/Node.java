@@ -3,15 +3,22 @@ package edu.wpi.punchy_pegasi.schema;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Node implements INode {
-    
+
+    @com.jsoniter.annotation.JsonProperty("nodeid")
     private Long nodeID;
+    @com.jsoniter.annotation.JsonProperty("xcoord")
     private Integer xcoord;
+    @com.jsoniter.annotation.JsonProperty("ycoord")
     private Integer ycoord;
+    @com.jsoniter.annotation.JsonProperty("floor")
     private String floor;
+    @com.jsoniter.annotation.JsonProperty("building")
     private String building;
 
     @Override
@@ -29,8 +36,9 @@ public class Node implements INode {
             default -> -1;
         };
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node>{
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node> {
         NODE_ID("nodeID"),
         XCOORD("xcoord"),
         YCOORD("ycoord"),
@@ -38,10 +46,12 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node>{
         BUILDING("building");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case NODE_ID -> getNodeID();

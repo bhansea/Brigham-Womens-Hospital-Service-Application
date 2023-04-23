@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
 
     public NodeDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public NodeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -55,11 +54,11 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
         try (var rs = dbController.searchQuery(TableType.NODES, Arrays.stream(params).map(Node.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Node req = new Node(
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("xcoord", java.lang.Integer.class),
-                    rs.getObject("ycoord", java.lang.Integer.class),
-                    rs.getObject("floor", java.lang.String.class),
-                    rs.getObject("building", java.lang.String.class));
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("xcoord", java.lang.Integer.class),
+                        rs.getObject("ycoord", java.lang.Integer.class),
+                        rs.getObject("floor", java.lang.String.class),
+                        rs.getObject("building", java.lang.String.class));
                 if (req != null)
                     map.put(req.getNodeID(), req);
             }
@@ -70,23 +69,28 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
     }
 
     @Override
-    public Map<java.lang.Long, Node> getAll() {
+    public ObservableMap<java.lang.Long, Node> getAll() {
         var map = new HashMap<java.lang.Long, Node>();
         try (var rs = dbController.searchQuery(TableType.NODES)) {
             while (rs.next()) {
                 Node req = new Node(
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("xcoord", java.lang.Integer.class),
-                    rs.getObject("ycoord", java.lang.Integer.class),
-                    rs.getObject("floor", java.lang.String.class),
-                    rs.getObject("building", java.lang.String.class));
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("xcoord", java.lang.Integer.class),
+                        rs.getObject("ycoord", java.lang.Integer.class),
+                        rs.getObject("floor", java.lang.String.class),
+                        rs.getObject("building", java.lang.String.class));
                 if (req != null)
                     map.put(req.getNodeID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Node> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

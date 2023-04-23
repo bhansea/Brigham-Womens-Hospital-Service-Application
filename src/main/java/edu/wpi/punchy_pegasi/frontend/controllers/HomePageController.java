@@ -3,13 +3,22 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -24,16 +33,59 @@ public class HomePageController {
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
 
-    @FXML
-    private void initialize() {
-        showServiceRequestTable(true);
-        initRequestTable();
-    }
+//    @FXML
+//    private MFXComboBox notificationComboBox;
 
-    private void showServiceRequestTable(boolean show) {
-        requestTable.setVisible(show);
-        requestTable.setManaged(show);
-    }
+
+//    @FXML
+//    private void initialize() {
+//
+//        //initRequestTable();
+//        //showServiceRequestTable(true);
+//
+//    }
+
+//    private void showServiceRequestTable(boolean show) {
+//        requestTable.setVisible(show);
+//        requestTable.setManaged(show);
+//    }
+
+//    @FXML
+//    private void openSelectedWindow() {
+//        String selectedOption = (String) notificationComboBox.getValue();
+//        if (selectedOption != null) {
+//            if (selectedOption.equals("Meals")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Flowers")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Conference Room")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Office Supplies")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            } else if (selectedOption.equals("Furniture")) {
+//                Stage window = new Stage();
+//                Scene scene = new Scene(new MFXTableView<>());
+//                window.setTitle(selectedOption + " Window");
+//                window.setScene(scene);
+//                window.show();
+//            }
+//        }
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;

@@ -56,7 +56,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
         container.getChildren().add(cardHolder);
         addTextField(patientName);
-        setHeaderText("Food Service Request");
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
         container.setAlignment(Pos.CENTER);

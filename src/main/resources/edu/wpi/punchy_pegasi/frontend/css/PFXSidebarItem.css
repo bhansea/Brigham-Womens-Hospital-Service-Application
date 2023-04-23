@@ -4,7 +4,7 @@
     -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
     -fx-background-color: transparent;
-    -fx-padding: 3 10;
+    -fx-padding: 3 10 3 5;
     -fx-spacing: 10;
     -fx-background-size: 5;
     -fx-background-radius: 5;
@@ -15,27 +15,25 @@
     -fx-border-color: transparent;
 }
 
-.pfx-sidebar-item Label{
-    -fx-padding: 8 0 0 0;
-    -fx-font-size: 14 ;
+.pfx-sidebar-expanded-container {
     -fx-alignment: CENTER_LEFT;
 }
-
+.pfx-sidebar-expanded-container > Label {
+    -fx-font-size: 14 ;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-family: "Nunito Sans Light";
+    -fx-background-color: transparent;
+    -fx-text-fill: -pfx-navy;
+}
 
 .pfx-sidebar-container {
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 0 10;
+    -fx-padding: 0 5;
 }
 
 
 .pfx-sidebar-item PFXIcon {
     -fx-fill: -pfx-navy;
-}
-
-.pfx-sidebar-item Label {
-    -fx-font-family: "Nunito Sans Light";
-    -fx-background-color: transparent;
-    -fx-text-fill: -pfx-navy;
 }
 
 .pfx-sidebar-item:selected {

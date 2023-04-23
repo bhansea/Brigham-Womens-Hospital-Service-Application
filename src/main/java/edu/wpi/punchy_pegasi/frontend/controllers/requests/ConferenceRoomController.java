@@ -63,7 +63,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
         beginningTime.setOnAction(e -> validateField());
         endTime.setOnAction(e -> validateField());
         calendar.setOnAction(e -> validateEntry());
-        setHeaderText("Conference Room Request");
     }
 
     @Override

@@ -35,7 +35,6 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     public void init() {
         addTextField(patientName);
         submit.setDisable(true);
-        setHeaderText("Flower Delivery Request");
         patientName.setOnKeyTyped(e -> validateEntry());
 
         PFXCardVertical card1 = new PFXCardVertical("Daisy", "Beautiful flower", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/daisy.jpg"));

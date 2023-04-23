@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
 
     public AccountDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public AccountDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -54,10 +53,10 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS, Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 if (req != null)
                     map.put(req.getUsername(), req);
             }
@@ -68,22 +67,27 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
     }
 
     @Override
-    public Map<java.lang.String, Account> getAll() {
+    public ObservableMap<java.lang.String, Account> getAll() {
         var map = new HashMap<java.lang.String, Account>();
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 if (req != null)
                     map.put(req.getUsername(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Account> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

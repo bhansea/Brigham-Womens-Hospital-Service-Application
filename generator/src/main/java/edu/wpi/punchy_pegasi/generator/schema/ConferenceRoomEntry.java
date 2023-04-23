@@ -1,16 +1,18 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class ConferenceRoomEntry extends RequestEntry {
-    private final String beginningTime;
-    private final String endTime;
-    private final LocalDate date;
-    private final String amountOfParticipants;
+    private String beginningTime;
+    private String endTime;
+    private LocalDate date;
+    private String amountOfParticipants;
 
     public ConferenceRoomEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String beginningTime, String endTime, LocalDate date, String amountOfParticipants, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);

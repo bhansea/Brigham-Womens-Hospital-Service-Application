@@ -18,8 +18,7 @@
         </HBox>
     </HBox>
     <HBox HBox.hgrow="ALWAYS"/>
-    <HBox styleClass="header-right-container" HBox.hgrow="ALWAYS" >
+    <HBox styleClass="header-right-container" HBox.hgrow="NEVER" >
         <PFXAccount fx:id="pfxAccount"/>
     </HBox>
-
 </fx:root>

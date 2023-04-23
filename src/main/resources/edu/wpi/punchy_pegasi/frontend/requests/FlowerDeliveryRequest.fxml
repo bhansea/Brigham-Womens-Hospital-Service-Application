@@ -12,12 +12,12 @@
     <center>
         <VBox spacing="16.0" style="-fx-background-color: white;">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "
-                      wrappingWidth="575.7366981506348">
-                    <font>
-                        <Font name="System Bold" size="24.0"/>
-                    </font>
-                </Text>
+<!--                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: "-->
+<!--                      wrappingWidth="575.7366981506348">-->
+<!--                    <font>-->
+<!--                        <Font name="System Bold" size="24.0"/>-->
+<!--                    </font>-->
+<!--                </Text>-->
                 <HBox>
                     <children>
                         <VBox spacing="32.0" fx:id="container"/>

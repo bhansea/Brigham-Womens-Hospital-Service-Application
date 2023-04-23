@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
 
     public LocationNameDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public LocationNameDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -54,10 +53,10 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, Arrays.stream(params).map(LocationName.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("longName", java.lang.String.class),
-                    rs.getObject("shortName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("longName", java.lang.String.class),
+                        rs.getObject("shortName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -68,22 +67,27 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
     }
 
     @Override
-    public Map<java.lang.Long, LocationName> getAll() {
+    public ObservableMap<java.lang.Long, LocationName> getAll() {
         var map = new HashMap<java.lang.Long, LocationName>();
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("longName", java.lang.String.class),
-                    rs.getObject("shortName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("longName", java.lang.String.class),
+                        rs.getObject("shortName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<LocationName> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

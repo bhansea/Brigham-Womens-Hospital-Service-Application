@@ -1,0 +1,73 @@
+.pfx-request-bar {
+    -fx-background-radius: 6;
+    -fx-border-color: -pfx-secondary-light;
+    -fx-border-radius: 6;
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);*/
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 20;
+    -fx-spacing: 6;
+    -fx-min-width: 300;
+}
+
+.pfx-request-component-holder {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+
+}
+
+.pfx-request-bar > Label {
+    -fx-text-fill: -pfx-text;
+    -fx-font-size: 18;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.pfx-request-bar > Label {
+    -fx-text-fill: -pfx-text;
+    -fx-font-size: 18;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.pfx-request-bar > TextField {
+    /*-fx-min-width: 50;*/
+    -fx-min-height: 50;
+    -fx-font-size: 18;
+    -fx-background-radius: 6;
+    -fx-border-color: -pfx-navy;
+    -fx-border-radius: 6;
+}
+
+.pfx-request-bar > VBox > Label {
+    -fx-text-fill: -pfx-text;
+    -fx-font-size: 18;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.pfx-request-bar > VBox > TextField {
+    /*-fx-alignment: CENTER_LEFT;*/
+    -fx-text-alignment: TOP_LEFT;
+    -fx-min-width: 0;
+    -fx-padding: 15;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0), 0, 0, 0, 0);
+    -fx-border-color: -pfx-navy;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-request-bar > VBox > MFXFilterComboBox {
+    -fx-min-width: 300;
+    -fx-min-height: 50;
+    -fx-background-color: transparent;
+    -fx-padding: 15;
+    -fx-font-size: 18;
+    -fx-border-radius: 6;
+    -fx-border-color: -pfx-navy;
+    -fx-text-fill: -pfx-navy;
+}
+
+.pfx-request {
+    /*-fx-background-color: -pfx-accent;*/
+    -fx-background-radius: 6;
+    -fx-border-color: -pfx-navy;
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);*/
+}

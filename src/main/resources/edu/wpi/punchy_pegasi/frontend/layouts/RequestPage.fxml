@@ -11,16 +11,8 @@
     <center>
         <VBox spacing="30.0">
             <children>
-                <VBox style="-fx-background-color: #F6BD3E; -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+                <VBox VBox.vgrow="ALWAYS" styleClass="pfx-request">
                     <children>
-                        <Label text="Fields marked with an asterisk (*) are required">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="10.0" top="5.0" />
-                            </VBox.margin>
-                        </Label>
                         <VBox VBox.vgrow="ALWAYS">
                             <children>
                                 <HBox style="-fx-background-color: -pfx-background;" VBox.vgrow="ALWAYS">

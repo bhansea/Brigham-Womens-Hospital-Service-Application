@@ -9,9 +9,11 @@
          type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/"
          styleClass="sideBar">
-    <VBox alignment="TOP_LEFT" VBox.vgrow="ALWAYS"/>
-    <VBox alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
-        <PFXIcon icon="EXPAND_CONTENT" onMouseClicked="#toggleExpand"/>
+    <VBox alignment="TOP_RIGHT">
+        <PFXIcon fx:id="expandIcon" icon="LAST_PAGE" styleClass="sidebar-expand-icon"/>
     </VBox>
-    <PFXSidebarItem icon="LOGOUT" text="Logout" fx:id="logout"/>
+    <VBox fx:id="navItems">
+    </VBox>
+    <VBox alignment="TOP_LEFT" VBox.vgrow="ALWAYS"/>
+    <PFXSidebarItem icon="LOGOUT" text="Exit" fx:id="exit"/>
 </fx:root>
