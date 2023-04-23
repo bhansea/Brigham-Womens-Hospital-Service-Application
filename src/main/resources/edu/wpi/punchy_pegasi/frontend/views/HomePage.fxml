@@ -100,7 +100,7 @@
             </Label>
             <VBox alignment="TOP_RIGHT" style="-fx-background-color: -pfx-background">
                 <Label text="Date: " BorderPane.alignment="CENTER" textAlignment="JUSTIFY"
-                       style="-fx-background-color: -pfx-background">
+                       style="-fx-background-color: -pfx-background" fx:id="dateLabel">
                     <font>
                         <Font name="Nunito Sans" size="14.0"/>
                     </font>
@@ -109,7 +109,7 @@
                     <Insets topRightBottomLeft="10"/>
                 </padding>
                 <Label text="Time: " BorderPane.alignment="CENTER" textAlignment="JUSTIFY"
-                       style="-fx-background-color: -pfx-background">
+                       style="-fx-background-color: -pfx-background" fx:id="timeLabel">
                     <font>
                         <Font name="Nunito Sans" size="14.0"/>
                     </font>

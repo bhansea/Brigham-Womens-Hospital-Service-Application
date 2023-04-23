@@ -16,6 +16,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -24,6 +25,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import javafx.scene.layout.StackPane;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Slf4j
@@ -43,9 +47,18 @@ public class HomePageController {
 //    @FXML
 //    private MFXComboBox notificationComboBox;
 
-
+    @FXML
+    private Label dateLabel = new Label();
+    @FXML
+    private Label timeLabel = new Label();
     @FXML
     private void initialize() {
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        LocalTime currentTimeNoSec = currentTime.truncatedTo(ChronoUnit.MINUTES);
+
+        dateLabel.setText(currentDate.toString());
+        timeLabel.setText(currentTimeNoSec.toString());
         List<RequestEntry> requestEntries = facade.getAllRequestEntry().values().stream().toList();
         int done = requestEntries.stream().mapToInt(r->r.getStatus() == RequestEntry.Status.DONE ? 1 : 0).sum();
         int processing = requestEntries.stream().mapToInt(r->r.getStatus() == RequestEntry.Status.PROCESSING ? 1 : 0).sum();
@@ -55,6 +68,8 @@ public class HomePageController {
         piechart.setData(pieChartData);
         piechart.setTitle("Service Request");
         piechart.setLegendVisible(false);
+
+
 
 
         //pie.getChildren().add(piechart);
