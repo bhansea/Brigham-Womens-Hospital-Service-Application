@@ -17,21 +17,22 @@
 <?import impl.org.controlsfx.skin.GridRow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Pane?>
 <BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
         <StackPane style="-fx-background-color: -pfx-background">
-<!--            <HBox alignment="CENTER" style="-fx-background-color: -pfx-background">-->
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS"/>
-                        <ColumnConstraints hgrow="ALWAYS"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="ALWAYS"/>
-                        <RowConstraints vgrow="ALWAYS"/>
-                    </rowConstraints>
-                    <children>
+            <GridPane>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                </rowConstraints>
+                <children>
+                    <Pane>
                         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background"
                               BorderPane.alignment="CENTER"
                               GridPane.rowIndex="0" maxHeight="Infinity">
@@ -53,7 +54,8 @@
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
                                             <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
-                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS"/>
+                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card"
+                                                                 VBox.vgrow="ALWAYS"/>
                                             </VBox>
                                         </StackPane>
                                     </HBox>
@@ -63,17 +65,18 @@
                                 </HBox>
                             </VBox>
                         </HBox>
-                        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" GridPane.rowIndex="1">
-                            <padding>
-                                <Insets topRightBottomLeft="20"/>
-                            </padding>
-                            <StackPane>
-                                <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
-                            </StackPane>
-                        </HBox>
-                    </children>
-                </GridPane>
-<!--            </HBox>-->
+                    </Pane>
+                    <HBox alignment="CENTER" style="-fx-background-color: -pfx-background" GridPane.rowIndex="1">
+                        <padding>
+                            <Insets topRightBottomLeft="20"/>
+                        </padding>
+                        <StackPane>
+                            <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
+                        </StackPane>
+                    </HBox>
+                </children>
+            </GridPane>
+            <!--            </HBox>-->
         </StackPane>
     </center>
     <top>
