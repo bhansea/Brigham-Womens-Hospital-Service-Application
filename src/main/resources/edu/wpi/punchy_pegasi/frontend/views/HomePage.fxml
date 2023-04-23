@@ -25,8 +25,8 @@
                 <GridPane>
 
                     <rowConstraints>
-                        <RowConstraints maxHeight="Infinity"/>
-                        <RowConstraints maxHeight="Infinity"/>
+                        <RowConstraints percentHeight="25"/>
+                        <RowConstraints percentHeight="25"/>
                     </rowConstraints>
                     <children>
                         <HBox alignment="CENTER" style="-fx-background-color: -pfx-background"
@@ -45,11 +45,13 @@
                                         </StackPane>
                                     </HBox>
                                     <HBox alignment="CENTER" maxHeight="Infinity">
-                                        <StackPane>
+                                        <StackPane HBox.hgrow="ALWAYS">
                                             <padding>
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
-                                            <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" HBox.hgrow="ALWAYS"/>
+                                            <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
+                                                <PFXCardVertical fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS"/>
+                                            </VBox>
                                         </StackPane>
                                     </HBox>
                                     <padding>
