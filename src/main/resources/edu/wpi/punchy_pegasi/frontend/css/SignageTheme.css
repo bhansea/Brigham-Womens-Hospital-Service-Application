@@ -6,9 +6,9 @@
 }
 
 .signage-list {
-    -fx-alignment: TOP_LEFT;
+    -fx-alignment: top-left;
     -fx-spacing: 20;
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 10 0 10 0;
 }
 
 .signage-icon {
