@@ -9,6 +9,13 @@
     -pfx-primary: #c9c9c9;
     -pfx-secondary: #676767;
     -pfx-yellow: #F6BD3E;
+    -pfx-text: -pfx-navy;
+    -pfx-danger: #ff4444;
+    -pfx-danger-dark: #CC0000;
+    -pfx-warning: #ffbb33;
+    -pfx-warning-dark: #FF8800;
+    -pfx-success: #00C851;
+    -pfx-success-dark: #007E33;
     -pfx-text: black;
     -pfx-text-opposite: white;
     -pfx-secondary-light: #d6d6d6;
