@@ -39,11 +39,10 @@
                 <children>
                     <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">
                         <children>
-                            <PFXIcon icon="ARROW_UPWARD" outlined="true" styleClass="signage-icon"/>
+                            <PFXIcon fx:id="direction" icon="ARROW_UPWARD" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Text text="agawgw"/>
-                                    <Text text="Information"/>
+                                    <Label text="PLACEHOLDER"/>
                                 </children>
                             </VBox>
                         </children>
@@ -54,8 +53,7 @@
                             <PFXIcon icon="ARROW_FORWARD" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Text text="Information"/>
-                                    <Text text="Information"/>
+                                    <Label text="Information"/>
                                 </children>
                             </VBox>
                         </children>
@@ -66,8 +64,7 @@
                             <PFXIcon icon="ARROW_BACK" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Text text="Information"/>
-                                    <Text text="Information"/>
+                                    <Label text="Information"/>
                                 </children>
                             </VBox>
                         </children>
@@ -78,8 +75,7 @@
                             <PFXIcon icon="ARROW_DOWNWARD" outlined="true" styleClass="signage-icon"/>
                             <VBox spacing="10.0" styleClass="signage-text">
                                 <children>
-                                    <Text text="Information"/>
-                                    <Text text="Information"/>
+                                    <Label text="Information"/>
                                 </children>
                             </VBox>
                         </children>
