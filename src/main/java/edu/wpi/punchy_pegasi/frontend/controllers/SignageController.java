@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class SignageController {
@@ -22,46 +23,83 @@ public class SignageController {
 
     private final Facade facade = App.getSingleton().getFacade();
 
-//    @FXML
-//    private Label labelUP;
-//    @FXML
-//    private Label labelDOWN;
-//    @FXML
-//    private Label labelLFT;
-//    @FXML
-//    private Label labelRGT;
-    @FXML
-    private Label labelHERE;
 
     @FXML
     private VBox signageBodyLeft;
-//    @FXML
-//    private HBox signageUpHB;
-//    @FXML
-//    private HBox signageDownHB;
-//    @FXML
-//    private HBox signageLeftHB;
-//    @FXML
-//    private HBox signageRightHB;
     @FXML
-    private HBox signageHereHB;
+    private HBox signageHeader;
 
 
-    private PFXIcon iconUp = new PFXIcon(MaterialSymbols.ARROW_UPWARD);
+    private final PFXIcon iconUp = new PFXIcon(MaterialSymbols.ARROW_UPWARD);
+    private final PFXIcon iconDown = new PFXIcon(MaterialSymbols.ARROW_DOWNWARD);
+    private final PFXIcon iconLeft = new PFXIcon(MaterialSymbols.ARROW_BACK);
+    private final PFXIcon iconRight = new PFXIcon(MaterialSymbols.ARROW_FORWARD);
+    private final PFXIcon iconHere = new PFXIcon(MaterialSymbols.DISTANCE);
+    private final PFXIcon iconTime = new PFXIcon(MaterialSymbols.SCHEDULE);
+    private final HBox signageHeaderLeft = new HBox();
+    private final HBox signageHeaderRight = new HBox();
+    private final Label signageDateTime = new Label();
 
-    private PFXIcon iconDown = new PFXIcon(MaterialSymbols.ARROW_DOWNWARD);
 
-    private PFXIcon iconLeft = new PFXIcon(MaterialSymbols.ARROW_BACK);
+    private void updateTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date date = new Date();
+        signageDateTime.setText(formatter.format(date));
+    }
 
-    private PFXIcon iconRight = new PFXIcon(MaterialSymbols.ARROW_FORWARD);
+    private void initHeader() {
+        // Set up left header
+        signageHeaderLeft.getStyleClass().add("signage-header-left");
+        signageHeaderLeft.getChildren().add(iconHere);
 
+        // Set up right header
+        signageHeaderRight.getStyleClass().add("signage-header-right");
+        HBox.setHgrow(signageHeaderRight, Priority.ALWAYS);
+        signageHeaderRight.getChildren().add(iconTime);
+        signageDateTime.getStyleClass().add("signage-text-DateTime");
+        updateTime();
+        signageHeaderRight.getChildren().add(signageDateTime);
 
-    @FXML
-    private PFXIcon iconHERE;
+        // Combine left and right header in signageHeader HBox
+        signageHeader.getChildren().add(signageHeaderLeft);
+        signageHeader.getChildren().add(signageHeaderRight);
+        signageHeader.getStyleClass().add("signage-header");
+    }
+
+    private void initIcons () {
+        iconUp.setOutlined(true);
+        iconUp.getStyleClass().add("signage-icon");
+        iconDown.setOutlined(true);
+        iconDown.getStyleClass().add("signage-icon");
+        iconLeft.setOutlined(true);
+        iconLeft.getStyleClass().add("signage-icon");
+        iconRight.setOutlined(true);
+        iconRight.getStyleClass().add("signage-icon");
+        iconHere.setOutlined(true);
+        iconHere.getStyleClass().add("signage-icon-header");
+        iconTime.setOutlined(true);
+        iconTime.getStyleClass().add("signage-icon-header");
+    }
+
+    private Timer configTimer(final int value, final long intervalMill) {
+        long currTime = System.currentTimeMillis();
+        Timer timer = new Timer("Timer" + value, true);
+        timer.schedule(new TimerTask() {
+            public void run() {
+                Platform.runLater(() -> {
+                    updateTime();
+                });
+            }
+        }, currTime%intervalMill, intervalMill);
+        return timer;
+    }
 
     @FXML
     private void initialize() {
+        configTimer(0, 1000);
         initIcons();
+        initHeader();
+
         Signage newSignageD = new Signage("Location Name Down 0", Signage.DirectionType.DOWN);
         Signage newSignageU = new Signage("Location Name Up 0", Signage.DirectionType.UP);
         Signage newSignageD1 = new Signage("Location Name Down 1", Signage.DirectionType.DOWN);
@@ -90,25 +128,9 @@ public class SignageController {
         });
     }
 
-    private void initIcons () {
-        iconUp.setOutlined(true);
-        iconUp.getStyleClass().add("signage-icon");
-        iconDown.setOutlined(true);
-        iconDown.getStyleClass().add("signage-icon");
-        iconLeft.setOutlined(true);
-        iconLeft.getStyleClass().add("signage-icon");
-        iconRight.setOutlined(true);
-        iconRight.getStyleClass().add("signage-icon");
-    }
-
     private Map<Signage.DirectionType, List<String>> loadSignage() {
         Map<Signage.DirectionType, List<String>> signageMap = new HashMap<>();
         Map<String, Signage> allSignage =  facade.getAllSignage();
-//        StringBuilder sbUp = new StringBuilder();
-//        StringBuilder sbDown = new StringBuilder();
-//        StringBuilder sbLeft = new StringBuilder();
-//        StringBuilder sbRight = new StringBuilder();
-//        StringBuilder sbHere = new StringBuilder();
         for (Map.Entry<String, Signage> entry : allSignage.entrySet()) {
             Signage.DirectionType directionType = entry.getValue().getDirectionType();
             switch (directionType) {
@@ -131,6 +153,8 @@ public class SignageController {
         }
         return signageMap;
     }
+
+
 
     private void buildSignage(Map<Signage.DirectionType, List<String>> signageMap) {
         for (Map.Entry<Signage.DirectionType, List<String>> entry : signageMap.entrySet()) {
@@ -156,8 +180,8 @@ public class SignageController {
                     signageHB.getChildren().add(locLabel);
                 }
                 case HERE -> {
-                    signageHB.getChildren().add(iconHERE);
-                    signageHB.getChildren().add(locLabel);
+                    locLabel.getStyleClass().add("signage-label-Here");
+                    signageHeaderLeft.getChildren().add(locLabel);
                 }
             }
             signageBodyLeft.getChildren().add(signageHB);

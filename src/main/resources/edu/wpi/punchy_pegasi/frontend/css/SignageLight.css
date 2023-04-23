@@ -11,11 +11,9 @@
     -fx-font-size: 55;
 }
 
-.signage-header Text {
-    -fx-fill: -pfx-signage-text;
+.signage-header Label {
+    -fx-text-fill: -pfx-signage-text;
     -fx-font-size: 30;
-    -fx-spacing: 20;
-    -fx-padding: 15 100 15 100;
 }
 
 .signage-body-left Label {

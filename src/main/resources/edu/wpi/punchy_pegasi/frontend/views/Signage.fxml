@@ -17,18 +17,17 @@
 <!--    </BorderPane.margin>-->
     <top>
         <VBox>
-            <HBox styleClass="signage-header">
-                <children>
-                    <HBox styleClass="signage-header-left">
-                        <PFXIcon icon="DISTANCE" outlined="true" styleClass="signage-icon-header"/>
-                        <Label fx:id="labelHERE" styleClass="signage-label-Here"/>
-                    </HBox>
-                    <HBox styleClass="signage-header-right" HBox.hgrow="ALWAYS">
-                        <PFXIcon icon="SCHEDULE" outlined="true" styleClass="signage-icon-header"/>
-                        <Text text="Date/Time" styleClass="signage-text-DateTime">
-                        </Text>
-                    </HBox>
-                </children>
+            <HBox fx:id="signageHeader">
+<!--                <children>-->
+<!--                    <HBox styleClass="signage-header-left">-->
+<!--                        <PFXIcon icon="DISTANCE" outlined="true" styleClass="signage-icon-header"/>-->
+<!--                        <Label fx:id="labelHERE" styleClass="signage-label-Here"/>-->
+<!--                    </HBox>-->
+<!--                    <HBox styleClass="signage-header-right" HBox.hgrow="ALWAYS">-->
+<!--                        <PFXIcon icon="SCHEDULE" outlined="true" styleClass="signage-icon-header"/>-->
+<!--                        <Label fx:id="signageDateTime" text="Date/Time" styleClass="signage-text-DateTime"/>-->
+<!--                    </HBox>-->
+<!--                </children>-->
             </HBox>
             <Separator/>
         </VBox>

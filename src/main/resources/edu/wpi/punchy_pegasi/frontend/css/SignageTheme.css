@@ -16,6 +16,11 @@
     -fx-padding: 20 0 0 0;
 }
 
+.signage-header {
+    -fx-spacing: 20;
+    -fx-padding: 15 100 15 100;
+}
+
 .signage-header-left {
     -fx-spacing: 15;
     -fx-padding: 10 0 10 30;
