@@ -27,7 +27,8 @@ public enum Screen {
     CONFERENCE_ROOM_SERVICE_REQUEST("Request Conference Room", "frontend/requests/ConferenceRoomRequest.fxml", Account.AccountType.STAFF, ConferenceRoomController::create),
     FURNITURE_DELIVERY_SERVICE_REQUEST("Request Furniture Delivery", "frontend/requests/FurnitureDeliveryRequest.fxml", Account.AccountType.STAFF, FurnitureRequestController::create),
     SERVICE_REQUEST("Service Request", "frontend/requests/ServiceRequest.fxml", Account.AccountType.STAFF),
-    ABOUT("About", "frontend/views/About.fxml", Account.AccountType.NONE);
+    ABOUT("About", "frontend/views/About.fxml", Account.AccountType.NONE),
+    INFO("Info", "frontend/views/Info.fxml", Account.AccountType.NONE);
     private final Function<String, ? extends Parent> createFunction;
     private final String path;
     private final String readable;
