@@ -17,10 +17,15 @@
     -fx-text-fill: -pfx-signage-text-opposite;
 }
 
-.signage-body-left Label {
+.signage-label {
     -fx-text-fill: -pfx-signage-text-opposite;
 }
 
 .signage-all {
     -fx-background-color: -pfx-signage-background-opposite;
+}
+
+.signage-edit-button {
+    -pfx-button-background: -pfx-signage-background-opposite;
+    -pfx-button-text: -pfx-signage-text-opposite;
 }
