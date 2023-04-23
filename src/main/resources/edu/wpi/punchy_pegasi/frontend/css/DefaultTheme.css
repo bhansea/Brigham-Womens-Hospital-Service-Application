@@ -52,6 +52,7 @@
 @import "PFXSidebarItem.css";
 @import "PFXTab.css";
 @import "PFXTabLayout.css";
+@import "PFXPopup.css";
 /* Pages */
 @import "Admin.css";
 @import "Conference.css";

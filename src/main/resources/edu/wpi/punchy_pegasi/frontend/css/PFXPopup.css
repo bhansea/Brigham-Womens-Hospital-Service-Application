@@ -1,0 +1,13 @@
+.pfx-popup {
+    -fx-background-color: -pfx-background;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
+}
+
+.pfx-popup .button {
+    -fx-background-color: -pfx-accent;
+}
+
+.pfx-popup .label {
+    -fx-font-size: 18;
+}

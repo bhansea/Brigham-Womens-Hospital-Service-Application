@@ -1,36 +1,38 @@
 package edu.wpi.punchy_pegasi.frontend.components;
 
+import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class PFXPopup extends Application {
+    String text;
+
     public void start(Stage stage) {
-        stage.setTitle("PFXPopup");
-        Button exit = new Button("Exit");
-        BorderPane borderPane = new BorderPane();
-        HBox layoutHBox = new HBox();
-        Label label = new Label("Your request has been submitted!");
         Popup popup = new Popup();
-        layoutHBox.getChildren().addAll(label, exit);
-        popup.getContent().add(layoutHBox);
-        EventHandler<ActionEvent> event = e -> {
-            if (!popup.isShowing())
-                popup.show(stage);
-            else
-                popup.hide();
-        };
-        exit.setOnAction(event);
-        borderPane.getChildren().add(layoutHBox);
-        Scene scene = new Scene(borderPane, 200, 200);
-        stage.setScene(scene);
-        stage.show();
+        Label label = new Label();
+        label.setText(text);
+        label.setMinWidth(300);
+        label.setMinHeight(300);
+        label.setStyle("-fx-background-color: -pfx-background; -fx-font-size: 25; -fx-font-weight: bold;");
+        label.setPadding(new Insets(20));
+        popup.getContent().add(label);
+        Button exit = new Button("Exit");
+        popup.getContent().add(exit);
+        popup.show(stage);
+        exit.setOnAction(event -> {
+            popup.hide();
+            App.getSingleton().navigate(Screen.HOME);
+        });
+    }
+
+    public PFXPopup(Stage stage, String text) {
+        super();
+        this.text = text;
+        start(stage);
     }
 }
