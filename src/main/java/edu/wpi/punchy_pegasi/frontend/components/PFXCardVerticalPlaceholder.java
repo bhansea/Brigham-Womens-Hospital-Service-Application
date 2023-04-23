@@ -10,7 +10,7 @@ public class PFXCardVerticalPlaceholder extends VBox {
     private final HBox stats = new HBox();
     private final VBox info = new VBox();
     private final VBox selection = new VBox();
-    private final PFXPicker picker = new PFXPicker();
+    //private final PFXPicker picker = new PFXPicker();
     // private final Label titleLabel;
     //private final Label subtitleLabel;
     //private final Label quantity;
@@ -40,7 +40,7 @@ public class PFXCardVerticalPlaceholder extends VBox {
 
 
 //        info.getChildren().addAll(titleLabel, subtitleLabel);
-        selection.getChildren().addAll(picker);
+        //selection.getChildren().addAll(picker);
     }
 }
 
