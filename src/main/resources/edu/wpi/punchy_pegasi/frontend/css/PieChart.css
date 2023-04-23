@@ -1,0 +1,13 @@
+@import "Fonts.css";
+
+.pie-chart{
+    -fx-font: "Nunito";
+    -fx-text-fill: black;
+}
+
+.default-color0.chart-pie{
+    -fx-pie-color: -pfx-accent;
+}
+.default-color1.chart-pie{
+    -fx-pie-color: -pfx-yellow;
+}
