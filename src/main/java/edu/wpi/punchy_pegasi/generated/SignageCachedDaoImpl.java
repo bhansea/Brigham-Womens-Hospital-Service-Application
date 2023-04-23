@@ -55,8 +55,8 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
         try (var rs = dbController.searchQuery(TableType.SIGNAGE)) {
             while (rs.next()) {
                 Signage req = new Signage(
-                    rs.getObject("longName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
+                        rs.getObject("longName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

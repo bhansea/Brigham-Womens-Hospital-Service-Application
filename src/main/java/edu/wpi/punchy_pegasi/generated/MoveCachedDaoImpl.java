@@ -55,10 +55,10 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         try (var rs = dbController.searchQuery(TableType.MOVES)) {
             while (rs.next()) {
                 Move req = new Move(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("locationID", java.lang.Long.class),
-                    rs.getObject("date", java.time.LocalDate.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("locationID", java.lang.Long.class),
+                        rs.getObject("date", java.time.LocalDate.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
