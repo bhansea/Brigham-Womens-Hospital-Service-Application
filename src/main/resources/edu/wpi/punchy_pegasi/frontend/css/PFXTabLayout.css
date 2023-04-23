@@ -9,7 +9,8 @@
 }
 
 .pfx-tab-container {
-    -fx-background-color: -pfx-primary;
+    -fx-background-color: -pfx-background;
     -fx-alignment: CENTER;
-    -fx-max-width: "-infinity";
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: -pfx-primary;
 }

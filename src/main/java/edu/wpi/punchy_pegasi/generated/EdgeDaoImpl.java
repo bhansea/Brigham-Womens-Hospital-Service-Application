@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
 
     public EdgeDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public EdgeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -53,9 +52,9 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         try (var rs = dbController.searchQuery(TableType.EDGES, Arrays.stream(params).map(Edge.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("startNode", java.lang.Long.class),
-                    rs.getObject("endNode", java.lang.Long.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("startNode", java.lang.Long.class),
+                        rs.getObject("endNode", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -66,21 +65,26 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
     }
 
     @Override
-    public Map<java.lang.Long, Edge> getAll() {
+    public ObservableMap<java.lang.Long, Edge> getAll() {
         var map = new HashMap<java.lang.Long, Edge>();
         try (var rs = dbController.searchQuery(TableType.EDGES)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("startNode", java.lang.Long.class),
-                    rs.getObject("endNode", java.lang.Long.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("startNode", java.lang.Long.class),
+                        rs.getObject("endNode", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Edge> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

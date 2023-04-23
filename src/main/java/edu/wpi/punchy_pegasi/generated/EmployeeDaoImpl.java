@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Employee;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
 
     public EmployeeDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public EmployeeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -53,9 +52,9 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES, Arrays.stream(params).map(Employee.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Employee req = new Employee(
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    rs.getObject("firstName", java.lang.String.class),
-                    rs.getObject("lastName", java.lang.String.class));
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        rs.getObject("firstName", java.lang.String.class),
+                        rs.getObject("lastName", java.lang.String.class));
                 if (req != null)
                     map.put(req.getEmployeeID(), req);
             }
@@ -66,21 +65,26 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
     }
 
     @Override
-    public Map<java.lang.Long, Employee> getAll() {
+    public ObservableMap<java.lang.Long, Employee> getAll() {
         var map = new HashMap<java.lang.Long, Employee>();
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES)) {
             while (rs.next()) {
                 Employee req = new Employee(
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    rs.getObject("firstName", java.lang.String.class),
-                    rs.getObject("lastName", java.lang.String.class));
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        rs.getObject("firstName", java.lang.String.class),
+                        rs.getObject("lastName", java.lang.String.class));
                 if (req != null)
                     map.put(req.getEmployeeID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<Employee> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

@@ -16,7 +16,7 @@ public enum Screen {
     SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.NONE),
     MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.NONE),
     EDIT_MAP_PAGE("Edit Map", "frontend/views/EditMap.fxml", Account.AccountType.ADMIN),
-    LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE),
+    LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE, false, false),
     ADMIN_PAGE("Admin Page", "frontend/requests/admin/AdminPage.fxml", Account.AccountType.ADMIN),
     ADMIN_TABLE_PAGE("Admin Table Page", "frontend/requests/admin/AdminViewTablePage.fxml", Account.AccountType.ADMIN),
     ADMIN_EDIT_TABLE_PAGE("Admin Edit Table Page", "frontend/requests/admin/AdminEditTable.fxml", Account.AccountType.ADMIN),
@@ -31,17 +31,29 @@ public enum Screen {
     private final String path;
     private final String readable;
     @Getter
+    private final boolean header;
+    @Getter
+    private final boolean sidebar;
+    @Getter
     private final Account.AccountType shield;
 
-    Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction) {
+    Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction, boolean header, boolean sidebar) {
         this.path = path;
         this.readable = readable;
         this.createFunction = createFunction;
         this.shield = shield;
+        this.header = header;
+        this.sidebar = sidebar;
+    }
+    Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction) {
+        this(readable, path, shield, createFunction, true, true);
     }
 
+    Screen(String readable, String path, Account.AccountType shield, boolean header, boolean sidebar) {
+        this(readable, path, shield, Screen::defaultCreate, header, sidebar);
+    }
     Screen(String readable, String path, Account.AccountType shield) {
-        this(readable, path, shield, Screen::defaultCreate);
+        this(readable, path, shield, true, true);
     }
 
     private static Parent defaultCreate(String path) {

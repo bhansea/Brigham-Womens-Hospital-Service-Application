@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.map;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.DragController;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
@@ -13,9 +14,7 @@ import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,6 +36,7 @@ import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.controlsfx.control.PopOver;
 import org.javatuples.Pair;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,23 +44,24 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class AdminMapController {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
         put("L2", new HospitalFloor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
         put("L1", new HospitalFloor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
-//        put("00", new HospitalFloor("frontend/assets/map/00_thegroundfloor.png", "Ground Layer", "00"));
         put("1", new HospitalFloor("frontend/assets/map/01_thefirstfloor.png", "First Layer", "1"));
         put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
+    private final Facade facade = App.getSingleton().getFacade();
     private final AtomicBoolean commiting = new AtomicBoolean();
     private final Predicate<MouseEvent> isLeftClick = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown() && !e.isShiftDown();
     private final Predicate<MouseEvent> isLeftClickAndShift = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown() && e.isShiftDown();
     private final Predicate<MouseEvent> isRightClick = e -> e.getButton() == MouseButton.SECONDARY || (e.getButton() == MouseButton.PRIMARY && e.isControlDown());
     private final ObservableList<MapEdit> mapEdits = FXCollections.observableArrayList(new MapEdit(MapEdit.ActionType.ADD_NODE, null));
     private final ObservableList<javafx.scene.Node> mapEditsNodes = FXCollections.observableArrayList(new javafx.scene.Group());
+    private final Map<Long, Circle> nodePoints = new HashMap<>();
+    private final MultiValuedMap<Long, Line> edgeLines = new ArrayListValuedHashMap<>();
     @FXML
     private VBox changes;
     private IMap<HospitalFloor> map;
@@ -76,58 +77,35 @@ public class AdminMapController {
     private PFXButton editButton;
     @FXML
     private VBox editing;
-    private Map<Long, Node> nodes;
-    private Map<Long, Edge> edges;
-    private Map<Long, LocationName> locations;
-    private Map<Long, Move> moves;
-    private Map<Long, Move> movesByNodeID = new HashMap<>();
-    private Map<String, LocationName> locationsByLongName = new HashMap<>();
-    private final StringConverter<Node> nodeToLocationString = new StringConverter<>() {
-        @Override
-        public String toString(Node node) {
-            var location = nodeToLocation(node);
-            if (location.isEmpty()) return "";
-            return location.get().getLongName();
-        }
-
-        @Override
-        public Node fromString(String string) {
-            return nodes.get(moves.values().stream().filter(m -> Objects.equals(m.getLongName(), string)).findFirst().get().getNodeID());// nodesList.stream().filter(n -> n.getNodeID().toString().equals(string)).findFirst().orElse(null);
-        }
-    };
-    private Map<Long, Circle> nodePoints = new HashMap<>();
-    private MultiValuedMap<Long, Line> edgeLines = new ArrayListValuedHashMap<>();
-
-    private static Facade getFacade() {
-        return App.getSingleton().getFacade();
-    }
+    private ObservableMap<Long, Node> nodes;
+    private ObservableMap<Long, Edge> edges;
+    private ObservableMap<Long, LocationName> locations;
+    private ObservableMap<Long, Move> moves;
+    private Node firstNode, secondNode;
+    private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
 
     private Optional<Circle> drawNode(Node node, String color) {
-        var location = nodeToLocation(node).orElseGet(() -> new LocationName(null, "", "", LocationName.NodeType.HALL));
-        var locationType = location.getNodeType();
-        var shortLabel = false; //locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV;
-        return map.drawNode(node, color, shortLabel ? location.getShortName() : "", location.getLongName() + "\nNode ID: " + node.getNodeID().toString());
+        var location = nodeToLocation.get(node);
+        if (location == null) location = FXCollections.observableArrayList();
+        return map.drawNode(node, color, "", String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)) + "\nNode ID: " + node.getNodeID().toString());
     }
-
-    private Node firstNode, secondNode;
 
     private Optional<LocationName> nodeToLocation(Node node) {
         if (node == null) return Optional.empty();
-        var move = movesByNodeID.get(node.getNodeID());
-        if (move == null) return Optional.empty();
-        return Optional.ofNullable(locationsByLongName.get(move.getLongName()));
+        var moves = this.moves.values().stream().filter(m -> m.getNodeID().equals(node.getNodeID())).toList();
+        if (moves.isEmpty()) return Optional.empty();
+        return Optional.ofNullable(locations.get(moves.get(0).getLocationID()));
     }
 
     private void load(Runnable callback) {
         var thread = new Thread(() -> {
-            nodes = getFacade().getAllNode();
-            edges = getFacade().getAllEdge();
-            moves = getFacade().getAllMove();
-            locations = getFacade().getAllLocationName();
+            nodes = facade.getAllNode();
+            edges = facade.getAllEdge();
+            moves = facade.getAllMove();
+            locations = facade.getAllLocationName();
 
-            movesByNodeID = moves.values().stream().collect(Collectors.toMap(Move::getNodeID, v -> v));
-            locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
-
+            // TODO: Update on date change
+            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, LocalDate.now());
             Platform.runLater(callback);
         });
         thread.setDaemon(true);
@@ -204,8 +182,8 @@ public class AdminMapController {
         makeMove.getStyleClass().add("node-popover-make-move");
         makeMove.setOnAction(a -> {
             if (locationDropdown.getSelectedItem() == null || date.getCurrentDate() == null) return;
-            var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 5;
-            var move = new Move(newID, node.getNodeID(), locationDropdown.getSelectedItem().getLongName(), date.getCurrentDate());
+            var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
+            var move = new Move(newID, node.getNodeID(), locationDropdown.getSelectedItem().getUuid(), date.getCurrentDate());
             moves.put(newID, move);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, move));
         });
@@ -220,7 +198,7 @@ public class AdminMapController {
                 edge.setVisible(false);
                 edge.setManaged(false);
             });
-            nodes = nodes.entrySet().stream().filter(e -> !e.getKey().equals(node.getNodeID())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//            nodes = nodes.entrySet().stream().filter(e -> !e.getKey().equals(node.getNodeID())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_NODE, node));
         });
         editNode.getChildren().addAll(buildingDropdown, new Separator(), new Label("Change Location"), locationDropdown, date, makeMove, new Separator(), delete);
@@ -348,8 +326,8 @@ public class AdminMapController {
             });
 
             Platform.runLater(() -> {
-                edgeLines.values().forEach(e->{
-                    if (e.getStroke() == Color.RED){
+                edgeLines.values().forEach(e -> {
+                    if (e.getStroke() == Color.RED) {
                         e.setVisible(false);
                         e.setManaged(false);
                     }
@@ -362,6 +340,7 @@ public class AdminMapController {
         commitThread.setDaemon(true);
         commitThread.start();
     }
+
     @Getter
     public static class MapEdit {
         private final ActionType type;
@@ -385,34 +364,34 @@ public class AdminMapController {
         public enum ActionType {
             ADD_NODE(o -> {
                 var node = (Node) o;
-                getFacade().saveNode(node);
+                App.getSingleton().getFacade().saveNode(node);
             }, o -> "Added node " + ((Node) o).getNodeID()),
             EDIT_NODE(o -> {
                 var node = (Node) o;
-                getFacade().updateNode(node, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.BUILDING});
+                App.getSingleton().getFacade().updateNode(node, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.BUILDING});
             }, o -> "Edited node " + ((Node) o).getNodeID()),
             REMOVE_NODE(o -> {
                 var node = (Node) o;
-                getFacade().deleteNode(node);
+                App.getSingleton().getFacade().deleteNode(node);
             }, o -> "Removed node " + ((Node) o).getNodeID()),
             ADD_EDGE(o -> {
                 var edge = (Edge) o;
-                getFacade().saveEdge(edge);
+                App.getSingleton().getFacade().saveEdge(edge);
             }, o -> "Added edge"),
             REMOVE_EDGE(o -> {
                 var edge = (Edge) o;
-                getFacade().deleteEdge(edge);
+                App.getSingleton().getFacade().deleteEdge(edge);
             }, o -> "Removed edge"),
             ADD_MOVE(o -> {
                 var move = (Move) o;
-                getFacade().saveMove(move);
+                App.getSingleton().getFacade().saveMove(move);
             }, o -> {
                 var move = (Move) o;
-                return "Node " + move.getNodeID().toString() + " to " + move.getLongName() + " on " + move.getDate().toString();
+                return "Node " + move.getNodeID().toString() + " to " + move.getLocationID() + " on " + move.getDate().toString();
             }),
             REMOVE_MOVE(o -> {
                 var move = (Move) o;
-                getFacade().deleteMove(move);
+                App.getSingleton().getFacade().deleteMove(move);
             }, o -> "Move deleted");
             private final Consumer<Object> action;
             public final Function<Object, String> getName;

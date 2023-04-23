@@ -5,6 +5,9 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -21,10 +24,6 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
 
     public FlowerDeliveryRequestEntryDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-    }
-
-    public FlowerDeliveryRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
     }
 
     @Override
@@ -60,16 +59,16 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS, Arrays.stream(params).map(FlowerDeliveryRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("patientName", java.lang.String.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("flowerSize", java.lang.String.class),
-                    rs.getObject("flowerAmount", java.lang.String.class),
-                    rs.getObject("flowerType", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("patientName", java.lang.String.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("flowerSize", java.lang.String.class),
+                        rs.getObject("flowerAmount", java.lang.String.class),
+                        rs.getObject("flowerType", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -80,28 +79,33 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
     }
 
     @Override
-    public Map<java.util.UUID, FlowerDeliveryRequestEntry> getAll() {
+    public ObservableMap<java.util.UUID, FlowerDeliveryRequestEntry> getAll() {
         var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("patientName", java.lang.String.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("flowerSize", java.lang.String.class),
-                    rs.getObject("flowerAmount", java.lang.String.class),
-                    rs.getObject("flowerType", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("patientName", java.lang.String.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("flowerSize", java.lang.String.class),
+                        rs.getObject("flowerAmount", java.lang.String.class),
+                        rs.getObject("flowerType", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        return map;
+        return FXCollections.observableMap(map);
+    }
+
+    @Override
+    public ObservableList<FlowerDeliveryRequestEntry> getAllAsList() {
+        return FXCollections.observableList(getAll().values().stream().toList());
     }
 
     @Override

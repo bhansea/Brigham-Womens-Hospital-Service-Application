@@ -1,0 +1,22 @@
+@import "Fonts.css";
+
+.pfx-table-card-vertical-container {
+    -fx-alignment: TOP_CENTER;
+    -fx-padding: 20 20;
+    -fx-background-color: -pfx-background;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
+}
+
+.pfx-table-card-table{
+    -fx-background-color: -pfx-primary;
+}
+
+.pfx-table-card-vertical-container:hover {
+
+}
+
+.pfx-table-box{
+    -fx-background-color: -pfx-background;
+}

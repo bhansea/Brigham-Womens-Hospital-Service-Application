@@ -2,98 +2,53 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
-<BorderPane style="-fx-background-color: -pfx-background;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-<center>
-    <HBox style="-fx-background-color: -pfx-background;" VBox.vgrow="ALWAYS">
-        <children>
-            <VBox>
-                <children>
-                    <Text styleClass="pfx-conference-header" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">
-                        <VBox.margin>
-                            <Insets left="15.0" top="15.0" />
-                        </VBox.margin>
-                    </Text>
-                    <HBox>
-                        <VBox.margin>
-                            <Insets left="20.0" top="20.0" />
-                        </VBox.margin>
-                        <children>
-                            <Text styleClass="pfx-conference-subText" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Beginning Time ">
-                            </Text>
-                            <Text styleClass="pfx-conference-redstar" text="*" />
-                        </children>
-                    </HBox>
-                    <MFXComboBox styleClass="pfx-conference-dropDown" fx:id="beginningTime" onAction="#validateField" prefHeight="50.0" prefWidth="360.0" promptText="Beginning Time">
-                        <VBox.margin>
-                            <Insets left="20.0" top="5.0" />
-                        </VBox.margin>
-                    </MFXComboBox>
-                    <HBox>
-                        <VBox.margin>
-                            <Insets left="20.0" top="50.0" />
-                        </VBox.margin>
-                        <children>
-                            <Text styleClass="pfx-conference-subText" strokeType="OUTSIDE" strokeWidth="0.0" text="Select an End Time">
-                            </Text>
-                            <Text styleClass="pfx-conference-redstar" text="*" />
-                        </children>
-                    </HBox>
-                    <MFXComboBox styleClass="pfx-conference-dropDown" fx:id="endTime" onAction="#validateField" prefHeight="50.0" prefWidth="360.0" promptText="End Time">
-                        <VBox.margin>
-                            <Insets left="20.0" top="5.0" />
-                        </VBox.margin>
-                    </MFXComboBox>
-                    <HBox>
-                        <VBox.margin>
-                            <Insets left="20.0" top="50.0" />
-                        </VBox.margin>
-                        <children>
-                            <Text styleClass="pfx-conference-subText" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter The Amount of Participants">
-                            </Text>
-                            <Text styleClass="pfx-conference-redstar" text="*"/>
-                        </children>
-                    </HBox>
-                    <TextField styleClass="pfx-conference-textField" fx:id="numberOfParticipants" promptText="Number of Participants">
-                        <VBox.margin>
-                            <Insets left="20.0" top="5.0" />
-                        </VBox.margin>
-                    </TextField>
-                </children>
-                <padding>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                </padding>
-            </VBox>
-            <VBox>
-                <children>
-                    <HBox>
-                        <VBox.margin>
-                            <Insets left="20.0" top="70.0" />
-                        </VBox.margin>
-                        <children>
-                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Date ">
-                                <font>
-                                    <Font size="18.0" />
-                                </font>
-                            </Text>
-                            <Text styleClass="pfx-conference-redstar" text="*" />
-                        </children>
-                    </HBox>
-                    <MFXDatePicker styleClass="pfx-conference-calendar" fx:id="calendar"/>
-                </children>
-                <padding>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                </padding>
-            </VBox>
-        </children>
-    </HBox>
-
-</center>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Separator?>
+<BorderPane style="-fx-background-color: -pfx-background;" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <VBox styleClass="conference-container">
+            <Text styleClass="conference-header" text="Please enter the following information: "/>
+            <Separator/>
+            <HBox style="-fx-background-color: -pfx-background;" HBox.hgrow="ALWAYS">
+                <VBox styleClass="conference-form-columns">
+                    <VBox styleClass="conference-form-sections">
+                        <HBox styleClass="conference-form-section-titles">
+                            <Text styleClass="conference-subText" text="Select a Beginning Time "/>
+                            <Text styleClass="conference-red-star" text="*"/>
+                        </HBox>
+                        <MFXComboBox styleClass="conference-dropDown" fx:id="beginningTime" onAction="#validateField"
+                                     promptText="Beginning Time" floatMode="DISABLED"/>
+                    </VBox>
+                    <VBox styleClass="conference-form-sections">
+                        <HBox styleClass="conference-form-section-titles">
+                            <Text styleClass="conference-subText" text="Select an End Time "/>
+                            <Text styleClass="conference-red-star" text="*"/>
+                        </HBox>
+                        <MFXComboBox styleClass="conference-dropDown" fx:id="endTime" onAction="#validateField"
+                                     promptText="End Time" floatMode="DISABLED"/>
+                    </VBox>
+                    <VBox styleClass="conference-form-sections">
+                        <HBox styleClass="conference-form-section-titles">
+                            <Text styleClass="conference-subText" text="Enter The Amount of Participants "/>
+                            <Text styleClass="conference-red-star" text="*"/>
+                        </HBox>
+                        <TextField styleClass="conference-textField" fx:id="numberOfParticipants"
+                                   promptText="Number of Participants"/>
+                    </VBox>
+                </VBox>
+                <VBox styleClass="conference-form-columns">
+                    <VBox styleClass="conference-form-sections">
+                        <HBox styleClass="conference-form-section-titles">
+                            <Text styleClass="conference-subText" text="Select a Date "/>
+                            <Text styleClass="conference-red-star" text="*"/>
+                        </HBox>
+                        <MFXDatePicker styleClass="conference-calendar" fx:id="calendar"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
 </BorderPane>

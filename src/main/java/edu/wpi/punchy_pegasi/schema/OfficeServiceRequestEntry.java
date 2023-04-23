@@ -1,12 +1,15 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class OfficeServiceRequestEntry extends RequestEntry {
-    private final String officeRequest;
+    @com.jsoniter.annotation.JsonProperty("officerequest")
+    private String officeRequest;
 
     public OfficeServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String officeRequest, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
@@ -17,8 +20,9 @@ public class OfficeServiceRequestEntry extends RequestEntry {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, employeeID);
         this.officeRequest = officeRequest;
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry>{
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry> {
         SERVICE_ID("serviceID"),
         LOCATION_NAME("locationName"),
         STAFF_ASSIGNMENT("staffAssignment"),
@@ -28,10 +32,12 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRe
         OFFICE_REQUEST("officeRequest");
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref) {
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
