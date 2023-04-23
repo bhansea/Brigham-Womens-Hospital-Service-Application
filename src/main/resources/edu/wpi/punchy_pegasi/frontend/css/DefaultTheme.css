@@ -38,29 +38,33 @@
 @import "MFXTreeItem.css";
 @import "MFXTreeView.css";
 
-/*TeamP css*/
-@import "Admin.css";
-@import "Layout.css";
-@import "PFXIcon.css";
+/* Components */
+@import "PFXAccount.css";
 @import "PFXButton.css";
-@import "PFXSidebarItem.css";
 @import "PFXColors.css";
-@import "NodePopover.css";
-@import "PathfindingMap.css";
-@import "HospitalMap.css";
-@import "EditableMap.css";
-@import "PFXTab.css";
-@import "PFXTabLayout.css";
-@import "LoginPage.css";
-@import "HomePage.css";
-@import "Spinner.css";
-@import "Link.css";
-@import "SignageLight.css";
 @import "PFXCardVertical.css";
 @import "PFXCardHorizontal.css";
-@import "PFXPicker.css";
 @import "PFXCardHolder.css";
-@import "Conference.css";
 @import "PFXDropdown.css";
+@import "PFXIcon.css";
+@import "PFXPicker.css";
 @import "PFXRequest.css";
+@import "PFXSidebarItem.css";
+@import "PFXTab.css";
+@import "PFXTabLayout.css";
+/* Pages */
+@import "Admin.css";
+@import "Conference.css";
+@import "EditableMap.css";
+@import "HomePage.css";
+@import "HospitalMap.css";
+@import "Layout.css";
+@import "LoginPage.css";
+@import "PathfindingMap.css";
+@import "SignageTheme.css";
+/* Misc */
+@import "Spinner.css";
+@import "Scrollbar.css";
 @import "PieChart.css";
+@import "NodePopover.css";
+@import "Link.css";

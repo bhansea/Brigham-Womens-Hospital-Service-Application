@@ -26,10 +26,6 @@ public class MoveDaoImpl implements IDao<java.lang.Long, Move, Move.Field> {
         this.dbController = dbController;
     }
 
-    public MoveDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Move> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.MOVES, "uuid", key)) {

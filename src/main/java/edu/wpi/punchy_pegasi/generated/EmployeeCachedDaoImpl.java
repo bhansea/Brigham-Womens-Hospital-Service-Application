@@ -38,10 +38,6 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public EmployeeCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(Employee employee) {
         if (!cache.containsKey(employee.getEmployeeID()))
             cache.put(employee.getEmployeeID(), employee);

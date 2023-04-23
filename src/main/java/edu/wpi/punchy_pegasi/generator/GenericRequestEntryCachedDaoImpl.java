@@ -38,10 +38,6 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public GenericRequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(GenericRequestEntry genericRequestEntry) {
         if (!cache.containsKey("genericRequestEntry"/*getID*/))
             cache.put("genericRequestEntry"/*getID*/, genericRequestEntry);

@@ -38,10 +38,6 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public ConferenceRoomEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(ConferenceRoomEntry conferenceRoomEntry) {
         if (!cache.containsKey(conferenceRoomEntry.getServiceID()))
             cache.put(conferenceRoomEntry.getServiceID(), conferenceRoomEntry);

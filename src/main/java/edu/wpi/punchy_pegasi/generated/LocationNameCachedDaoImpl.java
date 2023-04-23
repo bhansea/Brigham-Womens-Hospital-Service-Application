@@ -38,10 +38,6 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public LocationNameCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(LocationName locationName) {
         if (!cache.containsKey(locationName.getUuid()))
             cache.put(locationName.getUuid(), locationName);

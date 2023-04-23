@@ -38,10 +38,6 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public EdgeCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(Edge edge) {
         if (!cache.containsKey(edge.getUuid()))
             cache.put(edge.getUuid(), edge);

@@ -26,10 +26,6 @@ public class SignageDaoImpl implements IDao<java.lang.String, Signage, Signage.F
         this.dbController = dbController;
     }
 
-    public SignageDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Signage> get(java.lang.String key) {
         try (var rs = dbController.searchQuery(TableType.SIGNAGE, "longName", key)) {

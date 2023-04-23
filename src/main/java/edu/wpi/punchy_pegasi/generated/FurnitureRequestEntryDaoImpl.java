@@ -26,10 +26,6 @@ public class FurnitureRequestEntryDaoImpl implements IDao<java.util.UUID, Furnit
         this.dbController = dbController;
     }
 
-    public FurnitureRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<FurnitureRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS, "serviceID", key)) {

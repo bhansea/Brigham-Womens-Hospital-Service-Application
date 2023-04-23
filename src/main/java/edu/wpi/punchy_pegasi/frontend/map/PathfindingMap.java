@@ -24,6 +24,7 @@ import org.javatuples.Pair;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 import static edu.wpi.punchy_pegasi.frontend.map.AdminMapController.*;
 
@@ -77,7 +78,6 @@ public class PathfindingMap {
     private ObservableList<Edge> edgesList;
     private ObservableList<LocationName> locationsList;
     private ObservableList<Move> movesList;
-
     private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
@@ -89,7 +89,7 @@ public class PathfindingMap {
         if(location.isEmpty()) return Optional.empty();
         return map.drawNode(node, color, location.get(0).getShortName(), String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)));
     }
-
+    private final Predicate<LocationName> isDestination = location ->  location.getNodeType() != LocationName.NodeType.HALL && location.getNodeType() != LocationName.NodeType.STAI && location.getNodeType() != LocationName.NodeType.ELEV;
     @FXML
     private void initialize() {
         map = new HospitalMap(floors);
@@ -97,7 +97,8 @@ public class PathfindingMap {
         map.addLayer(pathfinding);
         pathfinding.setPickOnBounds(false);
         load(() -> {
-            nodeStartCombo.setItems(locationsList);
+            var filteredSorted = locationsList.filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName));
+            nodeStartCombo.setItems(filteredSorted);
             nodeStartCombo.setFilterFunction(s -> n -> locationToString.toString(n).toLowerCase().contains(s.toLowerCase()));
             nodeStartCombo.setConverter(locationToString);
             nodeStartCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
@@ -110,7 +111,7 @@ public class PathfindingMap {
                     });
                 }
             });
-            nodeEndCombo.setItems(locationsList);
+            nodeEndCombo.setItems(filteredSorted);
             nodeEndCombo.setFilterFunction(s -> n -> locationToString.toString(n).toLowerCase().contains(s.toLowerCase()));
             nodeEndCombo.setConverter(locationToString);
             nodeEndCombo.pressedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
@@ -158,10 +159,8 @@ public class PathfindingMap {
         });
         nodesList.forEach(n -> {
             var location = nodeToLocation.get(n);
-            if(location.isEmpty()) return;
-            var locationType = location.get(0).getNodeType();
-            if (locationType != LocationName.NodeType.HALL && locationType != LocationName.NodeType.STAI && locationType != LocationName.NodeType.ELEV)
-                return;
+            if(location == null || location.isEmpty()) return;
+            if (!isDestination.test(location.get(0))) return;
             var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();

@@ -26,10 +26,6 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         this.dbController = dbController;
     }
 
-    public FoodServiceRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<FoodServiceRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS, "serviceID", key)) {

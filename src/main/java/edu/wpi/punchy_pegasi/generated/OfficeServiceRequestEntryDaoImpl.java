@@ -26,10 +26,6 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         this.dbController = dbController;
     }
 
-    public OfficeServiceRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<OfficeServiceRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, "serviceID", key)) {

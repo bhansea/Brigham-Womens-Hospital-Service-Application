@@ -26,10 +26,6 @@ public class EmployeeDaoImpl implements IDao<java.lang.Long, Employee, Employee.
         this.dbController = dbController;
     }
 
-    public EmployeeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Employee> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.EMPLOYEES, "employeeID", key)) {

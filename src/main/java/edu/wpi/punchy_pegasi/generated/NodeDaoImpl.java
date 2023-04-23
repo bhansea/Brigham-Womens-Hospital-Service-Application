@@ -26,10 +26,6 @@ public class NodeDaoImpl implements IDao<java.lang.Long, Node, Node.Field> {
         this.dbController = dbController;
     }
 
-    public NodeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Node> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.NODES, "nodeID", key)) {
