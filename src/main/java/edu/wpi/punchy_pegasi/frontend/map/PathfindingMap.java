@@ -107,10 +107,11 @@ public class PathfindingMap {
     private void initialize() {
         map = new HospitalMap(floors);
         root.setCenter(map.get());
-        container.getChildren().addAll(pathfinding, robotInfo);
         map.addLayer(container);
+        container.getChildren().addAll(pathfinding, robotInfo);
         HBox.setHgrow(pathfinding, Priority.ALWAYS);
         invalidText.setVisible(false);
+        robotInfo.setVisible(false);
         pathfinding.setPickOnBounds(false);
         robotInfo.setPickOnBounds(false);
         load(() -> {
@@ -145,9 +146,7 @@ public class PathfindingMap {
 
         // Check account status for admin features
         if (App.getSingleton().getAccount().getAccountType().getShieldLevel() == Account.AccountType.ADMIN.getShieldLevel()) {
-            System.out.println("admin");
-        } else {
-            System.out.println("not admin");
+            robotInfo.setVisible(true);
         }
 
         selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search", "Dijkstra"));
