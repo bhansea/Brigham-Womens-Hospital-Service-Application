@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 
@@ -185,11 +186,15 @@ public class SignageController {
                 case HERE -> {
                     locLabel.getStyleClass().add("signage-label-Here");
                     signageHeaderLeft.getChildren().add(locLabel);
+                    continue;
                 }
             }
             signageBodyLeft.getChildren().add(signageHB);
             signageBodyLeft.getStyleClass().add("signage-body-left");
+            Separator separator = new Separator();
+            signageBodyLeft.getChildren().add(separator);
         }
+        signageBodyLeft.getChildren().remove(signageBodyLeft.getChildren().size() - 1);  // remove the last separator
     }
 
     private void switchTheme(boolean setDark) {
