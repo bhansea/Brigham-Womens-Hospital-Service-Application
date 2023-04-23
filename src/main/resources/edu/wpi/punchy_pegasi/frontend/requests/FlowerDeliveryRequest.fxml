@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;"
             xmlns="http://javafx.com/javafx/" fx:id="root">
     <center>

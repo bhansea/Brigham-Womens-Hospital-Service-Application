@@ -8,6 +8,7 @@
     -fx-border-radius: 12;
     -fx-border-color: -pfx-navy;
     -fx-border-width: 1.5;
+    -fx-pref-width: 80;
 }
 
 .pfx-picker-container Label {

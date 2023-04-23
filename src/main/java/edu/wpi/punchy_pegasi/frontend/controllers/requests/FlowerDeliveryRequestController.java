@@ -49,7 +49,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background;");
-        flowPane.setAlignment(Pos.CENTER);
+        flowPane.setAlignment(Pos.CENTER_LEFT);
         var scrollPane = new ScrollPane(flowPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
@@ -76,5 +76,10 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         clearGeneric();
         patientName.clear();
 //        cardHolder.clear();
+    }
+
+    @FXML
+    public void toggleFilter() {
+        return;
     }
 }
