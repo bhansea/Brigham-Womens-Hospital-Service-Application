@@ -18,18 +18,18 @@
 
 .signage-header {
     -fx-spacing: 20;
-    -fx-padding: 15 100 15 100;
+    -fx-padding: 15 50 15 50;
 }
 
 .signage-header-left {
     -fx-spacing: 15;
-    -fx-padding: 10 0 10 30;
+    -fx-padding: 10 0 10 0;
     -fx-alignment: CENTER;
 }
 
 .signage-header-right {
     -fx-spacing: 15;
-    -fx-padding: 10 30 10 0;
+    -fx-padding: 10 0 10 0;
     -fx-alignment: CENTER_RIGHT;
 }
 
