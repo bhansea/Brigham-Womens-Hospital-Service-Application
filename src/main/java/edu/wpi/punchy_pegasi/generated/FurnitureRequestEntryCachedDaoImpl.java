@@ -38,10 +38,6 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public FurnitureRequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(FurnitureRequestEntry furnitureRequestEntry) {
         if (!cache.containsKey(furnitureRequestEntry.getServiceID()))
             cache.put(furnitureRequestEntry.getServiceID(), furnitureRequestEntry);

@@ -86,8 +86,6 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         this.expanded = expanded;
         if (expanded) sidebarItems.forEach(s -> s.setExpanded(true));
         Platform.runLater(() -> {
-            if (!expanded)
-                maxWidth = getWidth();
             ChangeSize.changeWidth(this, expanded ? maxWidth : getMinWidth(), e -> {
                 if (!expanded) sidebarItems.forEach(s -> s.setExpanded(false));
                 animating.set(false);

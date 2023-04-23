@@ -38,10 +38,6 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public SignageCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(Signage signage) {
         if (!cache.containsKey(signage.getLongName()))
             cache.put(signage.getLongName(), signage);

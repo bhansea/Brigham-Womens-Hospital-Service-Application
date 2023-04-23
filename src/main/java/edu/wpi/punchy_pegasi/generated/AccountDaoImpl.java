@@ -26,10 +26,6 @@ public class AccountDaoImpl implements IDao<java.lang.String, Account, Account.F
         this.dbController = dbController;
     }
 
-    public AccountDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Account> get(java.lang.String key) {
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS, "username", key)) {

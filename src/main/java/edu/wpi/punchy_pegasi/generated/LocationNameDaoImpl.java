@@ -26,10 +26,6 @@ public class LocationNameDaoImpl implements IDao<java.lang.Long, LocationName, L
         this.dbController = dbController;
     }
 
-    public LocationNameDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<LocationName> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES, "uuid", key)) {

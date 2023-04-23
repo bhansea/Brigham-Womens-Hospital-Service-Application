@@ -26,10 +26,6 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
         this.dbController = dbController;
     }
 
-    public EdgeDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<Edge> get(java.lang.Long key) {
         try (var rs = dbController.searchQuery(TableType.EDGES, "uuid", key)) {

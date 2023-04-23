@@ -38,10 +38,6 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public RequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(RequestEntry requestEntry) {
         if (!cache.containsKey(requestEntry.getServiceID()))
             cache.put(requestEntry.getServiceID(), requestEntry);

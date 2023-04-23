@@ -38,10 +38,6 @@ public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Acc
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public AccountCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(Account account) {
         if (!cache.containsKey(account.getUsername()))
             cache.put(account.getUsername(), account);

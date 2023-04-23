@@ -26,10 +26,6 @@ public class RequestEntryDaoImpl implements IDao<java.util.UUID, RequestEntry, R
         this.dbController = dbController;
     }
 
-    public RequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<RequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.REQUESTS, "serviceID", key)) {
