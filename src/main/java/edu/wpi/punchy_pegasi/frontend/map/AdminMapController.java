@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.map;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.DragController;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
@@ -40,21 +41,19 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class AdminMapController {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
         put("L2", new HospitalFloor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
         put("L1", new HospitalFloor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
-//        put("00", new HospitalFloor("frontend/assets/map/00_thegroundfloor.png", "Ground Layer", "00"));
         put("1", new HospitalFloor("frontend/assets/map/01_thefirstfloor.png", "First Layer", "1"));
         put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
         put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
     }};
+    private final Facade facade = App.getSingleton().getFacade();
     private final AtomicBoolean commiting = new AtomicBoolean();
     private final Predicate<MouseEvent> isLeftClick = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown() && !e.isShiftDown();
     private final Predicate<MouseEvent> isLeftClickAndShift = e -> e.getButton() == MouseButton.PRIMARY && !e.isControlDown() && e.isShiftDown();
@@ -85,117 +84,6 @@ public class AdminMapController {
     private Node firstNode, secondNode;
     private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
 
-    private static Facade getFacade() {
-        return App.getSingleton().getFacade();
-    }
-
-    public static Map<Node, List<Move>> calculateMoves(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        var locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
-        return moves.values().stream()
-                // filter by moves which reference valid locations and nodes
-                .filter(m -> locations.containsKey(m.getLocationID()))
-                .filter(m -> nodes.containsKey(m.getNodeID()))
-                // first filter out all future dates
-                .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
-                // group by location
-                .collect(Collectors.groupingBy(Move::getLocationID)).values().stream()
-                // get max date for each location
-                .map(m -> m.stream().max(Comparator.comparing(Move::getDate)).get())
-                // group by node id
-                .collect(Collectors.groupingBy(Move::getNodeID)).entrySet().stream()
-                // map to node and move
-                .collect(Collectors.toMap(e -> nodes.get(e.getKey()), Map.Entry::getValue));
-    }
-
-    public static Map<LocationName, Node> calculateNodes(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        return moves.values().stream()
-                // filter by moves which reference valid locations and nodes
-                .filter(m -> locations.containsKey(m.getLocationID()))
-                .filter(m -> nodes.containsKey(m.getNodeID()))
-                // first filter out all future dates
-                .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
-                // group by location
-                .collect(Collectors.groupingBy(Move::getLocationID)).values().stream()
-                // get max date for each location
-                .map(m -> m.stream().max(Comparator.comparing(Move::getDate)).get())
-                // get map of location to node
-                .collect(Collectors.toMap(e -> locations.get(e.getLocationID()), e -> nodes.get(e.getNodeID())));
-    }
-
-    public static List<Move> calculateMoves(Node node, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        return moves.values().stream()
-                // first filter out all future dates
-                .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
-                // group by location
-                .collect(Collectors.groupingBy(Move::getLocationID)).values().stream()
-                // get max date for each location
-                .map(m -> m.stream().max(Comparator.comparing(Move::getDate)).get())
-                // select relevant node
-                .filter(m -> m.getNodeID().equals(node.getNodeID())).toList();
-    }
-
-    public static ObservableMap<Node, ObservableList<LocationName>> getNodeLocations(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        ObservableMap<Node, ObservableList<LocationName>> nodeLocations = FXCollections.observableMap(new LinkedHashMap<>());
-        BiConsumer<Node, LocationName> add = (n, l) -> {
-            if (!nodeLocations.containsKey(n))
-                nodeLocations.put(n, FXCollections.observableArrayList());
-            nodeLocations.get(n).add(l);
-        };
-        Consumer<Node> clear = n -> {
-            if (nodeLocations.containsKey(n))
-                nodeLocations.get(n).clear();
-        };
-        calculateMoves(nodes, locations, moves, date).forEach((n, ms) -> {
-            clear.accept(n);
-            ms.forEach(m -> add.accept(n, locations.get(m.getLocationID())));
-        });
-        // add event filters to all the maps to update the MultiValuedMap
-        nodes.addListener((MapChangeListener<Long, Node>) change -> {
-            if (change.wasRemoved())
-                nodeLocations.remove(change.getValueRemoved());
-            if (change.wasAdded()) {
-                clear.accept(change.getValueRemoved());
-                calculateMoves(change.getValueAdded(), locations, moves, date).forEach(m -> {
-                    add.accept(change.getValueAdded(), locations.get(m.getLocationID()));
-                });
-            }
-        });
-        locations.addListener((MapChangeListener<Long, LocationName>) change -> {
-            calculateMoves(nodes, locations, moves, date).forEach((n, ms) -> {
-                clear.accept(n);
-                ms.forEach(m -> add.accept(n, locations.get(m.getLocationID())));
-            });
-        });
-        moves.addListener((MapChangeListener<Long, Move>) change -> {
-            calculateMoves(nodes, locations, moves, date).forEach((n, ms) -> {
-                clear.accept(n);
-                ms.forEach(m -> add.accept(n, locations.get(m.getLocationID())));
-            });
-        });
-
-        // return the list of locations
-        return nodeLocations;
-    }
-
-    public static ObservableMap<LocationName, Node> getLocationNode(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        ObservableMap<LocationName, Node> locationNode = FXCollections.observableMap(calculateNodes(nodes, locations, moves, date));
-
-        // add event filters to all the maps to update the MultiValuedMap
-        nodes.addListener((MapChangeListener<Long, Node>) change -> {
-            locationNode.clear();
-            locationNode.putAll(calculateNodes(nodes, locations, moves, date));
-        });
-        locations.addListener((MapChangeListener<Long, LocationName>) change -> {
-            locationNode.clear();
-            locationNode.putAll(calculateNodes(nodes, locations, moves, date));
-        });
-        moves.addListener((MapChangeListener<Long, Move>) change -> {
-            locationNode.clear();
-            locationNode.putAll(calculateNodes(nodes, locations, moves, date));
-        });
-        return locationNode;
-    }
-
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation.get(node);
         if (location == null) location = FXCollections.observableArrayList();
@@ -211,13 +99,13 @@ public class AdminMapController {
 
     private void load(Runnable callback) {
         var thread = new Thread(() -> {
-            nodes = getFacade().getAllNode();
-            edges = getFacade().getAllEdge();
-            moves = getFacade().getAllMove();
-            locations = getFacade().getAllLocationName();
+            nodes = facade.getAllNode();
+            edges = facade.getAllEdge();
+            moves = facade.getAllMove();
+            locations = facade.getAllLocationName();
 
             // TODO: Update on date change
-            nodeToLocation = getNodeLocations(nodes, locations, moves, LocalDate.now());
+            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, LocalDate.now());
             Platform.runLater(callback);
         });
         thread.setDaemon(true);
@@ -476,34 +364,34 @@ public class AdminMapController {
         public enum ActionType {
             ADD_NODE(o -> {
                 var node = (Node) o;
-                getFacade().saveNode(node);
+                App.getSingleton().getFacade().saveNode(node);
             }, o -> "Added node " + ((Node) o).getNodeID()),
             EDIT_NODE(o -> {
                 var node = (Node) o;
-                getFacade().updateNode(node, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.BUILDING});
+                App.getSingleton().getFacade().updateNode(node, new Node.Field[]{Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.BUILDING});
             }, o -> "Edited node " + ((Node) o).getNodeID()),
             REMOVE_NODE(o -> {
                 var node = (Node) o;
-                getFacade().deleteNode(node);
+                App.getSingleton().getFacade().deleteNode(node);
             }, o -> "Removed node " + ((Node) o).getNodeID()),
             ADD_EDGE(o -> {
                 var edge = (Edge) o;
-                getFacade().saveEdge(edge);
+                App.getSingleton().getFacade().saveEdge(edge);
             }, o -> "Added edge"),
             REMOVE_EDGE(o -> {
                 var edge = (Edge) o;
-                getFacade().deleteEdge(edge);
+                App.getSingleton().getFacade().deleteEdge(edge);
             }, o -> "Removed edge"),
             ADD_MOVE(o -> {
                 var move = (Move) o;
-                getFacade().saveMove(move);
+                App.getSingleton().getFacade().saveMove(move);
             }, o -> {
                 var move = (Move) o;
                 return "Node " + move.getNodeID().toString() + " to " + move.getLocationID() + " on " + move.getDate().toString();
             }),
             REMOVE_MOVE(o -> {
                 var move = (Move) o;
-                getFacade().deleteMove(move);
+                App.getSingleton().getFacade().deleteMove(move);
             }, o -> "Move deleted");
             private final Consumer<Object> action;
             public final Function<Object, String> getName;

@@ -125,8 +125,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         endTime.getText(),
                         calendar.getValue(),
                         numberOfParticipants.getText(),
-                        // TODO: need a way to get the employeeID of the person making the request entry
-                        1L);
+                        App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
         App.getSingleton().navigate(Screen.HOME);
     }

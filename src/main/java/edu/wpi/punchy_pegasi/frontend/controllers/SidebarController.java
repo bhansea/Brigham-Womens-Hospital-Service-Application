@@ -88,8 +88,8 @@ public class SidebarController extends VBox implements PropertyChangeListener {
         Platform.runLater(() -> {
             ChangeSize.changeWidth(this, expanded ? maxWidth : getMinWidth(), e -> {
                 if (!expanded) sidebarItems.forEach(s -> s.setExpanded(false));
-                animating.set(false);
                 expandIcon.setIcon(expanded ? MaterialSymbols.FIRST_PAGE : MaterialSymbols.LAST_PAGE);
+                animating.set(false);
             });
         });
     }

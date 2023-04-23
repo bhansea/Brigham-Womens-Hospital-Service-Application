@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.PathfindingSingleton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.Move;
@@ -24,9 +25,8 @@ import org.javatuples.Pair;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
 
-import static edu.wpi.punchy_pegasi.frontend.map.AdminMapController.*;
+import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
 
 public class PathfindingMap {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
@@ -89,7 +89,6 @@ public class PathfindingMap {
         if(location.isEmpty()) return Optional.empty();
         return map.drawNode(node, color, location.get(0).getShortName(), String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)));
     }
-    private final Predicate<LocationName> isDestination = location ->  location.getNodeType() != LocationName.NodeType.HALL && location.getNodeType() != LocationName.NodeType.STAI && location.getNodeType() != LocationName.NodeType.ELEV;
     @FXML
     private void initialize() {
         map = new HospitalMap(floors);
@@ -185,8 +184,8 @@ public class PathfindingMap {
             movesList = App.getSingleton().getFacade().getAllAsListMove();
             locationsList = App.getSingleton().getFacade().getAllAsListLocationName();
             // TODO: Rerun when moves Date changes
-            nodeToLocation = getNodeLocations(nodes, locations, moves, movesDate);
-            locationToNode = getLocationNode(nodes, locations, moves, movesDate);
+            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, movesDate);
+            locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, movesDate);
             Platform.runLater(callback);
         });
         thread.setDaemon(true);

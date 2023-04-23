@@ -24,11 +24,11 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
     private final Image defaultImage = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/bwhlogo.png")));
     private final EventHandler<? super MouseEvent> noAccount = e -> App.getSingleton().navigate(Screen.LOGIN);
     private final Label label = new Label("Login");
-    private final PFXIcon loginIcon = new PFXIcon(MaterialSymbols.ACCOUNT_CIRCLE);
+    private final PFXIcon loginIcon = new PFXIcon(MaterialSymbols.LOGIN);
     private final PFXSidebarItem logout = new PFXSidebarItem();
     private final PopOver accountMenu = new PopOver();
     private final EventHandler<? super MouseEvent> isAccount = e -> accountMenu.show(this);
-    private final PFXIcon defaultIcon = new PFXIcon(MaterialSymbols.MOOD);
+    private final PFXIcon defaultIcon = new PFXIcon(MaterialSymbols.ACCOUNT_CIRCLE);
 
     public PFXAccount() {
         super();
@@ -43,6 +43,7 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
             App.getSingleton().setAccount(null);
             accountMenu.hide();
         });
+        defaultIcon.getStyleClass().add("pfx-default-account-icon");
         getStyleClass().add("pfx-account");
         setAccount(App.getSingleton().getAccount());
         App.getSingleton().addPropertyChangeListener(this);
