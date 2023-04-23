@@ -96,20 +96,7 @@ public class SignageController {
         initIcons();
         initHeader();
 
-        Signage newSignageD = new Signage("Location Name Down 0", Signage.DirectionType.DOWN);
-        Signage newSignageU = new Signage("Location Name Up 0", Signage.DirectionType.UP);
-        Signage newSignageD1 = new Signage("Location Name Down 1", Signage.DirectionType.DOWN);
-        Signage newSignageHere = new Signage("Location Name Here", Signage.DirectionType.HERE);
-        facade.saveSignage(newSignageD);
-        facade.saveSignage(newSignageU);
-        facade.saveSignage(newSignageD1);
-        facade.saveSignage(newSignageHere);
-        buildSignage(loadSignage());
 
-        facade.deleteSignage(newSignageD);
-        facade.deleteSignage(newSignageU);
-        facade.deleteSignage(newSignageD1);
-        facade.deleteSignage(newSignageHere);
 
         Platform.runLater(() -> {
             switchTheme(true);
@@ -129,8 +116,8 @@ public class SignageController {
 
     private Map<Signage.DirectionType, List<String>> loadSignage() {
         Map<Signage.DirectionType, List<String>> signageMap = new HashMap<>();
-        Map<String, Signage> allSignage = facade.getAllSignage();
-        for (Map.Entry<String, Signage> entry : allSignage.entrySet()) {
+        Map<Long, Signage> allSignage = facade.getAllSignage();
+        for (Map.Entry<Long, Signage> entry : allSignage.entrySet()) {
             Signage.DirectionType directionType = entry.getValue().getDirectionType();
             String locationName = entry.getValue().getLongName();
             switch (directionType) {
