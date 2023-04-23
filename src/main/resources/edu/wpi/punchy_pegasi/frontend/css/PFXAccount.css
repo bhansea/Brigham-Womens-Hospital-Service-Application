@@ -1,8 +1,11 @@
 .pfx-account {
     -fx-alignment: CENTER;
     -fx-spacing: 5;
+    -fx-cursor: hand;
 }
-
+.pfx-account:hover .pfx-default-account-icon {
+    -fx-fill: -pfx-primary;
+}
 .pfx-account-menu {
     -fx-padding: 10 0;
 }
@@ -13,4 +16,7 @@
 
 .pfx-account PFXIcon {
     -fx-fill: -pfx-text;
+}
+.pfx-default-account-icon {
+    -fx-fill: -pfx-secondary;
 }

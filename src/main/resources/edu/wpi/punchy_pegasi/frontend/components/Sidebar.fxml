@@ -8,6 +8,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1"
          type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/"
+
          styleClass="sideBar">
     <VBox alignment="TOP_RIGHT">
         <PFXIcon fx:id="expandIcon" icon="LAST_PAGE" styleClass="sidebar-expand-icon"/>

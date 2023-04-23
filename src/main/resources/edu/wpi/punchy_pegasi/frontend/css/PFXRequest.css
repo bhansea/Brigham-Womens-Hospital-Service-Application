@@ -1,4 +1,8 @@
-.pfx-request-bar {
+.pfx-request {
+    -fx-border-color: -pfx-background;
+}
+
+.pfx-request-container {
     -fx-background-radius: 6;
     -fx-border-color: -pfx-secondary-light;
     -fx-border-radius: 6;
@@ -16,19 +20,13 @@
 
 }
 
-.pfx-request-bar > Label {
+.pfx-request-container Label {
     -fx-text-fill: -pfx-text;
     -fx-font-size: 18;
     -fx-alignment: CENTER_LEFT;
 }
 
-.pfx-request-bar > Label {
-    -fx-text-fill: -pfx-text;
-    -fx-font-size: 18;
-    -fx-alignment: CENTER_LEFT;
-}
-
-.pfx-request-bar > TextField {
+.pfx-request-container > TextField {
     /*-fx-min-width: 50;*/
     -fx-min-height: 50;
     -fx-font-size: 18;
@@ -37,13 +35,7 @@
     -fx-border-radius: 6;
 }
 
-.pfx-request-bar > VBox > Label {
-    -fx-text-fill: -pfx-text;
-    -fx-font-size: 18;
-    -fx-alignment: CENTER_LEFT;
-}
-
-.pfx-request-bar > VBox > TextField {
+.pfx-request-container > VBox > TextField {
     /*-fx-alignment: CENTER_LEFT;*/
     -fx-text-alignment: TOP_LEFT;
     -fx-min-width: 0;
@@ -54,7 +46,7 @@
     -fx-text-fill: -pfx-navy;
 }
 
-.pfx-request-bar > VBox > MFXFilterComboBox {
+.pfx-request-container > VBox > MFXFilterComboBox {
     -fx-min-width: 300;
     -fx-min-height: 50;
     -fx-background-color: transparent;
@@ -65,9 +57,29 @@
     -fx-text-fill: -pfx-navy;
 }
 
-.pfx-request {
-    /*-fx-background-color: -pfx-accent;*/
-    -fx-background-radius: 6;
-    -fx-border-color: -pfx-navy;
-    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);*/
+.pfx-request-right-container {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+}
+
+.pfx-request-additional-notes {
+    -fx-max-height: Infinity;
+    -fx-alignment: TOP_LEFT;
+    -fx-font-size: 18;
+}
+
+.pfx-request-buttons {
+    -fx-alignment: CENTER;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+}
+
+#clear {
+    -pfx-button-background: -pfx-danger;
+    -pfx-button-text: -pfx-text-opposite;
+}
+#submit {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text-opposite;
 }

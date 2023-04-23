@@ -25,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.util.Comparator;
+
+import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
 
 @Slf4j
 public abstract class RequestController<T extends RequestEntry> {
@@ -47,14 +50,12 @@ public abstract class RequestController<T extends RequestEntry> {
     MFXFilterComboBox<LocationName> locationName;
     @FXML
     MFXFilterComboBox<Employee> staffAssignment;
-    @FXML
-    private HBox componentHolder;
 
     public static BorderPane create(RequestController controller, String path) {
         try {
             Parent l = App.getSingleton().loadWithCache(path, controller).getRoot();
             BorderPane g = App.getSingleton().loadWithCache("frontend/layouts/Request.fxml", controller).getRoot();
-            controller.componentHolder.getChildren().add(l);
+            g.setCenter(l);
             return g;
         } catch (IOException e) {
             log.error("create error", e);
@@ -89,9 +90,9 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected final void initialize() {
         if (!isLoaded()) return;
-        componentHolder.getStyleClass().add("pfx-request-component-holder");
-        locationName.setItems(FXCollections.observableArrayList(facade.getAllLocationName().values().stream().toList()));
-        staffAssignment.setItems(FXCollections.observableArrayList(facade.getAllEmployee().values().stream().toList()));
+//        componentHolder.getStyleClass().add("pfx-request-component-holder");
+        locationName.setItems(facade.getAllAsListLocationName().filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName)));
+        staffAssignment.setItems(facade.getAllAsListEmployee());
         locationName.setOnAction(p -> validateEntry());
         staffAssignment.setOnAction(p -> validateEntry());
         var employeeToName = new StringConverter<Employee>() {

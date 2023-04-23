@@ -35,30 +35,19 @@ public class ServiceRequestController {
         add(Screen.CONFERENCE_ROOM_SERVICE_REQUEST);
     }};
 
-    final List<Node> nodes = new ArrayList<>();
-
-    public ServiceRequestController() {}
     public void initialize() {
+        container.setStyle("-fx-background-color: -pfx-background;");
+        container.setCenter(layout);
         var thread = new Thread(() -> {
-
             for (Screen screen: screens) {
-                nodes.add(screen.get());
-            }
-            Platform.runLater(() -> {
-                for (int i = 0; i < screens.size(); i++) {
-                    if (!screens.get(i).getReadable().toLowerCase().contains("request") || screens.get(i).getReadable().equalsIgnoreCase("service request")) {
-                        continue;
-                    }
-                    PFXTab tab = new PFXTab(screens.get(i).getReadable().replace("Request ", ""),nodes.get(i));
-                    tab.setOnMouseClicked(e -> {
-                        layout.setSelected(tab);
-                        container.setCenter(layout);
-                    });
+                var node = screen.get();
+                Platform.runLater(() -> {
+                    var tab = new PFXTab(screen.getReadable().replace("Request ", ""), node);
                     layout.addTab(tab);
-                }
-                layout.setSelected(layout.getTabGroup().get(0));
-                container.setCenter(layout);
-            });
+                    tab.setOnMouseClicked(e -> layout.setSelected(tab));
+                });
+            }
+            Platform.runLater(() -> layout.setSelected(layout.getTabGroup().get(0)));
         });
         thread.setDaemon(true);
         thread.start();
