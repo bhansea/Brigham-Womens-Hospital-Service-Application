@@ -26,10 +26,6 @@ public class GenericRequestEntryDaoImpl implements IDao<java.util.UUID, GenericR
         this.dbController = dbController;
     }
 
-    public GenericRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<GenericRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.GENERIC, "serviceID", key)) {

@@ -26,10 +26,6 @@ public class ConferenceRoomEntryDaoImpl implements IDao<java.util.UUID, Conferen
         this.dbController = dbController;
     }
 
-    public ConferenceRoomEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<ConferenceRoomEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS, "serviceID", key)) {

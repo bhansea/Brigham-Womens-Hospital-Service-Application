@@ -38,10 +38,6 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public FlowerDeliveryRequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
         if (!cache.containsKey(flowerDeliveryRequestEntry.getServiceID()))
             cache.put(flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry);

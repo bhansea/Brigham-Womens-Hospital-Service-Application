@@ -38,10 +38,6 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public FoodServiceRequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(FoodServiceRequestEntry foodServiceRequestEntry) {
         if (!cache.containsKey(foodServiceRequestEntry.getServiceID()))
             cache.put(foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry);

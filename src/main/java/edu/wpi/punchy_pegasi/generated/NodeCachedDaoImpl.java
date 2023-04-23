@@ -38,10 +38,6 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public NodeCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(Node node) {
         if (!cache.containsKey(node.getNodeID()))
             cache.put(node.getNodeID(), node);

@@ -26,10 +26,6 @@ public class FlowerDeliveryRequestEntryDaoImpl implements IDao<java.util.UUID, F
         this.dbController = dbController;
     }
 
-    public FlowerDeliveryRequestEntryDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     @Override
     public Optional<FlowerDeliveryRequestEntry> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS, "serviceID", key)) {

@@ -92,6 +92,9 @@ public class AdminMapController {
     public static Map<Node, List<Move>> calculateMoves(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
         var locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
         return moves.values().stream()
+                // filter by moves which reference valid locations and nodes
+                .filter(m -> locations.containsKey(m.getLocationID()))
+                .filter(m -> nodes.containsKey(m.getNodeID()))
                 // first filter out all future dates
                 .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
                 // group by location
@@ -100,14 +103,26 @@ public class AdminMapController {
                 .map(m -> m.stream().max(Comparator.comparing(Move::getDate)).get())
                 // group by node id
                 .collect(Collectors.groupingBy(Move::getNodeID)).entrySet().stream()
-                // remove all nodes that are not present
-                .filter(e -> nodes.containsKey(e.getKey()))
                 // map to node and move
                 .collect(Collectors.toMap(e -> nodes.get(e.getKey()), Map.Entry::getValue));
     }
 
+    public static Map<LocationName, Node> calculateNodes(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
+        return moves.values().stream()
+                // filter by moves which reference valid locations and nodes
+                .filter(m -> locations.containsKey(m.getLocationID()))
+                .filter(m -> nodes.containsKey(m.getNodeID()))
+                // first filter out all future dates
+                .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
+                // group by location
+                .collect(Collectors.groupingBy(Move::getLocationID)).values().stream()
+                // get max date for each location
+                .map(m -> m.stream().max(Comparator.comparing(Move::getDate)).get())
+                // get map of location to node
+                .collect(Collectors.toMap(e -> locations.get(e.getLocationID()), e -> nodes.get(e.getNodeID())));
+    }
+
     public static List<Move> calculateMoves(Node node, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        var locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
         return moves.values().stream()
                 // first filter out all future dates
                 .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
@@ -163,53 +178,20 @@ public class AdminMapController {
     }
 
     public static ObservableMap<LocationName, Node> getLocationNode(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        ObservableMap<LocationName, Node> locationNode = FXCollections.observableMap(
-                moves.values().stream()
-                        // first filter out all future dates
-                        .filter(m -> m.getDate().isBefore(date) || m.getDate().isEqual(date))
-                        // group by location
-                        .collect(Collectors.groupingBy(Move::getLocationID)).values().stream()
-                        // get max date for each location
-                        .map(m -> m.stream().max(Comparator.comparing(Move::getDate)).get())
-                        // filter by present locations
-                        .filter(m -> locations.containsKey(m.getLocationID()))
-                        .filter(m -> nodes.containsKey(m.getNodeID()))
-                        // get map of location to node
-                        .collect(Collectors.toMap(e -> locations.get(e.getLocationID()), e -> nodes.get(e.getNodeID()))));
+        ObservableMap<LocationName, Node> locationNode = FXCollections.observableMap(calculateNodes(nodes, locations, moves, date));
 
         // add event filters to all the maps to update the MultiValuedMap
         nodes.addListener((MapChangeListener<Long, Node>) change -> {
-            if (change.wasRemoved())
-                locationNode.values().remove(change.getValueRemoved());
-            if (change.wasAdded()) {
-                calculateMoves(change.getValueAdded(), locations, moves, date).forEach(m -> {
-                    locationNode.put(locations.get(m.getLocationID()), change.getValueAdded());
-                });
-            }
+            locationNode.clear();
+            locationNode.putAll(calculateNodes(nodes, locations, moves, date));
         });
         locations.addListener((MapChangeListener<Long, LocationName>) change -> {
-            if (change.wasRemoved())
-                locationNode.remove(change.getValueRemoved());
-            if (change.wasAdded()) {
-                calculateMoves(nodes, locations, moves, date).forEach((n, ms) -> {
-                    ms.forEach(m -> {
-                        if (m.getLocationID().equals(change.getKey()))
-                            locationNode.put(change.getValueAdded(), n);
-                    });
-                });
-            }
+            locationNode.clear();
+            locationNode.putAll(calculateNodes(nodes, locations, moves, date));
         });
         moves.addListener((MapChangeListener<Long, Move>) change -> {
-            if (change.wasRemoved())
-                locationNode.remove(locations.get(change.getValueRemoved().getLocationID()));
-            if (change.wasAdded()) {
-                calculateMoves(nodes, locations, moves, date).forEach((n, ms) -> {
-                    ms.forEach(m -> {
-                        if (m.getLocationID().equals(change.getValueAdded().getLocationID()))
-                            locationNode.put(locations.get(m.getLocationID()), n);
-                    });
-                });
-            }
+            locationNode.clear();
+            locationNode.putAll(calculateNodes(nodes, locations, moves, date));
         });
         return locationNode;
     }
@@ -312,7 +294,7 @@ public class AdminMapController {
         makeMove.getStyleClass().add("node-popover-make-move");
         makeMove.setOnAction(a -> {
             if (locationDropdown.getSelectedItem() == null || date.getCurrentDate() == null) return;
-            var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 5;
+            var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
             var move = new Move(newID, node.getNodeID(), locationDropdown.getSelectedItem().getUuid(), date.getCurrentDate());
             moves.put(newID, move);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, move));

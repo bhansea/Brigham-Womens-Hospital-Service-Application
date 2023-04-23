@@ -38,10 +38,6 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public MoveCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(Move move) {
         if (!cache.containsKey(move.getUuid()))
             cache.put(move.getUuid(), move);

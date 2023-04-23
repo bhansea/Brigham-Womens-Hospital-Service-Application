@@ -38,10 +38,6 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public OfficeServiceRequestEntryCachedDaoImpl() {
-        this.dbController = App.getSingleton().getPdb();
-    }
-
     public void add(OfficeServiceRequestEntry officeServiceRequestEntry) {
         if (!cache.containsKey(officeServiceRequestEntry.getServiceID()))
             cache.put(officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry);
