@@ -8,10 +8,12 @@ import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,6 +34,9 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     PFXCardHolder cardHolder;
     @FXML
     VBox container = new VBox();
+    @FXML
+    private BorderPane root;
+    ScrollPane scrollPane;
 
     ArrayList<PFXCardVertical> items = new ArrayList<>();
 
@@ -55,12 +60,20 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         ImageView staplerPic = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/officeSupplies/stapler.jpg");
         stapler = new PFXCardVertical("Stapler", "Staples papers together", 5, staplerPic.getImage());
 
-        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(pencils, pens, paper, stapler)));
-
-        container.getChildren().add(cardHolder);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
-        container.setAlignment(Pos.CENTER);
+
+        var flowPane = new FlowPane(pencils, pens, paper, stapler);
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
+        flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
+        flowPane.setAlignment(Pos.CENTER_LEFT);
+        scrollPane = new ScrollPane(flowPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background;");
+
+        root.setCenter(scrollPane);
 }
 
     @FXML

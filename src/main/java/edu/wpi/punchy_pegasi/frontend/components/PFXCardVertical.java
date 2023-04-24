@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 public class PFXCardVertical extends VBox {
     private final VBox imageBox = new VBox();
@@ -13,10 +14,13 @@ public class PFXCardVertical extends VBox {
     private final HBox stats = new HBox();
     private final VBox info = new VBox();
     private final VBox selection = new VBox();
-    private final PFXPicker picker = new PFXPicker();
+    private final PFXPicker picker = new PFXPicker(this);
     private final Label titleLabel;
     private final Label subtitleLabel;
     private final Label quantity;
+    private final Rectangle rectangle;
+
+    private final int available;
 
     public PFXCardVertical() {
         super();
@@ -26,6 +30,7 @@ public class PFXCardVertical extends VBox {
         titleLabel = new Label("Meal Name");
         subtitleLabel = new Label("A very nice meal");
         quantity = new Label("0 Available");
+        available = 0;
 
         getStyleClass().add("pfx-card-vertical-container");
         getChildren().addAll(imageBox, stats);
@@ -44,15 +49,21 @@ public class PFXCardVertical extends VBox {
 
         info.getChildren().addAll(titleLabel, subtitleLabel);
         selection.getChildren().addAll(quantity, picker);
+
+        rectangle = new Rectangle(this.image.getFitWidth(), this.image.getFitHeight());
+        rectangle.setArcHeight(12);
+        rectangle.setArcWidth(12);
+        this.image.setClip(rectangle);
     }
 
     public PFXCardVertical(String title, String subtitle, int quantity, Image image) {
         super();
         this.image = new ImageView(image);
-        this.image.setFitHeight(300);
+        this.image.setFitHeight(250);
         this.image.setFitWidth(400);
         this.titleLabel = new Label(title);
         this.subtitleLabel = new Label(subtitle);
+        this.available = quantity;
         this.quantity = new Label(Integer.toString(quantity));
 
         getStyleClass().add("pfx-card-vertical-container");
@@ -71,6 +82,11 @@ public class PFXCardVertical extends VBox {
 
         info.getChildren().addAll(titleLabel, subtitleLabel);
         selection.getChildren().addAll(this.quantity, picker);
+
+        rectangle = new Rectangle(this.image.getFitWidth(), this.image.getFitHeight());
+        rectangle.setArcHeight(24);
+        rectangle.setArcWidth(24);
+        this.image.setClip(rectangle);
     }
 
     public int getQuantity() {
@@ -83,5 +99,17 @@ public class PFXCardVertical extends VBox {
 
     public void clearQuantity() {
         picker.clearQuantity();
+    }
+
+    public void addAvailable() {
+        this.quantity.setText(Integer.toString(Integer.parseInt(this.quantity.getText()) + 1));
+    }
+
+    public void subtractAvailable() {
+        this.quantity.setText(Integer.toString(Integer.parseInt(this.quantity.getText()) - 1));
+    }
+
+    public int getAvailable() {
+        return available;
     }
 }
