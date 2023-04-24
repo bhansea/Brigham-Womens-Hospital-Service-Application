@@ -54,7 +54,7 @@ public class LoginController {
         String password = passwordBox.getText();
         Account.Field[] fields = {Account.Field.USERNAME, Account.Field.PASSWORD};
         Object[] values = {username, password};
-        Map<String, Account> map = App.getSingleton().getFacade().getAccount(fields, values);
+        Map<Long, Account> map = App.getSingleton().getFacade().getAccount(fields, values);
 
         if (map.size() > 0) {
             App.getSingleton().setAccount(map.values().stream().findFirst().get());
