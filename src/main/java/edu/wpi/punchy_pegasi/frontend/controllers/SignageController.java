@@ -41,6 +41,7 @@ public class SignageController {
     private final PFXIcon iconHere = new PFXIcon(MaterialSymbols.DISTANCE);
     private final PFXIcon iconTime = new PFXIcon(MaterialSymbols.SCHEDULE);
     private final HBox signageHeaderLeft = new HBox();
+    private final HBox signageHeaderLeftEdit = new HBox();
     private final HBox signageHeaderRight = new HBox();
     private final Label signageDateTime = new Label();
 
@@ -54,8 +55,8 @@ public class SignageController {
     private HBox viewEdit;
     @FXML
     private HBox viewNormal;
-    @FXML
-    private VBox signageBodyLeft;
+
+    private final VBox signageBodyLeft = new VBox();
     @FXML
     private HBox signageHeader;
     @FXML
@@ -112,7 +113,12 @@ public class SignageController {
         } else {
             initHeaderEdit();
         }
-        buildSignage();
+        buildSignage(admin);
+
+//        // Combine left and right header in signageHeader HBox
+//        signageHeader.getChildren().add(signageHeaderLeft);
+//        signageHeader.getChildren().add(signageHeaderRight);
+//        signageHeader.getStyleClass().add("signage-header");
 
         viewEdit.setVisible(admin);
         viewEdit.setManaged(admin);
@@ -144,7 +150,7 @@ public class SignageController {
         signageHeaderLeft.getStyleClass().add("signage-header-left");
         signageHeaderLeft.getChildren().add(iconHere);
         var headerLeft = facade.getAllAsListSignage()
-                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
+                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE) && signage.getSignName().equals(prefSignageName));
         var headerVbox = getSignageTableView(headerLeft);
         headerVbox.getStyleClass().add("signage-label-Here");
         signageHeaderLeft.getChildren().add(headerVbox);
@@ -165,15 +171,14 @@ public class SignageController {
 
     private void initHeaderEdit() {
         // setting up left side of header
-        HBox signageHeaderLeftEdit = new HBox();
         PFXIcon iconSignageLocation = new PFXIcon(MaterialSymbols.WHERE_TO_VOTE);
         iconSignageLocation.getStyleClass().add("signage-icon-header");
         var signagePrefList = facade.getAllAsListSignage()
                 .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
-        var signageHere = getSignageTableView(signagePrefList);
-        signageHere.getStyleClass().add("signage-label-Here");
+//        var signageHere = getSignageTableView(signagePrefList);
+//        signageHere.getStyleClass().add("signage-label-Here");
         signageHeaderLeftEdit.getChildren().add(iconSignageLocation);
-        signageHeaderLeftEdit.getChildren().add(signageHere);
+//        signageHeaderLeftEdit.getChildren().add(signageHere);
 
         HBox signageHeaderRightEdit = new HBox();
 
@@ -224,8 +229,11 @@ public class SignageController {
         return vBox;
     }
 
-    private void buildSignage() {
+    private void buildSignage(boolean ifAdmin) {
         for (var direction : Signage.DirectionType.values()) {
+            if (direction == Signage.DirectionType.HERE) {
+                continue;
+            }
             var signageList = facade.getAllAsListSignage()
                     .filtered(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(prefSignageName));
 //            var prefSignList = signageList.filtered(signage -> signage.getSignName().equals(prefSignageName));
@@ -254,8 +262,9 @@ public class SignageController {
                     signageHB.getChildren().add(table);
                 }
                 case HERE -> {
-//                    locLabel.getStyleClass().add("signage-label-Here");
-//                    signageHeaderLeft.getChildren().add(locLabel);
+//                    table.getStyleClass().add("signage-label-Here");
+//                    signageHeaderLeft.getChildren().add(table);
+//                    signageHeaderLeftEdit.getChildren().add(table);
                     continue;
                 }
             }
@@ -267,6 +276,11 @@ public class SignageController {
             signageBodyLeft.getChildren().add(separator);
         }
         signageBodyLeft.getChildren().remove(signageBodyLeft.getChildren().size() - 1);  // remove the last separator
+        if (ifAdmin) {
+            viewEdit.getChildren().add(signageBodyLeft);
+        } else {
+            viewNormal.getChildren().add(signageBodyLeft);
+        }
     }
 
     private void switchTheme(boolean setDark) {
