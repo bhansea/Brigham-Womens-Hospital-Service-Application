@@ -1,12 +1,12 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class FoodServiceRequestEntry extends RequestEntry {
     private String foodSelection;

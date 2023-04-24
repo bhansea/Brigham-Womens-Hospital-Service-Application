@@ -38,15 +38,28 @@ public class Node implements INode {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node>{
-        NODE_ID("nodeID"),
-        XCOORD("xcoord"),
-        YCOORD("ycoord"),
-        FLOOR("floor"),
-        BUILDING("building");
+        NODE_ID("nodeID", true,false),
+        XCOORD("xcoord", false,false),
+        YCOORD("ycoord", false,false),
+        FLOOR("floor", false,false),
+        BUILDING("building", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.Node ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Node ref, String value){
+            ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {
@@ -54,6 +67,24 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node>{
             case NODE_ID -> getNodeID();
             case XCOORD -> getXcoord();
             case YCOORD -> getYcoord();
+            case FLOOR -> getFloor();
+            case BUILDING -> getBuilding();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case NODE_ID -> setNodeID(Long.parseLong(value));
+            case XCOORD -> setXcoord(Integer.parseInt(value));
+            case YCOORD -> setYcoord(Integer.parseInt(value));
+            case FLOOR -> setFloor(value);
+            case BUILDING -> setBuilding(value);
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case NODE_ID -> Long.toString(getNodeID());
+            case XCOORD -> Integer.toString(getXcoord());
+            case YCOORD -> Integer.toString(getYcoord());
             case FLOOR -> getFloor();
             case BUILDING -> getBuilding();
         };

@@ -181,8 +181,7 @@ public class PdbController {
     public int updateQuery(TableType tableType, String keyField, Object keyValue, String[] fields, Object[] values) throws DatabaseException {
         if (fields.length != values.length) throw new DatabaseException("Fields and values must be the same length");
         try {
-            var statement = connection.createStatement();
-            statement.closeOnCompletion();
+           @Cleanup var statement = connection.createStatement();
             var query = "UPDATE " + tableType.name().toLowerCase() + " SET ";
             query += getFieldValueString(fields, values, " = ", ", ");
             query += " WHERE " + keyField + " = " + objectToPsqlString(keyValue);
