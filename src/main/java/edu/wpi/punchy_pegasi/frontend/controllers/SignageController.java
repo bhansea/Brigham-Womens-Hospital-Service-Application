@@ -90,7 +90,7 @@ public class SignageController {
         //init the vBox
         for (Signage signage : rightList) {
             var hbox = new HBox(new Label(signage.getLongName()));
-            hbox.setId(signage.getLongName());
+            hbox.setId(signage.getUuid().toString());
             vBox.getChildren().add(hbox);
         }
 //        var tableView = new ListView<Signage>();
