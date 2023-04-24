@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background"
+            xmlns="http://javafx.com/javafx/"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminTablePageController">
+    <center>
+        <HBox>
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container">
+                        <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                            <VBox VBox.vgrow="ALWAYS" spacing="10.0">
+                                <Label text="Select A Table Type to Display" VBox.vgrow="ALWAYS"/>
+                                <MFXComboBox fx:id="displayTableTypeComboBox" promptText="Select Table Type"
+                                             HBox.hgrow="ALWAYS"
+                                             VBox.vgrow="ALWAYS" minWidth="300"/>
+                                <HBox spacing="10.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                    <PFXButton text="Import" fx:id="importButton"/>
+                                    <PFXButton text="Export" fx:id="exportButton"/>
+                                    <PFXButton text="Clear Table" fx:id="clearButton"/>
+                                </HBox>
+                                <HBox spacing="10.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                    <PFXButton text="Submit " fx:id="submitEditButton"/>
+                                    <PFXButton text="Add" fx:id="addButton"/>
+                                    <PFXButton text="Remove" fx:id="removeButton"/>
+                                </HBox>
+                            </VBox>
+                            <FlowPane fx:id="editContainer" alignment="CENTER_LEFT"/>
+                        </HBox>
+                    </VBox>
+                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" alignment="CENTER">
+                    <children>
+                        <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS" fx:id="tableContainer"/>
+                    </children>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

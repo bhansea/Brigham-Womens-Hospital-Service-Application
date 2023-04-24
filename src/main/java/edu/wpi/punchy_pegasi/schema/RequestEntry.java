@@ -10,17 +10,23 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RequestEntry {
     @SchemaID
+
+    @Setter
     @com.jsoniter.annotation.JsonProperty("serviceid")
     protected UUID serviceID;
+    @Setter
     @com.jsoniter.annotation.JsonProperty("locationname")
     protected Long locationName;
+    @Setter
     @com.jsoniter.annotation.JsonProperty("staffassignment")
     protected Long staffAssignment;
+    @Setter
     @com.jsoniter.annotation.JsonProperty("additionalnotes")
     protected String additionalNotes;
     @Setter
     @com.jsoniter.annotation.JsonProperty("status")
     protected Status status;
+    @Setter
     @com.jsoniter.annotation.JsonProperty("employeeid")
     protected Long employeeID;
 
@@ -43,6 +49,7 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry>{
             return ref.getFromField(this);
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();

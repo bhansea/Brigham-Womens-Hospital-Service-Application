@@ -1,23 +1,23 @@
-#viewTablePageContainer {
+#editContainer {
     -fx-padding: 20;
-    -fx-background-radius: 20;
-}
-.admin-import-container {
-    -fx-background-color: -pfx-accent-dark;
-    -fx-background-radius: 20;
-    -fx-alignment: BOTTOM_CENTER;
-    -fx-padding: 30 0 30 0;
-    -fx-max-width: 450;
+    -fx-hgap: 25;
+    -fx-vgap: 25;
 }
 
-.admin-import-container > Label{
-    -fx-font-size: 15;
-    -fx-text-fill: -pfx-text-opposite;
-}
-
-.admin-import-button-container {
+#editContainer{
     -fx-alignment: CENTER;
-    -fx-spacing: 30;
+    -fx-spacing: 5;
+}
+#editContainer >TextArea{
+    -fx-max-height: 35;
+    -fx-max-width: 200;
+    -fx-text-alignment: CENTER;
+    -fx-alignment: CENTER;
+
+}
+
+#editContainer >TextArea *.text{
+    /*-fx-text-alignment: CENTER_LEFT;*/
 }
 
 .admin-edit-container {
@@ -27,19 +27,23 @@
 
 .admin-edit-container > VBox >Label{
     -fx-font-size: 15;
-    -fx-text-fill: -pfx-text-opposite;
+    -fx-text-fill: -pfx-text;
 }
 
 .admin-edit-container > VBox > TextField{
     -fx-max-height: 200;
 }
 
-.admin-table-choose-container {
-    -fx-background-color: -pfx-accent-dark;
+.admin-container {
+    -fx-background-color: -pfx-background;
     -fx-border-radius: 6;
+    -fx-border-color: -pfx-accent;
     -fx-alignment: CENTER;
-    /*-fx-min-width: 1250;*/
-    -fx-max-width: 1250;
-    -fx-max-height: 600;
-    /*-fx-min-height: 600;*/
+    -fx-text-fill: -pfx-text;
+    -fx-font-size: 15;
 }
+
+.admin-container > HBox > VBox{
+    -fx-padding: 10;
+}
+
