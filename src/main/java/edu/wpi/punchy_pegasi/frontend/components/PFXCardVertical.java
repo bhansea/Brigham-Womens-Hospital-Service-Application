@@ -59,7 +59,7 @@ public class PFXCardVertical extends VBox {
     public PFXCardVertical(String title, String subtitle, int quantity, Image image) {
         super();
         this.image = new ImageView(image);
-        this.image.setFitHeight(300);
+        this.image.setFitHeight(250);
         this.image.setFitWidth(400);
         this.titleLabel = new Label(title);
         this.subtitleLabel = new Label(subtitle);

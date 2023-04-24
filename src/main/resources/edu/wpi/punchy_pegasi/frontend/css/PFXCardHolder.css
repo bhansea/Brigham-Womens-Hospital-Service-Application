@@ -4,6 +4,7 @@
     -fx-background-color: -pfx-background;
     -fx-border-color: transparent;
     -fx-border-width: 0;
+    -fx-cursor: default;
 }
 
 .pfx-cardholder-scrollpane {

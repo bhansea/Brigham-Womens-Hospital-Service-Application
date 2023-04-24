@@ -13,7 +13,6 @@
 }
 
 .pfx-card-vertical-stats {
-    -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
     -fx-spacing: 10;
@@ -21,7 +20,6 @@
 }
 
 .pfx-card-vertical-imageBox {
-    -fx-cursor: hand;
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
     -fx-border-radius: 12;

@@ -2,8 +2,10 @@ package edu.wpi.punchy_pegasi.frontend.components;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,24 +14,13 @@ import java.util.List;
 public class PFXCardHolder extends BorderPane {
     ScrollPane scrollPane = new ScrollPane();
     GridPane elements = new GridPane();
+    Label filterLabel;
     int numElements = 0;
-    public PFXCardHolder() {
-        super();
-        setCenter(scrollPane);
-        getStyleClass().add("pfx-cardholder-container");
-        scrollPane.getStyleClass().add("pfx-cardholder-scrollpane");
-        scrollPane.setContent(elements);
-        elements.getStyleClass().add("pfx-cardholder-container-gridpane");
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        HBox.setHgrow(this, Priority.ALWAYS);
-        HBox.setHgrow(scrollPane, Priority.ALWAYS);
-        scrollPane.setBorder(Border.EMPTY);
-        elements.setBorder(Border.EMPTY);
-    }
 
-    public PFXCardHolder(List<PFXCardVertical> cards) {
+    public PFXCardHolder(List<PFXCardVertical> cards, String filterName) {
         super();
+        filterLabel = new Label(filterName);
+        setTop(filterLabel);
         setCenter(scrollPane);
         scrollPane.setContent(elements);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

@@ -66,7 +66,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         PFXCardVertical card4 = new PFXCardVertical("Frame", "Pure wood", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/frame.jpg"));
         PFXCardVertical card5 = new PFXCardVertical("Pillow", "Nice feathers", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/pillow.jpg"));
         PFXCardVertical card6 = new PFXCardVertical("Rug", "Very comfy!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/rug.jpg"));
-        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4, card5, card6)));
+        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4, card5, card6)), "Furniture");
         container.getChildren().add(cardHolder);
         container.setAlignment(Pos.CENTER);
     }

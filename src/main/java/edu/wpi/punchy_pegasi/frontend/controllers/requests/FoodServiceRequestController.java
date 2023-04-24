@@ -54,7 +54,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         PFXCardVertical card4 = new PFXCardVertical("Steak", "Pan-seared goodness", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/steak.jpg"));
 
 
-        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4)));
+        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4)), "Foods");
 
         container.getChildren().add(cardHolder);
         addTextField(patientName);

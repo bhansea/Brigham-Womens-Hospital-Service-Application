@@ -26,15 +26,7 @@ import java.util.Arrays;
 public class FlowerDeliveryRequestController extends RequestController<FlowerDeliveryRequestEntry> {
     TextField patientName = new TextField();
     @FXML
-    PFXCardHolder cardHolder;
-    @FXML
-    VBox container = new VBox();
-    @FXML
     private BorderPane root;
-
-    PFXButton filter = new PFXButton("Filter Category");
-
-
     public static BorderPane create(String path) {
         return RequestController.create(new FlowerDeliveryRequestController(), path);
     }
@@ -42,12 +34,17 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     public void init() {
         addTextField(patientName);
+        root.setTop(addFilter());
+
         submit.setDisable(true);
-        patientName.setOnKeyTyped(e -> validateEntry());
+        filter.setOnAction(e -> toggleFilter());
         PFXCardVertical card1 = new PFXCardVertical("Daisy", "Beautiful flower", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/daisy.jpg"));
         PFXCardVertical card2 = new PFXCardVertical("Lavendar", "Amazing smell!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/lavendar.jpg"));
         PFXCardVertical card3 = new PFXCardVertical("Red Rose", "Flower of love", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/red-roses.jpg"));
         PFXCardVertical card4 = new PFXCardVertical("Sunflower", "Looks great!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/sunflower.jpg"));
+        ArrayList<PFXCardVertical> cards = new ArrayList<PFXCardVertical>(Arrays.asList(card1, card2, card3, card4));
+        initFilter(cards, "Flowers");
+
         var flowPane = new FlowPane(card1, card2, card3, card4);
         flowPane.setHgap(10);
         flowPane.setVgap(10);

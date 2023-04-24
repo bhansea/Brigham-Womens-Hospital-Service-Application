@@ -55,7 +55,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         ImageView staplerPic = new ImageView("edu/wpi/punchy_pegasi/frontend/assets/officeSupplies/stapler.jpg");
         stapler = new PFXCardVertical("Stapler", "Staples papers together", 5, staplerPic.getImage());
 
-        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(pencils, pens, paper, stapler)));
+        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(pencils, pens, paper, stapler)), "Office Supplies");
 
         container.getChildren().add(cardHolder);
         submit.setDisable(true);
