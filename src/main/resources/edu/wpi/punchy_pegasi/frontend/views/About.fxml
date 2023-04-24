@@ -69,7 +69,7 @@
 
                         <Label text="Brandon Luong" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                         <Label text="BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label text="bvluon@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Label text="bvluong@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="4" />
 
                         <Label text="Cooper Mann" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                         <Label text="Scrum Master" GridPane.columnIndex="1" GridPane.rowIndex="5" />
