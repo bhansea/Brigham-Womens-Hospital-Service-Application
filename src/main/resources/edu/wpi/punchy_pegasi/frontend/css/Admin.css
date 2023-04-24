@@ -51,6 +51,7 @@
     -pfx-button-text: white;
     -pfx-button-background: -pfx-accent;
     -pfx-button-hover: -pfx-accent-dark;
+    -fx-min-width: 120;
 }
 
 .admin-container-buttons-clear{
