@@ -37,7 +37,7 @@
                             </font>
                         </Text>
                         <padding>
-                            <Insets top="5" left="50" bottom="25"/>
+                            <Insets top="5" left="50" bottom="25" right="25"/>
                         </padding>
                     </TextFlow>
                 </VBox>
@@ -83,7 +83,7 @@
                         <Label text="FE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                         <Label text="rnguyen@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="7" />
 
-                        <Label text="Piper O' Connell" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                        <Label text="Piper O'Connell" GridPane.columnIndex="0" GridPane.rowIndex="8" />
                         <Label text="Project Manager" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                         <Label text="proconnell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="8" />
 
