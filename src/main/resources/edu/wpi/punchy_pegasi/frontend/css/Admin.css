@@ -1,3 +1,5 @@
+@import "Fonts.css";
+
 #editContainer {
     -fx-padding: 20;
     -fx-hgap: 25;
@@ -76,3 +78,4 @@
     -fx-min-width: 252;
     -fx-min-height: 45;
 }
+

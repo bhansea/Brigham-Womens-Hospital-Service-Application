@@ -54,6 +54,7 @@
 @import "PFXTabLayout.css";
 /* Pages */
 @import "Admin.css";
+@import "AdminTablePage.css";
 @import "Conference.css";
 @import "EditableMap.css";
 @import "HomePage.css";

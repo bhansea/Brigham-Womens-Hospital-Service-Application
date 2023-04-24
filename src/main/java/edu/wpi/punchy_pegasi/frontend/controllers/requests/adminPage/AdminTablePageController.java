@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -206,16 +207,28 @@ public class AdminTablePageController {
 //        editContainer.getStyleClass().add("admin-edit-container");
         form = new ArrayList<>();
         inputs = new ArrayList<>();
+        int counter = 0;
         for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
             var hbox = new HBox();
             var label = new Label(field.getColName());
             var input = new TextField();
+            input.setPromptText(field.getColName());
             if(field.isPrimaryKey()) {
                 input.setEditable(false);
             }
+            //elements.add(label, 0, counter);
+            //elements.add(input, 1, counter);
+//            GridPane.setColumnIndex(label, 0);
+//            GridPane.setColumnIndex(input, 1);
+//            GridPane.setRowIndex(label, counter);
+//            GridPane.setRowIndex(input, counter);
+            counter++;
+            hbox.getStyleClass().add("admin-table-container");
             hbox.getChildren().addAll(label, input);
+            //hbox.getChildren().add(input);
             form.add(hbox);
             inputs.add(input);
+
         }
         editContainer.getChildren().clear();
         editContainer.getChildren().addAll(form);
