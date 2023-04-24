@@ -24,7 +24,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge>{
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Edge ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.Edge ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Edge ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -32,6 +38,20 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge>{
             case UUID -> getUuid();
             case START_NODE -> getStartNode();
             case END_NODE -> getEndNode();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case UUID -> setUuid(Long.parseLong(value));
+            case START_NODE -> setStartNode(Long.parseLong(value));
+            case END_NODE -> setEndNode(Long.parseLong(value));
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case UUID -> Long.toString(getUuid());
+            case START_NODE -> Long.toString(getStartNode());
+            case END_NODE -> Long.toString(getEndNode());
         };
     }
 

@@ -29,7 +29,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.Move ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Move ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -38,6 +44,22 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
             case NODE_ID -> getNodeID();
             case LOCATION_ID -> getLocationID();
             case DATE -> getDate();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case UUID -> setUuid(Long.parseLong(value));
+            case NODE_ID -> setNodeID(Long.parseLong(value));
+            case LOCATION_ID -> setLocationID(Long.parseLong(value));
+            case DATE -> setDate(LocalDate.parse(value));
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case UUID -> Long.toString(getUuid());
+            case NODE_ID -> Long.toString(getNodeID());
+            case LOCATION_ID -> Long.toString(getLocationID());
+            case DATE -> getDate().toString();
         };
     }
 

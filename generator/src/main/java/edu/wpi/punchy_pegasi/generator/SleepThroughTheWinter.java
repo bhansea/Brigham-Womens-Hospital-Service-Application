@@ -16,7 +16,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +24,45 @@ import java.util.stream.Collectors;
 
 public class SleepThroughTheWinter {
 
+    private static final Map<Class<?>, String> classToPostgres = new HashMap<>() {{
+        put(Long.class, "bigint");
+        put(Integer.class, "int");
+        put(String.class, "varchar");
+        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
+        put(List.class, "varchar ARRAY");
+        put(LocalDate.class, "date NOT NULL");
+    }};
+    private static final Map<Class<?>, String> objectFromString = new HashMap<>() {{
+        put(Long.class, "Long.parseLong(value)");
+        put(Integer.class, "Integer.parseInt(value)");
+        put(String.class, "value");
+        put(UUID.class, "UUID.fromString(value)");
+        put(List.class, "new java.util.ArrayList<>(java.util.Arrays.asList(value.split(\"\\\\s*,\\\\s*\")))");
+        put(LocalDate.class, "LocalDate.parse(value)");
+    }};
+
+    private static String objectFromString(Class<?> clazz) {
+        if (clazz.isEnum()) {
+            return clazz.getSimpleName() + ".valueOf(value)";
+        } else {
+            return objectFromString.get(clazz);
+        }
+    }
+    private static String objectToString(Class<?> clazz, String getter) {
+        if (clazz.isEnum()) {
+            return getter + ".name()";
+        } else {
+            return objectToString.get(clazz).replace("value", getter);
+        }
+    }
+    private static final Map<Class<?>, String> objectToString = new HashMap<>() {{
+        put(Long.class, "Long.toString(value)");
+        put(Integer.class, "Integer.toString(value)");
+        put(String.class, "value");
+        put(UUID.class, "value.toString()");
+        put(List.class, "String.join(\", \", value)");
+        put(LocalDate.class, "value.toString()");
+    }};
     /***
      * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
      * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
@@ -32,14 +71,6 @@ public class SleepThroughTheWinter {
      * @throws IOException
      */
     private static boolean cachedMode = true;
-    private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
-        put(Long.class, "bigint");
-        put(Integer.class, "int");
-        put(String.class, "varchar");
-        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
-        put(List.class, "varchar ARRAY");
-        put(LocalDate.class, "date NOT NULL");
-    }};
 
     private static String daoImplSuffix() {
         return cachedMode ? "CachedDaoImpl" : "DaoImpl";
@@ -170,12 +201,33 @@ public class SleepThroughTheWinter {
                                 private final String colName;
                                 public Object getValue(""" + clazz.getCanonicalName() + """
                          ref){
-                                    return ref.getFromField(this);
+                            return ref.getFromField(this);
+                        }
+                        public String getValueAsString(""" + clazz.getCanonicalName() + """
+                         ref){
+                            return ref.getFromFieldAsString(this);
+                        }
+                            public void setValueFromString(""" + clazz.getCanonicalName() + """
+                         ref, String value){
+                                    ref.setFieldFromString(this, value);
                                 }
                             }
                             public Object getFromField(Field field) {
                                 return switch (field) {
-                        """ + "            " + String.join("            ", fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
+                                };
+                            }
+                            public void setFieldFromString(Field field, String value) {
+                                switch (field) {
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> set" + firstUpper(f.getName()) + "(" + objectFromString(f.getType()) + ");\n").toList()) + """
+                                };
+                            }
+                            public String getFromFieldAsString(Field field) {
+                                return switch (field) {
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> "+ objectToString(f.getType(), "get" + firstUpper(f.getName()) + "()") + ";\n" ).toList()) + """
                                 };
                             }
                         """;
@@ -515,6 +567,8 @@ public class SleepThroughTheWinter {
                                 import java.util.Map;
                                 import javafx.collections.ObservableList;
                                 import javafx.collections.ObservableMap;
+                                import io.github.palexdev.materialfx.controls.MFXTableView;
+                                import java.util.function.Consumer;
                                 import java.util.Optional;
                                 """);
         StringBuilder sbTemplate = new StringBuilder();

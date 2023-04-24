@@ -1,12 +1,13 @@
 package edu.wpi.punchy_pegasi.schema;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class ConferenceRoomEntry extends RequestEntry {
     @com.jsoniter.annotation.JsonProperty("beginningtime")
@@ -48,7 +49,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomE
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -62,6 +69,34 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomE
             case BEGINNING_TIME -> getBeginningTime();
             case END_TIME -> getEndTime();
             case DATE -> getDate();
+            case AMOUNT_OF_PARTICIPANTS -> getAmountOfParticipants();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case SERVICE_ID -> setServiceID(UUID.fromString(value));
+            case LOCATION_NAME -> setLocationName(Long.parseLong(value));
+            case STAFF_ASSIGNMENT -> setStaffAssignment(Long.parseLong(value));
+            case ADDITIONAL_NOTES -> setAdditionalNotes(value);
+            case STATUS -> setStatus(Status.valueOf(value));
+            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
+            case BEGINNING_TIME -> setBeginningTime(value);
+            case END_TIME -> setEndTime(value);
+            case DATE -> setDate(LocalDate.parse(value));
+            case AMOUNT_OF_PARTICIPANTS -> setAmountOfParticipants(value);
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID().toString();
+            case LOCATION_NAME -> Long.toString(getLocationName());
+            case STAFF_ASSIGNMENT -> Long.toString(getStaffAssignment());
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus().name();
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
+            case BEGINNING_TIME -> getBeginningTime();
+            case END_TIME -> getEndTime();
+            case DATE -> getDate().toString();
             case AMOUNT_OF_PARTICIPANTS -> getAmountOfParticipants();
         };
     }

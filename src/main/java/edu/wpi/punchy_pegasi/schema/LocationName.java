@@ -41,7 +41,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName>{
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.LocationName ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.LocationName ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -50,6 +56,22 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName>{
             case LONG_NAME -> getLongName();
             case SHORT_NAME -> getShortName();
             case NODE_TYPE -> getNodeType();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case UUID -> setUuid(Long.parseLong(value));
+            case LONG_NAME -> setLongName(value);
+            case SHORT_NAME -> setShortName(value);
+            case NODE_TYPE -> setNodeType(NodeType.valueOf(value));
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case UUID -> Long.toString(getUuid());
+            case LONG_NAME -> getLongName();
+            case SHORT_NAME -> getShortName();
+            case NODE_TYPE -> getNodeType().name();
         };
     }
 

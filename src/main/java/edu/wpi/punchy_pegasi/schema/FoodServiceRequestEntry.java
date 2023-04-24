@@ -1,12 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class FoodServiceRequestEntry extends RequestEntry {
     @com.jsoniter.annotation.JsonProperty("foodselection")
@@ -58,7 +58,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequ
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -72,6 +78,38 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequ
             case FOOD_SELECTION -> getFoodSelection();
             case TEMP_TYPE -> getTempType();
             case ADDITIONAL_ITEMS -> getAdditionalItems();
+            case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
+            case PATIENT_NAME -> getPatientName();
+            case BEVERAGE -> getBeverage();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case SERVICE_ID -> setServiceID(UUID.fromString(value));
+            case LOCATION_NAME -> setLocationName(Long.parseLong(value));
+            case STAFF_ASSIGNMENT -> setStaffAssignment(Long.parseLong(value));
+            case ADDITIONAL_NOTES -> setAdditionalNotes(value);
+            case STATUS -> setStatus(Status.valueOf(value));
+            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
+            case FOOD_SELECTION -> setFoodSelection(value);
+            case TEMP_TYPE -> setTempType(value);
+            case ADDITIONAL_ITEMS -> setAdditionalItems(new java.util.ArrayList<>(java.util.Arrays.asList(value.split("\\s*,\\s*"))));
+            case DIETARY_RESTRICTIONS -> setDietaryRestrictions(value);
+            case PATIENT_NAME -> setPatientName(value);
+            case BEVERAGE -> setBeverage(value);
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID().toString();
+            case LOCATION_NAME -> Long.toString(getLocationName());
+            case STAFF_ASSIGNMENT -> Long.toString(getStaffAssignment());
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus().name();
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
+            case FOOD_SELECTION -> getFoodSelection();
+            case TEMP_TYPE -> getTempType();
+            case ADDITIONAL_ITEMS -> String.join(", ", getAdditionalItems());
             case DIETARY_RESTRICTIONS -> getDietaryRestrictions();
             case PATIENT_NAME -> getPatientName();
             case BEVERAGE -> getBeverage();

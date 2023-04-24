@@ -40,7 +40,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account>{
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.Account ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Account ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -50,6 +56,24 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account>{
             case PASSWORD -> getPassword();
             case EMPLOYEE_ID -> getEmployeeID();
             case ACCOUNT_TYPE -> getAccountType();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case UUID -> setUuid(Long.parseLong(value));
+            case USERNAME -> setUsername(value);
+            case PASSWORD -> setPassword(value);
+            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
+            case ACCOUNT_TYPE -> setAccountType(AccountType.valueOf(value));
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case UUID -> Long.toString(getUuid());
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
+            case ACCOUNT_TYPE -> getAccountType().name();
         };
     }
 

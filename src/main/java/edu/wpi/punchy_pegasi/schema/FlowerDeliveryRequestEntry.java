@@ -1,13 +1,11 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import com.jsoniter.annotation.JsonCreator;
-import com.jsoniter.annotation.JsonProperty;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class FlowerDeliveryRequestEntry extends RequestEntry {
     @com.jsoniter.annotation.JsonProperty("flowersize")
@@ -45,7 +43,13 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryR
         @lombok.Getter
         private final String colName;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
-            return ref.getFromField(this);
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref, String value){
+            ref.setFieldFromString(this, value);
         }
     }
     public Object getFromField(Field field) {
@@ -56,6 +60,34 @@ public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryR
             case ADDITIONAL_NOTES -> getAdditionalNotes();
             case STATUS -> getStatus();
             case EMPLOYEE_ID -> getEmployeeID();
+            case FLOWER_SIZE -> getFlowerSize();
+            case FLOWER_TYPE -> getFlowerType();
+            case FLOWER_AMOUNT -> getFlowerAmount();
+            case PATIENT_NAME -> getPatientName();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case SERVICE_ID -> setServiceID(UUID.fromString(value));
+            case LOCATION_NAME -> setLocationName(Long.parseLong(value));
+            case STAFF_ASSIGNMENT -> setStaffAssignment(Long.parseLong(value));
+            case ADDITIONAL_NOTES -> setAdditionalNotes(value);
+            case STATUS -> setStatus(Status.valueOf(value));
+            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
+            case FLOWER_SIZE -> setFlowerSize(value);
+            case FLOWER_TYPE -> setFlowerType(value);
+            case FLOWER_AMOUNT -> setFlowerAmount(value);
+            case PATIENT_NAME -> setPatientName(value);
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case SERVICE_ID -> getServiceID().toString();
+            case LOCATION_NAME -> Long.toString(getLocationName());
+            case STAFF_ASSIGNMENT -> Long.toString(getStaffAssignment());
+            case ADDITIONAL_NOTES -> getAdditionalNotes();
+            case STATUS -> getStatus().name();
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
             case FLOWER_SIZE -> getFlowerSize();
             case FLOWER_TYPE -> getFlowerType();
             case FLOWER_AMOUNT -> getFlowerAmount();
