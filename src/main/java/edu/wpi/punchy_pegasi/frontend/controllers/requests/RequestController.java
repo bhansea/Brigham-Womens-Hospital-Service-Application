@@ -48,8 +48,6 @@ public abstract class RequestController<T extends RequestEntry> {
     @FXML
     protected VBox inputContainer;
     @FXML
-    protected VBox requestInfoContainer;
-    @FXML
     VBox filterContainer = new VBox();
     @FXML
     protected Label headerText;
