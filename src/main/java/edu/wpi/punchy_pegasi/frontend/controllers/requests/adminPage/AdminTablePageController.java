@@ -121,7 +121,7 @@ public class AdminTablePageController {
                         } else if (textAreas.get(4).getText() == "DONE") {
                             status = RequestEntry.Status.DONE;
                         }
-                var requestEntry = new RequestEntry(textAreas.get(0).getText(), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), textAreas.get(3).getText(), status, Long.parseLong(textAreas.get(5).getText()));
+                var requestEntry = new RequestEntry(UUID.fromString(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), textAreas.get(3).getText(), status, Long.parseLong(textAreas.get(5).getText()));
                 facade.updateRequestEntry(requestEntry, new RequestEntry.Field[]{RequestEntry.Field.SERVICE_ID, RequestEntry.Field.LOCATION_NAME, RequestEntry.Field.STAFF_ASSIGNMENT, RequestEntry.Field.ADDITIONAL_NOTES, RequestEntry.Field.STATUS, RequestEntry.Field.EMPLOYEE_ID});
                 currentTable.reload();
                 currentTable.table.update();
@@ -158,7 +158,7 @@ public class AdminTablePageController {
                 currentTable.table.update();
 
             } else if (currentTable.humanReadableName.toLowerCase().contains("move")) {
-                var move = new Move(Long.parseLong(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), textAreas.get(3).getText());
+                var move = new Move(Long.parseLong(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), LocalDate.parse(textAreas.get(3).getText()));
                 facade.updateMove(move, new Move.Field[]{Move.Field.UUID, Move.Field.NODE_ID, Move.Field.LOCATION_ID, Move.Field.DATE});
                 currentTable.reload();
                 currentTable.table.update();
