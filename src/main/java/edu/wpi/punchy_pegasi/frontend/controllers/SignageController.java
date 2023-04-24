@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXDropdown;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.generated.Facade;
@@ -43,6 +44,12 @@ public class SignageController {
     private final HBox signageHeaderRight = new HBox();
     private final Label signageDateTime = new Label();
 
+
+    @FXML
+    private VBox headerEdit;
+    @FXML
+    private VBox headerNormal;
+
     @FXML
     private HBox viewEdit;
     @FXML
@@ -51,6 +58,10 @@ public class SignageController {
     private VBox signageBodyLeft;
     @FXML
     private HBox signageHeader;
+    @FXML
+    private HBox signageHeaderEdit;
+
+    private static String prefSignageName = "";
 
     public static void tableHeightHelper(TableView<?> table, int rowHeight, int headerHeight, int margin) {
         table.prefHeightProperty().bind(Bindings.max(2, Bindings.size(table.getItems()))
@@ -61,86 +72,10 @@ public class SignageController {
         table.maxHeightProperty().bind(table.prefHeightProperty());
     }
 
-    @NotNull
-    private static VBox getSignageTableView(ObservableList<Signage> rightList) {
-        var vBox = new VBox();
-        rightList.addListener((ListChangeListener<? super Signage>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    for (Signage signage : c.getAddedSubList()) {
-                        var hbox = new HBox(new Label(signage.getLongName()));
-                        hbox.setId(signage.getUuid().toString());
-                        Platform.runLater(() ->
-                                vBox.getChildren().add(hbox)
-                        );
-                    }
-                }
-                if (c.wasRemoved()) {
-                    for (Signage signage : c.getRemoved()) {
-                        Platform.runLater(() ->
-                                vBox.getChildren().removeIf(node -> node.getId().equals(signage.getUuid().toString()))
-                        );
-                    }
-                }
-                if (c.wasUpdated()) {
-                    ;
-                }
-            }
-        });
-        //init the vBox
-        for (Signage signage : rightList) {
-            var hbox = new HBox(new Label(signage.getLongName()));
-            hbox.setId(signage.getUuid().toString());
-            vBox.getChildren().add(hbox);
-        }
-//        var tableView = new ListView<Signage>();
-//        tableView.getStyleClass().add("noheader");
-//        tableView.setItems(rightList);
-//        var col = new TableColumn<Signage, String>("");
-//        col.setCellValueFactory(s -> new SimpleObjectProperty<>(s.getValue().getLongName()));
-//        tableView.setCellFactory(c -> new ListCell<>() {
-//            @Override
-//            protected void updateItem(Signage item, boolean empty) {
-//                super.updateItem(item, empty);
-//                if (empty) {
-//                    setGraphic(null);
-//                } else {
-//                    final var graphic = new Label(item.getLongName());
-//                    graphic.setPadding(new Insets(0, 0, 0, 0));
-//                    graphic.getStyleClass().add("signage-label");
-//                    setGraphic(graphic);
-//                }
-//            }
-//        });
-//        tableHeightHelper(tableView, 50, 0, 0);
-//        tableView.getColumns().clear();
-//        tableView.getColumns().add(col);
-        return vBox;
-    }
-
     private void updateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         signageDateTime.setText(formatter.format(date));
-    }
-
-    private void initHeader() {
-        // Set up left header
-        signageHeaderLeft.getStyleClass().add("signage-header-left");
-        signageHeaderLeft.getChildren().add(iconHere);
-
-        // Set up right header
-        signageHeaderRight.getStyleClass().add("signage-header-right");
-        HBox.setHgrow(signageHeaderRight, Priority.ALWAYS);
-        signageHeaderRight.getChildren().add(iconTime);
-        signageDateTime.getStyleClass().add("signage-text-DateTime");
-        updateTime();
-        signageHeaderRight.getChildren().add(signageDateTime);
-
-        // Combine left and right header in signageHeader HBox
-        signageHeader.getChildren().add(signageHeaderLeft);
-        signageHeader.getChildren().add(signageHeaderRight);
-        signageHeader.getStyleClass().add("signage-header");
     }
 
     private void initIcons() {
@@ -168,27 +103,26 @@ public class SignageController {
 
     @FXML
     private void initialize() {
+        prefSignageName = "a";
+        var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
         configTimer(1000);
         initIcons();
-        initHeader();
+        if (!admin) {
+            initHeader();
+        } else {
+            initHeaderEdit();
+        }
         buildSignage();
 
-//        Signage newSignageD = new Signage("Location Name Right 1", Signage.DirectionType.RIGHT);
-//        Signage newSignageU = new Signage("Location Name Right 2", Signage.DirectionType.RIGHT);
-//        Signage newSignageD1 = new Signage("Location Name Down 1", Signage.DirectionType.DOWN);
-//        Signage newSignageHere = new Signage("Location Name Here", Signage.DirectionType.HERE);
-//        facade.saveSignage(newSignageD);
-//        facade.saveSignage(newSignageU);
-//        facade.saveSignage(newSignageD1);
-//        facade.saveSignage(newSignageHere);
-//        buildSignage(loadSignage());
-//        loadSignage();
-
-        var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
         viewEdit.setVisible(admin);
         viewEdit.setManaged(admin);
         viewNormal.setVisible(!admin);
         viewNormal.setManaged(!admin);
+        headerEdit.setVisible(admin);
+        headerEdit.setManaged(admin);
+        headerNormal.setVisible(!admin);
+        headerNormal.setManaged(!admin);
+
         Platform.runLater(() -> {
             switchTheme(true);
             App.getSingleton().getPrimaryStage().setFullScreen(true);
@@ -205,61 +139,97 @@ public class SignageController {
         });
     }
 
-    private Map<Signage.DirectionType, List<String>> loadSignage() {
-//        var rightList = signageList.filtered(signage -> signage.getDirectionType() == Signage.DirectionType.RIGHT);
-//        var leftList = signageList.filtered(signage -> signage.getDirectionType() == Signage.DirectionType.LEFT);
-//        var upList = signageList.filtered(signage -> signage.getDirectionType() == Signage.DirectionType.UP);
-//        var downList = signageList.filtered(signage -> signage.getDirectionType() == Signage.DirectionType.DOWN);
-//
-//        TableView<Signage> tableView = getSignageTableView(rightList);
-//
-//        signageBodyLeft.getChildren().add(tableView);
-//        var rightItems = new VBox();
-//        ObservableList<Signage> rightItemsNodes = FXCollections.observableArrayList();
-//
-//        rightList.addListener((ListChangeListener.Change<? extends Signage> c) -> {
-//            while (c.next()) {
-//                if (c.wasAdded()) {
-//                    for (Signage signage : c.getAddedSubList()) {
-//                        rightItems.getChildren().add(new Label(signage.getLongName()));
-//                    }
-//                } else if (c.wasRemoved()) {
-//                    for (Signage signage : c.getRemoved()) {
-//                        rightItems.getChildren().remove(new Label(signage.getLongName()));
-//                    }
-//                }
-//            }
-//        });
-//        Bindings.bindContentBidirectional(rightItemsNodes, rightList);
+    private void initHeader() {
+        // Set up left header
+        signageHeaderLeft.getStyleClass().add("signage-header-left");
+        signageHeaderLeft.getChildren().add(iconHere);
+        var headerLeft = facade.getAllAsListSignage()
+                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
+        var headerVbox = getSignageTableView(headerLeft);
+        headerVbox.getStyleClass().add("signage-label-Here");
+        signageHeaderLeft.getChildren().add(headerVbox);
 
-//        for (Map.Entry<String, Signage> entry : allSignage.entrySet()) {
-//            Signage.DirectionType directionType = entry.getValue().getDirectionType();
-//            String locationName = entry.getValue().getLongName();
-//            switch (directionType) {
-//                case UP -> {
-//                    signageMap.computeIfAbsent(Signage.DirectionType.UP, k -> new ArrayList<>()).add(locationName);
-//                }
-//                case DOWN -> {
-//                    signageMap.computeIfAbsent(Signage.DirectionType.DOWN, k -> new ArrayList<>()).add(locationName);
-//                }
-//                case LEFT -> {
-//                    signageMap.computeIfAbsent(Signage.DirectionType.LEFT, k -> new ArrayList<>()).add(locationName);
-//                }
-//                case RIGHT -> {
-//                    signageMap.computeIfAbsent(Signage.DirectionType.RIGHT, k -> new ArrayList<>()).add(locationName);
-//                }
-//                case HERE -> {
-//                    signageMap.computeIfAbsent(Signage.DirectionType.HERE, k -> new ArrayList<>()).add(locationName);
-//                }
-//            }
-//        }
-        return null;
+        // Set up right header
+        signageHeaderRight.getStyleClass().add("signage-header-right");
+        HBox.setHgrow(signageHeaderRight, Priority.ALWAYS);
+        signageHeaderRight.getChildren().add(iconTime);
+        signageDateTime.getStyleClass().add("signage-text-DateTime");
+        updateTime();
+        signageHeaderRight.getChildren().add(signageDateTime);
+
+        // Combine left and right header in signageHeader HBox
+        signageHeader.getChildren().add(signageHeaderLeft);
+        signageHeader.getChildren().add(signageHeaderRight);
+        signageHeader.getStyleClass().add("signage-header");
+    }
+
+    private void initHeaderEdit() {
+        // setting up left side of header
+        HBox signageHeaderLeftEdit = new HBox();
+        PFXIcon iconSignageLocation = new PFXIcon(MaterialSymbols.WHERE_TO_VOTE);
+        iconSignageLocation.getStyleClass().add("signage-icon-header");
+        var signagePrefList = facade.getAllAsListSignage()
+                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
+        var signageHere = getSignageTableView(signagePrefList);
+        signageHere.getStyleClass().add("signage-label-Here");
+        signageHeaderLeftEdit.getChildren().add(iconSignageLocation);
+        signageHeaderLeftEdit.getChildren().add(signageHere);
+
+        HBox signageHeaderRightEdit = new HBox();
+
+
+
+        signageHeaderEdit.getChildren().add(signageHeaderLeftEdit);
+        signageHeaderEdit.getChildren().add(signageHeaderRightEdit);
+    }
+
+    @NotNull
+    private static VBox getSignageTableView(ObservableList<Signage> rightList) {
+        var vBox = new VBox();
+        rightList.addListener((ListChangeListener<? super Signage>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    for (Signage signage : c.getAddedSubList()) {
+                        if (!signage.getSignName().equals(prefSignageName)) {
+                            continue;
+                        }
+                        var hbox = new HBox(new Label(signage.getLongName()));
+                        hbox.setId(signage.getUuid().toString());
+                        Platform.runLater(() ->
+                                vBox.getChildren().add(hbox)
+                        );
+                    }
+                }
+                if (c.wasRemoved()) {
+                    for (Signage signage : c.getRemoved()) {
+                        if (!signage.getSignName().equals(prefSignageName)) {
+                            continue;
+                        }
+                        Platform.runLater(() ->
+                                vBox.getChildren().removeIf(node -> node.getId().equals(signage.getUuid().toString()))
+                        );
+                    }
+                }
+            }
+        });
+        //init the vBox
+        for (Signage signage : rightList) {
+            if (!signage.getSignName().equals(prefSignageName)) {
+                continue;
+            }
+            var hbox = new HBox(new Label(signage.getLongName()));
+            hbox.setId(signage.getUuid().toString());
+            vBox.getChildren().add(hbox);
+        }
+        return vBox;
     }
 
     private void buildSignage() {
         for (var direction : Signage.DirectionType.values()) {
-            var signageList = facade.getAllAsListSignage().filtered(signage -> signage.getDirectionType() == direction);
-            Label locLabel = new Label(String.join("\n", signageList.stream().map(Signage::getLongName).toList()));
+            var signageList = facade.getAllAsListSignage()
+                    .filtered(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(prefSignageName));
+//            var prefSignList = signageList.filtered(signage -> signage.getSignName().equals(prefSignageName));
+//            Label locLabel = new Label(String.join("\n", signageList.stream().map(Signage::getLongName).toList()));
             var table = getSignageTableView(signageList);
             table.getStyleClass().add("signage-label");
             HBox signageHB = new HBox();
@@ -284,8 +254,8 @@ public class SignageController {
                     signageHB.getChildren().add(table);
                 }
                 case HERE -> {
-                    locLabel.getStyleClass().add("signage-label-Here");
-                    signageHeaderLeft.getChildren().add(locLabel);
+//                    locLabel.getStyleClass().add("signage-label-Here");
+//                    signageHeaderLeft.getChildren().add(locLabel);
                     continue;
                 }
             }
