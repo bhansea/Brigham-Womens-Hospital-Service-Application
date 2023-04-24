@@ -17,17 +17,17 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Signage.Field>, PropertyChangeListener {
+public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signage.Field>, PropertyChangeListener {
 
-    static String[] fields = {"longName", "directionType"};
+    static String[] fields = {"uuid", "signName", "longName", "directionType"};
 
-    private final ObservableMap<java.lang.String, Signage> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableMap<java.lang.Long, Signage> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<Signage> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public SignageCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-        cache.addListener((MapChangeListener<java.lang.String, Signage>) c -> {
+        cache.addListener((MapChangeListener<java.lang.Long, Signage>) c -> {
             if (c.wasRemoved()) {
                 list.remove(c.getValueRemoved());
             } else if (c.wasAdded()) {
@@ -39,24 +39,26 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
     }
 
     public void add(Signage signage) {
-        if (!cache.containsKey(signage.getLongName()))
-            cache.put(signage.getLongName(), signage);
+        if (!cache.containsKey(signage.getUuid()))
+            cache.put(signage.getUuid(), signage);
     }
 
     public void update(Signage signage) {
-        cache.put(signage.getLongName(), signage);
+        cache.put(signage.getUuid(), signage);
     }
 
     public void remove(Signage signage) {
-        cache.remove(signage.getLongName());
+        cache.remove(signage.getUuid());
     }
 
     private void initCache() {
         try (var rs = dbController.searchQuery(TableType.SIGNAGE)) {
             while (rs.next()) {
                 Signage req = new Signage(
-                        rs.getObject("longName", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
+                    rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("signName", java.lang.String.class),
+                    rs.getObject("longName", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.Signage.DirectionType.valueOf(rs.getString("directionType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -65,31 +67,31 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
     }
 
     @Override
-    public Optional<Signage> get(java.lang.String key) {
+    public Optional<Signage> get(java.lang.Long key) {
         return Optional.ofNullable(cache.get(key));
     }
 
     @Override
-    public Map<java.lang.String, Signage> get(Signage.Field column, Object value) {
+    public Map<java.lang.Long, Signage> get(Signage.Field column, Object value) {
         return get(new Signage.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.String, Signage> get(Signage.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.String, Signage>();
+    public Map<java.lang.Long, Signage> get(Signage.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.Long, Signage>();
         if (params.length != value.length) return map;
         cache.values().forEach(v -> {
             var include = true;
             for (int i = 0; i < params.length; i++)
                 include &= Objects.equals(params[i].getValue(v), value[i]);
             if (include)
-                map.put(v.getLongName(), v);
+                map.put(v.getUuid(), v);
         });
         return map;
     }
 
     @Override
-    public ObservableMap<java.lang.String, Signage> getAll() {
+    public ObservableMap<java.lang.Long, Signage> getAll() {
         return cache;
     }
 
@@ -100,7 +102,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
 
     @Override
     public void save(Signage signage) {
-        Object[] values = {signage.getLongName(), signage.getDirectionType()};
+        Object[] values = {signage.getUuid(), signage.getSignName(), signage.getLongName(), signage.getDirectionType()};
         try {
             dbController.insertQuery(TableType.SIGNAGE, fields, values);
 //            add(signage);
@@ -114,7 +116,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
         if (params.length < 1)
             return;
         try {
-            dbController.updateQuery(TableType.SIGNAGE, "longName", signage.getLongName(), Arrays.stream(params).map(Signage.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(signage)).toArray());
+            dbController.updateQuery(TableType.SIGNAGE, "uuid", signage.getUuid(), Arrays.stream(params).map(Signage.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(signage)).toArray());
 //            update(signage);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
@@ -124,7 +126,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.String, Signage, Sig
     @Override
     public void delete(Signage signage) {
         try {
-            dbController.deleteQuery(TableType.SIGNAGE, "longName", signage.getLongName());
+            dbController.deleteQuery(TableType.SIGNAGE, "uuid", signage.getUuid());
 //            remove(signage);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);

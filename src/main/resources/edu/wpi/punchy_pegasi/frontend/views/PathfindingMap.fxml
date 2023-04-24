@@ -21,7 +21,7 @@
                 <HBox>
                     <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
                                fx:id="selectGraphically"/>
-                    <PFXButton text="Cancel" fx:id="selectGraphicallyCancel"/>
+                    <PFXButton styleClass="pfx-button-cancel" text="Cancel" fx:id="selectGraphicallyCancel"/>
                 </HBox>
                 <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
                 <Text fx:id="pathfindStatus" textAlignment="CENTER"/>

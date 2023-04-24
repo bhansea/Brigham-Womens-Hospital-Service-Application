@@ -1,6 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
-
+import edu.wpi.punchy_pegasi.backend.SchemaID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocationName {
-
+    @SchemaID
     @com.jsoniter.annotation.JsonProperty("uuid")
     private Long uuid;
     @com.jsoniter.annotation.JsonProperty("longname")
@@ -18,7 +18,6 @@ public class LocationName {
     private String shortName;
     @com.jsoniter.annotation.JsonProperty("nodetype")
     private NodeType nodeType;
-
     public enum NodeType {
         HALL,
         ELEV,
@@ -33,21 +32,18 @@ public class LocationName {
         SERV,
         BATH
     }
-
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName> {
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName>{
         UUID("uuid"),
         LONG_NAME("longName"),
         SHORT_NAME("shortName"),
         NODE_TYPE("nodeType");
         @lombok.Getter
         private final String colName;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref){
             return ref.getFromField(this);
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
