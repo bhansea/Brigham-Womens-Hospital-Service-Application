@@ -2,17 +2,14 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
-import edu.wpi.punchy_pegasi.frontend.components.PFXPopup;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -20,7 +17,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
     @FXML
@@ -72,7 +68,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         Stage stage = App.getSingleton().getPrimaryStage();
-        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
+        PFXAlert pfxPopup = new PFXAlert(stage, "Your request has been submitted!");
     }
 
     @Override

@@ -45,6 +45,7 @@ import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class App extends Application {

@@ -1,20 +1,16 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.frontend.components.PFXPopup;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.util.List;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
@@ -129,7 +125,8 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         numberOfParticipants.getText(),
                         App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
-        Stage stage = App.getSingleton().getPrimaryStage();
-        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
+        App.getSingleton().getLayout().notify("Your request has been submitted!", "");
+//        Stage stage = App.getSingleton().getPopupStage();
+//        PFXAlert pfxPopup = new PFXAlert(stage, "Your request has been submitted!");
     }
 }

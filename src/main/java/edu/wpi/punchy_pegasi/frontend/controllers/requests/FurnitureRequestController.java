@@ -1,10 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
-import edu.wpi.punchy_pegasi.frontend.components.PFXPopup;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -112,7 +111,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
         Stage stage = App.getSingleton().getPrimaryStage();
-        PFXPopup pfxPopup = new PFXPopup(stage, "Your request has been submitted!");
+        PFXAlert pfxPopup = new PFXAlert(stage, "Your request has been submitted!");
     }
 
     @FXML
