@@ -44,6 +44,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
@@ -148,7 +149,14 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        log.info("Shutting Down");
+        try {
+            pdb.exposeConnection().close();
+            log.info("Shutting Down Connection");
+
+        } catch (SQLException e) {
+            log.error("Failed to close database connection", e);
+        }
+        log.info("Application Shutting Down");
     }
 
     public synchronized void navigate(final Screen screen) {
