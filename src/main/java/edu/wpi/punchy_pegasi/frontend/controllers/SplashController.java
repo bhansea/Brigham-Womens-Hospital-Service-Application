@@ -67,7 +67,7 @@ public class SplashController {
                 if (genericResource != null && Objects.equals(genericResource.getProtocol(), "jar"))
                     source = PdbController.Source.Wong;
                 else
-                    source = PdbController.Source.AWS;
+                    source = PdbController.Source.Blake;
                 while (!attemptDataBaseConnection(source)) {
                     source = null;
                     while (source == null) {
