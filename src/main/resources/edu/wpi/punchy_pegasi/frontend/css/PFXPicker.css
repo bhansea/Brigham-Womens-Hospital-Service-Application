@@ -8,6 +8,7 @@
     -fx-border-radius: 12;
     -fx-border-color: -pfx-navy;
     -fx-border-width: 1.5;
+    -fx-pref-width: 80;
 }
 
 .pfx-picker-container Label {
@@ -27,10 +28,12 @@
 .pfx-picker-minus {
     -fx-border-color: -pfx-navy;
     -fx-border-width: 0 1.5 0 0;
+    -fx-cursor: hand;
 }
 .pfx-picker-plus {
     -fx-border-color: -pfx-navy;
     -fx-border-width: 0 0 0 1.5;
+    -fx-cursor: hand;
 }
 .pfx-picker-icon PFXIcon {
     -fx-fill: -pfx-navy;

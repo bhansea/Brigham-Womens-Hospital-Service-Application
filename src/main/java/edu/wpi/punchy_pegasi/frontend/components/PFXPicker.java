@@ -15,8 +15,11 @@ public class PFXPicker extends HBox {
     private final Label quantity = new Label("0");
     private final PFXButton minus = new PFXButton("", new PFXIcon(MaterialSymbols.REMOVE));
     private final PFXButton plus = new PFXButton("", new PFXIcon(MaterialSymbols.ADD));
-    public PFXPicker() {
+
+    private PFXCardVertical parentCard = null;
+    public PFXPicker(PFXCardVertical parentCard) {
         super();
+        this.parentCard = parentCard;
         getStyleClass().add("pfx-picker-container");
         getChildren().addAll(minus, quantity, plus);
         minus.getStyleClass().add("pfx-picker-minus");
@@ -30,7 +33,9 @@ public class PFXPicker extends HBox {
                 int val = Integer.parseInt(quantity.getText()) - 1;
                 if(val >= 0) {
                     minus.setDisable(false);
+                    plus.setDisable(false);
                     quantity.setText(Integer.toString(val));
+                    parentCard.addAvailable();
                 }
                 else
                     minus.setDisable(true);
@@ -40,8 +45,14 @@ public class PFXPicker extends HBox {
             @Override
             public void handle(ActionEvent event) {
                 int val = Integer.parseInt(quantity.getText()) + 1;
-                quantity.setText(Integer.toString(val));
-                minus.setDisable(false);
+                if(val <= parentCard.getAvailable()) {
+                    plus.setDisable(false);
+                    minus.setDisable(false);
+                    quantity.setText(Integer.toString(val));
+                    parentCard.subtractAvailable();
+                }
+                else
+                    plus.setDisable(true);
             }
         });
     }

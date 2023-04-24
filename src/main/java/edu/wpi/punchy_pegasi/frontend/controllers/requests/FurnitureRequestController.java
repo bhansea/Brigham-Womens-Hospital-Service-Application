@@ -14,8 +14,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import lombok.Value;
 
@@ -40,6 +43,10 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     PFXCardHolder cardHolder;
     @FXML
     VBox container = new VBox();
+
+    @FXML
+    private BorderPane root;
+    ScrollPane scrollPane;
 
     public static BorderPane create(String path) {
         return RequestController.create(new FurnitureRequestController(), path);
@@ -66,9 +73,18 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         PFXCardVertical card4 = new PFXCardVertical("Frame", "Pure wood", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/frame.jpg"));
         PFXCardVertical card5 = new PFXCardVertical("Pillow", "Nice feathers", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/pillow.jpg"));
         PFXCardVertical card6 = new PFXCardVertical("Rug", "Very comfy!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/rug.jpg"));
-        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4, card5, card6)));
-        container.getChildren().add(cardHolder);
-        container.setAlignment(Pos.CENTER);
+
+        var flowPane = new FlowPane(card1, card2, card3, card4, card5, card6);
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
+        flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
+        flowPane.setAlignment(Pos.CENTER_LEFT);
+        scrollPane = new ScrollPane(flowPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background;");
+
+        root.setCenter(scrollPane);
     }
 
     @Override
