@@ -20,6 +20,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.w3c.dom.Text;
 
+import javax.xml.stream.Location;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
@@ -164,8 +165,36 @@ public class AdminTablePageController {
                 currentTable.table.update();
 
             } else if (currentTable.humanReadableName.toLowerCase().contains("location")) {
-                var edge = new Edge(Long.parseLong(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()));
-                facade.updateEdge(edge, new Edge.Field[]{Edge.Field.UUID, Edge.Field.START_NODE, Edge.Field.END_NODE});
+
+                LocationName.NodeType nodeType = null;
+                if (textAreas.get(3).getText() == "HALL") {
+                    nodeType = LocationName.NodeType.HALL;
+                } else if (textAreas.get(3).getText() == "ELEV") {
+                    nodeType = LocationName.NodeType.HALL;
+                } else if (textAreas.get(3).getText() == "REST") {
+                    nodeType = LocationName.NodeType.REST;
+                } else if (textAreas.get(3).getText() == "STAI") {
+                    nodeType = LocationName.NodeType.STAI;
+                } else if (textAreas.get(3).getText() == "DEPT") {
+                    nodeType = LocationName.NodeType.DEPT;
+                } else if (textAreas.get(3).getText() == "LABS") {
+                    nodeType = LocationName.NodeType.LABS;
+                } else if (textAreas.get(3).getText() == "INFO") {
+                    nodeType = LocationName.NodeType.INFO;
+                } else if (textAreas.get(3).getText() == "CONF") {
+                    nodeType = LocationName.NodeType.CONF;
+                } else if (textAreas.get(3).getText() == "EXIT") {
+                    nodeType = LocationName.NodeType.EXIT;
+                } else if (textAreas.get(3).getText() == "RETL") {
+                    nodeType = LocationName.NodeType.RETL;
+                } else if (textAreas.get(3).getText() == "SERV") {
+                    nodeType = LocationName.NodeType.SERV;
+                } else if (textAreas.get(3).getText() == "BATH") {
+                    nodeType = LocationName.NodeType.BATH;
+                }
+
+                var location = new LocationName(Long.parseLong(textAreas.get(0).getText()), textAreas.get(1).getText(), textAreas.get(2).getText(), nodeType);
+                facade.updateLocationName(location, new LocationName.Field[]{LocationName.Field.UUID, LocationName.Field.LONG_NAME, LocationName.Field.SHORT_NAME, LocationName.Field.NODE_TYPE});
                 currentTable.reload();
                 currentTable.table.update();
 
@@ -237,8 +266,6 @@ public class AdminTablePageController {
         clearButton.setOnAction(e -> {
 //            pdb.deleteQuery(currentTable, );
         });
-
-
     }
 
 
