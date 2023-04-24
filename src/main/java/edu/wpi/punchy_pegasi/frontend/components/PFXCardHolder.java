@@ -20,6 +20,7 @@ public class PFXCardHolder extends BorderPane {
     public PFXCardHolder(List<PFXCardVertical> cards, String filterName) {
         super();
         filterLabel = new Label(filterName);
+        filterLabel.getStyleClass().add("pfx-cardholder-container-label");
         setTop(filterLabel);
         setCenter(scrollPane);
         scrollPane.setContent(elements);
@@ -29,16 +30,8 @@ public class PFXCardHolder extends BorderPane {
         HBox.setHgrow(this, Priority.ALWAYS);
         HBox.setHgrow(scrollPane, Priority.ALWAYS);
 
-        int val = 0;
-        for(int i=0;i<(int)Math.ceil(cards.size()/3.0);i++) {
-            for(int j=0;j<2;j++) {
-                if(cards.size() <= val) {
-                    break;
-                }
-                elements.add(cards.get(val), j, i);
-                numElements++;
-                val++;
-            }
+        for(int i=0;i<cards.size();i++) {
+            elements.add(cards.get(i), i, 0);
         }
     }
 

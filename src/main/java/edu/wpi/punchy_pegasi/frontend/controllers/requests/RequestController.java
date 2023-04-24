@@ -171,17 +171,11 @@ public abstract class RequestController<T extends RequestEntry> {
     }
 
     @FXML
-    protected VBox addFilter() {
-        filterContainer.getChildren().add(filter);
-        filterContainer.setAlignment(Pos.CENTER_LEFT);
+    protected VBox addFilter(ArrayList<PFXCardVertical> cards, String filterName) {
+        filterContainer.setAlignment(Pos.TOP_LEFT);
+        cardHolder = new PFXCardHolder(cards, filterName);
+        filterContainer.getChildren().add(cardHolder);
         filterContainer.setPadding(new Insets(10, 10, 10, 23));
         return filterContainer;
     }
-
-    protected void initFilter(ArrayList<PFXCardVertical> cards, String filterName) {
-        cardHolder = new PFXCardHolder(cards, filterName);
-        cardHolder.setManaged(false);
-    }
-
-
 }

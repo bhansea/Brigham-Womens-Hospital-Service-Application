@@ -22,3 +22,9 @@
     -fx-border-color: transparent;
     -fx-border-width: 0;
 }
+
+.pfx-cardholder-container-label Label {
+    -fx-text-fill: -pfx-text;
+    -fx-font-size: 18;
+    -fx-alignment: CENTER_LEFT;
+}
