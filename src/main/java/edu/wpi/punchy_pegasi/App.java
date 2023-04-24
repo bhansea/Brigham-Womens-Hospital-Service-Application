@@ -76,7 +76,7 @@ public class App extends Application {
     @Getter
     private Scene scene;
     @Getter
-    private Account account = new Account("", "", 0L, Account.AccountType.NONE);
+    private Account account = new Account(0L,"", "", 0L, Account.AccountType.NONE);
 
     @Getter
     private LayoutController layout;
@@ -117,7 +117,7 @@ public class App extends Application {
     public void setAccount(Account account) {
         if (account == null) {
             navigate(Screen.LOGIN);
-            account = new Account("", "", 0L, Account.AccountType.NONE);
+            account = new Account(0L, "", "", 0L, Account.AccountType.NONE);
         }
         support.firePropertyChange("account", this.account, account);
         this.account = account;
