@@ -17,7 +17,7 @@
     -fx-text-fill: -pfx-signage-text;
 }
 
-.signage-label {
+.signage-label Label{
     -fx-text-fill: -pfx-signage-text;
 }
 
