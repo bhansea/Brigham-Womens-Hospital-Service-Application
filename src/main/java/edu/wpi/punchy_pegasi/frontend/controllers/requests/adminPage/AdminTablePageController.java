@@ -9,6 +9,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -93,78 +94,47 @@ public class AdminTablePageController {
             displayEditComponent();
         });
 
-        tables.values().forEach(t -> {
-            t.setRowClicked(r -> {
-                textAreas.clear();
-                int componentIndex = 1;
-                int fieldIndex = 0;
-
-                for (Object field : t.getTableType().getFieldEnum().getEnumConstants()) {
-                    var iField = (IField) field;
-                    textAreas.add((TextArea)editContainer.getChildren().get(componentIndex));
-                    textAreas.get(fieldIndex).setText(iField.getValue(r).toString());
-                    componentIndex+=2;
-                    fieldIndex++;
-                }
-            });
-        });
+        tables.values().forEach(t -> t.setRowClicked(this::populateForm));
 
         submitEditButton.setOnAction(e -> {
-            // location name works, additional notes, status, employee ID. anything after general request entries arent recorded, this is hard
-            if (currentTable.humanReadableName.toLowerCase().contains("request")) {
-                RequestEntry.Status status = RequestEntry.Status.valueOf(textAreas.get(4).getText());
-                var requestEntry = new RequestEntry(UUID.fromString(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), textAreas.get(3).getText(), status, Long.parseLong(textAreas.get(5).getText()));
-                facade.updateRequestEntry(requestEntry, new RequestEntry.Field[]{RequestEntry.Field.SERVICE_ID, RequestEntry.Field.LOCATION_NAME, RequestEntry.Field.STAFF_ASSIGNMENT, RequestEntry.Field.ADDITIONAL_NOTES, RequestEntry.Field.STATUS, RequestEntry.Field.EMPLOYEE_ID});
-                currentTable.reload();
-                currentTable.table.update();
-            }
-            // WORKS, employee id doesn't work
-            else if (currentTable.humanReadableName.toLowerCase().contains("employee")) {
-                var employee = new Employee(Long.parseLong(textAreas.get(0).getText()), textAreas.get(1).getText(), textAreas.get(2).getText());
-                facade.updateEmployee(employee, new Employee.Field[]{Employee.Field.EMPLOYEE_ID, Employee.Field.FIRST_NAME, Employee.Field.LAST_NAME});
-                currentTable.reload();
-                currentTable.table.update();
-            }
-            // works, id doesn't work
-            else if (currentTable.humanReadableName.toLowerCase().contains("account")) {
-                Account.AccountType accountType = Account.AccountType.valueOf(textAreas.get(4).getText());
-                var account = new Account(Long.parseLong(textAreas.get(0).getText()), textAreas.get(1).getText(),textAreas.get(2).getText(), Long.parseLong(textAreas.get(3).getText()), accountType);
-                facade.updateAccount(account, new Account.Field[]{Account.Field.UUID, Account.Field.USERNAME, Account.Field.PASSWORD, Account.Field.EMPLOYEE_ID, Account.Field.ACCOUNT_TYPE});
-                currentTable.reload();
-                currentTable.table.update();
-            }
-            // Works? dissapperars from table even on reload, odesnt work with id
-            else if (currentTable.humanReadableName.toLowerCase().contains("node")) {
-                var node = new Node(Long.parseLong(textAreas.get(0).getText()), Integer.parseInt(textAreas.get(1).getText()), Integer.parseInt(textAreas.get(2).getText()), textAreas.get(3).getText(), textAreas.get(4).getText());
-                facade.updateNode(node, new Node.Field[]{Node.Field.NODE_ID, Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.FLOOR, Node.Field.BUILDING});
-                currentTable.reload();
-                currentTable.table.update();
-
-            }
-            // works, without ID dissappears from table
-            else if (currentTable.humanReadableName.toLowerCase().contains("edge")) {
-                var edge = new Edge(Long.parseLong(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()));
-                facade.updateEdge(edge, new Edge.Field[]{Edge.Field.UUID, Edge.Field.START_NODE, Edge.Field.END_NODE});
-                currentTable.reload();
-                currentTable.table.update();
-
-            }
-            // works, without idd
-            else if (currentTable.humanReadableName.toLowerCase().contains("move")) {
-                var move = new Move(Long.parseLong(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), LocalDate.parse(textAreas.get(3).getText()));
-                facade.updateMove(move, new Move.Field[]{Move.Field.UUID, Move.Field.NODE_ID, Move.Field.LOCATION_ID, Move.Field.DATE});
-                currentTable.reload();
-                currentTable.table.update();
-
-            }
-            // works without ID, dissappears from table
-            else if (currentTable.humanReadableName.toLowerCase().contains("location")) {
-                LocationName.NodeType nodeType = LocationName.NodeType.valueOf(textAreas.get(3).getText());
-                var location = new LocationName(Long.parseLong(textAreas.get(0).getText()), textAreas.get(1).getText(), textAreas.get(2).getText(), nodeType);
-                facade.updateLocationName(location, new LocationName.Field[]{LocationName.Field.UUID, LocationName.Field.LONG_NAME, LocationName.Field.SHORT_NAME, LocationName.Field.NODE_TYPE});
-                currentTable.reload();
-                currentTable.table.update();
-
+            try {
+                switch (currentTable.getTableType()) {
+                    case NODES:
+                        facade.updateNode(commit(new edu.wpi.punchy_pegasi.schema.Node()), Arrays.stream(edu.wpi.punchy_pegasi.schema.Node.Field.values()).filter(f -> f != edu.wpi.punchy_pegasi.schema.Node.Field.NODE_ID).toArray(edu.wpi.punchy_pegasi.schema.Node.Field[]::new));
+                        break;
+                    case LOCATIONNAMES:
+                        facade.updateLocationName(commit(new LocationName()), Arrays.stream(LocationName.Field.values()).filter(f -> f != LocationName.Field.UUID).toArray(LocationName.Field[]::new));
+                        break;
+                    case EDGES:
+                        facade.updateEdge(commit(new Edge()), Arrays.stream(Edge.Field.values()).filter(f -> f != Edge.Field.UUID).toArray(Edge.Field[]::new));
+                        break;
+                    case MOVES:
+                        facade.updateMove(commit(new Move()), Arrays.stream(Move.Field.values()).filter(f -> f != Move.Field.UUID).toArray(Move.Field[]::new));
+                        break;
+                    case EMPLOYEES:
+                        facade.updateEmployee(commit(new Employee()), Arrays.stream(Employee.Field.values()).filter(f -> f != Employee.Field.EMPLOYEE_ID).toArray(Employee.Field[]::new));
+                        break;
+                    case ACCOUNTS:
+                        facade.updateAccount(commit(new Account()), Arrays.stream(Account.Field.values()).filter(f -> f != Account.Field.UUID).toArray(Account.Field[]::new));
+                        break;
+                    case CONFERENCEREQUESTS:
+                        facade.updateConferenceRoomEntry(commit(new ConferenceRoomEntry()), Arrays.stream(ConferenceRoomEntry.Field.values()).filter(f -> f != ConferenceRoomEntry.Field.SERVICE_ID).toArray(ConferenceRoomEntry.Field[]::new));
+                        break;
+                    case OFFICEREQUESTS:
+                        facade.updateOfficeServiceRequestEntry(commit(new OfficeServiceRequestEntry()), Arrays.stream(OfficeServiceRequestEntry.Field.values()).filter(f -> f != OfficeServiceRequestEntry.Field.SERVICE_ID).toArray(OfficeServiceRequestEntry.Field[]::new));
+                        break;
+                    case FURNITUREREQUESTS:
+                        facade.updateFurnitureRequestEntry(commit(new FurnitureRequestEntry()), Arrays.stream(FurnitureRequestEntry.Field.values()).filter(f -> f != FurnitureRequestEntry.Field.SERVICE_ID).toArray(FurnitureRequestEntry.Field[]::new));
+                        break;
+                    case FOODREQUESTS:
+                        facade.updateFoodServiceRequestEntry(commit(new FoodServiceRequestEntry()), Arrays.stream(FoodServiceRequestEntry.Field.values()).filter(f -> f != FoodServiceRequestEntry.Field.SERVICE_ID).toArray(FoodServiceRequestEntry.Field[]::new));
+                        break;
+                    case FLOWERREQUESTS:
+                        facade.updateFlowerDeliveryRequestEntry(commit(new FlowerDeliveryRequestEntry()), Arrays.stream(FlowerDeliveryRequestEntry.Field.values()).filter(f -> f != FlowerDeliveryRequestEntry.Field.SERVICE_ID).toArray(FlowerDeliveryRequestEntry.Field[]::new));
+                        break;
+                }
+            } catch (InvalidArgumentException ex) {
+                System.out.println("Invalid Argument Exception");
             }
         });
 
@@ -218,18 +188,61 @@ public class AdminTablePageController {
         tableContainer.getChildren().addAll(tables.values().stream().map(AdminTable::getTable).toList());
         showTable(tables.get("Node"));
     }
-    public void displayEditComponent() {
-        HBox hbox = new HBox();
-        editContainer.getChildren().clear();
-        for (Object field : currentTable.tableType.getFieldEnum().getEnumConstants()) {
-            Label fieldLabel = new Label();
-            TextArea fieldArea = new TextArea();
 
-            fieldLabel.setText(field.toString());
-            editContainer.getChildren().add(fieldLabel);
-            editContainer.getChildren().add(fieldArea);
+    private List<javafx.scene.Node> form;
+    private List<TextField> inputs;
+    public void displayEditComponent() {
+//        HBox hbox = new HBox();
+//        editContainer.getChildren().clear();
+//        for (Object field : currentTable.tableType.getFieldEnum().getEnumConstants()) {
+//            Label fieldLabel = new Label();
+//            TextArea fieldArea = new TextArea();
+//
+//            fieldLabel.setText(field.toString());
+//            editContainer.getChildren().add(fieldLabel);
+//            editContainer.getChildren().add(fieldArea);
+//        }
+//        editContainer.getChildren().add(hbox);
+//        editContainer.getStyleClass().add("admin-edit-container");
+        form = new ArrayList<>();
+        inputs = new ArrayList<>();
+        for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
+            var hbox = new HBox();
+            var label = new Label(field.getColName());
+            var input = new TextField();
+            if(field.isPrimaryKey()) {
+                input.setEditable(false);
+            }
+            hbox.getChildren().addAll(label, input);
+            form.add(hbox);
+            inputs.add(input);
         }
-        editContainer.getChildren().add(hbox);
-        editContainer.getStyleClass().add("admin-edit-container");
+        editContainer.getChildren().clear();
+        editContainer.getChildren().addAll(form);
+    }
+    public void populateForm(Object entry) {
+        for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
+            var input = inputs.get(field.ordinal());
+            input.setText(field.getValueAsString(entry));
+        }
+    }
+
+    public <T> T commit(T entry) throws InvalidArgumentException {
+        for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
+            var input = inputs.get(field.ordinal());
+            try {
+                field.setValueFromString(entry, input.getText());
+            } catch (Exception e) {
+                //alert the user that the input is invalid
+                throw new InvalidArgumentException("Invalid input for field " + field.getColName());
+            }
+        }
+        return entry;
+    }
+    // create an new exception class for this
+    private class InvalidArgumentException extends Exception {
+        public InvalidArgumentException(String message) {
+            super(message);
+        }
     }
 }

@@ -9,6 +9,7 @@ import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -39,11 +40,21 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
     public RequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.util.UUID, RequestEntry>) c -> {
-            if (c.wasRemoved()) {
-                list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
-                list.add(c.getValueAdded());
-            }
+            Platform.runLater(() -> {
+                if (c.wasRemoved() && c.wasAdded()) {
+                    var index = list.indexOf(c.getValueRemoved());
+                    if (index != -1) {
+                        list.remove(index);
+                        list.add(index, c.getValueAdded());
+                    }
+                }
+                if (c.wasRemoved()) {
+                    list.remove(c.getValueRemoved());
+                }
+                if (c.wasAdded()) {
+                    list.add(c.getValueAdded());
+                }
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);

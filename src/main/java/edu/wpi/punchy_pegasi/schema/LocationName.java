@@ -34,12 +34,16 @@ public class LocationName {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName>{
-        UUID("uuid"),
-        LONG_NAME("longName"),
-        SHORT_NAME("shortName"),
-        NODE_TYPE("nodeType");
+        UUID("uuid", true,false),
+        LONG_NAME("longName", false,false),
+        SHORT_NAME("shortName", false,false),
+        NODE_TYPE("nodeType", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.LocationName ref){
     return ref.getFromField(this);
 }
@@ -48,6 +52,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.LocationName ref){
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.LocationName ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

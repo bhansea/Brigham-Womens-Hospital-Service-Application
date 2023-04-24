@@ -36,10 +36,10 @@ public class AdminImportController {
     private final Facade facade = App.getSingleton().getFacade();
 
     private final Map<String, AdminTable> tables = new LinkedHashMap<>() {{
-        put("Node", new AdminTable<>("Node", TableType.NODES, () -> facade.getAllNode().values().stream().toList()));
-        put("Location", new AdminTable<>("Location", TableType.LOCATIONNAMES, () -> facade.getAllLocationName().values().stream().toList()));
-        put("Edge", new AdminTable<>("Edge", TableType.EDGES, () -> facade.getAllEdge().values().stream().toList()));
-        put("Move", new AdminTable<>("Move", TableType.MOVES, () -> facade.getAllMove().values().stream().toList()));
+        put("Node", new AdminTable<>("Node", TableType.NODES, facade::getAllAsListNode));
+        put("Location", new AdminTable<>("Location", TableType.LOCATIONNAMES, facade::getAllAsListLocationName));
+        put("Edge", new AdminTable<>("Edge", TableType.EDGES, facade::getAllAsListEdge));
+        put("Move", new AdminTable<>("Move", TableType.MOVES, facade::getAllAsListMove));
     }};
     public void initialize() {
 

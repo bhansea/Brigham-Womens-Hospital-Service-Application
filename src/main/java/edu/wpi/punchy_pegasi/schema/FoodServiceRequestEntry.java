@@ -43,20 +43,24 @@ public class FoodServiceRequestEntry extends RequestEntry {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        EMPLOYEE_ID("employeeID"),
-        FOOD_SELECTION("foodSelection"),
-        TEMP_TYPE("tempType"),
-        ADDITIONAL_ITEMS("additionalItems"),
-        DIETARY_RESTRICTIONS("dietaryRestrictions"),
-        PATIENT_NAME("patientName"),
-        BEVERAGE("beverage");
+        SERVICE_ID("serviceID", true,false),
+        LOCATION_NAME("locationName", false,false),
+        STAFF_ASSIGNMENT("staffAssignment", false,false),
+        ADDITIONAL_NOTES("additionalNotes", false,false),
+        STATUS("status", false,false),
+        EMPLOYEE_ID("employeeID", false,false),
+        FOOD_SELECTION("foodSelection", false,false),
+        TEMP_TYPE("tempType", false,false),
+        ADDITIONAL_ITEMS("additionalItems", false,false),
+        DIETARY_RESTRICTIONS("dietaryRestrictions", false,false),
+        PATIENT_NAME("patientName", false,false),
+        BEVERAGE("beverage", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref){
     return ref.getFromField(this);
 }
@@ -65,6 +69,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEn
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

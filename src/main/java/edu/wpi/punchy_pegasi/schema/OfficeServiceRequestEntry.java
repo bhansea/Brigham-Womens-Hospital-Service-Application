@@ -22,15 +22,19 @@ public class OfficeServiceRequestEntry extends RequestEntry {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        EMPLOYEE_ID("employeeID"),
-        OFFICE_REQUEST("officeRequest");
+        SERVICE_ID("serviceID", true,false),
+        LOCATION_NAME("locationName", false,false),
+        STAFF_ASSIGNMENT("staffAssignment", false,false),
+        ADDITIONAL_NOTES("additionalNotes", false,false),
+        STATUS("status", false,false),
+        EMPLOYEE_ID("employeeID", false,false),
+        OFFICE_REQUEST("officeRequest", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref){
     return ref.getFromField(this);
 }
@@ -39,6 +43,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.OfficeServiceRequest
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

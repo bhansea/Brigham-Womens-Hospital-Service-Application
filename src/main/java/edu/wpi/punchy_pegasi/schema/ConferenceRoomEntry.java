@@ -36,18 +36,22 @@ public class ConferenceRoomEntry extends RequestEntry {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        EMPLOYEE_ID("employeeID"),
-        BEGINNING_TIME("beginningTime"),
-        END_TIME("endTime"),
-        DATE("date"),
-        AMOUNT_OF_PARTICIPANTS("amountOfParticipants");
+        SERVICE_ID("serviceID", true,false),
+        LOCATION_NAME("locationName", false,false),
+        STAFF_ASSIGNMENT("staffAssignment", false,false),
+        ADDITIONAL_NOTES("additionalNotes", false,false),
+        STATUS("status", false,false),
+        EMPLOYEE_ID("employeeID", false,false),
+        BEGINNING_TIME("beginningTime", false,false),
+        END_TIME("endTime", false,false),
+        DATE("date", false,false),
+        AMOUNT_OF_PARTICIPANTS("amountOfParticipants", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref){
     return ref.getFromField(this);
 }
@@ -56,6 +60,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry 
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

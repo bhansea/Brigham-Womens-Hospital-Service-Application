@@ -16,6 +16,7 @@ public class Facade {
 	private final MoveCachedDaoImpl moveDao;
 	private final LocationNameCachedDaoImpl locationNameDao;
 	private final RequestEntryCachedDaoImpl requestEntryDao;
+	private final GenericRequestEntryCachedDaoImpl genericRequestEntryDao;
 	private final FoodServiceRequestEntryCachedDaoImpl foodServiceRequestEntryDao;
 	private final FlowerDeliveryRequestEntryCachedDaoImpl flowerDeliveryRequestEntryDao;
 	private final ConferenceRoomEntryCachedDaoImpl conferenceRoomEntryDao;
@@ -24,6 +25,24 @@ public class Facade {
 	private final EmployeeCachedDaoImpl employeeDao;
 	private final AccountCachedDaoImpl accountDao;
 	private final SignageCachedDaoImpl signageDao;
+    public <K, T, C> IDao<K, T, C> getDaoByClass(Class<T> clazz) {
+        if (clazz == null) return null;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Node.class) return (IDao<K, T, C>)nodeDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Edge.class) return (IDao<K, T, C>)edgeDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Move.class) return (IDao<K, T, C>)moveDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.LocationName.class) return (IDao<K, T, C>)locationNameDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.RequestEntry.class) return (IDao<K, T, C>)requestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.GenericRequestEntry.class) return (IDao<K, T, C>)genericRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.FoodServiceRequestEntry.class) return (IDao<K, T, C>)foodServiceRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.FlowerDeliveryRequestEntry.class) return (IDao<K, T, C>)flowerDeliveryRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.ConferenceRoomEntry.class) return (IDao<K, T, C>)conferenceRoomEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.FurnitureRequestEntry.class) return (IDao<K, T, C>)furnitureRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class) return (IDao<K, T, C>)officeServiceRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Employee.class) return (IDao<K, T, C>)employeeDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Account.class) return (IDao<K, T, C>)accountDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Signage.class) return (IDao<K, T, C>)signageDao;
+        else return null;
+    }
 
     public Facade(PdbController dbController) {
 		nodeDao = new NodeCachedDaoImpl(dbController);
@@ -31,6 +50,7 @@ public class Facade {
 		moveDao = new MoveCachedDaoImpl(dbController);
 		locationNameDao = new LocationNameCachedDaoImpl(dbController);
 		requestEntryDao = new RequestEntryCachedDaoImpl(dbController);
+		genericRequestEntryDao = new GenericRequestEntryCachedDaoImpl(dbController);
 		foodServiceRequestEntryDao = new FoodServiceRequestEntryCachedDaoImpl(dbController);
 		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryCachedDaoImpl(dbController);
 		conferenceRoomEntryDao = new ConferenceRoomEntryCachedDaoImpl(dbController);

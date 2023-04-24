@@ -22,12 +22,16 @@ public class Move {
     private LocalDate date;
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
-        UUID("uuid"),
-        NODE_ID("nodeID"),
-        LOCATION_ID("locationID"),
-        DATE("date");
+        UUID("uuid", true,false),
+        NODE_ID("nodeID", false,false),
+        LOCATION_ID("locationID", false,false),
+        DATE("date", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref){
     return ref.getFromField(this);
 }
@@ -36,6 +40,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Move ref){
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.Move ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

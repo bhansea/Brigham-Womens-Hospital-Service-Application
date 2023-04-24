@@ -32,13 +32,17 @@ public class Account {
 
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account>{
-        UUID("uuid"),
-        USERNAME("username"),
-        PASSWORD("password"),
-        EMPLOYEE_ID("employeeID"),
-        ACCOUNT_TYPE("accountType");
+        UUID("uuid", true,false),
+        USERNAME("username", false,true),
+        PASSWORD("password", false,false),
+        EMPLOYEE_ID("employeeID", false,false),
+        ACCOUNT_TYPE("accountType", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref){
     return ref.getFromField(this);
 }
@@ -47,6 +51,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Account ref){
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.Account ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

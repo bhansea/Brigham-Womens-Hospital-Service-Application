@@ -24,11 +24,15 @@ public class Employee {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Employee>{
-        EMPLOYEE_ID("employeeID"),
-        FIRST_NAME("firstName"),
-        LAST_NAME("lastName");
+        EMPLOYEE_ID("employeeID", true,false),
+        FIRST_NAME("firstName", false,false),
+        LAST_NAME("lastName", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref){
     return ref.getFromField(this);
 }
@@ -37,6 +41,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Employee ref){
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.Employee ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

@@ -18,11 +18,15 @@ public class Edge {
     private Long endNode;
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge>{
-        UUID("uuid"),
-        START_NODE("startNode"),
-        END_NODE("endNode");
+        UUID("uuid", true,false),
+        START_NODE("startNode", false,false),
+        END_NODE("endNode", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.Edge ref){
     return ref.getFromField(this);
 }
@@ -31,6 +35,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Edge ref){
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.Edge ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {

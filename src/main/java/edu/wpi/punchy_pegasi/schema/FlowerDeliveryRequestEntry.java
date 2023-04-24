@@ -30,18 +30,22 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     }
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry>{
-        SERVICE_ID("serviceID"),
-        LOCATION_NAME("locationName"),
-        STAFF_ASSIGNMENT("staffAssignment"),
-        ADDITIONAL_NOTES("additionalNotes"),
-        STATUS("status"),
-        EMPLOYEE_ID("employeeID"),
-        FLOWER_SIZE("flowerSize"),
-        FLOWER_TYPE("flowerType"),
-        FLOWER_AMOUNT("flowerAmount"),
-        PATIENT_NAME("patientName");
+        SERVICE_ID("serviceID", true,false),
+        LOCATION_NAME("locationName", false,false),
+        STAFF_ASSIGNMENT("staffAssignment", false,false),
+        ADDITIONAL_NOTES("additionalNotes", false,false),
+        STATUS("status", false,false),
+        EMPLOYEE_ID("employeeID", false,false),
+        FLOWER_SIZE("flowerSize", false,false),
+        FLOWER_TYPE("flowerType", false,false),
+        FLOWER_AMOUNT("flowerAmount", false,false),
+        PATIENT_NAME("patientName", false,false);
         @lombok.Getter
         private final String colName;
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
         public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
     return ref.getFromField(this);
 }
@@ -50,6 +54,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryReques
 }
     public void setValueFromString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref, String value){
             ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
     public Object getFromField(Field field) {
