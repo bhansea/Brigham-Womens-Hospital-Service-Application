@@ -146,7 +146,7 @@ public class AdminTablePageController {
                 currentTable.table.update();
 
             } else if (currentTable.humanReadableName.toLowerCase().contains("node")) {
-                var node = new Node(Long.parseLong(textAreas.get(0).getText()), Integer.parseInt(textAreas.get(1).getText()), Integer.parseInt(textAreas.get(2).getText()), textAreas.get(3).getText(), textAreas.get(0).getText());
+                var node = new Node(Long.parseLong(textAreas.get(0).getText()), Integer.parseInt(textAreas.get(1).getText()), Integer.parseInt(textAreas.get(2).getText()), textAreas.get(3).getText(), textAreas.get(4).getText());
                 facade.updateNode(node, new Node.Field[]{Node.Field.NODE_ID, Node.Field.XCOORD, Node.Field.YCOORD, Node.Field.FLOOR, Node.Field.BUILDING});
                 currentTable.reload();
                 currentTable.table.update();
