@@ -115,13 +115,13 @@ public class AdminTablePageController {
         submitEditButton.setOnAction(e -> {
             if (currentTable.humanReadableName.toLowerCase().contains("request")) {
                 RequestEntry.Status status = null;
-                        if (textAreas.get(4).getText() == "NONE") {
-                            status = RequestEntry.Status.NONE;
-                        } else if (textAreas.get(4).getText() == "PROCESSING") {
-                            status = RequestEntry.Status.PROCESSING;
-                        } else if (textAreas.get(4).getText() == "DONE") {
-                            status = RequestEntry.Status.DONE;
-                        }
+                    if (textAreas.get(4).getText() == "NONE") {
+                        status = RequestEntry.Status.NONE;
+                    } else if (textAreas.get(4).getText() == "PROCESSING") {
+                        status = RequestEntry.Status.PROCESSING;
+                    } else if (textAreas.get(4).getText() == "DONE") {
+                        status = RequestEntry.Status.DONE;
+                    }
                 var requestEntry = new RequestEntry(UUID.fromString(textAreas.get(0).getText()), Long.parseLong(textAreas.get(1).getText()), Long.parseLong(textAreas.get(2).getText()), textAreas.get(3).getText(), status, Long.parseLong(textAreas.get(5).getText()));
                 facade.updateRequestEntry(requestEntry, new RequestEntry.Field[]{RequestEntry.Field.SERVICE_ID, RequestEntry.Field.LOCATION_NAME, RequestEntry.Field.STAFF_ASSIGNMENT, RequestEntry.Field.ADDITIONAL_NOTES, RequestEntry.Field.STATUS, RequestEntry.Field.EMPLOYEE_ID});
                 currentTable.reload();
@@ -134,13 +134,13 @@ public class AdminTablePageController {
                 currentTable.table.update();
             } else if (currentTable.humanReadableName.toLowerCase().contains("account")) {
                 Account.AccountType status = null;
-                if (textAreas.get(4).getText() == "NONE") {
-                    status = Account.AccountType.NONE;
-                } else if (textAreas.get(4).getText() == "ADMIN") {
-                    status = Account.AccountType.ADMIN;
-                } else if (textAreas.get(4).getText() == "STAFF") {
-                    status = Account.AccountType.STAFF;
-                }
+                    if (textAreas.get(4).getText() == "NONE") {
+                        status = Account.AccountType.NONE;
+                    } else if (textAreas.get(4).getText() == "ADMIN") {
+                        status = Account.AccountType.ADMIN;
+                    } else if (textAreas.get(4).getText() == "STAFF") {
+                        status = Account.AccountType.STAFF;
+                    }
                 var account = new Account(Long.parseLong(textAreas.get(0).getText()), textAreas.get(1).getText(),textAreas.get(2).getText(), Long.parseLong(textAreas.get(3).getText()), status);
                 facade.updateAccount(account, new Account.Field[]{Account.Field.UUID, Account.Field.USERNAME, Account.Field.PASSWORD, Account.Field.EMPLOYEE_ID, Account.Field.ACCOUNT_TYPE});
                 currentTable.reload();
@@ -167,32 +167,31 @@ public class AdminTablePageController {
             } else if (currentTable.humanReadableName.toLowerCase().contains("location")) {
 
                 LocationName.NodeType nodeType = null;
-                if (textAreas.get(3).getText() == "HALL") {
-                    nodeType = LocationName.NodeType.HALL;
-                } else if (textAreas.get(3).getText() == "ELEV") {
-                    nodeType = LocationName.NodeType.HALL;
-                } else if (textAreas.get(3).getText() == "REST") {
-                    nodeType = LocationName.NodeType.REST;
-                } else if (textAreas.get(3).getText() == "STAI") {
-                    nodeType = LocationName.NodeType.STAI;
-                } else if (textAreas.get(3).getText() == "DEPT") {
-                    nodeType = LocationName.NodeType.DEPT;
-                } else if (textAreas.get(3).getText() == "LABS") {
-                    nodeType = LocationName.NodeType.LABS;
-                } else if (textAreas.get(3).getText() == "INFO") {
-                    nodeType = LocationName.NodeType.INFO;
-                } else if (textAreas.get(3).getText() == "CONF") {
-                    nodeType = LocationName.NodeType.CONF;
-                } else if (textAreas.get(3).getText() == "EXIT") {
-                    nodeType = LocationName.NodeType.EXIT;
-                } else if (textAreas.get(3).getText() == "RETL") {
-                    nodeType = LocationName.NodeType.RETL;
-                } else if (textAreas.get(3).getText() == "SERV") {
-                    nodeType = LocationName.NodeType.SERV;
-                } else if (textAreas.get(3).getText() == "BATH") {
-                    nodeType = LocationName.NodeType.BATH;
-                }
-
+                    if (textAreas.get(3).getText() == "HALL") {
+                        nodeType = LocationName.NodeType.HALL;
+                    } else if (textAreas.get(3).getText() == "ELEV") {
+                        nodeType = LocationName.NodeType.HALL;
+                    } else if (textAreas.get(3).getText() == "REST") {
+                        nodeType = LocationName.NodeType.REST;
+                    } else if (textAreas.get(3).getText() == "STAI") {
+                        nodeType = LocationName.NodeType.STAI;
+                    } else if (textAreas.get(3).getText() == "DEPT") {
+                        nodeType = LocationName.NodeType.DEPT;
+                    } else if (textAreas.get(3).getText() == "LABS") {
+                        nodeType = LocationName.NodeType.LABS;
+                    } else if (textAreas.get(3).getText() == "INFO") {
+                        nodeType = LocationName.NodeType.INFO;
+                    } else if (textAreas.get(3).getText() == "CONF") {
+                        nodeType = LocationName.NodeType.CONF;
+                    } else if (textAreas.get(3).getText() == "EXIT") {
+                        nodeType = LocationName.NodeType.EXIT;
+                    } else if (textAreas.get(3).getText() == "RETL") {
+                        nodeType = LocationName.NodeType.RETL;
+                    } else if (textAreas.get(3).getText() == "SERV") {
+                        nodeType = LocationName.NodeType.SERV;
+                    } else if (textAreas.get(3).getText() == "BATH") {
+                        nodeType = LocationName.NodeType.BATH;
+                    }
                 var location = new LocationName(Long.parseLong(textAreas.get(0).getText()), textAreas.get(1).getText(), textAreas.get(2).getText(), nodeType);
                 facade.updateLocationName(location, new LocationName.Field[]{LocationName.Field.UUID, LocationName.Field.LONG_NAME, LocationName.Field.SHORT_NAME, LocationName.Field.NODE_TYPE});
                 currentTable.reload();
@@ -293,8 +292,8 @@ public class AdminTablePageController {
             TextArea fieldArea = new TextArea();
 
             fieldLabel.setText(field.toString());
-            editContainer.getChildren().add(fieldLabel);
-            editContainer.getChildren().add(fieldArea);
+            hbox.getChildren().add(fieldLabel);
+            hbox.getChildren().add(fieldArea);
         }
         editContainer.getChildren().add(hbox);
         editContainer.getStyleClass().add("admin-edit-container");
