@@ -66,10 +66,24 @@
     -fx-padding: 20 0 0 0;
 }
 
-.signage-delete-btn {
-    -fx-font-size: 40;
+
+.signage-delete-btn ,
+.signage-delete-btn:armed,
+.signage-delete-btn:hover,
+.signage-delete-btn:focused {
+    -fx-font-size: 30;
     -fx-alignment: center;
     -fx-padding: 0 5 0 5;
+    -fx-cursor: hand;
+    -fx-background-radius: 30;
+    -pfx-button-background: transparent;
+}
+
+.signage-delete-btn PFXIcon {
+    -fx-cursor: hand;
+}
+.signage-delete-btn:hover PFXIcon {
+    -fx-fill: red;
 }
 
 .signage-edit-vbox {
@@ -96,6 +110,10 @@
     -fx-spacing: 15;
     -fx-padding: 10 0 10 0;
     -fx-alignment: CENTER_RIGHT;
+}
+
+.signage-label {
+    -fx-alignment: center;
 }
 
 .signage-label-Here {

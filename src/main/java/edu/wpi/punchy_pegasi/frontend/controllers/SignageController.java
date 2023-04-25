@@ -2,46 +2,44 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.components.PFXDropdown;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.LocationName;
-import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.Signage;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
-import org.phoenicis.javafx.collections.MappedList;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class SignageController {
 
+    private static final Facade facade = App.getSingleton().getFacade();
     private static String prefSignageName;
     private static boolean editing = false;
     private final String lightTheme = Objects.requireNonNull(getClass().getResource("/edu/wpi/punchy_pegasi/frontend/css/SignageLight.css")).toExternalForm();
     private final String darkTheme = Objects.requireNonNull(getClass().getResource("/edu/wpi/punchy_pegasi/frontend/css/SignageDark.css")).toExternalForm();
     private final Scene myScene = App.getSingleton().getScene();
-    private static final Facade facade = App.getSingleton().getFacade();
     private final PFXIcon iconUp = new PFXIcon(MaterialSymbols.ARROW_UPWARD);
     private final PFXIcon iconDown = new PFXIcon(MaterialSymbols.ARROW_DOWNWARD);
     private final PFXIcon iconLeft = new PFXIcon(MaterialSymbols.ARROW_BACK);
@@ -53,9 +51,12 @@ public class SignageController {
     private final HBox signageHeaderRight = new HBox();
     private final Label signageDateTime = new Label();
     private final VBox editingVbox = new VBox();
-    private MFXComboBox<String> signageNameCB = new MFXComboBox<>();
-    private MFXFilterComboBox<LocationName> locNameCB = new MFXFilterComboBox<>();
-    private MFXComboBox<Signage.DirectionType> directionCB = new MFXComboBox<>();
+    private final List<Consumer<String>> filterUpdaters = new ArrayList<>();
+    private final MFXComboBox<String> signageNameCB = new MFXComboBox<>();
+    private final MFXFilterComboBox<LocationName> locNameCB = new MFXFilterComboBox<>();
+    private final MFXComboBox<Signage.DirectionType> directionCB = new MFXComboBox<>();
+    private final PFXButton submitButton = new PFXButton("Submit");
+    private final ObservableList<String> signageNames = FXCollections.observableArrayList();
     @FXML
     private VBox headerEdit;
     @FXML
@@ -74,11 +75,11 @@ public class SignageController {
     private HBox signageHeader;
     @FXML
     private HBox signageHeaderEdit;
-    private PFXButton submitButton = new PFXButton("Submit");
 
     private static void addDelButton(HBox hbox, Signage signage) {
         var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
         deleteBtn.getStyleClass().add("signage-delete-btn");
+
         deleteBtn.setOnAction(event -> {
             facade.deleteSignage(signage);
         });
@@ -88,14 +89,16 @@ public class SignageController {
     @NotNull
     private static VBox getSignageTableView(ObservableList<Signage> rightList) {
         var vBox = new VBox();
-//        Bindings.bindContentBidirectional(vBox.getChildren(), new MappedList<>(rightList, signage -> new HBox(new Label(signage.getLongName()))));
+//        Bindings.bindContent(vBox.getChildren(), new MappedList<>(rightList, signage ->{
+//            var hbox = new HBox(new Label(signage.getLongName()));
+//            hbox.setId(signage.getUuid().toString());
+//            addDelButton(hbox, signage);
+//            return hbox;
+//        }));
         rightList.addListener((ListChangeListener<? super Signage>) c -> {
             while (c.next()) {
-                if (c.wasAdded()) {
+                if (c.wasAdded())
                     for (Signage signage : c.getAddedSubList()) {
-                        if (!signage.getSignName().equals(prefSignageName)) {
-                            continue;
-                        }
                         var hbox = new HBox(new Label(signage.getLongName()));
                         hbox.setId(signage.getUuid().toString());
                         addDelButton(hbox, signage);
@@ -103,24 +106,15 @@ public class SignageController {
                                 vBox.getChildren().add(hbox)
                         );
                     }
-                }
-                if (c.wasRemoved()) {
-                    for (Signage signage : c.getRemoved()) {
-                        if (!signage.getSignName().equals(prefSignageName)) {
-                            continue;
-                        }
+                if (c.wasRemoved())
+                    for (Signage signage : c.getRemoved())
                         Platform.runLater(() ->
                                 vBox.getChildren().removeIf(node -> node.getId().equals(signage.getUuid().toString()))
                         );
-                    }
-                }
             }
         });
-        //init the vBox
+//        init the vBox
         for (Signage signage : rightList) {
-//            if (!signage.getSignName().equals(prefSignageName)) {
-//                continue;
-//            }
             var hbox = new HBox(new Label(signage.getLongName()));
             addDelButton(hbox, signage);
             hbox.setId(signage.getUuid().toString());
@@ -159,16 +153,20 @@ public class SignageController {
     }
 
     private void buildTestSignage() {
-        ObservableList<String> signageNames = FXCollections.observableArrayList();
-        ObservableList<String> longNames = FXCollections.observableArrayList();
         ObservableList<Signage> signageList = facade.getAllAsListSignage();
-        for (Signage signage : signageList) {
-            if (!signageNames.contains(signage.getSignName()))
-                signageNames.add(signage.getSignName());
-        }
-        for (LocationName locName : facade.getAllAsListLocationName()) {
-            longNames.add(locName.getLongName());
-        }
+        signageNames.addAll(signageList.stream().map(Signage::getSignName).distinct().sorted().toList());
+        signageList.addListener((ListChangeListener<Signage>) c -> Platform.runLater(() -> {
+            while (c.next()) {
+                if (c.wasAdded())
+                    for (Signage signage : c.getAddedSubList())
+                        if (!signageNames.contains(signage.getSignName()))
+                            signageNames.add(signage.getSignName());
+                if (c.wasRemoved())
+                    for (Signage signage : c.getRemoved())
+                        if (c.getList().stream().map(Signage::getSignName).filter(signage.getSignName()::equals).count() == 0)
+                            signageNames.remove(signage.getSignName());
+            }
+        }));
         signageNameCB.setFloatingText("Signage Name");
         signageNameCB.setFloatMode(FloatMode.INLINE);
         signageNameCB.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -230,9 +228,12 @@ public class SignageController {
         submitButton.setDisable(invalid);
     }
 
+    private void setSignageName(String name) {
+        filterUpdaters.forEach(updater -> updater.accept(name));
+    }
+
     @FXML
     private void initialize() {
-        prefSignageName = "a";
         var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
         editing = true;
         configTimer(1000);
@@ -285,6 +286,12 @@ public class SignageController {
         signageDateTime.getStyleClass().add("signage-text-DateTime");
         updateTime();
         signageHeaderRight.getChildren().add(signageDateTime);
+        var signageNameSelector = new MFXComboBox<>(signageNames);
+        signageNameSelector.setOnAction(e -> {
+            setSignageName(signageNameSelector.getValue());
+        });
+        signageHeaderRight.getChildren().add(signageNameSelector);
+
 
         // Combine left and right header in signageHeader HBox
         signageHeader.getChildren().add(signageHeaderLeft);
@@ -315,8 +322,10 @@ public class SignageController {
 //            if (direction == Signage.DirectionType.HERE) {
 //                continue;
 //            }
-            var signageList = facade.getAllAsListSignage()
-                    .filtered(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(prefSignageName));
+            var signageList = facade.getAllAsListSignage().filtered(s -> true);
+            Consumer<String> updated = s -> signageList.setPredicate(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(s));
+            filterUpdaters.add(updated);
+            updated.accept(prefSignageName);
 //            var prefSignList = signageList.filtered(signage -> signage.getSignName().equals(prefSignageName));
 //            Label locLabel = new Label(String.join("\n", signageList.stream().map(Signage::getLongName).toList()));
             var table = getSignageTableView(signageList);
