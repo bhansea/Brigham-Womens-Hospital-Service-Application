@@ -2,17 +2,19 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-
-import java.util.List;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
 
@@ -97,21 +99,21 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
 
 
     /**
-     invalidText.setVisible(false);
-     String username = usernameEnter.getText();
-     String password = passwordBox.getText();
-     Account.Field[] fields = {Account.Field.USERNAME, Account.Field.PASSWORD};
-     Object[] values = {username, password};
-     Map<String, Account> map = facade.getAccount(fields, values);
-
-     if (map.size() > 0) {
-     App.getSingleton().setAccount(map.values().stream().findFirst().get());
-     App.getSingleton().navigate(Screen.HOME);
-     } else {
-     invalidText.setVisible(true);
-     usernameEnter.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
-     passwordBox.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
-     }
+     * invalidText.setVisible(false);
+     * String username = usernameEnter.getText();
+     * String password = passwordBox.getText();
+     * Account.Field[] fields = {Account.Field.USERNAME, Account.Field.PASSWORD};
+     * Object[] values = {username, password};
+     * Map<String, Account> map = facade.getAccount(fields, values);
+     * <p>
+     * if (map.size() > 0) {
+     * App.getSingleton().setAccount(map.values().stream().findFirst().get());
+     * App.getSingleton().navigate(Screen.HOME);
+     * } else {
+     * invalidText.setVisible(true);
+     * usernameEnter.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
+     * passwordBox.setStyle("-fx-border-color: red; -fx-text-fill: #000000;");
+     * }
      */
 
     @FXML
@@ -127,8 +129,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         numberOfParticipants.getText(),
                         App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
-        App.getSingleton().navigate(Screen.HOME);
+
+        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
-
-
 }
