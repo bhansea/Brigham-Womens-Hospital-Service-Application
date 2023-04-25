@@ -57,7 +57,7 @@
                                             <padding>
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
-                                            <VBox VBox.vgrow="ALWAYS" fx:id="tableHolder">
+                                            <VBox VBox.vgrow="ALWAYS" fx:id="alertsHolder">
                                                 <PFXCardVerticalPlaceholder fx:id="placeholderalerts" styleClass="home-page-card" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" />
                                             </VBox>
                                         </StackPane>

@@ -78,8 +78,8 @@ public class HomePageController {
         //pstage.setTitle("Pie");
         //pstage.setScene(scene);
         //pstage.show();
-        //initRequestTable();
-        //showServiceRequestTable(true);
+//        initRequestTable();
+//        showServiceRequestTable(true);
 
     }
 
@@ -162,11 +162,11 @@ public class HomePageController {
 //            });
 //            return row;
 //        });
-        requestTable.getTableColumns().addAll(locationCol, employeeCol, additionalCol, statusCol, typeCol);
-        requestTable.setItems(requestList);
-        requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
-        requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
-        requestTable.autosizeColumnsOnInitialization();
+//        requestTable.getTableColumns().addAll(locationCol, employeeCol, additionalCol, statusCol, typeCol);
+//        requestTable.setItems(requestList);
+//        requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
+//        requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
+//        requestTable.autosizeColumnsOnInitialization();
     }
 
     @FXML
