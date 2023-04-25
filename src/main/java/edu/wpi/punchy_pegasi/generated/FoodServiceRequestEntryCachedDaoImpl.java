@@ -109,18 +109,18 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS)) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
-                    rs.getObject("patientName", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("foodSelection", java.lang.String.class),
+                        rs.getObject("tempType", java.lang.String.class),
+                        java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
+                        rs.getObject("beverage", java.lang.String.class),
+                        rs.getObject("dietaryRestrictions", java.lang.String.class),
+                        rs.getObject("patientName", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -212,6 +212,7 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public FoodServiceRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

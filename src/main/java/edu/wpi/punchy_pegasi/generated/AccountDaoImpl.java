@@ -54,11 +54,11 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS, Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -74,11 +74,11 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

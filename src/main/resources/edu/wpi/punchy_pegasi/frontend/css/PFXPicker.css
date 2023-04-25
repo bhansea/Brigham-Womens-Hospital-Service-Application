@@ -20,7 +20,7 @@
 
 .pfx-picker-container PFXButton {
     -fx-font-family: "Nunito Sans Light";
-    -fx-background-color: transparent;
+    -pfx-button-background: transparent;
     -fx-font-size: 16;
     -fx-max-width: 9999;
     -fx-text-fill: -pfx-navy;
