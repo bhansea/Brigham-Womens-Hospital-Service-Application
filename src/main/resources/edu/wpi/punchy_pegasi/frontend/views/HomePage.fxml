@@ -99,7 +99,7 @@
 <!--                </padding>-->
             </Label>
             <AnchorPane maxWidth="-Infinity" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" fx:id="dateTimeAnchor">
-                <VBox alignment="CENTER_RIGHT" style="-fx-background-color: -pfx-background" fx:id="dateTimeBox">
+                <VBox alignment="CENTER_RIGHT" style="-fx-background-color: -pfx-background" fx:id="dateTimeBox" layoutX="10" layoutY="10">
                     <Label text="Date: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
                            style="-fx-background-color: -pfx-background" fx:id="dateLabel">
                         <font>

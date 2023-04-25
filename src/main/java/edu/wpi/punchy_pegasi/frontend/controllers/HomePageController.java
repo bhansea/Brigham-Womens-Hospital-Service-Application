@@ -64,9 +64,9 @@ public class HomePageController {
         dateLabel.setText(currentDate.toString());
         timeLabel.setText(currentTimeNoSec.toString());
 
-        dateTimeBox.layoutXProperty().bind(dateTimeAnchor.widthProperty().subtract(dateLabel.widthProperty()).subtract(10.0));
-        // Bind layoutYProperty of Label to heightProperty of AnchorPane - 10.0 to position it in the top corner
-        dateTimeBox.layoutYProperty().bind(dateTimeAnchor.heightProperty().subtract(dateLabel.heightProperty()).subtract(10.0));
+//        dateTimeBox.layoutXProperty().bind(dateTimeAnchor.widthProperty().subtract(dateLabel.widthProperty()).subtract(10.0));
+//        // Bind layoutYProperty of Label to heightProperty of AnchorPane - 10.0 to position it in the top corner
+//        dateTimeBox.layoutYProperty().bind(dateTimeAnchor.heightProperty().subtract(dateLabel.heightProperty()).subtract(10.0));
 
 
 
