@@ -72,9 +72,9 @@
                             <padding>
                                 <Insets topRightBottomLeft="20"/>
                             </padding>
-                            <StackPane>
-                                <MFXTableView fx:id="requestTable" stylesheets="@../css/MFXTableView.css"/>
-                            </StackPane>
+                            <VBox VBox.vgrow="ALWAYS" fx:id="tableContainer" minWidth="650" minHeight="250">
+                                <MFXTableView fx:id="requestTable" VBox.vgrow="ALWAYS"/>
+                            </VBox>
                         </HBox>
                     </children>
                 </GridPane>

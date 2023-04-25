@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
@@ -19,11 +20,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import javafx.scene.layout.StackPane;
+import javafx.scene.input.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,9 +36,9 @@ import java.util.*;
 @Slf4j
 public class HomePageController {
     @FXML
-    MFXTableView<GenericRequestEntry> requestTable;
+    MFXTableView<GenericRequestEntry> requestTable = new MFXTableView<>();
     @FXML
-    private VBox tableContainer;
+    private VBox tableContainer = new VBox();
     private final Facade facade = App.getSingleton().getFacade();
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
@@ -43,9 +46,6 @@ public class HomePageController {
 //    private VBox pie;
     @FXML
     private PieChart piechart = new PieChart();
-
-//    @FXML
-//    private MFXComboBox notificationComboBox;
 
     @FXML
     private Label dateLabel = new Label();
@@ -69,24 +69,21 @@ public class HomePageController {
         piechart.setTitle("Service Request");
         piechart.setLegendVisible(false);
 
-
-
-
         //pie.getChildren().add(piechart);
         //Scene scene = new Scene(pie, 500, 500);
         //Stage pstage = new Stage();
         //pstage.setTitle("Pie");
         //pstage.setScene(scene);
         //pstage.show();
-//        initRequestTable();
-//        showServiceRequestTable(true);
+        initRequestTable();
+        showServiceRequestTable(true);
 
     }
 
-//    private void showServiceRequestTable(boolean show) {
-//        requestTable.setVisible(show);
-//        requestTable.setManaged(show);
-//    }
+    private void showServiceRequestTable(boolean show) {
+        requestTable.setVisible(show);
+        requestTable.setManaged(show);
+    }
 
 //    @FXML
 //    private void openSelectedWindow() {
@@ -132,12 +129,8 @@ public class HomePageController {
 
     private void initRequestTable() {
         var employeeID = App.getSingleton().getAccount().getEmployeeID();
-        List<RequestEntry> requestEntries = new ArrayList<>();
-        requestEntries.addAll(facade.getAllFurnitureRequestEntry().values());
-        requestEntries.addAll(facade.getAllConferenceRoomEntry().values());
-        requestEntries.addAll(facade.getAllFlowerDeliveryRequestEntry().values());
-        requestEntries.addAll(facade.getAllOfficeServiceRequestEntry().values());
-        requestEntries.addAll(facade.getAllFoodServiceRequestEntry().values());
+        ObservableList<RequestEntry> requestEntries = facade.getAllAsListRequestEntry();
+
 
         ObservableList<GenericRequestEntry> requestList = FXCollections.observableArrayList(requestEntries.stream()
                 .filter(e -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel() || Objects.equals(e.getStaffAssignment(), employeeID))
@@ -154,19 +147,25 @@ public class HomePageController {
         additionalCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.additionalNotes));
         statusCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.status));
         typeCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.tableType));
-//        requestTable.setTableRowFactory(r -> {
-//            var row = new MFXTableRow<>(requestTable, r);
-//            row.setStyle("-fx-background-color: red");
-//            row.setOnMouseClicked(e -> {
-//                rowClicked(r);
-//            });
-//            return row;
-//        });
-//        requestTable.getTableColumns().addAll(locationCol, employeeCol, additionalCol, statusCol, typeCol);
-//        requestTable.setItems(requestList);
-//        requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
-//        requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
-//        requestTable.autosizeColumnsOnInitialization();
+        requestTable.setTableRowFactory(r -> {
+            var row = new MFXTableRow<>(requestTable, r);
+            row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                Stage stage = new Stage();
+                stage.setMinWidth(300);
+                stage.setMinHeight(200);
+//                stage.setMaxWidth(500);
+//                stage.setMaxHeight(400);
+                var popup = new Popup();
+                stage.show();
+            });
+            return row;
+        });
+        requestTable.getTableColumns().addAll(locationCol, employeeCol, additionalCol, statusCol, typeCol);
+        requestTable.setItems(requestList);
+        requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
+        requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
+        requestTable.autosizeColumnsOnInitialization();
+
     }
 
     @FXML
