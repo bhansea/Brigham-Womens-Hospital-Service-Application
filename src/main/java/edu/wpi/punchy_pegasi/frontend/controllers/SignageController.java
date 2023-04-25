@@ -228,10 +228,6 @@ public class SignageController {
         submitButton.setDisable(invalid);
     }
 
-    private void setSignageName(String name) {
-        filterUpdaters.forEach(updater -> updater.accept(name));
-    }
-
     @FXML
     private void initialize() {
         var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
@@ -299,22 +295,8 @@ public class SignageController {
         signageHeader.getStyleClass().add("signage-header");
     }
 
-    private void initHeaderEdit() {
-        // setting up left side of header
-        PFXIcon iconSignageLocation = new PFXIcon(MaterialSymbols.WHERE_TO_VOTE);
-        iconSignageLocation.getStyleClass().add("signage-icon-header");
-        var signagePrefList = facade.getAllAsListSignage()
-                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
-//        var signageHere = getSignageTableView(signagePrefList);
-//        signageHere.getStyleClass().add("signage-label-Here");
-        signageHeaderLeftEdit.getChildren().add(iconSignageLocation);
-//        signageHeaderLeftEdit.getChildren().add(signageHere);
-
-        HBox signageHeaderRightEdit = new HBox();
-
-
-        signageHeaderEdit.getChildren().add(signageHeaderLeftEdit);
-        signageHeaderEdit.getChildren().add(signageHeaderRightEdit);
+    private void setSignageName(String name) {
+        filterUpdaters.forEach(updater -> updater.accept(name));
     }
 
     private void buildSignage() {
