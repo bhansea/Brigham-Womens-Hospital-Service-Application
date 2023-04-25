@@ -9,9 +9,9 @@
             xmlns="http://javafx.com/javafx/"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminTablePageController">
     <center>
-        <HBox>
-            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
+        <VBox>
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent"/>
                     <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container">
                         <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                             <VBox VBox.vgrow="ALWAYS" spacing="10.0">
@@ -33,7 +33,7 @@
                                     <PFXButton styleClass="admin-container-buttons-clear" text="Clear Table" fx:id="clearButton"/>
                                 </HBox>
                             </VBox>
-                            <GridPane fx:id="editContainer" alignment="CENTER_LEFT"/>
+                            <GridPane hgap="5" fx:id="editContainer" alignment="CENTER_LEFT"/>
                         </HBox>
                     </VBox>
                 <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
@@ -45,6 +45,6 @@
                     </children>
                 </VBox>
             </VBox>
-        </HBox>
+        </VBox>
     </center>
 </BorderPane>

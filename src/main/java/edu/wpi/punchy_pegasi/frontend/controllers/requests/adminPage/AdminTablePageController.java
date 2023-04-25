@@ -319,6 +319,7 @@ public class AdminTablePageController {
         form = new ArrayList<>();
         inputs = new ArrayList<>();
         int counter = 0;
+        int rowcounter = 0;
         for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
             var hbox = new HBox();
             var label = new Label(field.getColName());
@@ -330,10 +331,14 @@ public class AdminTablePageController {
 
             //elements.add(label, 0, counter);
             //elements.add(input, 1, counter);
-            GridPane.setColumnIndex(label, 0);
-            GridPane.setColumnIndex(input, 1);
-            GridPane.setRowIndex(label, counter);
-            GridPane.setRowIndex(input, counter);
+            if(counter == 5){
+                counter = 0;
+                rowcounter+=2;
+            }
+            GridPane.setRowIndex(label, rowcounter);
+            GridPane.setRowIndex(input, rowcounter+1);
+            GridPane.setColumnIndex(label, counter);
+            GridPane.setColumnIndex(input, counter);
             counter++;
 //            hbox.getStyleClass().add("admin-table-container");
 //            hbox.getChildren().addAll(label, input);
@@ -343,6 +348,7 @@ public class AdminTablePageController {
             inputs.add(input);
         }
         //form.add(gp);
+        editContainer.getStyleClass().add("admin-table-container");
         editContainer.getChildren().clear();
         editContainer.getChildren().addAll(form);
     }

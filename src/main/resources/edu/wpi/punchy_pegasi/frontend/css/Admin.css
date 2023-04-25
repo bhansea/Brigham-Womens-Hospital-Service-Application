@@ -79,3 +79,6 @@
     -fx-min-height: 45;
 }
 
+.admin-container-parent{
+    -fx-padding: 0 10 0 10;
+}
