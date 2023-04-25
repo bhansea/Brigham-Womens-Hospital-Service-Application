@@ -167,7 +167,7 @@ public class PathfindingMap {
 
     @FXML
     private void graphicalSelect() {
-        if (selectingGraphically.compareAndExchange(false, true)) return;
+        if (!selectingGraphically.compareAndSet(false, true)) return;
         nodeStartCombo.setDisable(true);
         nodeEndCombo.setDisable(true);
         pathfindButton.setDisable(true);

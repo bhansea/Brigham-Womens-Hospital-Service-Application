@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import edu.wpi.punchy_pegasi.frontend.controllers.HeaderController?>
 <?import edu.wpi.punchy_pegasi.frontend.controllers.SidebarController?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import edu.wpi.punchy_pegasi.frontend.controllers.HeaderController?>
+<?import javafx.scene.layout.*?>
 <fx:root xmlns:fx="http://javafx.com/fxml"
-         type="javafx.scene.layout.BorderPane"
+         type="javafx.scene.layout.StackPane"
          xmlns="http://javafx.com/javafx">
-    <center>
-        <BorderPane style="-fx-background-color: -pfx-background;">
-            <center>
-                <BorderPane style="-fx-background-color: -pfx-background;">
-                    <center>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content" style="-fx-background-color: -pfx-background;">
-                            <BorderPane fx:id="ViewPane"/>
-                        </ScrollPane>
-                    </center>
-                    <top >
-                        <HeaderController fx:id="topLayout"/>
-                    </top>
-                </BorderPane>
-            </center>
-        </BorderPane>
-    </center>
-    <left>
-        <SidebarController fx:id="leftLayout"/>
-    </left>
+    <BorderPane fx:id="layoutPane">
+        <left>
+            <SidebarController fx:id="leftLayout"/>
+        </left>
+        <center>
+            <BorderPane style="-fx-background-color: -pfx-background;">
+                <top>
+                    <HeaderController fx:id="topLayout"/>
+                </top>
+                <center>
+                    <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content"
+                                style="-fx-background-color: -pfx-background;">
+                        <BorderPane fx:id="ViewPane"/>
+                    </ScrollPane>
+                </center>
+            </BorderPane>
+        </center>
+    </BorderPane>
+    <VBox fx:id="notificationsContainer"/>
+    <VBox alignment="CENTER" pickOnBounds="false" fx:id="alertVBox">
+        <HBox alignment="CENTER" pickOnBounds="false" fx:id="alertHBox"/>
+    </VBox>
 </fx:root>
