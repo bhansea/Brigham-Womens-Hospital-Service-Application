@@ -1,0 +1,14 @@
+@import "Fonts.css";
+
+.admin-table-container{
+
+}
+
+.admin-table-container > Label {
+    -fx-font-size: 18;
+    -fx-padding: 0 0 0 0;
+}
+
+.admin-table-container > TextField{
+    -fx-alignment: CENTER_LEFT;
+}

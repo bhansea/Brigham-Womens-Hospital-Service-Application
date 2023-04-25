@@ -1,20 +1,32 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Employee;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Slf4j
 public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Employee.Field>, PropertyChangeListener {
@@ -28,14 +40,56 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
     public EmployeeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Employee>) c -> {
-            if (c.wasRemoved()) {
-                list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
-                list.add(c.getValueAdded());
-            }
+            Platform.runLater(() -> {
+                if (c.wasRemoved() && c.wasAdded()) {
+                    var index = list.indexOf(c.getValueRemoved());
+                    if (index != -1) {
+                        list.remove(index);
+                        list.add(index, c.getValueAdded());
+                    }
+                }
+                if (c.wasRemoved()) {
+                    list.remove(c.getValueRemoved());
+                }
+                if (c.wasAdded()) {
+                    list.add(c.getValueAdded());
+                }
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
+    }
+
+    public MFXTableView<Employee> generateTable(Consumer<Employee> onRowClick, Employee.Field[] hidden) {
+        var table = new MFXTableView<Employee>();
+        table.setItems(list);
+        for (Employee.Field field : Arrays.stream(Employee.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
+            MFXTableColumn<Employee> col = new MFXTableColumn<>(field.getColName(), true);
+            col.setPickOnBounds(false);
+
+            col.setRowCellFactory(p -> {
+                var cell = new MFXTableRowCell<>(field::getValue);
+                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                    if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                    onRowClick.accept(p);
+                });
+                return cell;
+            });
+            table.getTableColumns().add(col);
+        }
+        table.setTableRowFactory(r -> {
+            var row = new MFXTableRow<>(table, r);
+            row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                onRowClick.accept(r);
+            });
+            return row;
+        });
+        return table;
+    }
+
+    public MFXTableView<Employee> generateTable(Consumer<Employee> onRowClick) {
+        return generateTable(onRowClick, new Employee.Field[]{});
     }
 
     public void add(Employee employee) {
@@ -142,6 +196,40 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
                 case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
+        }
+    }
+
+    public static class EmployeeForm implements IForm<Employee> {
+        @Getter
+        private final List<javafx.scene.Node> form;
+        private final List<TextField> inputs;
+        public EmployeeForm() {
+            form = new ArrayList<>();
+            inputs = new ArrayList<>();
+            for (var field : Employee.Field.values()) {
+                var hbox = new HBox();
+                var label = new Label(field.getColName());
+                var input = new TextField();
+                hbox.getChildren().addAll(label, input);
+                form.add(hbox);
+                inputs.add(input);
+            }
+        }
+
+        public void populateForm(Employee entry) {
+            for (var field : Employee.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                input.setText(field.getValueAsString(entry));
+            }
+        }
+
+        public Employee commit() {
+            var entry = new Employee();
+            for (var field : Employee.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                field.setValueFromString(entry, input.getText());
+            }
+            return entry;
         }
     }
 }

@@ -5,6 +5,8 @@ import edu.wpi.punchy_pegasi.backend.PdbController;
 import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import java.util.function.Consumer;
 import java.util.Optional;
 
 
@@ -14,6 +16,7 @@ public class Facade {
 	private final MoveCachedDaoImpl moveDao;
 	private final LocationNameCachedDaoImpl locationNameDao;
 	private final RequestEntryCachedDaoImpl requestEntryDao;
+	private final GenericRequestEntryCachedDaoImpl genericRequestEntryDao;
 	private final FoodServiceRequestEntryCachedDaoImpl foodServiceRequestEntryDao;
 	private final FlowerDeliveryRequestEntryCachedDaoImpl flowerDeliveryRequestEntryDao;
 	private final ConferenceRoomEntryCachedDaoImpl conferenceRoomEntryDao;
@@ -22,6 +25,24 @@ public class Facade {
 	private final EmployeeCachedDaoImpl employeeDao;
 	private final AccountCachedDaoImpl accountDao;
 	private final SignageCachedDaoImpl signageDao;
+    public <K, T, C> IDao<K, T, C> getDaoByClass(Class<T> clazz) {
+        if (clazz == null) return null;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Node.class) return (IDao<K, T, C>)nodeDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Edge.class) return (IDao<K, T, C>)edgeDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Move.class) return (IDao<K, T, C>)moveDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.LocationName.class) return (IDao<K, T, C>)locationNameDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.RequestEntry.class) return (IDao<K, T, C>)requestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.GenericRequestEntry.class) return (IDao<K, T, C>)genericRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.FoodServiceRequestEntry.class) return (IDao<K, T, C>)foodServiceRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.FlowerDeliveryRequestEntry.class) return (IDao<K, T, C>)flowerDeliveryRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.ConferenceRoomEntry.class) return (IDao<K, T, C>)conferenceRoomEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.FurnitureRequestEntry.class) return (IDao<K, T, C>)furnitureRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.OfficeServiceRequestEntry.class) return (IDao<K, T, C>)officeServiceRequestEntryDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Employee.class) return (IDao<K, T, C>)employeeDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Account.class) return (IDao<K, T, C>)accountDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Signage.class) return (IDao<K, T, C>)signageDao;
+        else return null;
+    }
 
     public Facade(PdbController dbController) {
 		nodeDao = new NodeCachedDaoImpl(dbController);
@@ -29,6 +50,7 @@ public class Facade {
 		moveDao = new MoveCachedDaoImpl(dbController);
 		locationNameDao = new LocationNameCachedDaoImpl(dbController);
 		requestEntryDao = new RequestEntryCachedDaoImpl(dbController);
+		genericRequestEntryDao = new GenericRequestEntryCachedDaoImpl(dbController);
 		foodServiceRequestEntryDao = new FoodServiceRequestEntryCachedDaoImpl(dbController);
 		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryCachedDaoImpl(dbController);
 		conferenceRoomEntryDao = new ConferenceRoomEntryCachedDaoImpl(dbController);
@@ -40,6 +62,12 @@ public class Facade {
 
     }
 
+	public MFXTableView<Node> generateTableNode(Consumer<Node> onRowClick, Node.Field[] hidden) {
+		return nodeDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<Node> generateTableNode(Consumer<Node> onRowClick) {
+		return nodeDao.generateTable(onRowClick);
+	}
 	public Optional<Node> getNode(java.lang.Long key) {
 		return nodeDao.get(key);
 	}
@@ -63,6 +91,12 @@ public class Facade {
 	}
 	public void deleteNode(Node node) {
 		nodeDao.delete(node);
+	}
+	public MFXTableView<Edge> generateTableEdge(Consumer<Edge> onRowClick, Edge.Field[] hidden) {
+		return edgeDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<Edge> generateTableEdge(Consumer<Edge> onRowClick) {
+		return edgeDao.generateTable(onRowClick);
 	}
 	public Optional<Edge> getEdge(java.lang.Long key) {
 		return edgeDao.get(key);
@@ -88,6 +122,12 @@ public class Facade {
 	public void deleteEdge(Edge edge) {
 		edgeDao.delete(edge);
 	}
+	public MFXTableView<Move> generateTableMove(Consumer<Move> onRowClick, Move.Field[] hidden) {
+		return moveDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<Move> generateTableMove(Consumer<Move> onRowClick) {
+		return moveDao.generateTable(onRowClick);
+	}
 	public Optional<Move> getMove(java.lang.Long key) {
 		return moveDao.get(key);
 	}
@@ -111,6 +151,12 @@ public class Facade {
 	}
 	public void deleteMove(Move move) {
 		moveDao.delete(move);
+	}
+	public MFXTableView<LocationName> generateTableLocationName(Consumer<LocationName> onRowClick, LocationName.Field[] hidden) {
+		return locationNameDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<LocationName> generateTableLocationName(Consumer<LocationName> onRowClick) {
+		return locationNameDao.generateTable(onRowClick);
 	}
 	public Optional<LocationName> getLocationName(java.lang.Long key) {
 		return locationNameDao.get(key);
@@ -136,6 +182,12 @@ public class Facade {
 	public void deleteLocationName(LocationName locationName) {
 		locationNameDao.delete(locationName);
 	}
+	public MFXTableView<RequestEntry> generateTableRequestEntry(Consumer<RequestEntry> onRowClick, RequestEntry.Field[] hidden) {
+		return requestEntryDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<RequestEntry> generateTableRequestEntry(Consumer<RequestEntry> onRowClick) {
+		return requestEntryDao.generateTable(onRowClick);
+	}
 	public Optional<RequestEntry> getRequestEntry(java.util.UUID key) {
 		return requestEntryDao.get(key);
 	}
@@ -159,6 +211,12 @@ public class Facade {
 	}
 	public void deleteRequestEntry(RequestEntry requestEntry) {
 		requestEntryDao.delete(requestEntry);
+	}
+	public MFXTableView<FoodServiceRequestEntry> generateTableFoodServiceRequestEntry(Consumer<FoodServiceRequestEntry> onRowClick, FoodServiceRequestEntry.Field[] hidden) {
+		return foodServiceRequestEntryDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<FoodServiceRequestEntry> generateTableFoodServiceRequestEntry(Consumer<FoodServiceRequestEntry> onRowClick) {
+		return foodServiceRequestEntryDao.generateTable(onRowClick);
 	}
 	public Optional<FoodServiceRequestEntry> getFoodServiceRequestEntry(java.util.UUID key) {
 		return foodServiceRequestEntryDao.get(key);
@@ -184,6 +242,12 @@ public class Facade {
 	public void deleteFoodServiceRequestEntry(FoodServiceRequestEntry foodServiceRequestEntry) {
 		foodServiceRequestEntryDao.delete(foodServiceRequestEntry);
 	}
+	public MFXTableView<FlowerDeliveryRequestEntry> generateTableFlowerDeliveryRequestEntry(Consumer<FlowerDeliveryRequestEntry> onRowClick, FlowerDeliveryRequestEntry.Field[] hidden) {
+		return flowerDeliveryRequestEntryDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<FlowerDeliveryRequestEntry> generateTableFlowerDeliveryRequestEntry(Consumer<FlowerDeliveryRequestEntry> onRowClick) {
+		return flowerDeliveryRequestEntryDao.generateTable(onRowClick);
+	}
 	public Optional<FlowerDeliveryRequestEntry> getFlowerDeliveryRequestEntry(java.util.UUID key) {
 		return flowerDeliveryRequestEntryDao.get(key);
 	}
@@ -207,6 +271,12 @@ public class Facade {
 	}
 	public void deleteFlowerDeliveryRequestEntry(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
 		flowerDeliveryRequestEntryDao.delete(flowerDeliveryRequestEntry);
+	}
+	public MFXTableView<ConferenceRoomEntry> generateTableConferenceRoomEntry(Consumer<ConferenceRoomEntry> onRowClick, ConferenceRoomEntry.Field[] hidden) {
+		return conferenceRoomEntryDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<ConferenceRoomEntry> generateTableConferenceRoomEntry(Consumer<ConferenceRoomEntry> onRowClick) {
+		return conferenceRoomEntryDao.generateTable(onRowClick);
 	}
 	public Optional<ConferenceRoomEntry> getConferenceRoomEntry(java.util.UUID key) {
 		return conferenceRoomEntryDao.get(key);
@@ -232,6 +302,12 @@ public class Facade {
 	public void deleteConferenceRoomEntry(ConferenceRoomEntry conferenceRoomEntry) {
 		conferenceRoomEntryDao.delete(conferenceRoomEntry);
 	}
+	public MFXTableView<FurnitureRequestEntry> generateTableFurnitureRequestEntry(Consumer<FurnitureRequestEntry> onRowClick, FurnitureRequestEntry.Field[] hidden) {
+		return furnitureRequestEntryDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<FurnitureRequestEntry> generateTableFurnitureRequestEntry(Consumer<FurnitureRequestEntry> onRowClick) {
+		return furnitureRequestEntryDao.generateTable(onRowClick);
+	}
 	public Optional<FurnitureRequestEntry> getFurnitureRequestEntry(java.util.UUID key) {
 		return furnitureRequestEntryDao.get(key);
 	}
@@ -255,6 +331,12 @@ public class Facade {
 	}
 	public void deleteFurnitureRequestEntry(FurnitureRequestEntry furnitureRequestEntry) {
 		furnitureRequestEntryDao.delete(furnitureRequestEntry);
+	}
+	public MFXTableView<OfficeServiceRequestEntry> generateTableOfficeServiceRequestEntry(Consumer<OfficeServiceRequestEntry> onRowClick, OfficeServiceRequestEntry.Field[] hidden) {
+		return officeServiceRequestEntryDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<OfficeServiceRequestEntry> generateTableOfficeServiceRequestEntry(Consumer<OfficeServiceRequestEntry> onRowClick) {
+		return officeServiceRequestEntryDao.generateTable(onRowClick);
 	}
 	public Optional<OfficeServiceRequestEntry> getOfficeServiceRequestEntry(java.util.UUID key) {
 		return officeServiceRequestEntryDao.get(key);
@@ -280,6 +362,12 @@ public class Facade {
 	public void deleteOfficeServiceRequestEntry(OfficeServiceRequestEntry officeServiceRequestEntry) {
 		officeServiceRequestEntryDao.delete(officeServiceRequestEntry);
 	}
+	public MFXTableView<Employee> generateTableEmployee(Consumer<Employee> onRowClick, Employee.Field[] hidden) {
+		return employeeDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<Employee> generateTableEmployee(Consumer<Employee> onRowClick) {
+		return employeeDao.generateTable(onRowClick);
+	}
 	public Optional<Employee> getEmployee(java.lang.Long key) {
 		return employeeDao.get(key);
 	}
@@ -304,6 +392,12 @@ public class Facade {
 	public void deleteEmployee(Employee employee) {
 		employeeDao.delete(employee);
 	}
+	public MFXTableView<Account> generateTableAccount(Consumer<Account> onRowClick, Account.Field[] hidden) {
+		return accountDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<Account> generateTableAccount(Consumer<Account> onRowClick) {
+		return accountDao.generateTable(onRowClick);
+	}
 	public Optional<Account> getAccount(java.lang.Long key) {
 		return accountDao.get(key);
 	}
@@ -327,6 +421,12 @@ public class Facade {
 	}
 	public void deleteAccount(Account account) {
 		accountDao.delete(account);
+	}
+	public MFXTableView<Signage> generateTableSignage(Consumer<Signage> onRowClick, Signage.Field[] hidden) {
+		return signageDao.generateTable(onRowClick, hidden);
+	}
+	public MFXTableView<Signage> generateTableSignage(Consumer<Signage> onRowClick) {
+		return signageDao.generateTable(onRowClick);
 	}
 	public Optional<Signage> getSignage(java.lang.Long key) {
 		return signageDao.get(key);

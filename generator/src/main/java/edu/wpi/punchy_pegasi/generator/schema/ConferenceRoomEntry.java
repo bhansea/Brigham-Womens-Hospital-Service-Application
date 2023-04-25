@@ -1,12 +1,13 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class ConferenceRoomEntry extends RequestEntry {
     private String beginningTime;
