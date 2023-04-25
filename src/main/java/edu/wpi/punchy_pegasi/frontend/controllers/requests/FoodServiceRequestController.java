@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
@@ -75,7 +76,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 "",
                 patientName.getText(), 1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
-        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!");
+        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 
     @Override

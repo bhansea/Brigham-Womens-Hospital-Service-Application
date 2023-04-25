@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -129,6 +130,6 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
 
-        new PFXAlert("Your request has been submitted!");
+        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 }

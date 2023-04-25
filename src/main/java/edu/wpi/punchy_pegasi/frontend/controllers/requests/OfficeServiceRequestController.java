@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
@@ -37,14 +38,9 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     private PFXCardVertical stapler = new PFXCardVertical();
     @FXML
-    PFXCardHolder cardHolder;
-    @FXML
-    VBox container = new VBox();
-    @FXML
     private BorderPane root;
     ScrollPane scrollPane;
 
-    ArrayList<PFXCardVertical> items = new ArrayList<>();
 
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
@@ -87,7 +83,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         //makes sure shared fields aren't empty
         requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
-        new PFXAlert("Your request has been submitted!");
+        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 
     @Override

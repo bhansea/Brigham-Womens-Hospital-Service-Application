@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
@@ -126,7 +127,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 // TODO: need a way to get the employeeID of the person making the request entry
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
-        new PFXAlert("Your request has been submitted!");
+        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 
     @FXML
