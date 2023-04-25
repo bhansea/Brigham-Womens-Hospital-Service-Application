@@ -61,11 +61,13 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
             @Override
             protected Number computeValue() {
-                return Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+                var minZoom = Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+                if (gesturePane.getCurrentScale() < minZoom)
+                    gesturePane.zoomTo(minZoom, gesturePane.targetPointAtViewportCentre());
+                return minZoom;
             }
         });
         gesturePane.setMaxScale(3.4);
-        gesturePane.zoomTo(gesturePane.getMinScale(), gesturePane.targetPointAtViewportCentre());
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
 
         var spinner = new MFXProgressSpinner(-1);

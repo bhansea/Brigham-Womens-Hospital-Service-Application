@@ -14,6 +14,7 @@ import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -98,18 +99,16 @@ public class AdminMapController {
     }
 
     private void load(Runnable callback) {
-        var thread = new Thread(() -> {
+        App.getSingleton().getExecutorService().execute(() -> {
             nodes = facade.getAllNode();
             edges = facade.getAllEdge();
             moves = facade.getAllMove();
             locations = facade.getAllLocationName();
 
             // TODO: Update on date change
-            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, LocalDate.now());
+            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, new SimpleObjectProperty<>(LocalDate.now()));
             Platform.runLater(callback);
         });
-        thread.setDaemon(true);
-        thread.start();
     }
 
     @FXML
@@ -315,7 +314,7 @@ public class AdminMapController {
         commitButton.setDisable(true);
         commitProgress.setProgress(0);
         AtomicInteger counter = new AtomicInteger(0);
-        var commitThread = new Thread(() -> {
+        App.getSingleton().getExecutorService().execute(() -> {
             var mapEditsCopy = new ArrayList<>(mapEdits);
             mapEditsCopy.forEach(e -> {
                 e.execute();
@@ -337,8 +336,6 @@ public class AdminMapController {
             });
             commiting.set(false);
         });
-        commitThread.setDaemon(true);
-        commitThread.start();
     }
 
     @Getter

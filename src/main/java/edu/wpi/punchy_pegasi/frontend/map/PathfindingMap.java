@@ -1,25 +1,25 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
+import com.fazecast.jSerialComm.SerialPort;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.PathfindingSingleton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.generated.LocationNameDaoImpl;
-import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
-import edu.wpi.punchy_pegasi.schema.Edge;
-import edu.wpi.punchy_pegasi.schema.LocationName;
-import edu.wpi.punchy_pegasi.schema.Move;
-import edu.wpi.punchy_pegasi.schema.Node;
+import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -30,8 +30,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
-
-import com.fazecast.jSerialComm.*;
 
 public class PathfindingMap {
     private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
@@ -56,6 +54,12 @@ public class PathfindingMap {
             return null;
         }
     };
+    private final ArrayList<Integer> xCoords = new ArrayList<Integer>();
+    private final ArrayList<Integer> yCoords = new ArrayList<Integer>();
+    private final HBox container = new HBox();
+    private final LocalDate movesDate = LocalDate.now();
+    @FXML
+    private MFXDatePicker adminDatePicker;
     @FXML
     private PFXButton selectGraphicallyCancel;
     @FXML
@@ -89,20 +93,52 @@ public class PathfindingMap {
     private ObservableList<Edge> edgesList;
     private ObservableList<LocationName> locationsList;
     private ObservableList<Move> movesList;
-    private ArrayList<Integer> xCoords = new ArrayList<Integer>();
-    private ArrayList<Integer> yCoords = new ArrayList<Integer>();
     private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
-    private HBox container = new HBox();
 
-    private LocalDate movesDate = LocalDate.now();
+    public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
+        byte[] strArray = str.getBytes();
+        byte[] tempStartArray = Integer.toString(startPos).getBytes();
+        byte[] tempEndArray = Integer.toString(endPos).getBytes();
+        byte[] startIntArray = {(byte) '0', (byte) '0', (byte) '0', (byte) '0'};
+        byte[] endIntArray = {(byte) '0', (byte) '0', (byte) '0', (byte) '0'};
+
+        for (int i = startIntArray.length - 1, j = tempStartArray.length - 1; j >= 0; i--, j--) {
+            startIntArray[i] = tempStartArray[j];
+        }
+
+        for (int i = endIntArray.length - 1, j = tempEndArray.length - 1; j >= 0; i--, j--) {
+            endIntArray[i] = tempEndArray[j];
+        }
+
+
+        byte[] result = new byte[strArray.length + startIntArray.length + endIntArray.length + 1];
+
+        int pos = 0;
+        for (byte element : strArray) {
+            result[pos] = element;
+            pos++;
+        }
+        for (byte element : startIntArray) {
+            result[pos] = element;
+            pos++;
+        }
+        for (byte element : endIntArray) {
+            result[pos] = element;
+            pos++;
+        }
+        result[result.length - 1] = '\n';
+
+        return result;
+    }
 
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation.get(node);
-        if(location.isEmpty()) return Optional.empty();
+        if (location.isEmpty()) return Optional.empty();
         return map.drawNode(node, color, location.get(0).getShortName(), String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)));
     }
+
     @FXML
     private void initialize() {
         map = new HospitalMap(floors);
@@ -115,6 +151,22 @@ public class PathfindingMap {
         container.setPickOnBounds(false);
         pathfinding.setPickOnBounds(false);
         robotInfo.setPickOnBounds(false);
+        var date = adminDatePicker.getValue();
+        adminDatePicker.setValue(LocalDate.now());
+        // Check account status for admin features
+        if (App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel()) {
+            robotInfo.setVisible(true);
+        }
+
+        selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search", "Dijkstra"));
+        selectGraphically.setDisable(true);
+        pathfindStatus.managedProperty().bind(Bindings.createBooleanBinding(() -> !pathfindStatus.textProperty().get().isBlank(), pathfindStatus.textProperty()));
+        pathfindStatus.visibleProperty().bind(Bindings.createBooleanBinding(() -> !pathfindStatus.textProperty().get().isBlank(), pathfindStatus.textProperty()));
+        robotButton.setDisable(true);
+        selectGraphicallyCancel.setVisible(false);
+        selectGraphicallyCancel.setManaged(false);
+
+        PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
         load(() -> {
             var filteredSorted = locationsList.filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName));
             nodeStartCombo.setItems(filteredSorted);
@@ -144,26 +196,7 @@ public class PathfindingMap {
                 }
             });
         });
-
-        // Check account status for admin features
-        if (App.getSingleton().getAccount().getAccountType().getShieldLevel() == Account.AccountType.ADMIN.getShieldLevel()) {
-            robotInfo.setVisible(true);
-        }
-
-        selectAlgo.setItems(FXCollections.observableArrayList("AStar", "Depth-First Search", "Breadth-First Search", "Dijkstra"));
-        selectGraphically.setDisable(true);
-        robotButton.setDisable(true);
-        selectGraphicallyCancel.setVisible(false);
-        selectGraphicallyCancel.setManaged(false);
-        PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
     }
-
-//    private Optional<Node> locationToNode(LocationName locationName) {
-//        if (node == null) return Optional.empty();
-//        var moves = this.moves.values().stream().filter(m -> m.getNodeID().equals(node.getNodeID())).toList();
-//        if (moves.isEmpty()) return Optional.empty();
-//        return Optional.ofNullable(locations.get(moves.get(0).getLocationID()));
-//    }
 
     @FXML
     private void graphicalSelect() {
@@ -185,23 +218,21 @@ public class PathfindingMap {
         });
         nodesList.forEach(n -> {
             var location = nodeToLocation.get(n);
-            if(location == null || location.isEmpty()) return;
+            if (location == null || location.isEmpty()) return;
             if (!isDestination.test(location.get(0))) return;
             var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();
             point.setOnMouseClicked(e -> {
-                if (startSelected.get())
-                    nodeStartCombo.selectItem(location.get(0));
-                else if (endSelected.get())
-                    nodeEndCombo.selectItem(location.get(0));
+                if (startSelected.get()) nodeStartCombo.selectItem(location.get(0));
+                else if (endSelected.get()) nodeEndCombo.selectItem(location.get(0));
                 selectGraphicallyCancel.fire();
             });
         });
     }
 
     private void load(Runnable callback) {
-        var thread = new Thread(() -> {
+        App.getSingleton().getExecutorService().execute(() -> {
             nodes = App.getSingleton().getFacade().getAllNode();
             edges = App.getSingleton().getFacade().getAllEdge();
             moves = App.getSingleton().getFacade().getAllMove();
@@ -210,13 +241,10 @@ public class PathfindingMap {
             edgesList = App.getSingleton().getFacade().getAllAsListEdge();
             movesList = App.getSingleton().getFacade().getAllAsListMove();
             locationsList = App.getSingleton().getFacade().getAllAsListLocationName();
-            // TODO: Rerun when moves Date changes
-            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, movesDate);
-            locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, movesDate);
+            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, adminDatePicker.valueProperty());
+            locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, adminDatePicker.valueProperty());
             Platform.runLater(callback);
         });
-        thread.setDaemon(true);
-        thread.start();
     }
 
     @FXML
@@ -226,7 +254,14 @@ public class PathfindingMap {
         if (startLocation == null || endLocation == null) return;
         var startNode = locationToNode.get(startLocation);
         var endNode = locationToNode.get(endLocation);
-        if (startNode == null || endNode == null) return;
+        if (startNode == null) {
+            pathfindStatus.setText("The starting location is not currently available");
+            return;
+        }
+        if (endNode == null) {
+            pathfindStatus.setText("The ending location is not currently available");
+            return;
+        }
         pathfindStatus.setText(pathFind(startNode, endNode));
     }
 
@@ -258,24 +293,23 @@ public class PathfindingMap {
             map.focusOn(path.get(0));
 
             for (Node node : path) {
-                xCoords.add((Integer)node.getFromField(Node.Field.XCOORD));
-                yCoords.add((Integer)node.getFromField(Node.Field.YCOORD));
+                xCoords.add(node.getXcoord());
+                yCoords.add(node.getYcoord());
             }
             robotButton.setDisable(false);
-            return "";
+            return "Path found successfully!";
         } catch (IllegalStateException e) {
             return "Path not found";
         }
     }
-
 
     @FXML
     private void sendRobotMessage() {
         SerialPort comPort = null;
         SerialPort[] ports = SerialPort.getCommPorts();
 
-        for(int i=0;i<ports.length;i++) {
-            if(ports[i].getPortDescription().equals("Pololu A-Star 32U4")) {
+        for (int i = 0; i < ports.length; i++) {
+            if (ports[i].getPortDescription().equals("Pololu A-Star 32U4")) {
                 comPort = ports[i];
             }
         }
@@ -283,7 +317,7 @@ public class PathfindingMap {
             comPort.openPort();
             robotButton.setDisable(true);
             invalidText.setVisible(false);
-        } catch(Exception e) {
+        } catch (Exception e) {
             invalidText.setVisible(true);
             return;
         }
@@ -291,7 +325,7 @@ public class PathfindingMap {
         System.out.println(xCoords.get(0) + ", " + yCoords.get(0));
         comPort.writeBytes(message, message.length);
 
-        for(int i=1;i<xCoords.size() - 1;i++) {
+        for (int i = 1; i < xCoords.size() - 1; i++) {
             message = generateMessage("M", xCoords.get(i), yCoords.get(i));
             System.out.println(xCoords.get(i) + ", " + yCoords.get(i));
             comPort.writeBytes(message, message.length);
@@ -303,41 +337,6 @@ public class PathfindingMap {
         comPort.closePort();
     }
 
-    public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
-        byte[] strArray = str.getBytes();
-        byte[] tempStartArray = Integer.toString(startPos).getBytes();
-        byte[] tempEndArray = Integer.toString(endPos).getBytes();
-        byte[] startIntArray = {(byte)'0', (byte)'0', (byte)'0', (byte)'0'};
-        byte[] endIntArray = {(byte)'0', (byte)'0', (byte)'0', (byte)'0'};
-
-        for(int i=startIntArray.length - 1, j = tempStartArray.length - 1;j>=0;i--, j--) {
-            startIntArray[i] = tempStartArray[j];
-        }
-
-        for(int i=endIntArray.length - 1, j = tempEndArray.length - 1;j>=0;i--, j--) {
-            endIntArray[i] = tempEndArray[j];
-        }
-
-
-        byte[] result = new byte[strArray.length + startIntArray.length + endIntArray.length + 1];
-
-        int pos = 0;
-        for (byte element : strArray) {
-            result[pos] = element;
-            pos++;
-        }
-        for (byte element : startIntArray) {
-            result[pos] = element;
-            pos++;
-        }
-        for (byte element : endIntArray) {
-            result[pos] = element;
-            pos++;
-        }
-        result[result.length - 1] = '\n';
-
-        return result;
-    }
     @FXML
     private void setAlgo() {
         selectedAlgo = selectAlgo.getSelectedItem();

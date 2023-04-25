@@ -71,7 +71,7 @@
        </HBox>
    </top>
     <bottom>
-        <HBox alignment="CENTER" style="-fx-background-color: pfx-background">
+        <HBox alignment="CENTER" style="-fx-background-color: -pfx-background">
             <padding>
                 <Insets topRightBottomLeft="20"/>
             </padding>

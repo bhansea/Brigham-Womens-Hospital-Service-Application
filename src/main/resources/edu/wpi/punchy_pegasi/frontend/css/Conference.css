@@ -26,7 +26,6 @@
 }
 
 .conference-textField {
-    -fx-prompt-text-fill: "Number of Participants";
     -fx-background-radius: 6;
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
