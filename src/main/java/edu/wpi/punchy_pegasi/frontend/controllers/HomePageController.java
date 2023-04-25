@@ -2,7 +2,6 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.*;
@@ -12,14 +11,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -55,6 +52,9 @@ public class HomePageController {
 
     @FXML
     private VBox dateTimeBox = new VBox();
+
+    @FXML
+    private AnchorPane dateTimeAnchor = new AnchorPane();
     @FXML
     private void initialize() {
         LocalDate currentDate = LocalDate.now();
@@ -63,6 +63,15 @@ public class HomePageController {
 
         dateLabel.setText(currentDate.toString());
         timeLabel.setText(currentTimeNoSec.toString());
+
+        dateLabel.layoutXProperty().bind(dateTimeAnchor.widthProperty().subtract(dateLabel.widthProperty()).subtract(10.0));
+        // Bind layoutYProperty of Label to heightProperty of AnchorPane - 10.0 to position it in the top corner
+        dateLabel.layoutYProperty().bind(dateTimeAnchor.heightProperty().subtract(dateLabel.heightProperty()).subtract(10.0));
+
+        timeLabel.layoutXProperty().bind(dateTimeAnchor.widthProperty().subtract(timeLabel.widthProperty()).subtract(10.0));
+        // Bind layoutYProperty of Label to heightProperty of AnchorPane - 10.0 to position it in the top corner
+        timeLabel.layoutYProperty().bind(dateTimeAnchor.heightProperty().subtract(timeLabel.heightProperty()).subtract(10.0));
+
 
 //        dateLabel.layoutXProperty().bind(dateTimeBox.layoutXProperty()
 //                        .subtract(dateLabel.widthProperty())

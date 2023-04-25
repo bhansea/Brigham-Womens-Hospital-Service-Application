@@ -98,8 +98,8 @@
 <!--                    <Insets right="500"/>-->
 <!--                </padding>-->
             </Label>
-            <AnchorPane maxWidth="-Infinity" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                <VBox alignment="CENTER_RIGHT" style="-fx-background-color: -pfx-background" layoutY="10" layoutX="10" fx:id="dateTimeBox">
+            <AnchorPane maxWidth="-Infinity" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" fx:id="dateTimeAnchor">
+                <VBox alignment="CENTER_RIGHT" style="-fx-background-color: -pfx-background" fx:id="dateTimeBox">
                     <Label text="Date: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
                            style="-fx-background-color: -pfx-background" fx:id="dateLabel">
                         <font>
