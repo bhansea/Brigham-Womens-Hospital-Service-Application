@@ -2,6 +2,7 @@
 
 .admin-table-container{
     -fx-alightment: CENTER_LEFT;
+    -fx-background-color: red;
 }
 
 .admin-table-container > Label {

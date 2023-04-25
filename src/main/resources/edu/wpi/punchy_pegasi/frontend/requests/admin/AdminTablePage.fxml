@@ -33,7 +33,7 @@
                                     <PFXButton styleClass="admin-container-buttons-clear" text="Clear Table" fx:id="clearButton"/>
                                 </HBox>
                             </VBox>
-                            <FlowPane fx:id="editContainer" alignment="CENTER_LEFT"/>
+                            <GridPane fx:id="editContainer" alignment="CENTER_LEFT"/>
                         </HBox>
                     </VBox>
                 <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>

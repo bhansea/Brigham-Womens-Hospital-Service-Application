@@ -60,7 +60,7 @@ public class AdminTablePageController {
     @FXML
     private PFXButton removeButton = new PFXButton("Remove");
     @FXML
-    private FlowPane editContainer;
+    private GridPane editContainer;
     private AdminTable currentTable;
     private ArrayList<TextArea> textAreas = new ArrayList<>();
     private GridPane gp = new GridPane();
@@ -225,13 +225,14 @@ public class AdminTablePageController {
             GridPane.setRowIndex(label, counter);
             GridPane.setRowIndex(input, counter);
             counter++;
-            //hbox.getStyleClass().add("admin-table-container");
-            //hbox.getChildren().addAll(label, input);
+//            hbox.getStyleClass().add("admin-table-container");
+//            hbox.getChildren().addAll(label, input);
             //hbox.getChildren().add(input);
-            //form.add(hbox);
+            form.add(label);
+            form.add(input);
             inputs.add(input);
         }
-        form.add(gp);
+        //form.add(gp);
         editContainer.getChildren().clear();
         editContainer.getChildren().addAll(form);
     }
