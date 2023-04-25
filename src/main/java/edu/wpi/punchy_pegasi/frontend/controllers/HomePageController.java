@@ -163,7 +163,25 @@ public class HomePageController {
                 popover.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
                 vbox.setAlignment(Pos.CENTER);
                 PFXButton button = new PFXButton();
-                button.setText(r.status.toString());
+                if(r.status.toString().toLowerCase().equals("processing")){
+                    button.setText("Set Done");
+                    button.setStyle("-fx-background-color: -pfx-success");
+                    button.setOnMouseClicked(m -> {
+                        r.status = RequestEntry.Status.DONE;
+                        button.setText("Set Processing");
+                        button.setStyle("-fx-background-color: -pfx-danger");
+                    });
+                }
+                else if(r.status.toString().toLowerCase().equals("done")){
+                    button.setText("Set Processing");
+                    button.setStyle("-fx-background-color: -pfx-danger");
+                    button.setOnMouseClicked(m -> {
+                        r.status = RequestEntry.Status.PROCESSING;
+                        button.setText("Set Done");
+                        button.setStyle("-fx-background-color: -pfx-success");
+                    });
+
+                }
                 vbox.getChildren().add(button);
                 vbox.getStyleClass().add("homepage-popup");
                 popover.setContentNode(vbox);
