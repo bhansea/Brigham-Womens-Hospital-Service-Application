@@ -28,37 +28,43 @@ public class FlowerDeliveryRequestEntry extends RequestEntry {
     public FlowerDeliveryRequestEntry(String patientName, Long locationName, Long staffAssignment, String additionalNotes, String flowerSize, String flowerAmount, String flowerType, Long employeeID) {
         this(UUID.randomUUID(), patientName, locationName, staffAssignment, additionalNotes, Status.PROCESSING, flowerSize, flowerAmount, flowerType, employeeID);
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry>{
-        SERVICE_ID("serviceID", true,false),
-        LOCATION_NAME("locationName", false,false),
-        STAFF_ASSIGNMENT("staffAssignment", false,false),
-        ADDITIONAL_NOTES("additionalNotes", false,false),
-        STATUS("status", false,false),
-        EMPLOYEE_ID("employeeID", false,false),
-        FLOWER_SIZE("flowerSize", false,false),
-        FLOWER_TYPE("flowerType", false,false),
-        FLOWER_AMOUNT("flowerAmount", false,false),
-        PATIENT_NAME("patientName", false,false);
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry> {
+        SERVICE_ID("serviceID", true, false),
+        LOCATION_NAME("locationName", false, false),
+        STAFF_ASSIGNMENT("staffAssignment", false, false),
+        ADDITIONAL_NOTES("additionalNotes", false, false),
+        STATUS("status", false, false),
+        EMPLOYEE_ID("employeeID", false, false),
+        FLOWER_SIZE("flowerSize", false, false),
+        FLOWER_TYPE("flowerType", false, false),
+        FLOWER_AMOUNT("flowerAmount", false, false),
+        PATIENT_NAME("patientName", false, false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
-    return ref.getFromField(this);
-}
-public String getValueAsString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref){
-    return ref.getFromFieldAsString(this);
-}
-    public void setValueFromString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref, String value){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref) {
+            return ref.getFromField(this);
+        }
+
+        public String getValueAsString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref) {
+            return ref.getFromFieldAsString(this);
+        }
+
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry ref, String value) {
             ref.setFieldFromString(this, value);
         }
-        public int oridinal(){
+
+        public int oridinal() {
             return ordinal();
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -73,6 +79,7 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryReques
             case PATIENT_NAME -> getPatientName();
         };
     }
+
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case SERVICE_ID -> setServiceID(UUID.fromString(value));
@@ -85,8 +92,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.FlowerDeliveryReques
             case FLOWER_TYPE -> setFlowerType(value);
             case FLOWER_AMOUNT -> setFlowerAmount(value);
             case PATIENT_NAME -> setPatientName(value);
-        };
+        }
     }
+
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID().toString();
