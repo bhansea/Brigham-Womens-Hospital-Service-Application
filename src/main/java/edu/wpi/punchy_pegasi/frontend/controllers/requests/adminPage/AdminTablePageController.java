@@ -63,6 +63,7 @@ public class AdminTablePageController {
     private FlowPane editContainer;
     private AdminTable currentTable;
     private ArrayList<TextArea> textAreas = new ArrayList<>();
+    private GridPane gp = new GridPane();
 
     // import export stuff
     private String filePath = "";
@@ -216,20 +217,21 @@ public class AdminTablePageController {
             if(field.isPrimaryKey()) {
                 input.setEditable(false);
             }
+
             //elements.add(label, 0, counter);
             //elements.add(input, 1, counter);
-//            GridPane.setColumnIndex(label, 0);
-//            GridPane.setColumnIndex(input, 1);
-//            GridPane.setRowIndex(label, counter);
-//            GridPane.setRowIndex(input, counter);
+            GridPane.setColumnIndex(label, 0);
+            GridPane.setColumnIndex(input, 1);
+            GridPane.setRowIndex(label, counter);
+            GridPane.setRowIndex(input, counter);
             counter++;
-            hbox.getStyleClass().add("admin-table-container");
-            hbox.getChildren().addAll(label, input);
+            //hbox.getStyleClass().add("admin-table-container");
+            //hbox.getChildren().addAll(label, input);
             //hbox.getChildren().add(input);
-            form.add(hbox);
+            //form.add(hbox);
             inputs.add(input);
-
         }
+        form.add(gp);
         editContainer.getChildren().clear();
         editContainer.getChildren().addAll(form);
     }
