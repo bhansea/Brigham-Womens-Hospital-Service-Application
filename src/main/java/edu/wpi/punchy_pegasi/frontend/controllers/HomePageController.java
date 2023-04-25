@@ -1,23 +1,23 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTableRow;
-import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
@@ -27,6 +27,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import javafx.scene.layout.StackPane;
 import javafx.scene.input.*;
+import org.controlsfx.control.PopOver;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -142,6 +143,7 @@ public class HomePageController {
         MFXTableColumn<GenericRequestEntry> additionalCol = new MFXTableColumn<>("Additional Notes", true);
         MFXTableColumn<GenericRequestEntry> statusCol = new MFXTableColumn<>("Status", true);
         MFXTableColumn<GenericRequestEntry> typeCol = new MFXTableColumn<>("Request Type", true);
+//        MFXTableColumn<PFXButton> buttonCol = new MFXTableColumn<>();
         locationCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.location));
         employeeCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.assigned));
         additionalCol.setRowCellFactory(r -> new MFXTableRowCell<>(r2 -> r2.additionalNotes));
@@ -150,13 +152,16 @@ public class HomePageController {
         requestTable.setTableRowFactory(r -> {
             var row = new MFXTableRow<>(requestTable, r);
             row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-                Stage stage = new Stage();
-                stage.setMinWidth(300);
-                stage.setMinHeight(200);
-//                stage.setMaxWidth(500);
-//                stage.setMaxHeight(400);
-                var popup = new Popup();
-                stage.show();
+                VBox vbox = new VBox();
+                var popover = new PopOver();
+                popover.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+                vbox.setAlignment(Pos.CENTER);
+                PFXButton button = new PFXButton();
+                button.setText(r.status.toString());
+                vbox.getChildren().add(button);
+                vbox.getStyleClass().add("homepage-popup");
+                popover.setContentNode(vbox);
+                popover.show(row);
             });
             return row;
         });
