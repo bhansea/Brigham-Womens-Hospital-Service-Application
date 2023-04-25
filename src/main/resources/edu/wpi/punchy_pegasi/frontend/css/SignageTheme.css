@@ -66,8 +66,10 @@
     -fx-padding: 20 0 0 0;
 }
 
-.signage-edit-icon {
+.signage-delete-btn {
     -fx-font-size: 40;
+    -fx-alignment: center;
+    -fx-padding: 0 5 0 5;
 }
 
 .signage-edit-vbox {

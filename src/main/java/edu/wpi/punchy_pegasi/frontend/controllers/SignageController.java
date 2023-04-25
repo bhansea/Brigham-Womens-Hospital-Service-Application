@@ -41,7 +41,7 @@ public class SignageController {
     private final String lightTheme = Objects.requireNonNull(getClass().getResource("/edu/wpi/punchy_pegasi/frontend/css/SignageLight.css")).toExternalForm();
     private final String darkTheme = Objects.requireNonNull(getClass().getResource("/edu/wpi/punchy_pegasi/frontend/css/SignageDark.css")).toExternalForm();
     private final Scene myScene = App.getSingleton().getScene();
-    private final Facade facade = App.getSingleton().getFacade();
+    private static final Facade facade = App.getSingleton().getFacade();
     private final PFXIcon iconUp = new PFXIcon(MaterialSymbols.ARROW_UPWARD);
     private final PFXIcon iconDown = new PFXIcon(MaterialSymbols.ARROW_DOWNWARD);
     private final PFXIcon iconLeft = new PFXIcon(MaterialSymbols.ARROW_BACK);
@@ -76,6 +76,15 @@ public class SignageController {
     private HBox signageHeaderEdit;
     private PFXButton submitButton = new PFXButton("Submit");
 
+    private static void addDelButton(HBox hbox, Signage signage) {
+        var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
+        deleteBtn.getStyleClass().add("signage-delete-btn");
+        deleteBtn.setOnAction(event -> {
+            facade.deleteSignage(signage);
+        });
+        hbox.getChildren().add(deleteBtn);
+    }
+
     @NotNull
     private static VBox getSignageTableView(ObservableList<Signage> rightList) {
         var vBox = new VBox();
@@ -89,6 +98,7 @@ public class SignageController {
                         }
                         var hbox = new HBox(new Label(signage.getLongName()));
                         hbox.setId(signage.getUuid().toString());
+                        addDelButton(hbox, signage);
                         Platform.runLater(() ->
                                 vBox.getChildren().add(hbox)
                         );
@@ -108,10 +118,11 @@ public class SignageController {
         });
         //init the vBox
         for (Signage signage : rightList) {
-            if (!signage.getSignName().equals(prefSignageName)) {
-                continue;
-            }
+//            if (!signage.getSignName().equals(prefSignageName)) {
+//                continue;
+//            }
             var hbox = new HBox(new Label(signage.getLongName()));
+            addDelButton(hbox, signage);
             hbox.setId(signage.getUuid().toString());
             vBox.getChildren().add(hbox);
         }
@@ -228,11 +239,7 @@ public class SignageController {
         editing = true;
         configTimer(1000);
         initIcons();
-        if (editing) {
-            initHeaderEdit();
-        } else {
-            initHeader();
-        }
+        initHeader();
         buildSignage();
         signageBody.getStyleClass().add("signage-body");
         if (editing) {
@@ -248,10 +255,10 @@ public class SignageController {
 //        viewEdit.setManaged(admin);
 //        viewNormal.setVisible(!admin);
 //        viewNormal.setManaged(!admin);
-        headerEdit.setVisible(admin);
-        headerEdit.setManaged(admin);
-        headerNormal.setVisible(!admin);
-        headerNormal.setManaged(!admin);
+//        headerEdit.setVisible(admin);
+//        headerEdit.setManaged(admin);
+//        headerNormal.setVisible(!admin);
+//        headerNormal.setManaged(!admin);
 
         Platform.runLater(() -> {
             switchTheme(true);

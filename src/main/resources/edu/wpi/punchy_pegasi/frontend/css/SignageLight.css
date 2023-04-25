@@ -5,7 +5,7 @@
     -fx-fill: -pfx-signage-text;
 }
 
-.signage-edit-icon {
+.signage-delete-btn PFXIcon {
     -fx-fill: -pfx-signage-text;
 }
 
