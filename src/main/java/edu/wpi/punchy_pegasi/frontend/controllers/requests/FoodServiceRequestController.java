@@ -7,9 +7,11 @@ import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.beans.PropertyChangeEvent;
@@ -26,6 +28,10 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
     PFXCardHolder cardHolder;
     @FXML
     VBox container = new VBox();
+    ScrollPane scrollPane;
+
+    @FXML
+    private BorderPane root;
 
 
     public static BorderPane create(String path) {
@@ -38,13 +44,21 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         PFXCardVertical card2 = new PFXCardVertical("Chicken and Rice", "Artisan-crafted meal", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/chicken-and-rice.jpg"));
         PFXCardVertical card3 = new PFXCardVertical("Meatloaf", "A delightful dish", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/meatloaf.jpg"));
         PFXCardVertical card4 = new PFXCardVertical("Steak", "Pan-seared goodness", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/food/steak.jpg"));
-        cardHolder = new PFXCardHolder(new ArrayList<>(Arrays.asList(card1, card2, card3, card4)));
-
-        container.getChildren().add(cardHolder);
         addTextField(patientName);
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
-        container.setAlignment(Pos.CENTER);
+
+        var flowPane = new FlowPane(card1, card2, card3, card4);
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
+        flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
+        flowPane.setAlignment(Pos.CENTER_LEFT);
+        scrollPane = new ScrollPane(flowPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background;");
+
+        root.setCenter(scrollPane);
     }
 
     @FXML

@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import javafx.scene.layout.StackPane;
 
 import java.util.*;
 
@@ -32,18 +34,34 @@ public class HomePageController {
     private final Facade facade = App.getSingleton().getFacade();
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
-
+    @FXML
+    private VBox pie;
+    @FXML
+    private PieChart piechart = new PieChart();
 //    @FXML
 //    private MFXComboBox notificationComboBox;
 
 
-//    @FXML
-//    private void initialize() {
-//
-//        //initRequestTable();
-//        //showServiceRequestTable(true);
-//
-//    }
+    @FXML
+    private void initialize() {
+        List<RequestEntry> requestEntries = facade.getAllRequestEntry().values().stream().toList();
+        int done = requestEntries.stream().mapToInt(r->r.getStatus() == RequestEntry.Status.DONE ? 1 : 0).sum();
+        int processing = requestEntries.stream().mapToInt(r->r.getStatus() == RequestEntry.Status.PROCESSING ? 1 : 0).sum();
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Done",done),
+                new PieChart.Data("Processing",processing));
+        piechart.setData(pieChartData);
+        piechart.setTitle("Service Request");
+        //pie.getChildren().add(piechart);
+        //Scene scene = new Scene(pie, 500, 500);
+        //Stage pstage = new Stage();
+        //pstage.setTitle("Pie");
+        //pstage.setScene(scene);
+        //pstage.show();
+        //initRequestTable();
+        //showServiceRequestTable(true);
+
+    }
 
 //    private void showServiceRequestTable(boolean show) {
 //        requestTable.setVisible(show);

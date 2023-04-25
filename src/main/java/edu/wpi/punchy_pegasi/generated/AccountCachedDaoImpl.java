@@ -17,17 +17,17 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Account.Field>, PropertyChangeListener {
+public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Account.Field>, PropertyChangeListener {
 
-    static String[] fields = {"username", "password", "employeeID", "accountType"};
+    static String[] fields = {"uuid", "username", "password", "employeeID", "accountType"};
 
-    private final ObservableMap<java.lang.String, Account> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableMap<java.lang.Long, Account> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<Account> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public AccountCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-        cache.addListener((MapChangeListener<java.lang.String, Account>) c -> {
+        cache.addListener((MapChangeListener<java.lang.Long, Account>) c -> {
             if (c.wasRemoved()) {
                 list.remove(c.getValueRemoved());
             } else if (c.wasAdded()) {
@@ -39,26 +39,27 @@ public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Acc
     }
 
     public void add(Account account) {
-        if (!cache.containsKey(account.getUsername()))
-            cache.put(account.getUsername(), account);
+        if (!cache.containsKey(account.getUuid()))
+            cache.put(account.getUuid(), account);
     }
 
     public void update(Account account) {
-        cache.put(account.getUsername(), account);
+        cache.put(account.getUuid(), account);
     }
 
     public void remove(Account account) {
-        cache.remove(account.getUsername());
+        cache.remove(account.getUuid());
     }
 
     private void initCache() {
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                        rs.getObject("username", java.lang.String.class),
-                        rs.getObject("password", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class),
-                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                    rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("username", java.lang.String.class),
+                    rs.getObject("password", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -67,31 +68,31 @@ public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Acc
     }
 
     @Override
-    public Optional<Account> get(java.lang.String key) {
+    public Optional<Account> get(java.lang.Long key) {
         return Optional.ofNullable(cache.get(key));
     }
 
     @Override
-    public Map<java.lang.String, Account> get(Account.Field column, Object value) {
+    public Map<java.lang.Long, Account> get(Account.Field column, Object value) {
         return get(new Account.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.String, Account> get(Account.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.String, Account>();
+    public Map<java.lang.Long, Account> get(Account.Field[] params, Object[] value) {
+        var map = new HashMap<java.lang.Long, Account>();
         if (params.length != value.length) return map;
         cache.values().forEach(v -> {
             var include = true;
             for (int i = 0; i < params.length; i++)
                 include &= Objects.equals(params[i].getValue(v), value[i]);
             if (include)
-                map.put(v.getUsername(), v);
+                map.put(v.getUuid(), v);
         });
         return map;
     }
 
     @Override
-    public ObservableMap<java.lang.String, Account> getAll() {
+    public ObservableMap<java.lang.Long, Account> getAll() {
         return cache;
     }
 
@@ -102,7 +103,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Acc
 
     @Override
     public void save(Account account) {
-        Object[] values = {account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values = {account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
         try {
             dbController.insertQuery(TableType.ACCOUNTS, fields, values);
 //            add(account);
@@ -116,7 +117,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Acc
         if (params.length < 1)
             return;
         try {
-            dbController.updateQuery(TableType.ACCOUNTS, "username", account.getUsername(), Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(account)).toArray());
+            dbController.updateQuery(TableType.ACCOUNTS, "uuid", account.getUuid(), Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(account)).toArray());
 //            update(account);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
@@ -126,7 +127,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.String, Account, Acc
     @Override
     public void delete(Account account) {
         try {
-            dbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            dbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
 //            remove(account);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);

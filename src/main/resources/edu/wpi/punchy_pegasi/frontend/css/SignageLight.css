@@ -1,0 +1,26 @@
+@import "PFXColors.css";
+@import "SignageTheme.css";
+
+.signage-icon {
+    -fx-fill: -pfx-signage-text;
+}
+
+.signage-edit-icon {
+    -fx-fill: -pfx-signage-text;
+}
+
+.signage-icon-header {
+    -fx-fill: -pfx-signage-text;
+}
+
+.signage-header Label {
+    -fx-text-fill: -pfx-signage-text;
+}
+
+.signage-body-left Label {
+    -fx-text-fill: -pfx-signage-text;
+}
+
+.signage-all {
+    -fx-background-color: -pfx-signage-background;
+}

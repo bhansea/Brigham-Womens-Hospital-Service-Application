@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
@@ -20,11 +21,22 @@
                 <HBox>
                     <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
                                fx:id="selectGraphically"/>
-                    <PFXButton text="Cancel" fx:id="selectGraphicallyCancel"/>
+                    <PFXButton styleClass="pfx-button-cancel" text="Cancel" fx:id="selectGraphicallyCancel"/>
                 </HBox>
                 <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
                 <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
             </VBox>
         </VBox>
     </left>
+    <right>
+        <VBox fx:id="robotInfo" styleClass="pathfinding-overlay">
+            <VBox>
+                <Text text="Battery Percentage: 100%" textAlignment="CENTER"/>
+                <Text text="Current Node: (0000, 0000)" textAlignment="CENTER"/>
+                <Label fx:id="invalidText" text="No port established!" textFill="red" visible="false">
+                </Label>
+                <PFXButton text="Start Robot" onMouseClicked="#sendRobotMessage" fx:id="robotButton"/>
+            </VBox>
+        </VBox>
+    </right>
 </BorderPane>

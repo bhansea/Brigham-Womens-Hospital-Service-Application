@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Signage {
     @SchemaID
+    private Long uuid;
+    private String signName;
     private String longName;
     private DirectionType directionType;
 
