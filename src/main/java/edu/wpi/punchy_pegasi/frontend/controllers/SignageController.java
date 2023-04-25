@@ -47,7 +47,7 @@ public class SignageController {
     private final PFXIcon iconHere = new PFXIcon(MaterialSymbols.DISTANCE);
     private final PFXIcon iconTime = new PFXIcon(MaterialSymbols.SCHEDULE);
     private final HBox signageHeaderLeft = new HBox();
-    private final HBox signageHeaderLeftEdit = new HBox();
+    private final HBox signageHeaderMid = new HBox();
     private final HBox signageHeaderRight = new HBox();
     private final Label signageDateTime = new Label();
     private final VBox editingVbox = new VBox();
@@ -91,19 +91,32 @@ public class SignageController {
         }
 
         Platform.runLater(() -> {
+            setFullScreen(false);
+        });
+        myScene.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.F11))
+                setFullScreen(true);
+            else if(event.getCode().equals(KeyCode.ESCAPE))
+                setFullScreen(false);
+        });
+    }
+
+    private void setFullScreen(boolean setFullScreen) {
+        if (setFullScreen) {
             switchTheme(true);
             App.getSingleton().getPrimaryStage().setFullScreen(true);
             App.getSingleton().getLayout().showLeftLayout(false);
             App.getSingleton().getLayout().showTopLayout(false);
-        });
-        myScene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.ESCAPE)) {
-                switchTheme(false);
-                App.getSingleton().getPrimaryStage().setFullScreen(false);
-                App.getSingleton().getLayout().showLeftLayout(true);
-                App.getSingleton().getLayout().showTopLayout(true);
-            }
-        });
+            signageHeaderMid.setVisible(false);
+            signageHeaderMid.setManaged(false);
+        } else {
+            switchTheme(false);
+            App.getSingleton().getPrimaryStage().setFullScreen(false);
+            App.getSingleton().getLayout().showLeftLayout(true);
+            App.getSingleton().getLayout().showTopLayout(true);
+            signageHeaderMid.setVisible(true);
+            signageHeaderMid.setManaged(true);
+        }
     }
 
     private void initIcons() {
@@ -145,16 +158,20 @@ public class SignageController {
         signageDateTime.getStyleClass().add("signage-text-DateTime");
         updateTime();
         signageHeaderRight.getChildren().add(signageDateTime);
-
-        var signageNameSelector = new MFXComboBox<>(signageNames);
+        var signageNameSelector = new MFXComboBox<String>(signageNames);
+        signageNameSelector.setFloatingText("Select Signage");
+        signageNameSelector.setFloatMode(FloatMode.BORDER);
+        signageNameSelector.autosize();
         signageNameSelector.setOnAction(e -> {
             setSignageName(signageNameSelector.getValue());
         });
-        signageHeaderRight.getChildren().add(signageNameSelector);
+        signageHeaderMid.getChildren().add(signageNameSelector);
+
 
 
         // Combine left and right header in signageHeader HBox
         signageHeader.getChildren().add(signageHeaderLeft);
+        signageHeader.getChildren().add(signageHeaderMid);
         signageHeader.getChildren().add(signageHeaderRight);
         signageHeader.getStyleClass().add("signage-header");
     }
