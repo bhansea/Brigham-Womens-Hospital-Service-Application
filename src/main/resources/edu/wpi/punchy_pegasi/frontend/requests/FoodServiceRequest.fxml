@@ -12,24 +12,8 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
-<BorderPane style="-fx-background-color: -pfx-background;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;"
+            xmlns="http://javafx.com/javafx/" fx:id="root">
     <center>
-        <VBox spacing="16.0">
-            <children>
-<!--                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the following information: " wrappingWidth="575.7366981506348">-->
-<!--                    <font>-->
-<!--                        <Font name="System Bold" size="24.0" />-->
-<!--                    </font>-->
-<!--                </Text>-->
-                <HBox>
-                    <children>
-                        <VBox spacing="32.0" fx:id="container"/>
-                    </children>
-                </HBox>
-            </children>
-            <padding>
-                <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
-            </padding>
-        </VBox>
     </center>
 </BorderPane>

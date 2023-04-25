@@ -12,7 +12,7 @@ public class PFXCardHorizontal extends HBox{
     private final VBox rightPane = new VBox();
     private final ImageView image;
     private final VBox spacer = new VBox();
-    private final PFXPicker picker = new PFXPicker();
+    private final PFXPicker picker = new PFXPicker(null);
     private final HBox selection = new HBox();
     private final VBox info = new VBox();
     private final Label titleLabel;
