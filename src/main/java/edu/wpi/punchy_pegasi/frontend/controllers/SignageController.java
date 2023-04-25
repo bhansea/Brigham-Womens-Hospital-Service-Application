@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXDropdown;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
@@ -8,6 +9,8 @@ import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.Signage;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -45,6 +48,10 @@ public class SignageController {
     private final HBox signageHeaderRight = new HBox();
     private final Label signageDateTime = new Label();
 
+    private MFXComboBox<String> signageNameCB = new MFXComboBox<>();
+    private MFXComboBox<String> locNameCB = new MFXComboBox<>();
+    private MFXComboBox<String> directionCB = new MFXComboBox<>();
+
 
     @FXML
     private VBox headerEdit;
@@ -56,13 +63,23 @@ public class SignageController {
     @FXML
     private HBox viewNormal;
 
-    private final VBox signageBodyLeft = new VBox();
+    @FXML
+    private HBox signageBody;
+    @FXML
+    private StackPane signageBodyStackPane;
+    @FXML
+    private VBox signageBodyLeft;
     @FXML
     private HBox signageHeader;
     @FXML
     private HBox signageHeaderEdit;
 
-    private static String prefSignageName = "";
+    private final VBox editingVbox = new VBox();
+
+    private static String prefSignageName;
+    private static boolean editing = false;
+
+    private PFXButton submitButton = new PFXButton("Submit");
 
     public static void tableHeightHelper(TableView<?> table, int rowHeight, int headerHeight, int margin) {
         table.prefHeightProperty().bind(Bindings.max(2, Bindings.size(table.getItems()))
@@ -102,28 +119,76 @@ public class SignageController {
         }, startDelay, interuptPeriodMill);
     }
 
+    private void buildTestSignage() {
+        ObservableList<String> signageNames = FXCollections.observableArrayList();
+        ObservableList<String> longNames = FXCollections.observableArrayList();
+        ObservableList<String> direction = FXCollections.observableArrayList();
+        ObservableList<Signage> signageList = facade.getAllAsListSignage();
+        for (Signage signage : signageList) {
+            if (!signageNames.contains(signage.getSignName()))
+                signageNames.add(signage.getSignName());
+            if (!longNames.contains(signage.getLongName()))
+                longNames.add(signage.getLongName());
+            if (!direction.contains(signage.getDirectionType().toString()))
+                direction.add(signage.getDirectionType().toString());
+        }
+
+        signageNameCB.setItems(signageNames);
+        signageNameCB.setEditable(true);
+        locNameCB.setItems(longNames);
+        directionCB.setItems(direction);
+        editingVbox.getChildren().add(signageNameCB);
+        editingVbox.getChildren().add(locNameCB);
+        editingVbox.getChildren().add(directionCB);
+        signageBodyStackPane.getChildren().add(editingVbox);
+        prefSignageName = signageNameCB.getSelectedItem();
+
+//        String signNameSelected = signageName.getSelectedItem();
+        // getSelected item
+        // if it exists in your signane Name list -> do something
+        // if ti doesn't create new signane name and add to list
+
+        // validate func
+        // validate.setOnMouseClick( e -> { } );
+
+
+
+
+//        submit -> getSelected item -> do something
+    }
+
+    private void validateSubmit() {
+        boolean valid = signageNameCB.getValue() == null || locNameCB.getValue() == null || directionCB.getValue() == null;
+        submitButton.setDisable(valid);
+    }
+
     @FXML
     private void initialize() {
         prefSignageName = "a";
         var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
+        editing = admin;
         configTimer(1000);
         initIcons();
-        if (!admin) {
-            initHeader();
-        } else {
+        if (editing) {
             initHeaderEdit();
+        } else {
+            initHeader();
         }
-        buildSignage(admin);
+        buildSignage();
+        signageBody.getStyleClass().add("signage-body");
+        if (editing) {
+            buildTestSignage();
+        }
 
 //        // Combine left and right header in signageHeader HBox
 //        signageHeader.getChildren().add(signageHeaderLeft);
 //        signageHeader.getChildren().add(signageHeaderRight);
 //        signageHeader.getStyleClass().add("signage-header");
 
-        viewEdit.setVisible(admin);
-        viewEdit.setManaged(admin);
-        viewNormal.setVisible(!admin);
-        viewNormal.setManaged(!admin);
+//        viewEdit.setVisible(admin);
+//        viewEdit.setManaged(admin);
+//        viewNormal.setVisible(!admin);
+//        viewNormal.setManaged(!admin);
         headerEdit.setVisible(admin);
         headerEdit.setManaged(admin);
         headerNormal.setVisible(!admin);
@@ -149,11 +214,11 @@ public class SignageController {
         // Set up left header
         signageHeaderLeft.getStyleClass().add("signage-header-left");
         signageHeaderLeft.getChildren().add(iconHere);
-        var headerLeft = facade.getAllAsListSignage()
-                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE) && signage.getSignName().equals(prefSignageName));
-        var headerVbox = getSignageTableView(headerLeft);
-        headerVbox.getStyleClass().add("signage-label-Here");
-        signageHeaderLeft.getChildren().add(headerVbox);
+//        var headerLeft = facade.getAllAsListSignage()
+//                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE) && signage.getSignName().equals(prefSignageName));
+//        var headerVbox = getSignageTableView(headerLeft);
+//        headerVbox.getStyleClass().add("signage-label-Here");
+//        signageHeaderLeft.getChildren().add(headerVbox);
 
         // Set up right header
         signageHeaderRight.getStyleClass().add("signage-header-right");
@@ -229,11 +294,11 @@ public class SignageController {
         return vBox;
     }
 
-    private void buildSignage(boolean ifAdmin) {
+    private void buildSignage() {
         for (var direction : Signage.DirectionType.values()) {
-            if (direction == Signage.DirectionType.HERE) {
-                continue;
-            }
+//            if (direction == Signage.DirectionType.HERE) {
+//                continue;
+//            }
             var signageList = facade.getAllAsListSignage()
                     .filtered(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(prefSignageName));
 //            var prefSignList = signageList.filtered(signage -> signage.getSignName().equals(prefSignageName));
@@ -262,9 +327,8 @@ public class SignageController {
                     signageHB.getChildren().add(table);
                 }
                 case HERE -> {
-//                    table.getStyleClass().add("signage-label-Here");
-//                    signageHeaderLeft.getChildren().add(table);
-//                    signageHeaderLeftEdit.getChildren().add(table);
+                    table.getStyleClass().add("signage-label-Here");
+                    signageHeaderLeft.getChildren().add(table);
                     continue;
                 }
             }
@@ -276,11 +340,6 @@ public class SignageController {
             signageBodyLeft.getChildren().add(separator);
         }
         signageBodyLeft.getChildren().remove(signageBodyLeft.getChildren().size() - 1);  // remove the last separator
-        if (ifAdmin) {
-            viewEdit.getChildren().add(signageBodyLeft);
-        } else {
-            viewNormal.getChildren().add(signageBodyLeft);
-        }
     }
 
     private void switchTheme(boolean setDark) {

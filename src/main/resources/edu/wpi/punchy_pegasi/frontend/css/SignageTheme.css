@@ -116,6 +116,7 @@
     -fx-spacing: 5;
     -fx-font-family: "Nunito Sans Regular";
     -fx-padding: 30 0 20 100;
+    -fx-min-width: 500;
 }
 
 .signage-body-left-edit {

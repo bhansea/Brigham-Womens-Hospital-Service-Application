@@ -53,82 +53,54 @@
         </StackPane>
     </top>
     <center>
-        <StackPane>
-            <HBox styleClass="signage-body" fx:id="viewEdit">
-<!--                <VBox styleClass="signage-body-left-edit">-->
-<!--                    <HBox styleClass="signage-list">-->
-<!--                        <PFXIcon icon="ARROW_UPWARD" styleClass="signage-icon"/>-->
-<!--                        <Label fx:id="labelUP"/>-->
-<!--                    </HBox>-->
-<!--                    <HBox styleClass="signage-list">-->
-<!--                        <PFXIcon icon="ARROW_FORWARD" styleClass="signage-icon"/>-->
-<!--                        <Label fx:id="labelRGT"/>-->
-<!--                    </HBox>-->
-<!--                    <HBox styleClass="signage-list">-->
-<!--                        <PFXIcon icon="ARROW_BACK" styleClass="signage-icon"/>-->
-<!--                        <Label fx:id="labelLFT"/>-->
-<!--                    </HBox>-->
-<!--                    <HBox styleClass="signage-list">-->
-<!--                        <PFXIcon icon="ARROW_DOWNWARD" styleClass="signage-icon"/>-->
-<!--                        <Label fx:id="labelDOWN"/>-->
-<!--                    </HBox>-->
-<!--                </VBox>-->
-<!--                <VBox HBox.hgrow="ALWAYS" styleClass="signage-edit-vbox">-->
-<!--                    <PFXButton text="" styleClass="signage-edit-button">-->
-<!--                        <graphic>-->
-<!--                            <PFXIcon icon="SAVE" outlined="true" styleClass="signage-edit-icon"/>-->
-<!--                        </graphic>-->
-<!--                    </PFXButton>-->
-<!--                </VBox>-->
-            </HBox>
-            <HBox styleClass="signage-body" fx:id="viewNormal">
+        <HBox fx:id="signageBody">
+            <VBox fx:id="signageBodyLeft"/>
+            <StackPane fx:id="signageBodyStackPane"/>
 <!--                <VBox fx:id="signageBodyLeft">-->
-                    <!--                <children>-->
-                    <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
-                    <!--                        <children>-->
-                    <!--                            <PFXIcon fx:id="direction" icon="ARROW_UPWARD" outlined="true" styleClass="signage-icon"/>-->
+                <!--                <children>-->
+                <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
+                <!--                        <children>-->
+                <!--                            <PFXIcon fx:id="direction" icon="ARROW_UPWARD" outlined="true" styleClass="signage-icon"/>-->
 
-                    <!--                            <Label fx:id="labelUP"/>-->
+                <!--                            <Label fx:id="labelUP"/>-->
 
-                    <!--                        </children>-->
-                    <!--                    </HBox>-->
-                    <!--                    <Separator/>-->
-                    <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
-                    <!--                        <children>-->
-                    <!--                            <PFXIcon icon="ARROW_FORWARD" outlined="true" styleClass="signage-icon"/>-->
-                    <!--                            <VBox spacing="10.0" styleClass="signage-text">-->
-                    <!--                                <children>-->
-                    <!--                                    <Label fx:id="labelRGT"/>-->
-                    <!--                                </children>-->
-                    <!--                            </VBox>-->
-                    <!--                        </children>-->
-                    <!--                    </HBox>-->
-                    <!--                    <Separator/>-->
-                    <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
-                    <!--                        <children>-->
-                    <!--                            <PFXIcon icon="ARROW_BACK" outlined="true" styleClass="signage-icon"/>-->
-                    <!--                            <VBox spacing="10.0" styleClass="signage-text">-->
-                    <!--                                <children>-->
-                    <!--                                    <Label fx:id="labelLFT"/>-->
-                    <!--                                </children>-->
-                    <!--                            </VBox>-->
-                    <!--                        </children>-->
-                    <!--                    </HBox>-->
-                    <!--                    <Separator/>-->
-                    <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
-                    <!--                        <children>-->
-                    <!--                            <PFXIcon icon="ARROW_DOWNWARD" outlined="true" styleClass="signage-icon"/>-->
-                    <!--                            <VBox spacing="10.0" styleClass="signage-text">-->
-                    <!--                                <children>-->
-                    <!--                                    <Label fx:id="labelDOWN"/>-->
-                    <!--                                </children>-->
-                    <!--                            </VBox>-->
-                    <!--                        </children>-->
-                    <!--                    </HBox>-->
-                    <!--                </children>-->
+                <!--                        </children>-->
+                <!--                    </HBox>-->
+                <!--                    <Separator/>-->
+                <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
+                <!--                        <children>-->
+                <!--                            <PFXIcon icon="ARROW_FORWARD" outlined="true" styleClass="signage-icon"/>-->
+                <!--                            <VBox spacing="10.0" styleClass="signage-text">-->
+                <!--                                <children>-->
+                <!--                                    <Label fx:id="labelRGT"/>-->
+                <!--                                </children>-->
+                <!--                            </VBox>-->
+                <!--                        </children>-->
+                <!--                    </HBox>-->
+                <!--                    <Separator/>-->
+                <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
+                <!--                        <children>-->
+                <!--                            <PFXIcon icon="ARROW_BACK" outlined="true" styleClass="signage-icon"/>-->
+                <!--                            <VBox spacing="10.0" styleClass="signage-text">-->
+                <!--                                <children>-->
+                <!--                                    <Label fx:id="labelLFT"/>-->
+                <!--                                </children>-->
+                <!--                            </VBox>-->
+                <!--                        </children>-->
+                <!--                    </HBox>-->
+                <!--                    <Separator/>-->
+                <!--                    <HBox styleClass="signage-list" VBox.vgrow="ALWAYS">-->
+                <!--                        <children>-->
+                <!--                            <PFXIcon icon="ARROW_DOWNWARD" outlined="true" styleClass="signage-icon"/>-->
+                <!--                            <VBox spacing="10.0" styleClass="signage-text">-->
+                <!--                                <children>-->
+                <!--                                    <Label fx:id="labelDOWN"/>-->
+                <!--                                </children>-->
+                <!--                            </VBox>-->
+                <!--                        </children>-->
+                <!--                    </HBox>-->
+                <!--                </children>-->
 <!--                </VBox>-->
-            </HBox>
-        </StackPane>
-
+        </HBox>
     </center>
 </BorderPane>
