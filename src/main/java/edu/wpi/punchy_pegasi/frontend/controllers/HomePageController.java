@@ -52,6 +52,9 @@ public class HomePageController {
     private Label dateLabel = new Label();
     @FXML
     private Label timeLabel = new Label();
+
+    @FXML
+    private VBox dateTimeBox = new VBox();
     @FXML
     private void initialize() {
         LocalDate currentDate = LocalDate.now();
@@ -60,6 +63,23 @@ public class HomePageController {
 
         dateLabel.setText(currentDate.toString());
         timeLabel.setText(currentTimeNoSec.toString());
+
+//        dateLabel.layoutXProperty().bind(dateTimeBox.layoutXProperty()
+//                        .subtract(dateLabel.widthProperty())
+//                        .subtract(10));
+//        dateLabel.layoutYProperty().bind(dateTimeBox.layoutYProperty()
+//                        .subtract(dateLabel.heightProperty())
+//                        .subtract(10));
+//
+//        timeLabel.layoutXProperty().bind(dateTimeBox.layoutXProperty()
+//                .subtract(timeLabel.widthProperty())
+//                .subtract(10));
+//        timeLabel.layoutYProperty().bind(dateTimeBox.layoutYProperty()
+//                .subtract(timeLabel.heightProperty())
+//                .subtract(10));
+
+        requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
+        requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
         List<RequestEntry> requestEntries = facade.getAllRequestEntry().values().stream().toList();
         int done = requestEntries.stream().mapToInt(r->r.getStatus() == RequestEntry.Status.DONE ? 1 : 0).sum();
         int processing = requestEntries.stream().mapToInt(r->r.getStatus() == RequestEntry.Status.PROCESSING ? 1 : 0).sum();
