@@ -21,8 +21,8 @@ public class CreditsController {
 
     @FXML
     private void initialize(){
-        resources.add(new Resource("Source 1", "an image", new Hyperlink("https://docs.oracle.com/javafx/2/ui_controls/hyperlink.htm")));
-        resources.add(new Resource("Source 2", "an icon", new Hyperlink("https://www.freecodecamp.org/news/java-operator-and-or-logical-operators/")));
+        resources.add(new Resource("Google Fonts", "icons", new Hyperlink("https://fonts.google.com/icons")));
+        resources.add(new Resource("jSerialComm", "Java library", new Hyperlink("https://fazecast.github.io/jSerialComm/")));
         resources.add(new Resource("Source 3", "an icon", new Hyperlink("https://www.freecodecamp.org/news/java-operator-and-or-logical-operators/")));
         resources.add(new Resource("Source 4", "an image", new Hyperlink("https://docs.oracle.com/javafx/2/ui_controls/hyperlink.htm")));
 
