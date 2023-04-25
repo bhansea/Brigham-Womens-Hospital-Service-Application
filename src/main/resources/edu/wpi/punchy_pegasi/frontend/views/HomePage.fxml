@@ -83,46 +83,45 @@
     </center>
     <top>
         <HBox style="-fx-background-color: -pfx-background" alignment="CENTER">
-                <HBox alignment="CENTER_LEFT" style="-fx-background-color: -pfx-background">
+            <HBox alignment="CENTER_LEFT" style="-fx-background-color: -pfx-background">
+                <padding>
+                    <Insets left="10"/>
+                </padding>
+                <Label text="Welcome back!&#10;Check your outstanding service requests." textAlignment="LEFT"
+                       BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background"
+                       HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10">
+                    <font>
+                        <Font name="Nunito Sans" size="20.0"/>
+                    </font>
                     <padding>
-                        <Insets left="10"/>
+                        <Insets topRightBottomLeft="10"/>
                     </padding>
-                    <Label text="Welcome back!&#10;Check your outstanding service requests." textAlignment="LEFT"
-                           BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background"
-                           HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10">
-                        <font>
-                            <Font name="Nunito Sans" size="20.0"/>
-                        </font>
-                        <padding>
-                            <Insets topRightBottomLeft="10"/>
-                        </padding>
-                    </Label>
-                    </HBox>
-                <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS"/>
-                    <VBox alignment="CENTER_RIGHT" style="-fx-background-color: -pfx-background"
-                          fx:id="dateTimeBox"
-                          AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
-                        <Label text="Date: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
-                               style="-fx-background-color: -pfx-background" fx:id="dateLabel"
-                               VBox.vgrow="ALWAYS"
-                               HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10">
-                            <font>
-                                <Font name="Nunito Sans" size="20.0"/>
-                            </font>
-                        </Label>
-                        <padding>
-                            <Insets topRightBottomLeft="10"/>
-                        </padding>
-                        <Label text="Time: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
-                               style="-fx-background-color: -pfx-background" fx:id="timeLabel"
-                               VBox.vgrow="ALWAYS"
-                               HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10">
-                            <font>
-                                <Font name="Nunito Sans" size="20.0"/>
-                            </font>
-                        </Label>
-                    </VBox>
+                </Label>
+            </HBox>
+            <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER_RIGHT" style="-fx-background-color: -pfx-background"
+                  fx:id="dateTimeBox"
+                  AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+                <Label text="Date: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
+                       style="-fx-background-color: -pfx-background" fx:id="dateLabel"
+                       VBox.vgrow="ALWAYS"
+                       HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10">
+                    <font>
+                        <Font name="Nunito Sans" size="20.0"/>
+                    </font>
+                </Label>
+                <padding>
+                    <Insets topRightBottomLeft="10"/>
+                </padding>
+                <Label text="Time: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
+                       style="-fx-background-color: -pfx-background" fx:id="timeLabel"
+                       VBox.vgrow="ALWAYS"
+                       HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10">
+                    <font>
+                        <Font name="Nunito Sans" size="20.0"/>
+                    </font>
+                </Label>
+            </VBox>
         </HBox>
     </top>
-
 </BorderPane>

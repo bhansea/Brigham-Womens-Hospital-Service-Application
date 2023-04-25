@@ -40,8 +40,7 @@ public class HomePageController {
     private final Facade facade = App.getSingleton().getFacade();
     private final Map<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
-//    @FXML
-//    private VBox pie;
+
     @FXML
     private PieChart piechart = new PieChart();
 
@@ -64,25 +63,6 @@ public class HomePageController {
         dateLabel.setText(currentDate.toString());
         timeLabel.setText(currentTimeNoSec.toString());
 
-//        dateTimeBox.layoutXProperty().bind(dateTimeAnchor.widthProperty().subtract(dateLabel.widthProperty()).subtract(10.0));
-//        // Bind layoutYProperty of Label to heightProperty of AnchorPane - 10.0 to position it in the top corner
-//        dateTimeBox.layoutYProperty().bind(dateTimeAnchor.heightProperty().subtract(dateLabel.heightProperty()).subtract(10.0));
-
-
-
-//        dateLabel.layoutXProperty().bind(dateTimeBox.layoutXProperty()
-//                        .subtract(dateLabel.widthProperty())
-//                        .subtract(10));
-//        dateLabel.layoutYProperty().bind(dateTimeBox.layoutYProperty()
-//                        .subtract(dateLabel.heightProperty())
-//                        .subtract(10));
-//
-//        timeLabel.layoutXProperty().bind(dateTimeBox.layoutXProperty()
-//                .subtract(timeLabel.widthProperty())
-//                .subtract(10));
-//        timeLabel.layoutYProperty().bind(dateTimeBox.layoutYProperty()
-//                .subtract(timeLabel.heightProperty())
-//                .subtract(10));
 
         requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
         requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
