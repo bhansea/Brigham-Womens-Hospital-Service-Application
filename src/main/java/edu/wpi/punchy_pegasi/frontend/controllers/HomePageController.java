@@ -76,12 +76,7 @@ public class HomePageController {
         piechart.setTitle("Service Request");
         piechart.setLegendVisible(false);
 
-        //pie.getChildren().add(piechart);
-        //Scene scene = new Scene(pie, 500, 500);
-        //Stage pstage = new Stage();
-        //pstage.setTitle("Pie");
-        //pstage.setScene(scene);
-        //pstage.show();
+
         initRequestTable();
         showServiceRequestTable(true);
 
@@ -91,43 +86,6 @@ public class HomePageController {
         requestTable.setVisible(show);
         requestTable.setManaged(show);
     }
-
-//    @FXML
-//    private void openSelectedWindow() {
-//        String selectedOption = (String) notificationComboBox.getValue();
-//        if (selectedOption != null) {
-//            if (selectedOption.equals("Meals")) {
-//                Stage window = new Stage();
-//                Scene scene = new Scene(new MFXTableView<>());
-//                window.setTitle(selectedOption + " Window");
-//                window.setScene(scene);
-//                window.show();
-//            } else if (selectedOption.equals("Flowers")) {
-//                Stage window = new Stage();
-//                Scene scene = new Scene(new MFXTableView<>());
-//                window.setTitle(selectedOption + " Window");
-//                window.setScene(scene);
-//                window.show();
-//            } else if (selectedOption.equals("Conference Room")) {
-//                Stage window = new Stage();
-//                Scene scene = new Scene(new MFXTableView<>());
-//                window.setTitle(selectedOption + " Window");
-//                window.setScene(scene);
-//                window.show();
-//            } else if (selectedOption.equals("Office Supplies")) {
-//                Stage window = new Stage();
-//                Scene scene = new Scene(new MFXTableView<>());
-//                window.setTitle(selectedOption + " Window");
-//                window.setScene(scene);
-//                window.show();
-//            } else if (selectedOption.equals("Furniture")) {
-//                Stage window = new Stage();
-//                Scene scene = new Scene(new MFXTableView<>());
-//                window.setTitle(selectedOption + " Window");
-//                window.setScene(scene);
-//                window.show();
-//            }
-//        }
 
     private void rowClicked(GenericRequestEntry entry) {
         var original = entry.originalEntry;
