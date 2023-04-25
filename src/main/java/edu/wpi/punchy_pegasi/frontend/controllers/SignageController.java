@@ -55,7 +55,7 @@ public class SignageController {
     private final VBox editingVbox = new VBox();
     private MFXComboBox<String> signageNameCB = new MFXComboBox<>();
     private MFXFilterComboBox<LocationName> locNameCB = new MFXFilterComboBox<>();
-    private MFXFilterComboBox<Signage.DirectionType> directionCB = new MFXFilterComboBox<>();
+    private MFXComboBox<Signage.DirectionType> directionCB = new MFXComboBox<>();
     @FXML
     private VBox headerEdit;
     @FXML
@@ -161,18 +161,16 @@ public class SignageController {
     private void buildTestSignage() {
         ObservableList<String> signageNames = FXCollections.observableArrayList();
         ObservableList<String> longNames = FXCollections.observableArrayList();
-        ObservableList<String> direction = FXCollections.observableArrayList();
         ObservableList<Signage> signageList = facade.getAllAsListSignage();
         for (Signage signage : signageList) {
             if (!signageNames.contains(signage.getSignName()))
                 signageNames.add(signage.getSignName());
-            if (!direction.contains(signage.getDirectionType().toString()))
-                direction.add(signage.getDirectionType().toString());
         }
         for (LocationName locName : facade.getAllAsListLocationName()) {
             longNames.add(locName.getLongName());
         }
-        signageNameCB.setFloatMode(FloatMode.DISABLED);
+        signageNameCB.setFloatingText("Signage Name");
+        signageNameCB.setFloatMode(FloatMode.INLINE);
         signageNameCB.textProperty().addListener((observable, oldValue, newValue) -> {
             validateSubmit();
         });
@@ -182,7 +180,7 @@ public class SignageController {
             validateSubmit();
         });
         directionCB.setFloatingText("Direction");
-        directionCB.setFloatMode(FloatMode.BORDER);
+        directionCB.setFloatMode(FloatMode.INLINE);
         directionCB.setOnAction(e -> {
             validateSubmit();
         });
@@ -279,12 +277,6 @@ public class SignageController {
     private void initHeader() {
         // Set up left header
         signageHeaderLeft.getStyleClass().add("signage-header-left");
-        signageHeaderLeft.getChildren().add(iconHere);
-//        var headerLeft = facade.getAllAsListSignage()
-//                .filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE) && signage.getSignName().equals(prefSignageName));
-//        var headerVbox = getSignageTableView(headerLeft);
-//        headerVbox.getStyleClass().add("signage-label-Here");
-//        signageHeaderLeft.getChildren().add(headerVbox);
 
         // Set up right header
         signageHeaderRight.getStyleClass().add("signage-header-right");
@@ -352,7 +344,10 @@ public class SignageController {
                 }
                 case HERE -> {
                     table.getStyleClass().add("signage-label-Here");
+                    signageHeaderLeft.getChildren().add(iconHere);
                     signageHeaderLeft.getChildren().add(table);
+                    signageHeaderLeft.visibleProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
+                    signageHeaderLeft.managedProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
                     continue;
                 }
             }
