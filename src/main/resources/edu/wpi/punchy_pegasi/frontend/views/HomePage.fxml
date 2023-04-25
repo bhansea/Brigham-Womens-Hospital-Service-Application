@@ -82,7 +82,7 @@
         </StackPane>
     </center>
     <top>
-        <AnchorPane maxHeight="Infinity" maxWidth="Infinity">
+        <AnchorPane maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: -pfx-background">
             <HBox alignment="CENTER_LEFT" style="-fx-background-color: -pfx-background">
                 <padding>
                     <Insets left="10"/>
