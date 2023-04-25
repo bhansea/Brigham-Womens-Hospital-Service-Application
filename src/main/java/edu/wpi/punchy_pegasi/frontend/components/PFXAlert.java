@@ -1,28 +1,15 @@
 package edu.wpi.punchy_pegasi.frontend.components;
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.Screen;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.util.function.Consumer;
 
 public class PFXAlert extends VBox {
-    String text;
-
-    public void start(Stage stage) {
-        Popup popup = new Popup();
-    }
-
     @Getter
-    @Setter
-    private Runnable exit;
+    private final String text;
 
-    public PFXAlert(Stage stage, String text) {
+    public PFXAlert(String text) {
         super();
         this.text = text;
         Label label = new Label();
@@ -31,6 +18,7 @@ public class PFXAlert extends VBox {
         getChildren().add(label);
         getChildren().add(exit);
         getStyleClass().add("pfx-alert");
-        exit.setOnAction(event -> this.exit.run());
+        exit.setOnAction(event -> App.getSingleton().getLayout().hideOverlay());
+        App.getSingleton().getLayout().showOverlay(this);
     }
 }

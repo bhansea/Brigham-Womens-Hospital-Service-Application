@@ -11,15 +11,18 @@
     -fx-background-color: white;
     -fx-spacing: 0;
 }
+
 .sidebar-expand-icon {
     -fx-font-size: 18;
     -fx-padding: 0;
     -fx-fill: -pfx-secondary;
     -fx-cursor: hand;
 }
+
 #navItems {
     -fx-spacing: 15;
 }
+
 .header {
     -fx-alignment: CENTER;
     -fx-background-color: -pfx-background;
@@ -50,7 +53,7 @@
 .header-right-container {
     -fx-alignment: CENTER_RIGHT;
     -fx-min-width: 165;
-    -fx-padding: 0 20 0 0 ;
+    -fx-padding: 0 20 0 0;
 }
 
 .header-right-container > PFXAccount {
@@ -70,6 +73,7 @@
 #profileImage {
     -fx-alignment: CENTER_LEFT;
 }
+
 .layout-content {
     -fx-background-color: transparent;
 }
@@ -77,12 +81,14 @@
 #alertOverlay {
     -fx-background-color: -pfx-secondary-transparent;
 }
+
 #notificationsContainer {
     -fx-alignment: TOP_RIGHT;
     -fx-padding: 10;
+    -fx-spacing: 5;
 }
 
-.notification-popup{
+.notification-popup {
     -fx-background-color: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
     -fx-font-family: "Nunito Sans Regular";
@@ -90,19 +96,32 @@
     -fx-background-radius: 6;
     -fx-padding: 10;
 }
-.notification-title{
+
+.notification-title {
     -fx-fill: -pfx-text;
     -fx-font-size: 20;
 }
-.notification-body{
+
+.notification-body {
     -fx-fill: -pfx-secondary;
     -fx-font-size: 16;
 }
+
 .notification-dismiss {
     -fx-padding: 3;
     -pfx-button-background: transparent;
     -pfx-button-text-hover: red;
 }
+
 .notification-title-bar {
+    -fx-alignment: CENTER;
+}
+
+.alert-VBox {
+    -fx-background-color: -pfx-secondary-transparent;
+    -fx-alignment: CENTER;
+}
+
+.alert-HBox {
     -fx-alignment: CENTER;
 }

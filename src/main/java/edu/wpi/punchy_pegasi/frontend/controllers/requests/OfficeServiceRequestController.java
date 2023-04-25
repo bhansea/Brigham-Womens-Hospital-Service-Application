@@ -2,16 +2,15 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 
 import edu.wpi.punchy_pegasi.App;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,6 +19,11 @@ import java.util.Arrays;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
     @FXML
+    PFXCardHolder cardHolder;
+    @FXML
+    VBox container = new VBox();
+    ArrayList<PFXCardVertical> items = new ArrayList<>();
+    @FXML
     private PFXCardVertical pencils = new PFXCardVertical();
     @FXML
     private PFXCardVertical pens = new PFXCardVertical();
@@ -27,12 +31,6 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     private PFXCardVertical paper = new PFXCardVertical();
     @FXML
     private PFXCardVertical stapler = new PFXCardVertical();
-    @FXML
-    PFXCardHolder cardHolder;
-    @FXML
-    VBox container = new VBox();
-
-    ArrayList<PFXCardVertical> items = new ArrayList<>();
 
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
@@ -60,15 +58,14 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
         container.setAlignment(Pos.CENTER);
-}
+    }
 
     @FXML
     public void submitEntry() {
         //makes sure shared fields aren't empty
         requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
-        Stage stage = App.getSingleton().getPrimaryStage();
-        PFXAlert pfxPopup = new PFXAlert(stage, "Your request has been submitted!");
+        new PFXAlert("Your request has been submitted!");
     }
 
     @Override

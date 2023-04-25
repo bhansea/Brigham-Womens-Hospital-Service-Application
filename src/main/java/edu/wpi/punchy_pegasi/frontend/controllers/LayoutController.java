@@ -23,13 +23,15 @@ public class LayoutController extends StackPane {
     @FXML
     private BorderPane layoutPane;
 
-    @FXML
-    private BorderPane notificationsOverlay;
-    @FXML
-    private BorderPane alertOverlay;
 
     @FXML
     private VBox notificationsContainer;
+
+    @FXML
+    private VBox alertVBox;
+
+    @FXML
+    private HBox alertHBox;
 
     @FXML
     private HeaderController topLayout;
@@ -50,8 +52,10 @@ public class LayoutController extends StackPane {
 //        notificationsOverlay.setVisible(false);
 //        notificationsOverlay.setManaged(false);
         notificationsContainer.setPickOnBounds(false);
-        alertOverlay.setVisible(false);
-        alertOverlay.setManaged(false);
+        alertVBox.setVisible(false);
+        alertVBox.setManaged(false);
+        alertVBox.getStyleClass().add("alert-VBox");
+        alertHBox.getStyleClass().add("alert-HBox");
     }
 
     public void showLeftLayout(boolean hide) {
@@ -92,17 +96,20 @@ public class LayoutController extends StackPane {
         notificationsContainer.getChildren().add(notification);
     }
 
-    public void showAlert(Node node) {
-        if (!alert.compareAndSet(false, true)) return;
-        alertOverlay.setCenter(node);
-        alertOverlay.setVisible(true);
-        alertOverlay.setManaged(true);
+    public boolean showOverlay(Node node) {
+        if (!alert.compareAndSet(false, true)) return false;
+        alertHBox.getChildren().add(node);
+        alertVBox.setVisible(true);
+        alertVBox.setManaged(true);
+        return true;
     }
 
-    public void dismissAlert() {
-        alertOverlay.setCenter(null);
-        alertOverlay.setVisible(false);
-        alertOverlay.setManaged(false);
+    public boolean hideOverlay() {
+        if (!alert.compareAndSet(true, false)) return false;
+        alertHBox.getChildren().clear();
+        alertVBox.setVisible(false);
+        alertVBox.setManaged(false);
+        return true;
     }
 
     @FXML

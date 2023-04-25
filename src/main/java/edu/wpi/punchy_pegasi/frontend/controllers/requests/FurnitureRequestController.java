@@ -110,8 +110,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 // TODO: need a way to get the employeeID of the person making the request entry
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
-        Stage stage = App.getSingleton().getPrimaryStage();
-        PFXAlert pfxPopup = new PFXAlert(stage, "Your request has been submitted!");
+        new PFXAlert("Your request has been submitted!");
     }
 
     @FXML

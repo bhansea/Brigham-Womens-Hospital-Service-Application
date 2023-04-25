@@ -8,8 +8,11 @@ import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ConferenceRoomController extends RequestController<ConferenceRoomEntry> {
@@ -125,8 +128,7 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         numberOfParticipants.getText(),
                         App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
-        App.getSingleton().getLayout().notify("Your request has been submitted!", "");
-//        Stage stage = App.getSingleton().getPopupStage();
-//        PFXAlert pfxPopup = new PFXAlert(stage, "Your request has been submitted!");
+
+        new PFXAlert("Your request has been submitted!");
     }
 }
