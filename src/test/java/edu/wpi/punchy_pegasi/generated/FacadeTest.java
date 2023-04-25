@@ -452,8 +452,8 @@ class FacadeTest {
 
     @Test
     void getMove() {
-        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
-        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        Move move = new Move(100L, 1005L, 100L, LocalDate.now());
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLocationID(), move.getDate()};
         try {
             pdbController.insertQuery(TableType.MOVES, moveFields, values);
         } catch (PdbController.DatabaseException e) {
@@ -471,26 +471,26 @@ class FacadeTest {
 
     @Test
     void testGetMove() {
-        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
-        Move move2 = new Move(101L, 1005L, "testLong", LocalDate.now());
-        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
-        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
+        Move move = new Move(100L, 1005L, 100L, LocalDate.now());
+        Move move2 = new Move(101L, 1005L, 100L, LocalDate.now());
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLocationID(), move.getDate()};
+        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLocationID(), move2.getDate()};
         try {
             pdbController.insertQuery(TableType.MOVES, moveFields, values);
             pdbController.insertQuery(TableType.MOVES, moveFields, values2);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        var results = facade.getMove(Move.Field.LONG_NAME, "testLong");
+        var results = facade.getMove(Move.Field.LOCATION_ID, 100L);
         var map = new HashMap<java.lang.Long, Move>();
-        try (var rs = pdbController.searchQuery(TableType.MOVES, "longName", "testLong")) {
+        try (var rs = pdbController.searchQuery(TableType.MOVES, "locationID", 100L)) {
             while (rs.next()) {
                 java.sql.Date dd = (java.sql.Date) rs.getObject("date");
                 LocalDate ld = dd.toLocalDate();
                 Move req = new Move(
                         (java.lang.Long) rs.getObject("uuid"),
                         (java.lang.Long) rs.getObject("nodeID"),
-                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.Long) rs.getObject("locationID"),
                         ld);
                 if (req != null)
                     map.put(req.getUuid(), req);
@@ -510,12 +510,12 @@ class FacadeTest {
 
     @Test
     void testGetMove1() {
-        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
-        Move move2 = new Move(101L, 1000L, "testLongName", LocalDate.now());
-        Move move3 = new Move(102L, 1005L, "testLongName", LocalDate.now());
-        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
-        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLongName(), move2.getDate()};
-        Object[] values3 = new Object[]{move3.getUuid(), move3.getNodeID(), move3.getLongName(), move3.getDate()};
+        Move move = new Move(100L, 1005L, 100L, LocalDate.now());
+        Move move2 = new Move(101L, 1000L, 200L, LocalDate.now());
+        Move move3 = new Move(102L, 1005L, 300L, LocalDate.now());
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLocationID(), move.getDate()};
+        Object[] values2 = new Object[]{move2.getUuid(), move2.getNodeID(), move2.getLocationID(), move2.getDate()};
+        Object[] values3 = new Object[]{move3.getUuid(), move3.getNodeID(), move3.getLocationID(), move3.getDate()};
         try {
             pdbController.insertQuery(TableType.MOVES, moveFields, values);
             pdbController.insertQuery(TableType.MOVES, moveFields, values2);
@@ -523,9 +523,9 @@ class FacadeTest {
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        Move.Field[] fields = {Move.Field.LONG_NAME, Move.Field.NODE_ID};
-        Object[] searchValues = new Object[]{"testLongName", 1005L};
-        String[] searchFields = new String[]{"longName", "nodeID"};
+        Move.Field[] fields = {Move.Field.LOCATION_ID, Move.Field.NODE_ID};
+        Object[] searchValues = new Object[]{200L, 1005L};
+        String[] searchFields = new String[]{"locationID", "nodeID"};
         var results = facade.getMove(fields, searchValues);
         var map = new HashMap<java.lang.Long, Move>();
         try (var rs = pdbController.searchQuery(TableType.MOVES, searchFields, searchValues)) {
@@ -535,7 +535,7 @@ class FacadeTest {
                 Move req = new Move(
                         (java.lang.Long) rs.getObject("uuid"),
                         (java.lang.Long) rs.getObject("nodeID"),
-                        (java.lang.String) rs.getObject("longName"),
+                        (java.lang.Long) rs.getObject("locationID"),
                         ld);
                 if (req != null)
                     map.put(req.getUuid(), req);
@@ -557,14 +557,14 @@ class FacadeTest {
 
     @Test
     void getAllMove() {
-        var values0 = new Object[]{100L, 1005L, "testLong", LocalDate.now()};
-        var values1 = new Object[]{101L, 1006L, "testLong1", LocalDate.now()};
-        var values2 = new Object[]{102L, 1007L, "testLong2", LocalDate.now()};
+        var values0 = new Object[]{100L, 1005L, 100L, LocalDate.now()};
+        var values1 = new Object[]{101L, 1006L, 200L, LocalDate.now()};
+        var values2 = new Object[]{102L, 1007L, 300L, LocalDate.now()};
         var valueSet = new Object[][]{values0, values1, values2};
 
         var refMap = new HashMap<Long, Move>();
         for (Object[] values : valueSet) {
-            var move = new Move((Long) values[0], (Long) values[1], (String) values[2], (LocalDate) values[3]);
+            var move = new Move((Long) values[0], (Long) values[1], (Long) values[2], (LocalDate) values[3]);
             refMap.put(move.getUuid(), move);
             try {
                 pdbController.insertQuery(TableType.MOVES, moveFields, values);
@@ -586,7 +586,7 @@ class FacadeTest {
 
     @Test
     void saveMove() {
-        Move move = new Move(100L, 1005L, "testLongName", LocalDate.now());
+        Move move = new Move(100L, 1005L, 100L, LocalDate.now());
         facade.saveMove(move);
         Optional<Move> results = facade.getMove(move.getUuid());
         Move daoresult = results.get();
@@ -601,11 +601,11 @@ class FacadeTest {
     @Test
     void updateMove() {
         LocalDate date = LocalDate.now();
-        Move move = new Move(100L, 1005L, "testLong", date);
+        Move move = new Move(100L, 1005L, 100L, date);
         facade.saveMove(move);
         LocalDate updatedDate = LocalDate.now();
-        Move updatedMove = new Move(100L, 1005L, "updatedTestLong", updatedDate);
-        Move.Field[] fields = {Move.Field.LONG_NAME, Move.Field.DATE};
+        Move updatedMove = new Move(100L, 1005L, 200L, updatedDate);
+        Move.Field[] fields = {Move.Field.LOCATION_ID, Move.Field.DATE};
         facade.updateMove(updatedMove, fields);
         Optional<Move> results = facade.getMove(move.getUuid());
         Move daoresult = results.get();
@@ -619,8 +619,8 @@ class FacadeTest {
 
     @Test
     void deleteMove() {
-        Move move = new Move(100L, 1005L, "testLong", LocalDate.now());
-        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLongName(), move.getDate()};
+        Move move = new Move(100L, 1005L, 100L, LocalDate.now());
+        Object[] values = new Object[]{move.getUuid(), move.getNodeID(), move.getLocationID(), move.getDate()};
         try {
             pdbController.insertQuery(TableType.MOVES, moveFields, values);
         } catch (PdbController.DatabaseException e) {
@@ -2632,18 +2632,18 @@ class FacadeTest {
 
     @Test
     void getAccount() {
-        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
-        Object[] values = new Object[]{account.getUsername(), "testPassword", account.getEmployeeID(), account.getAccountType()};
+        Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Object[] values = new Object[]{account.getUuid(), account.getUsername(), "testPassword", account.getEmployeeID(), account.getAccountType()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        Optional<Account> results = facade.getAccount(account.getUsername());
+        Optional<Account> results = facade.getAccount(account.getUuid());
         Account daoresult = results.get();
         assertEquals(daoresult, account);
         try {
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -2651,10 +2651,10 @@ class FacadeTest {
 
     @Test
     void testGetAccount() {
-        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
-        Account account2 = new Account("testUsername1", "testPassword", 100L, Account.AccountType.ADMIN);
-        Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
-        Object[] values2 = new Object[]{account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType()};
+        Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account2 = new Account(101L, "testUsername1", "testPassword", 100L, Account.AccountType.ADMIN);
+        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values2 = new Object[]{account2.getUuid(), account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values2);
@@ -2666,6 +2666,7 @@ class FacadeTest {
         try (var rs = pdbController.searchQuery(TableType.ACCOUNTS, "employeeID", 100L)) {
             while (rs.next()) {
                 Account req = new Account(
+                        (java.lang.Long) rs.getObject("uuid"),
                         (java.lang.String) rs.getObject("username"),
                         (java.lang.String) rs.getObject("password"),
                         (java.lang.Long) rs.getObject("employeeID"),
@@ -2679,8 +2680,8 @@ class FacadeTest {
         assertEquals(map.get(account.getUsername()), results.get(account.getUsername()));
         assertEquals(map.get(account2.getUsername()), results.get(account2.getUsername()));
         try {
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account2.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account2.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -2688,10 +2689,10 @@ class FacadeTest {
 
     @Test
     void testGetAccount1() {
-        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
-        Account account2 = new Account("testUsername1", "testPassword", 200L, Account.AccountType.STAFF);
-        Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
-        Object[] values2 = new Object[]{account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType()};
+        Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account2 = new Account(101L, "testUsername1", "testPassword", 200L, Account.AccountType.STAFF);
+        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values2 = new Object[]{account2.getUuid(), account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values2);
@@ -2706,6 +2707,7 @@ class FacadeTest {
         try (var rs = pdbController.searchQuery(TableType.ACCOUNTS, searchFields, searchValues)) {
             while (rs.next()) {
                 Account req = new Account(
+                        (java.lang.Long) rs.getObject("uuid"),
                         (java.lang.String) rs.getObject("username"),
                         (java.lang.String) rs.getObject("password"),
                         (java.lang.Long) rs.getObject("employeeID"),
@@ -2719,8 +2721,8 @@ class FacadeTest {
         assertEquals(map.get(account.getUsername()), results.get(account.getUsername()));
         assertEquals(map.get(account2.getUsername()), results.get(account2.getUsername()));
         try {
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account2.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account2.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -2734,10 +2736,10 @@ class FacadeTest {
 
         var valueSet = new Object[][]{values0, values1, values2};
 
-        var refMap = new HashMap<String, Account>();
+        var refMap = new HashMap<Long, Account>();
         for (Object[] values : valueSet) {
-            var account = new Account((String) values[0], (String) values[1], (Long) values[2], (Account.AccountType) values[3]);
-            refMap.put(account.getUsername(), account);
+            var account = new Account((Long) values[0], (String) values[1], (String) values[2], (Long) values[3], (Account.AccountType) values[4]);
+            refMap.put(account.getUuid(), account);
             try {
                 pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
             } catch (PdbController.DatabaseException e) {
@@ -2745,10 +2747,10 @@ class FacadeTest {
             }
         }
 
-        Map<String, Account> resultMap = facade.getAllAccount();
+        Map<Long, Account> resultMap = facade.getAllAccount();
         for (var username : resultMap.keySet()) {
             try {
-                pdbController.deleteQuery(TableType.ACCOUNTS, "username", username);
+                pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", username);
             } catch (PdbController.DatabaseException e) {
                 assert false : "Failed to delete from database";
             }
@@ -2759,13 +2761,13 @@ class FacadeTest {
     @Test
     void saveAccount() {
         Long uuid = 100L;
-        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account = new Account(uuid, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
         facade.saveAccount(account);
-        Optional<Account> results = facade.getAccount(account.getUsername());
+        Optional<Account> results = facade.getAccount(account.getUuid());
         Account daoresult = results.get();
         assertEquals(account, daoresult);
         try {
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -2773,18 +2775,18 @@ class FacadeTest {
 
     @Test
     void updateAccount() {
-        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
         facade.saveAccount(account);
 
-        Account updatedAccount = new Account("testUsername", "testPassword", 100L, Account.AccountType.STAFF);
+        Account updatedAccount = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.STAFF);
         Account.Field[] fields = {Account.Field.ACCOUNT_TYPE};
         facade.updateAccount(updatedAccount, fields);
 
-        Optional<Account> results = facade.getAccount(account.getUsername());
+        Optional<Account> results = facade.getAccount(account.getUuid());
         Account daoresult = results.get();
         assertEquals(updatedAccount, daoresult);
         try {
-            pdbController.deleteQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -2792,7 +2794,7 @@ class FacadeTest {
 
     @Test
     void deleteAccount() {
-        Account account = new Account("testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
+        Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
         Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
@@ -2800,7 +2802,7 @@ class FacadeTest {
             assert false : "Failed to insert into database";
         }
         try {
-            pdbController.searchQuery(TableType.ACCOUNTS, "username", account.getUsername());
+            pdbController.searchQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
         } catch (PdbController.DatabaseException e) {
             assert false : "Failed to search database";
         }
