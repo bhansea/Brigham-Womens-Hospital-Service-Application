@@ -3,11 +3,14 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -26,7 +29,7 @@ import javax.xml.stream.Location;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
-
+import java.util.UUID;
 import static java.lang.Long.parseLong;
 
 
@@ -73,9 +76,22 @@ public class AdminTablePageController {
     private Label fileText = new Label();
     FileChooser fileChooser = new FileChooser();
     DirectoryChooser directoryChooser = new DirectoryChooser();
+    private ObservableMap<Long, edu.wpi.punchy_pegasi.schema.Node> nodes;
+    private ObservableMap<Long, Edge> edges;
+    private ObservableMap<Long, LocationName> locations;
+    private ObservableMap<Long, Move> moves;
+
+    private ObservableMap<Long, Account> accounts;
     PdbController pdb = App.getSingleton().getPdb();
 
     public void initialize() {
+
+        nodes = facade.getAllNode();
+        edges = facade.getAllEdge();
+        moves = facade.getAllMove();
+        locations = facade.getAllLocationName();
+        accounts = facade.getAllAccount();
+
         fileChooser.setTitle("File Chooser");
 
         ObservableList<String> displayTableTypeList = FXCollections.observableArrayList();
@@ -97,6 +113,37 @@ public class AdminTablePageController {
         });
 
         tables.values().forEach(t -> t.setRowClicked(this::populateForm));
+
+        importButton.setOnAction(e -> {
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+            fileChooser.getExtensionFilters().add(extFilter);
+            selectedFile = fileChooser.showOpenDialog(App.getSingleton().getPopupStage());
+
+            if (selectedFile != null && displayTableTypeComboBox.getSelectedItem() != null) {
+                filePath = selectedFile.getAbsolutePath();
+                if (filePath.contains("Node.csv") || filePath.contains("Move.csv") || filePath.contains("LocationName.csv") || filePath.contains("Edge.csv")) {
+                    fileText.setText(filePath);
+                    try {
+                        pdb.importTable(currentTable.tableType, filePath);
+                    } catch (PdbController.DatabaseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+
+        exportButton.setOnAction(e -> {
+            selectedDir = directoryChooser.showDialog(App.getSingleton().getPopupStage());
+            if (selectedDir != null) {
+                fileText.setText(selectedDir.getAbsolutePath());
+                try {
+                    pdb.exportTable(selectedDir + "\\" + currentTable.humanReadableName + ".csv", currentTable.tableType);
+                    selectedDir = null;
+                } catch (PdbController.DatabaseException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         submitEditButton.setOnAction(e -> {
             try {
@@ -140,39 +187,113 @@ public class AdminTablePageController {
             }
         });
 
-        importButton.setOnAction(e -> {
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-            fileChooser.getExtensionFilters().add(extFilter);
-            selectedFile = fileChooser.showOpenDialog(App.getSingleton().getPopupStage());
-
-            if (selectedFile != null && displayTableTypeComboBox.getSelectedItem() != null) {
-                filePath = selectedFile.getAbsolutePath();
-                if (filePath.contains("Node.csv") || filePath.contains("Move.csv") || filePath.contains("LocationName.csv") || filePath.contains("Edge.csv")) {
-                    fileText.setText(filePath);
-                    try {
-                        pdb.importTable(currentTable.tableType, filePath);
-                    } catch (PdbController.DatabaseException ex) {
-                        throw new RuntimeException(ex);
-                    }
+        removeButton.setOnAction(e -> {
+            try {
+                switch (currentTable.getTableType()) {
+                    case NODES:
+                        facade.deleteNode(commit(new edu.wpi.punchy_pegasi.schema.Node()));
+                        break;
+                    case LOCATIONNAMES:
+                        facade.deleteLocationName(commit(new LocationName()));
+                        break;
+                    case EDGES:
+                        facade.deleteEdge(commit(new Edge()));
+                        break;
+                    case MOVES:
+                        facade.deleteMove(commit(new Move()));
+                        break;
+                    case EMPLOYEES:
+                        facade.deleteEmployee(commit(new Employee()));
+                        break;
+                    case ACCOUNTS:
+                        facade.deleteAccount(commit(new Account()));
+                        break;
+                    case CONFERENCEREQUESTS:
+                        facade.deleteConferenceRoomEntry(commit(new ConferenceRoomEntry()));
+                        break;
+                    case OFFICEREQUESTS:
+                        facade.deleteOfficeServiceRequestEntry(commit(new OfficeServiceRequestEntry()));
+                        break;
+                    case FURNITUREREQUESTS:
+                        facade.deleteFurnitureRequestEntry(commit(new FurnitureRequestEntry()));
+                        break;
+                    case FOODREQUESTS:
+                        facade.deleteFoodServiceRequestEntry(commit(new FoodServiceRequestEntry()));
+                        break;
+                    case FLOWERREQUESTS:
+                        facade.deleteFlowerDeliveryRequestEntry(commit(new FlowerDeliveryRequestEntry()));
+                        break;
                 }
+            } catch (InvalidArgumentException ex) {
+                System.out.println("Invalid Row Delete");
             }
+
         });
 
-        exportButton.setOnAction(e -> {
-            selectedDir = directoryChooser.showDialog(App.getSingleton().getPopupStage());
-            if (selectedDir != null) {
-                fileText.setText(selectedDir.getAbsolutePath());
-                try {
-                    pdb.exportTable(selectedDir + "\\" + currentTable.humanReadableName + ".csv", currentTable.tableType);
-                    selectedDir = null;
-                } catch (PdbController.DatabaseException ex) {
-                    throw new RuntimeException(ex);
+        addButton.setOnAction(e -> {
+            try {
+                switch (currentTable.getTableType()) {
+                    case NODES:
+                        edu.wpi.punchy_pegasi.schema.Node node = new edu.wpi.punchy_pegasi.schema.Node();
+                        var newNodeId = nodes.values().stream().mapToLong(edu.wpi.punchy_pegasi.schema.Node::getNodeID).max().orElse(1) + 1;
+                        idCommit(node);
+                        node.setNodeID(newNodeId);
+                        facade.saveNode(node);
+                        break;
+                    case LOCATIONNAMES:
+                        LocationName locationName = new LocationName();
+                        var newLocationId = locations.values().stream().mapToLong(LocationName::getUuid).max().orElse(1) + 1;
+                        idCommit(locationName);
+                        locationName.setUuid(newLocationId);
+                        facade.saveLocationName(locationName);
+                        break;
+                    case EDGES:
+                        Edge edge = new Edge();
+                        var newEdgeId = edges.values().stream().mapToLong(Edge::getUuid).max().orElse(1) + 1;
+                        idCommit(edge);
+                        edge.setUuid(newEdgeId);
+                        facade.saveEdge(edge);
+                        break;
+                    case MOVES:
+                        Move move = new Move();
+                        var newMovevId = moves.values().stream().mapToLong(Move::getUuid).max().orElse(1) + 1;
+                        idCommit(move);
+                        move.setUuid(newMovevId);
+                        facade.saveMove(move);
+                        break;
+                    case EMPLOYEES:
+                        Employee employee = new Employee();
+                        var newEmployeeId = facade.getAllEmployee().values().stream().mapToLong(Employee::getEmployeeID).max().orElse(0) + 1;
+                        idCommit(employee);
+                        employee.setEmployeeID(newEmployeeId);
+                        facade.saveEmployee(employee);
+                        break;
+                    case ACCOUNTS:
+                        Account account = new Account();
+                        var newAccountId = accounts.values().stream().mapToLong(Account::getUuid).max().orElse(1) + 1;
+                        idCommit(account);
+                        account.setUuid(newAccountId);
+                        facade.saveAccount(account);
+                        break;
+                    case CONFERENCEREQUESTS:
+                        facade.saveConferenceRoomEntry(serviceIdCommit(new ConferenceRoomEntry()));
+                        break;
+                    case OFFICEREQUESTS:
+                        facade.saveOfficeServiceRequestEntry(serviceIdCommit(new OfficeServiceRequestEntry()));
+                        break;
+                    case FURNITUREREQUESTS:
+                        facade.saveFurnitureRequestEntry(serviceIdCommit(new FurnitureRequestEntry()));
+                        break;
+                    case FOODREQUESTS:
+                        facade.saveFoodServiceRequestEntry(serviceIdCommit(new FoodServiceRequestEntry()));
+                        break;
+                    case FLOWERREQUESTS:
+                        facade.saveFlowerDeliveryRequestEntry(serviceIdCommit(new FlowerDeliveryRequestEntry()));
+                        break;
                 }
+            } catch (InvalidArgumentException ex) {
+                System.out.println("Invalid Argument Exception");
             }
-        });
-
-        clearButton.setOnAction(e -> {
-//            pdb.deleteQuery(currentTable, );
         });
     }
     public void showTable(AdminTable tableType) {
@@ -189,23 +310,12 @@ public class AdminTablePageController {
         tables.values().forEach(AdminTable::init);
         tableContainer.getChildren().addAll(tables.values().stream().map(AdminTable::getTable).toList());
         showTable(tables.get("Node"));
+        currentTable = tables.get("Node");
     }
 
     private List<javafx.scene.Node> form;
     private List<TextField> inputs;
     public void displayEditComponent() {
-//        HBox hbox = new HBox();
-//        editContainer.getChildren().clear();
-//        for (Object field : currentTable.tableType.getFieldEnum().getEnumConstants()) {
-//            Label fieldLabel = new Label();
-//            TextArea fieldArea = new TextArea();
-//
-//            fieldLabel.setText(field.toString());
-//            editContainer.getChildren().add(fieldLabel);
-//            editContainer.getChildren().add(fieldArea);
-//        }
-//        editContainer.getChildren().add(hbox);
-//        editContainer.getStyleClass().add("admin-edit-container");
         form = new ArrayList<>();
         inputs = new ArrayList<>();
         int counter = 0;
@@ -248,6 +358,41 @@ public class AdminTablePageController {
             var input = inputs.get(field.ordinal());
             try {
                 field.setValueFromString(entry, input.getText());
+            } catch (Exception e) {
+                //alert the user that the input is invalid
+                throw new InvalidArgumentException("Invalid input for field " + field.getColName());
+            }
+        }
+        return entry;
+    }
+
+    public <T> T idCommit(T entry) throws InvalidArgumentException {
+        for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
+            var input = inputs.get(field.ordinal());
+            try {
+                if (!field.getColName().toLowerCase().contains("id")) {
+
+                    field.setValueFromString(entry, input.getText());
+                } else {
+                    field.setValueFromString(entry, "1");
+                }
+            } catch (Exception e) {
+                //alert the user that the input is invalid
+                throw new InvalidArgumentException("Invalid input for field " + field.getColName());
+            }
+        }
+        return entry;
+    }
+
+    public <T> T serviceIdCommit(T entry) throws InvalidArgumentException {
+        for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
+            var input = inputs.get(field.ordinal());
+            try {
+                if (!field.getColName().toLowerCase().contains("serviceid")) {
+                    field.setValueFromString(entry, input.getText());
+                } else {
+                    field.setValueFromString(entry, (UUID.randomUUID()).toString());
+                }
             } catch (Exception e) {
                 //alert the user that the input is invalid
                 throw new InvalidArgumentException("Invalid input for field " + field.getColName());
