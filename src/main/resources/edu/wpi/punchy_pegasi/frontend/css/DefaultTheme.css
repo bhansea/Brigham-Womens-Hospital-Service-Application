@@ -40,6 +40,7 @@
 
 /* Components */
 @import "PFXAccount.css";
+@import "PFXAlert.css";
 @import "PFXButton.css";
 @import "PFXColors.css";
 @import "PFXCardVertical.css";
@@ -54,6 +55,7 @@
 @import "PFXTabLayout.css";
 /* Pages */
 @import "Admin.css";
+@import "AdminTablePage.css";
 @import "Conference.css";
 @import "EditableMap.css";
 @import "HomePage.css";

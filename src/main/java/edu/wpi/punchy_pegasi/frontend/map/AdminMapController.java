@@ -310,7 +310,7 @@ public class AdminMapController {
 
     @FXML
     private void commitChanges() {
-        if (commiting.compareAndExchange(false, true)) return;
+        if (!commiting.compareAndSet(false, true)) return;
         var totalEdited = mapEdits.size();
         commitButton.setDisable(true);
         commitProgress.setProgress(0);

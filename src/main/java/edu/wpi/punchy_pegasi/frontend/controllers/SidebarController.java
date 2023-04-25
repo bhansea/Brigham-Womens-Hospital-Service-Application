@@ -83,7 +83,7 @@ public class SidebarController extends VBox implements PropertyChangeListener {
 
     private void setExpanded(boolean expanded) {
         if (this.expanded != null && this.expanded == expanded) return;
-        if (animating.compareAndExchange(false, true)) return;
+        if (!animating.compareAndSet(false, true)) return;
         this.expanded = expanded;
         if (expanded) sidebarItems.forEach(s -> s.setExpanded(true));
         Platform.runLater(() -> {
