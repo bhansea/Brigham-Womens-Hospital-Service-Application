@@ -97,6 +97,7 @@
                     </padding>
                 </Label>
                 <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS" >
+                    <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS"></HBox>
                     <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS">
                         <padding>
                             <Insets right="500"/>
