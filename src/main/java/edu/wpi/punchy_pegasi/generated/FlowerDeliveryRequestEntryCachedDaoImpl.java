@@ -1,20 +1,32 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Slf4j
 public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field>, PropertyChangeListener {
@@ -28,13 +40,56 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
     public FlowerDeliveryRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.util.UUID, FlowerDeliveryRequestEntry>) c -> {
-            if (c.wasRemoved())
-                list.remove(c.getValueRemoved());
-            if (c.wasAdded())
-                list.add(c.getValueAdded());
+            Platform.runLater(() -> {
+                if (c.wasRemoved() && c.wasAdded()) {
+                    var index = list.indexOf(c.getValueRemoved());
+                    if (index != -1) {
+                        list.remove(index);
+                        list.add(index, c.getValueAdded());
+                    }
+                }
+                if (c.wasRemoved()) {
+                    list.remove(c.getValueRemoved());
+                }
+                if (c.wasAdded()) {
+                    list.add(c.getValueAdded());
+                }
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
+    }
+
+    public MFXTableView<FlowerDeliveryRequestEntry> generateTable(Consumer<FlowerDeliveryRequestEntry> onRowClick, FlowerDeliveryRequestEntry.Field[] hidden) {
+        var table = new MFXTableView<FlowerDeliveryRequestEntry>();
+        table.setItems(list);
+        for (FlowerDeliveryRequestEntry.Field field : Arrays.stream(FlowerDeliveryRequestEntry.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
+            MFXTableColumn<FlowerDeliveryRequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
+            col.setPickOnBounds(false);
+
+            col.setRowCellFactory(p -> {
+                var cell = new MFXTableRowCell<>(field::getValue);
+                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                    if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                    onRowClick.accept(p);
+                });
+                return cell;
+            });
+            table.getTableColumns().add(col);
+        }
+        table.setTableRowFactory(r -> {
+            var row = new MFXTableRow<>(table, r);
+            row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                onRowClick.accept(r);
+            });
+            return row;
+        });
+        return table;
+    }
+
+    public MFXTableView<FlowerDeliveryRequestEntry> generateTable(Consumer<FlowerDeliveryRequestEntry> onRowClick) {
+        return generateTable(onRowClick, new FlowerDeliveryRequestEntry.Field[]{});
     }
 
     public void add(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
@@ -54,16 +109,16 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("patientName", java.lang.String.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("flowerSize", java.lang.String.class),
-                        rs.getObject("flowerAmount", java.lang.String.class),
-                        rs.getObject("flowerType", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("patientName", java.lang.String.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("flowerSize", java.lang.String.class),
+                    rs.getObject("flowerAmount", java.lang.String.class),
+                    rs.getObject("flowerType", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -148,6 +203,40 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
                 case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
+        }
+    }
+
+    public static class FlowerDeliveryRequestEntryForm implements IForm<FlowerDeliveryRequestEntry> {
+        @Getter
+        private final List<javafx.scene.Node> form;
+        private final List<TextField> inputs;
+        public FlowerDeliveryRequestEntryForm() {
+            form = new ArrayList<>();
+            inputs = new ArrayList<>();
+            for (var field : FlowerDeliveryRequestEntry.Field.values()) {
+                var hbox = new HBox();
+                var label = new Label(field.getColName());
+                var input = new TextField();
+                hbox.getChildren().addAll(label, input);
+                form.add(hbox);
+                inputs.add(input);
+            }
+        }
+
+        public void populateForm(FlowerDeliveryRequestEntry entry) {
+            for (var field : FlowerDeliveryRequestEntry.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                input.setText(field.getValueAsString(entry));
+            }
+        }
+
+        public FlowerDeliveryRequestEntry commit() {
+            var entry = new FlowerDeliveryRequestEntry();
+            for (var field : FlowerDeliveryRequestEntry.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                field.setValueFromString(entry, input.getText());
+            }
+            return entry;
         }
     }
 }

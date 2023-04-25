@@ -24,6 +24,30 @@ import java.util.stream.Collectors;
 
 public class SleepThroughTheWinter {
 
+    private static final Map<Class<?>, String> classToPostgres = new HashMap<>() {{
+        put(Long.class, "bigint");
+        put(Integer.class, "int");
+        put(String.class, "varchar");
+        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
+        put(List.class, "varchar ARRAY");
+        put(LocalDate.class, "date NOT NULL");
+    }};
+    private static final Map<Class<?>, String> objectFromString = new HashMap<>() {{
+        put(Long.class, "Long.parseLong(value)");
+        put(Integer.class, "Integer.parseInt(value)");
+        put(String.class, "value");
+        put(UUID.class, "UUID.fromString(value)");
+        put(List.class, "new java.util.ArrayList<>(java.util.Arrays.asList(value.split(\"\\\\s*,\\\\s*\")))");
+        put(LocalDate.class, "LocalDate.parse(value)");
+    }};
+    private static final Map<Class<?>, String> objectToString = new HashMap<>() {{
+        put(Long.class, "Long.toString(value)");
+        put(Integer.class, "Integer.toString(value)");
+        put(String.class, "value");
+        put(UUID.class, "value.toString()");
+        put(List.class, "String.join(\", \", value)");
+        put(LocalDate.class, "value.toString()");
+    }};
     /***
      * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
      * annotation, consists of only basic Objects, List<String>, Enum for parameters, and whose constructor's have
@@ -32,14 +56,22 @@ public class SleepThroughTheWinter {
      * @throws IOException
      */
     private static boolean cachedMode = true;
-    private static Map<Class<?>, String> classToPostgres = new HashMap<>() {{
-        put(Long.class, "bigint");
-        put(Integer.class, "int");
-        put(String.class, "varchar");
-        put(UUID.class, "uuid DEFAULT gen_random_uuid()");
-        put(List.class, "varchar ARRAY");
-        put(LocalDate.class, "date NOT NULL");
-    }};
+
+    private static String objectFromString(Class<?> clazz) {
+        if (clazz.isEnum()) {
+            return clazz.getSimpleName() + ".valueOf(value)";
+        } else {
+            return objectFromString.get(clazz);
+        }
+    }
+
+    private static String objectToString(Class<?> clazz, String getter) {
+        if (clazz.isEnum()) {
+            return getter + ".name()";
+        } else {
+            return objectToString.get(clazz).replace("value", getter);
+        }
+    }
 
     private static String daoImplSuffix() {
         return cachedMode ? "CachedDaoImpl" : "DaoImpl";
@@ -164,18 +196,46 @@ public class SleepThroughTheWinter {
                         @lombok.RequiredArgsConstructor
                         public enum Field implements IField< """ + clazz.getCanonicalName() + """
                         >{
-                        """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\")").toList()) + """
+                        """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\", " + fieldIsID(f)  + "," + fieldIsUnique(f) + ")").toList()) + """
                         ;
                                 @lombok.Getter
                                 private final String colName;
+                                @lombok.Getter
+                                private final boolean primaryKey;
+                                @lombok.Getter
+                                private final boolean unique;
                                 public Object getValue(""" + clazz.getCanonicalName() + """
                          ref){
-                                    return ref.getFromField(this);
+                            return ref.getFromField(this);
+                        }
+                        public String getValueAsString(""" + clazz.getCanonicalName() + """
+                         ref){
+                            return ref.getFromFieldAsString(this);
+                        }
+                            public void setValueFromString(""" + clazz.getCanonicalName() + """
+                         ref, String value){
+                                    ref.setFieldFromString(this, value);
+                                }
+                                public int oridinal(){
+                                    return ordinal();
                                 }
                             }
                             public Object getFromField(Field field) {
                                 return switch (field) {
-                        """ + "            " + String.join("            ", fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
+                                };
+                            }
+                            public void setFieldFromString(Field field, String value) {
+                                switch (field) {
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> set" + firstUpper(f.getName()) + "(" + objectFromString(f.getType()) + ");\n").toList()) + """
+                                };
+                            }
+                            public String getFromFieldAsString(Field field) {
+                                return switch (field) {
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> " + objectToString(f.getType(), "get" + firstUpper(f.getName()) + "()") + ";\n").toList()) + """
                                 };
                             }
                         """;
@@ -483,6 +543,17 @@ public class SleepThroughTheWinter {
         return resultText;
     }
 
+    private static String getDaoByClass() {
+        return """
+                    public <K, T, C> IDao<K, T, C> getDaoByClass(Class<T> clazz) {
+                        if (clazz == null) return null;
+                """ + "        " + String.join("\n        ", Arrays.stream(TableType.values()).map(TableType::getClazz).map(c -> "else if (clazz == " + c.getCanonicalName() + ".class) return (IDao<K, T, C>)" + firstLower(c.getSimpleName()) + "Dao;").toList()) + """
+                                            
+                        else return null;
+                    }
+                """;
+    }
+
     private static void generateFacade() throws IOException, IllegalStateException {
         var facadeDestPath = Paths.get("src/main/java/edu/wpi/punchy_pegasi/generated/Facade.java");
         var facadeSourcePath = Paths.get("generator/src/main/java/edu/wpi/punchy_pegasi/generator/schema/Facade.java");
@@ -492,7 +563,6 @@ public class SleepThroughTheWinter {
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
                 var ClassName = clazz.getSimpleName();
-                if (ClassName.equals("GenericRequestEntry")) continue;  // skip GenericRequestEntry
                 var className = firstLower(ClassName);
                 sbDaoDec.append("\tprivate final " + ClassName + daoImplSuffix() + " " + className + "Dao;\n");
                 sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix() + "(dbController);\n");
@@ -500,6 +570,7 @@ public class SleepThroughTheWinter {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
         }
+        sbDaoDec.append(getDaoByClass());
         var template = new String(Files.readAllBytes(facadeSourcePath))
                 .replaceAll("}\n*$", "")
                 .replaceAll("/\\*Dao Declarations\\*/", sbDaoDec.toString())
@@ -515,6 +586,8 @@ public class SleepThroughTheWinter {
                                 import java.util.Map;
                                 import javafx.collections.ObservableList;
                                 import javafx.collections.ObservableMap;
+                                import io.github.palexdev.materialfx.controls.MFXTableView;
+                                import java.util.function.Consumer;
                                 import java.util.Optional;
                                 """);
         StringBuilder sbTemplate = new StringBuilder();

@@ -1,13 +1,11 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-import com.jsoniter.annotation.JsonCreator;
-import com.jsoniter.annotation.JsonProperty;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class FlowerDeliveryRequestEntry extends RequestEntry {
     private String flowerSize;

@@ -30,7 +30,8 @@ public class SidebarController extends VBox implements PropertyChangeListener {
             new PFXSidebarItem(Screen.MAP_PAGE, MaterialSymbols.MAP),
             new PFXSidebarItem(Screen.ADMIN_PAGE, MaterialSymbols.ADMIN_PANEL_SETTINGS),
             new PFXSidebarItem(Screen.EDIT_MAP_PAGE, MaterialSymbols.REBASE_EDIT),
-            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST)
+            new PFXSidebarItem(Screen.SIGNAGE, MaterialSymbols.SIGNPOST),
+            new PFXSidebarItem(Screen.INFO, MaterialSymbols.QUESTION_MARK)
     );
     private double maxWidth = 256;
     @FXML
@@ -82,7 +83,7 @@ public class SidebarController extends VBox implements PropertyChangeListener {
 
     private void setExpanded(boolean expanded) {
         if (this.expanded != null && this.expanded == expanded) return;
-        if (animating.compareAndExchange(false, true)) return;
+        if (!animating.compareAndSet(false, true)) return;
         this.expanded = expanded;
         if (expanded) sidebarItems.forEach(s -> s.setExpanded(true));
         Platform.runLater(() -> {

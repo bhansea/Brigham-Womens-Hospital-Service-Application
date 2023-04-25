@@ -3,7 +3,9 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -15,13 +17,18 @@ import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
+    @FXML
+    PFXCardHolder cardHolder;
+    @FXML
+    VBox container = new VBox();
+    ArrayList<PFXCardVertical> items = new ArrayList<>();
     @FXML
     private PFXCardVertical pencils = new PFXCardVertical();
     @FXML
@@ -31,14 +38,9 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     private PFXCardVertical stapler = new PFXCardVertical();
     @FXML
-    PFXCardHolder cardHolder;
-    @FXML
-    VBox container = new VBox();
-    @FXML
     private BorderPane root;
     ScrollPane scrollPane;
 
-    ArrayList<PFXCardVertical> items = new ArrayList<>();
 
     public static BorderPane create(String path) {
         return RequestController.create(new OfficeServiceRequestController(), path);
@@ -81,7 +83,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         //makes sure shared fields aren't empty
         requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
-        App.getSingleton().navigate(Screen.HOME);
+        PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 
     @Override

@@ -22,23 +22,47 @@ public class Employee {
     public String getFullName() {
         return firstName + " " + lastName;
     }
-
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Employee> {
-        EMPLOYEE_ID("employeeID"),
-        FIRST_NAME("firstName"),
-        LAST_NAME("lastName");
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Employee>{
+        EMPLOYEE_ID("employeeID", true,false),
+        FIRST_NAME("firstName", false,false),
+        LAST_NAME("lastName", false,false);
         @lombok.Getter
         private final String colName;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref) {
-            return ref.getFromField(this);
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Employee ref){
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.Employee ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Employee ref, String value){
+            ref.setFieldFromString(this, value);
+        }
+        public int oridinal(){
+            return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case EMPLOYEE_ID -> getEmployeeID();
+            case FIRST_NAME -> getFirstName();
+            case LAST_NAME -> getLastName();
+        };
+    }
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
+            case FIRST_NAME -> setFirstName(value);
+            case LAST_NAME -> setLastName(value);
+        };
+    }
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
             case FIRST_NAME -> getFirstName();
             case LAST_NAME -> getLastName();
         };

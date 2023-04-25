@@ -1,20 +1,32 @@
 package edu.wpi.punchy_pegasi.generator;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.GenericRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Slf4j
 public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldType*/, GenericRequestEntry, GenericRequestEntry.Field>, PropertyChangeListener {
@@ -28,13 +40,56 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
     public GenericRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<String/*idFieldType*/, GenericRequestEntry>) c -> {
-            if (c.wasRemoved())
-                list.remove(c.getValueRemoved());
-            if (c.wasAdded())
-                list.add(c.getValueAdded());
+            Platform.runLater(() -> {
+                if (c.wasRemoved() && c.wasAdded()) {
+                    var index = list.indexOf(c.getValueRemoved());
+                    if (index != -1) {
+                        list.remove(index);
+                        list.add(index, c.getValueAdded());
+                    }
+                }
+                if (c.wasRemoved()) {
+                    list.remove(c.getValueRemoved());
+                }
+                if (c.wasAdded()) {
+                    list.add(c.getValueAdded());
+                }
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
+    }
+
+    public MFXTableView<GenericRequestEntry> generateTable/*FacadeClassName*/(Consumer<GenericRequestEntry> onRowClick, GenericRequestEntry.Field[] hidden) {
+        var table = new MFXTableView<GenericRequestEntry>();
+        table.setItems(list);
+        for (GenericRequestEntry.Field field : Arrays.stream(GenericRequestEntry.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
+            MFXTableColumn<GenericRequestEntry> col = new MFXTableColumn<>(field.getColName(), true);
+            col.setPickOnBounds(false);
+
+            col.setRowCellFactory(p -> {
+                var cell = new MFXTableRowCell<>(field::getValue);
+                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                    if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                    onRowClick.accept(p);
+                });
+                return cell;
+            });
+            table.getTableColumns().add(col);
+        }
+        table.setTableRowFactory(r -> {
+            var row = new MFXTableRow<>(table, r);
+            row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                onRowClick.accept(r);
+            });
+            return row;
+        });
+        return table;
+    }
+
+    public MFXTableView<GenericRequestEntry> generateTable/*FacadeClassName*/(Consumer<GenericRequestEntry> onRowClick) {
+        return generateTable(onRowClick, new GenericRequestEntry.Field[]{});
     }
 
     public void add(GenericRequestEntry genericRequestEntry) {
@@ -138,6 +193,40 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
                 case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
+        }
+    }
+
+    public static class GenericRequestEntryForm implements IForm<GenericRequestEntry> {
+        @Getter
+        private final List<javafx.scene.Node> form;
+        private final List<TextField> inputs;
+        public GenericRequestEntryForm() {
+            form = new ArrayList<>();
+            inputs = new ArrayList<>();
+            for (var field : GenericRequestEntry.Field.values()) {
+                var hbox = new HBox();
+                var label = new Label(field.getColName());
+                var input = new TextField();
+                hbox.getChildren().addAll(label, input);
+                form.add(hbox);
+                inputs.add(input);
+            }
+        }
+
+        public void populateForm(GenericRequestEntry entry) {
+            for (var field : GenericRequestEntry.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                input.setText(field.getValueAsString(entry));
+            }
+        }
+
+        public GenericRequestEntry commit() {
+            var entry = new GenericRequestEntry();
+            for (var field : GenericRequestEntry.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                field.setValueFromString(entry, input.getText());
+            }
+            return entry;
         }
     }
 }
