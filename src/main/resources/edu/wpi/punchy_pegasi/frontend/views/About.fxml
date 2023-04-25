@@ -51,9 +51,9 @@
                         </padding>
                     </Label>
                     <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" style="-fx-font-family: Nunito Sans; -fx-font-size: 16;">
-                        <Label alignment="CENTER_LEFT" text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
-                        <Label alignment="CENTER" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
-                        <Label alignment="CENTER_RIGHT" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
+                        <Label alignment="CENTER_LEFT" text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: 700;"/>
+                        <Label alignment="CENTER" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: 700;"/>
+                        <Label alignment="CENTER_RIGHT" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-font-weight: 700;"/>
 
                         <Label text="Blake Bruell" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <Label text="Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
