@@ -23,8 +23,6 @@ public class CreditsController {
     private void initialize(){
         resources.add(new Resource("Google Fonts", "icons", new Hyperlink("https://fonts.google.com/icons")));
         resources.add(new Resource("jSerialComm", "Java library", new Hyperlink("https://fazecast.github.io/jSerialComm/")));
-        resources.add(new Resource("Source 3", "an icon", new Hyperlink("https://www.freecodecamp.org/news/java-operator-and-or-logical-operators/")));
-        resources.add(new Resource("Source 4", "an image", new Hyperlink("https://docs.oracle.com/javafx/2/ui_controls/hyperlink.htm")));
         resources.add(new Resource("daisy", "an image", new Hyperlink("https://cdn.shopify.com/s/files/1/2319/4521/files/pexels-pixabay-67857_0fd12879-bc6e-4699-a969-812cf1386085.jpg?v=1651115165&width=3840")));
         resources.add(new Resource("lavender", "an image", new Hyperlink("https://www.wallpaperflare.com/static/535/120/890/lavender-flowers-purple-wild-plant-wallpaper.jpg")));
         resources.add(new Resource("red roses", "an image", new Hyperlink("https://img3.wallspic.com/crops/5/2/0/1/5/151025/151025-rote_rosen_in_nahaufnahme_fotografie-4241x2828.jpg")));
