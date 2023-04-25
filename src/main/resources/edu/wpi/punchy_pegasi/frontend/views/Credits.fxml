@@ -47,9 +47,9 @@
                             <Insets top="25" left="50" />
                         </padding>
                     </Label>
-                    <GridPane fx:id="sourceGrid" vgap="5" hgap="20" alignment="CENTER_LEFT" style="-fx-font-family: Nunito Sans; -fx-font-size: 16;">
+                    <GridPane fx:id="sourceGrid" vgap="20" hgap="20" alignment="CENTER_LEFT" style="-fx-font-family: Nunito Sans; -fx-font-size: 16;">
                         <Label alignment="CENTER_LEFT" text="Resource" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
-                        <Label alignment="CENTER" text="Description" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
+                        <Label alignment="CENTER_LEFT" text="Description" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
                         <Label alignment="CENTER_RIGHT" text="Link" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-font-weight: 900;"/>
                         <padding>
                             <Insets top="5" left="50"/>
