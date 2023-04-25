@@ -53,6 +53,7 @@
 @import "PFXSidebarItem.css";
 @import "PFXTab.css";
 @import "PFXTabLayout.css";
+@import "PFXAlertCard.css";
 /* Pages */
 @import "Admin.css";
 @import "AdminTablePage.css";
