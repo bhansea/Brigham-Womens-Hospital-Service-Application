@@ -98,6 +98,9 @@
                 </Label>
                 <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS" >
                     <HBox style="-fx-background-color: -pfx-background" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets right="500"/>
+                        </padding>
                         <VBox alignment="TOP_RIGHT" style="-fx-background-color: -pfx-background" fx:id="dateTimeBox"
                               AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
                             <Label text="Date: " BorderPane.alignment="CENTER" textAlignment="RIGHT"
