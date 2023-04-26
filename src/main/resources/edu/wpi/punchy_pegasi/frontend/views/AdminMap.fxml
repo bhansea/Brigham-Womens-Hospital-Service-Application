@@ -5,16 +5,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
             fx:id="root">
     <left>
         <VBox fx:id="editing" styleClass="editing-overlay">
-            <VBox>
+            <VBox styleClass="editing-overlay-box">
                 <PFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
                 <MFXProgressBar fx:id="commitProgress" maxWidth="300" progress="0"/>
                 <VBox fx:id="changes"/>
+            </VBox>
+            <VBox styleClass="editing-overlay-box">
+                <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker" maxWidth="Infinity"/>
             </VBox>
         </VBox>
     </left>

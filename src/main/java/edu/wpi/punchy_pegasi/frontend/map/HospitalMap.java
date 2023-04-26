@@ -9,7 +9,9 @@ import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.Interpolator;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -29,11 +31,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import net.kurobako.gesturefx.GesturePane;
 import net.kurobako.gesturefx.GesturePaneOps;
+import org.javatuples.Triplet;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
@@ -213,9 +213,10 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     }
 
     @Override
-    public VBox makeTooltip(javafx.scene.Node parent, String text) {
+    public VBox makeTooltip(javafx.scene.Node parent, ObservableStringValue text) {
         var toolTip = new VBox();
-        var textLabel = new Label(text);
+        var textLabel = new Label();
+        textLabel.textProperty().bind(text);
         // tool tip text styling
         textLabel.setTextFill(Color.valueOf("#ffffff"));
         textLabel.setTextAlignment(TextAlignment.CENTER);
@@ -229,11 +230,12 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         toolTip.layoutXProperty().bind(parent.layoutXProperty());
         toolTip.layoutYProperty().bind(parent.layoutYProperty());
         toolTip.layout();
+        toolTip.visibleProperty().bind(Bindings.createBooleanBinding(() -> toolTip.isManaged() && !text.get().isBlank(), toolTip.managedProperty(), text));
         return toolTip;
     }
 
     @Override
-    public Optional<Circle> drawNode(Node node, String color, String labelText, String hoverText) {
+    public Optional<Circle> drawNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText) {
         var floor = floors.get(node.getFloor());
         if (floor == null) return Optional.empty();
         var circle = new Circle(0, 0, 15);
@@ -246,43 +248,66 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         var toolTip = makeTooltip(circle, hoverText);
         var shortNameTooltip = makeTooltip(circle, labelText);
 
-        final boolean[] updated = {false, false};
-        toolTip.boundsInParentProperty().addListener((v, o, n) -> {
-            if (!updated[0] && n.getHeight() > 20 && n.getWidth() > 0) {
-                updated[0] = true;
-                toolTip.setTranslateY(-(n.getHeight()));
-                toolTip.setTranslateX(-n.getWidth() / 2);
-            }
-        });
-        shortNameTooltip.boundsInParentProperty().addListener((v, o, n) -> {
-            if (!updated[1] && n.getHeight() > 20 && n.getWidth() > 0) {
-                updated[1] = true;
-                shortNameTooltip.setTranslateY(-(n.getHeight()));
-                shortNameTooltip.setTranslateX(-n.getWidth() / 2);
-            }
-        });
+        toolTip.translateYProperty().bind(toolTip.heightProperty().multiply(-1).subtract(15));
+        toolTip.translateXProperty().bind(toolTip.widthProperty().multiply(-.5));
+        shortNameTooltip.translateYProperty().bind(shortNameTooltip.heightProperty().multiply(-1).subtract(15));
+        shortNameTooltip.translateXProperty().bind(shortNameTooltip.widthProperty().multiply(-.5));
 
         circle.setOnMouseEntered(e -> {
-            toolTip.setVisible(true);
-            shortNameTooltip.setVisible(false);
+            toolTip.setManaged(true);
+            shortNameTooltip.setManaged(false);
         });
         circle.setOnMouseExited(e -> {
-            toolTip.setVisible(false);
-            shortNameTooltip.setVisible(true);
+            toolTip.setManaged(false);
+            shortNameTooltip.setManaged(true);
         });
-        toolTip.setVisible(false);
-        shortNameTooltip.setVisible(true);
+        toolTip.setManaged(false);
+        shortNameTooltip.setManaged(true);
 
         floor.nodeCanvas.getChildren().add(circle);
-        if (!hoverText.isBlank())
-            floor.tooltipCanvas.getChildren().add(toolTip);
-        if (!labelText.isBlank())
-            floor.tooltipCanvas.getChildren().add(shortNameTooltip);
+
+
+        floor.tooltipCanvas.getChildren().add(toolTip);
+        floor.tooltipCanvas.getChildren().add(shortNameTooltip);
+        nodeCircles.put(node, new Triplet<>(circle, toolTip, shortNameTooltip));
         return Optional.of(circle);
     }
 
+    private final Map<Node, Triplet<Circle, VBox, VBox>> nodeCircles = new HashMap<>();
+    private final Map<String, Line> edgeLines = new HashMap<>();
+
     @Override
-    public Optional<Line> drawEdge(Node startNode, Node endNode, javafx.scene.Node startSceneNode, javafx.scene.Node endSceneNode) {
+    public void removeNode(Node node) {
+        var floor = floors.get(node.getFloor());
+        if (floor == null) return;
+        var nodes = nodeCircles.get(node);
+        if (nodes == null) return;
+        floor.nodeCanvas.getChildren().remove(nodes.getValue0());
+        floor.tooltipCanvas.getChildren().remove(nodes.getValue1());
+        floor.tooltipCanvas.getChildren().remove(nodes.getValue2());
+        nodeCircles.remove(node);
+    }
+
+    private String hashEdge(Node a, Node b) {
+        return a.getNodeID() < b.getNodeID() ? "" + a.getNodeID() + b.getNodeID() : "" + b.getNodeID() + a.getNodeID();
+    }
+
+    @Override
+    public void removeEdge(Node startNode, Node endNode) {
+        if (startNode == null || endNode == null) return;
+        var startFloor = floors.get(startNode.getFloor());
+        var endFloor = floors.get(endNode.getFloor());
+        if (startFloor == null || startFloor != endFloor) return;
+        var set = new HashSet<>();
+        set.add(startNode);
+        set.add(endNode);
+        startFloor.lineCanvas.getChildren().remove(edgeLines.remove(hashEdge(startNode, endNode)));
+    }
+
+    @Override
+    public Optional<Line> drawEdge(Node startNode, Node endNode) {
+        var startSceneNode = nodeCircles.get(startNode).getValue0();
+        var endSceneNode = nodeCircles.get(endNode).getValue0();
         if (startNode == null || endNode == null || startSceneNode == null || endSceneNode == null)
             return Optional.empty();
         var startFloor = floors.get(startNode.getFloor());
@@ -295,7 +320,8 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         line.endYProperty().bind(endSceneNode.layoutYProperty());
         line.setFill(Color.valueOf("#000000"));
         line.setStrokeWidth(3);
-        startFloor.lineCanvas.getChildren().add(0, line);
+        startFloor.lineCanvas.getChildren().add(line);
+        edgeLines.put(hashEdge(startNode, endNode), line);
         return Optional.of(line);
     }
 

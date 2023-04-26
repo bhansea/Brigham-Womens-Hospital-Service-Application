@@ -3,15 +3,16 @@
     -fx-padding: 20;
 }
 
-.editing-overlay > VBox {
+.editing-overlay-box {
     -fx-alignment: CENTER;
     -fx-max-width: 300;
-    -fx-spacing: 15;
-    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-padding: 10;
     -fx-background-color: -pfx-background;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
+
 #commitProgress {
     -fx-min-height: 20;
     -fx-max-height: 20;

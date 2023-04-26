@@ -1,6 +1,9 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
 import edu.wpi.punchy_pegasi.schema.Node;
+import javafx.beans.Observable;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -37,11 +40,15 @@ public interface IMap<Layer> {
 
     void drawLine(List<Node> nodes);
 
-    VBox makeTooltip(javafx.scene.Node parent, String text);
+    VBox makeTooltip(javafx.scene.Node parent, ObservableStringValue text);
 
-    Optional<Circle> drawNode(Node node, String color, String labelText, String hoverText);
+    Optional<Circle> drawNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText);
 
-    Optional<Line> drawEdge(Node startNode, Node endNode, javafx.scene.Node startSceneNode, javafx.scene.Node endSceneNode);
+    void removeNode(Node node);
+
+    void removeEdge(Node startNode, Node endNode);
+
+    Optional<Line> drawEdge(Node startNode, Node endNode);
 
     javafx.scene.Node drawArrow(Node node, boolean up);
 

@@ -137,11 +137,14 @@ public class PathfindingMap {
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation.get(node);
         if (location.isEmpty()) return Optional.empty();
-        return map.drawNode(node, color, location.get(0).getShortName(), String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)));
+        var labelBinding = Bindings.createStringBinding(() -> location.get(0).getShortName(), location);
+        var hoverBinding = Bindings.createStringBinding(() -> String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)), location);
+        return map.drawNode(node, color, labelBinding, hoverBinding);
     }
 
     @FXML
     private void initialize() {
+
         map = new HospitalMap(floors);
         root.setCenter(map.get());
         map.addLayer(container);
@@ -291,7 +294,7 @@ public class PathfindingMap {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.drawNode(node, "red", "", "From Here");
+                    map.drawNode(node, "red", Bindings.createStringBinding(()->""), Bindings.createStringBinding(()->"From Here"));
                     //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
                     map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(node.getFloor()))));
                     currentPath = new ArrayList<>();
