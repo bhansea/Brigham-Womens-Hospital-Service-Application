@@ -41,6 +41,7 @@
 /* Components */
 @import "PFXAccount.css";
 @import "PFXAlert.css";
+@import "PFXAlertCard.css";
 @import "PFXButton.css";
 @import "PFXColors.css";
 @import "PFXCardVertical.css";
