@@ -573,6 +573,7 @@ class FacadeTest {
         }
 
         Map<Long, Move> resultMap = facade.getAllMove();
+        assertEquals(refMap, resultMap);
         for (var uuid : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.MOVES, "uuid", uuid);
@@ -580,7 +581,7 @@ class FacadeTest {
                 assert false : "Failed to delete from database";
             }
         }
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -762,6 +763,7 @@ class FacadeTest {
         }
 
         Map<Long, LocationName> resultMap = facade.getAllLocationName();
+        assertEquals(refMap, resultMap);
         for (var uuid : resultMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", uuid);
@@ -769,7 +771,7 @@ class FacadeTest {
                 assert false : "Failed to delete from database";
             }
         }
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -1873,6 +1875,7 @@ class FacadeTest {
         }
 
         Map<UUID, ConferenceRoomEntry> resultMap = facade.getAllConferenceRoomEntry();
+        assertEquals(refMap, resultMap);
         for (var entry : resultMap.entrySet()) {
             try {
                 pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", entry.getKey());
@@ -1880,7 +1883,7 @@ class FacadeTest {
                 assert false : "Failed to delete from database";
             }
         }
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -2665,7 +2668,7 @@ class FacadeTest {
             throw new RuntimeException(e);
         }
         var results = facade.getAccount(Account.Field.EMPLOYEE_ID, 100L);
-        var map = new HashMap<String, Account>();
+        var map = new HashMap<Long, Account>();
         try (var rs = pdbController.searchQuery(TableType.ACCOUNTS, "employeeID", 100L)) {
             while (rs.next()) {
                 Account req = new Account(
@@ -2675,13 +2678,13 @@ class FacadeTest {
                         (java.lang.Long) rs.getObject("employeeID"),
                         edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf((String) rs.getObject("accountType")));
                 if (req != null)
-                    map.put(req.getUsername(), req);
+                    map.put(req.getUuid(), req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        assertEquals(map.get(account.getUsername()), results.get(account.getUsername()));
-        assertEquals(map.get(account2.getUsername()), results.get(account2.getUsername()));
+        assertEquals(map.get(account.getUuid()), results.get(account.getUuid()));
+        assertEquals(map.get(account2.getUuid()), results.get(account2.getUuid()));
         try {
             pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
             pdbController.deleteQuery(TableType.ACCOUNTS, "uuid", account2.getUuid());
