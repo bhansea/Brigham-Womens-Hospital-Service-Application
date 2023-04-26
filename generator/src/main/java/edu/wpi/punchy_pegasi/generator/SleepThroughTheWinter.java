@@ -16,6 +16,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -31,6 +33,7 @@ public class SleepThroughTheWinter {
         put(UUID.class, "uuid DEFAULT gen_random_uuid()");
         put(List.class, "varchar ARRAY");
         put(LocalDate.class, "date NOT NULL");
+        put(Instant.class, "timestamptz NOT NULL");
     }};
     private static final Map<Class<?>, String> objectFromString = new HashMap<>() {{
         put(Long.class, "Long.parseLong(value)");
@@ -39,6 +42,7 @@ public class SleepThroughTheWinter {
         put(UUID.class, "UUID.fromString(value)");
         put(List.class, "new java.util.ArrayList<>(java.util.Arrays.asList(value.split(\"\\\\s*,\\\\s*\")))");
         put(LocalDate.class, "LocalDate.parse(value)");
+        put(Instant.class, "Instant.parse(value)");
     }};
     private static final Map<Class<?>, String> objectToString = new HashMap<>() {{
         put(Long.class, "Long.toString(value)");
@@ -47,6 +51,7 @@ public class SleepThroughTheWinter {
         put(UUID.class, "value.toString()");
         put(List.class, "String.join(\", \", value)");
         put(LocalDate.class, "value.toString()");
+        put(Instant.class, "value.toString()");
     }};
     /***
      * Currently generates from the TableType enum, and supports any type which has one field with the @SchemaID
@@ -171,11 +176,12 @@ public class SleepThroughTheWinter {
                         .append("String[])rs.getArray(\"").append(column).append("\").getArray())");
             else if (type.equals(Date.class))
                 constructor.append("rs.getDate(\"").append(column).append("\").toLocalDate()");
+            else if (type.equals(Instant.class))
+                constructor.append("rs.getTimestamp(\"").append(column).append("\").toInstant()");
             else
                 constructor.append("rs.getObject(\"").append(column).append("\", ")
                         .append(type.getCanonicalName()).append(".class)");
             constructor.append(",\n");
-
         }
         constructor.setLength(constructor.length() - 2);
         constructor.append(");");
@@ -631,6 +637,7 @@ public class SleepThroughTheWinter {
                     generateEntry(clazz);
                 } catch (Exception e) {
                     System.err.println("Failed to generate schema for " + clazz.getCanonicalName() + ": " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

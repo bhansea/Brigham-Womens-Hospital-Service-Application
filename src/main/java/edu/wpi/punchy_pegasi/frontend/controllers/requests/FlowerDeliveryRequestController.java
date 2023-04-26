@@ -2,10 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
-import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
+import edu.wpi.punchy_pegasi.frontend.components.*;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -39,8 +36,8 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         PFXCardVertical card3 = new PFXCardVertical("Red Rose", "Flower of love", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/red-roses.jpg"));
         PFXCardVertical card4 = new PFXCardVertical("Sunflower", "Looks great!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/sunflower.jpg"));
         filter.setOnAction(e -> toggleFilter());
-
-        var flowPane = new FlowPane(card1, card2, card3, card4);
+        PFXAlertCard card5 = new PFXAlertCard(1L);
+        var flowPane = new FlowPane(card1, card2, card3, card4, card5);
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
