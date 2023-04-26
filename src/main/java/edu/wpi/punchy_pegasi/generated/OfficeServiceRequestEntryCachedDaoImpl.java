@@ -109,13 +109,13 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("officeRequest", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("officeRequest", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -207,6 +207,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public OfficeServiceRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
