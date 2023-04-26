@@ -481,7 +481,39 @@ public enum TableType {
               FOR EACH ROW
               EXECUTE PROCEDURE notify_signage_update();
 
-            """, edu.wpi.punchy_pegasi.schema.Signage.Field.class);
+            """, edu.wpi.punchy_pegasi.schema.Signage.Field.class),
+    ALERT(edu.wpi.punchy_pegasi.schema.Alert.class, """
+            CREATE TABLE IF NOT EXISTS alert
+            (
+              uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+              alertTitle varchar,
+              description varchar,
+              dateTime timestamptz NOT NULL,
+              readStatus varchar NOT NULL
+            );
+            CREATE OR REPLACE FUNCTION notify_alert_update() RETURNS TRIGGER AS $$
+                DECLARE
+                    row RECORD;
+                output JSONB;
+                BEGIN
+                IF (TG_OP = 'DELETE') THEN
+                  row = OLD;
+                ELSE
+                  row = NEW;
+                END IF;
+                -- encode data as json inside a string
+                output = jsonb_build_object('tableType', 'ALERT', 'action', TG_OP, 'data', to_json(row_to_json(row)::text));
+                PERFORM pg_notify('alert_update',output::text);
+                RETURN NULL;
+                END;
+            $$ LANGUAGE plpgsql;
+            CREATE OR REPLACE TRIGGER trigger_alert_update
+              AFTER INSERT OR UPDATE OR DELETE
+              ON alert
+              FOR EACH ROW
+              EXECUTE PROCEDURE notify_alert_update();
+
+            """, edu.wpi.punchy_pegasi.schema.Alert.Field.class);
     @Getter
     private final Class<?> clazz;
     @Getter
