@@ -47,7 +47,6 @@ class FacadeTest {
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
         accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType"};
         pdbController = new PdbController(Config.source, "test");
-        facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
             try {
                 pdbController.initTableByType(tt);
@@ -55,7 +54,7 @@ class FacadeTest {
                 log.error("Could not init table " + tt.name());
             }
         }
-
+        facade = new Facade(pdbController);
     }
 
     @AfterEach
