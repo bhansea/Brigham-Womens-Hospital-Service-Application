@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import org.javatuples.Pair;
@@ -168,6 +169,17 @@ public class PathfindingMap {
 
         PathfindingSingleton.SINGLETON.setAlgorithm(PathfindingSingleton.SINGLETON.getAStar());
         load(() -> {
+            // set zoom to average of all nodes
+            var minX = nodesList.stream().mapToDouble(Node::getXcoord).min().orElse(0);
+//            var averageX = nodesList.stream().mapToDouble(Node::getXcoord).sum() / nodesList.size();
+            var maxX = nodesList.stream().mapToDouble(Node::getXcoord).max().orElse(0);
+            var minY = nodesList.stream().mapToDouble(Node::getYcoord).min().orElse(0);
+//            var averageY = nodesList.stream().mapToDouble(Node::getYcoord).sum() / nodesList.size();
+            var maxY = nodesList.stream().mapToDouble(Node::getYcoord).max().orElse(0);
+//            map.focusOn(new Node(0L, (int)averageX, (int)averageY, "1", ""));
+//            map.setZoom(1);
+            map.showRectangle(new Rectangle(minX, minY, maxX - minX, maxY - minY));
+
             var filteredSorted = locationsList.filtered(isDestination).sorted(Comparator.comparing(LocationName::getLongName));
             nodeStartCombo.setItems(filteredSorted);
             nodeStartCombo.setFilterFunction(s -> n -> locationToString.toString(n).toLowerCase().contains(s.toLowerCase()));
