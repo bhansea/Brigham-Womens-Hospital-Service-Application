@@ -8,6 +8,7 @@ import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
+import javafx.animation.Interpolator;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -27,6 +28,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import net.kurobako.gesturefx.GesturePane;
+import net.kurobako.gesturefx.GesturePaneOps;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private final HBox overlayBottom = new HBox();
     private final HBox overlayTop = new HBox();
     private HospitalFloor currentFloor;
+    private boolean animate = true;
 
     public HospitalMap(Map<String, HospitalFloor> floors) {
         this.floors = floors;
@@ -61,11 +64,13 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
             @Override
             protected Number computeValue() {
-                return Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+                var minZoom = Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+                if (gesturePane.getCurrentScale() < minZoom)
+                    gesturePane.zoomTo(minZoom, gesturePane.targetPointAtViewportCentre());
+                return minZoom;
             }
         });
         gesturePane.setMaxScale(3.4);
-        gesturePane.zoomTo(gesturePane.getMinScale(), gesturePane.targetPointAtViewportCentre());
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
 
         var spinner = new MFXProgressSpinner(-1);
@@ -88,8 +93,8 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
         var zoomIn = new PFXButton("", new PFXIcon(MaterialSymbols.ZOOM_IN, 30));
         var zoomOut = new PFXButton("", new PFXIcon(MaterialSymbols.ZOOM_OUT, 30));
-        zoomIn.setOnAction(e -> gesturePane.zoomBy(gesturePane.getCurrentScale(), gesturePane.targetPointAtViewportCentre()));
-        zoomOut.setOnAction(e -> gesturePane.zoomBy(-gesturePane.getCurrentScale() * .5, gesturePane.targetPointAtViewportCentre()));
+        zoomIn.setOnAction(e -> withAnimation().zoomBy(gesturePane.getCurrentScale(), gesturePane.targetPointAtViewportCentre()));
+        zoomOut.setOnAction(e -> withAnimation().zoomBy(-gesturePane.getCurrentScale() * .5, gesturePane.targetPointAtViewportCentre()));
         zoomModal.getChildren().addAll(zoomIn, zoomOut);
         zoomModal.getStyleClass().add("hospital-map-zoom-modal");
 
@@ -107,6 +112,10 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         showLayer(floors.get("1"));
     }
 
+    private GesturePaneOps withAnimation() {
+        return animate ? gesturePane.animate(new Duration(200)).interpolateWith(Interpolator.EASE_BOTH) : gesturePane;
+    }
+
     @Override
     public double getZoom() {
         return gesturePane.getCurrentScale();
@@ -114,7 +123,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
     @Override
     public void setZoom(double zoomScale) {
-        gesturePane.zoomTo(zoomScale, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
+        withAnimation().zoomTo(zoomScale, new Point2D(gesturePane.getCurrentX(), gesturePane.getCurrentY()));
     }
 
     @Override
@@ -318,6 +327,15 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         var floor = floors.get(node.getFloor());
         if (floor == null) return;
         showLayer(floor);
-        gesturePane.centreOn(new Point2D(node.getXcoord(), node.getYcoord()));
+        withAnimation().centreOn(new Point2D(node.getXcoord(), node.getYcoord()));
+    }
+
+    @Override
+    public void showRectangle(Rectangle rect) {
+        var scaleX = gesturePane.getWidth() / rect.getWidth();
+        var scaleY = gesturePane.getHeight() / rect.getHeight();
+        var scale = Math.min(scaleX, scaleY);
+        var pivot = new Point2D(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+        withAnimation().zoomTo(scale, pivot);
     }
 }

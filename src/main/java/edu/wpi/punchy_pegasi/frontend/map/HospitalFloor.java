@@ -31,7 +31,7 @@ class HospitalFloor {
         root.getChildren().addAll(imageView, lineCanvas, nodeCanvas, tooltipCanvas);
         button.setText(this.identifier);
         button.getStyleClass().add("floor-selector");
-        new Thread(this::loadImage).start();
+        App.getSingleton().getExecutorService().execute(this::loadImage);
     }
 
     void loadImage() {
