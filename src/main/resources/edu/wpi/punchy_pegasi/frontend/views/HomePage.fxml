@@ -17,7 +17,6 @@
 <?import impl.org.controlsfx.skin.GridRow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXCardVerticalPlaceholder?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
