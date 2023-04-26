@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Alert {
     @SchemaID
     private UUID uuid;
+    private Long employeeID;
     private String alertTitle;
     private String description;
     private Instant dateTime;

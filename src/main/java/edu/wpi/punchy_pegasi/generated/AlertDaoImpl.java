@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
 
-    static String[] fields = {"uuid", "alertTitle", "description", "dateTime", "readStatus"};
+    static String[] fields = {"uuid", "employeeID", "alertTitle", "description", "dateTime", "readStatus"};
     private final PdbController dbController;
 
     public AlertDaoImpl(PdbController dbController) {
@@ -32,6 +32,7 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
             rs.next();
             Alert req = new Alert(
                     rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
                     rs.getObject("alertTitle", java.lang.String.class),
                     rs.getObject("description", java.lang.String.class),
                     rs.getTimestamp("dateTime").toInstant(),
@@ -55,6 +56,7 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
             while (rs.next()) {
                 Alert req = new Alert(
                     rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
                     rs.getObject("alertTitle", java.lang.String.class),
                     rs.getObject("description", java.lang.String.class),
                     rs.getTimestamp("dateTime").toInstant(),
@@ -75,6 +77,7 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
             while (rs.next()) {
                 Alert req = new Alert(
                     rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
                     rs.getObject("alertTitle", java.lang.String.class),
                     rs.getObject("description", java.lang.String.class),
                     rs.getTimestamp("dateTime").toInstant(),
@@ -95,7 +98,7 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
 
     @Override
     public void save(Alert alert) {
-        Object[] values = {alert.getUuid(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
+        Object[] values = {alert.getUuid(), alert.getEmployeeID(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
         try {
             dbController.insertQuery(TableType.ALERT, fields, values);
         } catch (PdbController.DatabaseException e) {

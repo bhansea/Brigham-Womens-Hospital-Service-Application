@@ -493,6 +493,7 @@ CREATE OR REPLACE TRIGGER trigger_signage_update
 CREATE TABLE IF NOT EXISTS alert
 (
   uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  employeeID bigint,
   alertTitle varchar,
   description varchar,
   dateTime timestamptz NOT NULL,

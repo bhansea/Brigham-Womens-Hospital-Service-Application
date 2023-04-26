@@ -16,6 +16,8 @@ public class Alert {
     @SchemaID
     @com.jsoniter.annotation.JsonProperty("uuid")
     private UUID uuid;
+    @com.jsoniter.annotation.JsonProperty("employeeid")
+    private Long employeeID;
     @com.jsoniter.annotation.JsonProperty("alerttitle")
     private String alertTitle;
     @com.jsoniter.annotation.JsonProperty("description")
@@ -33,6 +35,7 @@ public class Alert {
 @lombok.RequiredArgsConstructor
 public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Alert>{
         UUID("uuid", true,false),
+        EMPLOYEE_ID("employeeID", false,false),
         ALERT_TITLE("alertTitle", false,false),
         DESCRIPTION("description", false,false),
         DATE_TIME("dateTime", false,false),
@@ -59,6 +62,7 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref){
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
+            case EMPLOYEE_ID -> getEmployeeID();
             case ALERT_TITLE -> getAlertTitle();
             case DESCRIPTION -> getDescription();
             case DATE_TIME -> getDateTime();
@@ -68,6 +72,7 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref){
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case UUID -> setUuid(UUID.fromString(value));
+            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
             case ALERT_TITLE -> setAlertTitle(value);
             case DESCRIPTION -> setDescription(value);
             case DATE_TIME -> setDateTime(Instant.parse(value));
@@ -77,6 +82,7 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref){
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> getUuid().toString();
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
             case ALERT_TITLE -> getAlertTitle();
             case DESCRIPTION -> getDescription();
             case DATE_TIME -> getDateTime().toString();
