@@ -1,7 +1,7 @@
 @import "Fonts.css";
 
 .pie-chart{
-    -fx-font: "Nunito";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-text-fill: black;
 }
 
@@ -10,4 +10,10 @@
 }
 .default-color1.chart-pie{
     -fx-pie-color: -pfx-yellow;
+}
+
+.pie-chart-box{
+    -fx-border-width: 2;
+    -fx-border-color: -pfx-primary;
+    -fx-border-radius: 12;
 }
