@@ -2,13 +2,16 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminTablePageController;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -26,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.input.*;
 import org.controlsfx.control.PopOver;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -44,8 +48,7 @@ public class HomePageController {
     @FXML
     private PieChart piechart = new PieChart();
 
-    @FXML
-    private Label dateLabel = new Label();
+
     @FXML
     private Label timeLabel = new Label();
 
@@ -56,12 +59,7 @@ public class HomePageController {
     private AnchorPane dateTimeAnchor = new AnchorPane();
     @FXML
     private void initialize() {
-        LocalDate currentDate = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-        LocalTime currentTimeNoSec = currentTime.truncatedTo(ChronoUnit.MINUTES);
-
-        dateLabel.setText(currentDate.toString());
-        timeLabel.setText(currentTimeNoSec.toString());
+        configTimer(1000);
 
 
         requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
@@ -120,30 +118,41 @@ public class HomePageController {
                 var popover = new PopOver();
                 popover.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
                 vbox.setAlignment(Pos.CENTER);
+                vbox.setPadding(new Insets(10));
                 PFXButton button = new PFXButton();
-                if(r.status.toString().toLowerCase().equals("processing")){
-                    button.setText("Set Done");
-                    button.setStyle("-fx-background-color: -pfx-success");
-                    button.setOnMouseClicked(m -> {
-                        r.status = RequestEntry.Status.DONE;
-                        button.setText("Set Processing");
-                        button.setStyle("-fx-background-color: -pfx-danger");
-                    });
-                }
-                else if(r.status.toString().toLowerCase().equals("done")){
-                    button.setText("Set Processing");
-                    button.setStyle("-fx-background-color: -pfx-danger");
-                    button.setOnMouseClicked(m -> {
-                        r.status = RequestEntry.Status.PROCESSING;
-                        button.setText("Set Done");
-                        button.setStyle("-fx-background-color: -pfx-success");
-                    });
+                button.setMinWidth(200);
+                button.setMaxHeight(200);
 
+                button.setOnAction(m -> {
+                    GenericRequestEntry entry = (GenericRequestEntry) r;
+                    if (button.getText().toLowerCase().equals("change to done")) {
+                        button.setText("Change To Processing");
+                        button.setStyle("-fx-background-color: -pfx-danger");
+                        entry.setStatus(RequestEntry.Status.DONE);
+                        //facade.updateGenericRequestEntry(entry, new GenericRequestEntry.Field[]{GenericRequestEntry.Field.STATUS};
+                        requestTable.update();
+                    } else if (button.getText().toLowerCase().equals("change to processing")) {
+                        button.setText("Change To Done");
+                        button.setStyle("-fx-background-color: -pfx-success");
+                        entry.setStatus(RequestEntry.Status.PROCESSING);
+                        requestTable.update();
+                    }
+                });
+
+                if (r.status.toString().toLowerCase().equals("done")) {
+                    button.setText("Change To Processing");
+                    button.setStyle("-fx-background-color: -pfx-danger");
+
+                } else if (r.status.toString().toLowerCase().equals("processing")) {
+                    button.setText("Change To Done");
+                    button.setStyle("-fx-background-color: -pfx-success");
                 }
+
                 vbox.getChildren().add(button);
                 vbox.getStyleClass().add("homepage-popup");
                 popover.setContentNode(vbox);
                 popover.show(row);
+
             });
             return row;
         });
@@ -154,7 +163,24 @@ public class HomePageController {
         requestTable.autosizeColumnsOnInitialization();
 
     }
+    private void updateTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date date = new Date();
+        timeLabel.setText(formatter.format(date));
+    }
 
+    private void configTimer(final long interuptPeriodMill) {
+        long currTime = System.currentTimeMillis();
+        long startDelay = interuptPeriodMill - (currTime % interuptPeriodMill);
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            public void run() {
+                Platform.runLater(() -> {
+                    updateTime();
+                });
+            }
+        }, startDelay, interuptPeriodMill);
+    }
     @FXML
     private void resizeColumns() {
         requestTable.autosizeColumns();
@@ -165,6 +191,7 @@ public class HomePageController {
         String location;
         String assigned;
         String additionalNotes;
+        @Setter
         RequestEntry.Status status;
         TableType tableType;
 
