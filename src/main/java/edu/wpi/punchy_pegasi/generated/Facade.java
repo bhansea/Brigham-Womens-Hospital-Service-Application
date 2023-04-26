@@ -1,16 +1,14 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.*;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-
-import java.util.Map;
-
+import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import io.github.palexdev.materialfx.controls.MFXTableView;
 
-import java.util.function.Consumer;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 
 public class Facade {
@@ -28,6 +26,7 @@ public class Facade {
     private final EmployeeCachedDaoImpl employeeDao;
     private final AccountCachedDaoImpl accountDao;
     private final SignageCachedDaoImpl signageDao;
+    private final AlertCachedDaoImpl alertDao;
 
     public <K, T, C> IDao<K, T, C> getDaoByClass(Class<T> clazz) {
         if (clazz == null) return null;
@@ -53,6 +52,7 @@ public class Facade {
         else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Employee.class) return (IDao<K, T, C>) employeeDao;
         else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Account.class) return (IDao<K, T, C>) accountDao;
         else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Signage.class) return (IDao<K, T, C>) signageDao;
+        else if (clazz == edu.wpi.punchy_pegasi.generator.schema.Alert.class) return (IDao<K, T, C>) alertDao;
         else return null;
     }
 
@@ -71,6 +71,7 @@ public class Facade {
         employeeDao = new EmployeeCachedDaoImpl(dbController);
         accountDao = new AccountCachedDaoImpl(dbController);
         signageDao = new SignageCachedDaoImpl(dbController);
+        alertDao = new AlertCachedDaoImpl(dbController);
 
     }
 
@@ -592,5 +593,45 @@ public class Facade {
 
     public void deleteSignage(Signage signage) {
         signageDao.delete(signage);
+    }
+
+    public MFXTableView<Alert> generateTableAlert(Consumer<Alert> onRowClick, Alert.Field[] hidden) {
+        return alertDao.generateTable(onRowClick, hidden);
+    }
+
+    public MFXTableView<Alert> generateTableAlert(Consumer<Alert> onRowClick) {
+        return alertDao.generateTable(onRowClick);
+    }
+
+    public Optional<Alert> getAlert(java.util.UUID key) {
+        return alertDao.get(key);
+    }
+
+    public Map<java.util.UUID, Alert> getAlert(Alert.Field column, Object value) {
+        return alertDao.get(column, value);
+    }
+
+    public Map<java.util.UUID, Alert> getAlert(Alert.Field[] params, Object[] value) {
+        return alertDao.get(params, value);
+    }
+
+    public ObservableMap<java.util.UUID, Alert> getAllAlert() {
+        return alertDao.getAll();
+    }
+
+    public ObservableList<Alert> getAllAsListAlert() {
+        return alertDao.getAllAsList();
+    }
+
+    public void saveAlert(Alert alert) {
+        alertDao.save(alert);
+    }
+
+    public void updateAlert(Alert alert, Alert.Field[] params) {
+        alertDao.update(alert, params);
+    }
+
+    public void deleteAlert(Alert alert) {
+        alertDao.delete(alert);
     }
 }

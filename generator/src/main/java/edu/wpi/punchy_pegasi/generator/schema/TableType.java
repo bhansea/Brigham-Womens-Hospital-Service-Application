@@ -17,7 +17,8 @@ public enum TableType {
     OFFICEREQUESTS(OfficeServiceRequestEntry.class, "", Object.class),
     EMPLOYEES(Employee.class, "", Object.class),
     ACCOUNTS(Account.class, "", Object.class),
-    SIGNAGE(Signage.class, "", Object.class);
+    SIGNAGE(Signage.class, "", Object.class),
+    ALERT(Alert.class, "", Object.class);
     @Getter
     private final Class<?> clazz;
     @Getter

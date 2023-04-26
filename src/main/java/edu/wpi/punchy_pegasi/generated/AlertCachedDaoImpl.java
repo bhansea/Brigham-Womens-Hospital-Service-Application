@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
+import edu.wpi.punchy_pegasi.schema.Alert;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.IForm;
-import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -29,17 +29,17 @@ import java.util.*;
 import java.util.function.Consumer;
 
 @Slf4j
-public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>, PropertyChangeListener {
+public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field>, PropertyChangeListener {
 
-    static String[] fields = {"nodeID", "xcoord", "ycoord", "floor", "building"};
+    static String[] fields = {"uuid", "alertTitle", "description", "dateTime", "readStatus"};
 
-    private final ObservableMap<java.lang.Long, Node> cache = FXCollections.observableMap(new LinkedHashMap<>());
-    private final ObservableList<Node> list = FXCollections.observableArrayList();
+    private final ObservableMap<java.util.UUID, Alert> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<Alert> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
-    public NodeCachedDaoImpl(PdbController dbController) {
+    public AlertCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-        cache.addListener((MapChangeListener<java.lang.Long, Node>) c -> {
+        cache.addListener((MapChangeListener<java.util.UUID, Alert>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
@@ -60,11 +60,11 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public MFXTableView<Node> generateTable(Consumer<Node> onRowClick, Node.Field[] hidden) {
-        var table = new MFXTableView<Node>();
+    public MFXTableView<Alert> generateTable(Consumer<Alert> onRowClick, Alert.Field[] hidden) {
+        var table = new MFXTableView<Alert>();
         table.setItems(list);
-        for (Node.Field field : Arrays.stream(Node.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
-            MFXTableColumn<Node> col = new MFXTableColumn<>(field.getColName(), true);
+        for (Alert.Field field : Arrays.stream(Alert.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
+            MFXTableColumn<Alert> col = new MFXTableColumn<>(field.getColName(), true);
             col.setPickOnBounds(false);
 
             col.setRowCellFactory(p -> {
@@ -88,32 +88,32 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         return table;
     }
 
-    public MFXTableView<Node> generateTable(Consumer<Node> onRowClick) {
-        return generateTable(onRowClick, new Node.Field[]{});
+    public MFXTableView<Alert> generateTable(Consumer<Alert> onRowClick) {
+        return generateTable(onRowClick, new Alert.Field[]{});
     }
 
-    public void add(Node node) {
-        if (!cache.containsKey(node.getNodeID()))
-            cache.put(node.getNodeID(), node);
+    public void add(Alert alert) {
+        if (!cache.containsKey(alert.getUuid()))
+            cache.put(alert.getUuid(), alert);
     }
 
-    public void update(Node node) {
-        cache.put(node.getNodeID(), node);
+    public void update(Alert alert) {
+        cache.put(alert.getUuid(), alert);
     }
 
-    public void remove(Node node) {
-        cache.remove(node.getNodeID());
+    public void remove(Alert alert) {
+        cache.remove(alert.getUuid());
     }
 
     private void initCache() {
-        try (var rs = dbController.searchQuery(TableType.NODES)) {
+        try (var rs = dbController.searchQuery(TableType.ALERT)) {
             while (rs.next()) {
-                Node req = new Node(
-                        rs.getObject("nodeID", java.lang.Long.class),
-                        rs.getObject("xcoord", java.lang.Integer.class),
-                        rs.getObject("ycoord", java.lang.Integer.class),
-                        rs.getObject("floor", java.lang.String.class),
-                        rs.getObject("building", java.lang.String.class));
+                Alert req = new Alert(
+                        rs.getObject("uuid", java.util.UUID.class),
+                        rs.getObject("alertTitle", java.lang.String.class),
+                        rs.getObject("description", java.lang.String.class),
+                        rs.getTimestamp("dateTime").toInstant(),
+                        edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -122,67 +122,67 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
     }
 
     @Override
-    public Optional<Node> get(java.lang.Long key) {
+    public Optional<Alert> get(java.util.UUID key) {
         return Optional.ofNullable(cache.get(key));
     }
 
     @Override
-    public Map<java.lang.Long, Node> get(Node.Field column, Object value) {
-        return get(new Node.Field[]{column}, new Object[]{value});
+    public Map<java.util.UUID, Alert> get(Alert.Field column, Object value) {
+        return get(new Alert.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.Long, Node> get(Node.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.Long, Node>();
+    public Map<java.util.UUID, Alert> get(Alert.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, Alert>();
         if (params.length != value.length) return map;
         cache.values().forEach(v -> {
             var include = true;
             for (int i = 0; i < params.length; i++)
                 include &= Objects.equals(params[i].getValue(v), value[i]);
             if (include)
-                map.put(v.getNodeID(), v);
+                map.put(v.getUuid(), v);
         });
         return map;
     }
 
     @Override
-    public ObservableMap<java.lang.Long, Node> getAll() {
+    public ObservableMap<java.util.UUID, Alert> getAll() {
         return cache;
     }
 
     @Override
-    public ObservableList<Node> getAllAsList() {
+    public ObservableList<Alert> getAllAsList() {
         return list;
     }
 
     @Override
-    public void save(Node node) {
-        Object[] values = {node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
+    public void save(Alert alert) {
+        Object[] values = {alert.getUuid(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
         try {
-            dbController.insertQuery(TableType.NODES, fields, values);
-//            add(node);
+            dbController.insertQuery(TableType.ALERT, fields, values);
+//            add(alert);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
     }
 
     @Override
-    public void update(Node node, Node.Field[] params) {
+    public void update(Alert alert, Alert.Field[] params) {
         if (params.length < 1)
             return;
         try {
-            dbController.updateQuery(TableType.NODES, "nodeID", node.getNodeID(), Arrays.stream(params).map(Node.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(node)).toArray());
-//            update(node);
+            dbController.updateQuery(TableType.ALERT, "uuid", alert.getUuid(), Arrays.stream(params).map(Alert.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(alert)).toArray());
+//            update(alert);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
     }
 
     @Override
-    public void delete(Node node) {
+    public void delete(Alert alert) {
         try {
-            dbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
-//            remove(node);
+            dbController.deleteQuery(TableType.ALERT, "uuid", alert.getUuid());
+//            remove(alert);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -190,9 +190,9 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (Objects.equals(evt.getPropertyName(), TableType.NODES.name() + "_update")) {
+        if (Objects.equals(evt.getPropertyName(), TableType.ALERT.name() + "_update")) {
             var update = (PdbController.DatabaseChangeEvent) evt.getNewValue();
-            var data = (Node) update.data();
+            var data = (Alert) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
                 case DELETE -> remove(data);
@@ -201,15 +201,15 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         }
     }
 
-    public static class NodeForm implements IForm<Node> {
+    public static class AlertForm implements IForm<Alert> {
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
 
-        public NodeForm() {
+        public AlertForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
-            for (var field : Node.Field.values()) {
+            for (var field : Alert.Field.values()) {
                 var hbox = new HBox();
                 var label = new Label(field.getColName());
                 var input = new TextField();
@@ -219,16 +219,16 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
             }
         }
 
-        public void populateForm(Node entry) {
-            for (var field : Node.Field.values()) {
+        public void populateForm(Alert entry) {
+            for (var field : Alert.Field.values()) {
                 var input = (TextField) form.get(field.ordinal());
                 input.setText(field.getValueAsString(entry));
             }
         }
 
-        public Node commit() {
-            var entry = new Node();
-            for (var field : Node.Field.values()) {
+        public Alert commit() {
+            var entry = new Alert();
+            for (var field : Alert.Field.values()) {
                 var input = (TextField) form.get(field.ordinal());
                 field.setValueFromString(entry, input.getText());
             }
