@@ -2,8 +2,7 @@
     -fx-spacing: 10;
     -fx-padding: 20;
 }
-
-.pathfinding-overlay-box {
+.pathfinding-overlay > VBox {
     -fx-alignment: CENTER;
     -fx-max-width: 300;
     -fx-spacing: 10;
@@ -13,7 +12,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
 
-.pathfinding-overlay-box > HBox {
+.pathfinding-overlay > VBox > HBox {
     -fx-spacing: 10;
     -fx-alignment: CENTER;
     -fx-padding: 5;
