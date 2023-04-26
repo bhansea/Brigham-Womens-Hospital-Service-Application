@@ -55,7 +55,9 @@
     <center>
         <HBox fx:id="signageBody">
             <VBox fx:id="signageBodyLeft"/>
-            <StackPane fx:id="signageBodyStackPane"/>
         </HBox>
     </center>
+    <right>
+        <StackPane fx:id="signageBodyStackPane" style="-fx-padding: 50"/>
+    </right>
 </BorderPane>
