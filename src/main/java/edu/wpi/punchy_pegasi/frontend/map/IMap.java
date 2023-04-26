@@ -7,7 +7,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +45,4 @@ public interface IMap<Layer> {
     javafx.scene.Node drawArrow(Node node, boolean up);
 
     void focusOn(Node node);
-
-    void showRectangle(Rectangle rect);
 }
