@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class PFXAlertCard extends HBox {
     private final PFXButton read;
@@ -22,10 +23,8 @@ public class PFXAlertCard extends HBox {
     private Long uuid;
     private VBox textContainer = new VBox();
 
-    public PFXAlertCard(Long uuid) {
+    public PFXAlertCard(Alert alert) {
         super();
-        Optional<Alert> la = App.getSingleton().getFacade().getAlert(uuid);
-        Alert alert = la.get();
         Alert.ReadStatus readStatus = alert.getReadStatus();
         if(readStatus == Alert.ReadStatus.READ) {
             isRead = true;
