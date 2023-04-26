@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Account;
+import edu.wpi.punchy_pegasi.schema.Alert;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -29,17 +29,17 @@ import java.util.*;
 import java.util.function.Consumer;
 
 @Slf4j
-public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Account.Field>, PropertyChangeListener {
+public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field>, PropertyChangeListener {
 
-    static String[] fields = {"uuid", "username", "password", "employeeID", "accountType"};
+    static String[] fields = {"uuid", "alertTitle", "description", "dateTime", "readStatus"};
 
-    private final ObservableMap<java.lang.Long, Account> cache = FXCollections.observableMap(new LinkedHashMap<>());
-    private final ObservableList<Account> list = FXCollections.observableArrayList();
+    private final ObservableMap<java.util.UUID, Alert> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableList<Alert> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
-    public AccountCachedDaoImpl(PdbController dbController) {
+    public AlertCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-        cache.addListener((MapChangeListener<java.lang.Long, Account>) c -> {
+        cache.addListener((MapChangeListener<java.util.UUID, Alert>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
@@ -60,11 +60,11 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         this.dbController.addPropertyChangeListener(this);
     }
 
-    public MFXTableView<Account> generateTable(Consumer<Account> onRowClick, Account.Field[] hidden) {
-        var table = new MFXTableView<Account>();
+    public MFXTableView<Alert> generateTable(Consumer<Alert> onRowClick, Alert.Field[] hidden) {
+        var table = new MFXTableView<Alert>();
         table.setItems(list);
-        for (Account.Field field : Arrays.stream(Account.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
-            MFXTableColumn<Account> col = new MFXTableColumn<>(field.getColName(), true);
+        for (Alert.Field field : Arrays.stream(Alert.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
+            MFXTableColumn<Alert> col = new MFXTableColumn<>(field.getColName(), true);
             col.setPickOnBounds(false);
 
             col.setRowCellFactory(p -> {
@@ -88,32 +88,32 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         return table;
     }
 
-    public MFXTableView<Account> generateTable(Consumer<Account> onRowClick) {
-        return generateTable(onRowClick, new Account.Field[]{});
+    public MFXTableView<Alert> generateTable(Consumer<Alert> onRowClick) {
+        return generateTable(onRowClick, new Alert.Field[]{});
     }
 
-    public void add(Account account) {
-        if (!cache.containsKey(account.getUuid()))
-            cache.put(account.getUuid(), account);
+    public void add(Alert alert) {
+        if (!cache.containsKey(alert.getUuid()))
+            cache.put(alert.getUuid(), alert);
     }
 
-    public void update(Account account) {
-        cache.put(account.getUuid(), account);
+    public void update(Alert alert) {
+        cache.put(alert.getUuid(), alert);
     }
 
-    public void remove(Account account) {
-        cache.remove(account.getUuid());
+    public void remove(Alert alert) {
+        cache.remove(alert.getUuid());
     }
 
     private void initCache() {
-        try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
+        try (var rs = dbController.searchQuery(TableType.ALERT)) {
             while (rs.next()) {
-                Account req = new Account(
-                        rs.getObject("uuid", java.lang.Long.class),
-                        rs.getObject("username", java.lang.String.class),
-                        rs.getObject("password", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class),
-                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                Alert req = new Alert(
+                        rs.getObject("uuid", java.util.UUID.class),
+                        rs.getObject("alertTitle", java.lang.String.class),
+                        rs.getObject("description", java.lang.String.class),
+                        rs.getTimestamp("dateTime").toInstant(),
+                        edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -122,18 +122,18 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
     }
 
     @Override
-    public Optional<Account> get(java.lang.Long key) {
+    public Optional<Alert> get(java.util.UUID key) {
         return Optional.ofNullable(cache.get(key));
     }
 
     @Override
-    public Map<java.lang.Long, Account> get(Account.Field column, Object value) {
-        return get(new Account.Field[]{column}, new Object[]{value});
+    public Map<java.util.UUID, Alert> get(Alert.Field column, Object value) {
+        return get(new Alert.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.Long, Account> get(Account.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.Long, Account>();
+    public Map<java.util.UUID, Alert> get(Alert.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, Alert>();
         if (params.length != value.length) return map;
         cache.values().forEach(v -> {
             var include = true;
@@ -146,43 +146,43 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
     }
 
     @Override
-    public ObservableMap<java.lang.Long, Account> getAll() {
+    public ObservableMap<java.util.UUID, Alert> getAll() {
         return cache;
     }
 
     @Override
-    public ObservableList<Account> getAllAsList() {
+    public ObservableList<Alert> getAllAsList() {
         return list;
     }
 
     @Override
-    public void save(Account account) {
-        Object[] values = {account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+    public void save(Alert alert) {
+        Object[] values = {alert.getUuid(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
         try {
-            dbController.insertQuery(TableType.ACCOUNTS, fields, values);
-//            add(account);
+            dbController.insertQuery(TableType.ALERT, fields, values);
+//            add(alert);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
     }
 
     @Override
-    public void update(Account account, Account.Field[] params) {
+    public void update(Alert alert, Alert.Field[] params) {
         if (params.length < 1)
             return;
         try {
-            dbController.updateQuery(TableType.ACCOUNTS, "uuid", account.getUuid(), Arrays.stream(params).map(Account.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(account)).toArray());
-//            update(account);
+            dbController.updateQuery(TableType.ALERT, "uuid", alert.getUuid(), Arrays.stream(params).map(Alert.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(alert)).toArray());
+//            update(alert);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
     }
 
     @Override
-    public void delete(Account account) {
+    public void delete(Alert alert) {
         try {
-            dbController.deleteQuery(TableType.ACCOUNTS, "uuid", account.getUuid());
-//            remove(account);
+            dbController.deleteQuery(TableType.ALERT, "uuid", alert.getUuid());
+//            remove(alert);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -190,9 +190,9 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (Objects.equals(evt.getPropertyName(), TableType.ACCOUNTS.name() + "_update")) {
+        if (Objects.equals(evt.getPropertyName(), TableType.ALERT.name() + "_update")) {
             var update = (PdbController.DatabaseChangeEvent) evt.getNewValue();
-            var data = (Account) update.data();
+            var data = (Alert) update.data();
             switch (update.action()) {
                 case UPDATE -> update(data);
                 case DELETE -> remove(data);
@@ -201,15 +201,15 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         }
     }
 
-    public static class AccountForm implements IForm<Account> {
+    public static class AlertForm implements IForm<Alert> {
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
 
-        public AccountForm() {
+        public AlertForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
-            for (var field : Account.Field.values()) {
+            for (var field : Alert.Field.values()) {
                 var hbox = new HBox();
                 var label = new Label(field.getColName());
                 var input = new TextField();
@@ -219,16 +219,16 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
             }
         }
 
-        public void populateForm(Account entry) {
-            for (var field : Account.Field.values()) {
+        public void populateForm(Alert entry) {
+            for (var field : Alert.Field.values()) {
                 var input = (TextField) form.get(field.ordinal());
                 input.setText(field.getValueAsString(entry));
             }
         }
 
-        public Account commit() {
-            var entry = new Account();
-            for (var field : Account.Field.values()) {
+        public Alert commit() {
+            var entry = new Alert();
+            for (var field : Alert.Field.values()) {
                 var input = (TextField) form.get(field.ordinal());
                 field.setValueFromString(entry, input.getText());
             }

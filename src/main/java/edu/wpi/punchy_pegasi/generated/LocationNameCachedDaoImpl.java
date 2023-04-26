@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.IForm;
+import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -109,10 +109,10 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         try (var rs = dbController.searchQuery(TableType.LOCATIONNAMES)) {
             while (rs.next()) {
                 LocationName req = new LocationName(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("longName", java.lang.String.class),
-                    rs.getObject("shortName", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("longName", java.lang.String.class),
+                        rs.getObject("shortName", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.LocationName.NodeType.valueOf(rs.getString("nodeType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -204,6 +204,7 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public LocationNameForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
