@@ -40,7 +40,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
     public AccountCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Account>) c -> {
-            //Platform.runLater(() -> {
+            Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            //});
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -109,11 +109,11 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -205,6 +205,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public AccountForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

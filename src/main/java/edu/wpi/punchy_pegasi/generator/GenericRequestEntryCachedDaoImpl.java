@@ -40,7 +40,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
     public GenericRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<String/*idFieldType*/, GenericRequestEntry>) c -> {
-            //Platform.runLater(() -> {
+            Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            //});
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -200,6 +200,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public GenericRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

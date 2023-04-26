@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.IForm;
+import edu.wpi.punchy_pegasi.schema.Move;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -40,7 +40,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
     public MoveCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Move>) c -> {
-            //Platform.runLater(() -> {
+            Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            //});
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
@@ -109,10 +109,10 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         try (var rs = dbController.searchQuery(TableType.MOVES)) {
             while (rs.next()) {
                 Move req = new Move(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("locationID", java.lang.Long.class),
-                    rs.getObject("date", java.time.LocalDate.class));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("locationID", java.lang.Long.class),
+                        rs.getObject("date", java.time.LocalDate.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -204,6 +204,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public MoveForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

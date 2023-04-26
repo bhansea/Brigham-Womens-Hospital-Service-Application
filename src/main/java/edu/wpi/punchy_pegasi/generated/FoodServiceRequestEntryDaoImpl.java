@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
@@ -38,7 +37,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
                     rs.getObject("foodSelection", java.lang.String.class),
                     rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
+                    java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
                     rs.getObject("beverage", java.lang.String.class),
                     rs.getObject("dietaryRestrictions", java.lang.String.class),
                     rs.getObject("patientName", java.lang.String.class),
@@ -61,18 +60,18 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS, Arrays.stream(params).map(FoodServiceRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
-                    rs.getObject("patientName", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("foodSelection", java.lang.String.class),
+                        rs.getObject("tempType", java.lang.String.class),
+                        java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
+                        rs.getObject("beverage", java.lang.String.class),
+                        rs.getObject("dietaryRestrictions", java.lang.String.class),
+                        rs.getObject("patientName", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -88,18 +87,18 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
         try (var rs = dbController.searchQuery(TableType.FOODREQUESTS)) {
             while (rs.next()) {
                 FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
-                    rs.getObject("patientName", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("foodSelection", java.lang.String.class),
+                        rs.getObject("tempType", java.lang.String.class),
+                        java.util.Arrays.asList((String[]) rs.getArray("additionalItems").getArray()),
+                        rs.getObject("beverage", java.lang.String.class),
+                        rs.getObject("dietaryRestrictions", java.lang.String.class),
+                        rs.getObject("patientName", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
