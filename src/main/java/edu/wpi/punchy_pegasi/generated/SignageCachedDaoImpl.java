@@ -40,7 +40,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
     public SignageCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Signage>) c -> {
-            Platform.runLater(() -> {
+            //Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            });
+            //});
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);

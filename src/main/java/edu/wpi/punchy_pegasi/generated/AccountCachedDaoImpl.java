@@ -40,7 +40,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
     public AccountCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Account>) c -> {
-            Platform.runLater(() -> {
+            //Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            });
+            //});
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);

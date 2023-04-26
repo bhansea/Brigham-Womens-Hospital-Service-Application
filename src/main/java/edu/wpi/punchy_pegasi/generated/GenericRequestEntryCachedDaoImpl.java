@@ -40,7 +40,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<java.util.UUID, Ge
     public GenericRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.util.UUID, GenericRequestEntry>) c -> {
-            Platform.runLater(() -> {
+            //Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<java.util.UUID, Ge
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            });
+            //});
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);

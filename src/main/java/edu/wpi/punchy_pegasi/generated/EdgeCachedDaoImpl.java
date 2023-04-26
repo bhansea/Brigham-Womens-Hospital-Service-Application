@@ -40,7 +40,7 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
     public EdgeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Edge>) c -> {
-            Platform.runLater(() -> {
+            //Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            });
+            //});
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);

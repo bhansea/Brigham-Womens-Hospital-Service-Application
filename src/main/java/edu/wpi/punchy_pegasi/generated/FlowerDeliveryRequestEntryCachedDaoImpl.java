@@ -40,7 +40,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
     public FlowerDeliveryRequestEntryCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.util.UUID, FlowerDeliveryRequestEntry>) c -> {
-            Platform.runLater(() -> {
+            //Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
                     if (index != -1) {
@@ -54,7 +54,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
                 if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
-            });
+            //});
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
