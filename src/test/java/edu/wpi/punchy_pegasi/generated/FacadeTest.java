@@ -763,8 +763,9 @@ class FacadeTest {
         }
 
         Map<Long, LocationName> resultMap = facade.getAllLocationName();
+        Map<Long, LocationName> copyMap = new HashMap<>(resultMap);
         assertEquals(refMap, resultMap);
-        for (var uuid : resultMap.keySet()) {
+        for (var uuid : copyMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.LOCATIONNAMES, "uuid", uuid);
             } catch (PdbController.DatabaseException e) {
@@ -856,7 +857,7 @@ class FacadeTest {
         var locName1 = ThreadLocalRandom.current().nextLong();
         var staff1 = ThreadLocalRandom.current().nextLong();
         var request1 = new RequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, 100L);
-        var request2 = new RequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, 100L);
+        var request2 = new RequestEntry(UUID.randomUUID(), locName1, staff0, "testNotes", RequestEntry.Status.PROCESSING, 100L);
         var values = new Object[]{request1.getServiceID(), request1.getLocationName(), request1.getStaffAssignment(), request1.getAdditionalNotes(), request1.getStatus(), request1.getEmployeeID()};
         var values2 = new Object[]{request2.getServiceID(), request2.getLocationName(), request2.getStaffAssignment(), request2.getAdditionalNotes(), request2.getStatus(), request2.getEmployeeID()};
         try {
@@ -1875,8 +1876,9 @@ class FacadeTest {
         }
 
         Map<UUID, ConferenceRoomEntry> resultMap = facade.getAllConferenceRoomEntry();
+        Map<UUID, ConferenceRoomEntry> copyMap = new HashMap<>(resultMap);
         assertEquals(refMap, resultMap);
-        for (var entry : resultMap.entrySet()) {
+        for (var entry : copyMap.entrySet()) {
             try {
                 pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", entry.getKey());
             } catch (PdbController.DatabaseException e) {
