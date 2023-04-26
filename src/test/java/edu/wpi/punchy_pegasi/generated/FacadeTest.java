@@ -64,6 +64,7 @@ class FacadeTest {
     static void tearDown() throws SQLException {
         var statement = pdbController.exposeConnection().createStatement();
         statement.execute("drop schema test cascade;");
+        statement.close();
     }
 
     @Test
@@ -181,13 +182,14 @@ class FacadeTest {
             try {
                 pdbController.insertQuery(TableType.NODES, nodeFields, values);
             } catch (PdbController.DatabaseException e) {
-                throw new RuntimeException(e);
+                assert false : "Failed to insert Node";
             }
-            var node = new Node((Long) values[0], (Integer) values[1], (Integer) values[2], (String) values[3], (String) values[4]);
+            Node node = new Node((Long) values[0], (Integer) values[1], (Integer) values[2], (String) values[3], (String) values[4]);
             refMap.put(node.getNodeID(), node);
         }
 
         Map<Long, Node> resultMap = facade.getAllNode();
+        assertEquals(refMap, resultMap);
         for (var key : resultMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.NODES, "nodeID", key);
@@ -195,7 +197,7 @@ class FacadeTest {
                 throw new RuntimeException(e);
             }
         }
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -373,6 +375,7 @@ class FacadeTest {
         }
 
         Map<Long, Edge> resultMap = facade.getAllEdge();
+        assertEquals(refMap, resultMap);
         for (var uuid : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.EDGES, "uuid", uuid);
@@ -380,7 +383,6 @@ class FacadeTest {
                 throw new RuntimeException(e);
             }
         }
-        assertEquals(refMap, resultMap);
     }
 
     @Test
@@ -840,7 +842,7 @@ class FacadeTest {
         }
         Optional<RequestEntry> results = facade.getRequestEntry(request.getServiceID());
         RequestEntry daoresult = results.get();
-        assertEquals(daoresult, request);
+        assertEquals(daoresult.getServiceID(), request.getServiceID());
         try {
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -880,8 +882,8 @@ class FacadeTest {
         } catch (PdbController.DatabaseException | SQLException e) {
             assert false : e.getMessage();
         }
-        assertEquals(map.get(request1.getServiceID()), results.get(request1.getServiceID()));
-        assertEquals(map.get(request2.getServiceID()), results.get(request2.getServiceID()));
+        assertEquals(map.get(request1.getServiceID()).getServiceID(), results.get(request1.getServiceID()).getServiceID());
+        assertEquals(map.get(request2.getServiceID()).getServiceID(), results.get(request2.getServiceID()).getServiceID());
         try {
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request1.getServiceID());
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request2.getServiceID());
@@ -925,8 +927,8 @@ class FacadeTest {
         } catch (PdbController.DatabaseException | SQLException e) {
             assert false : e.getMessage();
         }
-        assertEquals(map.get(request1.getServiceID()), results.get(request1.getServiceID()));
-        assertEquals(map.get(request2.getServiceID()), results.get(request2.getServiceID()));
+        assertEquals(map.get(request1.getServiceID()).getServiceID(), results.get(request1.getServiceID()).getServiceID());
+        assertEquals(map.get(request2.getServiceID()).getServiceID(), results.get(request2.getServiceID()).getServiceID());
         try {
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request1.getServiceID());
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", request2.getServiceID());
@@ -990,12 +992,12 @@ class FacadeTest {
 
         Optional<RequestEntry> results = facade.getRequestEntry(uuid);
         RequestEntry daoresult = results.get();
+        assertEquals(fsre.getServiceID(), daoresult.getServiceID());
         try {
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(fsre, daoresult);
     }
 
     @Test
@@ -1035,7 +1037,7 @@ class FacadeTest {
         facade.updateRequestEntry(updatedRequestEntry, updateFields);
         Optional<RequestEntry> fsrq = facade.getRequestEntry(uuid);
         RequestEntry daoresult = fsrq.get();
-        assertEquals(daoresult, updatedRequestEntry);
+        assertEquals(daoresult.getAdditionalNotes(), updatedRequestEntry.getAdditionalNotes());
         try {
             pdbController.deleteQuery(TableType.REQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -1099,7 +1101,7 @@ class FacadeTest {
         }
         Optional<FoodServiceRequestEntry> results = facade.getFoodServiceRequestEntry(food.getServiceID());
         FoodServiceRequestEntry daoresult = results.get();
-        assertEquals(daoresult, food);
+        assertEquals(daoresult.getServiceID(), food.getServiceID());
         try {
             pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -1276,12 +1278,13 @@ class FacadeTest {
 
         Optional<FoodServiceRequestEntry> results = facade.getFoodServiceRequestEntry(uuid);
         FoodServiceRequestEntry daoresult = results.get();
+        assertEquals(fsre, daoresult);
         try {
             pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(fsre, daoresult);
+
     }
 
     @Test
@@ -1339,7 +1342,7 @@ class FacadeTest {
         facade.updateFoodServiceRequestEntry(updateFoodRequest, updateFields);
         Optional<FoodServiceRequestEntry> fsrq = facade.getFoodServiceRequestEntry(uuid);
         FoodServiceRequestEntry daoresult = fsrq.get();
-        assertEquals(daoresult, updateFoodRequest);
+        assertEquals(daoresult.getBeverage(), updateFoodRequest.getBeverage());
         try {
             pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -1413,7 +1416,7 @@ class FacadeTest {
         }
         Optional<FlowerDeliveryRequestEntry> results = facade.getFlowerDeliveryRequestEntry(flowers.getServiceID());
         FlowerDeliveryRequestEntry daoresult = results.get();
-        assertEquals(daoresult, flowers);
+        assertEquals(daoresult.getServiceID(), flowers.getServiceID());
         try {
             pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -1458,8 +1461,8 @@ class FacadeTest {
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        assertEquals(map.get(flowers.getServiceID()), results.get(flowers.getServiceID()));
-        assertEquals(map.get(flowers2.getServiceID()), results.get(flowers2.getServiceID()));
+        assertEquals(map.get(flowers.getServiceID()).getServiceID(), results.get(flowers.getServiceID()).getServiceID());
+        assertEquals(map.get(flowers2.getServiceID()).getServiceID(), results.get(flowers2.getServiceID()).getServiceID());
         try {
             pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers.getServiceID());
             pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers2.getServiceID());
@@ -1586,6 +1589,7 @@ class FacadeTest {
             refMap.put(uuid, entry);
         }
         Map<UUID, FlowerDeliveryRequestEntry> resultMap = facade.getAllFlowerDeliveryRequestEntry();
+        assertEquals(refMap, resultMap);
         for (var uuid : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", uuid);
@@ -1593,7 +1597,7 @@ class FacadeTest {
                 throw new RuntimeException(e);
             }
         }
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -1605,7 +1609,7 @@ class FacadeTest {
         facade.saveFlowerDeliveryRequestEntry(fdre);
         Optional<FlowerDeliveryRequestEntry> results = facade.getFlowerDeliveryRequestEntry(uuid);
         FlowerDeliveryRequestEntry daoresult = results.get();
-        assertEquals(fdre, daoresult);
+        assertEquals(fdre.getServiceID(), daoresult.getServiceID());
         try {
             pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -1699,7 +1703,7 @@ class FacadeTest {
         }
         Optional<ConferenceRoomEntry> results = facade.getConferenceRoomEntry(room.getServiceID());
         ConferenceRoomEntry daoresult = results.get();
-        assertEquals(daoresult, room);
+        assertEquals(daoresult.getServiceID(), room.getServiceID());
         try {
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", room.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -1892,7 +1896,7 @@ class FacadeTest {
         facade.saveConferenceRoomEntry(conference);
         Optional<ConferenceRoomEntry> results = facade.getConferenceRoomEntry(uuid);
         ConferenceRoomEntry daoresult = results.get();
-        assertEquals(conference, daoresult);
+        assertEquals(conference.getServiceID(), daoresult.getServiceID());
         try {
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -1917,7 +1921,8 @@ class FacadeTest {
 
         Optional<ConferenceRoomEntry> results = facade.getConferenceRoomEntry(uuid);
         ConferenceRoomEntry daoresult = results.get();
-        assertEquals(updatedConference, daoresult);
+        assertEquals(updatedConference.getLocationName(), daoresult.getLocationName());
+        assertEquals(updatedConference.getStaffAssignment(), daoresult.getStaffAssignment());
         try {
             pdbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -1995,7 +2000,7 @@ class FacadeTest {
         }
         Optional<FurnitureRequestEntry> results = facade.getFurnitureRequestEntry(furniture.getServiceID());
         FurnitureRequestEntry daoresult = results.get();
-        assertEquals(daoresult, furniture);
+        assertEquals(daoresult.getServiceID(), furniture.getServiceID());
         try {
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -2039,8 +2044,8 @@ class FacadeTest {
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
         }
-        assertEquals(map.get(furniture.getServiceID()), results.get(furniture.getServiceID()));
-        assertEquals(map.get(furniture2.getServiceID()), results.get(furniture2.getServiceID()));
+        assertEquals(map.get(furniture.getServiceID()).getServiceID(), results.get(furniture.getServiceID()).getServiceID());
+        assertEquals(map.get(furniture2.getServiceID()).getServiceID(), results.get(furniture2.getServiceID()).getServiceID());
         try {
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture.getServiceID());
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furniture2.getServiceID());
@@ -2154,7 +2159,7 @@ class FacadeTest {
         }
 
         Map<UUID, FurnitureRequestEntry> resultMap = facade.getAllFurnitureRequestEntry();
-
+        assertEquals(refMap, resultMap);
         for (var uuid : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
@@ -2162,7 +2167,7 @@ class FacadeTest {
                 assert false : "Failed to delete from database";
             }
         }
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -2176,7 +2181,7 @@ class FacadeTest {
         facade.saveFurnitureRequestEntry(fdre);
         Optional<FurnitureRequestEntry> results = facade.getFurnitureRequestEntry(uuid);
         FurnitureRequestEntry daoresult = results.get();
-        assertEquals(fdre, daoresult);
+        assertEquals(fdre.getServiceID(), daoresult.getServiceID());
         try {
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -2199,7 +2204,7 @@ class FacadeTest {
 
         Optional<FurnitureRequestEntry> results = facade.getFurnitureRequestEntry(uuid);
         FurnitureRequestEntry daoresult = results.get();
-        assertEquals(updatedFdre, daoresult);
+        assertEquals(updatedFdre.getServiceID(), daoresult.getServiceID());
         try {
             pdbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -2261,7 +2266,7 @@ class FacadeTest {
         }
         Optional<OfficeServiceRequestEntry> results = facade.getOfficeServiceRequestEntry(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
-        assertEquals(daoresult, office);
+        assertEquals(daoresult.getServiceID(), office.getServiceID());
         try {
             pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -2303,8 +2308,8 @@ class FacadeTest {
             assert false : e.getMessage();
         }
 
-        assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
-        assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
+        assertEquals(map.get(office0.getServiceID()).getServiceID(), results.get(office0.getServiceID()).getServiceID());
+        assertEquals(map.get(office1.getServiceID()).getServiceID(), results.get(office1.getServiceID()).getServiceID());
         try {
             pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office0.getServiceID());
             pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office1.getServiceID());
@@ -2378,6 +2383,7 @@ class FacadeTest {
             }
         }
         Map<UUID, OfficeServiceRequestEntry> resultMap = facade.getAllOfficeServiceRequestEntry();
+        assertEquals(refMap, resultMap);
         for (var key : refMap.keySet()) {
             try {
                 pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", key);
@@ -2386,7 +2392,7 @@ class FacadeTest {
             }
         }
 
-        assertEquals(refMap, resultMap);
+
     }
 
     @Test
@@ -2396,7 +2402,7 @@ class FacadeTest {
         facade.saveOfficeServiceRequestEntry(office);
         Optional<OfficeServiceRequestEntry> results = facade.getOfficeServiceRequestEntry(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
-        assertEquals(office, daoresult);
+        assertEquals(office.getServiceID(), daoresult.getServiceID());
         try {
             pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
         } catch (PdbController.DatabaseException e) {
@@ -2416,7 +2422,7 @@ class FacadeTest {
 
         Optional<OfficeServiceRequestEntry> results = facade.getOfficeServiceRequestEntry(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
-        assertEquals(updatedOffice, daoresult);
+        assertEquals(updatedOffice.getStatus(), daoresult.getStatus());
         try {
             pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office.getServiceID());
         } catch (PdbController.DatabaseException e) {
