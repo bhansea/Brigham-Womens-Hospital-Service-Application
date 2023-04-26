@@ -1,7 +1,6 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
