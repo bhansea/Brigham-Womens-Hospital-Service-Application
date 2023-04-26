@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field>, PropertyChangeListener {
 
-    static String[] fields = {"uuid", "alertTitle", "description", "dateTime", "readStatus"};
+    static String[] fields = {"uuid", "employeeID", "alertTitle", "description", "dateTime", "readStatus"};
 
     private final ObservableMap<java.util.UUID, Alert> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<Alert> list = FXCollections.observableArrayList();
@@ -109,11 +109,12 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
         try (var rs = dbController.searchQuery(TableType.ALERT)) {
             while (rs.next()) {
                 Alert req = new Alert(
-                        rs.getObject("uuid", java.util.UUID.class),
-                        rs.getObject("alertTitle", java.lang.String.class),
-                        rs.getObject("description", java.lang.String.class),
-                        rs.getTimestamp("dateTime").toInstant(),
-                        edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("alertTitle", java.lang.String.class),
+                    rs.getObject("description", java.lang.String.class),
+                    rs.getTimestamp("dateTime").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -157,7 +158,7 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
 
     @Override
     public void save(Alert alert) {
-        Object[] values = {alert.getUuid(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
+        Object[] values = {alert.getUuid(), alert.getEmployeeID(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
         try {
             dbController.insertQuery(TableType.ALERT, fields, values);
 //            add(alert);
@@ -205,7 +206,6 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
-
         public AlertForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
