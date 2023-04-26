@@ -3,9 +3,7 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,11 +32,11 @@ class FacadeTest {
     static String[] employeeFields;
     static String[] accountFields;
 
-    @BeforeAll
-    static void setUp() throws SQLException, ClassNotFoundException {
+    @BeforeEach
+    void setUp() throws SQLException, ClassNotFoundException {
         nodeFields = new String[]{"nodeID", "xcoord", "ycoord", "floor", "building"};
         edgeFields = new String[]{"uuid", "startNode", "endNode"};
-        moveFields = new String[]{"uuid", "nodeID", "longName", "date"};
+        moveFields = new String[]{"uuid", "nodeID", "locationID", "date"};
         locationNameFields = new String[]{"uuid", "longName", "shortName", "nodeType"};
         requestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID"};
         foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName", "employeeID"};
@@ -47,7 +45,7 @@ class FacadeTest {
         furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture", "employeeID"};
         officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeID"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
-        accountFields = new String[]{"username", "password", "employeeID", "accountType"};
+        accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType"};
         pdbController = new PdbController(Config.source, "test");
         facade = new Facade(pdbController);
         for (var tt : TableType.values()) {
@@ -60,8 +58,8 @@ class FacadeTest {
 
     }
 
-    @AfterAll
-    static void tearDown() throws SQLException {
+    @AfterEach
+    void tearDown() throws SQLException {
         var statement = pdbController.exposeConnection().createStatement();
         statement.execute("drop schema test cascade;");
         statement.close();
@@ -2706,7 +2704,7 @@ class FacadeTest {
             throw new RuntimeException(e);
         }
         Account.Field[] fields = {Account.Field.EMPLOYEE_ID, Account.Field.ACCOUNT_TYPE};
-        Object[] searchValues = new Object[]{"100L", "STAFF"};
+        Object[] searchValues = new Object[]{100L, "STAFF"};
         String[] searchFields = new String[]{"employeeID", "accountType"};
         var results = facade.getAccount(fields, searchValues);
         var map = new HashMap<String, Account>();
@@ -2736,9 +2734,9 @@ class FacadeTest {
 
     @Test
     void getAllAccount() {
-        var values0 = new Object[]{"username0", "password0", 100L, Account.AccountType.ADMIN};
-        var values1 = new Object[]{"username1", "password1", 101L, Account.AccountType.ADMIN};
-        var values2 = new Object[]{"username2", "password2", 102L, Account.AccountType.ADMIN};
+        var values0 = new Object[]{100L, "username0", "password0", 100L, Account.AccountType.ADMIN};
+        var values1 = new Object[]{101L, "username1", "password1", 101L, Account.AccountType.ADMIN};
+        var values2 = new Object[]{102L, "username2", "password2", 102L, Account.AccountType.ADMIN};
 
         var valueSet = new Object[][]{values0, values1, values2};
 
@@ -2801,7 +2799,7 @@ class FacadeTest {
     @Test
     void deleteAccount() {
         Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN);
-        Object[] values = new Object[]{account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
         } catch (PdbController.DatabaseException e) {
