@@ -25,67 +25,51 @@ public class AdminTable<T> {
     @Getter
     final TableType tableType;
     @Getter
-    final Supplier<List<T>> getAll;
+    final Supplier<ObservableList<T>> getAll;
 
     @Getter
     @Setter
     private Consumer<T> rowClicked;
 
-    public AdminTable(String humanReadableName, TableType tableType, Supplier<List<T>> getAll) {
+    public AdminTable(String humanReadableName, TableType tableType, Supplier<ObservableList<T>> getAll) {
         this.humanReadableName = humanReadableName;
         table = new MFXTableView<>();
         this.tableType = tableType;
         this.getAll = getAll;
     }
-    public void reload(){
-        var thread = new Thread(() -> {
-            var list = getAll.get();
-            Platform.runLater(() -> {
-                ObservableList<T> tableList = FXCollections.observableList(list);
-                table.setItems(tableList);
-            });
-        });
-        thread.setDaemon(true);
-        thread.start();
-    }
 
     public void init() {
-        var thread = new Thread(() -> {
-            var list = getAll.get();
-            Platform.runLater(() -> {
-                ObservableList<T> tableList = FXCollections.observableList(list);
-                table.setItems(tableList);
-                // Create columns
-                for (Object field : tableType.getFieldEnum().getEnumConstants()) {
-                    var iField = (IField<T>) field;
-                    MFXTableColumn<T> col = new MFXTableColumn<>(iField.getColName(), true);
-                    col.setPickOnBounds(false);
+        table.setItems(getAll.get());
+        // Create columns
+        for (Object field : tableType.getFieldEnum().getEnumConstants()) {
+            var iField = (IField<T>) field;
+            MFXTableColumn<T> col = new MFXTableColumn<>(iField.getColName(), true);
+            col.setPickOnBounds(false);
 
-                    col.setRowCellFactory(p -> {
-                        var cell = new MFXTableRowCell<>(iField::getValue);
-                        cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e ->{
-                            if(!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
-                            if(rowClicked != null)
-                                rowClicked.accept(p);
-                        });
-                        return cell;
-                    });
-                    table.getTableColumns().add(col);
-                }
-                table.setTableRowFactory(r -> {
-                    var row = new MFXTableRow<>(table, r);
-                    row.addEventFilter(MouseEvent.MOUSE_CLICKED, e ->{
-                        if(!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
-                        if(rowClicked != null)
-                            rowClicked.accept(r);
-                    });
-                    return row;
-                });
+            col.setRowCellFactory(p -> {
+                var cell = new MFXTableRowCell<>(iField::getValue);
+//                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+//                    if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+//                    if (rowClicked != null)
+//                        rowClicked.accept(p);
+//                });
+                return cell;
             });
+            table.getTableColumns().add(col);
+        }
+//        table.setTableRowFactory(r -> {
+//            var row = new MFXTableRow<>(table, r);
+//            row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+//                if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+//                if (rowClicked != null)
+//                    rowClicked.accept(r);
+//            });
+//            return row;
+//        });
+        table.getSelectionModel().selectionProperty().addListener((observable, oldValue, newValue) -> {
+            if (rowClicked != null)
+                newValue.values().stream().findFirst().ifPresent(r -> rowClicked.accept(r));
         });
-        thread.setDaemon(true);
-        thread.start();
-
     }
 }
 

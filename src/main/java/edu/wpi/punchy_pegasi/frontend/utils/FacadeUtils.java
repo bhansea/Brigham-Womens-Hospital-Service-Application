@@ -24,7 +24,6 @@ public class FacadeUtils {
     public static final Predicate<LocationName> isDestination = location -> location.getNodeType() != LocationName.NodeType.HALL && location.getNodeType() != LocationName.NodeType.STAI && location.getNodeType() != LocationName.NodeType.ELEV;
 
     public static Map<Node, List<Move>> calculateMoves(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, LocalDate date) {
-        var locationsByLongName = locations.values().stream().collect(Collectors.toMap(LocationName::getLongName, v -> v));
         return moves.values().stream()
                 // filter by moves which reference valid locations and nodes
                 .filter(m -> locations.containsKey(m.getLocationID()))

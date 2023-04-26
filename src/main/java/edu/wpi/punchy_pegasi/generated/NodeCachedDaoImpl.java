@@ -1,20 +1,32 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.IDao;
+import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Slf4j
 public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>, PropertyChangeListener {
@@ -28,14 +40,56 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
     public NodeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
         cache.addListener((MapChangeListener<java.lang.Long, Node>) c -> {
-            if (c.wasRemoved()) {
-                list.remove(c.getValueRemoved());
-            } else if (c.wasAdded()) {
-                list.add(c.getValueAdded());
-            }
+            Platform.runLater(() -> {
+                if (c.wasRemoved() && c.wasAdded()) {
+                    var index = list.indexOf(c.getValueRemoved());
+                    if (index != -1) {
+                        list.remove(index);
+                        list.add(index, c.getValueAdded());
+                    }
+                }
+                if (c.wasRemoved()) {
+                    list.remove(c.getValueRemoved());
+                }
+                if (c.wasAdded()) {
+                    list.add(c.getValueAdded());
+                }
+            });
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
+    }
+
+    public MFXTableView<Node> generateTable(Consumer<Node> onRowClick, Node.Field[] hidden) {
+        var table = new MFXTableView<Node>();
+        table.setItems(list);
+        for (Node.Field field : Arrays.stream(Node.Field.values()).filter(f -> !Arrays.asList(hidden).contains(f)).toList()) {
+            MFXTableColumn<Node> col = new MFXTableColumn<>(field.getColName(), true);
+            col.setPickOnBounds(false);
+
+            col.setRowCellFactory(p -> {
+                var cell = new MFXTableRowCell<>(field::getValue);
+                cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                    if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                    onRowClick.accept(p);
+                });
+                return cell;
+            });
+            table.getTableColumns().add(col);
+        }
+        table.setTableRowFactory(r -> {
+            var row = new MFXTableRow<>(table, r);
+            row.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                if (!(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1)) return;
+                onRowClick.accept(r);
+            });
+            return row;
+        });
+        return table;
+    }
+
+    public MFXTableView<Node> generateTable(Consumer<Node> onRowClick) {
+        return generateTable(onRowClick, new Node.Field[]{});
     }
 
     public void add(Node node) {
@@ -55,11 +109,11 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         try (var rs = dbController.searchQuery(TableType.NODES)) {
             while (rs.next()) {
                 Node req = new Node(
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("xcoord", java.lang.Integer.class),
-                    rs.getObject("ycoord", java.lang.Integer.class),
-                    rs.getObject("floor", java.lang.String.class),
-                    rs.getObject("building", java.lang.String.class));
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("xcoord", java.lang.Integer.class),
+                        rs.getObject("ycoord", java.lang.Integer.class),
+                        rs.getObject("floor", java.lang.String.class),
+                        rs.getObject("building", java.lang.String.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -144,6 +198,41 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
                 case DELETE -> remove(data);
                 case INSERT -> add(data);
             }
+        }
+    }
+
+    public static class NodeForm implements IForm<Node> {
+        @Getter
+        private final List<javafx.scene.Node> form;
+        private final List<TextField> inputs;
+
+        public NodeForm() {
+            form = new ArrayList<>();
+            inputs = new ArrayList<>();
+            for (var field : Node.Field.values()) {
+                var hbox = new HBox();
+                var label = new Label(field.getColName());
+                var input = new TextField();
+                hbox.getChildren().addAll(label, input);
+                form.add(hbox);
+                inputs.add(input);
+            }
+        }
+
+        public void populateForm(Node entry) {
+            for (var field : Node.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                input.setText(field.getValueAsString(entry));
+            }
+        }
+
+        public Node commit() {
+            var entry = new Node();
+            for (var field : Node.Field.values()) {
+                var input = (TextField) form.get(field.ordinal());
+                field.setValueFromString(entry, input.getText());
+            }
+            return entry;
         }
     }
 }

@@ -19,31 +19,68 @@ public class Signage {
     @com.jsoniter.annotation.JsonProperty("directiontype")
     private DirectionType directionType;
 
-    public enum DirectionType{
+    public enum DirectionType {
         UP,
         DOWN,
         LEFT,
         RIGHT,
         HERE
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Signage>{
-        UUID("uuid"),
-        SIGN_NAME("signName"),
-        LONG_NAME("longName"),
-        DIRECTION_TYPE("directionType");
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Signage> {
+        UUID("uuid", true, false),
+        SIGN_NAME("signName", false, false),
+        LONG_NAME("longName", false, false),
+        DIRECTION_TYPE("directionType", false, false);
         @lombok.Getter
         private final String colName;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Signage ref){
+        @lombok.Getter
+        private final boolean primaryKey;
+        @lombok.Getter
+        private final boolean unique;
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Signage ref) {
             return ref.getFromField(this);
         }
+
+        public String getValueAsString(edu.wpi.punchy_pegasi.schema.Signage ref) {
+            return ref.getFromFieldAsString(this);
+        }
+
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Signage ref, String value) {
+            ref.setFieldFromString(this, value);
+        }
+
+        public int oridinal() {
+            return ordinal();
+        }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
             case SIGN_NAME -> getSignName();
             case LONG_NAME -> getLongName();
             case DIRECTION_TYPE -> getDirectionType();
+        };
+    }
+
+    public void setFieldFromString(Field field, String value) {
+        switch (field) {
+            case UUID -> setUuid(Long.parseLong(value));
+            case SIGN_NAME -> setSignName(value);
+            case LONG_NAME -> setLongName(value);
+            case DIRECTION_TYPE -> setDirectionType(DirectionType.valueOf(value));
+        }
+    }
+
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case UUID -> Long.toString(getUuid());
+            case SIGN_NAME -> getSignName();
+            case LONG_NAME -> getLongName();
+            case DIRECTION_TYPE -> getDirectionType().name();
         };
     }
 

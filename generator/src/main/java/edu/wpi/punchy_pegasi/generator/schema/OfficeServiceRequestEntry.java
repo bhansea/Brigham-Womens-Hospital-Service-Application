@@ -1,11 +1,11 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class OfficeServiceRequestEntry extends RequestEntry {
     private String officeRequest;

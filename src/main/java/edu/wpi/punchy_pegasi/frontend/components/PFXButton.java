@@ -35,7 +35,9 @@ public class PFXButton extends MFXButton {
      * @param graphic the icon for its label.
      */
     public PFXButton(String text, Node graphic) {
-        super(text, graphic);
+        this();
+        setText(text);
+        setGraphic(graphic);
     }
 
     public BooleanProperty selectedProperty() {

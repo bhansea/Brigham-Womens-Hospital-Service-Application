@@ -17,7 +17,6 @@ public class AdminPageController {
     final List<Screen> screens = new ArrayList<>(){{
         add(Screen.ADMIN_TABLE_PAGE);
         add(Screen.ADMIN_IMPORT_PAGE);
-//        add(Screen.ADMIN_EDIT_TABLE_PAGE);
     }};
 
     final List<Node> nodes = new ArrayList<>();
