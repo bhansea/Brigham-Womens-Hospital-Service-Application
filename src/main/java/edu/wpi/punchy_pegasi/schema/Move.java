@@ -20,37 +20,31 @@ public class Move {
     private Long locationID;
     @com.jsoniter.annotation.JsonProperty("date")
     private LocalDate date;
-
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move> {
-        UUID("uuid", true, false),
-        NODE_ID("nodeID", false, false),
-        LOCATION_ID("locationID", false, false),
-        DATE("date", false, false);
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move>{
+        UUID("uuid", true,false),
+        NODE_ID("nodeID", false,false),
+        LOCATION_ID("locationID", false,false),
+        DATE("date", false,false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref) {
-            return ref.getFromField(this);
-        }
-
-        public String getValueAsString(edu.wpi.punchy_pegasi.schema.Move ref) {
-            return ref.getFromFieldAsString(this);
-        }
-
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Move ref, String value) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Move ref){
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.Move ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Move ref, String value){
             ref.setFieldFromString(this, value);
         }
-
-        public int oridinal() {
+        public int oridinal(){
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -59,16 +53,14 @@ public class Move {
             case DATE -> getDate();
         };
     }
-
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case UUID -> setUuid(Long.parseLong(value));
             case NODE_ID -> setNodeID(Long.parseLong(value));
             case LOCATION_ID -> setLocationID(Long.parseLong(value));
             case DATE -> setDate(LocalDate.parse(value));
-        }
+        };
     }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> Long.toString(getUuid());

@@ -21,7 +21,7 @@
     -fx-font-spacing: 20;
 }
 
-.pfx-alert-card-container-unread PFXButton {
+.pfx-alert-card-container-unread Button {
     -fx-background-color: transparent;
     -fx-background-radius: 12;
 }
@@ -54,7 +54,7 @@
     -fx-font-spacing: 20;
 }
 
-.pfx-alert-card-container-read PFXButton {
+.pfx-alert-card-container-read Button {
     -fx-background-color: transparent;
     -fx-background-radius: 6;
 }

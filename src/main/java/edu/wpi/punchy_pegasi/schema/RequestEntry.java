@@ -1,10 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -32,39 +29,33 @@ public class RequestEntry {
         PROCESSING,
         DONE
     }
-
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry> {
-        SERVICE_ID("serviceID", true, false),
-        LOCATION_NAME("locationName", false, false),
-        STAFF_ASSIGNMENT("staffAssignment", false, false),
-        ADDITIONAL_NOTES("additionalNotes", false, false),
-        STATUS("status", false, false),
-        EMPLOYEE_ID("employeeID", false, false);
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry>{
+        SERVICE_ID("serviceID", true,false),
+        LOCATION_NAME("locationName", false,false),
+        STAFF_ASSIGNMENT("staffAssignment", false,false),
+        ADDITIONAL_NOTES("additionalNotes", false,false),
+        STATUS("status", false,false),
+        EMPLOYEE_ID("employeeID", false,false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.RequestEntry ref) {
-            return ref.getFromField(this);
-        }
-
-        public String getValueAsString(edu.wpi.punchy_pegasi.schema.RequestEntry ref) {
-            return ref.getFromFieldAsString(this);
-        }
-
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.RequestEntry ref, String value) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.RequestEntry ref){
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.RequestEntry ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.RequestEntry ref, String value){
             ref.setFieldFromString(this, value);
         }
-
-        public int oridinal() {
+        public int oridinal(){
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -75,7 +66,6 @@ public class RequestEntry {
             case EMPLOYEE_ID -> getEmployeeID();
         };
     }
-
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case SERVICE_ID -> setServiceID(UUID.fromString(value));
@@ -84,9 +74,8 @@ public class RequestEntry {
             case ADDITIONAL_NOTES -> setAdditionalNotes(value);
             case STATUS -> setStatus(Status.valueOf(value));
             case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
-        }
+        };
     }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID().toString();

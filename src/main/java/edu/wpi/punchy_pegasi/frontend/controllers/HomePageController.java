@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlertCard;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminTablePageController;
 import edu.wpi.punchy_pegasi.generated.Facade;
@@ -51,6 +52,9 @@ public class HomePageController {
     @FXML
     private PieChart piechart = new PieChart();
 
+    @FXML
+    VBox alertsHolder = new VBox();
+
 
     @FXML
     private Label timeLabel = new Label();
@@ -76,6 +80,14 @@ public class HomePageController {
         piechart.setData(pieChartData);
         piechart.setTitle("Service Request");
         piechart.setLegendVisible(false);
+
+        List<Alert> alerts = App.getSingleton().getFacade().getAllAsListAlert();
+        for(Alert alert: alerts) {
+            if(App.getSingleton().getAccount().getEmployeeID().equals(alert.getEmployeeID())) {
+                alertsHolder.getChildren().add(new PFXAlertCard(alert));
+            }
+        }
+
 
 
         initRequestTable();

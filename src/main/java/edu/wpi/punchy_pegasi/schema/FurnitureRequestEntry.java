@@ -23,39 +23,34 @@ public class FurnitureRequestEntry extends RequestEntry {
         this.selectFurniture = selectFurniture;
     }
 
-    @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry> {
-        SERVICE_ID("serviceID", true, false),
-        LOCATION_NAME("locationName", false, false),
-        STAFF_ASSIGNMENT("staffAssignment", false, false),
-        ADDITIONAL_NOTES("additionalNotes", false, false),
-        STATUS("status", false, false),
-        EMPLOYEE_ID("employeeID", false, false),
-        SELECT_FURNITURE("selectFurniture", false, false);
+@lombok.RequiredArgsConstructor
+public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry>{
+        SERVICE_ID("serviceID", true,false),
+        LOCATION_NAME("locationName", false,false),
+        STAFF_ASSIGNMENT("staffAssignment", false,false),
+        ADDITIONAL_NOTES("additionalNotes", false,false),
+        STATUS("status", false,false),
+        EMPLOYEE_ID("employeeID", false,false),
+        SELECT_FURNITURE("selectFurniture", false,false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-
-        public Object getValue(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref) {
-            return ref.getFromField(this);
-        }
-
-        public String getValueAsString(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref) {
-            return ref.getFromFieldAsString(this);
-        }
-
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref, String value) {
+        public Object getValue(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref){
+    return ref.getFromField(this);
+}
+public String getValueAsString(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref){
+    return ref.getFromFieldAsString(this);
+}
+    public void setValueFromString(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref, String value){
             ref.setFieldFromString(this, value);
         }
-
-        public int oridinal() {
+        public int oridinal(){
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -67,7 +62,6 @@ public class FurnitureRequestEntry extends RequestEntry {
             case SELECT_FURNITURE -> getSelectFurniture();
         };
     }
-
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case SERVICE_ID -> setServiceID(UUID.fromString(value));
@@ -76,11 +70,9 @@ public class FurnitureRequestEntry extends RequestEntry {
             case ADDITIONAL_NOTES -> setAdditionalNotes(value);
             case STATUS -> setStatus(Status.valueOf(value));
             case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
-            case SELECT_FURNITURE ->
-                    setSelectFurniture(new java.util.ArrayList<>(java.util.Arrays.asList(value.split("\\s*,\\s*"))));
-        }
+            case SELECT_FURNITURE -> setSelectFurniture(new java.util.ArrayList<>(java.util.Arrays.asList(value.split("\\s*,\\s*"))));
+        };
     }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID().toString();

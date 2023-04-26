@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Alert;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -16,26 +17,29 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PFXAlertCard extends HBox {
-    private final PFXButton read;
+    private final Button read;
     private final Label titleLabel;
     private final Label description;
     private boolean isRead;
     private Long uuid;
     private VBox textContainer = new VBox();
+    private PFXIcon icon;
 
     public PFXAlertCard(Alert alert) {
         super();
         Alert.ReadStatus readStatus = alert.getReadStatus();
         if(readStatus == Alert.ReadStatus.READ) {
             isRead = true;
+            icon = new PFXIcon(MaterialSymbols.TASK_ALT);
             getStyleClass().add("pfx-alert-card-container-read");
         } else {
             isRead = false;
+            icon = new PFXIcon(MaterialSymbols.NOTIFICATIONS_ACTIVE);
             getStyleClass().add("pfx-alert-card-container-unread");
         }
         titleLabel = new Label(alert.getAlertTitle());
         description = new Label(alert.getDescription());
-        read = new PFXButton("", new PFXIcon(MaterialSymbols.NOTIFICATIONS));
+        read = new Button("", icon);
 
 
         getChildren().addAll(textContainer, read);
@@ -49,7 +53,7 @@ public class PFXAlertCard extends HBox {
         super();
         this.titleLabel = new Label(title);
         this.description = new Label(description);
-        this.read = new PFXButton("Mark read");
+        this.read = new Button("Mark read");
         this.isRead = isRead;
 
         getStyleClass().add("pfx-alert-card-container-unread");
@@ -71,10 +75,12 @@ public class PFXAlertCard extends HBox {
         isRead = !isRead;
         if(isRead) {
             getStyleClass().remove("pfx-alert-card-container-unread");
+            icon.setIcon(MaterialSymbols.TASK_ALT);
             getStyleClass().add("pfx-alert-card-container-read");
         }
         else{
             getStyleClass().remove("pfx-alert-card-container-read");
+            icon.setIcon(MaterialSymbols.NOTIFICATIONS_ACTIVE);
             getStyleClass().add("pfx-alert-card-container-unread");
         }
     }
