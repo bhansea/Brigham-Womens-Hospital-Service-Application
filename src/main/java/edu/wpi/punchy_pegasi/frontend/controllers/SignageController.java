@@ -74,6 +74,32 @@ public class SignageController {
     @FXML
     private HBox signageHeader;
 
+    @FXML
+    private void initialize() {
+        var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
+        editing = admin;
+        configTimer(1000);
+        initIcons();
+        initHeader();
+        buildSignage();
+        signageBody.getStyleClass().add("signage-body");
+        if (editing) {
+            buildEditSignage();
+        } else {
+            initSignSelector();
+        }
+
+        Platform.runLater(() -> {
+            setFullScreen(false);
+        });
+        myScene.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.F11))
+                setFullScreen(true);
+            else if (event.getCode().equals(KeyCode.ESCAPE))
+                setFullScreen(false);
+        });
+    }
+
     private static void initSignSelector() {
         ObservableList<Signage> signageList = facade.getAllAsListSignage();
         signageNames.clear();
@@ -101,6 +127,8 @@ public class SignageController {
                 facade.deleteSignage(signage);
             });
             hbox.getChildren().add(deleteBtn);
+            deleteBtn.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
+            deleteBtn.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
         }
     }
 
@@ -141,51 +169,17 @@ public class SignageController {
         return vBox;
     }
 
-    @FXML
-    private void initialize() {
-        var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
-        editing = admin;
-        configTimer(1000);
-        initIcons();
-        initHeader();
-        buildSignage();
-        signageBody.getStyleClass().add("signage-body");
-        if (editing) {
-            buildEditSignage();
-        } else {
-            initSignSelector();
-        }
-
-        Platform.runLater(() -> {
-            setFullScreen(false);
-        });
-        myScene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.F11))
-                setFullScreen(true);
-            else if (event.getCode().equals(KeyCode.ESCAPE))
-                setFullScreen(false);
-        });
-    }
-
     private void setFullScreen(boolean setFullScreen) {
         if (setFullScreen) {
             switchTheme(true);
             App.getSingleton().getPrimaryStage().setFullScreen(true);
             App.getSingleton().getLayout().showLeftLayout(false);
             App.getSingleton().getLayout().showTopLayout(false);
-//            signageHeaderMid.setVisible(false);
-//            signageHeaderMid.setManaged(false);
-//            fullscreenButton.setVisible(false);
-//            fullscreenButton.setManaged(false);
         } else {
             switchTheme(false);
             App.getSingleton().getPrimaryStage().setFullScreen(false);
             App.getSingleton().getLayout().showLeftLayout(true);
             App.getSingleton().getLayout().showTopLayout(true);
-//            signageHeaderMid.setVisible(true);
-//            signageHeaderMid.setManaged(true);
-//            fullscreenButton.setVisible(true);
-//            fullscreenButton.setManaged(true);
         }
     }
 
@@ -322,6 +316,8 @@ public class SignageController {
         VBox.setVgrow(outerVbox, Priority.ALWAYS);
         outerVbox.getStyleClass().add("signage-right-edit-outer-vbox");
         signageBodyStackPane.getChildren().add(outerVbox);
+        outerVbox.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
+        outerVbox.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
     }
 
     private void validateSubmit() {
