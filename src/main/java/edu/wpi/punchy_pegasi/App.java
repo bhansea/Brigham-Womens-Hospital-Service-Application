@@ -2,6 +2,9 @@ package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
 import edu.wpi.punchy_pegasi.frontend.controllers.ErrorController;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
@@ -12,10 +15,14 @@ import edu.wpi.punchy_pegasi.schema.TableType;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -38,12 +45,8 @@ import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class App extends Application {
@@ -65,8 +68,6 @@ public class App extends Application {
         System.out.println("Hot-loaded FXML: " + s);
     }, 250);
     @Getter
-    ExecutorService executorService = Executors.newFixedThreadPool(8);
-    @Getter
     private PdbController pdb;
     @Getter
     private Facade facade;
@@ -77,7 +78,7 @@ public class App extends Application {
     @Getter
     private Scene scene;
     @Getter
-    private Account account = new Account(0L, "", "", 0L, Account.AccountType.NONE);
+    private Account account = new Account(0L,"", "", 0L, Account.AccountType.NONE);
 
     @Getter
     private LayoutController layout;
@@ -151,11 +152,11 @@ public class App extends Application {
     public void stop() {
         try {
             pdb.exposeConnection().close();
-            log.info("Shut Down Connection");
+            log.info("Shutting Down Connection");
+
         } catch (SQLException e) {
             log.error("Failed to close database connection", e);
         }
-        executorService.shutdownNow();
         log.info("Application Shutting Down");
     }
 
@@ -166,8 +167,16 @@ public class App extends Application {
             getLayout().showTopLayout(screen.isHeader());
             getLayout().showLeftLayout(screen.isSidebar());
             getViewPane().setCenter(new PageLoading());
-            getViewPane().setCenter(screen.get());
-            setCurrentScreen(screen);
+            loadingThread = new Thread(() -> {
+                var loaded = screen.get();
+                if (!Thread.interrupted())
+                    Platform.runLater(() -> {
+                        setCurrentScreen(screen);
+                        getViewPane().setCenter(loaded);
+                    });
+            });
+            loadingThread.setDaemon(true);
+            loadingThread.start();
         }
     }
 
@@ -216,7 +225,7 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         navigate(Screen.LOGIN);
-        App.getSingleton().getExecutorService().execute(this::initDatabaseTables);
+        new Thread(this::initDatabaseTables).start();
     }
 
     private void initDatabaseTables() {
@@ -246,7 +255,7 @@ public class App extends Application {
         loadStylesheet("frontend/css/DefaultTheme.css");
 
         if (development) {
-            App.getSingleton().getExecutorService().execute(() -> {
+            var hotloadCSS = new Thread(() -> {
                 try {
                     WatchService watchService = FileSystems.getDefault().newWatchService();
                     Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/edu/wpi/punchy_pegasi/frontend");
@@ -266,6 +275,8 @@ public class App extends Application {
                     log.error("Error with hotloading css", e);
                 }
             });
+            hotloadCSS.setDaemon(true);
+            hotloadCSS.start();
         }
 
         this.primaryStage.setScene(scene);
@@ -290,7 +301,9 @@ public class App extends Application {
             log.error("Could not find file {}", path);
             throw new IOException("No such file");
         }
-        return new LoadedFXML(resource.get(), root, controller).load();
+        var loaded = new LoadedFXML(resource.get(), root, controller);
+        loadedFXML.add(loaded);
+        return loaded.load();
     }
 
     private static class LoadedFXML {

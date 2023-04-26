@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXTab;
 import edu.wpi.punchy_pegasi.frontend.components.PFXTabLayout;
@@ -39,7 +38,7 @@ public class ServiceRequestController {
     public void initialize() {
         container.setStyle("-fx-background-color: -pfx-background;");
         container.setCenter(layout);
-        App.getSingleton().getExecutorService().execute(() -> {
+        var thread = new Thread(() -> {
             for (Screen screen: screens) {
                 var node = screen.get();
                 Platform.runLater(() -> {
@@ -50,6 +49,8 @@ public class ServiceRequestController {
             }
             Platform.runLater(() -> layout.setSelected(layout.getTabGroup().get(0)));
         });
+        thread.setDaemon(true);
+        thread.start();
     }
 
 

@@ -93,16 +93,3 @@ Virtual Flow
     -thumb-color: rgb(137, 137, 137);
     -thumb-hover-color: rgb(89, 88, 91);
 }
-
-.mfx-table-view .default-footer {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-max-height: 0;
-    -fx-min-height: 0;
-    -fx-pref-height: 0;
-    -fx-opacity: 0;
-}
-
-.mfx-table-view .default-footer .mfx-icon-wrapper {
-    -fx-opacity: 0;
-}

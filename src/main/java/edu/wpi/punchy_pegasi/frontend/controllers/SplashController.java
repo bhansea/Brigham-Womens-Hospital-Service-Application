@@ -60,7 +60,7 @@ public class SplashController {
 
     public boolean getConnection() {
         if (onConnection == null) return false;
-        App.getSingleton().getExecutorService().execute(() -> {
+        var thread = new Thread(() -> {
             try {
                 var genericResource = this.getClass().getResource("");
                 PdbController.Source source;
@@ -86,6 +86,8 @@ public class SplashController {
                 throw new RuntimeException(e);
             }
         });
+        thread.setDaemon(true);
+        thread.start();
         return true;
     }
 

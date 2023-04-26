@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXTab;
 import edu.wpi.punchy_pegasi.frontend.components.PFXTabLayout;
@@ -25,7 +24,8 @@ public class AdminPageController {
     public AdminPageController(){};
 
     public void initialize() {
-        App.getSingleton().getExecutorService().execute(() -> {
+
+        var thread = new Thread(() -> {
 
             for (Screen screen: screens) {
                 nodes.add(screen.get());
@@ -43,5 +43,7 @@ public class AdminPageController {
                 container.setCenter(layout);
             });
         });
+        thread.setDaemon(true);
+        thread.start();
     }
 }
