@@ -17,14 +17,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,7 +77,7 @@ public class SignageController {
     @FXML
     private void initialize() {
         var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
-        editing = admin;
+        editing = true;
         configTimer(1000);
         initIcons();
         initHeader();
@@ -166,7 +165,7 @@ public class SignageController {
             setSignageName(signageNameSelector.getValue());
         });
         signageHeaderMid.getChildren().add(signageNameSelector);
-
+        signageHeaderMid.getStyleClass().add("signage-header-mid");
 
 
         // Combine left and right header in signageHeader HBox
@@ -263,6 +262,7 @@ public class SignageController {
             validateSubmit();
         });
         submitButton.setDisable(true);
+        submitButton.getStyleClass().add("signage-submit-btn");
         submitButton.setOnAction(e -> {
             facade.saveSignage(new Signage(facade.getAllAsListSignage().stream().mapToLong(Signage::getUuid).max().orElse(0) + 1, signageNameCB.getText(), locNameCB.getValue().getLongName(), directionCB.getValue()));
         });
@@ -283,11 +283,31 @@ public class SignageController {
             }
         });
         directionCB.setItems(FXCollections.observableArrayList(Signage.DirectionType.values()));
-        editingVbox.getChildren().add(signageNameCB);
-        editingVbox.getChildren().add(locNameCB);
-        editingVbox.getChildren().add(directionCB);
+
+        VBox editingOptVBox = new VBox(
+                new Label("Signage Name: "),
+                signageNameCB,
+                new Label("Location Name: "),
+                locNameCB,
+                new Label("Direction: "),
+                directionCB);
+
+        editingOptVBox.getStyleClass().add("signage-edit-options");
+
+        editingVbox.getChildren().add(editingOptVBox);
         editingVbox.getChildren().add(submitButton);
-        signageBodyStackPane.getChildren().add(editingVbox);
+        editingVbox.getStyleClass().add("signage-right-edit-vbox");
+        VBox blankVBoxHi = new VBox();
+        VBox blankVBoxLo = new VBox();
+//        blankVBoxHi.setMinHeight(40);
+//        blankVBoxLo.setMinHeight(40);
+        VBox.setVgrow(blankVBoxHi, Priority.ALWAYS);
+        VBox.setVgrow(blankVBoxLo, Priority.ALWAYS);
+
+        VBox outerVbox = new VBox(blankVBoxHi, editingVbox, blankVBoxLo);
+        VBox.setVgrow(outerVbox, Priority.ALWAYS);
+        outerVbox.getStyleClass().add("signage-right-edit-outer-vbox");
+        signageBodyStackPane.getChildren().add(outerVbox);
     }
 
     private void validateSubmit() {
@@ -302,16 +322,11 @@ public class SignageController {
 
     private void buildSignage() {
         for (var direction : Signage.DirectionType.values()) {
-//            if (direction == Signage.DirectionType.HERE) {
-//                continue;
-//            }
             var signageList = facade.getAllAsListSignage().filtered(s -> true);
             Consumer<String> updated = s ->
                     signageList.setPredicate(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(s));
             filterUpdaters.add(updated);
             updated.accept(prefSignageName);
-//            var prefSignList = signageList.filtered(signage -> signage.getSignName().equals(prefSignageName));
-//            Label locLabel = new Label(String.join("\n", signageList.stream().map(Signage::getLongName).toList()));
             var table = getSignageTableView(signageList);
             table.getStyleClass().add("signage-label");
             HBox signageHB = new HBox();

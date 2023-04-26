@@ -82,8 +82,50 @@
 .signage-delete-btn PFXIcon {
     -fx-cursor: hand;
 }
+
+.signage-edit-options {
+    -fx-alignment: center-left;
+    -fx-spacing: 5;
+}
+
+.signage-right-edit-vbox {
+    /*-fx-background-color: green;*/
+    -fx-alignment: center;
+    -fx-spacing: 50;
+    -fx-padding: 75 100 50 100;
+    -fx-border-width: 1;
+    -fx-border-color: -pfx-accent;
+    -fx-border-radius: 12;
+
+}
+
+signage-right-edit-outer-vbox {
+    -fx-background-color: blue;
+    -fx-spacing: 10;
+    -fx-padding: 10 100 10 100;
+    -fx-alignment: center-right;
+}
+
 .signage-delete-btn:hover PFXIcon {
     -fx-fill: red;
+}
+
+.signage-submit-btn,
+.signage-submit-btn:armed,
+.signage-submit-btn:focused{
+    -fx-background-color: -pfx-success;
+    -fx-text-fill: white;
+}
+
+.signage-submit-btn:hover{
+    /*-fx-background-color: -pfx-success-dark;*/
+    -fx-text-fill: white;
+}
+
+
+.signage-header-mid {
+    -fx-alignment: center;
+    -fx-padding: 0 10 0 10;
 }
 
 .signage-edit-vbox {
@@ -109,7 +151,7 @@
 .signage-header-right {
     -fx-spacing: 15;
     -fx-padding: 10 0 10 0;
-    -fx-alignment: CENTER_RIGHT;
+    -fx-alignment: center-right;
 }
 
 .signage-label {
