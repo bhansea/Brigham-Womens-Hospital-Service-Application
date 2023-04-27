@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -33,12 +34,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.controlsfx.control.PopOver;
-import org.javatuples.Pair;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -114,6 +113,14 @@ public class AdminMapController {
 
     @FXML
     private void initialize() {
+        App.getSingleton().getScene().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.Z && e.isControlDown())
+                Platform.runLater(() -> {
+                    if (mapEdits.size() > 0)
+                        mapEdits.remove(mapEdits.size() - 1).undo();
+                });
+        });
+
         map = new HospitalMap(floors);
         root.setCenter(map.get());
         map.addLayer(editing);
@@ -152,7 +159,7 @@ public class AdminMapController {
             node.setBuilding(buildingDropdown.getValue());
             nodePoints.get(node.getNodeID()).setFill(Color.YELLOW);
             popOver.setOnCloseRequest(null);
-            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), node.getNodeID())).findFirst().ifPresent(mapEdits::remove);
+//            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), node.getNodeID())).findFirst().ifPresent(mapEdits::remove);
             mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, node));
         });
 
@@ -276,7 +283,7 @@ public class AdminMapController {
                 return;
             n.get().setXcoord((int) node.getLayoutX());
             n.get().setYcoord((int) node.getLayoutY());
-            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), n.get().getNodeID())).findFirst().ifPresent(mapEdits::remove);
+//            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), n.get().getNodeID())).findFirst().ifPresent(mapEdits::remove);
             mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get()));
         });
         dragController.setOnEnd(node -> map.enableMove(true));
@@ -294,11 +301,11 @@ public class AdminMapController {
             if (edgeLine.get().getStroke() == Color.RED) return;
             edgeLine.get().setStroke(Color.RED);
             mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edge));
-            edgeLines.get(edge.getStartNode()).removeIf(edg->edg.equals(edge.getUuid()));
-            edgeLines.get(edge.getEndNode()).removeIf(edg->edg.equals(edge.getUuid()));
+            edgeLines.get(edge.getStartNode()).removeIf(edg -> edg.equals(edge.getUuid()));
+            edgeLines.get(edge.getEndNode()).removeIf(edg -> edg.equals(edge.getUuid()));
         });
         edgeLines.put(edge.getStartNode(), edge.getUuid());
-        edgeLines.put(edge.getEndNode(),  edge.getUuid());
+        edgeLines.put(edge.getEndNode(), edge.getUuid());
         return edgeLine;
     }
 
@@ -398,9 +405,9 @@ public class AdminMapController {
 
         public void undo() {
             if (type.name().toLowerCase().contains("edit"))
-                type.action.accept(previous);
+                type.undo.accept(previous);
             else
-                type.action.accept(object);
+                type.undo.accept(object);
         }
 
         @RequiredArgsConstructor
