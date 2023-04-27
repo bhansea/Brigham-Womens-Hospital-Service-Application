@@ -1,8 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import com.jsoniter.annotation.JsonProperty;
-import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
+import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.jsoniter.annotation.JsonCreator;
 import lombok.NoArgsConstructor;

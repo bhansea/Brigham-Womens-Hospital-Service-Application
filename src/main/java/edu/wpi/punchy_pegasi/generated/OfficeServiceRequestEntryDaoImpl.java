@@ -1,8 +1,8 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
+import edu.wpi.punchy_pegasi.schema.IDao;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,13 +55,13 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS, Arrays.stream(params).map(OfficeServiceRequestEntry.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("officeRequest", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("officeRequest", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }
@@ -77,13 +77,13 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("officeRequest", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    rs.getObject("officeRequest", java.lang.String.class),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
             }

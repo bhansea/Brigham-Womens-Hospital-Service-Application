@@ -109,12 +109,12 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
         try (var rs = dbController.searchQuery(TableType.ALERT)) {
             while (rs.next()) {
                 Alert req = new Alert(
-                        rs.getObject("uuid", java.util.UUID.class),
-                        rs.getObject("employeeID", java.lang.Long.class),
-                        rs.getObject("alertTitle", java.lang.String.class),
-                        rs.getObject("description", java.lang.String.class),
-                        rs.getTimestamp("dateTime").toInstant(),
-                        edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("alertTitle", java.lang.String.class),
+                    rs.getObject("description", java.lang.String.class),
+                    rs.getTimestamp("dateTime").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

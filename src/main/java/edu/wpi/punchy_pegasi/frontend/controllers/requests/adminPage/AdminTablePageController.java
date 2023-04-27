@@ -3,34 +3,24 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import org.w3c.dom.Text;
 
-import javax.xml.stream.Location;
 import java.io.File;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.UUID;
-import static java.lang.Long.parseLong;
 
 
 public class AdminTablePageController {
@@ -77,7 +67,6 @@ public class AdminTablePageController {
     FileChooser fileChooser = new FileChooser();
     DirectoryChooser directoryChooser = new DirectoryChooser();
     private ObservableMap<Long, edu.wpi.punchy_pegasi.schema.Node> nodes;
-    private ObservableMap<Long, Edge> edges;
     private ObservableMap<Long, LocationName> locations;
     private ObservableMap<Long, Move> moves;
 
@@ -85,9 +74,7 @@ public class AdminTablePageController {
     PdbController pdb = App.getSingleton().getPdb();
 
     public void initialize() {
-
         nodes = facade.getAllNode();
-        edges = facade.getAllEdge();
         moves = facade.getAllMove();
         locations = facade.getAllLocationName();
         accounts = facade.getAllAccount();
@@ -249,9 +236,8 @@ public class AdminTablePageController {
                         break;
                     case EDGES:
                         Edge edge = new Edge();
-                        var newEdgeId = edges.values().stream().mapToLong(Edge::getUuid).max().orElse(1) + 1;
                         idCommit(edge);
-                        edge.setUuid(newEdgeId);
+                        edge.setUuid(UUID.randomUUID());
                         facade.saveEdge(edge);
                         break;
                     case MOVES:
@@ -296,6 +282,7 @@ public class AdminTablePageController {
             }
         });
     }
+
     public void showTable(AdminTable tableType) {
         currentTable = tableType;
         currentTable.getTable().setVisible(true);
@@ -306,6 +293,7 @@ public class AdminTablePageController {
             f.getTable().setManaged(false);
         });
     }
+
     public void initTables() {
         tables.values().forEach(AdminTable::init);
         tableContainer.getChildren().addAll(tables.values().stream().map(AdminTable::getTable).toList());
@@ -315,6 +303,7 @@ public class AdminTablePageController {
 
     private List<javafx.scene.Node> form;
     private List<TextField> inputs;
+
     public void displayEditComponent() {
         form = new ArrayList<>();
         inputs = new ArrayList<>();
@@ -325,18 +314,18 @@ public class AdminTablePageController {
             var label = new Label(field.getColName());
             var input = new TextField();
             input.setPromptText(field.getColName());
-            if(field.isPrimaryKey()) {
+            if (field.isPrimaryKey()) {
                 input.setEditable(false);
             }
 
             //elements.add(label, 0, counter);
             //elements.add(input, 1, counter);
-            if(counter == 5){
+            if (counter == 5) {
                 counter = 0;
-                rowcounter+=2;
+                rowcounter += 2;
             }
             GridPane.setRowIndex(label, rowcounter);
-            GridPane.setRowIndex(input, rowcounter+1);
+            GridPane.setRowIndex(input, rowcounter + 1);
             GridPane.setColumnIndex(label, counter);
             GridPane.setColumnIndex(input, counter);
             counter++;
@@ -352,6 +341,7 @@ public class AdminTablePageController {
         editContainer.getChildren().clear();
         editContainer.getChildren().addAll(form);
     }
+
     public void populateForm(Object entry) {
         for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
             var input = inputs.get(field.ordinal());
@@ -406,6 +396,7 @@ public class AdminTablePageController {
         }
         return entry;
     }
+
     // create an new exception class for this
     private class InvalidArgumentException extends Exception {
         public InvalidArgumentException(String message) {

@@ -54,12 +54,12 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
         try (var rs = dbController.searchQuery(TableType.ALERT, Arrays.stream(params).map(Alert.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Alert req = new Alert(
-                        rs.getObject("uuid", java.util.UUID.class),
-                        rs.getObject("employeeID", java.lang.Long.class),
-                        rs.getObject("alertTitle", java.lang.String.class),
-                        rs.getObject("description", java.lang.String.class),
-                        rs.getTimestamp("dateTime").toInstant(),
-                        edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("alertTitle", java.lang.String.class),
+                    rs.getObject("description", java.lang.String.class),
+                    rs.getTimestamp("dateTime").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -75,12 +75,12 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
         try (var rs = dbController.searchQuery(TableType.ALERT)) {
             while (rs.next()) {
                 Alert req = new Alert(
-                        rs.getObject("uuid", java.util.UUID.class),
-                        rs.getObject("employeeID", java.lang.Long.class),
-                        rs.getObject("alertTitle", java.lang.String.class),
-                        rs.getObject("description", java.lang.String.class),
-                        rs.getTimestamp("dateTime").toInstant(),
-                        edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getObject("uuid", java.util.UUID.class),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("alertTitle", java.lang.String.class),
+                    rs.getObject("description", java.lang.String.class),
+                    rs.getTimestamp("dateTime").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }

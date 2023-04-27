@@ -44,19 +44,12 @@ CREATE OR REPLACE TRIGGER trigger_nodes_update
 
 """, edu.wpi.punchy_pegasi.schema.Node.Field.class),
     EDGES(edu.wpi.punchy_pegasi.schema.Edge.class, """
-DO $$
-BEGIN
-  IF to_regclass('edges') IS NULL THEN
-    CREATE SEQUENCE edges_id_seq;
-    CREATE TABLE edges
-    (
-      uuid bigint DEFAULT nextval('edges_id_seq') PRIMARY KEY,
-      startNode bigint,
-      endNode bigint
-    );
-    ALTER SEQUENCE edges_id_seq OWNED BY edges.uuid;
-  END IF;
-END $$;
+CREATE TABLE IF NOT EXISTS edges
+(
+  uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  startNode bigint,
+  endNode bigint
+);
 CREATE OR REPLACE FUNCTION notify_edges_update() RETURNS TRIGGER AS $$
     DECLARE
         row RECORD;
@@ -79,7 +72,8 @@ CREATE OR REPLACE TRIGGER trigger_edges_update
   FOR EACH ROW
   EXECUTE PROCEDURE notify_edges_update();
 
-""", edu.wpi.punchy_pegasi.schema.Edge.Field.class),
+""", edu.wpi.punchy_pegasi.schema.Edge.Field.class)
+,
     MOVES(edu.wpi.punchy_pegasi.schema.Move.class, """
 DO $$
 BEGIN
