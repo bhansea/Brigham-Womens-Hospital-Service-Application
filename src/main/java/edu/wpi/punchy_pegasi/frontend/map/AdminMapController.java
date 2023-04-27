@@ -60,7 +60,7 @@ public class AdminMapController {
     private final ObservableList<MapEdit> mapEdits = FXCollections.observableArrayList(new MapEdit(MapEdit.ActionType.ADD_NODE, null));
     private final ObservableList<javafx.scene.Node> mapEditsNodes = FXCollections.observableArrayList(new javafx.scene.Group());
     private final Map<Long, Circle> nodePoints = new HashMap<>();
-    private final MultiValuedMap<Long, Line> edgeLines = new ArrayListValuedHashMap<>();
+    private final MultiValuedMap<Long, UUID> edgeLines = new ArrayListValuedHashMap<>();
     @FXML
     private MFXDatePicker adminDatePicker;
     @FXML
@@ -79,7 +79,7 @@ public class AdminMapController {
     @FXML
     private VBox editing;
     private ObservableMap<Long, Node> nodes;
-    private ObservableMap<Long, Edge> edges;
+    private ObservableMap<UUID, Edge> edges;
     private ObservableMap<Long, LocationName> locations;
     private ObservableMap<Long, Move> moves;
     private Node firstNode, secondNode;
@@ -90,7 +90,7 @@ public class AdminMapController {
         if (location == null) location = FXCollections.observableArrayList();
         ObservableList<LocationName> finalLocation = location;
         var stringBinding = Bindings.createStringBinding(() -> String.join("\n", finalLocation.stream().map(LocationName::getLongName).toArray(String[]::new)) + "\nNode ID: " + node.getNodeID().toString(), location);
-        return map.drawNode(node, color, Bindings.createStringBinding(() -> ""), stringBinding);
+        return map.addNode(node, color, Bindings.createStringBinding(() -> ""), stringBinding);
     }
 
     private Optional<LocationName> nodeToLocation(Node node) {
@@ -211,8 +211,7 @@ public class AdminMapController {
             nodePoint.setVisible(false);
             nodePoint.setManaged(false);
             edgeLines.get(node.getNodeID()).forEach(edge -> {
-                edge.setVisible(false);
-                edge.setManaged(false);
+                mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge)));
             });
 //            nodes = nodes.entrySet().stream().filter(e -> !e.getKey().equals(node.getNodeID())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_NODE, node));
@@ -240,7 +239,6 @@ public class AdminMapController {
 
     private Optional<Circle> addEditableNode(Long nodeID) {
         Supplier<Node> n = () -> nodes.get(nodeID);
-        var result = new ArrayList<Pair<Long, Circle>>();
         var pointOpt = drawNode(n.get(), "#FFFF00");
         if (pointOpt.isEmpty()) return pointOpt;
         var point = pointOpt.get();
@@ -261,9 +259,7 @@ public class AdminMapController {
                 return;
             if (secondNode == null)
                 secondNode = n.get();
-            var newEdgeID = edges.values().stream().mapToLong(Edge::getUuid).max().orElse(0) + 5;
-            var newEdge = new Edge(newEdgeID, firstNode.getNodeID(), secondNode.getNodeID());
-//            edges.put(newEdgeID, newEdge);
+            var newEdge = new Edge(UUID.randomUUID(), firstNode.getNodeID(), secondNode.getNodeID());
             addEditableEdge(newEdge);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge));
             var startPoint = nodePoints.get(firstNode.getNodeID());
@@ -276,11 +272,12 @@ public class AdminMapController {
         dragController.setScaleSupplier(() -> map.getZoom());
         dragController.setFilterMouseEvents(isLeftClick);
         dragController.setOnMove(node -> {
-            if (n.get().getXcoord() == (int) node.getLayoutX() && n.get().getYcoord() == (int) node.getLayoutY()) return;
+            if (n.get().getXcoord() == (int) node.getLayoutX() && n.get().getYcoord() == (int) node.getLayoutY())
+                return;
             n.get().setXcoord((int) node.getLayoutX());
             n.get().setYcoord((int) node.getLayoutY());
             mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), n.get().getNodeID())).findFirst().ifPresent(mapEdits::remove);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get()));
         });
         dragController.setOnEnd(node -> map.enableMove(true));
         dragController.setOnStart(node -> map.enableMove(false));
@@ -289,32 +286,21 @@ public class AdminMapController {
     }
 
     private Optional<Line> addEditableEdge(Edge edge) {
-        var startNode = nodes.get(edge.getStartNode());
-        var endNode = nodes.get(edge.getEndNode());
-        if (startNode == null || endNode == null) return Optional.empty();
-        var edgeLine = map.drawEdge(startNode, endNode);
+        var edgeLine = map.addEdge(edge);
         if (edgeLine.isEmpty()) return Optional.empty();
         // add right click event to edge to select it
-        var edgeSelected = new AtomicBoolean(false);
-        AtomicReference<MapEdit> newEdge = new AtomicReference<>();
         edgeLine.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if (!isRightClick.test(e)) return;
-            edgeSelected.set(!edgeSelected.get());
-            edgeLine.get().setStroke(edgeSelected.get() ? Color.RED : Color.BLACK);
-            if (edgeSelected.get()) {
-                newEdge.set(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edge));
-                mapEdits.add(newEdge.get());
-            } else {
-                mapEdits.remove(newEdge.get());
-                newEdge.set(null);
-            }
+            if (edgeLine.get().getStroke() == Color.RED) return;
+            edgeLine.get().setStroke(Color.RED);
+            mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edge));
+            edgeLines.get(edge.getStartNode()).removeIf(edg->edg.equals(edge.getUuid()));
+            edgeLines.get(edge.getEndNode()).removeIf(edg->edg.equals(edge.getUuid()));
         });
-        edgeLines.put(startNode.getNodeID(), edgeLine.get());
-        edgeLines.put(endNode.getNodeID(), edgeLine.get());
+        edgeLines.put(edge.getStartNode(), edge.getUuid());
+        edgeLines.put(edge.getEndNode(),  edge.getUuid());
         return edgeLine;
     }
-
-    private ObservableMap<Long, Circle> editableNodes = FXCollections.observableHashMap();
 
     private void editNodes() {
         map.clearMap();
@@ -332,30 +318,23 @@ public class AdminMapController {
 //            nodeEditMenu(node).show(nodePoints.get(node.getNodeID()));
         });
         nodes.addListener((MapChangeListener<? super Long, ? super Node>) c -> {
-            if(c.wasAdded() && c.wasRemoved()){
+            if (c.wasAdded() && c.wasRemoved()) {
                 var node = c.getValueAdded();
-                Platform.runLater(()->{
-                    var point = nodePoints.get(node.getNodeID());
-                    point.setTranslateX(node.getXcoord());
-                    point.setTranslateY(node.getYcoord());
+                Platform.runLater(() -> {
+                    map.updateNode(node);
                 });
-            }
-            if (c.wasAdded()) {
-                Platform.runLater(()->addEditableNode(c.getValueAdded().getNodeID()));
-            }
-            if (c.wasRemoved()) {
-                Platform.runLater(()->map.removeNode(c.getValueRemoved()));
+            } else if (c.wasAdded()) {
+                Platform.runLater(() -> addEditableNode(c.getValueAdded().getNodeID()));
+            } else if (c.wasRemoved()) {
+                Platform.runLater(() -> map.removeNode(c.getValueRemoved()));
             }
         });
-        edges.addListener((MapChangeListener<? super Long, ? super Edge>) c -> {
-            if(c.wasAdded()){
-                Platform.runLater(()->addEditableEdge(c.getValueAdded()));
+        edges.addListener((MapChangeListener<? super UUID, ? super Edge>) c -> {
+            if (c.wasAdded()) {
+                Platform.runLater(() -> addEditableEdge(c.getValueAdded()));
             }
-            if(c.wasRemoved()) {
-                var startNode = nodes.get(c.getValueRemoved().getStartNode());
-                var endNode = nodes.get(c.getValueRemoved().getEndNode());
-                if (startNode == null || endNode == null) return;
-                Platform.runLater(()->map.removeEdge(startNode, endNode));
+            if (c.wasRemoved()) {
+                Platform.runLater(() -> map.removeEdge(c.getValueRemoved()));
             }
         });
         nodes.values().stream().map(Node::getNodeID).forEach(this::addEditableNode);
@@ -409,7 +388,7 @@ public class AdminMapController {
             this.object = object;
             this.graphic = new Label(object == null ? "" : type.getName.apply(object));
             this.previous = previous;
-            if(object != null)
+            if (object != null)
                 execute();
         }
 

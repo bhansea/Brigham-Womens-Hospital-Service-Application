@@ -1,9 +1,10 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
+import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Edge {
     @SchemaID
     @com.jsoniter.annotation.JsonProperty("uuid")
-    private Long uuid;
+    private UUID uuid;
     @com.jsoniter.annotation.JsonProperty("startnode")
     private Long startNode;
     @com.jsoniter.annotation.JsonProperty("endnode")
@@ -49,14 +50,14 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Edge ref){
     }
     public void setFieldFromString(Field field, String value) {
         switch (field) {
-            case UUID -> setUuid(Long.parseLong(value));
+            case UUID -> setUuid(UUID.fromString(value));
             case START_NODE -> setStartNode(Long.parseLong(value));
             case END_NODE -> setEndNode(Long.parseLong(value));
         };
     }
     public String getFromFieldAsString(Field field) {
         return switch (field) {
-            case UUID -> Long.toString(getUuid());
+            case UUID -> getUuid().toString();
             case START_NODE -> Long.toString(getStartNode());
             case END_NODE -> Long.toString(getEndNode());
         };

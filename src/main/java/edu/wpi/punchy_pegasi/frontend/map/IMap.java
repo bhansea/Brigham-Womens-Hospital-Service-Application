@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
+import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Node;
 import javafx.beans.Observable;
 import javafx.beans.property.StringProperty;
@@ -42,13 +43,15 @@ public interface IMap<Layer> {
 
     VBox makeTooltip(javafx.scene.Node parent, ObservableStringValue text);
 
-    Optional<Circle> drawNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText);
+    Optional<Circle> addNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText);
+
+    void updateNode(Node node);
 
     void removeNode(Node node);
 
-    void removeEdge(Node startNode, Node endNode);
+    Optional<Line> addEdge(Edge edge);
 
-    Optional<Line> drawEdge(Node startNode, Node endNode);
+    void removeEdge(Edge edge);
 
     javafx.scene.Node drawArrow(Node node, boolean up);
 

@@ -87,7 +87,7 @@ public class PathfindingMap {
     @FXML
     private Text pathfindStatus;
     private ObservableMap<Long, Node> nodes;
-    private ObservableMap<Long, Edge> edges;
+    private ObservableMap<UUID, Edge> edges;
     private ObservableMap<Long, LocationName> locations;
     private ObservableMap<Long, Move> moves;
     private ObservableList<Node> nodesList;
@@ -139,7 +139,7 @@ public class PathfindingMap {
         if (location.isEmpty()) return Optional.empty();
         var labelBinding = Bindings.createStringBinding(() -> location.get(0).getShortName(), location);
         var hoverBinding = Bindings.createStringBinding(() -> String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)), location);
-        return map.drawNode(node, color, labelBinding, hoverBinding);
+        return map.addNode(node, color, labelBinding, hoverBinding);
     }
 
     @FXML
@@ -294,7 +294,7 @@ public class PathfindingMap {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.drawNode(node, "red", Bindings.createStringBinding(()->""), Bindings.createStringBinding(()->"From Here"));
+                    map.addNode(node, "red", Bindings.createStringBinding(()->""), Bindings.createStringBinding(()->"From Here"));
                     //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
                     map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(node.getFloor()))));
                     currentPath = new ArrayList<>();

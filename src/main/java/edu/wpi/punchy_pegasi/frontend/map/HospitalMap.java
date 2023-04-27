@@ -6,6 +6,7 @@ import edu.wpi.punchy_pegasi.frontend.animations.FollowPath;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
+import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.Interpolator;
@@ -29,9 +30,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import net.kurobako.gesturefx.GesturePane;
 import net.kurobako.gesturefx.GesturePaneOps;
-import org.javatuples.Triplet;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,6 +50,22 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private final HBox overlayTop = new HBox();
     private HospitalFloor currentFloor;
     private boolean animate = true;
+
+    @AllArgsConstructor
+    @Data
+    private class RenderedNode {
+        Circle circle;
+        HospitalFloor floor;
+        VBox tooltip;
+        VBox label;
+    }
+
+    private record RenderedEdge(Line line, HospitalFloor floor) {
+    }
+
+    private final Map<Long, RenderedNode> nodeCircles = new HashMap<>();
+    private final Map<UUID, RenderedEdge> edgeLines = new HashMap<>();
+    private final MultiValuedMap<Long, UUID> nodeEdges = new ArrayListValuedHashMap<>();
 
     public HospitalMap(Map<String, HospitalFloor> floors) {
         this.floors = floors;
@@ -235,9 +255,9 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     }
 
     @Override
-    public Optional<Circle> drawNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText) {
+    public Optional<Circle> addNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText) {
         var floor = floors.get(node.getFloor());
-        if (floor == null) return Optional.empty();
+        if (floor == null || nodeCircles.containsKey(node.getNodeID())) return Optional.empty();
         var circle = new Circle(0, 0, 15);
         circle.setLayoutX(node.getXcoord());
         circle.setLayoutY(node.getYcoord());
@@ -247,7 +267,6 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         circle.setStroke(Color.valueOf("#000000"));
         var toolTip = makeTooltip(circle, hoverText);
         var shortNameTooltip = makeTooltip(circle, labelText);
-
         toolTip.translateYProperty().bind(toolTip.heightProperty().multiply(-1).subtract(15));
         toolTip.translateXProperty().bind(toolTip.widthProperty().multiply(-.5));
         shortNameTooltip.translateYProperty().bind(shortNameTooltip.heightProperty().multiply(-1).subtract(15));
@@ -265,64 +284,70 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         shortNameTooltip.setManaged(true);
 
         floor.nodeCanvas.getChildren().add(circle);
-
-
         floor.tooltipCanvas.getChildren().add(toolTip);
         floor.tooltipCanvas.getChildren().add(shortNameTooltip);
-        nodeCircles.put(node, new Triplet<>(circle, toolTip, shortNameTooltip));
+        nodeCircles.put(node.getNodeID(), new RenderedNode(circle, floor, toolTip, shortNameTooltip));
+        // TODO: render un-rendered edges
+//        nodeEdges.get(node.getNodeID()).forEach(e->{
+//            if(!edgeLines.containsKey(e))
+//                addEdge()
+//        });
         return Optional.of(circle);
     }
 
-    private final Map<Node, Triplet<Circle, VBox, VBox>> nodeCircles = new HashMap<>();
-    private final Map<String, Line> edgeLines = new HashMap<>();
+    public void updateNode(Node node) {
+        Optional.ofNullable(nodeCircles.get(node.getNodeID())).ifPresent(n -> {
+            n.circle.setLayoutX(node.getXcoord());
+            n.circle.setLayoutY(node.getYcoord());
+            var newFloor = floors.get(node.getFloor());
+            if (n.floor != newFloor) {
+                n.floor.nodeCanvas.getChildren().remove(n.circle);
+                n.floor.tooltipCanvas.getChildren().remove(n.tooltip);
+                n.floor.tooltipCanvas.getChildren().remove(n.label);
+                n.floor = newFloor;
+                n.floor.nodeCanvas.getChildren().add(n.circle);
+                n.floor.tooltipCanvas.getChildren().add(n.tooltip);
+                n.floor.tooltipCanvas.getChildren().add(n.label);
+            }
+        });
+    }
 
     @Override
     public void removeNode(Node node) {
-        var floor = floors.get(node.getFloor());
-        if (floor == null) return;
-        var nodes = nodeCircles.get(node);
-        if (nodes == null) return;
-        floor.nodeCanvas.getChildren().remove(nodes.getValue0());
-        floor.tooltipCanvas.getChildren().remove(nodes.getValue1());
-        floor.tooltipCanvas.getChildren().remove(nodes.getValue2());
-        nodeCircles.remove(node);
-    }
-
-    private String hashEdge(Node a, Node b) {
-        return a.getNodeID() < b.getNodeID() ? "" + a.getNodeID() + b.getNodeID() : "" + b.getNodeID() + a.getNodeID();
+        Optional.ofNullable(nodeCircles.remove(node.getNodeID())).ifPresent(n -> {
+            n.floor.nodeCanvas.getChildren().remove(n.circle);
+            n.floor.tooltipCanvas.getChildren().remove(n.tooltip);
+            n.floor.tooltipCanvas.getChildren().remove(n.label);
+            // TODO: For ui performance if edges must be removed, we can remove the preemptively here
+        });
     }
 
     @Override
-    public void removeEdge(Node startNode, Node endNode) {
-        if (startNode == null || endNode == null) return;
-        var startFloor = floors.get(startNode.getFloor());
-        var endFloor = floors.get(endNode.getFloor());
-        if (startFloor == null || startFloor != endFloor) return;
-        var set = new HashSet<>();
-        set.add(startNode);
-        set.add(endNode);
-        startFloor.lineCanvas.getChildren().remove(edgeLines.remove(hashEdge(startNode, endNode)));
-    }
-
-    @Override
-    public Optional<Line> drawEdge(Node startNode, Node endNode) {
-        var startSceneNode = nodeCircles.get(startNode).getValue0();
-        var endSceneNode = nodeCircles.get(endNode).getValue0();
-        if (startNode == null || endNode == null || startSceneNode == null || endSceneNode == null)
+    public Optional<Line> addEdge(Edge edge) {
+        var startNode = nodeCircles.get(edge.getStartNode());
+        var endNode = nodeCircles.get(edge.getEndNode());
+        if (startNode == null || endNode == null || !Objects.equals(startNode.floor, endNode.floor) || edgeLines.containsKey(edge.getUuid()))
             return Optional.empty();
-        var startFloor = floors.get(startNode.getFloor());
-        var endFloor = floors.get(endNode.getFloor());
-        if (startFloor == null || startFloor != endFloor) return Optional.empty();
         var line = new Line();
-        line.startXProperty().bind(startSceneNode.layoutXProperty());
-        line.startYProperty().bind(startSceneNode.layoutYProperty());
-        line.endXProperty().bind(endSceneNode.layoutXProperty());
-        line.endYProperty().bind(endSceneNode.layoutYProperty());
+        line.startXProperty().bind(startNode.circle.layoutXProperty());
+        line.startYProperty().bind(startNode.circle.layoutYProperty());
+        line.endXProperty().bind(endNode.circle.layoutXProperty());
+        line.endYProperty().bind(endNode.circle.layoutYProperty());
         line.setFill(Color.valueOf("#000000"));
         line.setStrokeWidth(3);
-        startFloor.lineCanvas.getChildren().add(line);
-        edgeLines.put(hashEdge(startNode, endNode), line);
+        startNode.floor.lineCanvas.getChildren().add(line);
+        edgeLines.put(edge.getUuid(), new RenderedEdge(line, startNode.floor));
+        nodeEdges.put(edge.getStartNode(), edge.getUuid());
+        nodeEdges.put(edge.getEndNode(), edge.getUuid());
         return Optional.of(line);
+    }
+
+    @Override
+    public void removeEdge(Edge edge) {
+        nodeEdges.get(edge.getStartNode()).removeIf(e -> e.equals(edge.getUuid()));
+        nodeEdges.get(edge.getEndNode()).removeIf(e -> e.equals(edge.getUuid()));
+        Optional.ofNullable(edgeLines.remove(edge.getUuid()))
+                .ifPresent(e -> e.floor.lineCanvas.getChildren().remove(e.line));
     }
 
     @Override
