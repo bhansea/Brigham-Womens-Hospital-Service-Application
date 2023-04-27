@@ -11,6 +11,8 @@ import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.Interpolator;
 import javafx.beans.binding.Bindings;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
@@ -77,19 +79,14 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         overlayBottom.getStyleClass().add("hospital-map-overlay-bottom");
         overlay.setTop(overlayTop);
         gesturePane.getStyleClass().add("hospital-map-gesture-pane");
-        gesturePane.minScaleProperty().bind(new ObjectBinding<>() {
-            {
-                bind(gesturePane.widthProperty(), gesturePane.heightProperty());
-            }
-
-            @Override
-            protected Number computeValue() {
-                var minZoom = Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+        gesturePane.minScaleProperty().bind(Bindings.createDoubleBinding(() -> {
+            var minZoom = Math.max(gesturePane.getWidth() / 5000, gesturePane.getHeight() / 3400);
+            Platform.runLater(() -> {
                 if (gesturePane.getCurrentScale() < minZoom)
                     gesturePane.zoomTo(minZoom, gesturePane.targetPointAtViewportCentre());
-                return minZoom;
-            }
-        });
+            });
+            return minZoom;
+        }, gesturePane.widthProperty(), gesturePane.heightProperty()));
         gesturePane.setMaxScale(3.4);
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
 
