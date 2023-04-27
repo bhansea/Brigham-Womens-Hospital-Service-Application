@@ -53,7 +53,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     public void submitEntry() {
         // TODO: need a way to get the employeeID of the person making the request entry
-        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), "", "", "", 1L);
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveFlowerDeliveryRequestEntry(requestEntry);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }

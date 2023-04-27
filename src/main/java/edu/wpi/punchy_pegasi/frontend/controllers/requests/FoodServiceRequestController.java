@@ -70,10 +70,6 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
                 cardHolder.getChosenItems(),
-                "",
-                new ArrayList<>(List.of("")),
-                "",
-                "",
                 patientName.getText(), 1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));

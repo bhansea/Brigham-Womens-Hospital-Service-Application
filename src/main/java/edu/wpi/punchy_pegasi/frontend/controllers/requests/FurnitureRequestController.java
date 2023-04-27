@@ -123,8 +123,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                furniture.getItems(),
-                // TODO: need a way to get the employeeID of the person making the request entry
+                cardHolder.getChosenItems(),
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));

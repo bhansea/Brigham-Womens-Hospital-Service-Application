@@ -1,6 +1,8 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.backend.SchemaID;import edu.wpi.punchy_pegasi.backend.Unique;import lombok.*;
+import edu.wpi.punchy_pegasi.backend.SchemaID;
+import edu.wpi.punchy_pegasi.backend.Unique;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
