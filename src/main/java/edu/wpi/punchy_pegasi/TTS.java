@@ -12,6 +12,8 @@ public class TTS {
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         VoiceManager voiceManager = VoiceManager.getInstance();
         Voice voice = voiceManager.getVoice(VOICE_NAME);
+        voice.setRate(170);
+        voice.setPitch(120);
         voice.allocate();
         voice.speak(text);
     }
