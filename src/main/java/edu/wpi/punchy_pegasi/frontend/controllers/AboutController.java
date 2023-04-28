@@ -30,7 +30,7 @@ public class AboutController {
 
     @FXML
     private void initialize(){
-        TeamMember blake = new TeamMember("Blake Bruell", "Lead Software Engineer", "babruell@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/blake.PNG"));
+        TeamMember blake = new TeamMember("Blake Bruell", "Lead Software Engineer", "babruell@wpi.edu", "Computer Science BS/MS", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/blake.PNG"));
         TeamMember charlotte = new TeamMember("Charlotte Carter", "Document Analyst", "ccarter@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/charlotte.PNG"));
         TeamMember brittany = new TeamMember("Brittany Ficarra", "FE Software Engineer", "bcficarra@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brittany.PNG"));
         TeamMember brandon = new TeamMember("Brandon Luong", "BE Software Engineer", "bvluong@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brandon.PNG"));
@@ -64,7 +64,7 @@ public class AboutController {
         private StackPane stackpane;
         private Label nameLabel;
         private Label positionLabel;
-        private Text hiddenTextOverlay;
+        private Label hiddenTextOverlay;
         private VBox textOverlay;
 
         public TeamMember(String name, String position, String email, String major, String funFact, ImageView image) {
@@ -91,24 +91,32 @@ public class AboutController {
             positionLabel.getStyleClass().add("info-about-team-member-position");
             positionLabel.setEffect(dropShadow);
 
-
+            hiddenTextOverlay = new Label(this.name + "\n" + this.position + "\n\nMajor: " + this.major);
+            stackpane.getChildren().add(hiddenTextOverlay);
+            StackPane.setAlignment(hiddenTextOverlay, Pos.TOP_LEFT);
+            hiddenTextOverlay.getStyleClass().add("info-about-hidden-text");
+            hiddenTextOverlay.setVisible(false);
 
             textOverlay = new VBox(nameLabel, positionLabel);
             textOverlay.setPadding(new Insets(0, 0, 5, 5));
             stackpane.getChildren().add(textOverlay);
             textOverlay.setAlignment(Pos.BOTTOM_LEFT);
-//
-//            stackpane.setOnMouseEntered(event -> {
-//                hiddenTextOverlay.setVisible(true);
-//                stackpane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
-//                image.setOpacity(0.5);
-//            });
-//
-//            stackpane.setOnMouseExited(event -> {
-//                hiddenTextOverlay.setVisible(false);
-//                stackpane.setStyle("-fx-background-color: transparent;");
-//                image.setOpacity(1.0);
-//            });
+
+            stackpane.setOnMouseEntered(event -> {
+                hiddenTextOverlay.setVisible(true);
+                textOverlay.setVisible(false);
+                hiddenTextOverlay.setVisible(true);
+                stackpane.setStyle("-fx-background-color: white;");
+                image.setOpacity(0.1);
+            });
+
+            stackpane.setOnMouseExited(event -> {
+                hiddenTextOverlay.setVisible(false);
+                textOverlay.setVisible(true);
+                hiddenTextOverlay.setVisible(false);
+                stackpane.setStyle("-fx-background-color: transparent;");
+                image.setOpacity(1.0);
+            });
         }
     }
 }
