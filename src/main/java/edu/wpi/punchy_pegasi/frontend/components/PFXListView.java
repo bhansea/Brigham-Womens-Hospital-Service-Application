@@ -19,17 +19,18 @@ public class PFXListView<T> extends VBox {
         this.mapper = mapper;
         list.addListener((ListChangeListener<? super T>) c -> {
             while (c.next()) {
+                if (c.wasRemoved())
+                    for (T item : c.getRemoved())
+                        removeNode(item);
                 if (c.wasAdded())
                     for (T item : c.getAddedSubList()) {
                         createNode(item);
                     }
-                if (c.wasRemoved())
-                    for (T item : c.getRemoved())
-                        removeNode(item);
             }
         });
         for (T item : list)
-            getChildren().add(mapper.apply(item));
+            createNode(item);
+//            getChildren().add(mapper.apply(item));
     }
 
     private void createNode(T item) {

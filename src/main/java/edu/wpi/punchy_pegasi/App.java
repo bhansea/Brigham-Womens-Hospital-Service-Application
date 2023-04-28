@@ -48,8 +48,6 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class App extends Application {
-
-    private static AppSearch appSearch;
     @Getter
     private static App singleton;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -148,11 +146,6 @@ public class App extends Application {
     public void init() {
         singleton = this;
         log.info("Starting Up");
-        try {
-            appSearch.initialize();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

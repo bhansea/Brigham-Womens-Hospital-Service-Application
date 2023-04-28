@@ -1,4 +1,9 @@
 package edu.wpi.punchy_pegasi.backend;
+import edu.wpi.punchy_pegasi.App;
+import javafx.beans.value.ObservableNumberValue;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -14,7 +19,6 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.search.similarities.BooleanSimilarity;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
@@ -29,6 +33,14 @@ import java.util.Map;
 
 public class AppSearch {
 
+    @RequiredArgsConstructor
+    @Data
+    public static class SearchableItem {
+        private final String name;
+        private final String description;
+        private final Runnable navigate;
+        private int currentWeight;
+    }
     public static void initialize() throws Exception {
 
         // Create an index
@@ -46,7 +58,9 @@ public class AppSearch {
     }
 
     private static Directory createIndex() throws IOException {
-        Path indexPath = Paths.get("index");
+        var dir = App.class.getResource("index");
+        if (dir == null) return null;
+        Path indexPath = Path.of(dir.getPath());
         Directory index = new MMapDirectory(indexPath);
         StandardAnalyzer analyzer = new StandardAnalyzer();
 
@@ -58,16 +72,17 @@ public class AppSearch {
         IndexWriter writer = new IndexWriter(index, config);
 
         // Add the functions in your app to the index
-        addFunctionToIndex(writer, "functionName1", "functionDescription1");
-        addFunctionToIndex(writer, "functionName2", "functionDescription2");
-        addFunctionToIndex(writer, "functionName3", "functionDescription3");
+//        addFunctionToIndex(writer, "Signage", "functionName1", "functionDescription1");
+//        addFunctionToIndex(writer, "Service Request", "functionName2", "functionDescription2");
+//        addFunctionToIndex(writer, "Admin", "functionName3", "functionDescription3");
 
         writer.close();
         return index;
     }
 
-    private static void addFunctionToIndex(IndexWriter writer, String functionName, String functionDescription) throws IOException {
+    private static void addFunctionToIndex(IndexWriter writer, String pageName, String functionName, String functionDescription) throws IOException {
         Document doc = new Document();
+        doc.add(new TextField("pageName", pageName, Field.Store.YES));
         doc.add(new TextField("functionName", functionName, Field.Store.YES));
         doc.add(new TextField("functionDescription", functionDescription, Field.Store.YES));
         writer.addDocument(doc);
