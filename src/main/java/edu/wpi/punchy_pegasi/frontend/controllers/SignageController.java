@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
+import edu.wpi.punchy_pegasi.frontend.map.HospitalMap;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.LocationName;
@@ -35,7 +36,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class SignageController {
-
     private static final Facade facade = App.getSingleton().getFacade();
     private static final ObservableList<String> signageNames = FXCollections.observableArrayList();
     private static boolean editing = false;
@@ -85,10 +85,11 @@ public class SignageController {
         initHeader();
         buildSignage();
         signageBody.getStyleClass().add("signage-body");
+        initSignSelector();
         if (editing) {
             buildEditSignage();
         } else {
-            initSignSelector();
+            buildSignageMap();
         }
 
         Platform.runLater(() -> {
@@ -100,6 +101,12 @@ public class SignageController {
             else if (event.getCode().equals(KeyCode.ESCAPE))
                 setFullScreen(false);
         });
+    }
+
+    private void buildSignageMap() {
+        var hospitalMap = new HospitalMap();
+        signageBodyStackPane.getChildren().add(hospitalMap);
+        signageBodyStackPane.setMaxWidth(300);
     }
 
     private static void initSignSelector() {
@@ -254,8 +261,6 @@ public class SignageController {
     }
 
     private void buildEditSignage() {
-        initSignSelector();
-
         signageNameCB.setFloatingText("Signage Name");
         signageNameCB.setFloatMode(FloatMode.INLINE);
         signageNameCB.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -309,8 +314,6 @@ public class SignageController {
         editingVbox.getStyleClass().add("signage-right-edit-vbox");
         VBox blankVBoxHi = new VBox();
         VBox blankVBoxLo = new VBox();
-//        blankVBoxHi.setMinHeight(40);
-//        blankVBoxLo.setMinHeight(40);
         VBox.setVgrow(blankVBoxHi, Priority.ALWAYS);
         VBox.setVgrow(blankVBoxLo, Priority.ALWAYS);
 
