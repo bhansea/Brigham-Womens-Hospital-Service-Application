@@ -2,7 +2,7 @@
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 14;
     -fx-padding: 25 0 0 50;
-    -fx-text-fill: #0067B1;
+    -fx-text-fill: -pfx-accent;
 }
 
 .info-text{
