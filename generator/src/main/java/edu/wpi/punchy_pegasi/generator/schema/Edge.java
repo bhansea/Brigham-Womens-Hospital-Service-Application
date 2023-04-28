@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Edge {
     @SchemaID
-    private Long uuid;
+    private UUID uuid;
     private Long startNode;
     private Long endNode;
 }

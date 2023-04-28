@@ -15,7 +15,7 @@ public enum Screen {
     HOME("Home", "frontend/views/HomePage.fxml", Account.AccountType.STAFF),
     SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.NONE),
     MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.NONE),
-    EDIT_MAP_PAGE("Edit Map", "frontend/views/EditMap.fxml", Account.AccountType.ADMIN),
+    EDIT_MAP_PAGE("Edit Map", "frontend/views/AdminMap.fxml", Account.AccountType.ADMIN),
     LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE, false, false),
     ADMIN_PAGE("Admin Page", "frontend/requests/admin/AdminPage.fxml", Account.AccountType.ADMIN),
     ADMIN_TABLE_PAGE("Admin Table Page", "frontend/requests/admin/AdminTablePage.fxml", Account.AccountType.ADMIN),

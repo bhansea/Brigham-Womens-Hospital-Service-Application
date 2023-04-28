@@ -1,10 +1,19 @@
 .node-popover {
     -fx-background-color: -pfx-background;
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+    -fx-padding: 10;
 }
 
 .node-popover > Label {
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 20;
+}
+
+.node-popover > HBox > Label {
+    -fx-font-family: "Nunito Sans Regular";
+    -fx-font-size: 16;
+    -fx-text-alignment: CENTER;
 }
 .node-popover-make-move {
     -pfx-button-background: -pfx-accent;
@@ -14,4 +23,11 @@
 .node-popover-delete {
     -pfx-button-background: red;
     -pfx-button-text: -pfx-text-opposite;
+}
+.building-dropdown {
+    -fx-max-width: Infinity;
+}
+
+.location-dropdown {
+    -fx-max-width: Infinity;
 }

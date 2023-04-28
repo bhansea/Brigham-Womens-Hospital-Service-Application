@@ -200,6 +200,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public GenericRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

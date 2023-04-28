@@ -11,41 +11,41 @@
     -fx-min-height: 0;
 }
 
-.table-view {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-}
+/*.table-view {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*}*/
 
-.table-view .column-header-background .filler {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-}
+/*.table-view .column-header-background .filler {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*}*/
 
-.table-view .corner {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-}
+/*.table-view .corner {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*}*/
 
-.table-view .table-cell{
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
-.table-row-cell:hover {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
-.table-row-cell:odd{
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
-.table-row-cell:even{
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
+/*.table-view .table-cell{*/
+/*    -fx-border-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
+/*.table-row-cell:hover {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
+/*.table-row-cell:odd{*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
+/*.table-row-cell:even{*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-width: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
 
 .signage-list {
     -fx-alignment: top-left;
@@ -67,7 +67,7 @@
 }
 
 
-.signage-delete-btn ,
+.signage-delete-btn,
 .signage-delete-btn:armed,
 .signage-delete-btn:hover,
 .signage-delete-btn:focused {
@@ -79,11 +79,76 @@
     -pfx-button-background: transparent;
 }
 
+.signage-fullscreen-button,
+.signage-fullscreen-button:armed,
+.signage-fullscreen-button:hover,
+.signage-fullscreen-button:focused {
+    -fx-font-size: 30;
+    -fx-alignment: center;
+    -fx-padding: 0 0 0 0;
+    -fx-cursor: hand;
+    -fx-background-radius: 15;
+    -pfx-button-background: transparent;
+}
+
 .signage-delete-btn PFXIcon {
     -fx-cursor: hand;
 }
+
+.signage-edit-options {
+    -fx-alignment: center-left;
+    -fx-spacing: 5;
+}
+
+.signage-right-edit-vbox {
+    /*-fx-background-color: green;*/
+    -fx-alignment: center;
+    -fx-spacing: 50;
+    -fx-padding: 75 100 50 100;
+    -fx-border-width: 1;
+    -fx-border-color: -pfx-accent;
+    -fx-border-radius: 12;
+
+}
+
+signage-right-edit-outer-vbox {
+    -fx-background-color: blue;
+    -fx-spacing: 10;
+    -fx-padding: 10 100 10 100;
+    -fx-alignment: center-right;
+}
+
 .signage-delete-btn:hover PFXIcon {
     -fx-fill: red;
+}
+
+.signage-submit-btn,
+.signage-submit-btn:armed,
+.signage-submit-btn:focused {
+    -fx-background-color: -pfx-success;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.signage-submit-btn:hover {
+    /*-fx-background-color: -pfx-success-dark;*/
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.signage-header-mid {
+    -fx-alignment: center;
+    -fx-padding: 0 10 0 10;
+    -fx-font-size: 10;
+}
+
+.signage-combo-box .combo-popup .virtual-flow .data-label {
+    -fx-font-size: 18;
+}
+
+.signage-combo-box {
+    -fx-font-size: 18;
+    -fx-max-height: 50;
 }
 
 .signage-edit-vbox {
@@ -92,9 +157,11 @@
 }
 
 .signage-header {
+    -fx-alignment: center;
     -fx-spacing: 20;
     -fx-padding: 15 50 15 50;
 }
+
 
 .signage-header Label {
     -fx-font-size: 30;
@@ -103,13 +170,13 @@
 .signage-header-left {
     -fx-spacing: 15;
     -fx-padding: 10 0 10 0;
-    -fx-alignment: CENTER;
+    -fx-alignment: center;
 }
 
 .signage-header-right {
     -fx-spacing: 15;
     -fx-padding: 10 0 10 0;
-    -fx-alignment: CENTER_RIGHT;
+    -fx-alignment: center-right;
 }
 
 .signage-label {

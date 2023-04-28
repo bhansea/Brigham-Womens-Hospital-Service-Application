@@ -4,6 +4,7 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.*;
 import edu.wpi.punchy_pegasi.schema.Alert;
+import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;

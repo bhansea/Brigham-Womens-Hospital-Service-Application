@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.IDao;
@@ -17,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
+public class EdgeDaoImpl implements IDao<java.util.UUID, Edge, Edge.Field> {
 
     static String[] fields = {"uuid", "startNode", "endNode"};
     private final PdbController dbController;
@@ -27,11 +26,11 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
     }
 
     @Override
-    public Optional<Edge> get(java.lang.Long key) {
+    public Optional<Edge> get(java.util.UUID key) {
         try (var rs = dbController.searchQuery(TableType.EDGES, "uuid", key)) {
             rs.next();
             Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("uuid", java.util.UUID.class),
                     rs.getObject("startNode", java.lang.Long.class),
                     rs.getObject("endNode", java.lang.Long.class));
             return Optional.ofNullable(req);
@@ -42,17 +41,17 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
     }
 
     @Override
-    public Map<java.lang.Long, Edge> get(Edge.Field column, Object value) {
+    public Map<java.util.UUID, Edge> get(Edge.Field column, Object value) {
         return get(new Edge.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.Long, Edge> get(Edge.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.Long, Edge>();
+    public Map<java.util.UUID, Edge> get(Edge.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, Edge>();
         try (var rs = dbController.searchQuery(TableType.EDGES, Arrays.stream(params).map(Edge.Field::getColName).toList().toArray(new String[params.length]), value)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("uuid", java.util.UUID.class),
                     rs.getObject("startNode", java.lang.Long.class),
                     rs.getObject("endNode", java.lang.Long.class));
                 if (req != null)
@@ -65,12 +64,12 @@ public class EdgeDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field> {
     }
 
     @Override
-    public ObservableMap<java.lang.Long, Edge> getAll() {
-        var map = new HashMap<java.lang.Long, Edge>();
+    public ObservableMap<java.util.UUID, Edge> getAll() {
+        var map = new HashMap<java.util.UUID, Edge>();
         try (var rs = dbController.searchQuery(TableType.EDGES)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("uuid", java.util.UUID.class),
                     rs.getObject("startNode", java.lang.Long.class),
                     rs.getObject("endNode", java.lang.Long.class));
                 if (req != null)

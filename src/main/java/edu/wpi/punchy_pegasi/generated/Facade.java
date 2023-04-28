@@ -64,7 +64,6 @@ public class Facade {
 		alertDao = new AlertCachedDaoImpl(dbController);
 
     }
-
 	public MFXTableView<Node> generateTableNode(Consumer<Node> onRowClick, Node.Field[] hidden) {
 		return nodeDao.generateTable(onRowClick, hidden);
 	}
@@ -101,16 +100,16 @@ public class Facade {
 	public MFXTableView<Edge> generateTableEdge(Consumer<Edge> onRowClick) {
 		return edgeDao.generateTable(onRowClick);
 	}
-	public Optional<Edge> getEdge(java.lang.Long key) {
+	public Optional<Edge> getEdge(java.util.UUID key) {
 		return edgeDao.get(key);
 	}
-	public Map<java.lang.Long, Edge> getEdge(Edge.Field column, Object value) {
+	public Map<java.util.UUID, Edge> getEdge(Edge.Field column, Object value) {
 		return edgeDao.get(column, value);
 	}
-	public Map<java.lang.Long, Edge> getEdge(Edge.Field[] params, Object[] value) {
+	public Map<java.util.UUID, Edge> getEdge(Edge.Field[] params, Object[] value) {
 		return edgeDao.get(params, value);
 	}
-	public ObservableMap<java.lang.Long, Edge> getAllEdge() {
+	public ObservableMap<java.util.UUID, Edge> getAllEdge() {
 		return edgeDao.getAll();
 	}
 	public ObservableList<Edge> getAllAsListEdge() {

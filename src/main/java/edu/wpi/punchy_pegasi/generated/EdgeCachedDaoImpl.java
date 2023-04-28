@@ -29,17 +29,17 @@ import java.util.*;
 import java.util.function.Consumer;
 
 @Slf4j
-public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>, PropertyChangeListener {
+public class EdgeCachedDaoImpl implements IDao<java.util.UUID, Edge, Edge.Field>, PropertyChangeListener {
 
     static String[] fields = {"uuid", "startNode", "endNode"};
 
-    private final ObservableMap<java.lang.Long, Edge> cache = FXCollections.observableMap(new LinkedHashMap<>());
+    private final ObservableMap<java.util.UUID, Edge> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<Edge> list = FXCollections.observableArrayList();
     private final PdbController dbController;
 
     public EdgeCachedDaoImpl(PdbController dbController) {
         this.dbController = dbController;
-        cache.addListener((MapChangeListener<java.lang.Long, Edge>) c -> {
+        cache.addListener((MapChangeListener<java.util.UUID, Edge>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
                     var index = list.indexOf(c.getValueRemoved());
@@ -109,7 +109,7 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
         try (var rs = dbController.searchQuery(TableType.EDGES)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                    rs.getObject("uuid", java.lang.Long.class),
+                    rs.getObject("uuid", java.util.UUID.class),
                     rs.getObject("startNode", java.lang.Long.class),
                     rs.getObject("endNode", java.lang.Long.class));
                 add(req);
@@ -120,18 +120,18 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
     }
 
     @Override
-    public Optional<Edge> get(java.lang.Long key) {
+    public Optional<Edge> get(java.util.UUID key) {
         return Optional.ofNullable(cache.get(key));
     }
 
     @Override
-    public Map<java.lang.Long, Edge> get(Edge.Field column, Object value) {
+    public Map<java.util.UUID, Edge> get(Edge.Field column, Object value) {
         return get(new Edge.Field[]{column}, new Object[]{value});
     }
 
     @Override
-    public Map<java.lang.Long, Edge> get(Edge.Field[] params, Object[] value) {
-        var map = new HashMap<java.lang.Long, Edge>();
+    public Map<java.util.UUID, Edge> get(Edge.Field[] params, Object[] value) {
+        var map = new HashMap<java.util.UUID, Edge>();
         if (params.length != value.length) return map;
         cache.values().forEach(v -> {
             var include = true;
@@ -144,7 +144,7 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
     }
 
     @Override
-    public ObservableMap<java.lang.Long, Edge> getAll() {
+    public ObservableMap<java.util.UUID, Edge> getAll() {
         return cache;
     }
 
@@ -203,6 +203,7 @@ public class EdgeCachedDaoImpl implements IDao<java.lang.Long, Edge, Edge.Field>
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public EdgeForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
