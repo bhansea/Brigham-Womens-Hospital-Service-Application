@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.generated.Facade;
@@ -25,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
 
@@ -132,42 +134,42 @@ public class SignageController {
         }
     }
 
-    @NotNull
-    private static VBox getSignageTableView(ObservableList<Signage> rightList) {
-        var vBox = new VBox();
-//        Bindings.bindContent(vBox.getChildren(), new MappedList<>(rightList, signage ->{
+//    @NotNull
+//    private static VBox getSignageTableView(ObservableList<Signage> rightList) {
+//        var vBox = new VBox();
+////        Bindings.bindContent(vBox.getChildren(), new MappedList<>(rightList, signage ->{
+////            var hbox = new HBox(new Label(signage.getLongName()));
+////            hbox.setId(signage.getUuid().toString());
+////            addDelButton(hbox, signage);
+////            return hbox;
+////        }));
+//        rightList.addListener((ListChangeListener<? super Signage>) c -> {
+//            while (c.next()) {
+//                if (c.wasAdded())
+//                    for (Signage signage : c.getAddedSubList()) {
+//                        var hbox = new HBox(new Label(signage.getLongName()));
+//                        hbox.setId(signage.getUuid().toString());
+//                        addDelButton(hbox, signage);
+//                        Platform.runLater(() ->
+//                                vBox.getChildren().add(hbox)
+//                        );
+//                    }
+//                if (c.wasRemoved())
+//                    for (Signage signage : c.getRemoved())
+//                        Platform.runLater(() ->
+//                                vBox.getChildren().removeIf(node -> node.getId().equals(signage.getUuid().toString()))
+//                        );
+//            }
+//        });
+////        init the vBox
+//        for (Signage signage : rightList) {
 //            var hbox = new HBox(new Label(signage.getLongName()));
-//            hbox.setId(signage.getUuid().toString());
 //            addDelButton(hbox, signage);
-//            return hbox;
-//        }));
-        rightList.addListener((ListChangeListener<? super Signage>) c -> {
-            while (c.next()) {
-                if (c.wasAdded())
-                    for (Signage signage : c.getAddedSubList()) {
-                        var hbox = new HBox(new Label(signage.getLongName()));
-                        hbox.setId(signage.getUuid().toString());
-                        addDelButton(hbox, signage);
-                        Platform.runLater(() ->
-                                vBox.getChildren().add(hbox)
-                        );
-                    }
-                if (c.wasRemoved())
-                    for (Signage signage : c.getRemoved())
-                        Platform.runLater(() ->
-                                vBox.getChildren().removeIf(node -> node.getId().equals(signage.getUuid().toString()))
-                        );
-            }
-        });
-//        init the vBox
-        for (Signage signage : rightList) {
-            var hbox = new HBox(new Label(signage.getLongName()));
-            addDelButton(hbox, signage);
-            hbox.setId(signage.getUuid().toString());
-            vBox.getChildren().add(hbox);
-        }
-        return vBox;
-    }
+//            hbox.setId(signage.getUuid().toString());
+//            vBox.getChildren().add(hbox);
+//        }
+//        return vBox;
+//    }
 
     private void setFullScreen(boolean setFullScreen) {
         if (setFullScreen) {
@@ -337,7 +339,12 @@ public class SignageController {
                     signageList.setPredicate(signage -> signage.getDirectionType() == direction && signage.getSignName().equals(s));
             filterUpdaters.add(updated);
             updated.accept(prefSignageName);
-            var table = getSignageTableView(signageList);
+            var table = new PFXListView<>(signageList, s -> {
+                var hbox = new HBox(new Label(s.getLongName()));
+                hbox.setId(s.getUuid().toString());
+                addDelButton(hbox, s);
+                return hbox;
+            }, s -> s.getUuid().toString()); //getSignageTableView(signageList);
             table.getStyleClass().add("signage-label");
             HBox signageHB = new HBox();
             signageHB.visibleProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
@@ -362,6 +369,9 @@ public class SignageController {
                 }
                 case HERE -> {
                     table.getStyleClass().add("signage-label-Here");
+                    var label = new Label();
+                    label.fontProperty().bind(Bindings.createObjectBinding(() ->
+                            Font.font(App.getSingleton().getPrimaryStage().getWidth()/20), App.getSingleton().getPrimaryStage().widthProperty()));
                     signageHeaderLeft.getChildren().add(iconHere);
                     signageHeaderLeft.getChildren().add(table);
                     signageHeaderLeft.visibleProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
