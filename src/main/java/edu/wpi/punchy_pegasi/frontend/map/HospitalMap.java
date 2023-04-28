@@ -44,7 +44,6 @@ import java.util.stream.Collectors;
 
 public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private static final Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
-    private final Map<String, HospitalFloor> floors;
     private final StackPane maps = new StackPane();
     private final GesturePane gesturePane = new GesturePane(maps);
     private final BorderPane overlay = new BorderPane();
@@ -69,8 +68,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     private final Map<UUID, RenderedEdge> edgeLines = new HashMap<>();
     private final MultiValuedMap<Long, UUID> nodeEdges = new ArrayListValuedHashMap<>();
 
-    public HospitalMap(Map<String, HospitalFloor> floors) {
-        this.floors = floors;
+    public HospitalMap() {
         VBox.setVgrow(gesturePane, Priority.ALWAYS);
         getChildren().addAll(new VBox(gesturePane), overlay);
         maps.setAlignment(Pos.TOP_LEFT);
@@ -96,8 +94,8 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         maps.getChildren().add(new StackPane(new Rectangle(5000, 3400, Color.TRANSPARENT), spinner));
 
         var floorContainer = new HBox();
-        floors.values().forEach(HospitalFloor::init);
-        floors.values().forEach(f -> {
+        Arrays.stream(HospitalFloor.values()).forEach(HospitalFloor::init);
+        Arrays.stream(HospitalFloor.values()).forEach(f -> {
             f.button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> showLayer(f));
             floorContainer.getChildren().add(f.button);
             maps.getChildren().add(f.root);
@@ -126,7 +124,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         separator.setPickOnBounds(false);
         overlayBottom.setPickOnBounds(false);
 
-        showLayer(floors.get("1"));
+        showLayer(HospitalFloor.F1);
     }
 
     private GesturePaneOps withAnimation() {
@@ -168,7 +166,12 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     @FXML
     @Override
     public void clearMap() {
-        floors.values().forEach(HospitalFloor::clearFloor);
+        nodeCircles.values().forEach(n -> n.floor.root.getChildren().removeAll(n.circle, n.tooltip, n.label));
+        nodeCircles.clear();
+        edgeLines.values().forEach(e -> e.floor.root.getChildren().remove(e.line));
+        edgeLines.clear();
+        nodeEdges.clear();
+        Arrays.stream(HospitalFloor.values()).forEach(HospitalFloor::clearFloor);
     }
 
     @FXML
@@ -181,7 +184,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         currentFloor = floor;
         floor.root.setVisible(true);
         floor.button.setSelected(true);
-        floors.values().stream().filter(f -> !Objects.equals(f.identifier, floor.identifier)).forEach(f -> {
+        Arrays.stream(HospitalFloor.values()).filter(f -> !Objects.equals(f.identifier, floor.identifier)).forEach(f -> {
             f.button.setSelected(false);
             f.root.setVisible(false);
         });
@@ -194,7 +197,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
     @Override
     public void drawYouAreHere(Node node) {
-        var floor = floors.get(node.getFloor());
+        var floor = HospitalFloor.floorMap.get(node.getFloor());
         if (floor == null)
             return;
         var icon = new PFXIcon(MaterialSymbols.LOCATION_ON, 60);
@@ -207,7 +210,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
     @Override
     public void drawLine(List<Node> nodes) {
         if (nodes.size() < 2) return;
-        var floor = floors.get(nodes.get(0).getFloor());
+        var floor = HospitalFloor.floorMap.get(nodes.get(0).getFloor());
         if (floor == null || nodes.stream().map(Node::getFloor).collect(Collectors.toSet()).size() > 1)
             return;
         // create animated arrow which follows the path of the line
@@ -253,7 +256,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
     @Override
     public Optional<Circle> addNode(Node node, String color, ObservableStringValue labelText, ObservableStringValue hoverText) {
-        var floor = floors.get(node.getFloor());
+        var floor = HospitalFloor.floorMap.get(node.getFloor());
         if (floor == null || nodeCircles.containsKey(node.getNodeID())) return Optional.empty();
         var circle = new Circle(0, 0, 15);
         circle.setLayoutX(node.getXcoord());
@@ -296,7 +299,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
         Optional.ofNullable(nodeCircles.get(node.getNodeID())).ifPresent(n -> {
             n.circle.setLayoutX(node.getXcoord());
             n.circle.setLayoutY(node.getYcoord());
-            var newFloor = floors.get(node.getFloor());
+            var newFloor = HospitalFloor.floorMap.get(node.getFloor());
             if (n.floor != newFloor) {
                 n.floor.nodeCanvas.getChildren().remove(n.circle);
                 n.floor.tooltipCanvas.getChildren().remove(n.tooltip);
@@ -349,7 +352,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
     @Override
     public javafx.scene.Node drawArrow(Node node, boolean up) {
-        var floor = floors.get(node.getFloor());
+        var floor = HospitalFloor.floorMap.get(node.getFloor());
         if (floor == null) return null;
         var group = new Group();
         group.setLayoutX(node.getXcoord());
@@ -372,7 +375,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor> {
 
     @Override
     public void focusOn(Node node) {
-        var floor = floors.get(node.getFloor());
+        var floor = HospitalFloor.floorMap.get(node.getFloor());
         if (floor == null) return;
         showLayer(floor);
         withAnimation().centreOn(new Point2D(node.getXcoord(), node.getYcoord()));

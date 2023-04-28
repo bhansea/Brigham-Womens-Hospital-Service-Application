@@ -9,13 +9,24 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
-class HospitalFloor {
+public enum HospitalFloor {
+    L2("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"),
+    L1("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"),
+    F1("frontend/assets/map/01_thefirstfloor.png", "First Layer", "1"),
+    F2("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"),
+    F3("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3");
     private static final Map<String, Image> imageCache = new ConcurrentHashMap<>();
+    public static Map<String, HospitalFloor> floorMap = Arrays.stream(values()).map(f -> Map.entry(f.identifier, f)).collect(
+            ConcurrentHashMap::new,
+            (m, v) -> m.put(v.getKey(), v.getValue()),
+            ConcurrentHashMap::putAll
+    );
     final String path;
     final String humanReadableName;
     final String identifier;
