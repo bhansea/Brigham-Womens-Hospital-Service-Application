@@ -30,16 +30,16 @@ public class AboutController {
 
     @FXML
     private void initialize(){
-        TeamMember blake = new TeamMember("Blake Bruell", "Lead Software Engineer", "babruell@wpi.edu", "Computer Science BS/MS", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/blake.PNG"));
-        TeamMember charlotte = new TeamMember("Charlotte Carter", "Document Analyst", "ccarter@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/charlotte.PNG"));
-        TeamMember brittany = new TeamMember("Brittany Ficarra", "FE Software Engineer", "bcficarra@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brittany.PNG"));
-        TeamMember brandon = new TeamMember("Brandon Luong", "BE Software Engineer", "bvluong@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brandon.PNG"));
-        TeamMember cooper = new TeamMember("Cooper Mann", "Scrum Master", "cpmann@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/cooper.PNG"));
-        TeamMember arnav = new TeamMember("Arnav Mishra", "BE Assistant Lead Software Engineer", "amishra2@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/arnav.jpg"));
-        TeamMember ryan = new TeamMember("Ryan Nguyen", "FE Assistant Lead Software Engineer", "rnguyen@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/ryan.PNG"));
-        TeamMember piper = new TeamMember("Piper O'Connell", "Project Manager", "proconnell@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/piper.PNG"));
-        TeamMember gabe = new TeamMember("Gabe Ward", "Product Owner", "gward@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/gabe.PNG"));
-        TeamMember tommy = new TeamMember("Weizhe Wang", "FE & BE Software Engineer", "wwang8@wpi.edu", "", "", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/tommy.PNG"));
+        TeamMember blake = new TeamMember("Blake Bruell", "Lead Software Engineer", "babruell@wpi.edu", "Computer Science (BS/MS)", "I play the piano", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/blake.PNG"));
+        TeamMember charlotte = new TeamMember("Charlotte Carter", "Document Analyst", "ccarter@wpi.edu", "Data Science (BS)", "I have too many squishmallows", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/charlotte.PNG"));
+        TeamMember brittany = new TeamMember("Brittany Ficarra", "FE Software Engineer", "bcficarra@wpi.edu", "IMGD & Computer Science (BS)", "I own over 3000 comic books not including duplicates", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brittany.PNG"));
+        TeamMember brandon = new TeamMember("Brandon Luong", "BE Software Engineer", "bvluong@wpi.edu", "Computer Science (BS)", "I am allergic to bananas", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brandon.PNG"));
+        TeamMember cooper = new TeamMember("Cooper Mann", "Scrum Master", "cpmann@wpi.edu", "Robotics Engineering (BS)", "I play the trumpet", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/cooper.PNG"));
+        TeamMember arnav = new TeamMember("Arnav Mishra", "BE Assistant Lead Software Engineer", "amishra2@wpi.edu", "Computer Science & Data Science (BS)", "I play the guitar", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/arnav.jpg"));
+        TeamMember ryan = new TeamMember("Ryan Nguyen", "FE Assistant Lead Software Engineer", "rnguyen@wpi.edu", "Computer Science (BS)", "I am allergic to the cold brrr", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/ryan.PNG"));
+        TeamMember piper = new TeamMember("Piper O'Connell", "Project Manager", "proconnell@wpi.edu", "Computer Science (BS)", "I throw the javelin", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/piper.PNG"));
+        TeamMember gabe = new TeamMember("Gabe Ward", "Product Owner", "gward@wpi.edu", "Robotics Engineering (BS)", "I am insane with the yo-yo", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/gabe.PNG"));
+        TeamMember tommy = new TeamMember("Weizhe Wang", "FE & BE Software Engineer", "wwang8@wpi.edu", "Electrical Engineering (BS)", "I play flight and racing simulators", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/tommy.PNG"));
 
         TeamMember[][] teamMembers = {
                 {blake, charlotte, brittany, brandon, cooper},
@@ -91,7 +91,7 @@ public class AboutController {
             positionLabel.getStyleClass().add("info-about-team-member-position");
             positionLabel.setEffect(dropShadow);
 
-            hiddenTextOverlay = new Label(this.name + "\n" + this.position + "\n\nMajor: " + this.major);
+            hiddenTextOverlay = new Label(this.name + "\n" + this.position + "\n\nMajor: " + this.major + "\nFun fact: " + this.funFact);
             stackpane.getChildren().add(hiddenTextOverlay);
             StackPane.setAlignment(hiddenTextOverlay, Pos.TOP_LEFT);
             hiddenTextOverlay.getStyleClass().add("info-about-hidden-text");
