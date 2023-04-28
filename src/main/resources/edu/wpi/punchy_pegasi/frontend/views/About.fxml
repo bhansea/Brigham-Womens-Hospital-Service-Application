@@ -31,51 +31,10 @@
                 </VBox>
                 <VBox style="-fx-background-color: -pfx-background" spacing="10">
                     <Label text="MEET THE TEAM" styleClass="info-title"/>
-                    <GridPane styleClass="info-about-team-list">
+                    <GridPane fx:id="sourceGrid" styleClass="info-about-team-list">
                         <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="info-about-team-header"/>
                         <Label alignment="CENTER" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="info-about-team-header"/>
                         <Label alignment="CENTER_RIGHT" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="info-about-team-header"/>
-
-                        <Label text="Blake Bruell" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <Label text="Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="babruell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-
-                        <Label text="Charlotte Carter" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                        <Label text="Document Analyst" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="ccarter@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-
-                        <Label text="Brittany Ficarra" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                        <Label text="FE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label text="bcficarra@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-
-                        <Label text="Brandon Luong" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                        <Label text="BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label text="bvluong@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-
-                        <Label text="Cooper Mann" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                        <Label text="Scrum Master" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label text="cpmann@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-
-                        <Label text="Arnav Mishra" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-                        <Label text="BE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label text="amishra2@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-
-                        <Label text="Ryan Nguyen" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                        <Label text="FE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Label text="rnguyen@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-
-                        <Label text="Piper O'Connell" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-                        <Label text="Project Manager" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Label text="proconnell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-
-                        <Label text="Gabe Ward" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-                        <Label text="Product Owner" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <Label text="gward@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-
-                        <Label text="Weizhe (Tommy) Wang" GridPane.columnIndex="0" GridPane.rowIndex="10" />
-                        <Label text="FE and BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <Label text="wwang8@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-
                         <padding>
                             <Insets top="5" left="50" bottom="25"/>
                         </padding>
