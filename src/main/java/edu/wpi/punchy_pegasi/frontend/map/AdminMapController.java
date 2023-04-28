@@ -189,9 +189,9 @@ public class AdminMapController {
         var makeMove = new PFXButton("Make Move");
         makeMove.getStyleClass().add("node-popover-make-move");
         makeMove.setOnAction(a -> {
-            if (locationDropdown.getSelectedItem() == null || date.getCurrentDate() == null) return;
+            if (locationDropdown.getSelectedItem() == null || date.getValue() == null) return;
             var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
-            var move = new Move(newID, node.getNodeID(), locationDropdown.getSelectedItem().getUuid(), date.getCurrentDate());
+            var move = new Move(newID, node.getNodeID(), locationDropdown.getSelectedItem().getUuid(), date.getValue());
 //            moves.put(newID, move);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, move));
         });
