@@ -3,14 +3,15 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,7 +46,7 @@ public class AboutController {
 
         for(int row = 0; row < 2; row++) {
             for (int col = 0; col < 5; col++) {
-                sourceGrid.add(teamMembers[row][col].getLink(), col, row);
+                sourceGrid.add(teamMembers[row][col].getStackpane(), col, row);
             }
         }
     }
@@ -57,19 +58,35 @@ public class AboutController {
         private String email;
         private String major;
         private String funFact;
-        private ImageView link;
+        private ImageView image;
+        private StackPane stackpane;
+        private Text nameLabel;
+        private Text positionLabel;
+        private Text hiddenTextOverlay;
+        private VBox textOverlay;
 
-        public TeamMember(String name, String position, String email, String major, String funFact, ImageView link) {
+        public TeamMember(String name, String position, String email, String major, String funFact, ImageView image) {
             this.name = name;
             this.position = position;
             this.email = email;
             this.major = major;
             this.funFact = funFact;
-            this.link = link;
-            this.link.setFitWidth(200);
-            this.link.setFitHeight(200);
-            this.link.setPreserveRatio(false);
-            this.link.setSmooth(true);
+            this.image = image;
+
+            this.nameLabel = new Text(this.name);
+            this.nameLabel.getStyleClass().add("info-about-team-member-name");
+            this.positionLabel = new Text(this.position);
+            this.positionLabel.getStyleClass().add("info-about-team-member-position");
+            this.textOverlay = new VBox(nameLabel, positionLabel);
+            StackPane.setAlignment(textOverlay, Pos.BOTTOM_LEFT);
+            StackPane.setAlignment(nameLabel, Pos.BOTTOM_LEFT);
+            StackPane.setAlignment(positionLabel, Pos.BOTTOM_LEFT);
+            this.image.setFitWidth(250);
+            this.image.setFitHeight(250);
+            this.image.setPreserveRatio(false);
+            this.image.setSmooth(true);
+
+            this.stackpane = new StackPane(image, textOverlay);
         }
     }
 }

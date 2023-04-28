@@ -37,3 +37,19 @@
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 16;
 }
+
+.info-about-team-member-name{
+    -fx-alignment: bottom;
+    -fx-text-alignment: left;
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+
+.info-about-team-member-position{
+    -fx-alignment: bottom;
+    -fx-text-alignment: left;
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 12;
+    -fx-text-fill: #0067B1;
+}
