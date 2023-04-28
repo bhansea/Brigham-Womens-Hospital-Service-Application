@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi;
 
+import edu.wpi.punchy_pegasi.backend.AppSearch;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
@@ -47,6 +48,8 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class App extends Application {
+
+    private static AppSearch appSearch;
     @Getter
     private static App singleton;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -145,6 +148,11 @@ public class App extends Application {
     public void init() {
         singleton = this;
         log.info("Starting Up");
+        try {
+            appSearch.initialize();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
