@@ -1,8 +1,9 @@
 @import "Fonts.css";
 
 .pie-chart{
-    -fx-font: "Nunito";
-    -fx-text-fill: black;
+    -fx-font-family: "Nunito Sans";
+    -fx-text-fill: -pfx-text;
+    -fx-font-size: 20;
 }
 
 .default-color0.chart-pie{
