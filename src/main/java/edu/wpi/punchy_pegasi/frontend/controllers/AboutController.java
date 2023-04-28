@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -60,8 +61,8 @@ public class AboutController {
         private String funFact;
         private ImageView image;
         private StackPane stackpane;
-        private Text nameLabel;
-        private Text positionLabel;
+        private Label nameLabel;
+        private Label positionLabel;
         private Text hiddenTextOverlay;
         private VBox textOverlay;
 
@@ -73,20 +74,26 @@ public class AboutController {
             this.funFact = funFact;
             this.image = image;
 
-            this.nameLabel = new Text(this.name);
-            this.nameLabel.getStyleClass().add("info-about-team-member-name");
-            this.positionLabel = new Text(this.position);
-            this.positionLabel.getStyleClass().add("info-about-team-member-position");
-            this.textOverlay = new VBox(nameLabel, positionLabel);
-            StackPane.setAlignment(textOverlay, Pos.BOTTOM_LEFT);
-            StackPane.setAlignment(nameLabel, Pos.BOTTOM_LEFT);
-            StackPane.setAlignment(positionLabel, Pos.BOTTOM_LEFT);
+
+//            StackPane.setAlignment(textOverlay, Pos.BOTTOM_LEFT);
+//            StackPane.setAlignment(nameLabel, Pos.BOTTOM_LEFT);
+//            StackPane.setAlignment(positionLabel, Pos.BOTTOM_LEFT);
+
             this.image.setFitWidth(250);
             this.image.setFitHeight(250);
             this.image.setPreserveRatio(false);
             this.image.setSmooth(true);
 
-            this.stackpane = new StackPane(image, textOverlay);
+            stackpane = new StackPane(image);
+
+            nameLabel = new Label(this.name);
+            nameLabel.getStyleClass().add("info-about-team-member-name");
+            positionLabel = new Label(this.position);
+            positionLabel.getStyleClass().add("info-about-team-member-position");
+            textOverlay = new VBox(nameLabel, positionLabel);
+            textOverlay.setPadding(new Insets(0, 0, 5, 5));
+            stackpane.getChildren().add(textOverlay);
+            textOverlay.setAlignment(Pos.BOTTOM_LEFT);
         }
     }
 }
