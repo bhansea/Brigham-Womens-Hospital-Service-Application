@@ -5,7 +5,9 @@ import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
+import edu.wpi.punchy_pegasi.frontend.map.HospitalFloor;
 import edu.wpi.punchy_pegasi.frontend.map.HospitalMap;
+import edu.wpi.punchy_pegasi.frontend.map.IMap;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.LocationName;
@@ -27,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
@@ -104,9 +107,12 @@ public class SignageController {
     }
 
     private void buildSignageMap() {
-        var hospitalMap = new HospitalMap();
-        signageBodyStackPane.getChildren().add(hospitalMap);
-        signageBodyStackPane.setMaxWidth(300);
+        IMap<HospitalFloor.Floors> hospitalMap = new HospitalMap();
+        hospitalMap.setDefaultOverlaysVisible(false);
+        hospitalMap.enableMove(false);
+        hospitalMap.showRectangle(new Rectangle(1000, 1000, 1000, 1000));
+        signageBodyStackPane.getChildren().add(hospitalMap.get());
+        signageBodyStackPane.setMaxWidth(1000);
     }
 
     private static void initSignSelector() {
