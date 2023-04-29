@@ -5,6 +5,7 @@
     -fx-font-size: 18;
     -fx-max-width: 200;
 }
+
 .conference-container {
     -fx-padding: 10;
 }
@@ -12,17 +13,21 @@
 .conference-header {
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 24;
+    -fx-text-fill: -pfx-text;
 }
 
 .conference-subText {
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
+    -fx-padding: 0 0 10 0;
 }
 
 .conference-red-star {
-    -fx-fill: red;
+    -fx-text-fill: red;
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
+    -fx-padding: 0 0 10 0;
 }
 
 .conference-textField {
@@ -38,13 +43,9 @@
 
 .conference-form-sections {
     -fx-padding: 10;
-    -fx-max-width: 300;
+    -fx-max-width: 400;
 }
 
 .conference-form-columns {
     -fx-padding: 10 50 10 10;
-}
-
-.conference-form-section-titles {
-    -fx-padding: 10;
 }
