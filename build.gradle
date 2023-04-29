@@ -56,6 +56,8 @@ dependencies {
             'com.github.phoenicisorg:javafx-collections:1.2.5',
             'net.java.dev.jna:jna:5.12.1',
 
+            'net.sf.sociaal:freetts:1.2.2',
+
             'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
 
     )

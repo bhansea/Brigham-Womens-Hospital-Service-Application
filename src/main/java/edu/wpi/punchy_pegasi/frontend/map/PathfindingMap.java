@@ -33,14 +33,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
 
 public class PathfindingMap {
-    private final Map<String, HospitalFloor> floors = new LinkedHashMap<>() {{
-        put("L2", new HospitalFloor("frontend/assets/map/00_thelowerlevel2.png", "Lower Level 2", "L2"));
-        put("L1", new HospitalFloor("frontend/assets/map/00_thelowerlevel1.png", "Lower Level 1", "L1"));
-//        put("00", new HospitalFloor("frontend/assets/map/00_thegroundfloor.png", "Ground Layer", "00"));
-        put("1", new HospitalFloor("frontend/assets/map/01_thefirstfloor.png", "First Layer", "1"));
-        put("2", new HospitalFloor("frontend/assets/map/02_thesecondfloor.png", "Second Layer", "2"));
-        put("3", new HospitalFloor("frontend/assets/map/03_thethirdfloor.png", "Third Layer", "3"));
-    }};
     private final AtomicBoolean startSelected = new AtomicBoolean(false);
     private final AtomicBoolean endSelected = new AtomicBoolean(false);
     private final AtomicBoolean selectingGraphically = new AtomicBoolean(false);
@@ -73,7 +65,7 @@ public class PathfindingMap {
     private PFXButton robotButton;
     @FXML
     private BorderPane root;
-    private IMap<HospitalFloor> map;
+    private IMap<HospitalFloor.Floors> map;
     @FXML
     private VBox pathfinding;
     @FXML
@@ -144,8 +136,7 @@ public class PathfindingMap {
 
     @FXML
     private void initialize() {
-
-        map = new HospitalMap(floors);
+        map = new HospitalMap();
         root.setCenter(map.get());
         map.addLayer(container);
         container.getChildren().addAll(pathfinding, robotInfo);
@@ -286,17 +277,16 @@ public class PathfindingMap {
 
         try {
             var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
-            for (var floor : floors.values())
-                floor.clearFloor();
+            map.clearMap();
             String currentFloor = path.get(0).getFloor();
             List<Node> currentPath = new ArrayList<>();
             for (var node : path) {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.addNode(node, "red", Bindings.createStringBinding(()->""), Bindings.createStringBinding(()->"From Here"));
+                    map.addNode(node, "red", Bindings.createStringBinding(() -> ""), Bindings.createStringBinding(() -> "From Here"));
                     //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
-                    map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(node.getFloor()))));
+                    map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(HospitalFloor.floorMap.get(node.getFloor()))));
                     currentPath = new ArrayList<>();
                     currentFloor = node.getFloor();
                 }
