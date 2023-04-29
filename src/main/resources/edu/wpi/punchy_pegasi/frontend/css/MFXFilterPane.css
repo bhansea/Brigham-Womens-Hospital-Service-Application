@@ -107,7 +107,7 @@ Filter Builder
 }
 
 .mfx-filter-pane .mfx-combo-box .caret .mfx-font-icon {
-    -mfx-color: gray;
+    -mfx-color: -pfx-text;
 }
 
 .mfx-filter-pane .mfx-combo-box .popup .virtual-flow {
@@ -144,7 +144,7 @@ Filter Builder
 }
 
 .mfx-filter-pane .mfx-combo-box .caret .mfx-ripple-generator {
-    -mfx-ripple-color: #C68EF8;
+    -mfx-ripple-color: -pfx-text;
 }
 
 .mfx-filter-pane .mfx-combo-box:focus-within .caret .mfx-font-icon {
