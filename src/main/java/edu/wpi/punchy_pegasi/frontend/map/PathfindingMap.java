@@ -65,7 +65,7 @@ public class PathfindingMap {
     private PFXButton robotButton;
     @FXML
     private BorderPane root;
-    private IMap<HospitalFloor> map;
+    private IMap<HospitalFloor.Floors> map;
     @FXML
     private VBox pathfinding;
     @FXML
@@ -136,7 +136,6 @@ public class PathfindingMap {
 
     @FXML
     private void initialize() {
-
         map = new HospitalMap();
         root.setCenter(map.get());
         map.addLayer(container);
@@ -278,15 +277,14 @@ public class PathfindingMap {
 
         try {
             var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
-            for (var floor : HospitalFloor.values())
-                floor.clearFloor();
+            map.clearMap();
             String currentFloor = path.get(0).getFloor();
             List<Node> currentPath = new ArrayList<>();
             for (var node : path) {
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
-                    map.addNode(node, "red", Bindings.createStringBinding(()->""), Bindings.createStringBinding(()->"From Here"));
+                    map.addNode(node, "red", Bindings.createStringBinding(() -> ""), Bindings.createStringBinding(() -> "From Here"));
                     //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
                     map.drawArrow(endNode, endNode.getFloorNum() < node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(HospitalFloor.floorMap.get(node.getFloor()))));
                     currentPath = new ArrayList<>();
