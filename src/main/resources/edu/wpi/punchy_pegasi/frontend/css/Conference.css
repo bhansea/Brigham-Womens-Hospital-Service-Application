@@ -35,6 +35,7 @@
 
 .conference-textField {
     -fx-border-radius: 6;
+    -fx-background-radius: 6;
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
     -fx-background-color: -pfx-primary;

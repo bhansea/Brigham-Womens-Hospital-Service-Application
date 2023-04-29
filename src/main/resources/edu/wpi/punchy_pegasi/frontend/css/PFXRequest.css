@@ -2,43 +2,29 @@
     -fx-border-radius: 6;
     -fx-border-color: -pfx-secondary;
     /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);*/
-    -fx-alignment: TOP_LEFT;
     -fx-padding: 20;
     -fx-spacing: 6;
     -fx-min-width: 300;
+    -fx-border-insets: 20;
 }
 
-.pfx-request-component-holder {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-radius: 0;
-}
-
-.pfx-request-label {
+.pfx-request-container Label {
     -fx-text-fill: -pfx-text;
     -fx-font-size: 18;
     -fx-padding: 0 0 5 0;
     -fx-alignment: CENTER_LEFT;
 }
 
-.pfx-request-container > TextField {
-    /*-fx-min-width: 50;*/
+.pfx-request-container TextField {
     -fx-min-height: 50;
     -fx-font-size: 18;
     -fx-background-radius: 6;
-    -fx-border-color: -pfx-navy;
+    -fx-border-color: -pfx-secondary;
     -fx-border-radius: 6;
-}
-
-.pfx-request-container > VBox > TextField {
-    /*-fx-alignment: CENTER_LEFT;*/
-    -fx-text-alignment: TOP_LEFT;
-    -fx-min-width: 0;
     -fx-padding: 15;
-    -fx-border-radius: 6;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0), 0, 0, 0, 0);
-    -fx-border-color: -pfx-navy;
-    -fx-text-fill: -pfx-navy;
+    -fx-background-color: -pfx-primary;
+    -fx-text-fill: -pfx-text;
+    -fx-prompt-text-fill: -pfx-secondary-light;
 }
 
 .pfx-request-container > VBox > MFXFilterComboBox {
@@ -50,12 +36,6 @@
     -fx-border-radius: 6;
     -fx-border-color: -pfx-navy;
     -fx-text-fill: -pfx-navy;
-}
-
-.pfx-request-right-container {
-    -fx-alignment: CENTER_RIGHT;
-    -fx-padding: 20;
-    -fx-spacing: 20;
 }
 
 .pfx-request-additional-notes {

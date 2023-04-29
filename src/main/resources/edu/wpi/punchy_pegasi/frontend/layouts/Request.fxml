@@ -7,27 +7,26 @@
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
     <right>
-        <VBox BorderPane.alignment="CENTER" styleClass="pfx-request-right-container">
-            <VBox VBox.vgrow="ALWAYS" fx:id="inputContainer" styleClass="pfx-request-container">
-                <VBox HBox.hgrow="ALWAYS">
-                    <Label text="Location Name"/>
-                    <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" promptText="Location Names"/>
-                </VBox>
-                <VBox HBox.hgrow="ALWAYS">
-                    <Label text="Staff Assignment"/>
-                    <MFXFilterComboBox fx:id="staffAssignment" floatMode="DISABLED" promptText="Employee Name"/>
-                </VBox>
-                <VBox VBox.vgrow="ALWAYS">
-                    <Label text="Additional Notes" textFill="WHITE"/>
-                    <TextField fx:id="additionalNotes" promptText="Additional Notes"
-                               styleClass="pfx-request-additional-notes" VBox.vgrow="ALWAYS"/>
-                </VBox>
-                <VBox fx:id="requestInfoContainer"/>
-                <HBox styleClass="pfx-request-buttons">
-                    <PFXButton onMouseClicked="#clearEntry" fx:id="clear" text="Clear"/>
-                    <PFXButton onMouseClicked="#submitEntry" fx:id="submit" text="Submit"/>
-                </HBox>
+        <VBox BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS" fx:id="inputContainer"
+              styleClass="pfx-request-container">
+            <VBox HBox.hgrow="ALWAYS">
+                <Label text="Location Name"/>
+                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" promptText="Location Names"/>
             </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+                <Label text="Staff Assignment"/>
+                <MFXFilterComboBox fx:id="staffAssignment" floatMode="DISABLED" promptText="Employee Name"/>
+            </VBox>
+            <VBox VBox.vgrow="ALWAYS">
+                <Label text="Additional Notes" textFill="WHITE"/>
+                <TextField fx:id="additionalNotes" promptText="Additional Notes"
+                           styleClass="pfx-request-additional-notes" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            <VBox fx:id="requestInfoContainer"/>
+            <HBox styleClass="pfx-request-buttons">
+                <PFXButton onMouseClicked="#clearEntry" fx:id="clear" text="Clear"/>
+                <PFXButton onMouseClicked="#submitEntry" fx:id="submit" text="Submit"/>
+            </HBox>
         </VBox>
     </right>
 </BorderPane>
