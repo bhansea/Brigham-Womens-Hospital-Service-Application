@@ -29,7 +29,7 @@ public class PFXListView<T> extends VBox {
             }
         });
         for (T item : list)
-            getChildren().add(mapper.apply(item));
+            createNode(item);
     }
 
     private void createNode(T item) {
