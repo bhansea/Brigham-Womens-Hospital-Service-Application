@@ -1,11 +1,6 @@
-.pfx-request {
-    -fx-border-color: -pfx-background;
-}
-
 .pfx-request-container {
-    -fx-background-radius: 6;
-    -fx-border-color: -pfx-secondary-light;
     -fx-border-radius: 6;
+    -fx-border-color: -pfx-secondary;
     /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);*/
     -fx-alignment: TOP_LEFT;
     -fx-padding: 20;
@@ -17,12 +12,12 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-border-radius: 0;
-
 }
 
-.pfx-request-container Label {
+.pfx-request-label {
     -fx-text-fill: -pfx-text;
     -fx-font-size: 18;
+    -fx-padding: 0 0 5 0;
     -fx-alignment: CENTER_LEFT;
 }
 
@@ -79,6 +74,7 @@
     -pfx-button-background: -pfx-danger;
     -pfx-button-text: -pfx-text-opposite;
 }
+
 #submit {
     -pfx-button-background: -pfx-accent;
     -pfx-button-text: -pfx-text-opposite;
