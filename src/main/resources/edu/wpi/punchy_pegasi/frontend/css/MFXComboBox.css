@@ -34,15 +34,16 @@
 }
 
 .mfx-combo-box:focus-within .caret .mfx-font-icon {
-    -mfx-color: -mfx-main;
+    -mfx-color: -pfx-text;
 }
 
 .mfx-combo-box .combo-popup .virtual-flow {
     -fx-background-radius: 5;
-    -fx-border-color: #ebebeb;
+    -fx-border-color: -pfx-secondary;
     -fx-border-radius: 5;
+    -fx-background-color: -pfx-primary;
 }
 
 .mfx-combo-box:disabled .caret .mfx-font-icon {
-    -mfx-color: #bcbcbc;
+    -mfx-color: -pfx-text;
 }

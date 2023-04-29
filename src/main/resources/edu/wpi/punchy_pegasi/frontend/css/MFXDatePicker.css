@@ -33,20 +33,20 @@ Date Picker
 }
 
 .mfx-date-picker:focus-within .icon {
-    -mfx-color: -mfx-purple;
+    -mfx-color: -pfx-text;
 }
 
 .mfx-date-picker:disabled .icon {
-    -mfx-color: #bcbcbc;
+    -mfx-color: -pfx-text;
 }
 
 /********************
 Popup
 ********************/
 .mfx-date-picker .date-picker-popup .content {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-primary;
     -fx-background-radius: 10;
-    -fx-border-color: #ebebeb;
+    -fx-border-color: -pfx-secondary;
     -fx-border-radius: 10;
     -fx-padding: 15;
     -fx-min-height: 300;
@@ -75,8 +75,9 @@ Popup
 
 .mfx-date-picker .date-picker-popup .months-combo:focus-within,
 .mfx-date-picker .date-picker-popup .years-combo:focus-within {
-    -fx-background-color: #f8f7fa;
-    -fx-text-fill: -mfx-purple;
+    -fx-background-color: -pfx-primary;
+    -fx-text-fill: -pfx-text;
+    -fx-border-color: -pfx-secondary;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .mfx-icon-wrapper .mfx-ripple-generator,
@@ -91,21 +92,21 @@ Popup
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:hover,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:hover {
-    -fx-background-color: #f8f7fa;
+    -fx-background-color: -pfx-primary;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected {
-    -fx-background-color: #f8f7fa;
+    -fx-background-color: -pfx-accent-transparent;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected .label {
-    -fx-text-fill: -mfx-purple;
+    -fx-text-fill: -pfx-text;
 }
 
 .mfx-date-picker .date-picker-popup .week-day {
-    -fx-font-family: "Nunito Sans SemiBold";
-    -fx-text-fill: -mfx-text-he;
+    -fx-font-family: "Nunito Sans";
+    -fx-text-fill: -pfx-text;
     -fx-padding: 0 0 5 0;
 }
