@@ -16,6 +16,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -242,6 +244,9 @@ public class App extends Application {
         scene = new Scene(loader.getRoot(), 600, 400);
         splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
         splashController.getConnection();
+
+        //var testComponent = new PFXCard();
+        //scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
 

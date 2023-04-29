@@ -1,0 +1,14 @@
+@import "Fonts.css";
+
+.alert-container{
+
+}
+
+.alert-container > Label {
+    -fx-font-size: 18;
+    -fx-padding: 0 0 0 0;
+}
+
+.alert-container > TextField{
+    -fx-alignment: CENTER_LEFT;
+}

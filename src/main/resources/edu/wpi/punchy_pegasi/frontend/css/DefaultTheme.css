@@ -67,6 +67,7 @@
 @import "SignageTheme.css";
 @import "SignageDark.css";
 @import "SignageLight.css";
+@import "AlertPage.css";
 /* Misc */
 @import "Spinner.css";
 @import "Scrollbar.css";
