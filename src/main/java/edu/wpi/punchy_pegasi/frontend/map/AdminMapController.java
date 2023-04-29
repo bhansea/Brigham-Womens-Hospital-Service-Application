@@ -3,6 +3,9 @@ package edu.wpi.punchy_pegasi.frontend.map;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.DragController;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Edge;
@@ -16,6 +19,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -24,6 +28,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -82,13 +87,13 @@ public class AdminMapController {
     private ObservableMap<Long, LocationName> locations;
     private ObservableMap<Long, Move> moves;
     private Node firstNode, secondNode;
-    private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
+    private ObservableMap<Node, ObservableList<Move>> nodeToLocation;
 
     private Optional<Circle> drawNode(Node node, String color) {
         var location = nodeToLocation.get(node);
         if (location == null) location = FXCollections.observableArrayList();
-        ObservableList<LocationName> finalLocation = location;
-        var stringBinding = Bindings.createStringBinding(() -> String.join("\n", finalLocation.stream().map(LocationName::getLongName).toArray(String[]::new)) + "\nNode ID: " + node.getNodeID().toString(), location);
+        ObservableList<Move> finalLocation = location;
+        var stringBinding = Bindings.createStringBinding(() -> String.join("\n", finalLocation.stream().map(e -> locations.get(e.getLocationID())).filter(Objects::nonNull).map(LocationName::getLongName).toArray(String[]::new)) + "\nNode ID: " + node.getNodeID().toString(), location);
         return map.addNode(node, color, Bindings.createStringBinding(() -> ""), stringBinding);
     }
 
@@ -186,7 +191,7 @@ public class AdminMapController {
         var date = new MFXDatePicker();
         date.setText("Pick Effective Date");
         date.setEditable(false);
-        var makeMove = new PFXButton("Make Move");
+        var makeMove = new PFXButton("Submit");
         makeMove.getStyleClass().add("node-popover-make-move");
         makeMove.setOnAction(a -> {
             if (locationDropdown.getSelectedItem() == null || date.getValue() == null) return;
@@ -195,20 +200,25 @@ public class AdminMapController {
 //            moves.put(newID, move);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, move));
         });
-
+        Function<Move, javafx.scene.Node> renderMove = m -> {
+            var hbox = new HBox();
+            var label = new Label(locations.get(m.getLocationID()).getLongName());
+            var grow = new HBox();
+            HBox.setHgrow(grow, Priority.ALWAYS);
+            var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
+            deleteBtn.getStyleClass().add("move-delete-btn");
+            deleteBtn.setOnAction(event -> facade.deleteMove(m));
+            hbox.getChildren().addAll(label, grow, deleteBtn);
+            hbox.setAlignment(Pos.CENTER    );
+            return hbox;
+        };
+        Function<Move, String> locationKey = m -> m.getUuid().toString();
         var location = nodeToLocation.get(node);
         if (location == null) location = FXCollections.observableArrayList();
-        // current move
-        ObservableList<LocationName> finalLocation = location;
-        var list = new VBox();
-        var stringBinding = Bindings.createStringBinding(() -> String.join("\n", finalLocation.stream().map(LocationName::getLongName).toList()), location);
-        var currentMove = new Label();
-        currentMove.textProperty().bind(stringBinding);
+        var currentMovesList = new PFXListView<>(location, renderMove, locationKey);
 
         var movesList = FacadeUtils.getFutureMoves(node, locations, moves, adminDatePicker.valueProperty());
-        var futureStringBinding = Bindings.createStringBinding(() -> String.join("\n", movesList.stream().map(LocationName::getLongName).toList()), movesList);
-        var futureMoves = new Label();
-        futureMoves.textProperty().bind(futureStringBinding);
+        var futureMovesList = new PFXListView<>(movesList, renderMove, locationKey);
 
         var delete = new PFXButton("Delete Node");
         delete.getStyleClass().add("node-popover-delete");
@@ -226,16 +236,16 @@ public class AdminMapController {
         editNode.getChildren().addAll(
                 buildingDropdown,
                 new Separator(),
-                new Label("Change Location"),
+                new Label("Make Move"),
                 locationDropdown,
                 date,
                 makeMove,
                 new Separator(),
                 new Label("Current Move"),
-                new HBox(currentMove),
+                currentMovesList,
                 new Separator(),
                 new Label("Future Moves"),
-                new HBox(futureMoves),
+                futureMovesList,
                 new Separator(),
                 delete);
         // sort locations by long name

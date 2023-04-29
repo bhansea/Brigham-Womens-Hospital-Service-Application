@@ -94,7 +94,7 @@ public class PathfindingMap {
     private ObservableList<Edge> edgesList;
     private ObservableList<LocationName> locationsList;
     private ObservableList<Move> movesList;
-    private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
+    private ObservableMap<Node, ObservableList<Move>> nodeToMoves;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
 
@@ -135,10 +135,10 @@ public class PathfindingMap {
     }
 
     private Optional<Circle> drawNode(Node node, String color) {
-        var location = nodeToLocation.get(node);
-        if (location.isEmpty()) return Optional.empty();
-        var labelBinding = Bindings.createStringBinding(() -> location.get(0).getShortName(), location);
-        var hoverBinding = Bindings.createStringBinding(() -> String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)), location);
+        var moves = nodeToMoves.get(node);
+        if (moves.isEmpty()) return Optional.empty();
+        var labelBinding = Bindings.createStringBinding(() -> locations.get(moves.get(0).getLocationID()).getShortName(), moves);
+        var hoverBinding = Bindings.createStringBinding(() -> String.join("\n", moves.stream().map(e->locations.get(e.getLocationID())).filter(Objects::nonNull).map(LocationName::getLongName).toArray(String[]::new)), moves);
         return map.addNode(node, color, labelBinding, hoverBinding);
     }
 
@@ -232,15 +232,15 @@ public class PathfindingMap {
             map.clearMap();
         });
         nodesList.forEach(n -> {
-            var location = nodeToLocation.get(n);
-            if (location == null || location.isEmpty()) return;
-            if (!isDestination.test(location.get(0))) return;
+            if (!nodeToMoves.containsKey(n)) return;
+            var moves = nodeToMoves.get(n).stream().map(m -> locations.get(m.getLocationID())).filter(l->l != null && isDestination.test(l)).toList();
+            if (moves.isEmpty()) return;
             var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();
             point.setOnMouseClicked(e -> {
-                if (startSelected.get()) nodeStartCombo.selectItem(location.get(0));
-                else if (endSelected.get()) nodeEndCombo.selectItem(location.get(0));
+                if (startSelected.get()) nodeStartCombo.selectItem(moves.get(0));
+                else if (endSelected.get()) nodeEndCombo.selectItem(moves.get(0));
                 selectGraphicallyCancel.fire();
             });
         });
@@ -256,7 +256,7 @@ public class PathfindingMap {
             edgesList = App.getSingleton().getFacade().getAllAsListEdge();
             movesList = App.getSingleton().getFacade().getAllAsListMove();
             locationsList = App.getSingleton().getFacade().getAllAsListLocationName();
-            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, adminDatePicker.valueProperty());
+            nodeToMoves = FacadeUtils.getNodeLocations(nodes, locations, moves, adminDatePicker.valueProperty());
             locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, adminDatePicker.valueProperty());
             Platform.runLater(callback);
         });
