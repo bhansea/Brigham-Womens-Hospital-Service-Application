@@ -45,19 +45,16 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         App.getSingleton().addPropertyChangeListener(this);
         setAccount(App.getSingleton().getAccount());
 
-
-//        ObservableList<Node> headerChildren = getChildren();
-        // Remove existing search result buttons
-//        headerChildren.removeIf(node -> node.getStyleClass().contains("search-result"));
-        // Generate new search result buttons
-
+        //for each page, list its functions??
         ObservableList<AppSearch.SearchableItem> list = FXCollections.observableArrayList();
-        list.add(new AppSearch.SearchableItem("Pathfinding", "", () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
-        list.add(new AppSearch.SearchableItem("Info", "", () -> App.getSingleton().navigate(Screen.ABOUT)));
-        list.add(new AppSearch.SearchableItem("Editing", "", () -> App.getSingleton().navigate(Screen.ADMIN_PAGE)));
-        list.add(new AppSearch.SearchableItem("Flower", "", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
-        list.add(new AppSearch.SearchableItem("Conference", "", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
-        list.add(new AppSearch.SearchableItem("Map Editing", "", () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
+        list.add(new AppSearch.SearchableItem("Pathfinding", "Pathfind between two different locations on the hospital map", () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
+        list.add(new AppSearch.SearchableItem("Info", "See the credits and the about page for the application", () -> App.getSingleton().navigate(Screen.ABOUT)));
+        list.add(new AppSearch.SearchableItem("Editing", "Edit any table information for the app", () -> App.getSingleton().navigate(Screen.ADMIN_PAGE)));
+        list.add(new AppSearch.SearchableItem("Flower Delivery", "Order flowers for delivery", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
+        list.add(new AppSearch.SearchableItem("Conference Room", "Book a conference room for a meeting", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
+        list.add(new AppSearch.SearchableItem("Office Supplies", "Order office supplies", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
+        list.add(new AppSearch.SearchableItem("Food Delivery", "Order food for delivery", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
+        list.add(new AppSearch.SearchableItem("Map Editing", "Edit the map and its features", () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
 
         var filtered = list.filtered(s -> true);
 
