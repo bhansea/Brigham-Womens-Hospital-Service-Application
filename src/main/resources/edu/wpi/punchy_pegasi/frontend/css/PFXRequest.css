@@ -27,15 +27,17 @@
     -fx-prompt-text-fill: -pfx-secondary-light;
 }
 
-.pfx-request-container > VBox > MFXFilterComboBox {
+.pfx-request-container MFXFilterComboBox {
+    -fx-text-fill: -pfx-text;
+    -fx-prompt-text-fill: -pfx-secondary-light;
     -fx-min-width: 300;
     -fx-min-height: 50;
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-primary;
     -fx-padding: 15;
     -fx-font-size: 18;
     -fx-border-radius: 6;
-    -fx-border-color: -pfx-navy;
-    -fx-text-fill: -pfx-navy;
+    -fx-background-radius: 6;
+    -fx-border-color: -pfx-secondary;
 }
 
 .pfx-request-additional-notes {
