@@ -29,7 +29,7 @@ Date Picker
 
 .mfx-date-picker .mfx-icon-wrapper .mfx-ripple-generator {
     -mfx-ripple-radius: 24;
-    -mfx-ripple-color: #F3F1F6;
+    -mfx-ripple-color: -pfx-text;
 }
 
 .mfx-date-picker:focus-within .icon {
@@ -37,6 +37,10 @@ Date Picker
 }
 
 .mfx-date-picker:disabled .icon {
+    -mfx-color: -pfx-text;
+}
+
+.mfx-date-picker .icon {
     -mfx-color: -pfx-text;
 }
 
@@ -60,7 +64,7 @@ Popup
 
 .mfx-date-picker .date-picker-popup .signage-left-arrow .mfx-ripple-generator,
 .mfx-date-picker .date-picker-popup .signage-right-arrow .mfx-ripple-generator {
-    -mfx-ripple-color: #F0E9FF;
+    -mfx-ripple-color: -pfx-text;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo,
@@ -82,7 +86,7 @@ Popup
 
 .mfx-date-picker .date-picker-popup .months-combo .mfx-icon-wrapper .mfx-ripple-generator,
 .mfx-date-picker .date-picker-popup .years-combo .mfx-icon-wrapper .mfx-ripple-generator {
-    -mfx-ripple-color: #F0E9FF;
+    -mfx-ripple-color: -pfx-text;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,
