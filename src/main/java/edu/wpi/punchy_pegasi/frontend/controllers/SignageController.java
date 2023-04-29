@@ -11,6 +11,7 @@ import edu.wpi.punchy_pegasi.frontend.map.IMap;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.LocationName;
+import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.Signage;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
@@ -32,7 +33,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -61,6 +61,7 @@ public class SignageController {
     private final MFXFilterComboBox<LocationName> locNameCB = new MFXFilterComboBox<>();
     private final MFXComboBox<Signage.DirectionType> directionCB = new MFXComboBox<>();
     private final PFXButton submitButton = new PFXButton("Submit");
+    private final IMap<HospitalFloor.Floors> hospitalMap = new HospitalMap();
     private String prefSignageName;
     @FXML
     private VBox headerEdit;
@@ -78,42 +79,7 @@ public class SignageController {
     private VBox signageBodyLeft;
     @FXML
     private HBox signageHeader;
-
-    @FXML
-    private void initialize() {
-        var admin = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
-        editing = admin;
-        configTimer(1000);
-        initIcons();
-        initHeader();
-        buildSignage();
-        signageBody.getStyleClass().add("signage-body");
-        initSignSelector();
-        if (editing) {
-            buildEditSignage();
-        } else {
-            buildSignageMap();
-        }
-
-        Platform.runLater(() -> {
-            setFullScreen(false);
-        });
-        myScene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.F11))
-                setFullScreen(true);
-            else if (event.getCode().equals(KeyCode.ESCAPE))
-                setFullScreen(false);
-        });
-    }
-
-    private void buildSignageMap() {
-        IMap<HospitalFloor.Floors> hospitalMap = new HospitalMap();
-        hospitalMap.setDefaultOverlaysVisible(false);
-        hospitalMap.enableMove(false);
-        hospitalMap.showRectangle(new Rectangle(1000, 1000, 1000, 1000));
-        signageBodyStackPane.getChildren().add(hospitalMap.get());
-        signageBodyStackPane.setMaxWidth(1000);
-    }
+    private Rectangle maxRectangle = new Rectangle(0, 0, 0,0);
 
     private static void initSignSelector() {
         ObservableList<Signage> signageList = facade.getAllAsListSignage();
@@ -145,6 +111,49 @@ public class SignageController {
             deleteBtn.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
             deleteBtn.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
         }
+    }
+
+    @FXML
+    private void initialize() {
+        editing = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
+        configTimer(1000);
+        initIcons();
+        initHeader();
+        buildSignage();
+        signageBody.getStyleClass().add("signage-body");
+        initSignSelector();
+        if (editing) {
+            buildEditSignage();
+        } else {
+            buildSignageMap();
+        }
+
+        Platform.runLater(() -> {
+            setFullScreen(false);
+        });
+        myScene.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.F11))
+                setFullScreen(true);
+            else if (event.getCode().equals(KeyCode.ESCAPE))
+                setFullScreen(false);
+        });
+    }
+
+    private void buildSignageMap() {
+        hospitalMap.setDefaultOverlaysVisible(false);
+        hospitalMap.enableMove(false);
+        hospitalMap.setAnimate(false);
+        signageBodyStackPane.getChildren().add(hospitalMap.get());
+        signageBodyStackPane.setMinWidth(600);
+        signageBodyStackPane.setMaxWidth(700);
+    }
+
+    private void updateView(List<Node> nodes) {
+        var minX = nodes.stream().mapToDouble(Node::getXcoord).min().orElse(0);
+        var maxX = nodes.stream().mapToDouble(Node::getXcoord).max().orElse(0);
+        var minY = nodes.stream().mapToDouble(Node::getYcoord).min().orElse(0);
+        var maxY = nodes.stream().mapToDouble(Node::getYcoord).max().orElse(0);
+        hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
     }
 
 //    @NotNull
@@ -235,7 +244,11 @@ public class SignageController {
         signageNameSelector.setOnAction(e -> {
             setSignageName(signageNameSelector.getValue());
         });
-        signageHeaderMid.getChildren().add(signageNameSelector);
+        var button = new PFXButton("Zoom to rect");
+        button.setOnMouseClicked(e->{
+            hospitalMap.showRectangle(new Rectangle(1000, 1000, 1000, 1000));
+        });
+        signageHeaderMid.getChildren().addAll(signageNameSelector, button);
         signageHeaderMid.getStyleClass().add("signage-header-mid");
         signageHeaderMid.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
         signageHeaderMid.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
@@ -380,7 +393,7 @@ public class SignageController {
                     table.getStyleClass().add("signage-label-Here");
                     var label = new Label();
                     label.fontProperty().bind(Bindings.createObjectBinding(() ->
-                            Font.font(App.getSingleton().getPrimaryStage().getWidth()/20), App.getSingleton().getPrimaryStage().widthProperty()));
+                            Font.font(App.getSingleton().getPrimaryStage().getWidth() / 20), App.getSingleton().getPrimaryStage().widthProperty()));
                     signageHeaderLeft.getChildren().add(iconHere);
                     signageHeaderLeft.getChildren().add(table);
                     signageHeaderLeft.visibleProperty().bind(Bindings.greaterThan(Bindings.size(signageList), 0));
