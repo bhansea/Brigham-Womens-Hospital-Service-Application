@@ -154,11 +154,11 @@ public class AdminMapController {
         } else
             buildingDropdown.getSelectionModel().selectItem(node.getBuilding());
         buildingDropdown.setOnAction(e -> {
+            var old = node.toBuilder().build();
             node.setBuilding(buildingDropdown.getValue());
             nodePoints.get(node.getNodeID()).setFill(Color.YELLOW);
             popOver.setOnCloseRequest(null);
-//            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), node.getNodeID())).findFirst().ifPresent(mapEdits::remove);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, node));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, node.toBuilder().build(), old));
         });
 
         // make move
@@ -180,6 +180,7 @@ public class AdminMapController {
         var date = new MFXDatePicker();
         date.setText("Pick Effective Date");
         date.setEditable(false);
+        date.getStyleClass().add("node-popover-date");
         var makeMove = new PFXButton("Submit");
         makeMove.getStyleClass().add("node-popover-make-move");
         makeMove.setOnAction(a -> {
@@ -187,7 +188,7 @@ public class AdminMapController {
             var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
             var move = moves.values().stream().filter(m-> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
             if(move.isPresent()){
-                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue())));
+                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue()), move.get().withDate(move.get().getDate())));
                 return;
             }
             var newMove = new Move(newID, node.getNodeID(), locationDropdown.getValue().getUuid(), date.getValue());
@@ -289,11 +290,10 @@ public class AdminMapController {
         dragController.setOnMove(node -> {
             if (n.get().getXcoord() == (int) node.getLayoutX() && n.get().getYcoord() == (int) node.getLayoutY())
                 return;
+            var old = n.get().toBuilder().build();
             n.get().setXcoord((int) node.getLayoutX());
             n.get().setYcoord((int) node.getLayoutY());
-
-//            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), n.get().getNodeID())).findFirst().ifPresent(mapEdits::remove);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get()));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().build(), old));
         });
         dragController.setOnEnd(node -> map.enableMove(true));
         dragController.setOnStart(node -> map.enableMove(false));

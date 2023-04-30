@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Builder(toBuilder=true)
 public class Edge {
     @SchemaID
     @lombok.With

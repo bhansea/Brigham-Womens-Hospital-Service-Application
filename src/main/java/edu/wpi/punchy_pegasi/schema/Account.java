@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.backend.SchemaID;import edu.wpi.punchy_pegasi.backe
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Builder(toBuilder=true)
 public class Account {
     @SchemaID
     @lombok.With

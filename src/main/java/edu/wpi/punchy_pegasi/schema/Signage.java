@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Builder(toBuilder=true)
 public class Signage {
     @SchemaID
     @lombok.With

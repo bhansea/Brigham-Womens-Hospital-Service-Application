@@ -22,6 +22,10 @@
 
 }
 
+.node-popover-date {
+
+}
+
 .move-delete-btn PFXIcon {
     -fx-fill: -pfx-text;
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Builder(toBuilder=true)
 public class Move {
     @SchemaID
     @lombok.With

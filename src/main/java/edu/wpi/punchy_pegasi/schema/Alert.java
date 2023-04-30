@@ -11,6 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Builder(toBuilder=true)
 public class Alert {
     @SchemaID
     @lombok.With
