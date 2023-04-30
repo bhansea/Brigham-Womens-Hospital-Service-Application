@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/"
