@@ -3,23 +3,17 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 
 public class AboutController {
@@ -29,7 +23,7 @@ public class AboutController {
 
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         TeamMember blake = new TeamMember("Blake Bruell", "Lead Software Engineer", "babruell@wpi.edu", "Computer Science (BS/MS)", "I play the piano", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/blake.PNG"));
         TeamMember charlotte = new TeamMember("Charlotte Carter", "Document Analyst", "ccarter@wpi.edu", "Data Science (BS)", "I have too many squishmallows", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/charlotte.PNG"));
         TeamMember brittany = new TeamMember("Brittany Ficarra", "FE Software Engineer", "bcficarra@wpi.edu", "IMGD & Computer Science (BS)", "I own over 3000 comic books not including duplicates", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brittany.PNG"));
@@ -46,14 +40,15 @@ public class AboutController {
                 {arnav, ryan, piper, gabe, tommy}
         };
 
-        for(int row = 0; row < 2; row++) {
+        for (int row = 0; row < 2; row++) {
             for (int col = 0; col < 5; col++) {
                 sourceGrid.add(teamMembers[row][col].getStackpane(), col, row);
             }
         }
     }
 
-    @Getter@Setter
+    @Getter
+    @Setter
     private static class TeamMember {
         private String name;
         private String position;
