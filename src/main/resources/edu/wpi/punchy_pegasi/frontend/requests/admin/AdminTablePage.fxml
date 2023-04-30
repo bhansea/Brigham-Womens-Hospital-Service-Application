@@ -16,9 +16,7 @@
                             <Label styleClass="admin-container-text-size" text="Select A Table Type to Display"
                                    VBox.vgrow="ALWAYS"/>
                             <MFXComboBox styleClass="admin-container-displayTable" fx:id="displayTableTypeComboBox"
-                                         promptText="Select Table Type"
-                                         HBox.hgrow="ALWAYS"
-                                         VBox.vgrow="ALWAYS"/>
+                                         promptText="Select Table Type" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
                             <HBox spacing="10.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                                 <PFXButton styleClass="admin-container-buttons" text="Import" fx:id="importButton"/>
                                 <PFXButton styleClass="admin-container-buttons" text="Export" fx:id="exportButton"/>
@@ -42,9 +40,7 @@
                 <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
             </VBox>
             <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                <children>
-                    <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS" fx:id="tableContainer"/>
-                </children>
+                <VBox HBox.hgrow="ALWAYS" alignment="CENTER" VBox.Vgrow="ALWAYS" fx:id="tableContainer"/>
             </VBox>
         </VBox>
     </center>
