@@ -58,5 +58,12 @@
     -fx-wrap-text: true;
     -fx-font-size: 14;
     -fx-text-fill: black;
+}
 
+.info-about-bottom-disclaimer{
+    -fx-text-alignment: right;
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 14;
+    -fx-text-fill: #6F6F6F;
+    -fx-padding: 5 20 0 25;
 }

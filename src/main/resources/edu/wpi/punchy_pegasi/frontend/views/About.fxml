@@ -56,6 +56,10 @@
                             <Insets top="5" left="50" bottom="25"/>
                         </padding>
                     </GridPane>
+                    <VBox alignment="BOTTOM_RIGHT">
+                        <Label text="*The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes." styleClass="info-about-bottom-disclaimer">
+                        </Label>
+                    </VBox>
                 </VBox>
             </children>
         </VBox>
