@@ -96,8 +96,8 @@ public class AboutController {
             Text nameText = new Text(this.name);
             Text positionText = new Text(this.position);
             nameText.setStyle("-fx-font-weight: bold");
-            positionText.setStyle("-fx-font-weight: bold");
-            Text description = new Text("________________________\nMajor: " + this.major + "\nFun fact: " + this.funFact + "\nContact: " + this.email);
+            positionText.setStyle("-fx-font-style: italic");
+            Text description = new Text("____________________________\nMajor: " + this.major + "\nFun fact: " + this.funFact + "\nContact: " + this.email);
             VBox vbox = new VBox(nameText, positionText, description);
             vbox.setPadding(new Insets(8));
             hiddenTextOverlay.setGraphic(vbox);
