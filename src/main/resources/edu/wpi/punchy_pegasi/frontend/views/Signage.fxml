@@ -20,11 +20,14 @@
         </StackPane>
     </top>
     <center>
-        <HBox fx:id="signageBody">
-            <VBox fx:id="signageBodyLeft"/>
+        <HBox>
+<!--            <HBox fx:id="signageBody">-->
+                <VBox fx:id="signageBodyLeft"/>
+<!--            </HBox>-->
+            <HBox fx:id="signageBodyMap"/>
         </HBox>
     </center>
     <right>
-        <StackPane fx:id="signageBodyStackPane" style="-fx-padding: 50"/>
+        <StackPane fx:id="signageBodyStackPane" style="-fx-padding: 10"/>
     </right>
 </BorderPane>
