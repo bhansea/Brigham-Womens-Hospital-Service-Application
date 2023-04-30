@@ -29,12 +29,22 @@
     -fx-border-color: -pfx-accent;
     -fx-border-width: 0 1.5 0 0;
     -fx-cursor: hand;
+    -fx-fill: -pfx-text;
+    -fx-text-fill: -pfx-text;
 }
+
+.pfx-picker-minus PFXIcon {
+    -fx-fill: -pfx-accent;
+    -fx-text-fill: -pfx-accent;
+}
+
 .pfx-picker-plus {
     -fx-border-color: -pfx-accent;
     -fx-border-width: 0 0 0 1.5;
     -fx-cursor: hand;
 }
-.pfx-picker-icon PFXIcon {
+
+.pfx-picker-plus PFXIcon {
     -fx-fill: -pfx-accent;
+    -fx-text-fill: -pfx-accent;
 }
