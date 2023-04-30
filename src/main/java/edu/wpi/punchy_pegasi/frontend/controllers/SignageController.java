@@ -255,11 +255,13 @@ public class SignageController {
             App.getSingleton().getPrimaryStage().setFullScreen(true);
             App.getSingleton().getLayout().showLeftLayout(false);
             App.getSingleton().getLayout().showTopLayout(false);
+            signageBodyStackPane.setMaxWidth(1300);
         } else {
             switchTheme(false);
             App.getSingleton().getPrimaryStage().setFullScreen(false);
             App.getSingleton().getLayout().showLeftLayout(true);
             App.getSingleton().getLayout().showTopLayout(true);
+            signageBodyStackPane.setMaxWidth(700);
         }
     }
 
@@ -472,6 +474,7 @@ public class SignageController {
                     continue;
                 }
             }
+//            signageHB.maxWidth(1000);
             signageBodyLeft.getChildren().add(signageHB);
             signageBodyLeft.getStyleClass().add("signage-body-left");
             Separator separator = new Separator();
