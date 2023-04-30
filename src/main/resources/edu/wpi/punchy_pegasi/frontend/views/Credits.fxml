@@ -18,10 +18,11 @@
             </VBox>
             <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
                 <Label text="RESOURCES" styleClass="about-subtitles"/>
-                <GridPane fx:id="sourceGrid" vgap="5" hgap="20" alignment="CENTER_LEFT" styleClass="about-grid">
-                    <Label alignment="CENTER_LEFT" text="Resource" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <Label alignment="CENTER_LEFT" text="Description" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                    <Label alignment="CENTER_RIGHT" text="Link" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <GridPane style="-fx-padding: 0 0 25 50" fx:id="sourceGrid" vgap="5" hgap="20" alignment="CENTER_LEFT"
+                          styleClass="about-grid">
+                    <Label text="Resource" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label text="Description" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Link" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
                 </GridPane>
             </VBox>
         </VBox>

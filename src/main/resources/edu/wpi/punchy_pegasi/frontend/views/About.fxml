@@ -11,7 +11,7 @@
         <VBox VBox.vgrow="ALWAYS" alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: -pfx-accent;">
             <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background;" spacing="10">
                 <Label text="ABOUT" styleClass="about-subtitles"/>
-                <TextFlow style="-fx-padding: 0 0 25 50">
+                <TextFlow style="-fx-padding: 0 0 25 50" lineSpacing="10">
                     <Text styleClass="about-paragraphs">
                         This application is in collaboration with Brigham &amp; Women's Hospital and represents the work
                         of 10 WPI undergraduate students in partial fulfillment of the requirements for CS3733-D23
@@ -27,7 +27,8 @@
             </VBox>
             <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
                 <Label text="MEET THE TEAM" styleClass="about-subtitles"/>
-                <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" styleClass="about-grid">
+                <GridPane style="-fx-padding: 0 0 25 50" vgap="5" hgap="20" alignment="CENTER_LEFT"
+                          styleClass="about-grid">
                     <Label styleClass="about-grid-title" text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                     <Label styleClass="about-grid-title" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                     <Label styleClass="about-grid-title" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
@@ -71,10 +72,6 @@
                     <Label text="Tommy Wang" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
                     <Label text="FE and BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
                     <Label text="wwang8@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
-
-                    <padding>
-                        <Insets top="5" left="50" bottom="25"/>
-                    </padding>
                 </GridPane>
             </VBox>
             <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">

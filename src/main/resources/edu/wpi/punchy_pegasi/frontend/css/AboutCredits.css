@@ -15,6 +15,7 @@
     -fx-font-family: "Nunito Sans";
     -fx-font-size: 18;
     -fx-text-fill: -pfx-text;
+    -fx-padding: 0 0 10 50;
 }
 
 .about-grid-title {
