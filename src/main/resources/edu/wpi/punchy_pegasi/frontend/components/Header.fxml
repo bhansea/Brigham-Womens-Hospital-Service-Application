@@ -7,7 +7,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/"
          styleClass="header">
     <HBox styleClass="header-left-container">
-        <HBox HBox.hgrow="ALWAYS" styleClass="header-search">
+        <HBox HBox.hgrow="ALWAYS" styleClass="header-search" fx:id="headerSearch">
             <PFXIcon icon="SEARCH"/>
             <Label text="Search"/>
         </HBox>
