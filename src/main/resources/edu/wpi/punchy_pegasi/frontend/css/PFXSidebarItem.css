@@ -53,5 +53,5 @@
 }
 
 .pfx-sidebar-container:hover {
-    -fx-background-color: derive(-pfx-accent-light, -5%);
+    -fx-background-color: -pfx-accent-transparent;
 }
