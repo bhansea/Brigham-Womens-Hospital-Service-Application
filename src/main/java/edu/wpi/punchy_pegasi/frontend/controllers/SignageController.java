@@ -17,7 +17,9 @@ import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -47,7 +49,7 @@ import java.util.stream.Stream;
 public class SignageController {
     private static final Facade facade = App.getSingleton().getFacade();
     private static final ObservableList<String> signageNames = FXCollections.observableArrayList();
-    private static boolean editing = false;
+    private static ObservableBooleanValue editing = Bindings.createBooleanBinding(() -> false);
     private final String lightTheme = Objects.requireNonNull(getClass().getResource("/edu/wpi/punchy_pegasi/frontend/css/SignageLight.css")).toExternalForm();
     private final String darkTheme = Objects.requireNonNull(getClass().getResource("/edu/wpi/punchy_pegasi/frontend/css/SignageDark.css")).toExternalForm();
     private final Scene myScene = App.getSingleton().getScene();
@@ -129,34 +131,35 @@ public class SignageController {
     }
 
     private static void addDelButton(HBox hbox, Signage signage) {
-        if (editing) {
-            var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
-            deleteBtn.getStyleClass().add("signage-delete-btn");
 
-            deleteBtn.setOnAction(event -> {
-                facade.deleteSignage(signage);
-            });
-            hbox.getChildren().add(deleteBtn);
-            deleteBtn.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
-            deleteBtn.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
-        }
+        var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
+        deleteBtn.getStyleClass().add("signage-delete-btn");
+
+        deleteBtn.setOnAction(event -> {
+            facade.deleteSignage(signage);
+        });
+        hbox.getChildren().add(deleteBtn);
+        deleteBtn.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not().and(editing));
+        deleteBtn.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not().and(editing));
+
     }
 
     @FXML
     private void initialize() {
         load();
-        editing = App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel();
+        editing = Bindings.createBooleanBinding
+                (() -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel());
         configTimer(1000);
         initIcons();
         initHeader();
         buildSignage();
 //        signageBody.getStyleClass().add("signage-body");
         initSignSelector();
-        if (editing) {
+//        if (editing.get()) {
             buildEditSignage();
-        } else {
+//        } else {
             buildSignageMap();
-        }
+//        }
 
         Platform.runLater(() -> {
             setFullScreen(false);
@@ -179,6 +182,8 @@ public class SignageController {
 //        signageBodyMap.maxWidth(500);
         HBox.setHgrow(signageBodyMap, Priority.ALWAYS);
         signageBodyMap.getStyleClass().add("signage-map");
+        signageBodyMap.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().or(Bindings.not(editing)));
+        signageBodyMap.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().or(Bindings.not(editing)));
 //        hospitalMap.get()
 
 //        signageBodyStackPane.setMinWidth(600);
@@ -205,21 +210,21 @@ public class SignageController {
 //            hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
 ////            hospitalMap.addNode()
 //        });
-        signageList.addListener((ListChangeListener<Signage>) c -> {
-            if (editing) return;
-            var nodes = signageToNodes(signageList);
-            var minX = nodes.stream().mapToDouble(Node::getXcoord).min().orElse(0);
-            var maxX = nodes.stream().mapToDouble(Node::getXcoord).max().orElse(0);
-            var minY = nodes.stream().mapToDouble(Node::getYcoord).min().orElse(0);
-            var maxY = nodes.stream().mapToDouble(Node::getYcoord).max().orElse(0);
-            Platform.runLater(() -> {
-                hospitalMap.clearMap();
-                if (nodes.size() == 0) return;
-                hospitalMap.showLayer(HospitalFloor.floorMap.get(nodes.get(0).getFloor()));
-                nodes.forEach(n -> hospitalMap.addNode(n, "#fffb00", Bindings.createStringBinding(() -> nodeToLocation(n)), Bindings.createStringBinding(() -> "")));
-                hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
-            });
-        });
+//        signageList.addListener((ListChangeListener<Signage>) c -> {
+//            if (editing.get()) return;
+//            var nodes = signageToNodes(signageList);
+//            var minX = nodes.stream().mapToDouble(Node::getXcoord).min().orElse(0);
+//            var maxX = nodes.stream().mapToDouble(Node::getXcoord).max().orElse(0);
+//            var minY = nodes.stream().mapToDouble(Node::getYcoord).min().orElse(0);
+//            var maxY = nodes.stream().mapToDouble(Node::getYcoord).max().orElse(0);
+//            Platform.runLater(() -> {
+//                hospitalMap.clearMap();
+//                if (nodes.size() == 0) return;
+//                hospitalMap.showLayer(HospitalFloor.floorMap.get(nodes.get(0).getFloor()));
+//                nodes.forEach(n -> hospitalMap.addNode(n, "#fffb00", Bindings.createStringBinding(() -> nodeToLocation(n)), Bindings.createStringBinding(() -> "")));
+//                hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
+//            });
+//        });
 
         var signageHere = signageList.filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
         var signageRest = signageList.filtered(signage -> !signage.getDirectionType().equals(Signage.DirectionType.HERE));
@@ -421,7 +426,7 @@ public class SignageController {
         signageNameCB.setItems(signageNames);
         signageNameCB.setEditable(true);
         signageNameCB.setText("");
-        locNameCB.setItems(facade.getAllAsListLocationName());
+        locNameCB.setItems(facade.getAllAsListLocationName().filtered(loc -> loc.getNodeType() != LocationName.NodeType.HALL && loc.getNodeType() != LocationName.NodeType.ELEV && loc.getNodeType() != LocationName.NodeType.STAI));
         locNameCB.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocationName object) {
@@ -460,6 +465,8 @@ public class SignageController {
         outerVbox.setPadding(new Insets(50));
         outerVbox.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
         outerVbox.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
+        outerVbox.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not().and(editing));
+        outerVbox.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not().and(editing));
     }
 
     private void validateSubmit() {
@@ -470,14 +477,10 @@ public class SignageController {
 
     private void setSignageName(String name) {
         filterUpdaters.forEach(updater -> updater.accept(name));
-        if (editing) {
-            return;
-        }
 
         // set up the listener to change to map size when stage size changes
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
                 Platform.runLater(() -> {
-                    System.out.println(signageBodyStackPane.getLayoutX() + " " + signageBodyStackPane.getWidth());
                     updateMapView(facade.getAllAsListSignage().filtered(s -> s.getSignName().equals(name)));
                 });
 
