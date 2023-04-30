@@ -38,6 +38,6 @@
 }
 
 .mfx-combo-box-cell .data-label {
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-text-fill: -pfx-text;
 }

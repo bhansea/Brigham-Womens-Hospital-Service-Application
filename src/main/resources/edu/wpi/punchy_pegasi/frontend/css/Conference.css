@@ -1,7 +1,7 @@
 @import "Fonts.css";
 
 .conference-dropDown {
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-font-size: 18;
     -fx-max-width: 200;
     -fx-background-color: -pfx-primary;
@@ -22,7 +22,7 @@
 }
 
 .conference-subText {
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-font-size: 18;
     -fx-text-fill: -pfx-text;
     -fx-padding: 0 0 5 0;
@@ -30,7 +30,7 @@
 
 .conference-red-star {
     -fx-text-fill: red;
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-font-size: 18;
     -fx-padding: 0 0 5 0;
 }
@@ -38,7 +38,7 @@
 .conference-textField {
     -fx-border-radius: 6;
     -fx-background-radius: 6;
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-font-size: 18;
     -fx-background-color: -pfx-primary;
     -fx-border-color: -pfx-secondary;

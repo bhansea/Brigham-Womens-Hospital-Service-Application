@@ -92,7 +92,7 @@ Popup
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell {
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:hover,
@@ -113,7 +113,7 @@ Popup
 }
 
 .mfx-date-picker .date-picker-popup .week-day {
-    -fx-font-family: "Nunito Sans";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-text-fill: -pfx-text;
     -fx-padding: 0 0 5 0;
 }
