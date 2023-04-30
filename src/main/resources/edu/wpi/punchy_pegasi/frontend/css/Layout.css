@@ -80,8 +80,8 @@
     -fx-background-color: -pfx-background;
 }
 
-#alertOverlay {
-    -fx-background-color: -pfx-secondary-transparent;
+#overlayContainer {
+    -fx-background-color: transparent;
 }
 
 #notificationsContainer {
@@ -126,4 +126,13 @@
 
 .alert-HBox {
     -fx-alignment: CENTER;
+}
+
+.search-popup {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+    -fx-pref-width: 300;
+    -fx-max-width: 300;
+    -fx-min-width: 300;
 }
