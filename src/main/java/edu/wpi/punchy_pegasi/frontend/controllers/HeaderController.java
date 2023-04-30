@@ -6,29 +6,22 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
 import edu.wpi.punchy_pegasi.schema.Account;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import org.apache.logging.log4j.util.Strings;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 
@@ -41,36 +34,55 @@ public class HeaderController extends HBox implements PropertyChangeListener {
     HBox headerSearch;
 
 
+
+    public ObservableList<VBox> vboxPopulator(FilteredList<AppSearch.SearchableItem> filtered){
+        ObservableMap<String, VBox> items = FXCollections.observableHashMap();
+        for (AppSearch.SearchableItem s: filtered) {
+            var name = s.getScreen().name();
+            VBox item = items.get(name);
+            if (item == null) {
+                item = new VBox();
+                item.setId(name);
+                var separator = new Separator();
+                var nameLabel = new Label(name);
+                nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-underline: true");
+                nameLabel.setOnMouseClicked(e -> s.getNavigate().run());
+                items.put(name, item);
+                var description = new Label(s.getDescription());
+                item.getChildren().addAll(nameLabel, separator, description);
+            } else {
+                var description = new Label(s.getDescription());
+                description.setOnMouseClicked(e -> s.getNavigate().run());
+                if (!item.getChildren().contains(description)) {
+                    item.getChildren().add(description);
+                }
+            }
+        }
+
+        ObservableList<VBox> VBoxlist = FXCollections.observableList(new ArrayList<>(items.values()));
+        return VBoxlist;
+    }
     public void initialize() {
         App.getSingleton().addPropertyChangeListener(this);
         setAccount(App.getSingleton().getAccount());
 
         //for each page, list its functions??
         ObservableList<AppSearch.SearchableItem> list = FXCollections.observableArrayList();
-        list.add(new AppSearch.SearchableItem("Pathfinding", "Pathfind between two different locations on the hospital map", () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
-        list.add(new AppSearch.SearchableItem("Info", "See the credits and the about page for the application", () -> App.getSingleton().navigate(Screen.ABOUT)));
-        list.add(new AppSearch.SearchableItem("Editing", "Edit any table information for the app", () -> App.getSingleton().navigate(Screen.ADMIN_PAGE)));
-        list.add(new AppSearch.SearchableItem("Flower Delivery", "Order flowers for delivery", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
-        list.add(new AppSearch.SearchableItem("Conference Room", "Book a conference room for a meeting", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
-        list.add(new AppSearch.SearchableItem("Office Supplies", "Order office supplies", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
-        list.add(new AppSearch.SearchableItem("Food Delivery", "Order food for delivery", () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
-        list.add(new AppSearch.SearchableItem("Map Editing", "Edit the map and its features", () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
-
+        list.add(new AppSearch.SearchableItem("Pathfind between two different locations on the hospital map", Screen.MAP_PAGE, () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
+        list.add(new AppSearch.SearchableItem("View the hospital map", Screen.MAP_PAGE, () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
+        list.add(new AppSearch.SearchableItem("View the about page", Screen.INFO, () -> App.getSingleton().navigate(Screen.INFO)));
+        list.add(new AppSearch.SearchableItem( "View the credits page", Screen.INFO, () -> App.getSingleton().navigate(Screen.INFO)));
         var filtered = list.filtered(s -> true);
 
         var container = new VBox();
         container.setStyle("-fx-background-color: -pfx-secondary-transparent");
         var containerV2 = new VBox();
-        var listView = new PFXListView<>(filtered, s -> {
-            var item = new VBox();
-            var separator = new Separator();
-            var name = new Label(s.getName());
-            name.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-underline: true");
-            name.setOnMouseClicked(e->s.getNavigate().run());
-            var description = new Label(s.getDescription());
-            item.getChildren().addAll(name, separator, description);
-            return item;
-        }, AppSearch.SearchableItem::getName);
+        
+
+        ObservableList<VBox> VBoxlist = vboxPopulator(filtered);
+        var listView = new PFXListView<VBox>(VBoxlist, s-> s, s -> s.getId());
+
+
         var searchField = new TextField("Testing");
         containerV2.getStyleClass().add("search-popup");
         containerV2.prefWidthProperty().bind(headerSearch.widthProperty());
@@ -84,15 +96,18 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         });
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filtered.setPredicate(s -> true);
-            if (newValue.isBlank())
+            if (newValue.isBlank()) {
+                VBoxlist.clear();
+                VBoxlist.addAll(vboxPopulator(filtered));
                 return;
+            }
             var preppedWords = Arrays.stream(newValue.trim().split("\s+")).distinct().map(w -> String.join(".?",
                     w.chars().mapToObj(c -> String.valueOf((char) c))
                             .toList())
             ).map(w -> Pattern.compile(w, Pattern.CASE_INSENSITIVE)).toList();
             list.forEach(si -> si.setCurrentWeight(( // weight 5
                     preppedWords.stream().mapToInt(regex ->
-                            regex.matcher(si.getName()).find() ? 1 : 0
+                            regex.matcher(si.getScreen().name()).find() ? 1 : 0
                     ).sum()) * 5
                     + ( // weight 1
                     preppedWords.stream().mapToInt(regex ->
@@ -100,6 +115,8 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                     ).sum())));
             FXCollections.sort(list, Comparator.comparing(AppSearch.SearchableItem::getCurrentWeight).reversed());
             filtered.setPredicate(si -> si.getCurrentWeight() > 0);
+            VBoxlist.clear();
+            VBoxlist.addAll(vboxPopulator(filtered));
         });
     }
 
