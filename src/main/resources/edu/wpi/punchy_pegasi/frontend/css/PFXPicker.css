@@ -35,7 +35,6 @@
 
 .pfx-picker-minus PFXIcon {
     -fx-fill: -pfx-accent;
-    -fx-text-fill: -pfx-accent;
 }
 
 .pfx-picker-plus {
@@ -46,5 +45,4 @@
 
 .pfx-picker-plus PFXIcon {
     -fx-fill: -pfx-accent;
-    -fx-text-fill: -pfx-accent;
 }
