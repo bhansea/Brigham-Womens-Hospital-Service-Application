@@ -9,7 +9,6 @@ import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
-import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -56,6 +55,7 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
     @Setter
     private boolean animate = true;
     private Map<HospitalFloor.Floors, HospitalFloor> floorMap = new HashMap<>();
+
     public HospitalMap() {
         VBox.setVgrow(gesturePane, Priority.ALWAYS);
         getChildren().addAll(new VBox(gesturePane), overlay);
@@ -72,8 +72,20 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
                     gesturePane.zoomTo(minZoom, gesturePane.targetPointAtViewportCentre());
             });
             return minZoom;
-        }, gesturePane.widthProperty(), gesturePane.heightProperty()));
-        gesturePane.setMaxScale(3.4);
+        },
+        gesturePane.widthProperty(),
+        gesturePane.heightProperty(),
+        App.getSingleton().getPrimaryStage().widthProperty(),
+        App.getSingleton().getPrimaryStage().heightProperty()));
+
+        gesturePane.maxScaleProperty().bind(Bindings.createDoubleBinding(() -> {
+            var maxZoom = Math.min(gesturePane.getWidth() / 300, gesturePane.getHeight() / 300);
+            Platform.runLater(() -> {
+                if (gesturePane.getCurrentScale() > maxZoom)
+                    gesturePane.zoomTo(maxZoom, gesturePane.targetPointAtViewportCentre());
+            });
+            return maxZoom;
+        }, gesturePane.widthProperty(), gesturePane.heightProperty(), App.getSingleton().getPrimaryStage().widthProperty(), App.getSingleton().getPrimaryStage().heightProperty()));
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
 
         var spinner = new MFXProgressSpinner(-1);

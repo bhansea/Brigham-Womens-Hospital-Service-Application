@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.frontend.controllers;
 
-import com.sun.javafx.tk.Toolkit;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
@@ -18,9 +17,7 @@ import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -44,6 +41,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SignageController {
     private static final Facade facade = App.getSingleton().getFacade();
@@ -194,7 +193,7 @@ public class SignageController {
 //                signageBody.widthProperty().add(App.getSingleton().getLayout().getLeftLayout().widthProperty().add(5))));
     }
 
-    private static void updateView(ObservableList<Signage> signageList) {
+    private static void updateMapView(ObservableList<Signage> signageList) {
 //        var nodesList = getNode(signageList);
 //        signageList.addListener((ListChangeListener<Signage>) c -> {
 //            if (editing) return;
@@ -206,19 +205,57 @@ public class SignageController {
 //            hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
 ////            hospitalMap.addNode()
 //        });
+        signageList.addListener((ListChangeListener<Signage>) c -> {
+            if (editing) return;
+            var nodes = signageToNodes(signageList);
+            var minX = nodes.stream().mapToDouble(Node::getXcoord).min().orElse(0);
+            var maxX = nodes.stream().mapToDouble(Node::getXcoord).max().orElse(0);
+            var minY = nodes.stream().mapToDouble(Node::getYcoord).min().orElse(0);
+            var maxY = nodes.stream().mapToDouble(Node::getYcoord).max().orElse(0);
+            Platform.runLater(() -> {
+                hospitalMap.clearMap();
+                if (nodes.size() == 0) return;
+                hospitalMap.showLayer(HospitalFloor.floorMap.get(nodes.get(0).getFloor()));
+                nodes.forEach(n -> hospitalMap.addNode(n, "#fffb00", Bindings.createStringBinding(() -> nodeToLocation(n)), Bindings.createStringBinding(() -> "")));
+                hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
+            });
+        });
 
-
-        var nodes = signageToNodes(signageList);
-        var minX = nodes.stream().mapToDouble(Node::getXcoord).min().orElse(0);
-        var maxX = nodes.stream().mapToDouble(Node::getXcoord).max().orElse(0);
-        var minY = nodes.stream().mapToDouble(Node::getYcoord).min().orElse(0);
-        var maxY = nodes.stream().mapToDouble(Node::getYcoord).max().orElse(0);
-        Platform.runLater(() -> {
-            hospitalMap.clearMap();
-            if (nodes.size() == 0) return;
-            hospitalMap.showLayer(HospitalFloor.floorMap.get(nodes.get(0).getFloor()));
-            nodes.forEach(n -> hospitalMap.addNode(n, "#fffb00", Bindings.createStringBinding(() -> nodeToLocation(n)), Bindings.createStringBinding(() -> "")));
-            hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200)); });
+        var signageHere = signageList.filtered(signage -> signage.getDirectionType().equals(Signage.DirectionType.HERE));
+        var signageRest = signageList.filtered(signage -> !signage.getDirectionType().equals(Signage.DirectionType.HERE));
+        if (signageHere.size() > 0) {
+            var nodeHere = signageToNodes(signageHere);
+            var nodeRest = signageToNodes(signageRest);
+            var floorHere = nodeHere.get(0).getFloor();
+            var nodeHereOnFloor = nodeHere.filtered(node -> node.getFloor().equals(floorHere));
+            var nodeRestOnFloor = nodeRest.filtered(node -> node.getFloor().equals(floorHere));
+            List<Node> concatenated;
+            concatenated = Stream.concat(nodeHereOnFloor.stream(), nodeRestOnFloor.stream()).collect(Collectors.toList());
+            var minX = concatenated.stream().mapToDouble(Node::getXcoord).min().orElse(0);
+            var maxX = concatenated.stream().mapToDouble(Node::getXcoord).max().orElse(0);
+            var minY = concatenated.stream().mapToDouble(Node::getYcoord).min().orElse(0);
+            var maxY = concatenated.stream().mapToDouble(Node::getYcoord).max().orElse(0);
+            Platform.runLater(() -> {
+                hospitalMap.clearMap();
+                hospitalMap.showLayer(HospitalFloor.floorMap.get(floorHere));
+                hospitalMap.drawYouAreHere(nodeHereOnFloor.get(0));
+                nodeRestOnFloor.forEach(n -> hospitalMap.addNode(n, "#fffb00", Bindings.createStringBinding(() -> nodeToLocation(n)), Bindings.createStringBinding(() -> "")));
+                hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
+            });
+        } else {
+            var nodes = signageToNodes(signageList);
+            var minX = nodes.stream().mapToDouble(Node::getXcoord).min().orElse(0);
+            var maxX = nodes.stream().mapToDouble(Node::getXcoord).max().orElse(0);
+            var minY = nodes.stream().mapToDouble(Node::getYcoord).min().orElse(0);
+            var maxY = nodes.stream().mapToDouble(Node::getYcoord).max().orElse(0);
+            Platform.runLater(() -> {
+                hospitalMap.clearMap();
+                if (nodes.size() == 0) return;
+                hospitalMap.showLayer(HospitalFloor.floorMap.get(nodes.get(0).getFloor()));
+                nodes.forEach(n -> hospitalMap.addNode(n, "#fffb00", Bindings.createStringBinding(() -> nodeToLocation(n)), Bindings.createStringBinding(() -> "")));
+                hospitalMap.showRectangle(new Rectangle(minX - 100, minY - 100, maxX - minX + 200, maxY - minY + 200));
+            });
+        }
     }
 
     private static String nodeToLocation(Node node) {
@@ -436,14 +473,18 @@ public class SignageController {
         if (editing) {
             return;
         }
+
+        // set up the listener to change to map size when stage size changes
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
                 Platform.runLater(() -> {
                     System.out.println(signageBodyStackPane.getLayoutX() + " " + signageBodyStackPane.getWidth());
-                    updateView(facade.getAllAsListSignage().filtered(s -> s.getSignName().equals(name)));});
+                    updateMapView(facade.getAllAsListSignage().filtered(s -> s.getSignName().equals(name)));
+                });
 
         App.getSingleton().getPrimaryStage().widthProperty().addListener(stageSizeListener);
         App.getSingleton().getPrimaryStage().heightProperty().addListener(stageSizeListener);
-        updateView(facade.getAllAsListSignage().filtered(s -> s.getSignName().equals(name)));
+        // update the map view when the signage name is changed
+        updateMapView(facade.getAllAsListSignage().filtered(s -> s.getSignName().equals(name)));
     }
     public static double computeTextWidth(Font font, String text, double wrappingWidth) {
         Text textNode = new Text(text);
