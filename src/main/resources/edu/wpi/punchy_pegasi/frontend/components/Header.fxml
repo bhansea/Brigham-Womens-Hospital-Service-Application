@@ -9,8 +9,8 @@
          styleClass="header">
     <HBox styleClass="header-left-container">
         <HBox HBox.hgrow="ALWAYS" styleClass="header-search" fx:id="headerSearch">
-            <PFXIcon icon="SEARCH"/>
-            <Label text="Search"/>
+            <PFXIcon icon="SEARCH" style="-fx-fill: -pfx-secondary-light;"/>
+            <Label text="Search" style="-fx-text-fill: -pfx-secondary-light;"/>
         </HBox>
     </HBox>
     <HBox HBox.hgrow="ALWAYS"/>

@@ -92,17 +92,19 @@ Popup
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell {
-    -fx-font-family: "Nunito Sans SemiBold";
+    -fx-font-family: "Nunito Sans";
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:hover,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:hover {
-    -fx-background-color: -pfx-primary;
+    -fx-background-color: -pfx-accent-transparent;
+    -fx-text-fill: -pfx-text;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected,
 .mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected {
     -fx-background-color: -pfx-accent-transparent;
+    -fx-text-fill: -pfx-text;
 }
 
 .mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
