@@ -24,8 +24,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.javatuples.Pair;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -309,7 +311,7 @@ public class PathfindingMap {
     }
 
     @FXML
-    private void sendRobotMessage() {
+    private void sendRobotMessage() throws InterruptedException {
         SerialPort comPort = null;
         SerialPort[] ports = SerialPort.getCommPorts();
 
@@ -331,6 +333,7 @@ public class PathfindingMap {
         comPort.writeBytes(message, message.length);
 
         for (int i = 1; i < xCoords.size() - 1; i++) {
+            Thread.sleep(100);
             message = generateMessage("M", xCoords.get(i), yCoords.get(i));
             System.out.println(xCoords.get(i) + ", " + yCoords.get(i));
             comPort.writeBytes(message, message.length);
@@ -339,6 +342,21 @@ public class PathfindingMap {
         message = generateMessage("E", xCoords.get(xCoords.size() - 1), yCoords.get(yCoords.size() - 1));
         System.out.println(xCoords.get(xCoords.size() - 1) + ", " + yCoords.get(yCoords.size() - 1));
         comPort.writeBytes(message, message.length);
+
+        // Receive Message
+        int numRead = 0;
+        byte[] readBuffer = new byte[0];
+        comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 100, 0);
+        while (numRead <= 1)
+        {
+            readBuffer = new byte[1024];
+            numRead = comPort.readBytes(readBuffer, readBuffer.length);
+            System.out.println("Read " + numRead + " bytes.");
+            System.out.println(Arrays.toString(readBuffer));
+        }
+
+        System.out.println(Arrays.toString(readBuffer));
+
         comPort.closePort();
     }
 
