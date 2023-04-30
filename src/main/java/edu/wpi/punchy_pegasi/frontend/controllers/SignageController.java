@@ -331,11 +331,13 @@ public class SignageController {
         signageNameSelector.setOnAction(e -> {
             setSignageName(signageNameSelector.getValue());
         });
-//        var button = new PFXButton("Zoom to rect");
-//        button.setOnMouseClicked(e->{
-//            hospitalMap.showRectangle(new Rectangle(1401 - 100, 2566 - 100, 1681 - 1401 + 200, 2747 - 2556 + 200));
-//        });
-        signageHeaderMid.getChildren().addAll(signageNameSelector);
+
+        var selectASignageToStart = new Label("Select a signage to start:");
+        selectASignageToStart.visibleProperty().bind(signageNameSelector.selectedItemProperty().isNull());
+        selectASignageToStart.managedProperty().bind(signageNameSelector.selectedItemProperty().isNull());
+        selectASignageToStart.setPadding(new Insets(0, 10, 0, 0));
+
+        signageHeaderMid.getChildren().addAll(selectASignageToStart, signageNameSelector);
         signageHeaderMid.getStyleClass().add("signage-header-mid");
         signageHeaderMid.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
         signageHeaderMid.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().not());
