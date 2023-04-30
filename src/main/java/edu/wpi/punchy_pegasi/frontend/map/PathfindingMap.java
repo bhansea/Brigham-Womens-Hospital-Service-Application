@@ -24,8 +24,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.javatuples.Pair;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -86,9 +88,11 @@ public class PathfindingMap {
     private ObservableList<Edge> edgesList;
     private ObservableList<LocationName> locationsList;
     private ObservableList<Move> movesList;
-    private ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
+    private ObservableMap<Node, ObservableList<Move>> nodeToMoves;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
+    @FXML
+    private Label batteryPercent;
 
     public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
         byte[] strArray = str.getBytes();
@@ -127,10 +131,10 @@ public class PathfindingMap {
     }
 
     private Optional<Circle> drawNode(Node node, String color) {
-        var location = nodeToLocation.get(node);
-        if (location.isEmpty()) return Optional.empty();
-        var labelBinding = Bindings.createStringBinding(() -> location.get(0).getShortName(), location);
-        var hoverBinding = Bindings.createStringBinding(() -> String.join("\n", location.stream().map(LocationName::getLongName).toArray(String[]::new)), location);
+        var moves = nodeToMoves.get(node);
+        if (moves.isEmpty()) return Optional.empty();
+        var labelBinding = Bindings.createStringBinding(() -> locations.get(moves.get(0).getLocationID()).getShortName(), moves);
+        var hoverBinding = Bindings.createStringBinding(() -> String.join("\n", moves.stream().map(e->locations.get(e.getLocationID())).filter(Objects::nonNull).map(LocationName::getLongName).toArray(String[]::new)), moves);
         return map.addNode(node, color, labelBinding, hoverBinding);
     }
 
@@ -223,15 +227,15 @@ public class PathfindingMap {
             map.clearMap();
         });
         nodesList.forEach(n -> {
-            var location = nodeToLocation.get(n);
-            if (location == null || location.isEmpty()) return;
-            if (!isDestination.test(location.get(0))) return;
+            if (!nodeToMoves.containsKey(n)) return;
+            var moves = nodeToMoves.get(n).stream().map(m -> locations.get(m.getLocationID())).filter(l->l != null && isDestination.test(l)).toList();
+            if (moves.isEmpty()) return;
             var pointOpt = drawNode(n, "#FFFF00");
             if (pointOpt.isEmpty()) return;
             var point = pointOpt.get();
             point.setOnMouseClicked(e -> {
-                if (startSelected.get()) nodeStartCombo.selectItem(location.get(0));
-                else if (endSelected.get()) nodeEndCombo.selectItem(location.get(0));
+                if (startSelected.get()) nodeStartCombo.selectItem(moves.get(0));
+                else if (endSelected.get()) nodeEndCombo.selectItem(moves.get(0));
                 selectGraphicallyCancel.fire();
             });
         });
@@ -247,7 +251,7 @@ public class PathfindingMap {
             edgesList = App.getSingleton().getFacade().getAllAsListEdge();
             movesList = App.getSingleton().getFacade().getAllAsListMove();
             locationsList = App.getSingleton().getFacade().getAllAsListLocationName();
-            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, adminDatePicker.valueProperty());
+            nodeToMoves = FacadeUtils.getNodeLocations(nodes, locations, moves, adminDatePicker.valueProperty());
             locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, adminDatePicker.valueProperty());
             Platform.runLater(callback);
         });
@@ -309,7 +313,7 @@ public class PathfindingMap {
     }
 
     @FXML
-    private void sendRobotMessage() {
+    private void sendRobotMessage() throws InterruptedException {
         SerialPort comPort = null;
         SerialPort[] ports = SerialPort.getCommPorts();
 
@@ -331,6 +335,7 @@ public class PathfindingMap {
         comPort.writeBytes(message, message.length);
 
         for (int i = 1; i < xCoords.size() - 1; i++) {
+            Thread.sleep(50);
             message = generateMessage("M", xCoords.get(i), yCoords.get(i));
             System.out.println(xCoords.get(i) + ", " + yCoords.get(i));
             comPort.writeBytes(message, message.length);
@@ -339,6 +344,24 @@ public class PathfindingMap {
         message = generateMessage("E", xCoords.get(xCoords.size() - 1), yCoords.get(yCoords.size() - 1));
         System.out.println(xCoords.get(xCoords.size() - 1) + ", " + yCoords.get(yCoords.size() - 1));
         comPort.writeBytes(message, message.length);
+
+        // Receive Message for Battery
+        comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+
+        byte[] firstReadBuffer = new byte[1];
+        byte[] secondReadBuffer = new byte[1];
+        for(int i=0;i<2;i++)
+        {
+            if(i == 0) comPort.readBytes(firstReadBuffer, firstReadBuffer.length);
+            if(i == 1) comPort.readBytes(secondReadBuffer, secondReadBuffer.length);
+        }
+
+        byte[] result = new byte[2];
+        result[0] = firstReadBuffer[0];
+        result[1] = secondReadBuffer[0];
+
+        batteryPercent.setText("Battery Percentage: " + new String(result, StandardCharsets.UTF_8) + "%");
+
         comPort.closePort();
     }
 
