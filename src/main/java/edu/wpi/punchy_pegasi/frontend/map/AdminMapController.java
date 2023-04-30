@@ -188,11 +188,11 @@ public class AdminMapController {
             var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
             var move = moves.values().stream().filter(m-> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
             if(move.isPresent()){
-                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue()), move.get().withDate(move.get().getDate())));
+                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue()), move.get().toBuilder().build()));
                 return;
             }
             var newMove = new Move(newID, node.getNodeID(), locationDropdown.getValue().getUuid(), date.getValue());
-            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, newMove));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, newMove.toBuilder().build()));
         });
         Function<Move, javafx.scene.Node> renderMove = m -> {
             var hbox = new HBox();
@@ -227,10 +227,10 @@ public class AdminMapController {
             nodePoint.setVisible(false);
             nodePoint.setManaged(false);
             edgeLines.get(node.getNodeID()).forEach(edge -> {
-                mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge)));
+                mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge).toBuilder().build()));
             });
 //            nodes = nodes.entrySet().stream().filter(e -> !e.getKey().equals(node.getNodeID())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_NODE, node));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_NODE, node.toBuilder().build()));
         });
         editNode.getChildren().addAll(
                 buildingDropdown,
@@ -277,7 +277,7 @@ public class AdminMapController {
                 secondNode = n.get();
             var newEdge = new Edge(UUID.randomUUID(), firstNode.getNodeID(), secondNode.getNodeID());
             addEditableEdge(newEdge);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge.toBuilder().build()));
             var startPoint = nodePoints.get(firstNode.getNodeID());
             if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
             var endPoint = nodePoints.get(secondNode.getNodeID());
@@ -309,7 +309,7 @@ public class AdminMapController {
             if (!isRightClick.test(e)) return;
             if (edgeLine.get().getStroke() == Color.RED) return;
             edgeLine.get().setStroke(Color.RED);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edge));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edge.toBuilder().build()));
             edgeLines.get(edge.getStartNode()).removeIf(edg -> edg.equals(edge.getUuid()));
             edgeLines.get(edge.getEndNode()).removeIf(edg -> edg.equals(edge.getUuid()));
         });
@@ -326,7 +326,7 @@ public class AdminMapController {
             var location = map.getClickLocation(e);
             var node = new Node(nodes.values().stream().mapToLong(Node::getNodeID).max().orElse(0) + 5, (int) location.getX(), (int) location.getY(), map.getLayer().getIdentifier(), null);
             nodes.put(node.getNodeID(), node);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_NODE, node));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_NODE, node.toBuilder().build()));
 //            var nodePoint = addEditableNode(node);
 //            if (nodePoint.isEmpty()) {
 //                new PFXAlert("Error, could not add node.");
