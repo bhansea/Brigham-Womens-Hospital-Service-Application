@@ -23,14 +23,12 @@ public class PFXListView<T> extends VBox {
                     for (T item : c.getRemoved())
                         removeNode(item);
                 if (c.wasAdded())
-                    for (T item : c.getAddedSubList()) {
+                    for (T item : c.getAddedSubList())
                         createNode(item);
-                    }
             }
         });
         for (T item : list)
             createNode(item);
-//            getChildren().add(mapper.apply(item));
     }
 
     private void createNode(T item) {
