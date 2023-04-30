@@ -8,6 +8,7 @@ import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Account;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -76,19 +77,31 @@ public class HeaderController extends HBox implements PropertyChangeListener {
 
         //for each page, list its functions??
         ObservableList<AppSearch.SearchableItem> list = FXCollections.observableArrayList();
+        list.add(new AppSearch.SearchableItem("View the home page", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("Check your outstanding service requests", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("View service request pie chart", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("View service request table", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("View alerts", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("Change status of service requests", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("Mark service request as done", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+        list.add(new AppSearch.SearchableItem("Mark service request as processing", Screen.HOME, () -> App.getSingleton().navigate(Screen.HOME)));
+
         list.add(new AppSearch.SearchableItem("Pathfind between two locations on the hospital map", Screen.MAP_PAGE, () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
         list.add(new AppSearch.SearchableItem("View the hospital map", Screen.MAP_PAGE, () -> App.getSingleton().navigate(Screen.MAP_PAGE)));
+
         list.add(new AppSearch.SearchableItem("Edit the hospital map", Screen.EDIT_MAP_PAGE, () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
         list.add(new AppSearch.SearchableItem("Edit moves on the map", Screen.EDIT_MAP_PAGE, () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
         list.add(new AppSearch.SearchableItem("Edit locations on the hospital map", Screen.EDIT_MAP_PAGE, () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
         list.add(new AppSearch.SearchableItem("Add nodes to the hospital map", Screen.EDIT_MAP_PAGE, () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
         list.add(new AppSearch.SearchableItem("Add edges to the hospital map", Screen.EDIT_MAP_PAGE, () -> App.getSingleton().navigate(Screen.EDIT_MAP_PAGE)));
+
         list.add(new AppSearch.SearchableItem("Create a service request", Screen.SERVICE_REQUEST, () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
         list.add(new AppSearch.SearchableItem("Create a flower delivery service request", Screen.SERVICE_REQUEST, () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
         list.add(new AppSearch.SearchableItem("Create a conference room service request", Screen.SERVICE_REQUEST, () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
         list.add(new AppSearch.SearchableItem("Create a office supplies service request", Screen.SERVICE_REQUEST, () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
         list.add(new AppSearch.SearchableItem("Create a food delivery service request", Screen.SERVICE_REQUEST, () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
         list.add(new AppSearch.SearchableItem("Create a furniture service request", Screen.SERVICE_REQUEST, () -> App.getSingleton().navigate(Screen.SERVICE_REQUEST)));
+
         list.add(new AppSearch.SearchableItem("View the about page", Screen.INFO, () -> App.getSingleton().navigate(Screen.INFO)));
         list.add(new AppSearch.SearchableItem( "View the credits page", Screen.INFO, () -> App.getSingleton().navigate(Screen.INFO)));
         var filtered = list.filtered(s -> true);
@@ -102,11 +115,10 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         var listView = new PFXListView<VBox>(VBoxlist, s-> s, s -> s.getId());
 
 
+        var scrollPane = new MFXScrollPane();
         var searchField = new TextField("");
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
-        searchField.requestFocus();
-        searchField.positionCaret(searchField.getText().length());
         searchBox.setStyle("-fx-background-radius: 40; -fx-background-color: -pfx-background; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 40");
         searchBox.setPrefHeight(35);
         searchBox.setMaxHeight(35);
@@ -124,12 +136,16 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         containerV2.prefWidthProperty().bind(headerSearch.widthProperty());
         containerV2.maxWidthProperty().bind(headerSearch.widthProperty());
         containerV2.minWidthProperty().bind(headerSearch.widthProperty());
+        containerV2.setMaxHeight(500);
         container.getChildren().addAll(searchBox, containerV2);
         containerV2.setTranslateX(headerSearch.getLayoutX());
-        containerV2.getChildren().addAll(listView);
+        scrollPane.setContent(listView);
+        containerV2.getChildren().addAll(scrollPane);
 
 
         headerSearch.setOnMouseClicked(e -> {
+            searchField.requestFocus();
+            searchField.positionCaret(searchField.getText().length());
             VBoxlist.clear();
             VBoxlist.addAll(vboxPopulator(filtered));
             var spacer = new HBox();
