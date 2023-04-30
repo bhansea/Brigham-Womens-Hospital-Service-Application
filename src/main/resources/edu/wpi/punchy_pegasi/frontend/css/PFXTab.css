@@ -1,28 +1,28 @@
 @import "Fonts.css";
 
 .pfx-tab{
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
     -fx-font-size: 18;
     -fx-padding: 10;
     -fx-alignment: CENTER;
-    -fx-border-width: 0 0 3 0;
-    -fx-border-color: transparent;
+    -fx-border-color: -pfx-background;
     -fx-cursor: hand;
 }
 
 .pfx-tab-text {
-    -fx-text-fill: -pfx-secondary;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-tab:selected {
-    -fx-border-width: 0 0 3 0;
-    -fx-border-color: -pfx-accent;
+    -fx-border-width: 3;
+    -fx-border-color: -pfx-background -pfx-background -pfx-text -pfx-background;
 }
 
 .pfx-tab:selected .pfx-tab-text{
-    -fx-text-fill: -pfx-navy;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-tab:hover {
     -fx-background-color: derive(-pfx-accent-light, -5%);
+    -fx-text-fill: -pfx-accent;
 }

@@ -40,9 +40,9 @@
 }
 
 .pfx-card-vertical-stats Label {
-    -fx-font-family: "Nunito Sans Light";
+    -fx-font-family: "Nunito Sans";
     -fx-background-color: transparent;
-    -fx-text-fill: -pfx-navy;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-card-vertical-container:selected {

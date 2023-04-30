@@ -50,21 +50,21 @@
 }
 
 .admin-container-buttons{
-    -pfx-button-text: white;
+    -pfx-button-text: -pfx-text;
     -pfx-button-background: -pfx-accent;
     -pfx-button-hover: -pfx-accent-dark;
     -fx-min-width: 120;
 }
 
 .admin-container-buttons-clear{
-    -pfx-button-text: white;
+    -pfx-button-text: -pfx-text;
     -pfx-button-background: -pfx-danger;
     -pfx-button-hover: -pfx-danger-dark;
     -fx-min-width: 120;
 }
 
 .admin-container-buttons-add{
-    -pfx-button-text: white;
+    -pfx-button-text: -pfx-text;
     -pfx-button-background: -pfx-success;
     -pfx-button-hover: -pfx-success-dark;
     -fx-min-width: 120;

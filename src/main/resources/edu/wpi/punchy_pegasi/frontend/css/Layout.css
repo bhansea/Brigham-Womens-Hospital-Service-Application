@@ -15,7 +15,7 @@
 .sidebar-expand-icon {
     -fx-font-size: 18;
     -fx-padding: 0;
-    -fx-fill: -pfx-secondary;
+    -fx-fill: -pfx-text;
     -fx-cursor: hand;
 }
 
