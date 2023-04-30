@@ -70,7 +70,7 @@
                     <Insets left="10"/>
                 </padding>
                 <Label text="Welcome back!&#10;Check your outstanding service requests."
-                       BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background"
+                       BorderPane.alignment="CENTER" style="-fx-background-color: -pfx-background; -fx-text-fill: -pfx-text;"
                        HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10">
                     <font>
                         <Font name="Nunito Sans" size="20.0"/>
@@ -85,9 +85,9 @@
                   fx:id="dateTimeBox"
                   AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
                 <HBox HBox.hgrow="ALWAYS" style="-fx-alignment: CENTER; -fx-padding: 25" spacing="25">
-                    <PFXIcon icon="SCHEDULE" style="-fx-font-size: 40; -fx-alignment: CENTER;" outlined="true"/>
+                    <PFXIcon icon="SCHEDULE" style="-fx-font-size: 40; -fx-alignment: CENTER; -fx-fill: -pfx-text;" outlined="true"/>
                     <Label textAlignment="RIGHT"
-                           style="-fx-background-color: -pfx-background; -fx-alignment: CENTER" fx:id="timeLabel"
+                           style="-fx-background-color: -pfx-background; -fx-alignment: CENTER; -fx-text-fill: -pfx-text;" fx:id="timeLabel"
                            VBox.vgrow="ALWAYS"
                            HBox.hgrow="ALWAYS" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10">
                         <font>
