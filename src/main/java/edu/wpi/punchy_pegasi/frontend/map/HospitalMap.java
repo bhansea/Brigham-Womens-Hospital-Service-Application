@@ -10,10 +10,8 @@ import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Node;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.Interpolator;
-import javafx.beans.binding.Bindings;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -34,6 +32,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Setter;
 import net.kurobako.gesturefx.GesturePane;
 import net.kurobako.gesturefx.GesturePaneOps;
 import org.apache.commons.collections4.MultiValuedMap;
@@ -49,26 +48,13 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
     private final BorderPane overlay = new BorderPane();
     private final HBox overlayBottom = new HBox();
     private final HBox overlayTop = new HBox();
-    private HospitalFloor.Floors currentFloor;
-    private boolean animate = true;
-
-    private Map<HospitalFloor.Floors, HospitalFloor> floorMap = new HashMap<>();
-
-    @AllArgsConstructor
-    @Data
-    private class RenderedNode {
-        Circle circle;
-        HospitalFloor floor;
-        VBox tooltip;
-        VBox label;
-    }
-
-    private record RenderedEdge(Line line, HospitalFloor floor) {
-    }
-
     private final Map<Long, RenderedNode> nodeCircles = new HashMap<>();
     private final Map<UUID, RenderedEdge> edgeLines = new HashMap<>();
     private final MultiValuedMap<Long, UUID> nodeEdges = new ArrayListValuedHashMap<>();
+    private HospitalFloor.Floors currentFloor;
+    @Setter
+    private boolean animate = true;
+    private Map<HospitalFloor.Floors, HospitalFloor> floorMap = new HashMap<>();
 
     public HospitalMap() {
         VBox.setVgrow(gesturePane, Priority.ALWAYS);
@@ -86,8 +72,20 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
                     gesturePane.zoomTo(minZoom, gesturePane.targetPointAtViewportCentre());
             });
             return minZoom;
-        }, gesturePane.widthProperty(), gesturePane.heightProperty()));
-        gesturePane.setMaxScale(3.4);
+        },
+        gesturePane.widthProperty(),
+        gesturePane.heightProperty(),
+        App.getSingleton().getPrimaryStage().widthProperty(),
+        App.getSingleton().getPrimaryStage().heightProperty()));
+
+        gesturePane.maxScaleProperty().bind(Bindings.createDoubleBinding(() -> {
+            var maxZoom = Math.min(gesturePane.getWidth() / 300, gesturePane.getHeight() / 300);
+            Platform.runLater(() -> {
+                if (gesturePane.getCurrentScale() > maxZoom)
+                    gesturePane.zoomTo(maxZoom, gesturePane.targetPointAtViewportCentre());
+            });
+            return maxZoom;
+        }, gesturePane.widthProperty(), gesturePane.heightProperty(), App.getSingleton().getPrimaryStage().widthProperty(), App.getSingleton().getPrimaryStage().heightProperty()));
         gesturePane.setScrollBarPolicy(GesturePane.ScrollBarPolicy.NEVER);
 
         var spinner = new MFXProgressSpinner(-1);
@@ -131,8 +129,13 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
         showLayer(HospitalFloor.Floors.F1);
     }
 
+    private GesturePaneOps withAnimation(Runnable afterFinished) {
+        return animate ? gesturePane.animate(new Duration(200)).interpolateWith(Interpolator.EASE_BOTH).afterFinished(afterFinished) : gesturePane.animate(new Duration(1)).interpolateWith(Interpolator.DISCRETE).afterFinished(afterFinished);
+    }
+
     private GesturePaneOps withAnimation() {
-        return animate ? gesturePane.animate(new Duration(200)).interpolateWith(Interpolator.EASE_BOTH) : gesturePane;
+        return withAnimation(() -> {
+        });
     }
 
     @Override
@@ -392,11 +395,23 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
         var scaleY = gesturePane.getHeight() / rect.getHeight();
         var scale = Math.min(scaleX, scaleY);
         var pivot = new Point2D(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
-        withAnimation().zoomTo(scale, pivot);
+        withAnimation(() -> withAnimation().centreOn(pivot)).zoomTo(scale, pivot);
     }
 
     @Override
     public void setDefaultOverlaysVisible(boolean isVisible) {
         overlay.setVisible(isVisible);
+    }
+
+    private record RenderedEdge(Line line, HospitalFloor floor) {
+    }
+
+    @AllArgsConstructor
+    @Data
+    private class RenderedNode {
+        Circle circle;
+        HospitalFloor floor;
+        VBox tooltip;
+        VBox label;
     }
 }
