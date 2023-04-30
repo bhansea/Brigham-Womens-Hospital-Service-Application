@@ -24,8 +24,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.javatuples.Pair;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -89,6 +91,8 @@ public class PathfindingMap {
     private ObservableMap<Node, ObservableList<Move>> nodeToMoves;
     private ObservableMap<LocationName, Node> locationToNode;
     private String selectedAlgo;
+    @FXML
+    private Label batteryPercent;
 
     public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
         byte[] strArray = str.getBytes();
@@ -309,7 +313,7 @@ public class PathfindingMap {
     }
 
     @FXML
-    private void sendRobotMessage() {
+    private void sendRobotMessage() throws InterruptedException {
         SerialPort comPort = null;
         SerialPort[] ports = SerialPort.getCommPorts();
 
@@ -331,6 +335,7 @@ public class PathfindingMap {
         comPort.writeBytes(message, message.length);
 
         for (int i = 1; i < xCoords.size() - 1; i++) {
+            Thread.sleep(50);
             message = generateMessage("M", xCoords.get(i), yCoords.get(i));
             System.out.println(xCoords.get(i) + ", " + yCoords.get(i));
             comPort.writeBytes(message, message.length);
@@ -339,6 +344,24 @@ public class PathfindingMap {
         message = generateMessage("E", xCoords.get(xCoords.size() - 1), yCoords.get(yCoords.size() - 1));
         System.out.println(xCoords.get(xCoords.size() - 1) + ", " + yCoords.get(yCoords.size() - 1));
         comPort.writeBytes(message, message.length);
+
+        // Receive Message for Battery
+        comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+
+        byte[] firstReadBuffer = new byte[1];
+        byte[] secondReadBuffer = new byte[1];
+        for(int i=0;i<2;i++)
+        {
+            if(i == 0) comPort.readBytes(firstReadBuffer, firstReadBuffer.length);
+            if(i == 1) comPort.readBytes(secondReadBuffer, secondReadBuffer.length);
+        }
+
+        byte[] result = new byte[2];
+        result[0] = firstReadBuffer[0];
+        result[1] = secondReadBuffer[0];
+
+        batteryPercent.setText("Battery Percentage: " + new String(result, StandardCharsets.UTF_8) + "%");
+
         comPort.closePort();
     }
 
