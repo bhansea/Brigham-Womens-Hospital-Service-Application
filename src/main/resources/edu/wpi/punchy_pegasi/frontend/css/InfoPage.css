@@ -55,8 +55,8 @@
 .info-about-hidden-text{
     -fx-text-alignment: left;
     -fx-font-family: "Nunito Sans";
+    -fx-wrap-text: true;
     -fx-font-size: 14;
     -fx-text-fill: black;
-    -fx-padding: 8 8 8 8;
 
 }

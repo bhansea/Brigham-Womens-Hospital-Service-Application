@@ -90,15 +90,29 @@ public class AboutController {
             positionLabel = new Label(this.position);
             positionLabel.getStyleClass().add("info-about-team-member-position");
             positionLabel.setEffect(dropShadow);
+            GridPane.setVgrow(positionLabel, Priority.ALWAYS);
 
-            hiddenTextOverlay = new Label(this.name + "\n" + this.position + "\n\nMajor: " + this.major + "\nFun fact: " + this.funFact);
+            hiddenTextOverlay = new Label();
+            Text nameText = new Text(this.name);
+            Text positionText = new Text(this.position);
+            nameText.setStyle("-fx-font-weight: bold");
+            positionText.setStyle("-fx-font-weight: bold");
+            Text description = new Text("________________________\nMajor: " + this.major + "\nFun fact: " + this.funFact + "\nContact: " + this.email);
+            VBox vbox = new VBox(nameText, positionText, description);
+            vbox.setPadding(new Insets(8));
+            hiddenTextOverlay.setGraphic(vbox);
             stackpane.getChildren().add(hiddenTextOverlay);
             StackPane.setAlignment(hiddenTextOverlay, Pos.TOP_LEFT);
             hiddenTextOverlay.getStyleClass().add("info-about-hidden-text");
+            nameText.setWrappingWidth(240);
+            positionText.setWrappingWidth(240);
+            description.setWrappingWidth(240);
             hiddenTextOverlay.setVisible(false);
+            GridPane.setVgrow(hiddenTextOverlay, Priority.ALWAYS);
+            hiddenTextOverlay.setPrefWidth(230);
 
             textOverlay = new VBox(nameLabel, positionLabel);
-            textOverlay.setPadding(new Insets(0, 0, 5, 5));
+            textOverlay.setPadding(new Insets(0, 0, 8, 8));
             stackpane.getChildren().add(textOverlay);
             textOverlay.setAlignment(Pos.BOTTOM_LEFT);
 
