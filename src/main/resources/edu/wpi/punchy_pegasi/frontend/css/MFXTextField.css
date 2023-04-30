@@ -48,7 +48,7 @@
 
 .mfx-text-field:focus-within {
     -fx-background-insets: 2;
-    -fx-border-color: -pfx-secondary;
+    -fx-border-color: -pfx-accent;
     -fx-border-width: 1.5;
     -fx-border-insets: -0.5;
 }
@@ -63,7 +63,7 @@
 }
 
 .mfx-text-field:focus-within .floating-text {
-    -fx-text-fill: -mfx-main;
+    -fx-text-fill: -pfx-accent;
 }
 
 .mfx-text-field .measure-unit {

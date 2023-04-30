@@ -27,6 +27,13 @@
     -fx-prompt-text-fill: -pfx-secondary-light;
 }
 
+.pfx-request-container TextField:focused {
+    -fx-border-color: -pfx-accent;
+    -fx-background-insets: 2;
+    -fx-border-width: 1.5;
+    -fx-border-insets: -0.5;
+}
+
 .pfx-request-container MFXFilterComboBox {
     -fx-text-fill: -pfx-text;
     -fx-prompt-text-fill: -pfx-secondary-light;
