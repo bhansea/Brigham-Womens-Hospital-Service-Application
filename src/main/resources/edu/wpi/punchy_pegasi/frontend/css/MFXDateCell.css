@@ -41,7 +41,7 @@
 
 .mfx-date-cell:current {
     -fx-text-fill: -pfx-accent;
-    -fx-background-color: -pfx-text;
+    -fx-background-color: -pfx-accent-transparent;
     -fx-font-family: "Nunito Sans Regular";
 }
 
