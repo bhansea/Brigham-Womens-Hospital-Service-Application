@@ -95,23 +95,6 @@ public class SignageController {
     private static ObservableMap<Node, ObservableList<LocationName>> nodeToLocation;
     private ObservableMap<LocationName, Node> locationToNode;
 
-    private void load() {
-        App.getSingleton().getExecutorService().execute(() -> {
-            var nodes = App.getSingleton().getFacade().getAllNode();
-            var edges = App.getSingleton().getFacade().getAllEdge();
-            var moves = App.getSingleton().getFacade().getAllMove();
-            var locations = App.getSingleton().getFacade().getAllLocationName();
-            var nodesList = App.getSingleton().getFacade().getAllAsListNode();
-            var edgesList = App.getSingleton().getFacade().getAllAsListEdge();
-            var movesList = App.getSingleton().getFacade().getAllAsListMove();
-            var locationsList = App.getSingleton().getFacade().getAllAsListLocationName();
-            MFXDatePicker dateee = new MFXDatePicker();
-            dateee.setValue(LocalDate.now());
-            nodeToLocation = FacadeUtils.getNodeLocations(nodes, locations, moves, dateee.valueProperty());
-            locationToNode = FacadeUtils.getLocationNode(nodes, locations, moves, dateee.valueProperty());
-        });
-    }
-
     private static void initSignSelector() {
         ObservableList<Signage> signageList = facade.getAllAsListSignage();
         signageNames.clear();
@@ -146,20 +129,16 @@ public class SignageController {
 
     @FXML
     private void initialize() {
-        load();
         editing = Bindings.createBooleanBinding
                 (() -> App.getSingleton().getAccount().getAccountType().getShieldLevel() >= Account.AccountType.ADMIN.getShieldLevel());
         configTimer(1000);
         initIcons();
         initHeader();
         buildSignage();
-//        signageBody.getStyleClass().add("signage-body");
         initSignSelector();
-//        if (editing.get()) {
-            buildEditSignage();
-//        } else {
-            buildSignageMap();
-//        }
+        buildEditSignage();
+        buildSignageMap();
+
 
         Platform.runLater(() -> {
             setFullScreen(false);
@@ -178,24 +157,10 @@ public class SignageController {
         hospitalMap.setAnimate(false);
         signageBodyMap.getChildren().add(hospitalMap.get());
 
-//        signageBody.minWidth(500);
-//        signageBodyMap.maxWidth(500);
         HBox.setHgrow(signageBodyMap, Priority.ALWAYS);
         signageBodyMap.getStyleClass().add("signage-map");
         signageBodyMap.visibleProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().or(Bindings.not(editing)));
         signageBodyMap.managedProperty().bind(App.getSingleton().getPrimaryStage().fullScreenProperty().or(Bindings.not(editing)));
-//        hospitalMap.get()
-
-//        signageBodyStackPane.setMinWidth(600);
-//        signageBodyStackPane.setMaxWidth(700);
-//        LayoutController layout = new LayoutController();
-//        ObservableDoubleValue dd =
-//        Platform.runLater(() -> {
-//            signageBodyStackPane.prefWidthProperty().bind(App.getSingleton().getPrimaryStage().getScene().widthProperty().subtract(
-//                    signageBody.widthProperty().add(App.getSingleton().getLayout().getLeftLayout().widthProperty())));
-//        });
-//        signageBodyStackPane.prefWidthProperty().bind(App.getSingleton().getPrimaryStage().getScene().widthProperty().subtract(
-//                signageBody.widthProperty().add(App.getSingleton().getLayout().getLeftLayout().widthProperty().add(5))));
     }
 
     private static void updateMapView(ObservableList<Signage> signageList) {
