@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.schema;
 import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.time.LocalDate;
 
@@ -11,12 +12,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Move {
     @SchemaID
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("uuid")
     private Long uuid;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("nodeid")
     private Long nodeID;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("locationid")
     private Long locationID;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("date")
     private LocalDate date;
 @lombok.RequiredArgsConstructor

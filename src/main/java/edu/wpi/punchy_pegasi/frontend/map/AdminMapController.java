@@ -166,10 +166,6 @@ public class AdminMapController {
         locationDropdown.getStyleClass().add("location-dropdown");
         locationDropdown.setFloatingText("Pick Location");
         locationDropdown.getItems().addAll(locations.values().stream().sorted(Comparator.comparing(LocationName::getLongName)).toList());
-        nodeToLocation(node).flatMap(l -> locationDropdown.getItems().stream().filter(l2 -> Objects.equals(l2.getUuid(), l.getUuid())).findFirst()).ifPresent(l -> {
-            locationDropdown.getSelectionModel().selectItem(l);
-            locationDropdown.setValue(l);
-        });
         locationDropdown.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocationName location) {
@@ -187,11 +183,15 @@ public class AdminMapController {
         var makeMove = new PFXButton("Submit");
         makeMove.getStyleClass().add("node-popover-make-move");
         makeMove.setOnAction(a -> {
-            if (locationDropdown.getSelectedItem() == null || date.getValue() == null) return;
+            if (locationDropdown.getValue() == null || date.getValue() == null) return;
             var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
-            var move = new Move(newID, node.getNodeID(), locationDropdown.getSelectedItem().getUuid(), date.getValue());
-//            moves.put(newID, move);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, move));
+            var move = moves.values().stream().filter(m-> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
+            if(move.isPresent()){
+                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue())));
+                return;
+            }
+            var newMove = new Move(newID, node.getNodeID(), locationDropdown.getValue().getUuid(), date.getValue());
+            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_MOVE, newMove));
         });
         Function<Move, javafx.scene.Node> renderMove = m -> {
             var hbox = new HBox();
@@ -199,10 +199,15 @@ public class AdminMapController {
             var grow = new HBox();
             HBox.setHgrow(grow, Priority.ALWAYS);
             var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
+            hbox.setOnMouseClicked(e->{
+                locationDropdown.setValue(locations.get(m.getLocationID()));
+                date.setValue(m.getDate());
+            });
+            hbox.getStyleClass().add("move-hbox");
             deleteBtn.getStyleClass().add("move-delete-btn");
             deleteBtn.setOnAction(event -> facade.deleteMove(m));
             hbox.getChildren().addAll(label, grow, deleteBtn);
-            hbox.setAlignment(Pos.CENTER    );
+            hbox.setAlignment(Pos.CENTER);
             return hbox;
         };
         Function<Move, String> locationKey = m -> m.getUuid().toString();
@@ -286,6 +291,7 @@ public class AdminMapController {
                 return;
             n.get().setXcoord((int) node.getLayoutX());
             n.get().setYcoord((int) node.getLayoutY());
+
 //            mapEdits.stream().filter(edit -> edit.type == MapEdit.ActionType.EDIT_NODE && Objects.equals(((Node) edit.object).getNodeID(), n.get().getNodeID())).findFirst().ifPresent(mapEdits::remove);
             mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get()));
         });
@@ -459,6 +465,16 @@ public class AdminMapController {
             }, o -> {
                 var move = (Move) o;
                 return "Node " + move.getNodeID().toString() + " to " + move.getLocationID() + " on " + move.getDate().toString();
+            }),
+            EDIT_MOVE(o -> {
+                var move = (Move) o;
+                App.getSingleton().getFacade().updateMove(move, new Move.Field[]{Move.Field.DATE});
+            }, o -> {
+                var move = (Move) o;
+                App.getSingleton().getFacade().updateMove(move, new Move.Field[]{Move.Field.DATE});
+            }, o -> {
+                var move = (Move) o;
+                return "Changed move date to " + move.getDate();
             }),
             REMOVE_MOVE(o -> {
                 var move = (Move) o;

@@ -69,7 +69,7 @@ public class FacadeUtils {
         nodes.addListener((MapChangeListener<Long, Node>) change -> {
             if (change.wasRemoved())
                 Platform.runLater(()->nodeLocations.remove(change.getValueRemoved()));
-            if (change.wasAdded())
+            if (change.wasAdded() && !nodeLocations.containsKey(change.getValueAdded()))
                 Platform.runLater(()->nodeLocations.put(change.getValueAdded(), FXCollections.observableArrayList()));
             update.run();
         });

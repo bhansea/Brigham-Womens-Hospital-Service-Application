@@ -11,10 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Employee {
     @SchemaID
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("employeeid")
     private Long employeeID;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("firstname")
     private String firstName;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("lastname")
     private String lastName;
 

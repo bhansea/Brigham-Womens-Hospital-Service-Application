@@ -13,17 +13,23 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Alert {
     @SchemaID
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("uuid")
     private UUID uuid;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("employeeid")
     private Long employeeID;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("alerttitle")
     private String alertTitle;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("description")
     private String description;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("datetime")
     private Instant dateTime;
     @Setter
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("readstatus")
     private ReadStatus readStatus;
 

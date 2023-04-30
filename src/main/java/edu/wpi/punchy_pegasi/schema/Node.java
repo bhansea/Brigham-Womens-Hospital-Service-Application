@@ -9,14 +9,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Node implements INode {
     @SchemaID
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("nodeid")
     private Long nodeID;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("xcoord")
     private Integer xcoord;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("ycoord")
     private Integer ycoord;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("floor")
     private String floor;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("building")
     private String building;
 
