@@ -32,6 +32,9 @@
     -fx-padding: 0 5;
 }
 
+.pfx-sidebar-item Label {
+    -fx-text-fill: -pfx-side-icon-dark;
+}
 
 .pfx-sidebar-item PFXIcon {
     -fx-fill: -pfx-side-icon-dark;
@@ -42,7 +45,7 @@
 }
 
 .pfx-sidebar-item:selected Label {
-    -fx-text-fill: -pfx-accent;
+    -fx-text-fill: -pfx-side-icon-light;
 }
 
 .pfx-sidebar-item:selected PFXIcon {
