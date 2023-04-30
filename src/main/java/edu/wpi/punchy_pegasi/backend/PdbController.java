@@ -26,7 +26,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -61,8 +65,8 @@ public class PdbController {
         JsoniterSpi.registerTypeDecoder(UUID.class, iter -> UUID.fromString(iter.readString()));
         JsoniterSpi.registerTypeEncoder(LocalDate.class, (obj, stream) -> stream.writeVal(obj.toString()));
         JsoniterSpi.registerTypeDecoder(LocalDate.class, iter -> LocalDate.parse(iter.readString()));
-        JsoniterSpi.registerTypeEncoder(LocalDateTime.class, (obj, stream) -> stream.writeVal(obj.toString()));
-        JsoniterSpi.registerTypeDecoder(LocalDateTime.class, iter -> LocalDateTime.parse(iter.readString()));
+        JsoniterSpi.registerTypeEncoder(Instant.class, (obj, stream) -> stream.writeVal(obj.toString()));
+        JsoniterSpi.registerTypeDecoder(Instant.class, iter -> Instant.parse(iter.readString()));
         this.source = source;
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
@@ -84,7 +88,7 @@ public class PdbController {
 
     public static String objectToPsqlString(Object o, boolean first) {
         if (o == null) return "NULL";
-        if (o instanceof String || o instanceof UUID || o instanceof LocalDate || o.getClass().isEnum()) {
+        if (o instanceof String || o instanceof UUID || o instanceof LocalDate || o instanceof Instant || o.getClass().isEnum()) {
             return "'" + o + "'";
         } else if (o instanceof List<?>) {
             return (first ? "ARRAY" : "") + "[" + String.join(", ", ((List<?>) o).stream().map(v -> objectToPsqlString(v, false)).toList()) + "]";
