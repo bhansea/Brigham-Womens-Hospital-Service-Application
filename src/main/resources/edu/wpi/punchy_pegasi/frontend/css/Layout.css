@@ -77,7 +77,7 @@
 }
 
 .layout-content {
-    -fx-background-color: -pfx-background;
+    -fx-background-color: transparent;
 }
 
 #overlayContainer {
