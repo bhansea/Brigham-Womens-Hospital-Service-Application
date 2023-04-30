@@ -2,15 +2,15 @@
 
 .pfx-cardholder-container {
     -fx-background-color: -pfx-background;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    /*-fx-border-color: -pfx-background;*/
+    /*-fx-border-width: 0;*/
     -fx-cursor: default;
 }
 
 .pfx-cardholder-scrollpane {
     -fx-background-color: -pfx-background;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    /*-fx-border-color: -pfx-background;*/
+    /*-fx-border-width: 0;*/
 }
 
 .pfx-cardholder-container-gridpane {
@@ -19,8 +19,8 @@
     -fx-hgap: 20;
     -fx-vgap: 30;
     -fx-background-color: -pfx-background;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    /*-fx-border-color: -pfx-background;*/
+    /*-fx-border-width: 0;*/
 }
 
 .pfx-cardholder-container-label Label {

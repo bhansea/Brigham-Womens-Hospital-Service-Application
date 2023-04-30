@@ -56,6 +56,7 @@
 @import "PFXTab.css";
 @import "PFXTabLayout.css";
 /* Pages */
+@import "AboutCredits.css";
 @import "Admin.css";
 @import "AdminTablePage.css";
 @import "Conference.css";

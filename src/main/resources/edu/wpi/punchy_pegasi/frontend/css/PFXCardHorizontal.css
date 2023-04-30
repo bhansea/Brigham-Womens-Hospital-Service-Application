@@ -39,7 +39,7 @@
 }
 
 .pfx-card-horizontal-container:selected Label {
-    -fx-text-fill: -pfx-accent;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-card-horizontal-container:hover {

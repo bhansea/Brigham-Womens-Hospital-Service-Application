@@ -22,7 +22,6 @@
 .pfx-card-vertical-imageBox {
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
-    -fx-border-radius: 12;
 }
 
 .pfx-card-vertical-info {
@@ -50,7 +49,7 @@
 }
 
 .pfx-card-vertical-container:selected Label {
-    -fx-text-fill: -pfx-accent;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-card-vertical-container:hover {

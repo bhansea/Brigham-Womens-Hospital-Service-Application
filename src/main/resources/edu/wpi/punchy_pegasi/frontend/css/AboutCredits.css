@@ -1,0 +1,25 @@
+.about-subtitles {
+    -fx-font-family: "Nunito Sans";
+    -fx-text-fill: -pfx-accent;
+    -fx-font-size: 20;
+    -fx-padding: 25 0 0 50;
+}
+
+.about-paragraphs {
+    -fx-fill: -pfx-text;
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 18;
+}
+
+.about-grid Label {
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
+}
+
+.about-grid-title {
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
+    -fx-font-weight: bold;
+}

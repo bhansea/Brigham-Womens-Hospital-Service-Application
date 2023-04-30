@@ -5,7 +5,7 @@
     -fx-font-size: 18;
     -fx-padding: 10;
     -fx-alignment: CENTER;
-    -fx-border-color: -pfx-background;
+    -fx-border-color: transparent;
     -fx-cursor: hand;
 }
 
@@ -14,8 +14,8 @@
 }
 
 .pfx-tab:selected {
-    -fx-border-width: 3;
-    -fx-border-color: -pfx-background -pfx-background -pfx-text -pfx-background;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-color: -pfx-text;
 }
 
 .pfx-tab:selected .pfx-tab-text{

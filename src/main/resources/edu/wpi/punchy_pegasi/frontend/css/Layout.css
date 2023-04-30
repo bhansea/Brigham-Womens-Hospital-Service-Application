@@ -4,7 +4,7 @@
     -fx-min-width: 65;
     -fx-padding: 0 0 15 0;
     -fx-border-width: 0 1 0 0;
-    -fx-border-color: -pfx-secondary-light;
+    -fx-border-color: -pfx-secondary;
 }
 
 .sidebar-button:selected > .icon {
@@ -27,8 +27,7 @@
     -fx-alignment: CENTER;
     -fx-background-color: -pfx-background;
     -fx-padding: 10;
-    -fx-border-color: -pfx-secondary-light;
-    -fx-border-width: 0 0 1 0;
+    /*-fx-border-color: -pfx-background;*/
 }
 
 .header-left-container {
@@ -63,6 +62,9 @@
 .header-search {
     -fx-background-color: -pfx-primary;
     -fx-cursor: text;
+    -fx-border-color: -pfx-secondary;
+    -fx-border-radius: 40;
+    -fx-background-radius: 40;
 }
 
 #accountInfo > HBox {
@@ -75,7 +77,7 @@
 }
 
 .layout-content {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
 }
 
 #alertOverlay {

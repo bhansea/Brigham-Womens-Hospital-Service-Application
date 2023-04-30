@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
-<?import javafx.scene.layout.HBox?>
 
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
-<?import javafx.geometry.Insets?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
 <?import javafx.scene.control.Label?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1"
-         type="javafx.scene.layout.HBox"
-         xmlns="http://javafx.com/javafx/"
+<?import javafx.scene.layout.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/"
          styleClass="header">
     <HBox styleClass="header-left-container">
         <HBox HBox.hgrow="ALWAYS" styleClass="header-search">
@@ -18,7 +13,7 @@
         </HBox>
     </HBox>
     <HBox HBox.hgrow="ALWAYS"/>
-    <HBox styleClass="header-right-container" HBox.hgrow="NEVER" >
+    <HBox styleClass="header-right-container" HBox.hgrow="NEVER">
         <PFXAccount fx:id="pfxAccount"/>
     </HBox>
 </fx:root>

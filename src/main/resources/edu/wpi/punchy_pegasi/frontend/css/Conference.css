@@ -11,6 +11,8 @@
 
 .conference-container {
     -fx-padding: 10;
+    -fx-background-color: -pfx-background;
+    /*-fx-border-color: -pfx-background;*/
 }
 
 .conference-header {

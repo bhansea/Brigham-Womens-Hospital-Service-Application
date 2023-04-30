@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: -pfx-background;">
     <right>
         <VBox BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS" fx:id="inputContainer"
               styleClass="pfx-request-container">
