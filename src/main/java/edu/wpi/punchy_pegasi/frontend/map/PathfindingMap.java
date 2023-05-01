@@ -26,8 +26,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.MultiMap;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.javatuples.Pair;
 
@@ -99,6 +103,8 @@ public class PathfindingMap {
     private String selectedAlgo;
     @FXML
     private Label batteryPercent;
+    private MultiValuedMap<String, directionalNode> directionMap = new ArrayListValuedHashMap<>();
+
 
     public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
         byte[] strArray = str.getBytes();
@@ -295,12 +301,38 @@ public class PathfindingMap {
 
     }
 
-    private void pathPutDirection(pathDirectionType direction, Node node) {
-        var moveLocationID = nodeToMoves.get(node).get(0).getLocationID();
-        var locationName = locations.get(moveLocationID).getLongName();
-        HBox directionBox = new HBox(direction.getIcon(), new Label(locationName));
-        pathDirections.getChildren().add(directionBox);
-        // TODO Group the directions by floor (HashMap<Floor, list<Node>>)
+    @RequiredArgsConstructor
+    @Data
+    class directionalNode {
+        private final Node node;
+        private final pathDirectionType direction;
+    }
+
+    private void pathDrawDirections() {
+        VBox directions = new VBox();
+        for (var floor : directionMap.keySet()) {
+            var dNodeList = directionMap.get(floor);
+            VBox directionsOnFloor = new VBox();
+            for (var dNode : dNodeList) {
+                var directionEntry = new HBox();
+                var directionIcon = dNode.getDirection().getIcon();
+                directionIcon.setSize(10.0);
+                directionEntry.getChildren().add(directionIcon);
+                var directionText = new Label(locationToString.toString(locations.get(nodeToMoves.get(dNode.getNode()).get(0).getLocationID())));
+                directionEntry.getChildren().add(directionText);
+                directionsOnFloor.getChildren().add(directionEntry);
+            }
+            directions.getChildren().add(directionsOnFloor);
+        }
+    }
+
+    private void pathPutNodes(pathDirectionType direction, Node node) {
+        var floor = node.getFloor();
+        var dNode = new directionalNode(node, direction);
+        if (directionMap.containsKey(floor))
+            directionMap.get(floor).add(dNode);
+        else
+            directionMap.put(floor, dNode);
     }
 
 
