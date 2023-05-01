@@ -34,6 +34,7 @@ public class LayoutController extends StackPane {
     private BorderPane overlayContainer;
 
     @FXML
+    @Getter
     private SidebarController leftLayout;
     private AtomicBoolean alert = new AtomicBoolean(false);
 
@@ -57,6 +58,7 @@ public class LayoutController extends StackPane {
         leftLayout.setVisible(hide);
         leftLayout.setManaged(hide);
     }
+
 
     public void showTopLayout(boolean hide) {
         topLayout.setVisible(hide);

@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.AppSearch;
+import javafx.scene.image.Image;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
@@ -250,6 +251,7 @@ public class App extends Application {
         //scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
         loadStylesheet("frontend/css/DefaultTheme.css");
+        primaryStage.getIcons().add(new Image(resolveResource("frontend/assets/bwhlogo.png").get().toString()));
 
         if (development) {
             App.getSingleton().getExecutorService().execute(() -> {
