@@ -1,31 +1,31 @@
 @import "SignageTheme.css";
 
 .signage-icon {
-    -fx-fill: -pfx-signage-text;
+    -fx-fill: -pfx-text;
 }
 
 .signage-delete-btn PFXIcon {
-    -fx-fill: -pfx-signage-text;
+    -fx-fill: -pfx-text;
 }
 
 .signage-icon-header {
-    -fx-fill: -pfx-signage-text;
+    -fx-fill: -pfx-text;
 }
 
 .signage-header Label {
-    -fx-text-fill: -pfx-signage-text;
+    -fx-text-fill: -pfx-text;
     -fx-font-size: 20;
 }
 
 .signage-label Label{
-    -fx-text-fill: -pfx-signage-text;
+    -fx-text-fill: -pfx-text;
     -fx-font-size: 25;
 }
 
 .signage-all {
-    -fx-background-color: -pfx-signage-background;
+    -fx-background-color: -pfx-background;
 }
 
 .signage-edit-button {
-    -pfx-button-background: -pfx-signage-background;
+    -pfx-button-background: -pfx-background;
 }
