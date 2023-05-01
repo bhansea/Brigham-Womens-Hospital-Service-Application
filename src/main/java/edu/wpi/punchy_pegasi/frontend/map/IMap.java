@@ -59,4 +59,5 @@ public interface IMap<Layer> {
 
     void showRectangle(Rectangle rect);
     void setDefaultOverlaysVisible(boolean isVisible);
+    void setAnimate(boolean animate);
 }
