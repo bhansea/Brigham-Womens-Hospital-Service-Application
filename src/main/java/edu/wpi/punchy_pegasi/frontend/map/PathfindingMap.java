@@ -5,6 +5,8 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.PathfindingSingleton;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
@@ -24,6 +26,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.javatuples.Pair;
 
@@ -72,6 +76,8 @@ public class PathfindingMap {
     private VBox pathfinding;
     @FXML
     private VBox robotInfo;
+    @FXML
+    private VBox pathDirections;
     @FXML
     private MFXFilterComboBox<LocationName> nodeEndCombo;
     @FXML
@@ -143,7 +149,7 @@ public class PathfindingMap {
         map = new HospitalMap();
         root.setCenter(map.get());
         map.addLayer(container);
-        container.getChildren().addAll(pathfinding, robotInfo);
+        container.getChildren().addAll(pathfinding, robotInfo, pathDirections);
         HBox.setHgrow(pathfinding, Priority.ALWAYS);
         invalidText.setVisible(false);
         robotInfo.setVisible(false);
@@ -274,6 +280,29 @@ public class PathfindingMap {
         }
         pathfindStatus.setText(pathFind(startNode, endNode));
     }
+
+    @RequiredArgsConstructor
+    private enum pathDirectionType {
+        START(new PFXIcon(MaterialSymbols.STEP_OUT)),
+        LEFT(new PFXIcon(MaterialSymbols.KEYBOARD_ARROW_LEFT)),
+        RIGHT(new PFXIcon(MaterialSymbols.KEYBOARD_ARROW_RIGHT)),
+        UP(new PFXIcon(MaterialSymbols.NORTH_EAST)),
+        DOWN(new PFXIcon(MaterialSymbols.SOUTH_WEST)),
+        END(new PFXIcon(MaterialSymbols.PIN_DROP));
+
+        @Getter
+        private final PFXIcon icon;
+
+    }
+
+    private void pathPutDirection(pathDirectionType direction, Node node) {
+        var moveLocationID = nodeToMoves.get(node).get(0).getLocationID();
+        var locationName = locations.get(moveLocationID).getLongName();
+        HBox directionBox = new HBox(direction.getIcon(), new Label(locationName));
+        pathDirections.getChildren().add(directionBox);
+        // TODO Group the directions by floor (HashMap<Floor, list<Node>>)
+    }
+
 
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();

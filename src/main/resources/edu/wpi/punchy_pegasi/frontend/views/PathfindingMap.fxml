@@ -12,21 +12,24 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.PathfindingMap"
             fx:id="root">
     <left>
-        <VBox fx:id="pathfinding" styleClass="pathfinding-overlay">
-            <VBox styleClass="pathfinding-overlay-box">
-                <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
-                <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"/>
-                <MFXFilterComboBox floatingText="Select Algorithm" onAction="#setAlgo"
-                                   fx:id="selectAlgo" maxWidth="Infinity"/>
-                <HBox>
-                    <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
-                               fx:id="selectGraphically"/>
-                    <PFXButton styleClass="pfx-button-cancel" text="Cancel" fx:id="selectGraphicallyCancel"/>
-                </HBox>
-                <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
-                <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+        <HBox>
+            <VBox fx:id="pathfinding" styleClass="pathfinding-overlay">
+                <VBox styleClass="pathfinding-overlay-box">
+                    <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
+                    <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"/>
+                    <MFXFilterComboBox floatingText="Select Algorithm" onAction="#setAlgo"
+                                       fx:id="selectAlgo" maxWidth="Infinity"/>
+                    <HBox>
+                        <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
+                                   fx:id="selectGraphically"/>
+                        <PFXButton styleClass="pfx-button-cancel" text="Cancel" fx:id="selectGraphicallyCancel"/>
+                    </HBox>
+                    <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+                    <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+                </VBox>
             </VBox>
-        </VBox>
+            <VBox fx:id="pathDirections"/>
+        </HBox>
     </left>
     <right>
         <VBox fx:id="robotInfo" styleClass="pathfinding-overlay">
