@@ -24,9 +24,11 @@ public class PFXAlertCard extends HBox {
     private Long uuid;
     private VBox textContainer = new VBox();
     private PFXIcon icon;
+    private Alert alert;
 
     public PFXAlertCard(Alert alert) {
         super();
+        this.alert = alert;
         Alert.ReadStatus readStatus = alert.getReadStatus();
         if(readStatus == Alert.ReadStatus.READ) {
             isRead = true;
@@ -84,4 +86,6 @@ public class PFXAlertCard extends HBox {
             getStyleClass().add("pfx-alert-card-container-unread");
         }
     }
+
+    public Alert getAlert(){return this.alert;}
 }
