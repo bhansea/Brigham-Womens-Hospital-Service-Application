@@ -1,5 +1,6 @@
 package edu.wpi.punchy_pegasi;
 
+import edu.wpi.punchy_pegasi.backend.AppSearch;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;

@@ -6,12 +6,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXAlert?>
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXPopup?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXAlertCard?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AlertPageController"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminAlertPageController"
             fx:id="container">
     <center>
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
@@ -23,11 +23,12 @@
                         <TextField promptText="Alert title" fx:id="alertTitle"/>
                         <TextField promptText="Alert description" fx:id="alertDescription"/>
                         <PFXButton styleClass="admin-container-buttons" text="Send" fx:id="sendButton"/>
+                        <PFXButton styleClass="admin-container-buttons" text="Submit" fx:id="submitButton"/>
                     </VBox>
                 </VBox>
-                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                     <Label styleClass="admin-container-text-size" text="Active Alerts" VBox.vgrow="ALWAYS"/>
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container">
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="activeAlertsContainer">
                     </VBox>
                 </VBox>
             </HBox>
