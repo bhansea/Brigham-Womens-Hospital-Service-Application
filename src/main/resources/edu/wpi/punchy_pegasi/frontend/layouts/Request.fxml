@@ -11,7 +11,7 @@
               styleClass="pfx-request-container">
             <VBox HBox.hgrow="ALWAYS">
                 <Label text="Location Name"/>
-                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" promptText="Location Names"/>
+                <MFXFilterComboBox fx:id="locationName" floatMode="DISABLED" promptText="Location Name"/>
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                 <Label text="Staff Assignment"/>
