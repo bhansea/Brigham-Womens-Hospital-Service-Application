@@ -5,11 +5,11 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Account;
+import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -32,7 +32,7 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
 
     public PFXAccount() {
         super();
-        var content = new VBox(logout);
+        var content = new VBox();
         content.getStyleClass().add("pfx-account-menu");
         accountMenu.setContentNode(content);
         accountMenu.setDetachable(false);
@@ -47,6 +47,34 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
         getStyleClass().add("pfx-account");
         setAccount(App.getSingleton().getAccount());
         App.getSingleton().addPropertyChangeListener(this);
+
+
+        Label nameLabel = new Label();
+        Label accountLevel = new Label();
+        MFXToggleButton colorToggle = new MFXToggleButton();
+        MFXToggleButton ttsToggle = new MFXToggleButton();
+        VBox accountInformation = new VBox();
+
+        nameLabel.setText(App.getSingleton().getAccount().getUsername());
+        accountLevel.setText(App.getSingleton().getAccount().getAccountType().toString());
+        accountInformation.getChildren().add(nameLabel);
+        accountInformation.getChildren().add(accountLevel);
+        accountInformation.setAlignment(Pos.CENTER);
+        accountInformation.setPadding(new Insets(0, 0, 15, 0));
+        accountInformation.setStyle("-fx-border-color: -pfx-secondary-light; -fx-border-width: 0 0 1 0");
+
+        nameLabel.setStyle("-fx-font-size: 14");
+
+        colorToggle.setText("Dark Mode");
+        colorToggle.setStyle("-fx-font-size: 12");
+        ttsToggle.setText("Text to Speech");
+        ttsToggle.setStyle("-fx-font-size: 12");
+
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.getChildren().add(accountInformation);
+        content.getChildren().add(colorToggle);
+        content.getChildren().add(ttsToggle);
+        content.getChildren().add(logout);
     }
 
     public void setAccount(Account account) {
