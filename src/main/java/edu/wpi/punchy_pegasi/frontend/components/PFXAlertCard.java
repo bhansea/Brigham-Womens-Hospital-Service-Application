@@ -24,11 +24,13 @@ public class PFXAlertCard extends HBox {
     private Long uuid;
     private VBox textContainer = new VBox();
     private PFXIcon icon;
+    private MaterialSymbols active;
     private Alert alert;
 
     public PFXAlertCard(Alert alert) {
         super();
         this.alert = alert;
+        this.active = MaterialSymbols.NOTIFICATIONS_ACTIVE;
         Alert.ReadStatus readStatus = alert.getReadStatus();
         if(readStatus == Alert.ReadStatus.READ) {
             isRead = true;
@@ -36,7 +38,7 @@ public class PFXAlertCard extends HBox {
             getStyleClass().add("pfx-alert-card-container-read");
         } else {
             isRead = false;
-            icon = new PFXIcon(MaterialSymbols.NOTIFICATIONS_ACTIVE);
+            icon = new PFXIcon(active);
             getStyleClass().add("pfx-alert-card-container-unread");
         }
         titleLabel = new Label(alert.getAlertTitle());
@@ -82,10 +84,14 @@ public class PFXAlertCard extends HBox {
         }
         else{
             getStyleClass().remove("pfx-alert-card-container-read");
-            icon.setIcon(MaterialSymbols.NOTIFICATIONS_ACTIVE);
+            icon.setIcon(active);
             getStyleClass().add("pfx-alert-card-container-unread");
         }
     }
 
     public Alert getAlert(){return this.alert;}
+    public void changeToDeleteIcon(){
+        this.active = MaterialSymbols.DELETE;
+        icon.setIcon(active);
+    }
 }

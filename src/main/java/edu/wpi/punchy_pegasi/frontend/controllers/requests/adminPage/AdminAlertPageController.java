@@ -4,6 +4,8 @@ import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlertCard;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Alert;
 import edu.wpi.punchy_pegasi.schema.TableType;
@@ -29,7 +31,7 @@ public class AdminAlertPageController {
     public PFXButton sendButton;
     public VBox activeAlertsContainer;
     public BorderPane container;
-    public PFXButton submitButton;
+    public PFXButton removeButton;
     Facade facade = App.getSingleton().getFacade();
     LayoutController layout = new LayoutController();
 
@@ -46,11 +48,12 @@ public class AdminAlertPageController {
 
             Platform.runLater( () -> {
 //                activeAlertsContainer.getChildren().add(alertTable.getTable());
-                activeAlertsContainer.setStyle("-fx-spacing: 25");
+                activeAlertsContainer.setStyle("-fx-spacing: 15");
 
                 for(Alert alert: allAlerts) {
                     if(App.getSingleton().getAccount().getEmployeeID().equals(alert.getEmployeeID())) {
                         PFXAlertCard alertCard = new PFXAlertCard(alert);
+                        alertCard.changeToDeleteIcon();
                         activeAlertsContainer.getChildren().add(alertCard);
                         alertCards.add(alertCard);
 ;                       alerts.add(alert);
@@ -58,21 +61,23 @@ public class AdminAlertPageController {
                 }
 
                 // this is a terrible way to do it i know please dont hurt me
-                submitButton.setOnAction(e -> {
+                removeButton.setOnAction(e -> {
+                    int i = 0;
                     for (PFXAlertCard card: alertCards) {
-                        int i = 0;
+
                         if (card.getIsRead()) {
                             activeAlertsContainer.getChildren().remove(card);
                             indexes.add(i);
                         }
-                        i++;
+
 
                         for (Integer num : indexes) {
-                            alertCards.remove(num);
-                            alerts.remove(num);
                             allAlerts.remove(alertCards.get(i).getAlert());
                             facade.deleteAlert(alertCards.get(i).getAlert());
+                            alertCards.remove(num);
+                            alerts.remove(num);
                         }
+                        i++;
                     }
 
                 });
