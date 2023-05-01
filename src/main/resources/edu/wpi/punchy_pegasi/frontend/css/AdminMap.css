@@ -33,6 +33,7 @@
 .move-delete-btn:hover PFXIcon {
     -fx-fill: red;
 }
+
 .move-delete-btn,
 .move-delete-btn:armed,
 .move-delete-btn:hover,
@@ -51,6 +52,12 @@
     -fx-cursor: hand;
     -fx-padding: 0 5;
 }
+
 .move-hbox:hover {
     -fx-background-color: -pfx-accent-transparent;
+}
+
+.commit-button {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text;
 }

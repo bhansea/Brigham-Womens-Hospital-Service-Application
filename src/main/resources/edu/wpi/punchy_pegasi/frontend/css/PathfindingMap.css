@@ -13,6 +13,10 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
 
+.pathfinding-overlay-box Label {
+    -fx-text-fill: -pfx-text;
+}
+
 .pathfinding-overlay-box > HBox {
     -fx-spacing: 10;
     -fx-alignment: CENTER;

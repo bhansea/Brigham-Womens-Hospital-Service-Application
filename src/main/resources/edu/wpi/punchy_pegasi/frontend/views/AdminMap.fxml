@@ -13,7 +13,7 @@
     <left>
         <VBox fx:id="editing" styleClass="editing-overlay">
             <VBox styleClass="editing-overlay-box">
-                <PFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
+                <PFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton" styleClass="commit-button"/>
                 <MFXProgressBar fx:id="commitProgress" maxWidth="300" progress="0"/>
                 <VBox fx:id="changes"/>
             </VBox>
