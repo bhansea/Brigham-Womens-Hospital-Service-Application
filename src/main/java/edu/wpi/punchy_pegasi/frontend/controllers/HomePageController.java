@@ -3,40 +3,31 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlertCard;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminTablePageController;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import javafx.scene.layout.StackPane;
-import javafx.scene.input.*;
 import org.controlsfx.control.PopOver;
 import org.phoenicis.javafx.collections.MappedList;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Slf4j
@@ -68,7 +59,6 @@ public class HomePageController {
     private void initialize() {
         configTimer(1000);
 
-
         requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
         requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
         List<RequestEntry> requestEntries = facade.getAllRequestEntry().values().stream().toList();
@@ -83,18 +73,34 @@ public class HomePageController {
 
         List<Alert> alerts = App.getSingleton().getFacade().getAllAsListAlert();
         for(Alert alert: alerts) {
-            if(alerts.isEmpty()){
+            //var moves = this.moves.values().stream().filter(m -> m.getNodeID().equals(node.getNodeID())).toList();
+            alerts = alerts.stream().filter(a -> a.getEmployeeID().equals(App.getSingleton().getAccount().getEmployeeID())).toList();
+            alerts = alerts.stream().filter(e -> e.getAlertType().equals(Alert.AlertType.EMPLOYEE)).toList();
+
+            alertsContainer.setVisible(true);
+            alertsHolder.setVisible(true);
+            alertScrollPane.setVisible(true);
+
+            alertsContainer.setManaged(true);
+            alertScrollPane.setManaged(true);
+            alertsHolder.setManaged(true);
+
+            if(alerts.isEmpty() || alerts.size() == 0){
                 alertsContainer.setVisible(false);
+                alertsHolder.setVisible(false);
+                alertScrollPane.setVisible(false);
+
                 alertsContainer.setManaged(false);
+                alertScrollPane.setManaged(false);
+                alertsHolder.setManaged(false);
             }
-            if(App.getSingleton().getAccount().getEmployeeID().equals(alert.getEmployeeID())) {
-                alertsHolder.getChildren().add(new PFXAlertCard(alert));
-                alertsContainer.setVisible(true);
-                alertsContainer.setManaged(false);
-            }
+
         }
 
-
+        for (Alert alert: alerts) {
+            PFXAlertCard card = new PFXAlertCard(alert);
+            alertsHolder.getChildren().add(card);
+        }
 
         initRequestTable();
         showServiceRequestTable(true);

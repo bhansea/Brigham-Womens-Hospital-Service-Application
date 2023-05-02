@@ -493,7 +493,8 @@ CREATE TABLE IF NOT EXISTS alert
   startDate timestamptz NOT NULL,
   endDate timestamptz NOT NULL,
   readStatus varchar NOT NULL,
-  employeeID bigint
+  employeeID bigint,
+  nodeID bigint
 );
 CREATE OR REPLACE FUNCTION notify_alert_update() RETURNS TRIGGER AS $$
     DECLARE

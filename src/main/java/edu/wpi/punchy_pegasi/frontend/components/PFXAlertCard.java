@@ -1,20 +1,13 @@
 package edu.wpi.punchy_pegasi.frontend.components;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Alert;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 public class PFXAlertCard extends HBox {
     private final Button read;
@@ -26,6 +19,7 @@ public class PFXAlertCard extends HBox {
     private PFXIcon icon;
     private MaterialSymbols active;
     private Alert alert;
+
 
     public PFXAlertCard(Alert alert) {
         super();
@@ -50,6 +44,19 @@ public class PFXAlertCard extends HBox {
         textContainer.getChildren().addAll(titleLabel, description);
         HBox.setHgrow(read, Priority.ALWAYS);
         HBox.setHgrow(description, Priority.ALWAYS);
+
+        if (alert.getAlertType() == Alert.AlertType.MAP) {
+            Label endDateTimeLabel = new Label();
+            endDateTimeLabel.setText("End Date Time: " + alert.getEndDate().toString());
+
+        } else if (alert.getAlertType() == Alert.AlertType.MAP_DISABLED) {
+            Label endDateTimeLabel = new Label();
+            endDateTimeLabel.setText("End Date Time: " + alert.getEndDate().toString());
+
+        } else if (alert.getAlertType() == Alert.AlertType.EMPLOYEE) {
+            Label endDateTimeLabel = new Label();
+            endDateTimeLabel.setText("End Date Time: " + alert.getEndDate().toString());
+        }
         read.setOnAction(e -> toggleRead());
     }
 

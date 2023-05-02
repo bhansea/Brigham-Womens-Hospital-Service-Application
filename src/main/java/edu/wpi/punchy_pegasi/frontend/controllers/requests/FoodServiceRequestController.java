@@ -79,7 +79,8 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 "",
                 patientName.getText(), 1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
-        App.getSingleton().getFacade().saveAlert(new edu.wpi.punchy_pegasi.schema.Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Food Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
+        Alert alert = Alert.builder().uuid(UUID.randomUUID()).alertType(Alert.AlertType.SERVICE_REQUEST).alertTitle("Service Request").description("Food Service Request").startDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).employeeID(staffAssignment.getSelectedItem().getEmployeeID()).startDate(Instant.now()).endDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).build();
+        App.getSingleton().getFacade().saveAlert(alert);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 

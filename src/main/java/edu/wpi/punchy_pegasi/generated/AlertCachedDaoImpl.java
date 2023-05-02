@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field>, PropertyChangeListener {
 
-    static String[] fields = {"uuid", "alertType", "alertTitle", "description", "startDate", "endDate", "readStatus", "employeeID"};
+    static String[] fields = {"uuid", "alertType", "alertTitle", "description", "startDate", "endDate", "readStatus", "employeeID", "nodeID"};
 
     private final ObservableMap<java.util.UUID, Alert> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<Alert> list = FXCollections.observableArrayList();
@@ -116,7 +116,8 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
                     rs.getTimestamp("startDate").toInstant(),
                     rs.getTimestamp("endDate").toInstant(),
                     edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("nodeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -160,7 +161,7 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
 
     @Override
     public void save(Alert alert) {
-        Object[] values = {alert.getUuid(), alert.getAlertType(), alert.getAlertTitle(), alert.getDescription(), alert.getStartDate(), alert.getEndDate(), alert.getReadStatus(), alert.getEmployeeID()};
+        Object[] values = {alert.getUuid(), alert.getAlertType(), alert.getAlertTitle(), alert.getDescription(), alert.getStartDate(), alert.getEndDate(), alert.getReadStatus(), alert.getEmployeeID(), alert.getNodeID()};
         try {
             dbController.insertQuery(TableType.ALERT, fields, values);
 //            add(alert);
