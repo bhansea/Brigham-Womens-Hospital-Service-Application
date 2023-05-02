@@ -245,7 +245,7 @@ public class App extends Application {
         splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
         splashController.getConnection();
 
-        IdleScreen screenSaver = new IdleScreen(scene);
+        IdleScreen screenSaver = new IdleScreen();
 
         loadStylesheet("frontend/css/DefaultTheme.css");
         primaryStage.getIcons().add(new Image(resolveResource("frontend/assets/bwhlogo.png").get().toString()));
