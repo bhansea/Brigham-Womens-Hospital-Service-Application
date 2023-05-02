@@ -11,6 +11,8 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminAlertPageController"
             fx:id="container">
     <center>
+        <!--TODO Make the scroll pane have max width, same thing on home page, dont have max width on alert card -->
+
         <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
             <HBox spacing="10.0" alignment="CENTER" HBox.hgrow="ALWAYS">
                 <VBox alignment="TOP_LEFT" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent" spacing="15.0">

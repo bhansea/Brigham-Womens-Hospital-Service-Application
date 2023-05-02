@@ -7,13 +7,15 @@
     -fx-padding: 20 20;
     -fx-background-color: -pfx-accent;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
-    -fx-spacing: 10;
+    -fx-spacing: 15;
     -fx-background-radius: 12;
     -fx-font-size: 24;
     -fx-text-fill: white;
 }
 .pfx-alert-card-title-text{
     -fx-font-size: 30;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: -pfx-accent-light;
 }
 .pfx-alert-card-type-text{
     -fx-font-size: 12;
@@ -43,7 +45,7 @@
     -fx-padding: 20 20;
     -fx-background-color: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
-    -fx-spacing: 10;
+    -fx-spacing: 15;
     -fx-background-radius: 12;
     -fx-font-size: 24;
     -fx-text-fill: -pfx-accent;
