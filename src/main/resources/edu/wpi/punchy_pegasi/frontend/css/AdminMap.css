@@ -16,7 +16,14 @@
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
-
+.changes-edit-scrollpane {
+    -fx-max-height: 300;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.changes-edit-scrollpane > .viewport {
+    -fx-background-color: tranparent;
+}
 #commitProgress {
     -fx-min-height: 20;
     -fx-max-height: 20;

@@ -177,8 +177,17 @@ public class App extends Application {
             getLayout().showLeftLayout(screen.isSidebar());
             enableTimeout(screen.isTimeout());
             getViewPane().setCenter(new PageLoading());
-            getViewPane().setCenter(screen.get());
-            setCurrentScreen(screen);
+            if(loadingThread !=null)
+                loadingThread.interrupt();
+            getExecutorService().execute(() -> {
+                loadingThread = Thread.currentThread();
+                var loaded = screen.get();
+                if (!Thread.interrupted())
+                    Platform.runLater(() -> {
+                        setCurrentScreen(screen);
+                        getViewPane().setCenter(loaded);
+                    });
+            });
         }
     }
 

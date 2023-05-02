@@ -27,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -123,7 +124,7 @@ public class AdminMapController {
 
     @FXML
     private void initialize() {
-        App.getSingleton().getScene().setOnKeyPressed(e -> {
+        App.getSingleton().getScene().addEventHandler(KeyEvent.KEY_PRESSED, e -> {
             if (e.getCode() == KeyCode.Z && e.isControlDown())
                 Platform.runLater(() -> {
                     if (mapEdits.size() > 0)
@@ -150,6 +151,13 @@ public class AdminMapController {
 
     private PopOver nodeEditMenu(Node node) {
         var popOver = new PopOver();
+        popOver.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.Z && e.isControlDown())
+                Platform.runLater(() -> {
+                    if (mapEdits.size() > 0)
+                        mapEdits.remove(mapEdits.size() - 1).undo();
+                });
+        });
         popOver.getRoot().getStylesheets().add(App.getSingleton().resolveResource("frontend/css/DefaultTheme.css").get().toExternalForm());
         var editNode = new VBox();
         editNode.getStyleClass().add("node-popover");
@@ -165,8 +173,11 @@ public class AdminMapController {
             });
         } else
             buildingDropdown.getSelectionModel().selectItem(node.getBuilding());
-        buildingDropdown.setOnAction(e -> {
+        buildingDropdown.selectedItemProperty().addListener(
+//        buildingDropdown.setOnAction(
+                e -> {
             var old = node.toBuilder().build();
+            if (Objects.equals(old.getBuilding(), buildingDropdown.getValue())) return;
             node.setBuilding(buildingDropdown.getValue());
             nodePoints.get(node.getNodeID()).setFill(Color.YELLOW);
             popOver.setOnCloseRequest(null);
@@ -239,10 +250,21 @@ public class AdminMapController {
             nodePoint.setVisible(false);
             nodePoint.setManaged(false);
             edgeLines.get(node.getNodeID()).forEach(edge -> {
-                mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge).toBuilder().build()));
+                if (edges.containsKey(edge))
+                    mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge).toBuilder().build()));
             });
 //            nodes = nodes.entrySet().stream().filter(e -> !e.getKey().equals(node.getNodeID())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_NODE, node.toBuilder().build()));
+        });
+
+        nodes.addListener((MapChangeListener<? super Long, ? super Node>) e -> {
+            if (e.wasAdded()) {
+                var newNode = e.getValueAdded();
+                if (Objects.equals(newNode.getNodeID(), node.getNodeID()))
+                    Platform.runLater(() -> buildingDropdown.setValue(newNode.getBuilding()));
+            } else if (e.wasRemoved()) {
+                Platform.runLater(popOver::hide);
+            }
         });
         editNode.getChildren().addAll(
                 buildingDropdown,
@@ -308,9 +330,8 @@ public class AdminMapController {
                 n.get().setXcoord((int) point.getLayoutX());
                 n.get().setYcoord((int) point.getLayoutY());
                 mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().build(), old));
-
             } else {
-                if (firstNode == null) {
+                if (firstNode == null || nodes.get(firstNode.getNodeID()) == null) {
                     firstNode = n.get();
                     point.setStroke(Color.valueOf("#FF00FF"));
                     return;
@@ -404,7 +425,16 @@ public class AdminMapController {
     private void editNodes() {
         map.clearMap();
         map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if (!isLeftClick.test(e) || e.getTarget().getClass() != ImageView.class) return;
+            if (firstNode != null) {
+                var startPoint = nodePoints.get(firstNode.getNodeID());
+                if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
+                firstNode = null;
+            }
+        });
+        map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             // check for double click of the primary button
+            if (aligning.get()) return;
             if (!isLeftClick.test(e) || e.getClickCount() != 2 || e.getTarget().getClass() != ImageView.class) return;
             var location = map.getClickLocation(e);
             var node = new Node(nodes.values().stream().mapToLong(Node::getNodeID).max().orElse(0) + 5, (int) location.getX(), (int) location.getY(), map.getLayer().getIdentifier(), null);

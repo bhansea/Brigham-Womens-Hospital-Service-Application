@@ -91,11 +91,12 @@ public class SplashController {
 
     @FXML
     private void initialize() {
-        InputStream imageResource;
-        if ((imageResource = App.class.getResourceAsStream("frontend/assets/BW-logo.png")) != null) {
-            var imageView = new ImageView(new Image(imageResource));
-            container.getChildren().add(0, imageView);
-        }
+//        InputStream imageResource;
+//        if ((imageResource = App.class.getResourceAsStream("frontend/assets/BW-logo.png")) != null) {
+//            var imageView = new ImageView(new Image(imageResource));
+//            imageView.setFitWidth(App.getSingleton().getPrimaryStage().getWidth() - 20);
+//            container.getChildren().add(0, imageView);
+//        }
         exit.setOnMouseClicked(e -> App.getSingleton().exit());
         databaseSourceSelection.setItems(FXCollections.observableArrayList(PdbController.Source.values()));
         databaseSourceSelection.selectedItemProperty().addListener((v, o, n) -> {

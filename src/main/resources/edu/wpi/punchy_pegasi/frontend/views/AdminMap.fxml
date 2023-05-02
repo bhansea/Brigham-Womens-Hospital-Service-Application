@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
@@ -14,7 +16,9 @@
             <VBox styleClass="editing-overlay-box">
                 <Label text="Change History" styleClass="label-header"/>
                 <Separator/>
-                <VBox fx:id="changes"/>
+                <ScrollPane styleClass="changes-edit-scrollpane" hbarPolicy="NEVER" fitToWidth="true">
+                    <VBox fx:id="changes"/>
+                </ScrollPane>
             </VBox>
             <VBox styleClass="editing-overlay-box">
                 <Label text="Node Alignment" styleClass="label-header"/>

@@ -183,11 +183,11 @@ public class PdbController {
     }
 
     private void initConnection() throws SQLException {
-        DriverManager.setLoginTimeout(2);
+        DriverManager.setLoginTimeout(4);
         connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
         connection.addNotificationListener(listener);
         connection.setSchema(schema);
-        connection.setNetworkTimeout(App.getSingleton().getExecutorService(), 2000);
+        connection.setNetworkTimeout(App.getSingleton().getExecutorService(), 4000);
         var statement = connection.createStatement();
         for (var tableType : TableType.values()) {
             statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
@@ -196,7 +196,7 @@ public class PdbController {
     }
 
     private void initConnectionTest() throws SQLException {
-        DriverManager.setLoginTimeout(2);
+        DriverManager.setLoginTimeout(4);
         connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
         connection.addNotificationListener(listener);
         connection.setSchema(schema);
