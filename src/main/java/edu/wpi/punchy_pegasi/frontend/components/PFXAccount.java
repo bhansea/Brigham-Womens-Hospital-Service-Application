@@ -52,7 +52,7 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
         Label nameLabel = new Label();
         Label accountLevel = new Label();
         MFXToggleButton colorToggle = new MFXToggleButton();
-        MFXToggleButton ttsToggle = new MFXToggleButton();
+//        MFXToggleButton ttsToggle = new MFXToggleButton();
         VBox accountInformation = new VBox();
 
         nameLabel.setText(App.getSingleton().getAccount().getUsername());
@@ -67,13 +67,13 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
 
         colorToggle.setText("Dark Mode");
         colorToggle.setStyle("-fx-font-size: 12");
-        ttsToggle.setText("Text to Speech");
-        ttsToggle.setStyle("-fx-font-size: 12");
+//        ttsToggle.setText("Text to Speech");
+//        ttsToggle.setStyle("-fx-font-size: 12");
 
         content.setAlignment(Pos.CENTER_LEFT);
         content.getChildren().add(accountInformation);
         content.getChildren().add(colorToggle);
-        content.getChildren().add(ttsToggle);
+//        content.getChildren().add(ttsToggle);
         content.getChildren().add(logout);
     }
 
