@@ -12,7 +12,7 @@
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.PathfindingMap"
             fx:id="root">
     <left>
-        <HBox>
+        <VBox>
             <VBox fx:id="pathfinding" styleClass="pathfinding-overlay">
                 <VBox styleClass="pathfinding-overlay-box">
                     <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
@@ -28,8 +28,8 @@
                     <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
                 </VBox>
             </VBox>
-            <VBox fx:id="pathDirections"/>
-        </HBox>
+            <VBox fx:id="pathDirections" styleClass="pathfinding-overlay-box"/>
+        </VBox>
     </left>
     <right>
         <VBox fx:id="robotInfo" styleClass="pathfinding-overlay">

@@ -305,47 +305,53 @@ public class PathfindingMap {
     @Data
     class directionalNode {
         private final Node node;
-        private final pathDirectionType direction;
+        private final PFXIcon directionIcon;
     }
 
     private void pathDrawDirections() {
-        VBox directions = new VBox();
+//        VBox directions = new VBox();
         for (var floor : directionMap.keySet()) {
             var dNodeList = directionMap.get(floor);
-            VBox directionsOnFloor = new VBox();
+            VBox directionsOnFloor = new VBox(new Label("Floor " + floor));
             for (var dNode : dNodeList) {
                 var directionEntry = new HBox();
-                var directionIcon = dNode.getDirection().getIcon();
-                directionIcon.setSize(10.0);
+                var directionIcon = dNode.getDirectionIcon();
+                directionIcon.setSize(15.0);
                 directionEntry.getChildren().add(directionIcon);
                 var directionText = new Label(locationToString.toString(locations.get(nodeToMoves.get(dNode.getNode()).get(0).getLocationID())));
                 directionEntry.getChildren().add(directionText);
                 directionsOnFloor.getChildren().add(directionEntry);
             }
-            directions.getChildren().add(directionsOnFloor);
+            pathDirections.getChildren().add(directionsOnFloor);
         }
     }
 
     private void pathPutNodes(pathDirectionType direction, Node node) {
         var floor = node.getFloor();
-        var dNode = new directionalNode(node, direction);
+        var dNode = new directionalNode(node, direction.getIcon());
         if (directionMap.containsKey(floor))
             directionMap.get(floor).add(dNode);
         else
             directionMap.put(floor, dNode);
     }
 
+    private void clearDirections() {
+        pathDirections.getChildren().clear();
+        directionMap.clear();
+    }
+
 
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
         var graph = new Graph<>(nodes, edgeList);
-
+        clearDirections();
         try {
             var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
             map.clearMap();
             String currentFloor = path.get(0).getFloor();
             List<Node> currentPath = new ArrayList<>();
             for (var node : path) {
+                pathPutNodes(pathDirectionType.START, node);
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
@@ -357,6 +363,7 @@ public class PathfindingMap {
                 }
                 currentPath.add(node);
             }
+            pathDrawDirections();
             map.drawLine(currentPath);
             map.drawYouAreHere(path.get(0));
             drawNode(path.get(path.size() - 1), "#3cb043");
