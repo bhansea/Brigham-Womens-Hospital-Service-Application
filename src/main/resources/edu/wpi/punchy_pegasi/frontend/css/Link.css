@@ -6,11 +6,11 @@
 }
 
 .link-parent:hover {
-    -fx-background-color: white;
-    -fx-border-color: #012D5A;
-    -fx-border-width: 7;
-    -fx-border-style: solid outside;
-    -fx-border-radius: 1;
+    /*-fx-background-color: white;*/
+    /*-fx-border-color: #012D5A;*/
+    /*-fx-border-width: 7;*/
+    /*-fx-border-style: solid outside;*/
+    /*-fx-border-radius: 1;*/
 }
 
 .link-parent:hover .link-arrow {
@@ -31,9 +31,9 @@
 
 .link-arrow-border {
     -fx-alignment: center;
-    -fx-border-color: #f6bd38;
-    -fx-border-radius: 3;
-    -fx-border-width: 2;
+    /*-fx-border-color: #f6bd38;*/
+    /*-fx-border-radius: 3;*/
+    /*-fx-border-width: 2;*/
     -size: 24;
     -fx-min-height: -size;
     -fx-max-height: -size;

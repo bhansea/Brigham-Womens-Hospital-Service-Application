@@ -17,24 +17,24 @@
  */
 
 .mfx-scroll-pane {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-background;
 
-    -track-color: rgb(230, 230, 230);
-    -thumb-color: rgb(137, 137, 137);
-    -thumb-hover-color: rgb(89, 88, 91);
+    /*-track-color: rgb(230, 230, 230);*/
+    /*-thumb-color: rgb(137, 137, 137);*/
+    /*-thumb-hover-color: rgb(89, 88, 91);*/
 }
 
 /* Remove JavaFX crap */
 .mfx-scroll-pane:focused {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-background;
 }
 
 .mfx-scroll-pane > .corner {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
 }
 
 .mfx-scroll-pane .viewport {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
 }
 
 .mfx-scroll-pane .scroll-bar,
@@ -47,14 +47,14 @@
 
 .mfx-scroll-pane .scroll-bar:horizontal .increment-button,
 .mfx-scroll-pane .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
     -fx-background-radius: 0.0em;
     -fx-padding: 0.0 0.0 10.0 0.0;
 }
 
 .mfx-scroll-pane .scroll-bar:vertical .increment-button,
 .mfx-scroll-pane .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
     -fx-background-radius: 0.0em;
     -fx-padding: 0.0 10.0 0.0 0.0;
 
@@ -89,7 +89,7 @@
 }
 
 .mfx-scroll-pane .scroll-bar:vertical .track {
-    -fx-background-color: -track-color;
+    -fx-background-color: -pfx-background;
     -fx-border-color: transparent;
     -fx-background-radius: 2.0em;
     -fx-border-radius: 2.0em;
@@ -103,14 +103,14 @@
 }
 
 .mfx-scroll-pane .scroll-bar:vertical {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
     -fx-pref-width: 12;
     -fx-pref-height: 12;
     -fx-padding: 5 0.5 5 0.5;
 }
 
 .mfx-scroll-pane .scroll-bar:horizontal {
-    -fx-background-color: transparent;
+    -fx-background-color: -pfx-background;
     -fx-pref-width: 12;
     -fx-pref-height: 12;
     -fx-padding: 0.5 5 0.5 5;
@@ -125,7 +125,7 @@
 
 .mfx-scroll-pane .scroll-bar:horizontal .thumb:hover,
 .mfx-scroll-pane .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: -thumb-hover-color;
+    -fx-background-color: -pfx-background;
     -fx-background-insets: 1.5, 0.0, 0.0;
     -fx-background-radius: 2.0em;
 }

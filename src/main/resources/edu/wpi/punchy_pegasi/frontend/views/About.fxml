@@ -3,73 +3,59 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.AboutController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.AboutController">
     <center>
-        <VBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #F1F1F1">
-            <children>
-                <VBox style="-fx-background-color: -pfx-background" spacing="10">
-                    <Label text="ABOUT" styleClass="info-title"/>
-                    <TextFlow styleClass="info-text">
-                        <Text>
-                            This application is in collaboration with Brigham &amp; Women's Hospital and represents the
-                            work of 10 WPI undergraduate students in partial fulfillment of the requirements for
-                            CS3733-D23 Software Engineering.
-                            As a whole, our group worked together effectively to communicate, apply Agile development
-                            methodologies, and fulfill software requirements in Java. We shared ideas, provided
-                            constructive feedback to each other, and took on different roles and responsibilities in
-                            order to accomplish the objectives of the project.
-                            The software systems we created were used to inform the hospital representatives about
-                            potential features, user interfaces, or design approaches that they might consider
-                            implementing.
-                        </Text>
-                    </TextFlow>
+        <VBox VBox.vgrow="ALWAYS" alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: -pfx-accent;">
+            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background;" spacing="10">
+                <Label text="ABOUT" styleClass="about-subtitles"/>
+                <TextFlow style="-fx-padding: 0 0 25 50" lineSpacing="10">
+                    <Text styleClass="about-paragraphs">
+                        This application is in collaboration with Brigham &amp; Women's Hospital and represents the
+                        work of 10 WPI undergraduate students in partial fulfillment of the requirements for
+                        CS3733-D23 Software Engineering.
+                        As a whole, our group worked together effectively to communicate, apply Agile development
+                        methodologies, and fulfill software requirements in Java. We shared ideas, provided
+                        constructive feedback to each other, and took on different roles and responsibilities in
+                        order to accomplish the objectives of the project.
+                        The software systems we created were used to inform the hospital representatives about
+                        potential features, user interfaces, or design approaches that they might consider
+                        implementing.
+                    </Text>
+                </TextFlow>
+            </VBox>
+            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
+                <Label text="MEET THE TEAM" styleClass="about-subtitles"/>
+                <GridPane fx:id="sourceGrid" styleClass="info-about-team-list"/>
+            </VBox>
+            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
+                <Label text="ACKNOWLEDGEMENTS" styleClass="about-subtitles"/>
+                <TextFlow style="-fx-padding: 0 0 0 50">
+                    <Text styleClass="about-paragraphs">
+                        Our team would like to acknowledge the following people and organization for their
+                        contributions to this project:
+                    </Text>
+                </TextFlow>
+                <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" styleClass="about-grid">
+                    <Label text="-  The WPI Computer Science Department for providing us with this opportunity."
+                           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label text="-  Professor Wilson Wong for organizing this project and providing timely feedback for our numerous iterations."
+                           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label text="-  Our coach, Qui Nguyen, for providing us with valuable guidance."
+                           GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label text="-  Brigham &amp; Women's Hospital for the opportunity to work with them."
+                           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label text="-  The representative from Brigham &amp; Women's Hospital, Andrew Shinn, for their time and input."
+                           GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                </GridPane>
+                <VBox alignment="BOTTOM_RIGHT">
+                    <Label text="*The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes."
+                           styleClass="about-disclaimer">
+                    </Label>
                 </VBox>
-                <VBox style="-fx-background-color: -pfx-background" spacing="10">
-                    <Label text="MEET THE TEAM" styleClass="info-title"/>
-                    <GridPane fx:id="sourceGrid" styleClass="info-about-team-list">
-                    </GridPane>
-                </VBox>
-                <VBox style="-fx-background-color: -pfx-background" spacing="10">
-                    <Label text="ACKNOWLEDGEMENTS" styleClass="info-title"/>
-                    <TextFlow prefWidth="600">
-                        <Text>
-                            Our team would like to acknowledge the following people and organization for their
-                            contributions to this project:
-                            <font>
-                                <Font name="Nunito Sans" size="18.0"/>
-                            </font>
-                        </Text>
-                        <padding>
-                            <Insets top="5" left="50"/>
-                        </padding>
-                    </TextFlow>
-                    <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT"
-                              style="-fx-font-family: Nunito Sans; -fx-font-size: 16; -fx-text-fill: black;">
-                        <Label text="-  The WPI Computer Science Department for providing us with this opportunity."
-                               GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <Label text="-  Professor Wilson Wong for organizing this project and providing timely feedback for our numerous iterations."
-                               GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <Label text="-  Our coach, Qui Nguyen, for providing us with valuable guidance."
-                               GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <Label text="-  Brigham &amp; Women's Hospital for the opportunity to work with them."
-                               GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <Label text="-  The representative from Brigham &amp; Women's Hospital, Andrew Shinn, for their time and input."
-                               GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                        <padding>
-                            <Insets top="5" left="50" bottom="25"/>
-                        </padding>
-                    </GridPane>
-                    <VBox alignment="BOTTOM_RIGHT">
-                        <Label text="*The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes."
-                               styleClass="info-about-bottom-disclaimer">
-                        </Label>
-                    </VBox>
-                </VBox>
-            </children>
+            </VBox>
         </VBox>
     </center>
 </BorderPane>

@@ -1,33 +1,32 @@
-@import "PFXColors.css";
 @import "SignageTheme.css";
 
 .signage-icon {
-    -fx-fill: -pfx-signage-text-opposite;
+    -fx-fill: white;
 }
 
 .signage-delete-btn PFXIcon {
-    -fx-fill: -pfx-signage-text-opposite;
+    -fx-fill: white;
 }
 
 .signage-icon-header {
-    -fx-fill: -pfx-signage-text-opposite;
+    -fx-fill: white;
 }
 
 .signage-header Label {
-    -fx-text-fill: -pfx-signage-text-opposite;
+    -fx-text-fill: white;
     -fx-font-size: 30;
 }
 
 .signage-label Label {
-    -fx-text-fill: -pfx-signage-text-opposite;
+    -fx-text-fill: white;
     -fx-font-size: 50;
 }
 
 .signage-all {
-    -fx-background-color: -pfx-signage-background-opposite;
+    -fx-background-color: -pfx-navy;
 }
 
 .signage-edit-button {
-    -pfx-button-background: -pfx-signage-background-opposite;
-    -pfx-button-text: -pfx-signage-text-opposite;
+    -pfx-button-background: -pfx-navy;
+    -pfx-button-text: white;
 }

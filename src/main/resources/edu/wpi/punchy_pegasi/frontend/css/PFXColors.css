@@ -1,18 +1,17 @@
 * {
     -pfx-navy: #012d5a;
     -pfx-navy-grey: #636c75;
-    -pfx-background: #ffffff;
+    -pfx-background: white;
     -pfx-background-transparent: rgba(255, 255, 255, 0.5);
     -pfx-accent: #0072e7;
     -pfx-accent-transparent: #0072e733;
     -pfx-accent-light: #daeeff;
     -pfx-accent-dark: #00418a;
-    -pfx-primary: #c9c9c9;
+    -pfx-primary: white;
     -pfx-primary-transparent: #c9c9c933;
     -pfx-secondary: #676767;
     -pfx-secondary-transparent: #67676733;
     -pfx-yellow: #F6BD3E;
-    -pfx-text: -pfx-navy;
     -pfx-danger: #ff4444;
     -pfx-danger-dark: #CC0000;
     -pfx-warning: #ffbb33;
@@ -21,5 +20,8 @@
     -pfx-success-dark: #007E33;
     -pfx-text: black;
     -pfx-text-opposite: white;
-    -pfx-secondary-light: #d6d6d6;
+    -pfx-secondary-light: #8d8d8d;
+    -pfx-text-entry: white;
+    -pfx-side-icon-dark: -pfx-navy;
+    -pfx-side-icon-light: -pfx-accent;
 }

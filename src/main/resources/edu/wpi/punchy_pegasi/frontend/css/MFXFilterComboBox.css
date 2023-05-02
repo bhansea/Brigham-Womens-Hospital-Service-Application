@@ -32,12 +32,14 @@
     -fx-background-color: transparent;
     -fx-background-radius: 0;
     -fx-max-height: 200;
+    -fx-border-width: 0;
+    -fx-border-color: -pfx-secondary;
 }
 
 .mfx-filter-combo-box .combo-popup .search-container {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-primary;
     -fx-background-radius: 5;
-    -fx-border-color: #ebebeb;
+    -fx-border-color: -pfx-secondary;
     -fx-border-radius: 5;
     -fx-padding: 10 5 5 5;
 }
@@ -47,12 +49,13 @@
     -mfx-float-mode: disabled;
     -fx-padding: 5;
     -fx-display-caret: false;
+    -fx-background-color: -pfx-primary;
 }
 
 .mfx-filter-combo-box .combo-popup .search-field,
 .mfx-filter-combo-box .combo-popup .search-field:focus-within {
     -fx-border-width: 1;
     -fx-background-insets: 0;
-    -fx-border-color: lightgray;
+    -fx-border-color: -pfx-secondary;
 }
 

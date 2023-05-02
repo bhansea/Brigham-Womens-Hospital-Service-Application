@@ -4,7 +4,7 @@
     -fx-min-width: 65;
     -fx-padding: 0 0 15 0;
     -fx-border-width: 0 1 0 0;
-    -fx-border-color: -pfx-secondary-light;
+    -fx-border-color: -pfx-secondary;
 }
 
 .sidebar-button:selected > .icon {
@@ -15,7 +15,7 @@
 .sidebar-expand-icon {
     -fx-font-size: 18;
     -fx-padding: 0;
-    -fx-fill: -pfx-secondary;
+    -fx-fill: -pfx-text;
     -fx-cursor: hand;
 }
 
@@ -27,8 +27,7 @@
     -fx-alignment: CENTER;
     -fx-background-color: -pfx-background;
     -fx-padding: 10;
-    -fx-border-color: -pfx-secondary-light;
-    -fx-border-width: 0 0 1 0;
+    /*-fx-border-color: -pfx-background;*/
 }
 
 .header-left-container {
@@ -63,6 +62,9 @@
 .header-search {
     -fx-background-color: -pfx-primary;
     -fx-cursor: text;
+    -fx-border-color: -pfx-secondary;
+    -fx-border-radius: 40;
+    -fx-background-radius: 40;
 }
 
 #accountInfo > HBox {
@@ -127,10 +129,21 @@
 }
 
 .search-popup {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-secondary;
     -fx-background-radius: 12;
-    -fx-padding: 10;
+    /*-fx-padding: 10;*/
     -fx-pref-width: 300;
     -fx-max-width: 300;
     -fx-min-width: 300;
+}
+
+.search-box {
+    -fx-background-radius: 40;
+    -fx-background-color: -pfx-primary;
+    -fx-border-color: -pfx-secondary;
+    -fx-border-width: 1;
+    -fx-border-radius: 40;
+    -fx-pref-height: 35;
+    -fx-max-height: 35;
+    -fx-min-height: 35;
 }

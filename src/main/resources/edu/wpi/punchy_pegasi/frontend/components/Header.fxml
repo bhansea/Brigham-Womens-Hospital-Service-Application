@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXAccount?>
-<?import javafx.scene.layout.HBox?>
-
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
-<?import javafx.geometry.Insets?>
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/"
          styleClass="header">
     <HBox styleClass="header-left-container" fx:id="headerContainer">
         <HBox HBox.hgrow="ALWAYS" styleClass="header-search" fx:id="headerSearch">
-                <PFXIcon icon="SEARCH"/>
-                <Label text="Search"/>
-<!--            <VBox VBox.vgrow="ALWAYS" fx:id="headerSearch">-->
-<!--                <TextField fx:id="searchField" promptText="Search" HBox.hgrow="ALWAYS"/>-->
-<!--            </VBox>-->
+            <PFXIcon icon="SEARCH" style="-fx-fill: -pfx-secondary-light;"/>
+            <Label text="Search" style="-fx-text-fill: -pfx-secondary-light;"/>
         </HBox>
     </HBox>
     <HBox HBox.hgrow="ALWAYS"/>
-    <HBox styleClass="header-right-container" HBox.hgrow="NEVER" >
+    <HBox styleClass="header-right-container" HBox.hgrow="NEVER">
         <PFXAccount fx:id="pfxAccount"/>
     </HBox>
 </fx:root>

@@ -1,5 +1,5 @@
 .pfx-dropdown {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-text-entry;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
@@ -9,7 +9,7 @@
 }
 
 .pfx-dropdown .arrow-button {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-text-entry;
 }
 
 .pfx-dropdown .arrow-button:hover {
@@ -21,7 +21,7 @@
 }
 
 .pfx-dropdown .list-cell {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-text-entry;
 }
 
 .pfx-dropdown .list-cell:hover {

@@ -4,11 +4,10 @@
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-
-<?import javafx.scene.control.Separator?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" styleClass="login-page-background" xmlns="http://javafx.com/javafx/"
            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.LoginController">
     <VBox styleClass="login-page-white-layer"/>
@@ -27,8 +26,7 @@
                         <HBox alignment="CENTER">
                             <MFXTextFieldFocusable fx:id="usernameEnter" floatingText="Username"
                                                    maxHeight="50.0" maxWidth="300" minHeight="0.0"
-                                                   onAction="#logIn" prefHeight="50.0" prefWidth="300"
-                                                   style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                                                   onAction="#logIn" prefHeight="50.0" prefWidth="300">
                                 <textFill>
                                     <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
                                 </textFill>
@@ -37,8 +35,7 @@
                         <HBox alignment="CENTER" prefHeight="80" prefWidth="200.0">
                             <MFXPasswordField fx:id="passwordBox" floatingText="Password" maxHeight="50.0"
                                               maxWidth="300" minHeight="0.0" onAction="#logIn" prefHeight="50.0"
-                                              prefWidth="300"
-                                              style="-fx-border-color: #0067b1; -fx-text-fill: #000000;">
+                                              prefWidth="300">
                                 <textFill>
                                     <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716"/>
                                 </textFill>

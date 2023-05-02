@@ -2,15 +2,10 @@
 
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.control.ScrollPane?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
-            fx:id="root">
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController" fx:id="root">
     <left>
         <VBox fx:id="editing" styleClass="editing-overlay">
             <VBox styleClass="editing-overlay-box">
@@ -32,7 +27,7 @@
             <VBox styleClass="editing-overlay-box">
                 <Label text="Set Effective Date" styleClass="label-header"/>
                 <Separator/>
-                <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker" maxWidth="Infinity"/>
+                <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker" maxWidth="Infinity" style="-fx-font-size: 18"/>
             </VBox>
         </VBox>
     </left>

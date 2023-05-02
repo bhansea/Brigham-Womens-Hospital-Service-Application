@@ -16,7 +16,7 @@
     -fx-padding: 20 50 20 50;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-border-color: -pfx-primary;
+    -fx-border-color: -pfx-secondary;
     -fx-border-width: 1;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 30, 0, 0.0, 0.0);
 }
@@ -30,6 +30,12 @@
 }
 
 .login-quicknav PFXButton {
+    -fx-text-fill: -pfx-text;
+    -pfx-button-background: -pfx-background;
+}
+
+.login-quicknav PFXButton:hover {
+    -fx-text-fill: -pfx-text;
     -pfx-button-background: -pfx-background;
 }
 

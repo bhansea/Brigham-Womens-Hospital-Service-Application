@@ -30,7 +30,7 @@
 }
 
 .mfx-combo-box-cell:hover {
-    -fx-background-color: -mfx-hover;
+    -fx-background-color: -pfx-accent-transparent;
 }
 
 .mfx-combo-box-cell:selected {
@@ -39,5 +39,5 @@
 
 .mfx-combo-box-cell .data-label {
     -fx-font-family: "Nunito Sans Regular";
-    -fx-text-fill: -mfx-text-he;
+    -fx-text-fill: -pfx-text;
 }

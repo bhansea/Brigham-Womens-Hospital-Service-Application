@@ -3,7 +3,7 @@
 .pfx-card-vertical-container {
     -fx-alignment: TOP_CENTER;
     -fx-padding: 20 20;
-    -fx-background-color: -pfx-background;
+    -fx-background-color: transparent;
     /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);*/
     -fx-border-width: 0;
     -fx-border-color: -pfx-primary;
@@ -22,7 +22,6 @@
 .pfx-card-vertical-imageBox {
     -fx-alignment: TOP_CENTER;
     -fx-background-color: transparent;
-    -fx-border-radius: 12;
 }
 
 .pfx-card-vertical-info {
@@ -40,9 +39,9 @@
 }
 
 .pfx-card-vertical-stats Label {
-    -fx-font-family: "Nunito Sans Light";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-background-color: transparent;
-    -fx-text-fill: -pfx-navy;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-card-vertical-container:selected {
@@ -50,7 +49,7 @@
 }
 
 .pfx-card-vertical-container:selected Label {
-    -fx-text-fill: -pfx-accent;
+    -fx-text-fill: -pfx-text;
 }
 
 .pfx-card-vertical-container:hover {

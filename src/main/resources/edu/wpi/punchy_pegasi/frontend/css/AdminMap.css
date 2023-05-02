@@ -4,7 +4,8 @@
 }
 
 .label-header {
-    -fx-font-size: 20;
+    -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
 }
 
 .editing-overlay-box {
@@ -12,7 +13,7 @@
     -fx-max-width: 300;
     -fx-spacing: 10;
     -fx-padding: 10;
-    -fx-background-color: -pfx-background;
+    -fx-background-color: -pfx-primary;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
@@ -48,6 +49,7 @@
 .move-delete-btn:hover PFXIcon {
     -fx-fill: red;
 }
+
 .move-delete-btn,
 .move-delete-btn:armed,
 .move-delete-btn:hover,
@@ -66,6 +68,12 @@
     -fx-cursor: hand;
     -fx-padding: 0 5;
 }
+
 .move-hbox:hover {
     -fx-background-color: -pfx-accent-transparent;
+}
+
+.commit-button {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text;
 }

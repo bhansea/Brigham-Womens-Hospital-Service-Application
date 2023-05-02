@@ -9,6 +9,7 @@
     -fx-font-family: "Nunito Sans Regular";
     -pfx-button-background: -pfx-background;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
+    -fx-text-fill: -pfx-text;
 }
 
 .hospital-map-overlay-bottom {
@@ -29,6 +30,7 @@
 .hospital-map-zoom-modal PFXIcon {
     -fx-alignment: CENTER;
     -fx-font-size: 30;
+    -fx-fill: -pfx-text;
 }
 
 .hospital-map-zoom-modal PFXButton {
