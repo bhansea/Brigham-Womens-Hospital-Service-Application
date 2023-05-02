@@ -30,6 +30,10 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
     private final EventHandler<? super MouseEvent> isAccount = e -> accountMenu.show(this);
     private final PFXIcon defaultIcon = new PFXIcon(MaterialSymbols.ACCOUNT_CIRCLE);
 
+    VBox accountInformation = new VBox();
+    Label nameLabel = new Label();
+    Label accountLevel = new Label();
+
     public PFXAccount() {
         super();
         var content = new VBox();
@@ -49,19 +53,12 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
         App.getSingleton().addPropertyChangeListener(this);
 
 
-        Label nameLabel = new Label();
-        Label accountLevel = new Label();
         MFXToggleButton colorToggle = new MFXToggleButton();
 //        MFXToggleButton ttsToggle = new MFXToggleButton();
-        VBox accountInformation = new VBox();
 
-        nameLabel.setText(App.getSingleton().getAccount().getUsername());
-        accountLevel.setText(App.getSingleton().getAccount().getAccountType().toString());
         accountInformation.getChildren().add(nameLabel);
         accountInformation.getChildren().add(accountLevel);
-        accountInformation.setAlignment(Pos.CENTER);
-        accountInformation.setPadding(new Insets(0, 0, 15, 0));
-        accountInformation.setStyle("-fx-border-color: -pfx-secondary-light; -fx-border-width: 0 0 1 0");
+        accountInformation.getStyleClass().add("pfx-account-information");
 
         nameLabel.setStyle("-fx-font-size: 14");
 
@@ -83,11 +80,17 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
             addEventFilter(MouseEvent.MOUSE_CLICKED, noAccount);
             getChildren().clear();
             getChildren().addAll(loginIcon, label);
+            accountInformation.setVisible(false);
+            accountInformation.setManaged(false);
         } else {
             removeEventFilter(MouseEvent.MOUSE_CLICKED, noAccount);
             addEventFilter(MouseEvent.MOUSE_CLICKED, isAccount);
             getChildren().clear();
             getChildren().addAll(defaultIcon);
+            accountInformation.setVisible(true);
+            accountInformation.setManaged(true);
+            nameLabel.setText(account.getUsername());
+            accountLevel.setText(account.getAccountType().toString());
         }
     }
 
