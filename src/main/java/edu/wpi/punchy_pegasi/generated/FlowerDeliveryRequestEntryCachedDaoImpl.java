@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field>, PropertyChangeListener {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "flowerSize", "flowerType", "flowerAmount", "patientName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "selectedFlowers", "patientName"};
 
     private final ObservableMap<java.util.UUID, FlowerDeliveryRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<FlowerDeliveryRequestEntry> list = FXCollections.observableArrayList();
@@ -109,16 +109,14 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         try (var rs = dbController.searchQuery(TableType.FLOWERREQUESTS)) {
             while (rs.next()) {
                 FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("patientName", java.lang.String.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("flowerSize", java.lang.String.class),
-                        rs.getObject("flowerAmount", java.lang.String.class),
-                        rs.getObject("flowerType", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("patientName", java.lang.String.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    java.util.Arrays.asList((String[])rs.getArray("selectedFlowers").getArray()),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -162,7 +160,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getEmployeeID(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
+        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getEmployeeID(), flowerDeliveryRequestEntry.getSelectedFlowers(), flowerDeliveryRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
 //            add(flowerDeliveryRequestEntry);

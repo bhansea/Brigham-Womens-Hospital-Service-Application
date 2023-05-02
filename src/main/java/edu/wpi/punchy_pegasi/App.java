@@ -1,7 +1,5 @@
 package edu.wpi.punchy_pegasi;
 
-import edu.wpi.punchy_pegasi.backend.AppSearch;
-import javafx.scene.image.Image;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.components.PageLoading;
@@ -11,15 +9,23 @@ import edu.wpi.punchy_pegasi.frontend.controllers.SplashController;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
@@ -92,6 +98,7 @@ public class App extends Application {
         });
         System.out.println("Hot-loaded CSS: " + s);
     }, 250);
+    private IdleScreen idleScreen;
     @Getter
     private BorderPane viewPane;
     private Thread loadingThread = null;
@@ -146,6 +153,7 @@ public class App extends Application {
     @Override
     public void init() {
         singleton = this;
+        idleScreen = new IdleScreen(90);
         log.info("Starting Up");
     }
 
@@ -167,6 +175,7 @@ public class App extends Application {
         if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
             getLayout().showTopLayout(screen.isHeader());
             getLayout().showLeftLayout(screen.isSidebar());
+            enableTimeout(screen.isTimeout());
             getViewPane().setCenter(new PageLoading());
             getViewPane().setCenter(screen.get());
             setCurrentScreen(screen);
@@ -219,6 +228,26 @@ public class App extends Application {
         primaryStage.show();
         navigate(Screen.LOGIN);
         App.getSingleton().getExecutorService().execute(this::initDatabaseTables);
+
+        // Idle Screen
+
+        var idleTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            if (!idleScreen.isIdle() && idleScreen.isEnabled()) {
+                idleScreen.setIdle(true);
+                getLayout().showOverlay(idleScreen, false);
+            }
+        }));
+        idleTimeline.setCycleCount(Timeline.INDEFINITE);
+        idleTimeline.play();
+
+        // Add event handling to show/hide the screensaver on user activity
+        scene.addEventHandler(MouseEvent.MOUSE_MOVED, e -> disableScreenSaver(idleTimeline));
+        scene.addEventHandler(KeyEvent.ANY, e -> disableScreenSaver(idleTimeline));
+        scene.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> disableScreenSaver(idleTimeline));
+    }
+
+    public void enableTimeout(boolean enable) {
+        idleScreen.setEnabled(enable);
     }
 
     private void initDatabaseTables() {
@@ -245,6 +274,9 @@ public class App extends Application {
         splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
         splashController.getConnection();
 
+        //var testComponent = new PFXCard();
+        //scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
+
         loadStylesheet("frontend/css/DefaultTheme.css");
         primaryStage.getIcons().add(new Image(resolveResource("frontend/assets/bwhlogo.png").get().toString()));
 
@@ -270,13 +302,16 @@ public class App extends Application {
                 }
             });
         }
-
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
+    }
 
-
-        //splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
-        //splashController.getConnection();
+    public void disableScreenSaver(Timeline idleTimeline) {
+        if (idleScreen.isIdle()) {
+            getLayout().hideOverlay();
+            idleScreen.setIdle(false);
+        }
+        idleTimeline.playFromStart(); // Reset the idle timeline
     }
 
     public FXMLLoader loadWithCache(String path) throws IOException {

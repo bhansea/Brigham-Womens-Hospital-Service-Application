@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field>, PropertyChangeListener {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "officeRequest"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "officeSupplies"};
 
     private final ObservableMap<java.util.UUID, OfficeServiceRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<OfficeServiceRequestEntry> list = FXCollections.observableArrayList();
@@ -109,13 +109,13 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         try (var rs = dbController.searchQuery(TableType.OFFICEREQUESTS)) {
             while (rs.next()) {
                 OfficeServiceRequestEntry req = new OfficeServiceRequestEntry(
-                        rs.getObject("serviceID", java.util.UUID.class),
-                        rs.getObject("locationName", java.lang.Long.class),
-                        rs.getObject("staffAssignment", java.lang.Long.class),
-                        rs.getObject("additionalNotes", java.lang.String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                        rs.getObject("officeRequest", java.lang.String.class),
-                        rs.getObject("employeeID", java.lang.Long.class));
+                    rs.getObject("serviceID", java.util.UUID.class),
+                    rs.getObject("locationName", java.lang.Long.class),
+                    rs.getObject("staffAssignment", java.lang.Long.class),
+                    rs.getObject("additionalNotes", java.lang.String.class),
+                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                    java.util.Arrays.asList((String[])rs.getArray("officeSupplies").getArray()),
+                    rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -159,7 +159,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
 
     @Override
     public void save(OfficeServiceRequestEntry officeServiceRequestEntry) {
-        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getEmployeeID(), officeServiceRequestEntry.getOfficeRequest()};
+        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getEmployeeID(), officeServiceRequestEntry.getOfficeSupplies()};
         try {
             dbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
 //            add(officeServiceRequestEntry);

@@ -7,16 +7,28 @@
     -fx-fill: -pfx-primary;
 }
 .pfx-account-menu {
-    -fx-padding: 10 0;
+    -fx-padding: 10;
+    -fx-min-width: 150;
+    -fx-opacity: 1;
 }
 
+
 .pfx-account Label {
-    -fx-font-size: 18;
+    -fx-font-size: 12;
+    -fx-fill: -pfx-text;
 }
 
 .pfx-account PFXIcon {
     -fx-fill: -pfx-text;
 }
+
 .pfx-default-account-icon {
     -fx-fill: -pfx-secondary;
+}
+
+.pfx-account-information {
+    -fx-alignment: CENTER;
+    -fx-padding: 0 0 15 0;
+    -fx-border-color: -pfx-secondary-light;
+    -fx-border-width: 0 0 1 0;
 }
