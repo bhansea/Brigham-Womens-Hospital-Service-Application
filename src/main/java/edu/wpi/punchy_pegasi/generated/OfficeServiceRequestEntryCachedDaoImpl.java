@@ -60,6 +60,12 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<OfficeServiceRequestEntry> generateTable(Consumer<OfficeServiceRequestEntry> onRowClick, OfficeServiceRequestEntry.Field[] hidden) {
         var table = new MFXTableView<OfficeServiceRequestEntry>();
         table.setItems(list);
@@ -207,6 +213,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public OfficeServiceRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

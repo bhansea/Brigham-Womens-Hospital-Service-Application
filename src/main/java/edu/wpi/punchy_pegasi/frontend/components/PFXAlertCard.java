@@ -1,20 +1,13 @@
 package edu.wpi.punchy_pegasi.frontend.components;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Alert;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 public class PFXAlertCard extends HBox {
     private final Button read;
@@ -24,9 +17,14 @@ public class PFXAlertCard extends HBox {
     private Long uuid;
     private VBox textContainer = new VBox();
     private PFXIcon icon;
+    private MaterialSymbols active;
+    private Alert alert;
+
 
     public PFXAlertCard(Alert alert) {
         super();
+        this.alert = alert;
+        this.active = MaterialSymbols.NOTIFICATIONS_ACTIVE;
         Alert.ReadStatus readStatus = alert.getReadStatus();
         if(readStatus == Alert.ReadStatus.READ) {
             isRead = true;
@@ -34,7 +32,7 @@ public class PFXAlertCard extends HBox {
             getStyleClass().add("pfx-alert-card-container-read");
         } else {
             isRead = false;
-            icon = new PFXIcon(MaterialSymbols.NOTIFICATIONS_ACTIVE);
+            icon = new PFXIcon(active);
             getStyleClass().add("pfx-alert-card-container-unread");
         }
         titleLabel = new Label(alert.getAlertTitle());
@@ -43,9 +41,25 @@ public class PFXAlertCard extends HBox {
 
 
         getChildren().addAll(textContainer, read);
-        textContainer.getChildren().addAll(titleLabel, description);
+        Label alertType = new Label(alert.getAlertType().toString());
+        textContainer.getChildren().addAll(titleLabel, alertType, description);
+        alertType.getStyleClass().add("pfx-alert-card-type-text");
+        titleLabel.getStyleClass().add("pfx-alert-card-title-text");
         HBox.setHgrow(read, Priority.ALWAYS);
         HBox.setHgrow(description, Priority.ALWAYS);
+
+        if (alert.getAlertType() == Alert.AlertType.MAP) {
+            Label endDateTimeLabel = new Label();
+            endDateTimeLabel.setText("End Date Time: " + alert.getEndDate().toString());
+
+        } else if (alert.getAlertType() == Alert.AlertType.MAP_DISABLED) {
+            Label endDateTimeLabel = new Label();
+            endDateTimeLabel.setText("End Date Time: " + alert.getEndDate().toString());
+
+        } else if (alert.getAlertType() == Alert.AlertType.EMPLOYEE) {
+            Label endDateTimeLabel = new Label();
+            endDateTimeLabel.setText("End Date Time: " + alert.getEndDate().toString());
+        }
         read.setOnAction(e -> toggleRead());
     }
 
@@ -80,8 +94,14 @@ public class PFXAlertCard extends HBox {
         }
         else{
             getStyleClass().remove("pfx-alert-card-container-read");
-            icon.setIcon(MaterialSymbols.NOTIFICATIONS_ACTIVE);
+            icon.setIcon(active);
             getStyleClass().add("pfx-alert-card-container-unread");
         }
+    }
+
+    public Alert getAlert(){return this.alert;}
+    public void changeToDeleteIcon(){
+        this.active = MaterialSymbols.DELETE;
+        icon.setIcon(active);
     }
 }

@@ -18,12 +18,16 @@ import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -33,6 +37,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +63,11 @@ public class AdminMapController {
     private final ObservableList<javafx.scene.Node> mapEditsNodes = FXCollections.observableArrayList(new javafx.scene.Group());
     private final Map<Long, Circle> nodePoints = new HashMap<>();
     private final MultiValuedMap<Long, UUID> edgeLines = new ArrayListValuedHashMap<>();
+    private AtomicBoolean aligning = new AtomicBoolean(false);
+    @FXML
+    private PFXButton alignButton;
+    @FXML
+    private PFXButton cancelAlignButton;
     @FXML
     private MFXDatePicker adminDatePicker;
     @FXML
@@ -80,6 +90,9 @@ public class AdminMapController {
     private ObservableMap<Long, LocationName> locations;
     private ObservableMap<Long, Move> moves;
     private Node firstNode, secondNode;
+    private Point2D firstPoint, secondPoint;
+    private Polyline alignmentLine;
+    private HospitalFloor.Floors firstFloor;
     private ObservableMap<Node, ObservableList<Move>> nodeToLocation;
 
     private Optional<Circle> drawNode(Node node, String color) {
@@ -111,7 +124,7 @@ public class AdminMapController {
 
     @FXML
     private void initialize() {
-        App.getSingleton().getScene().setOnKeyPressed(e -> {
+        App.getSingleton().getScene().addEventHandler(KeyEvent.KEY_PRESSED, e -> {
             if (e.getCode() == KeyCode.Z && e.isControlDown())
                 Platform.runLater(() -> {
                     if (mapEdits.size() > 0)
@@ -138,6 +151,13 @@ public class AdminMapController {
 
     private PopOver nodeEditMenu(Node node) {
         var popOver = new PopOver();
+        popOver.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.Z && e.isControlDown())
+                Platform.runLater(() -> {
+                    if (mapEdits.size() > 0)
+                        mapEdits.remove(mapEdits.size() - 1).undo();
+                });
+        });
         popOver.getRoot().getStylesheets().add(App.getSingleton().resolveResource("frontend/css/DefaultTheme.css").get().toExternalForm());
         var editNode = new VBox();
         editNode.getStyleClass().add("node-popover");
@@ -153,8 +173,11 @@ public class AdminMapController {
             });
         } else
             buildingDropdown.getSelectionModel().selectItem(node.getBuilding());
-        buildingDropdown.setOnAction(e -> {
+        buildingDropdown.selectedItemProperty().addListener(
+//        buildingDropdown.setOnAction(
+                e -> {
             var old = node.toBuilder().build();
+            if (Objects.equals(old.getBuilding(), buildingDropdown.getValue())) return;
             node.setBuilding(buildingDropdown.getValue());
             nodePoints.get(node.getNodeID()).setFill(Color.YELLOW);
             popOver.setOnCloseRequest(null);
@@ -186,8 +209,8 @@ public class AdminMapController {
         makeMove.setOnAction(a -> {
             if (locationDropdown.getValue() == null || date.getValue() == null) return;
             var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
-            var move = moves.values().stream().filter(m-> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
-            if(move.isPresent()){
+            var move = moves.values().stream().filter(m -> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
+            if (move.isPresent()) {
                 mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue()), move.get().toBuilder().build()));
                 return;
             }
@@ -200,7 +223,7 @@ public class AdminMapController {
             var grow = new HBox();
             HBox.setHgrow(grow, Priority.ALWAYS);
             var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
-            hbox.setOnMouseClicked(e->{
+            hbox.setOnMouseClicked(e -> {
                 locationDropdown.setValue(locations.get(m.getLocationID()));
                 date.setValue(m.getDate());
             });
@@ -227,10 +250,21 @@ public class AdminMapController {
             nodePoint.setVisible(false);
             nodePoint.setManaged(false);
             edgeLines.get(node.getNodeID()).forEach(edge -> {
-                mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge).toBuilder().build()));
+                if (edges.containsKey(edge))
+                    mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_EDGE, edges.get(edge).toBuilder().build()));
             });
 //            nodes = nodes.entrySet().stream().filter(e -> !e.getKey().equals(node.getNodeID())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             mapEdits.add(new MapEdit(MapEdit.ActionType.REMOVE_NODE, node.toBuilder().build()));
+        });
+
+        nodes.addListener((MapChangeListener<? super Long, ? super Node>) e -> {
+            if (e.wasAdded()) {
+                var newNode = e.getValueAdded();
+                if (Objects.equals(newNode.getNodeID(), node.getNodeID()))
+                    Platform.runLater(() -> buildingDropdown.setValue(newNode.getBuilding()));
+            } else if (e.wasRemoved()) {
+                Platform.runLater(popOver::hide);
+            }
         });
         editNode.getChildren().addAll(
                 buildingDropdown,
@@ -253,6 +287,23 @@ public class AdminMapController {
         return popOver;
     }
 
+    public static Point2D getClosestPointOnLine(Point2D p1, Point2D p2, Point2D p3) {
+        double x1 = p1.getX();
+        double y1 = p1.getY();
+        double x2 = p2.getX();
+        double y2 = p2.getY();
+        double x3 = p3.getX();
+        double y3 = p3.getY();
+
+        double slope = (y2 - y1) / (x2 - x1);
+        double perpendicularSlope = -1 / slope;
+
+        double x4 = (y3 - y1 + slope * x1 - perpendicularSlope * x3) / (slope - perpendicularSlope);
+        double y4 = slope * (x4 - x1) + y1;
+
+        return new Point2D(x4, y4);
+    }
+
     private Optional<Circle> addEditableNode(Long nodeID) {
         Supplier<Node> n = () -> nodes.get(nodeID);
         var pointOpt = drawNode(n.get(), "#FFFF00");
@@ -266,23 +317,38 @@ public class AdminMapController {
 
         point.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if (!isLeftClickAndShift.test(e)) return;
-            if (firstNode == null) {
-                firstNode = n.get();
-                point.setStroke(Color.valueOf("#FF00FF"));
-                return;
+            if (aligning.get()) {
+                if (alignmentLine == null || alignmentLine.getPoints().size() != 4) return;
+                //align node to line
+                var point1 = new Point2D(alignmentLine.getPoints().get(0), alignmentLine.getPoints().get(1));
+                var point2 = new Point2D(alignmentLine.getPoints().get(2), alignmentLine.getPoints().get(3));
+                var point3 = new Point2D(point.getLayoutX(), point.getLayoutY());
+                var newPoint = getClosestPointOnLine(point1, point2, point3);
+                point.setLayoutX(newPoint.getX());
+                point.setLayoutY(newPoint.getY());
+                var old = n.get().toBuilder().build();
+                n.get().setXcoord((int) point.getLayoutX());
+                n.get().setYcoord((int) point.getLayoutY());
+                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().build(), old));
+            } else {
+                if (firstNode == null || nodes.get(firstNode.getNodeID()) == null) {
+                    firstNode = n.get();
+                    point.setStroke(Color.valueOf("#FF00FF"));
+                    return;
+                }
+                if (n.get() == firstNode)
+                    return;
+                if (secondNode == null)
+                    secondNode = n.get();
+                var newEdge = new Edge(UUID.randomUUID(), firstNode.getNodeID(), secondNode.getNodeID());
+                addEditableEdge(newEdge);
+                mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge.toBuilder().build()));
+                var startPoint = nodePoints.get(firstNode.getNodeID());
+                if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
+                var endPoint = nodePoints.get(secondNode.getNodeID());
+                if (endPoint != null) endPoint.setStroke(Color.valueOf("#000000"));
+                firstNode = secondNode = null;
             }
-            if (n.get() == firstNode)
-                return;
-            if (secondNode == null)
-                secondNode = n.get();
-            var newEdge = new Edge(UUID.randomUUID(), firstNode.getNodeID(), secondNode.getNodeID());
-            addEditableEdge(newEdge);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge.toBuilder().build()));
-            var startPoint = nodePoints.get(firstNode.getNodeID());
-            if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
-            var endPoint = nodePoints.get(secondNode.getNodeID());
-            if (endPoint != null) endPoint.setStroke(Color.valueOf("#000000"));
-            firstNode = secondNode = null;
         });
         DragController dragController = new DragController(point, true);
         dragController.setScaleSupplier(() -> map.getZoom());
@@ -318,20 +384,62 @@ public class AdminMapController {
         return edgeLine;
     }
 
+    private final EventHandler<MouseEvent> alignNode = e -> {
+        if (alignmentLine != null) return;
+        if (!isLeftClick.test(e) || e.getClickCount() != 1 || e.getTarget().getClass() != ImageView.class) return;
+        var location = map.getClickLocation(e);
+        if (firstPoint == null) {
+            firstPoint = location;
+            firstFloor = map.getLayer();
+            return;
+        }
+        if (map.getLayer() != firstFloor) return;
+        if (secondPoint == null)
+            secondPoint = location;
+        var line = map.drawLine(firstFloor, Arrays.asList(firstPoint, secondPoint), Color.BLUE, 3);
+        firstPoint = secondPoint = null;
+        alignmentLine = (Polyline) line.get();
+    };
+
+    @FXML
+    private void alignNodes() {
+        alignButton.setDisable(true);
+        if (!aligning.compareAndSet(false, true)) return;
+        map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, alignNode);
+        cancelAlignButton.setVisible(true);
+        cancelAlignButton.setManaged(true);
+    }
+
+    @FXML
+    private void cancelAlignNodes() {
+        map.get().removeEventFilter(MouseEvent.MOUSE_CLICKED, alignNode);
+        if (alignmentLine != null)
+            ((Group) alignmentLine.getParent()).getChildren().remove(alignmentLine);
+        cancelAlignButton.setVisible(false);
+        cancelAlignButton.setManaged(false);
+        alignmentLine = null;
+        aligning.set(false);
+        alignButton.setDisable(false);
+    }
+
     private void editNodes() {
         map.clearMap();
         map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if (!isLeftClick.test(e) || e.getTarget().getClass() != ImageView.class) return;
+            if (firstNode != null) {
+                var startPoint = nodePoints.get(firstNode.getNodeID());
+                if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
+                firstNode = null;
+            }
+        });
+        map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             // check for double click of the primary button
+            if (aligning.get()) return;
             if (!isLeftClick.test(e) || e.getClickCount() != 2 || e.getTarget().getClass() != ImageView.class) return;
             var location = map.getClickLocation(e);
             var node = new Node(nodes.values().stream().mapToLong(Node::getNodeID).max().orElse(0) + 5, (int) location.getX(), (int) location.getY(), map.getLayer().getIdentifier(), null);
             nodes.put(node.getNodeID(), node);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_NODE, node.toBuilder().build()));
-//            var nodePoint = addEditableNode(node);
-//            if (nodePoint.isEmpty()) {
-//                new PFXAlert("Error, could not add node.");
-//            }
-//            nodeEditMenu(node).show(nodePoints.get(node.getNodeID()));
         });
         nodes.addListener((MapChangeListener<? super Long, ? super Node>) c -> {
             if (c.wasAdded() && c.wasRemoved()) {

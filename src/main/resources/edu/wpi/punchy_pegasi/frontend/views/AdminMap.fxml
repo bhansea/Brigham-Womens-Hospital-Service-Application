@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController"
-            fx:id="root">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.map.AdminMapController" fx:id="root">
     <left>
         <VBox fx:id="editing" styleClass="editing-overlay">
             <VBox styleClass="editing-overlay-box">
-                <PFXButton text="Commit Changes" onMouseClicked="#commitChanges" fx:id="commitButton"/>
-                <MFXProgressBar fx:id="commitProgress" maxWidth="300" progress="0"/>
-                <VBox fx:id="changes"/>
+                <Label text="Change History" styleClass="label-header"/>
+                <Separator/>
+                <ScrollPane styleClass="changes-edit-scrollpane" hbarPolicy="NEVER" fitToWidth="true">
+                    <VBox fx:id="changes"/>
+                </ScrollPane>
             </VBox>
             <VBox styleClass="editing-overlay-box">
-                <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker" maxWidth="Infinity"/>
+                <Label text="Node Alignment" styleClass="label-header"/>
+                <Separator/>
+                <HBox spacing="10" alignment="CENTER">
+                    <PFXButton text="Align Nodes" onMouseClicked="#alignNodes" fx:id="alignButton"/>
+                    <PFXButton text="Cancel" onMouseClicked="#cancelAlignNodes" fx:id="cancelAlignButton"
+                               visible="false" managed="false"/>
+                </HBox>
+            </VBox>
+            <VBox styleClass="editing-overlay-box">
+                <Label text="Set Effective Date" styleClass="label-header"/>
+                <Separator/>
+                <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker" maxWidth="Infinity" style="-fx-font-size: 18"/>
             </VBox>
         </VBox>
     </left>

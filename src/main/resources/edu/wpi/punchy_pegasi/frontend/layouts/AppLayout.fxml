@@ -7,7 +7,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml"
          type="javafx.scene.layout.StackPane"
          xmlns="http://javafx.com/javafx">
-    <BorderPane fx:id="layoutPane">
+    <BorderPane fx:id="layoutPane" style="-fx-background-color: -pfx-background;">
         <left>
             <SidebarController fx:id="leftLayout"/>
         </left>
@@ -17,8 +17,7 @@
                     <HeaderController fx:id="topLayout"/>
                 </top>
                 <center>
-                    <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content"
-                                style="-fx-background-color: -pfx-background;">
+                    <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="layout-content">
                         <BorderPane fx:id="ViewPane"/>
                     </ScrollPane>
                 </center>

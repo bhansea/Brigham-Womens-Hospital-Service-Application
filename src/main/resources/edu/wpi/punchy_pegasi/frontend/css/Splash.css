@@ -1,0 +1,7 @@
+.splash-logo {
+    -fx-background-image: url("../assets/BW-logo.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-pref-height: 100;
+}

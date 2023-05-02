@@ -4,7 +4,6 @@ import edu.wpi.punchy_pegasi.generator.SchemaID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -16,15 +15,26 @@ import java.util.UUID;
 public class Alert {
     @SchemaID
     private UUID uuid;
-    private Long employeeID;
+    private AlertType alertType;
     private String alertTitle;
     private String description;
-    private Instant dateTime;
-    @Setter
+    private Instant startDate;
+    private Instant endDate; // For map alerts
     private ReadStatus readStatus;
+    private Long employeeID; // For employee(who will see the alert) only applies for service/employee alert type
+    private Long nodeID; // For map alert type
 
     public enum ReadStatus {
         READ,
         UNREAD
+    }
+
+    public enum AlertType {
+        NONE,
+        MAP,
+        MAP_DISABLED,
+        EMPLOYEE,
+        ADMIN,
+        SERVICE_REQUEST
     }
 }

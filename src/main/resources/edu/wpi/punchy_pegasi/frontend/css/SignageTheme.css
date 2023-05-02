@@ -1,10 +1,3 @@
-* {
-    -pfx-signage-text: #1c1c1c;
-    -pfx-signage-text-opposite: white;
-    -pfx-signage-background: -pfx-background;
-    -pfx-signage-background-opposite: -pfx-navy;
-}
-
 .column-header-background {
     -fx-max-height: 0;
     -fx-pref-height: 0;

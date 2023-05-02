@@ -51,26 +51,28 @@ public class FacadeUtils {
     public static ObservableMap<Node, ObservableList<Move>> getNodeLocations(ObservableMap<Long, Node> nodes, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, ObservableObjectValue<LocalDate> date) {
         ObservableMap<Node, ObservableList<Move>> nodeLocations = FXCollections.observableMap(new LinkedHashMap<>());
         Runnable update = () -> {
-            nodeLocations.forEach((n, l) -> Platform.runLater(()->{
-                if (nodeLocations.containsKey(n))
-                    nodeLocations.get(n).clear();
-            }));
-            calculateMoves(nodes, locations, moves, date.get()).forEach((n, ms) -> {
-                ms.forEach(e -> {
+            var calculateMoves = calculateMoves(nodes, locations, moves, date.get());
+            Platform.runLater(() -> {
+                nodeLocations.forEach((n, l) -> {
+                    if (nodeLocations.containsKey(n))
+                        nodeLocations.get(n).clear();
+                });
+                calculateMoves.forEach((n, ms) -> {
                     if (!nodeLocations.containsKey(n))
-                        Platform.runLater(()->nodeLocations.put(n, FXCollections.observableArrayList()));
-                    Platform.runLater(()->nodeLocations.get(n).add(e));
+                        nodeLocations.put(n, FXCollections.observableArrayList());
+                    nodeLocations.get(n).addAll(ms);
                 });
             });
         };
+
         nodes.forEach((l, n) -> nodeLocations.put(n, FXCollections.observableArrayList()));
         update.run();
         // add event filters to all the maps to update the MultiValuedMap
         nodes.addListener((MapChangeListener<Long, Node>) change -> {
             if (change.wasRemoved())
-                Platform.runLater(()->nodeLocations.remove(change.getValueRemoved()));
+                Platform.runLater(() -> nodeLocations.remove(change.getValueRemoved()));
             if (change.wasAdded() && !nodeLocations.containsKey(change.getValueAdded()))
-                Platform.runLater(()->nodeLocations.put(change.getValueAdded(), FXCollections.observableArrayList()));
+                Platform.runLater(() -> nodeLocations.put(change.getValueAdded(), FXCollections.observableArrayList()));
             update.run();
         });
         locations.addListener((MapChangeListener<Long, LocationName>) change -> update.run());
@@ -85,43 +87,43 @@ public class FacadeUtils {
         ObservableMap<LocationName, Node> locationNode = FXCollections.observableMap(calculateNodes(nodes, locations, moves, date.get()));
 
         // add event filters to all the maps to update the MultiValuedMap
-        nodes.addListener((MapChangeListener<Long, Node>) change -> Platform.runLater(()->{
+        nodes.addListener((MapChangeListener<Long, Node>) change -> Platform.runLater(() -> {
             locationNode.clear();
             locationNode.putAll(calculateNodes(nodes, locations, moves, date.get()));
         }));
-        locations.addListener((MapChangeListener<Long, LocationName>) change -> Platform.runLater(()->{
+        locations.addListener((MapChangeListener<Long, LocationName>) change -> Platform.runLater(() -> {
             locationNode.clear();
             locationNode.putAll(calculateNodes(nodes, locations, moves, date.get()));
         }));
-        moves.addListener((MapChangeListener<Long, Move>) change -> Platform.runLater(()->{
+        moves.addListener((MapChangeListener<Long, Move>) change -> Platform.runLater(() -> {
             locationNode.clear();
             locationNode.putAll(calculateNodes(nodes, locations, moves, date.get()));
         }));
-        date.addListener((observable, oldValue, newValue) -> Platform.runLater(()->{
+        date.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
             locationNode.clear();
             locationNode.putAll(calculateNodes(nodes, locations, moves, date.get()));
         }));
         return locationNode;
     }
 
-    private static Stream<Move> futureMoves(Node node,  Map<Long, LocationName> locations, Map<Long, Move> moves, LocalDate date) {
+    private static Stream<Move> futureMoves(Node node, Map<Long, LocationName> locations, Map<Long, Move> moves, LocalDate date) {
         return moves.values().stream()
                 .filter(m -> locations.containsKey(m.getLocationID()))
                 .filter(m -> Objects.equals(m.getNodeID(), node.getNodeID()) && m.getDate().isAfter(date));
     }
 
-    public static ObservableList<Move> getFutureMoves(Node node,  ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, ObservableObjectValue<LocalDate> date) {
+    public static ObservableList<Move> getFutureMoves(Node node, ObservableMap<Long, LocationName> locations, ObservableMap<Long, Move> moves, ObservableObjectValue<LocalDate> date) {
         ObservableList<Move> list = FXCollections.observableArrayList();
         list.addAll(futureMoves(node, locations, moves, date.get()).toList());
-        locations.addListener((MapChangeListener<Long, LocationName>) change -> Platform.runLater(()->{
+        locations.addListener((MapChangeListener<Long, LocationName>) change -> Platform.runLater(() -> {
             list.clear();
             list.addAll(futureMoves(node, locations, moves, date.get()).toList());
         }));
-        moves.addListener((MapChangeListener<Long, Move>) change -> Platform.runLater(()->{
+        moves.addListener((MapChangeListener<Long, Move>) change -> Platform.runLater(() -> {
             list.clear();
             list.addAll(futureMoves(node, locations, moves, date.get()).toList());
         }));
-        date.addListener((observable, oldValue, newValue) -> Platform.runLater(()->{
+        date.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
             list.clear();
             list.addAll(futureMoves(node, locations, moves, date.get()).toList());
         }));

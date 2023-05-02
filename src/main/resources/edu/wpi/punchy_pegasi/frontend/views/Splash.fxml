@@ -6,12 +6,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.HBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SplashController"
             style="-fx-background-color: -pfx-background;">
     <center>
         <VBox alignment="CENTER" spacing="10" fx:id="container">
+            <VBox styleClass="splash-logo"/>
             <Text fx:id="statusText" textAlignment="CENTER"/>
             <MFXProgressSpinner fx:id="progressBar" prefWidth="200"/>
             <MFXComboBox fx:id="databaseSourceSelection" floatingText="Database"/>

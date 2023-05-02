@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@lombok.Builder(toBuilder=true)
+@lombok.Builder(toBuilder = true)
 public class Account {
     @SchemaID
     @lombok.With
@@ -27,41 +27,46 @@ public class Account {
     @com.jsoniter.annotation.JsonProperty("accounttype")
     private AccountType accountType;
 
-        @RequiredArgsConstructor
-        public enum AccountType {
-            NONE(0),
-            ADMIN(2),
-            STAFF(1);
-            @Getter
-            private final int shieldLevel;
-        }
+    @RequiredArgsConstructor
+    public enum AccountType {
+        NONE(0),
+        ADMIN(2),
+        STAFF(1);
+        @Getter
+        private final int shieldLevel;
+    }
 
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account>{
-        UUID("uuid", true,false),
-        USERNAME("username", false,true),
-        PASSWORD("password", false,false),
-        EMPLOYEE_ID("employeeID", false,false),
-        ACCOUNT_TYPE("accountType", false,false);
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account> {
+        UUID("uuid", true, false),
+        USERNAME("username", false, true),
+        PASSWORD("password", false, false),
+        EMPLOYEE_ID("employeeID", false, false),
+        ACCOUNT_TYPE("accountType", false, false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref){
-    return ref.getFromField(this);
-}
-public String getValueAsString(edu.wpi.punchy_pegasi.schema.Account ref){
-    return ref.getFromFieldAsString(this);
-}
-    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Account ref, String value){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Account ref) {
+            return ref.getFromField(this);
+        }
+
+        public String getValueAsString(edu.wpi.punchy_pegasi.schema.Account ref) {
+            return ref.getFromFieldAsString(this);
+        }
+
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Account ref, String value) {
             ref.setFieldFromString(this, value);
         }
-        public int oridinal(){
+
+        public int oridinal() {
             return ordinal();
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -71,6 +76,7 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Account ref){
             case ACCOUNT_TYPE -> getAccountType();
         };
     }
+
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case UUID -> setUuid(Long.parseLong(value));
@@ -78,8 +84,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Account ref){
             case PASSWORD -> setPassword(value);
             case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
             case ACCOUNT_TYPE -> setAccountType(AccountType.valueOf(value));
-        };
+        }
     }
+
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> Long.toString(getUuid());

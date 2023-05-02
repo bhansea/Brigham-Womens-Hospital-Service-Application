@@ -25,3 +25,10 @@
 .pfx-default-account-icon {
     -fx-fill: -pfx-secondary;
 }
+
+.pfx-account-information {
+    -fx-alignment: CENTER;
+    -fx-padding: 0 0 15 0;
+    -fx-border-color: -pfx-secondary-light;
+    -fx-border-width: 0 0 1 0;
+}
