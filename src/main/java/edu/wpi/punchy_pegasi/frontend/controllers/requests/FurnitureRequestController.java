@@ -27,6 +27,7 @@ import lombok.Value;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.Flow;
 
 public class FurnitureRequestController extends RequestController<FurnitureRequestEntry> {
     private final ObservableList<String> furnitureList =
@@ -47,6 +48,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
     PFXCardHolder cardHolder;
     @FXML
     VBox container = new VBox();
+    FlowPane flowPane;
 
     @FXML
     private BorderPane root;
@@ -78,7 +80,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
         PFXCardVertical card5 = new PFXCardVertical("Pillow", "Nice feathers", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/pillow.jpg"));
         PFXCardVertical card6 = new PFXCardVertical("Rug", "Very comfy!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/furniture/rug.jpg"));
 
-        var flowPane = new FlowPane(card1, card2, card3, card4, card5, card6);
+        flowPane = new FlowPane(card1, card2, card3, card4, card5, card6);
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
@@ -125,8 +127,7 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                furniture.getItems(),
-                // TODO: need a way to get the employeeID of the person making the request entry
+                getSelectedItems(flowPane),
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
         App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Furniture Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
