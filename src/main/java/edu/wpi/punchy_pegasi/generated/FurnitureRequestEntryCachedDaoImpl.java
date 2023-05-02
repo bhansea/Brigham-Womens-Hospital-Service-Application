@@ -60,6 +60,12 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<FurnitureRequestEntry> generateTable(Consumer<FurnitureRequestEntry> onRowClick, FurnitureRequestEntry.Field[] hidden) {
         var table = new MFXTableView<FurnitureRequestEntry>();
         table.setItems(list);
@@ -109,13 +115,13 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
         try (var rs = dbController.searchQuery(TableType.FURNITUREREQUESTS)) {
             while (rs.next()) {
                 FurnitureRequestEntry req = new FurnitureRequestEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    java.util.Arrays.asList((String[])rs.getArray("selectFurniture").getArray()),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        java.util.Arrays.asList((String[]) rs.getArray("selectFurniture").getArray()),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {

@@ -7,24 +7,27 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Label?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.PathfindingMap"
             fx:id="root">
     <left>
-        <VBox fx:id="pathfinding" styleClass="pathfinding-overlay">
-            <VBox styleClass="pathfinding-overlay-box">
-                <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
-                <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"/>
-                <MFXFilterComboBox floatingText="Select Algorithm" onAction="#setAlgo"
-                                   fx:id="selectAlgo" maxWidth="Infinity"/>
-                <HBox>
-                    <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
-                               fx:id="selectGraphically"/>
-                    <PFXButton styleClass="pfx-button-cancel" text="Cancel" fx:id="selectGraphicallyCancel"/>
-                </HBox>
-                <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
-                <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+        <VBox>
+            <VBox fx:id="pathfinding" styleClass="pathfinding-overlay">
+                <VBox styleClass="pathfinding-overlay-box">
+                    <MFXFilterComboBox floatingText="Start node" fx:id="nodeStartCombo" maxWidth="Infinity"/>
+                    <MFXFilterComboBox floatingText="End node" fx:id="nodeEndCombo" maxWidth="Infinity"/>
+                    <MFXFilterComboBox floatingText="Select Algorithm" onAction="#setAlgo"
+                                       fx:id="selectAlgo" maxWidth="Infinity"/>
+                    <HBox>
+                        <PFXButton text="Select Nodes Graphically" onMouseClicked="#graphicalSelect"
+                                   fx:id="selectGraphically"/>
+                        <PFXButton styleClass="pfx-button-cancel" text="Cancel" fx:id="selectGraphicallyCancel"/>
+                    </HBox>
+                    <PFXButton text="Find Path!" fx:id="pathfindButton" onMouseClicked="#pathFindWithSelectedNodes"/>
+                    <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
+                </VBox>
             </VBox>
         </VBox>
     </left>
@@ -37,6 +40,13 @@
             </VBox>
             <VBox styleClass="pathfinding-overlay-box">
                 <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker"/>
+            </VBox>
+        </VBox>
+        <VBox fx:id="pathDirections" styleClass="pathfinding-direction-overlay">
+            <VBox styleClass="pathfinding-direction-box">
+                <ScrollPane styleClass="pathfinding-direction-scroll-pane" fitToWidth="true" hbarPolicy="NEVER">
+                    <VBox fx:id="pathDirectionsBox" styleClass="pathfinding-direction-inner-box"/>
+                </ScrollPane>
             </VBox>
         </VBox>
     </right>

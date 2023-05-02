@@ -26,7 +26,7 @@ public class AboutController {
     private void initialize() {
         TeamMember blake = new TeamMember("Blake Bruell", "Lead Software Engineer", "babruell@wpi.edu", "Computer Science (BS/MS)", "I play the piano", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/blake.PNG"));
         TeamMember charlotte = new TeamMember("Charlotte Carter", "Document Analyst", "ccarter@wpi.edu", "Data Science (BS)", "I have too many squishmallows", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/charlotte.PNG"));
-        TeamMember brittany = new TeamMember("Brittany Ficarra", "FE Software Engineer", "bcficarra@wpi.edu", "IMGD & Computer Science (BS)", "I own over 3000 comic books not including duplicates", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brittany.PNG"));
+        TeamMember brittany = new TeamMember("Brittany Ficarra", "FE Software Engineer", "bcficarra@wpi.edu", "IMGD & Computer Science (BS)", "I collect comic books", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brittany.PNG"));
         TeamMember brandon = new TeamMember("Brandon Luong", "BE Software Engineer", "bvluong@wpi.edu", "Computer Science (BS)", "I am allergic to bananas", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/brandon.PNG"));
         TeamMember cooper = new TeamMember("Cooper Mann", "Scrum Master", "cpmann@wpi.edu", "Robotics Engineering (BS)", "I play the trumpet", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/cooper.PNG"));
         TeamMember arnav = new TeamMember("Arnav Mishra", "BE Assistant Lead Software Engineer", "amishra2@wpi.edu", "Computer Science & Data Science (BS)", "I play the guitar", new ImageView("edu/wpi/punchy_pegasi/frontend/assets/headshots/arnav.jpg"));
@@ -90,9 +90,10 @@ public class AboutController {
             hiddenTextOverlay = new Label();
             Text nameText = new Text(this.name);
             Text positionText = new Text(this.position);
-            nameText.setStyle("-fx-font-weight: bold");
-            positionText.setStyle("-fx-font-style: italic");
+            nameText.setStyle("-fx-font-weight: bold; -fx-fill: -pfx-text;");
+            positionText.setStyle("-fx-font-style: italic; -fx-fill: -pfx-text;");
             Text description = new Text("____________________________\nMajor: " + this.major + "\nFun fact: " + this.funFact + "\nContact: " + this.email);
+            description.setStyle("-fx-fill: -pfx-text;");
             VBox vbox = new VBox(nameText, positionText, description);
             vbox.setPadding(new Insets(8));
             hiddenTextOverlay.setGraphic(vbox);
@@ -115,7 +116,7 @@ public class AboutController {
                 hiddenTextOverlay.setVisible(true);
                 textOverlay.setVisible(false);
                 hiddenTextOverlay.setVisible(true);
-                stackpane.setStyle("-fx-background-color: white;");
+                stackpane.setStyle("-fx-background-color: -pfx-primary;");
                 image.setOpacity(0.1);
             });
 

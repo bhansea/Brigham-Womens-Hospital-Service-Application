@@ -29,20 +29,25 @@
 }
 
 .mfx-combo-box .caret .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(24, 50, 238, 0.1);
+    -mfx-ripple-color: -pfx-text;
     -mfx-ripple-radius: 14;
 }
 
 .mfx-combo-box:focus-within .caret .mfx-font-icon {
-    -mfx-color: -mfx-main;
+    -mfx-color: -pfx-text;
 }
 
 .mfx-combo-box .combo-popup .virtual-flow {
     -fx-background-radius: 5;
-    -fx-border-color: #ebebeb;
+    -fx-border-color: -pfx-secondary;
     -fx-border-radius: 5;
+    -fx-background-color: -pfx-primary;
 }
 
 .mfx-combo-box:disabled .caret .mfx-font-icon {
-    -mfx-color: #bcbcbc;
+    -mfx-color: -pfx-secondary-light;
+}
+
+.mfx-combo-box .caret .mfx-font-icon {
+    -mfx-color: -pfx-text;
 }

@@ -3,25 +3,41 @@
     -fx-padding: 20;
 }
 
+.label-header {
+    -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
+}
+
 .editing-overlay-box {
     -fx-alignment: CENTER;
     -fx-max-width: 300;
     -fx-spacing: 10;
     -fx-padding: 10;
-    -fx-background-color: -pfx-background;
+    -fx-background-color: -pfx-primary;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
-
+.changes-edit-scrollpane {
+    -fx-max-height: 300;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.changes-edit-scrollpane > .viewport {
+    -fx-background-color: tranparent;
+}
 #commitProgress {
     -fx-min-height: 20;
     -fx-max-height: 20;
 }
 
-#changes {
-
+#alignButton {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: white;
 }
-
+#cancelAlignButton {
+    -pfx-button-background: -pfx-danger;
+    -pfx-button-text: white;
+}
 .node-popover-date {
 
 }
@@ -33,6 +49,7 @@
 .move-delete-btn:hover PFXIcon {
     -fx-fill: red;
 }
+
 .move-delete-btn,
 .move-delete-btn:armed,
 .move-delete-btn:hover,
@@ -51,6 +68,12 @@
     -fx-cursor: hand;
     -fx-padding: 0 5;
 }
+
 .move-hbox:hover {
     -fx-background-color: -pfx-accent-transparent;
+}
+
+.commit-button {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: -pfx-text;
 }

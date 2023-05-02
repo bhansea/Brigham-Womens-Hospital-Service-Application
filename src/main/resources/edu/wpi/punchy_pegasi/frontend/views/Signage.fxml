@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
-<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<?import javafx.scene.layout.*?>
 <BorderPane styleClass="signage-all" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.SignageController">
     <top>
@@ -21,9 +14,9 @@
     </top>
     <center>
         <HBox>
-<!--            <HBox fx:id="signageBody">-->
-                <VBox fx:id="signageBodyLeft"/>
-<!--            </HBox>-->
+            <!--            <HBox fx:id="signageBody">-->
+            <VBox fx:id="signageBodyLeft"/>
+            <!--            </HBox>-->
             <HBox fx:id="signageBodyMap"/>
         </HBox>
     </center>

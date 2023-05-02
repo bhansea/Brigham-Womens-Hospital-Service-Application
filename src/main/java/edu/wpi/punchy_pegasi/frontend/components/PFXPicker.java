@@ -13,8 +13,10 @@ import static edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols.HEART_MINUS;
 
 public class PFXPicker extends HBox {
     private final Label quantity = new Label("0");
-    private final PFXButton minus = new PFXButton("", new PFXIcon(MaterialSymbols.REMOVE));
-    private final PFXButton plus = new PFXButton("", new PFXIcon(MaterialSymbols.ADD));
+    private final PFXIcon remove = new PFXIcon(MaterialSymbols.REMOVE);
+    private final PFXIcon add = new PFXIcon(MaterialSymbols.ADD);
+    private final PFXButton minus = new PFXButton("", remove);
+    private final PFXButton plus = new PFXButton("", add);
 
     private PFXCardVertical parentCard = null;
     public PFXPicker(PFXCardVertical parentCard) {

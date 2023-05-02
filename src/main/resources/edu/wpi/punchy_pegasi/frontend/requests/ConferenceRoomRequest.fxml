@@ -2,38 +2,36 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.Separator?>
 <BorderPane style="-fx-background-color: -pfx-background;" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox styleClass="conference-container">
-            <Text styleClass="conference-header" text="Please enter the following information: "/>
+            <Label styleClass="conference-header" text="Please enter the following information: "/>
             <Separator/>
-            <HBox style="-fx-background-color: -pfx-background;" HBox.hgrow="ALWAYS">
+            <HBox style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
                 <VBox styleClass="conference-form-columns">
                     <VBox styleClass="conference-form-sections">
-                        <HBox styleClass="conference-form-section-titles">
-                            <Text styleClass="conference-subText" text="Select a Beginning Time "/>
-                            <Text styleClass="conference-red-star" text="*"/>
+                        <HBox>
+                            <Label styleClass="conference-subText" text="Select a Beginning Time "/>
+                            <Label styleClass="conference-red-star" text="*"/>
                         </HBox>
                         <MFXComboBox styleClass="conference-dropDown" fx:id="beginningTime" onAction="#validateField"
                                      promptText="Beginning Time" floatMode="DISABLED"/>
                     </VBox>
                     <VBox styleClass="conference-form-sections">
-                        <HBox styleClass="conference-form-section-titles">
-                            <Text styleClass="conference-subText" text="Select an End Time "/>
-                            <Text styleClass="conference-red-star" text="*"/>
+                        <HBox>
+                            <Label styleClass="conference-subText" text="Select an End Time "/>
+                            <Label styleClass="conference-red-star" text="*"/>
                         </HBox>
                         <MFXComboBox styleClass="conference-dropDown" fx:id="endTime" onAction="#validateField"
                                      promptText="End Time" floatMode="DISABLED"/>
                     </VBox>
                     <VBox styleClass="conference-form-sections">
-                        <HBox styleClass="conference-form-section-titles">
-                            <Text styleClass="conference-subText" text="Enter The Amount of Participants "/>
-                            <Text styleClass="conference-red-star" text="*"/>
+                        <HBox>
+                            <Label styleClass="conference-subText" text="Enter The Number of Participants "/>
+                            <Label styleClass="conference-red-star" text="*"/>
                         </HBox>
                         <TextField styleClass="conference-textField" fx:id="numberOfParticipants"
                                    promptText="Number of Participants"/>
@@ -41,9 +39,9 @@
                 </VBox>
                 <VBox styleClass="conference-form-columns">
                     <VBox styleClass="conference-form-sections">
-                        <HBox styleClass="conference-form-section-titles">
-                            <Text styleClass="conference-subText" text="Select a Date "/>
-                            <Text styleClass="conference-red-star" text="*"/>
+                        <HBox>
+                            <Label styleClass="conference-subText" text="Select a Date "/>
+                            <Label styleClass="conference-red-star" text="*"/>
                         </HBox>
                         <MFXDatePicker styleClass="conference-calendar" fx:id="calendar"/>
                     </VBox>

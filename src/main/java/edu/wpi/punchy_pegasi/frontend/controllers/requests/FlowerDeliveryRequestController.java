@@ -49,7 +49,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         scrollPane = new ScrollPane(flowPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-        scrollPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background;");
+        scrollPane.setStyle("-fx-border-width: 0px; -fx-background-color: transparent;");
 
         root.setCenter(scrollPane);
     }

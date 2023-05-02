@@ -15,7 +15,9 @@ import javafx.collections.ObservableMap;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -39,10 +41,16 @@ public class HeaderController extends HBox implements PropertyChangeListener {
 
 
 
-    public ObservableList<VBox> vboxPopulator(FilteredList<AppSearch.SearchableItem> filtered){
-        ObservableMap<String, VBox> items = FXCollections.observableHashMap();
+    public VBox resultsVBox(FilteredList<AppSearch.SearchableItem> filtered){
+        if(filtered.isEmpty()){
+            var emptyVBox = new VBox();
+            var emptyLabel = new Label("No results");
+            emptyVBox.getChildren().add(emptyLabel);
+            return emptyVBox;
+        }
+        Map<String, VBox> items = new LinkedHashMap<>();
         for (AppSearch.SearchableItem s: filtered) {
-            var name = s.getScreen().name();
+            var name = s.getScreen().getReadable();
             VBox item = items.get(name);
             if(s.getScreen().getShield().getShieldLevel() <= App.getSingleton().getAccount().getAccountType().getShieldLevel()){
                 if (item == null) {
@@ -50,16 +58,19 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                     item.setId(name);
                     var separator = new Separator();
                     var nameLabel = new Label(name);
-                    nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-underline: true");
+                    nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-font-size: 16;");
+                    nameLabel.setWrapText(true);
                     nameLabel.setOnMouseClicked(e -> s.getNavigate().run());
                     items.put(name, item);
                     var description = new Label(s.getDescription());
                     description.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent;");
+                    description.setWrapText(true);
                     description.setOnMouseClicked(e -> s.getNavigate().run());
                     item.getChildren().addAll(nameLabel, separator, description);
                 } else {
                     var description = new Label(s.getDescription());
                     description.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent;");
+                    description.setWrapText(true);
                     description.setOnMouseClicked(e -> s.getNavigate().run());
                     if (!item.getChildren().contains(description)) {
                         item.getChildren().add(description);
@@ -68,8 +79,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
             }
         }
 
-        ObservableList<VBox> VBoxlist = FXCollections.observableList(new ArrayList<>(items.values()));
-        return VBoxlist;
+        return new VBox(items.values().toArray(VBox[]::new));
     }
     public void initialize() {
         App.getSingleton().addPropertyChangeListener(this);
@@ -323,15 +333,11 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         var filtered = list.filtered(s -> true);
 
         var container = new VBox();
-        var containerV2 = new VBox();
-
-
-
-        ObservableList<VBox> VBoxlist = vboxPopulator(filtered);
-        var listView = new PFXListView<VBox>(VBoxlist, s-> s, s -> s.getId());
-
+        var resultScrollContainer = new VBox();
 
         var scrollPane = new MFXScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setFitToWidth(true);
         var searchField = new TextField("");
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
@@ -339,7 +345,13 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         searchBox.setPrefHeight(35);
         searchBox.setMaxHeight(35);
         searchBox.setMinHeight(35);
-        searchField.setStyle("-fx-background-color: -pfx-background;");
+        searchBox.prefWidthProperty().bind(headerSearch.widthProperty());
+        searchBox.maxWidthProperty().bind(headerSearch.widthProperty());
+        searchBox.minWidthProperty().bind(headerSearch.widthProperty());
+        resultScrollContainer.setMaxHeight(500);
+        searchField.setStyle(" -fx-background-color: -pfx-background;");
+        searchBox.getStyleClass().add("search-box");
+        searchField.setStyle("-fx-font-size: 18; -fx-text-fill: -pfx-text; -fx-background-color: -pfx-primary;");
         searchField.setPrefHeight(30);
         searchField.setMaxHeight(30);
         searchField.setMinHeight(30);
@@ -347,39 +359,34 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         icon.setTranslateY(-2);
         icon.setIcon(MaterialSymbols.SEARCH);
         icon.setSize(30.0);
+        icon.setStyle("-fx-fill: -pfx-text; -fx-font-size: 30;");
         searchBox.getChildren().addAll(icon, searchField);
-        containerV2.getStyleClass().add("search-popup");
-        containerV2.prefWidthProperty().bind(headerSearch.widthProperty());
-        containerV2.maxWidthProperty().bind(headerSearch.widthProperty());
-        containerV2.minWidthProperty().bind(headerSearch.widthProperty());
-        containerV2.setMaxHeight(500);
-        container.getChildren().addAll(searchBox, containerV2);
-        containerV2.setTranslateX(headerSearch.getLayoutX());
-        scrollPane.setContent(listView);
-        containerV2.getChildren().addAll(scrollPane);
+        resultScrollContainer.getStyleClass().add("search-popup");
+        resultScrollContainer.setMaxHeight(500);
+        container.getChildren().addAll(searchBox, resultScrollContainer);
+        resultScrollContainer.setTranslateX(headerSearch.getLayoutX());
+        resultScrollContainer.getChildren().addAll(scrollPane);
 
 
         headerSearch.setOnMouseClicked(e -> {
-            VBoxlist.clear();
-            VBoxlist.addAll(vboxPopulator(filtered));
+            scrollPane.setContent(resultsVBox(filtered));
             var spacer = new HBox();
             spacer.setPrefWidth(App.getSingleton().getLayout().getLeftLayout().getWidth());
-            var containerH = new HBox();
-            var anotherVBox = new VBox();
-            anotherVBox.setStyle("-fx-background-color: -pfx-secondary-transparent");
-            containerH.getChildren().add(spacer);
-            containerH.getChildren().add(container);
-            containerH.setPadding(new Insets(10,0,0,10));
-            anotherVBox.getChildren().add(containerH);
-            App.getSingleton().getLayout().showOverlay(anotherVBox, true);
+            var overlayHBox = new HBox();
+            var overlayVBox = new VBox();
+            overlayVBox.setStyle("-fx-background-color: -pfx-secondary-transparent");
+            overlayHBox.getChildren().add(spacer);
+            overlayHBox.getChildren().add(container);
+            overlayHBox.setPadding(new Insets(10,0,0,10));
+            overlayVBox.getChildren().add(overlayHBox);
+            App.getSingleton().getLayout().showOverlay(overlayVBox, true);
             searchField.requestFocus();
             searchField.positionCaret(searchField.getText().length());
         });
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filtered.setPredicate(s -> true);
             if (newValue.isBlank()) {
-                VBoxlist.clear();
-                VBoxlist.addAll(vboxPopulator(filtered));
+                scrollPane.setContent(resultsVBox(filtered));
                 return;
             }
             var preppedWords = Arrays.stream(newValue.trim().split("\s+")).distinct().map(w -> String.join(".?",
@@ -396,14 +403,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                     ).sum())));
             FXCollections.sort(list, Comparator.comparing(AppSearch.SearchableItem::getCurrentWeight).reversed());
             filtered.setPredicate(si -> si.getCurrentWeight() > 0);
-            VBoxlist.clear();
-            VBoxlist.addAll(vboxPopulator(filtered));
-            if(filtered.isEmpty()){
-                var emptyVBox = new VBox();
-                var emptyLabel = new Label("No results");
-                emptyVBox.getChildren().add(emptyLabel);
-                VBoxlist.add(emptyVBox);
-            }
+            scrollPane.setContent(resultsVBox(filtered));
         });
     }
 

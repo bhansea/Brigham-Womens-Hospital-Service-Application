@@ -60,6 +60,12 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<String/*idFieldTyp
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<GenericRequestEntry> generateTable/*FacadeClassName*/(Consumer<GenericRequestEntry> onRowClick, GenericRequestEntry.Field[] hidden) {
         var table = new MFXTableView<GenericRequestEntry>();
         table.setItems(list);

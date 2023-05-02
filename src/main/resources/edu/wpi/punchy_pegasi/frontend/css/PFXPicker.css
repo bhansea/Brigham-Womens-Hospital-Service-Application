@@ -6,35 +6,43 @@
     -fx-spacing: 20;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-border-color: -pfx-navy;
+    -fx-border-color: -pfx-accent;
     -fx-border-width: 1.5;
     -fx-pref-width: 80;
 }
 
 .pfx-picker-container Label {
-    -fx-font-family: "Nunito Sans Light";
+    -fx-font-family: "Nunito Sans Regular";
     -fx-background-color: transparent;
     -fx-font-size: 16;
-    -fx-text-fill: -pfx-navy;
+    -fx-text-fill: -pfx-accent;
 }
 
 .pfx-picker-container PFXButton {
-    -fx-font-family: "Nunito Sans Light";
+    -fx-font-family: "Nunito Sans Regular";
     -pfx-button-background: transparent;
     -fx-font-size: 16;
     -fx-max-width: 9999;
-    -fx-text-fill: -pfx-navy;
+    -fx-text-fill: -pfx-accent;
 }
 .pfx-picker-minus {
-    -fx-border-color: -pfx-navy;
+    -fx-border-color: -pfx-accent;
     -fx-border-width: 0 1.5 0 0;
     -fx-cursor: hand;
+    -fx-fill: -pfx-text;
+    -fx-text-fill: -pfx-text;
 }
+
+.pfx-picker-minus PFXIcon {
+    -fx-fill: -pfx-accent;
+}
+
 .pfx-picker-plus {
-    -fx-border-color: -pfx-navy;
+    -fx-border-color: -pfx-accent;
     -fx-border-width: 0 0 0 1.5;
     -fx-cursor: hand;
 }
-.pfx-picker-icon PFXIcon {
-    -fx-fill: -pfx-navy;
+
+.pfx-picker-plus PFXIcon {
+    -fx-fill: -pfx-accent;
 }
