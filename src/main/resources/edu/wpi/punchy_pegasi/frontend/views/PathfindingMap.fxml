@@ -7,6 +7,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Label?>
 <?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="edu.wpi.punchy_pegasi.frontend.map.PathfindingMap"
@@ -41,8 +42,12 @@
                 <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker"/>
             </VBox>
         </VBox>
-        <VBox fx:id="pathDirections" styleClass="pathfinding-overlay">
-                <VBox fx:id="pathDirectionsBox" styleClass="pathfinding-overlay-box"/>
+        <VBox fx:id="pathDirections" styleClass="pathfinding-direction-overlay">
+            <VBox styleClass="pathfinding-direction-box">
+                <ScrollPane styleClass="pathfinding-direction-scroll-pane" fitToWidth="true" hbarPolicy="NEVER">
+                    <VBox fx:id="pathDirectionsBox" styleClass="pathfinding-direction-inner-box"/>
+                </ScrollPane>
+            </VBox>
         </VBox>
     </right>
 </BorderPane>
