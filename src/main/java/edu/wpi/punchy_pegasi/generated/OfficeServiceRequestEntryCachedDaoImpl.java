@@ -207,6 +207,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public OfficeServiceRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

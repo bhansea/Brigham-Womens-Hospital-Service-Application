@@ -86,7 +86,8 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         //makes sure shared fields aren't empty
         requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
-        App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Office Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
+        Alert alert = Alert.builder().uuid(UUID.randomUUID()).alertType(Alert.AlertType.SERVICE_REQUEST).alertTitle("Service Request").description("Office Room Request").startDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).employeeID(staffAssignment.getSelectedItem().getEmployeeID()).build();
+        App.getSingleton().getFacade().saveAlert(alert);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 

@@ -54,8 +54,8 @@ public class HomePageController {
 
     @FXML
     VBox alertsHolder = new VBox();
-
-
+    @FXML
+    VBox alertsContainer = new VBox();
     @FXML
     private Label timeLabel = new Label();
 
@@ -83,8 +83,14 @@ public class HomePageController {
 
         List<Alert> alerts = App.getSingleton().getFacade().getAllAsListAlert();
         for(Alert alert: alerts) {
+            if(alerts.isEmpty()){
+                alertsContainer.setVisible(false);
+                alertsContainer.setManaged(false);
+            }
             if(App.getSingleton().getAccount().getEmployeeID().equals(alert.getEmployeeID())) {
                 alertsHolder.getChildren().add(new PFXAlertCard(alert));
+                alertsContainer.setVisible(true);
+                alertsContainer.setManaged(false);
             }
         }
 

@@ -205,6 +205,7 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public NodeForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

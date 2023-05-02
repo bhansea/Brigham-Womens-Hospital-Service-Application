@@ -84,7 +84,21 @@ public class AdminAlertPageController {
 
                 sendButton.setOnAction(e -> {
                     Instant dateTime = Instant.now();
-                    Alert alert = new Alert((UUID.randomUUID()), App.getSingleton().getAccount().getEmployeeID(), alertTitle.getText(), alertDescription.getText(), dateTime , Alert.ReadStatus.UNREAD);
+                    Alert.AlertType alertType = Alert.AlertType.NONE;
+                    if (alertTypeComboBox.getSelectedItem().equals("Map")) {
+                        alertType = Alert.AlertType.MAP;
+                    } else if (alertTypeComboBox.getSelectedItem().equals("Map Disabled")) {
+                        alertType = Alert.AlertType.MAP_DISABLED;
+                    } else if (alertTypeComboBox.getSelectedItem().equals("Employee")) {
+                        alertType = Alert.AlertType.EMPLOYEE;
+                    } else if (alertTypeComboBox.getSelectedItem().equals("Admin")) {
+                        alertType = Alert.AlertType.ADMIN;
+                    } else if (alertTypeComboBox.getSelectedItem().equals("Service Request")) {
+                        alertType = Alert.AlertType.SERVICE_REQUEST;
+                    }
+
+
+                    Alert alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.READ).build();
                     facade.saveAlert(alert);
                     alerts.add(alert);
                     PFXAlertCard alertCard = new PFXAlertCard(alert);

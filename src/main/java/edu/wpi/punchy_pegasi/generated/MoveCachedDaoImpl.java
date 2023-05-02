@@ -204,6 +204,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public MoveForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

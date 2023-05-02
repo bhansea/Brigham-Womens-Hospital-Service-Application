@@ -210,6 +210,7 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public ConferenceRoomEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
