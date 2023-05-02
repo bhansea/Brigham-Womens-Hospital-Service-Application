@@ -1,6 +1,10 @@
 package edu.wpi.punchy_pegasi;
 
 import edu.wpi.punchy_pegasi.backend.AppSearch;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.Screen;
@@ -18,8 +22,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
@@ -85,6 +93,8 @@ public class App extends Application {
     private LayoutController layout;
     @Getter
     private boolean development = false;
+    private final int idleTimeSeconds = 60;
+    private boolean isIdle = false;
     private final Debouncer<String> cssDebouncer = new Debouncer<>(s -> {
         Platform.runLater(() -> {
             scene.getStylesheets().clear();
@@ -273,12 +283,63 @@ public class App extends Application {
             });
         }
 
+        // Idle Screen
+        // Create the screensaver content and timeline
+//        Label screensaverLabel = new Label("Screensaver");
+//        StackPane screensaverRoot = new StackPane(screensaverLabel);
+//        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+//        Scene screensaverScene = new Scene(screensaverRoot, 1280, 720);
+//        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
+//        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
+
+        Label screensaverLabel = new Label("Screensaver");
+        StackPane screensaverRoot = new StackPane(screensaverLabel);
+        Scene screensaverScene = new Scene(screensaverRoot);
+        screensaverScene.setFill(Color.TRANSPARENT);
+        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
+        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
+
+        Timeline idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleTimeSeconds), e -> {
+            if (!isIdle) {
+                this.primaryStage.setScene(screensaverScene);
+                isIdle = true;
+                if(this.primaryStage.isMaximized()) {
+                    screensaverScene.getWindow().setWidth(screenBounds.getWidth());
+                    screensaverScene.getWindow().setHeight(screenBounds.getHeight());
+                }
+                else {
+                    screensaverScene.getWindow().setWidth(1280);
+                    screensaverScene.getWindow().setHeight(720);
+                }
+
+            }
+        }));
+        idleTimeline.setCycleCount(Timeline.INDEFINITE);
+        idleTimeline.play();
+
+        // Add event handling to show/hide the screensaver on user activity
+        screensaverScene.setOnMouseMoved(e -> {
+            disableScreenSaver(idleTimeline);
+        });
+
+        screensaverScene.setOnKeyPressed(e -> {
+            disableScreenSaver(idleTimeline);
+        });
+
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
 
-
         //splashController.setOnConnection(pdb -> Platform.runLater(() -> loadUI(pdb)));
         //splashController.getConnection();
+    }
+
+    public void disableScreenSaver(Timeline idleTimeline) {
+        if (isIdle) {
+            this.primaryStage.setScene(scene);
+            isIdle = false;
+        }
+        idleTimeline.playFromStart(); // Reset the idle timeline
     }
 
     public FXMLLoader loadWithCache(String path) throws IOException {
