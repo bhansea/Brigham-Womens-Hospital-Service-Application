@@ -231,7 +231,7 @@ public class App extends Application {
 
         // Idle Screen
 
-        var idleTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+        var idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleScreen.getIdleTimeSeconds()), e -> {
             if (!idleScreen.isIdle() && idleScreen.isEnabled()) {
                 idleScreen.setIdle(true);
                 getLayout().showOverlay(idleScreen, false);
