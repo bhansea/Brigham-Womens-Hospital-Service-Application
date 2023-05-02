@@ -79,6 +79,9 @@
 .admin-container-text-size{
     -fx-font-size: 18;
 }
+.admin-container-title-text-size{
+    -fx-font-size: 25;
+}
 
 .admin-container-displayTable{
     -fx-min-width: 252;

@@ -90,6 +90,7 @@ public class AdminAlertPageController {
                     PFXAlertCard alertCard = new PFXAlertCard(alert);
                     activeAlertsContainer.getChildren().add(alertCard);
                     alertCards.add(alertCard);
+                    alertCards.get(alertCards.size()-1).changeToDeleteIcon();
                 });
             });
         });

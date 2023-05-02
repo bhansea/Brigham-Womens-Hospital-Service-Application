@@ -13,24 +13,27 @@
             fx:id="container">
     <center>
         <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
-            <Label styleClass="admin-container-text-size" text="Alerts Page" VBox.vgrow="ALWAYS"/>
             <HBox spacing="10.0" alignment="CENTER" HBox.hgrow="ALWAYS">
-                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
-                    <Label styleClass="admin-container-text-size" text="Create Alert" VBox.vgrow="ALWAYS"/>
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container" fx:id="alertsContainer">
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent" spacing="15.0">
+                    <Label styleClass="admin-container-title-text-size" text="Create Alert" VBox.vgrow="ALWAYS"/>
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER" styleClass="admin-container" fx:id="alertsContainer" spacing="15.0">
+                        <Label alignment="CENTER_LEFT" text="Alert Title" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
                         <TextField promptText="Alert title" fx:id="alertTitle"/>
+                        <Label text="Alert Description" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
                         <TextField promptText="Alert description" fx:id="alertDescription"/>
-                        <HBox spacing="10.0" alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS">
                             <PFXButton styleClass="admin-container-buttons" text="Send" fx:id="sendButton"/>
                             <PFXButton styleClass="admin-container-buttons-remove"  text="Remove" fx:id="removeButton"/>
                         </HBox>
                     </VBox>
                 </VBox>
                 <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                    <Label styleClass="admin-container-text-size" text="Active Alerts" VBox.vgrow="ALWAYS"/>
+                    <Label styleClass="admin-container-title-text-size" text="Active Alerts" VBox.vgrow="ALWAYS"/>
                     <ScrollPane styleClass= "admin-container" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="activeAlertsContainer">
-                        </VBox>
+                        <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS">
+                            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="activeAlertsContainer" spacing="15">
+                            </VBox>
+                        </HBox>
                     </ScrollPane>
                 </VBox>
             </HBox>
