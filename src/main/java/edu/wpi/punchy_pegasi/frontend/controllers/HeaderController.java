@@ -335,11 +335,8 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         var searchField = new TextField("");
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
-        searchBox.setStyle("-fx-text-fill:red; -fx-background-radius: 40; -fx-background-color: -pfx-background; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 40");
-        searchBox.setPrefHeight(35);
-        searchBox.setMaxHeight(35);
-        searchBox.setMinHeight(35);
-        searchField.setStyle("-fx-text-fill:red; -fx-background-color: -pfx-background;");
+        searchBox.getStyleClass().add("search-box");
+        searchField.setStyle("-fx-font-size: 18; -fx-text-fill: -pfx-text; -fx-background-color: -pfx-primary;");
         searchField.setPrefHeight(30);
         searchField.setMaxHeight(30);
         searchField.setMinHeight(30);
@@ -347,6 +344,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         icon.setTranslateY(-2);
         icon.setIcon(MaterialSymbols.SEARCH);
         icon.setSize(30.0);
+        icon.setStyle("-fx-fill: -pfx-text; -fx-font-size: 30;");
         searchBox.getChildren().addAll(icon, searchField);
         resultScrollContainer.getStyleClass().add("search-popup");
         resultScrollContainer.prefWidthProperty().bind(headerSearch.widthProperty());

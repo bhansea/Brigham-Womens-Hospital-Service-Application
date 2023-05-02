@@ -129,10 +129,21 @@
 }
 
 .search-popup {
-    -fx-background-color: white;
+    -fx-background-color: -pfx-secondary;
     -fx-background-radius: 12;
-    -fx-padding: 10;
+    /*-fx-padding: 10;*/
     -fx-pref-width: 300;
     -fx-max-width: 300;
     -fx-min-width: 300;
+}
+
+.search-box {
+    -fx-background-radius: 40;
+    -fx-background-color: -pfx-primary;
+    -fx-border-color: -pfx-secondary;
+    -fx-border-width: 1;
+    -fx-border-radius: 40;
+    -fx-pref-height: 35;
+    -fx-max-height: 35;
+    -fx-min-height: 35;
 }
