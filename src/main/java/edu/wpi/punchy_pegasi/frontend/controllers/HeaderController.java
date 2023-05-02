@@ -47,9 +47,9 @@ public class HeaderController extends HBox implements PropertyChangeListener {
             emptyVBox.getChildren().add(emptyLabel);
             return emptyVBox;
         }
-        Map<String, VBox> items = new HashMap<>();
+        Map<String, VBox> items = new LinkedHashMap<>();
         for (AppSearch.SearchableItem s: filtered) {
-            var name = s.getScreen().name();
+            var name = s.getScreen().getReadable();
             VBox item = items.get(name);
             if(s.getScreen().getShield().getShieldLevel() <= App.getSingleton().getAccount().getAccountType().getShieldLevel()){
                 if (item == null) {
@@ -57,7 +57,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                     item.setId(name);
                     var separator = new Separator();
                     var nameLabel = new Label(name);
-                    nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-underline: true");
+                    nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent;");
                     nameLabel.setOnMouseClicked(e -> s.getNavigate().run());
                     items.put(name, item);
                     var description = new Label(s.getDescription());
@@ -335,11 +335,11 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         var searchField = new TextField("");
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
-        searchBox.setStyle("-fx-text-fill:red; -fx-background-radius: 40; -fx-background-color: -pfx-background; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 40");
+        searchBox.setStyle("-fx-background-radius: 40; -fx-background-color: -pfx-background; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 40");
         searchBox.setPrefHeight(35);
         searchBox.setMaxHeight(35);
         searchBox.setMinHeight(35);
-        searchField.setStyle("-fx-text-fill:red; -fx-background-color: -pfx-background;");
+        searchField.setStyle(" -fx-background-color: -pfx-background;");
         searchField.setPrefHeight(30);
         searchField.setMaxHeight(30);
         searchField.setMinHeight(30);
