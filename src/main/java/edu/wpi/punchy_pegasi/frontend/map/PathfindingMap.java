@@ -162,6 +162,8 @@ public class PathfindingMap {
         pathfinding.setPickOnBounds(false);
         robotInfo.setPickOnBounds(false);
         pathDirections.setPickOnBounds(false);
+        pathDirections.setVisible(false);
+        pathDirections.setManaged(false);
         var date = adminDatePicker.getValue();
         adminDatePicker.setValue(LocalDate.now());
         // Check account status for admin features
@@ -455,6 +457,8 @@ public class PathfindingMap {
     }
 
     private String pathFind(Node start, Node end) {
+        pathDirections.setVisible(true);
+        pathDirections.setManaged(true);
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
         var graph = new Graph<>(nodes, edgeList);
         clearDirections();
@@ -471,6 +475,7 @@ public class PathfindingMap {
                 var floorChange = !node.getFloor().equals(currentFloor);
                 PathDirectionType nodeDirection = null;
                 if (floorChange)
+                    // TODO info user the next floor and elevator/staircase
                     if (getFloorNumm(currentFloor) < node.getFloorNum()) {
                         nodeDirection = PathDirectionType.UPSTAIRS;
                     } else {
