@@ -2,52 +2,33 @@ package edu.wpi.punchy_pegasi;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
-public class IdleScreen extends Application {
-
-    private final int idleTimeSeconds = 5;
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
+public class IdleScreen extends VBox {
+    private final double idleTimeSeconds;
     private boolean isIdle = false;
-    private Stage stage;
 
-    @Override
-    public void start(Stage stage) {
-        this.stage = stage;
-        Label screensaverLabel = new Label("Screensaver");
-        StackPane root = new StackPane(screensaverLabel);
-        Scene scene = new Scene(root, Color.BLACK);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setFullScreen(true);
-        stage.setScene(scene);
-        stage.setOpacity(0);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
-        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
-        Timeline idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleTimeSeconds), e -> {
-            if (!isIdle) {
-                stage.show();
-                isIdle = true;
-            }
-        }));
-        idleTimeline.setCycleCount(Timeline.INDEFINITE);
-        idleTimeline.play();
-        scene.setOnMouseMoved(e -> {
-            if (isIdle) {
-                stage.hide();
-                isIdle = false;
-            }
-        });
-    }
+    public IdleScreen(double idleTimeSeconds) {
+        this.idleTimeSeconds = idleTimeSeconds;
 
-    public static void main(String[] args) {
-        launch(args);
+        ImageView image = new ImageView(new Image(App.getSingleton().resolveResource("frontend/assets/BW-logo.png").get().toString()));
+        setStyle("-fx-background-color: white");
+        setAlignment(Pos.CENTER);
+        getChildren().add(image);
     }
 }
