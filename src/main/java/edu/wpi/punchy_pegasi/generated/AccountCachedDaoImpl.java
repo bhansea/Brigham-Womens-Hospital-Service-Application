@@ -60,6 +60,12 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Account> generateTable(Consumer<Account> onRowClick, Account.Field[] hidden) {
         var table = new MFXTableView<Account>();
         table.setItems(list);

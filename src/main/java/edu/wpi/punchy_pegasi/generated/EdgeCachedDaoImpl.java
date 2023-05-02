@@ -60,6 +60,12 @@ public class EdgeCachedDaoImpl implements IDao<java.util.UUID, Edge, Edge.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Edge> generateTable(Consumer<Edge> onRowClick, Edge.Field[] hidden) {
         var table = new MFXTableView<Edge>();
         table.setItems(list);

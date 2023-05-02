@@ -60,6 +60,12 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Node> generateTable(Consumer<Node> onRowClick, Node.Field[] hidden) {
         var table = new MFXTableView<Node>();
         table.setItems(list);
