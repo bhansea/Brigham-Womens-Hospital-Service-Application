@@ -1,9 +1,9 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.AllArgsConstructor;
+import edu.wpi.punchy_pegasi.backend.SchemaID;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.With;
 
 import java.time.LocalDate;
 

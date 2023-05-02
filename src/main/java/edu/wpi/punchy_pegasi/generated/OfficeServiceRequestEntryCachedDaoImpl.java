@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field>, PropertyChangeListener {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "officeRequest"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "officeSupplies"};
 
     private final ObservableMap<java.util.UUID, OfficeServiceRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<OfficeServiceRequestEntry> list = FXCollections.observableArrayList();
@@ -58,6 +58,12 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
+    }
+
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
     }
 
     public MFXTableView<OfficeServiceRequestEntry> generateTable(Consumer<OfficeServiceRequestEntry> onRowClick, OfficeServiceRequestEntry.Field[] hidden) {
@@ -114,7 +120,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("officeRequest", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("officeSupplies").getArray()),
                     rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
@@ -159,7 +165,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
 
     @Override
     public void save(OfficeServiceRequestEntry officeServiceRequestEntry) {
-        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getEmployeeID(), officeServiceRequestEntry.getOfficeRequest()};
+        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getEmployeeID(), officeServiceRequestEntry.getOfficeSupplies()};
         try {
             dbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
 //            add(officeServiceRequestEntry);
@@ -207,6 +213,7 @@ public class OfficeServiceRequestEntryCachedDaoImpl implements IDao<java.util.UU
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public OfficeServiceRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

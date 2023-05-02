@@ -20,6 +20,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <?import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
@@ -57,7 +58,11 @@
                                             <padding>
                                                 <Insets topRightBottomLeft="25"/>
                                             </padding>
-                                            <VBox VBox.vgrow="ALWAYS" fx:id="alertsHolder">
+                                            <VBox styleClass="admin-container" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="alertsContainer">
+                                                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="alertScrollPane">
+                                                    <VBox VBox.vgrow="ALWAYS" fx:id="alertsHolder">
+                                                    </VBox>
+                                                </ScrollPane>
                                             </VBox>
                                         </StackPane>
                                     </HBox>

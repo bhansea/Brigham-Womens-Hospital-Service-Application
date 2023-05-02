@@ -10,12 +10,9 @@ import edu.wpi.punchy_pegasi.schema.Alert;
 import edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
-import edu.wpi.punchy_pegasi.frontend.components.PFXCardHorizontal;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
@@ -23,7 +20,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 public class OfficeServiceRequestController extends RequestController<OfficeServiceRequestEntry> implements PropertyChangeListener {
@@ -43,6 +39,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     private BorderPane root;
     ScrollPane scrollPane;
+    FlowPane flowPane;
 
 
     public static BorderPane create(String path) {
@@ -68,7 +65,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
 
-        var flowPane = new FlowPane(pencils, pens, paper, stapler);
+        flowPane = new FlowPane(pencils, pens, paper, stapler);
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
@@ -84,9 +81,10 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     public void submitEntry() {
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
+        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), getSelectedItems(flowPane), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
-        App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Office Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
+        Alert alert = Alert.builder().uuid(UUID.randomUUID()).alertType(Alert.AlertType.SERVICE_REQUEST).alertTitle("Service Request").description("Office Room Request").startDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).employeeID(staffAssignment.getSelectedItem().getEmployeeID()).startDate(Instant.now()).endDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).build();
+        App.getSingleton().getFacade().saveAlert(alert);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 

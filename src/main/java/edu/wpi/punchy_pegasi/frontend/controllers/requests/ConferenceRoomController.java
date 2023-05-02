@@ -10,12 +10,8 @@ import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -133,7 +129,17 @@ public class ConferenceRoomController extends RequestController<ConferenceRoomEn
                         numberOfParticipants.getText(),
                         App.getSingleton().getAccount().getEmployeeID());
         App.getSingleton().getFacade().saveConferenceRoomEntry(requestEntry);
-        App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Conference Room Request", Instant.now(), Alert.ReadStatus.UNREAD));
+        Alert alert = Alert.builder().uuid(UUID.randomUUID())
+                .alertType(Alert.AlertType.SERVICE_REQUEST)
+                .alertTitle("Service Request")
+                .description("Conference Room Request")
+                .startDate(Instant.now())
+                .readStatus(Alert.ReadStatus.UNREAD)
+                .employeeID(staffAssignment.getSelectedItem().getEmployeeID())
+                .endDate(Instant.now())
+                .readStatus(Alert.ReadStatus.UNREAD)
+                .build();
+        App.getSingleton().getFacade().saveAlert(alert);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 }

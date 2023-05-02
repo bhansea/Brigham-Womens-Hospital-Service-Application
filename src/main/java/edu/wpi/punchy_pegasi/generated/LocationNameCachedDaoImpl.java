@@ -60,6 +60,12 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<LocationName> generateTable(Consumer<LocationName> onRowClick, LocationName.Field[] hidden) {
         var table = new MFXTableView<LocationName>();
         table.setItems(list);
@@ -204,6 +210,7 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public LocationNameForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

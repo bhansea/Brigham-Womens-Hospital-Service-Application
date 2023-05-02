@@ -216,12 +216,8 @@ CREATE OR REPLACE TRIGGER trigger_generic_update
     FOODREQUESTS(edu.wpi.punchy_pegasi.schema.FoodServiceRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS foodrequests
 (
-  foodSelection varchar,
-  tempType varchar,
-  additionalItems varchar ARRAY,
-  dietaryRestrictions varchar,
-  patientName varchar,
-  beverage varchar
+  selectedFoods varchar ARRAY,
+  patientName varchar
 ) INHERITS (requests);
 CREATE OR REPLACE FUNCTION notify_foodrequests_update() RETURNS TRIGGER AS $$
     DECLARE
@@ -250,9 +246,7 @@ CREATE OR REPLACE TRIGGER trigger_foodrequests_update
     FLOWERREQUESTS(edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS flowerrequests
 (
-  flowerSize varchar,
-  flowerType varchar,
-  flowerAmount varchar,
+  selectedFlowers varchar ARRAY,
   patientName varchar
 ) INHERITS (requests);
 CREATE OR REPLACE FUNCTION notify_flowerrequests_update() RETURNS TRIGGER AS $$
@@ -343,7 +337,7 @@ CREATE OR REPLACE TRIGGER trigger_furniturerequests_update
     OFFICEREQUESTS(edu.wpi.punchy_pegasi.schema.OfficeServiceRequestEntry.class, """
 CREATE TABLE IF NOT EXISTS officerequests
 (
-  officeRequest varchar
+  officeSupplies varchar ARRAY
 ) INHERITS (requests);
 CREATE OR REPLACE FUNCTION notify_officerequests_update() RETURNS TRIGGER AS $$
     DECLARE
@@ -487,11 +481,14 @@ CREATE OR REPLACE TRIGGER trigger_signage_update
 CREATE TABLE IF NOT EXISTS alert
 (
   uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  employeeID bigint,
+  alertType varchar NOT NULL,
   alertTitle varchar,
   description varchar,
-  dateTime timestamptz NOT NULL,
-  readStatus varchar NOT NULL
+  startDate timestamptz NOT NULL,
+  endDate timestamptz NOT NULL,
+  readStatus varchar NOT NULL,
+  employeeID bigint,
+  nodeID bigint
 );
 CREATE OR REPLACE FUNCTION notify_alert_update() RETURNS TRIGGER AS $$
     DECLARE

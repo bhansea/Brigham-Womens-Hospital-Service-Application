@@ -1,6 +1,5 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Alert;
 import edu.wpi.punchy_pegasi.schema.IDao;
@@ -19,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
 
-    static String[] fields = {"uuid", "employeeID", "alertTitle", "description", "dateTime", "readStatus"};
+    static String[] fields = {"uuid", "alertType", "alertTitle", "description", "startDate", "endDate", "readStatus", "employeeID", "nodeID"};
     private final PdbController dbController;
 
     public AlertDaoImpl(PdbController dbController) {
@@ -32,11 +31,14 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
             rs.next();
             Alert req = new Alert(
                     rs.getObject("uuid", java.util.UUID.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
+                    edu.wpi.punchy_pegasi.schema.Alert.AlertType.valueOf(rs.getString("alertType")),
                     rs.getObject("alertTitle", java.lang.String.class),
                     rs.getObject("description", java.lang.String.class),
-                    rs.getTimestamp("dateTime").toInstant(),
-                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getTimestamp("startDate").toInstant(),
+                    rs.getTimestamp("endDate").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("nodeID", java.lang.Long.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -56,11 +58,14 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
             while (rs.next()) {
                 Alert req = new Alert(
                     rs.getObject("uuid", java.util.UUID.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
+                    edu.wpi.punchy_pegasi.schema.Alert.AlertType.valueOf(rs.getString("alertType")),
                     rs.getObject("alertTitle", java.lang.String.class),
                     rs.getObject("description", java.lang.String.class),
-                    rs.getTimestamp("dateTime").toInstant(),
-                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getTimestamp("startDate").toInstant(),
+                    rs.getTimestamp("endDate").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("nodeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -77,11 +82,14 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
             while (rs.next()) {
                 Alert req = new Alert(
                     rs.getObject("uuid", java.util.UUID.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
+                    edu.wpi.punchy_pegasi.schema.Alert.AlertType.valueOf(rs.getString("alertType")),
                     rs.getObject("alertTitle", java.lang.String.class),
                     rs.getObject("description", java.lang.String.class),
-                    rs.getTimestamp("dateTime").toInstant(),
-                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")));
+                    rs.getTimestamp("startDate").toInstant(),
+                    rs.getTimestamp("endDate").toInstant(),
+                    edu.wpi.punchy_pegasi.schema.Alert.ReadStatus.valueOf(rs.getString("readStatus")),
+                    rs.getObject("employeeID", java.lang.Long.class),
+                    rs.getObject("nodeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -98,7 +106,7 @@ public class AlertDaoImpl implements IDao<java.util.UUID, Alert, Alert.Field> {
 
     @Override
     public void save(Alert alert) {
-        Object[] values = {alert.getUuid(), alert.getEmployeeID(), alert.getAlertTitle(), alert.getDescription(), alert.getDateTime(), alert.getReadStatus()};
+        Object[] values = {alert.getUuid(), alert.getAlertType(), alert.getAlertTitle(), alert.getDescription(), alert.getStartDate(), alert.getEndDate(), alert.getReadStatus(), alert.getEmployeeID(), alert.getNodeID()};
         try {
             dbController.insertQuery(TableType.ALERT, fields, values);
         } catch (PdbController.DatabaseException e) {
