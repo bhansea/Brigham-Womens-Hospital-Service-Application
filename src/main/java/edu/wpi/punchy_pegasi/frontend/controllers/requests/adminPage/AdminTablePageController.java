@@ -93,7 +93,7 @@ public class AdminTablePageController {
         moves = facade.getAllMove();
         locations = facade.getAllLocationName();
         accounts = facade.getAllAccount();
-        databaseLabel.setText("Current Database: " + App.getSingleton().getPdb().source.toString());
+        databaseLabel.setText("Select Database: ");
         // displayDatabaseComboBox.selectItem(App.getSingleton().getPdb().source);
 
         fileChooser.setTitle("File Chooser");
@@ -107,6 +107,7 @@ public class AdminTablePageController {
         ObservableList<PdbController.Source> sources = FXCollections.observableArrayList(PdbController.Source.values());
         //sources.remove(App.getSingleton().getPdb().source);
         displayDatabaseComboBox.setItems(sources);
+        displayDatabaseComboBox.selectItem(App.getSingleton().getPdb().source);
 
         initTables();
         showTable(null);
@@ -120,23 +121,27 @@ public class AdminTablePageController {
             displayEditComponent();
         });
         displayDatabaseComboBox.setOnAction(e -> {
-            refreshInit();
-            App.getSingleton().getExecutorService().execute(() -> Platform.runLater(()->App.getSingleton().getLayout().showOverlay(vC, false)));
-
             PdbController.Source source = displayDatabaseComboBox.getSelectedItem();
-            try {
-                App.getSingleton().getFacade().switchDatabase(source);
-            } catch (SQLException | PdbController.DatabaseException ex) {
-                log.error("Could not switch database");
-            }
-            for (var tt : TableType.values()) {
+
+            if(!(source == App.getSingleton().getPdb().source)) {
+                refreshInit();
+                App.getSingleton().getExecutorService().execute(() -> Platform.runLater(() -> App.getSingleton().getLayout().showOverlay(vC, false)));
+
+
                 try {
-                    pdb.initTableByType(tt);
-                } catch (PdbController.DatabaseException err) {
-                    log.error("Could not init table " + tt.name());
+                    App.getSingleton().getFacade().switchDatabase(source);
+                } catch (SQLException | PdbController.DatabaseException ex) {
+                    log.error("Could not switch database");
                 }
+                for (var tt : TableType.values()) {
+                    try {
+                        pdb.initTableByType(tt);
+                    } catch (PdbController.DatabaseException err) {
+                        log.error("Could not init table " + tt.name());
+                    }
+                }
+                Platform.runLater(() -> App.getSingleton().getLayout().hideOverlay());
             }
-            Platform.runLater(() -> App.getSingleton().getLayout().hideOverlay());
         });
 
         tables.values().forEach(t -> t.setRowClicked(this::populateForm));
