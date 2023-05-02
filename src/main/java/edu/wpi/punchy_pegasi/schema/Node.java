@@ -1,7 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.AllArgsConstructor;
-import lombok.Builder;
+import edu.wpi.punchy_pegasi.backend.SchemaID;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,8 +34,8 @@ public class Node implements INode {
 
     public int getFloorNum() {
         return switch (floor) {
-            case "L1" -> 1;
-            case "L2" -> 2;
+            case "L1" -> 2;
+            case "L2" -> 1;
             case "1" -> 3;
             case "2" -> 4;
             case "3" -> 5;

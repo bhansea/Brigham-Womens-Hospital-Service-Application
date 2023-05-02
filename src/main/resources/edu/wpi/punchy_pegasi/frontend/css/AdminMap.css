@@ -3,6 +3,10 @@
     -fx-padding: 20;
 }
 
+.label-header {
+    -fx-font-size: 20;
+}
+
 .editing-overlay-box {
     -fx-alignment: CENTER;
     -fx-max-width: 300;
@@ -12,16 +16,27 @@
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
-
+.changes-edit-scrollpane {
+    -fx-max-height: 300;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.changes-edit-scrollpane > .viewport {
+    -fx-background-color: tranparent;
+}
 #commitProgress {
     -fx-min-height: 20;
     -fx-max-height: 20;
 }
 
-#changes {
-
+#alignButton {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: white;
 }
-
+#cancelAlignButton {
+    -pfx-button-background: -pfx-danger;
+    -pfx-button-text: white;
+}
 .node-popover-date {
 
 }

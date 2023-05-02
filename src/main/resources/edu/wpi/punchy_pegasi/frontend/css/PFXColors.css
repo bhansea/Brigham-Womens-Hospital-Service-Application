@@ -2,6 +2,7 @@
     -pfx-navy: #012d5a;
     -pfx-navy-grey: #636c75;
     -pfx-background: white;
+    -pfx-background-transparent: rgba(255, 255, 255, 0.5);
     -pfx-accent: #0072e7;
     -pfx-accent-transparent: #0072e733;
     -pfx-accent-light: #daeeff;

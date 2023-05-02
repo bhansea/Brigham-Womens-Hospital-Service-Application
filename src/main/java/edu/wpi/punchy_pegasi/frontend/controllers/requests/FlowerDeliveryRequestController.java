@@ -2,9 +2,9 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
-import edu.wpi.punchy_pegasi.frontend.components.*;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
+import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.schema.Alert;
-import edu.wpi.punchy_pegasi.schema.Account;
 import edu.wpi.punchy_pegasi.schema.FlowerDeliveryRequestEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -14,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -26,6 +25,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     private BorderPane root;
     private VBox container;
     ScrollPane scrollPane;
+    FlowPane flowPane;
     public static BorderPane create(String path) {
         return RequestController.create(new FlowerDeliveryRequestController(), path);
     }
@@ -41,7 +41,7 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
         PFXCardVertical card3 = new PFXCardVertical("Red Rose", "Flower of love", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/red-roses.jpg"));
         PFXCardVertical card4 = new PFXCardVertical("Sunflower", "Looks great!", 20, new Image("edu/wpi/punchy_pegasi/frontend/assets/flower/sunflower.jpg"));
         filter.setOnAction(e -> toggleFilter());
-        var flowPane = new FlowPane(card1, card2, card3, card4);
+        flowPane = new FlowPane(card1, card2, card3, card4);
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
@@ -57,9 +57,11 @@ public class FlowerDeliveryRequestController extends RequestController<FlowerDel
     @FXML
     public void submitEntry() {
         // TODO: need a way to get the employeeID of the person making the request entry
-        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), "", "", "", 1L);
+        requestEntry = new FlowerDeliveryRequestEntry(patientName.getText(), locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), getSelectedItems(flowPane), 1L);
         App.getSingleton().getFacade().saveFlowerDeliveryRequestEntry(requestEntry);
-        App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Flower Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
+        Alert alert = Alert.builder().uuid(UUID.randomUUID()).alertType(Alert.AlertType.SERVICE_REQUEST).alertTitle("Service Request").description("Flower Service Request").startDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).employeeID(staffAssignment.getSelectedItem().getEmployeeID()).startDate(Instant.now()).endDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).build();
+
+        App.getSingleton().getFacade().saveAlert(alert);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 

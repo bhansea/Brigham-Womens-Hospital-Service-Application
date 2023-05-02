@@ -60,6 +60,12 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Node> generateTable(Consumer<Node> onRowClick, Node.Field[] hidden) {
         var table = new MFXTableView<Node>();
         table.setItems(list);
@@ -109,11 +115,11 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         try (var rs = dbController.searchQuery(TableType.NODES)) {
             while (rs.next()) {
                 Node req = new Node(
-                    rs.getObject("nodeID", java.lang.Long.class),
-                    rs.getObject("xcoord", java.lang.Integer.class),
-                    rs.getObject("ycoord", java.lang.Integer.class),
-                    rs.getObject("floor", java.lang.String.class),
-                    rs.getObject("building", java.lang.String.class));
+                        rs.getObject("nodeID", java.lang.Long.class),
+                        rs.getObject("xcoord", java.lang.Integer.class),
+                        rs.getObject("ycoord", java.lang.Integer.class),
+                        rs.getObject("floor", java.lang.String.class),
+                        rs.getObject("building", java.lang.String.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -205,6 +211,7 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public NodeForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

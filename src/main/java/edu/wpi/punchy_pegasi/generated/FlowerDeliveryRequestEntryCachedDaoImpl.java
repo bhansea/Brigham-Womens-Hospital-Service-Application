@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.UUID, FlowerDeliveryRequestEntry, FlowerDeliveryRequestEntry.Field>, PropertyChangeListener {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "flowerSize", "flowerType", "flowerAmount", "patientName"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "selectedFlowers", "patientName"};
 
     private final ObservableMap<java.util.UUID, FlowerDeliveryRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<FlowerDeliveryRequestEntry> list = FXCollections.observableArrayList();
@@ -58,6 +58,12 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         });
         initCache();
         this.dbController.addPropertyChangeListener(this);
+    }
+
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
     }
 
     public MFXTableView<FlowerDeliveryRequestEntry> generateTable(Consumer<FlowerDeliveryRequestEntry> onRowClick, FlowerDeliveryRequestEntry.Field[] hidden) {
@@ -115,9 +121,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("flowerSize", java.lang.String.class),
-                    rs.getObject("flowerAmount", java.lang.String.class),
-                    rs.getObject("flowerType", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("selectedFlowers").getArray()),
                     rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
@@ -162,7 +166,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
 
     @Override
     public void save(FlowerDeliveryRequestEntry flowerDeliveryRequestEntry) {
-        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getEmployeeID(), flowerDeliveryRequestEntry.getFlowerSize(), flowerDeliveryRequestEntry.getFlowerType(), flowerDeliveryRequestEntry.getFlowerAmount(), flowerDeliveryRequestEntry.getPatientName()};
+        Object[] values = {flowerDeliveryRequestEntry.getServiceID(), flowerDeliveryRequestEntry.getLocationName(), flowerDeliveryRequestEntry.getStaffAssignment(), flowerDeliveryRequestEntry.getAdditionalNotes(), flowerDeliveryRequestEntry.getStatus(), flowerDeliveryRequestEntry.getEmployeeID(), flowerDeliveryRequestEntry.getSelectedFlowers(), flowerDeliveryRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FLOWERREQUESTS, fields, values);
 //            add(flowerDeliveryRequestEntry);
@@ -210,6 +214,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public FlowerDeliveryRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

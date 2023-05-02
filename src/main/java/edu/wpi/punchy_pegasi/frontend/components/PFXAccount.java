@@ -5,11 +5,11 @@ import edu.wpi.punchy_pegasi.frontend.Screen;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Account;
+import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -30,9 +30,13 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
     private final EventHandler<? super MouseEvent> isAccount = e -> accountMenu.show(this);
     private final PFXIcon defaultIcon = new PFXIcon(MaterialSymbols.ACCOUNT_CIRCLE);
 
+    VBox accountInformation = new VBox();
+    Label nameLabel = new Label();
+    Label accountLevel = new Label();
+
     public PFXAccount() {
         super();
-        var content = new VBox(logout);
+        var content = new VBox();
         content.getStyleClass().add("pfx-account-menu");
         accountMenu.setContentNode(content);
         accountMenu.setDetachable(false);
@@ -47,6 +51,27 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
         getStyleClass().add("pfx-account");
         setAccount(App.getSingleton().getAccount());
         App.getSingleton().addPropertyChangeListener(this);
+
+
+        MFXToggleButton colorToggle = new MFXToggleButton();
+//        MFXToggleButton ttsToggle = new MFXToggleButton();
+
+        accountInformation.getChildren().add(nameLabel);
+        accountInformation.getChildren().add(accountLevel);
+        accountInformation.getStyleClass().add("pfx-account-information");
+
+        nameLabel.setStyle("-fx-font-size: 14");
+
+        colorToggle.setText("Dark Mode");
+        colorToggle.setStyle("-fx-font-size: 12");
+//        ttsToggle.setText("Text to Speech");
+//        ttsToggle.setStyle("-fx-font-size: 12");
+
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.getChildren().add(accountInformation);
+        content.getChildren().add(colorToggle);
+//        content.getChildren().add(ttsToggle);
+        content.getChildren().add(logout);
     }
 
     public void setAccount(Account account) {
@@ -55,11 +80,17 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
             addEventFilter(MouseEvent.MOUSE_CLICKED, noAccount);
             getChildren().clear();
             getChildren().addAll(loginIcon, label);
+            accountInformation.setVisible(false);
+            accountInformation.setManaged(false);
         } else {
             removeEventFilter(MouseEvent.MOUSE_CLICKED, noAccount);
             addEventFilter(MouseEvent.MOUSE_CLICKED, isAccount);
             getChildren().clear();
             getChildren().addAll(defaultIcon);
+            accountInformation.setVisible(true);
+            accountInformation.setManaged(true);
+            nameLabel.setText(account.getUsername());
+            accountLevel.setText(account.getAccountType().toString());
         }
     }
 

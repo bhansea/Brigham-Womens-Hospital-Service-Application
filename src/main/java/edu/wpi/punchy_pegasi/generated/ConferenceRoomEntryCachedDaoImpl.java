@@ -60,6 +60,12 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<ConferenceRoomEntry> generateTable(Consumer<ConferenceRoomEntry> onRowClick, ConferenceRoomEntry.Field[] hidden) {
         var table = new MFXTableView<ConferenceRoomEntry>();
         table.setItems(list);
@@ -109,16 +115,16 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         try (var rs = dbController.searchQuery(TableType.CONFERENCEREQUESTS)) {
             while (rs.next()) {
                 ConferenceRoomEntry req = new ConferenceRoomEntry(
-                    rs.getObject("serviceID", java.util.UUID.class),
-                    rs.getObject("locationName", java.lang.Long.class),
-                    rs.getObject("staffAssignment", java.lang.Long.class),
-                    rs.getObject("additionalNotes", java.lang.String.class),
-                    edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("beginningTime", java.lang.String.class),
-                    rs.getObject("endTime", java.lang.String.class),
-                    rs.getObject("date", java.time.LocalDate.class),
-                    rs.getObject("amountOfParticipants", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class));
+                        rs.getObject("serviceID", java.util.UUID.class),
+                        rs.getObject("locationName", java.lang.Long.class),
+                        rs.getObject("staffAssignment", java.lang.Long.class),
+                        rs.getObject("additionalNotes", java.lang.String.class),
+                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
+                        rs.getObject("beginningTime", java.lang.String.class),
+                        rs.getObject("endTime", java.lang.String.class),
+                        rs.getObject("date", java.time.LocalDate.class),
+                        rs.getObject("amountOfParticipants", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -210,6 +216,7 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public ConferenceRoomEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

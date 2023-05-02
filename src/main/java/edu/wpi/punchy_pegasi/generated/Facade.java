@@ -1,16 +1,20 @@
 package edu.wpi.punchy_pegasi.generated;
 
-import edu.wpi.punchy_pegasi.schema.*;
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import java.util.Map;
+import edu.wpi.punchy_pegasi.schema.*;
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import io.github.palexdev.materialfx.controls.MFXTableView;
-import java.util.function.Consumer;
-import java.util.Optional;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+
+import java.sql.SQLException;
 
 public class Facade {
+	private final PdbController dbController;
 	private final NodeCachedDaoImpl nodeDao;
 	private final EdgeCachedDaoImpl edgeDao;
 	private final MoveCachedDaoImpl moveDao;
@@ -47,23 +51,45 @@ public class Facade {
     }
 
     public Facade(PdbController dbController) {
-		nodeDao = new NodeCachedDaoImpl(dbController);
-		edgeDao = new EdgeCachedDaoImpl(dbController);
-		moveDao = new MoveCachedDaoImpl(dbController);
-		locationNameDao = new LocationNameCachedDaoImpl(dbController);
-		requestEntryDao = new RequestEntryCachedDaoImpl(dbController);
-		genericRequestEntryDao = new GenericRequestEntryCachedDaoImpl(dbController);
-		foodServiceRequestEntryDao = new FoodServiceRequestEntryCachedDaoImpl(dbController);
-		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryCachedDaoImpl(dbController);
-		conferenceRoomEntryDao = new ConferenceRoomEntryCachedDaoImpl(dbController);
-		furnitureRequestEntryDao = new FurnitureRequestEntryCachedDaoImpl(dbController);
-		officeServiceRequestEntryDao = new OfficeServiceRequestEntryCachedDaoImpl(dbController);
-		employeeDao = new EmployeeCachedDaoImpl(dbController);
-		accountDao = new AccountCachedDaoImpl(dbController);
-		signageDao = new SignageCachedDaoImpl(dbController);
-		alertDao = new AlertCachedDaoImpl(dbController);
+		this.dbController = dbController;
+		nodeDao = new NodeCachedDaoImpl(this.dbController);
+		edgeDao = new EdgeCachedDaoImpl(this.dbController);
+		moveDao = new MoveCachedDaoImpl(this.dbController);
+		locationNameDao = new LocationNameCachedDaoImpl(this.dbController);
+		requestEntryDao = new RequestEntryCachedDaoImpl(this.dbController);
+		genericRequestEntryDao = new GenericRequestEntryCachedDaoImpl(this.dbController);
+		foodServiceRequestEntryDao = new FoodServiceRequestEntryCachedDaoImpl(this.dbController);
+		flowerDeliveryRequestEntryDao = new FlowerDeliveryRequestEntryCachedDaoImpl(this.dbController);
+		conferenceRoomEntryDao = new ConferenceRoomEntryCachedDaoImpl(this.dbController);
+		furnitureRequestEntryDao = new FurnitureRequestEntryCachedDaoImpl(this.dbController);
+		officeServiceRequestEntryDao = new OfficeServiceRequestEntryCachedDaoImpl(this.dbController);
+		employeeDao = new EmployeeCachedDaoImpl(this.dbController);
+		accountDao = new AccountCachedDaoImpl(this.dbController);
+		signageDao = new SignageCachedDaoImpl(this.dbController);
+		alertDao = new AlertCachedDaoImpl(this.dbController);
 
     }
+
+    public void switchDatabase(PdbController.Source source) throws SQLException, PdbController.DatabaseException{
+		 this.dbController.switchSource(source);
+		nodeDao.refresh();
+		edgeDao.refresh();
+		moveDao.refresh();
+		locationNameDao.refresh();
+		requestEntryDao.refresh();
+		genericRequestEntryDao.refresh();
+		foodServiceRequestEntryDao.refresh();
+		flowerDeliveryRequestEntryDao.refresh();
+		conferenceRoomEntryDao.refresh();
+		furnitureRequestEntryDao.refresh();
+		officeServiceRequestEntryDao.refresh();
+		employeeDao.refresh();
+		accountDao.refresh();
+		signageDao.refresh();
+		alertDao.refresh();
+
+    }
+
 	public MFXTableView<Node> generateTableNode(Consumer<Node> onRowClick, Node.Field[] hidden) {
 		return nodeDao.generateTable(onRowClick, hidden);
 	}

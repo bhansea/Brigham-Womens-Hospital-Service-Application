@@ -10,15 +10,18 @@ import edu.wpi.punchy_pegasi.schema.LocationName;
 import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -31,6 +34,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
 
@@ -175,5 +179,17 @@ public abstract class RequestController<T extends RequestEntry> {
         filterContainer.getChildren().add(cardHolder);
         filterContainer.setPadding(new Insets(10, 10, 10, 23));
         return filterContainer;
+    }
+
+    protected List<String> getSelectedItems(Pane pane) {
+        List<String> items = new ArrayList<String>();
+        ObservableList<Node> panes = pane.getChildren();
+        for(Node node : panes) {
+            PFXCardVertical ele = (PFXCardVertical) node;
+            if(ele.getQuantity() > 0) {
+                items.add(ele.getTitle() + " " + ele.getQuantity());
+            }
+        }
+        return items;
     }
 }

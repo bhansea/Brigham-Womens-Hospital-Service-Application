@@ -60,6 +60,12 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Account> generateTable(Consumer<Account> onRowClick, Account.Field[] hidden) {
         var table = new MFXTableView<Account>();
         table.setItems(list);
@@ -109,11 +115,11 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         try (var rs = dbController.searchQuery(TableType.ACCOUNTS)) {
             while (rs.next()) {
                 Account req = new Account(
-                    rs.getObject("uuid", java.lang.Long.class),
-                    rs.getObject("username", java.lang.String.class),
-                    rs.getObject("password", java.lang.String.class),
-                    rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        rs.getObject("uuid", java.lang.Long.class),
+                        rs.getObject("username", java.lang.String.class),
+                        rs.getObject("password", java.lang.String.class),
+                        rs.getObject("employeeID", java.lang.Long.class),
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
                 add(req);
             }
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -205,6 +211,7 @@ public class AccountCachedDaoImpl implements IDao<java.lang.Long, Account, Accou
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public AccountForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

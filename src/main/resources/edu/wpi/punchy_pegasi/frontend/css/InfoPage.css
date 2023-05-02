@@ -1,0 +1,69 @@
+.info-title{
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 14;
+    -fx-padding: 25 0 0 50;
+    -fx-text-fill: -pfx-accent;
+}
+
+.info-text{
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 18;
+    -fx-padding: 5 25 25 50;
+    -fx-spacing: 10;
+    -fx-pref-width: 600;
+}
+
+.info-about-team-list{
+    -fx-alignment: center-left;
+    -fx-vgap: 10;
+    -fx-hgap: 10;
+    -fx-padding: 5 0 25 50;
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 16;
+}
+
+.info-about-team-header{
+    -fx-font-weight: 700;
+}
+
+.info-credit-list{
+    -fx-alignment: center-left;
+    -fx-vgap: 20;
+    -fx-hgap: 20;
+    -fx-padding: 5 0 25 50;
+}
+
+.info-credit-list Label{
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 16;
+}
+
+.info-about-team-member-name{
+    -fx-text-alignment: left;
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+
+.info-about-team-member-position{
+    -fx-text-alignment: left;
+    -fx-font-family: "Nunito Sans Bold";
+    -fx-font-size: 12;
+    -fx-text-fill: #B5ECFF;
+}
+
+.info-about-hidden-text{
+    -fx-text-alignment: left;
+    -fx-font-family: "Nunito Sans";
+    -fx-wrap-text: true;
+    -fx-font-size: 14;
+    -fx-text-fill: black;
+}
+
+.info-about-bottom-disclaimer{
+    -fx-text-alignment: right;
+    -fx-font-family: "Nunito Sans";
+    -fx-font-size: 14;
+    -fx-text-fill: #6F6F6F;
+    -fx-padding: 5 20 0 25;
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import edu.wpi.punchy_pegasi.frontend.components.PFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage.AdminAlertPageController"
+            fx:id="container">
+    <center>
+        <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
+            <HBox spacing="10.0" alignment="CENTER" HBox.hgrow="ALWAYS">
+                <VBox alignment="TOP_LEFT" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent" spacing="15.0">
+                    <Label styleClass="admin-container-title-text-size" text="Create Alert" VBox.vgrow="ALWAYS"/>
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container" fx:id="alertsContainer" spacing="15.0">
+                        <Label alignment="CENTER_LEFT" text="Alert Title" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
+                        <TextField promptText="Alert title" fx:id="alertTitle"/>
+                        <Label text="Alert Description" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
+                        <TextField promptText="Alert description" fx:id="alertDescription"/>
+                        <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="timePickerContainer">
+                            <Label text="End Date" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
+                            <MFXDatePicker fx:id="endDatePicker"/>
+                            <Label text="End Time" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
+                            <MFXComboBox styleClass="conference-dropDown" fx:id="endTimeComboBox" promptText="End Time" floatMode="DISABLED"/>
+                        </HBox>
+                        <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="employeePickerContainer">
+                            <Label text="Assign Employee" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
+                            <MFXFilterComboBox styleClass="conference-dropDown" fx:id="employeeComboBox" floatMode="DISABLED"/>
+                        </HBox>
+                        <MFXComboBox promptText="Select Alert Type" fx:id="alertTypeComboBox"/>
+                        <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS">
+                            <PFXButton styleClass="admin-container-buttons" text="Send" fx:id="sendButton"/>
+                            <PFXButton styleClass="admin-container-buttons-remove"  text="Remove" fx:id="removeButton"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+                <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                    <Label styleClass="admin-container-title-text-size" text="Active Alerts" VBox.vgrow="ALWAYS"/>
+                    <ScrollPane styleClass= "admin-container" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS">
+                            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="activeAlertsContainer" spacing="15">
+                            </VBox>
+                        </HBox>
+                    </ScrollPane>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

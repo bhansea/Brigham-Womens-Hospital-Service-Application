@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -47,9 +48,9 @@ public class HeaderController extends HBox implements PropertyChangeListener {
             emptyVBox.getChildren().add(emptyLabel);
             return emptyVBox;
         }
-        Map<String, VBox> items = new HashMap<>();
+        Map<String, VBox> items = new LinkedHashMap<>();
         for (AppSearch.SearchableItem s: filtered) {
-            var name = s.getScreen().name();
+            var name = s.getScreen().getReadable();
             VBox item = items.get(name);
             if(s.getScreen().getShield().getShieldLevel() <= App.getSingleton().getAccount().getAccountType().getShieldLevel()){
                 if (item == null) {
@@ -57,16 +58,19 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                     item.setId(name);
                     var separator = new Separator();
                     var nameLabel = new Label(name);
-                    nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-underline: true");
+                    nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-font-size: 16;");
+                    nameLabel.setWrapText(true);
                     nameLabel.setOnMouseClicked(e -> s.getNavigate().run());
                     items.put(name, item);
                     var description = new Label(s.getDescription());
                     description.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent;");
+                    description.setWrapText(true);
                     description.setOnMouseClicked(e -> s.getNavigate().run());
                     item.getChildren().addAll(nameLabel, separator, description);
                 } else {
                     var description = new Label(s.getDescription());
                     description.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent;");
+                    description.setWrapText(true);
                     description.setOnMouseClicked(e -> s.getNavigate().run());
                     if (!item.getChildren().contains(description)) {
                         item.getChildren().add(description);
@@ -332,9 +336,20 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         var resultScrollContainer = new VBox();
 
         var scrollPane = new MFXScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setFitToWidth(true);
         var searchField = new TextField("");
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
+        searchBox.setStyle("-fx-background-radius: 40; -fx-background-color: -pfx-background; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 40");
+        searchBox.setPrefHeight(35);
+        searchBox.setMaxHeight(35);
+        searchBox.setMinHeight(35);
+        searchBox.prefWidthProperty().bind(headerSearch.widthProperty());
+        searchBox.maxWidthProperty().bind(headerSearch.widthProperty());
+        searchBox.minWidthProperty().bind(headerSearch.widthProperty());
+        resultScrollContainer.setMaxHeight(500);
+        searchField.setStyle(" -fx-background-color: -pfx-background;");
         searchBox.getStyleClass().add("search-box");
         searchField.setStyle("-fx-font-size: 18; -fx-text-fill: -pfx-text; -fx-background-color: -pfx-primary;");
         searchField.setPrefHeight(30);
@@ -347,9 +362,6 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         icon.setStyle("-fx-fill: -pfx-text; -fx-font-size: 30;");
         searchBox.getChildren().addAll(icon, searchField);
         resultScrollContainer.getStyleClass().add("search-popup");
-        resultScrollContainer.prefWidthProperty().bind(headerSearch.widthProperty());
-        resultScrollContainer.maxWidthProperty().bind(headerSearch.widthProperty());
-        resultScrollContainer.minWidthProperty().bind(headerSearch.widthProperty());
         resultScrollContainer.setMaxHeight(500);
         container.getChildren().addAll(searchBox, resultScrollContainer);
         resultScrollContainer.setTranslateX(headerSearch.getLayoutX());

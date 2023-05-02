@@ -17,7 +17,7 @@ public class AdminPageController {
     PFXTabLayout layout = new PFXTabLayout();
     final List<Screen> screens = new ArrayList<>(){{
         add(Screen.ADMIN_TABLE_PAGE);
-//        add(Screen.ADMIN_IMPORT_PAGE);
+        add(Screen.ADMIN_ALERT_PAGE);
     }};
 
     final List<Node> nodes = new ArrayList<>();
