@@ -29,10 +29,8 @@ import javafx.util.StringConverter;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.MultiMap;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.javatuples.Pair;
 
 import java.nio.charset.StandardCharsets;
@@ -288,24 +286,26 @@ public class PathfindingMap {
     }
 
     @RequiredArgsConstructor
-    private enum pathDirectionType {
-        START(new PFXIcon(MaterialSymbols.STEP_OUT)),
-        LEFT(new PFXIcon(MaterialSymbols.KEYBOARD_ARROW_LEFT)),
-        RIGHT(new PFXIcon(MaterialSymbols.KEYBOARD_ARROW_RIGHT)),
-        UP(new PFXIcon(MaterialSymbols.NORTH_EAST)),
-        DOWN(new PFXIcon(MaterialSymbols.SOUTH_WEST)),
-        END(new PFXIcon(MaterialSymbols.PIN_DROP));
+    private enum PathDirectionType {
+        START(MaterialSymbols.STEP_OUT),
+        LEFT(MaterialSymbols.KEYBOARD_ARROW_LEFT),
+        RIGHT(MaterialSymbols.KEYBOARD_ARROW_RIGHT),
+        UP(MaterialSymbols.NORTH_EAST),
+        DOWN(MaterialSymbols.SOUTH_WEST),
+        END(MaterialSymbols.PIN_DROP);
 
         @Getter
-        private final PFXIcon icon;
-
+        private final MaterialSymbols icon;
+        public PFXIcon getPFXIcon(){
+            return new PFXIcon(getIcon());
+        }
     }
 
     @RequiredArgsConstructor
     @Data
     class directionalNode {
         private final Node node;
-        private final PFXIcon directionIcon;
+        private final PathDirectionType directionIcon;
     }
 
     private void pathDrawDirections() {
@@ -314,21 +314,20 @@ public class PathfindingMap {
             var dNodeList = directionMap.get(floor);
             VBox directionsOnFloor = new VBox(new Label("Floor " + floor));
             for (var dNode : dNodeList) {
-                var directionEntry = new HBox();
-                var directionIcon = dNode.getDirectionIcon();
+//                var directionEntry = new HBox();
+                var directionIcon = dNode.getDirectionIcon().getPFXIcon();
                 directionIcon.setSize(15.0);
-                directionEntry.getChildren().add(directionIcon);
                 var directionText = new Label(locationToString.toString(locations.get(nodeToMoves.get(dNode.getNode()).get(0).getLocationID())));
-                directionEntry.getChildren().add(directionText);
-                directionsOnFloor.getChildren().add(directionEntry);
+//                directionEntry.getChildren().addAll(directionIcon ,directionText);
+                directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
             }
             pathDirections.getChildren().add(directionsOnFloor);
         }
     }
 
-    private void pathPutNodes(pathDirectionType direction, Node node) {
+    private void pathPutNodes(PathDirectionType direction, Node node) {
         var floor = node.getFloor();
-        var dNode = new directionalNode(node, direction.getIcon());
+        var dNode = new directionalNode(node, direction);
         if (directionMap.containsKey(floor))
             directionMap.get(floor).add(dNode);
         else
@@ -351,7 +350,7 @@ public class PathfindingMap {
             String currentFloor = path.get(0).getFloor();
             List<Node> currentPath = new ArrayList<>();
             for (var node : path) {
-                pathPutNodes(pathDirectionType.START, node);
+                pathPutNodes(PathDirectionType.START, node);
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
