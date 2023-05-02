@@ -104,8 +104,4 @@ public class PFXAlertCard extends HBox {
     }
 
     public Alert getAlert(){return this.alert;}
-    public void changeToDeleteIcon(){
-        this.active = MaterialSymbols.DELETE;
-        icon.setIcon(active);
-    }
 }

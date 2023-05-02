@@ -132,7 +132,6 @@ public class AdminAlertPageController {
                 {
                     if (alert.getAlertType().toString().toLowerCase().replace('_', ' ').equals(alertTypeComboBox.getSelectedItem().toString().toLowerCase())) {
                         PFXAlertCard alertCard = new PFXAlertCard(alert);
-                        alertCard.changeToDeleteIcon();
                         activeAlertsContainer.getChildren().add(alertCard);
                         alertCards.add(alertCard);
                         alerts.add(alert);
@@ -217,7 +216,6 @@ public class AdminAlertPageController {
                     PFXAlertCard alertCard = new PFXAlertCard(alert);
                     activeAlertsContainer.getChildren().add(alertCard);
                     alertCards.add(alertCard);
-                    alertCards.get(alertCards.size()-1).changeToDeleteIcon();
                 });
             });
         });
