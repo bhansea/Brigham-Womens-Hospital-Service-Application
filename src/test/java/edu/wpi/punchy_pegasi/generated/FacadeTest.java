@@ -46,7 +46,11 @@ class FacadeTest {
         officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeID"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
         accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType"};
-        pdbController = new PdbController(Config.source, "test");
+        try {
+            pdbController = new PdbController(Config.source, "test");
+        } catch (PdbController.DatabaseException e) {
+            log.error("Could not connect to database");
+        }
         for (var tt : TableType.values()) {
             try {
                 pdbController.initTableByType(tt);
@@ -257,7 +261,7 @@ class FacadeTest {
 
     @Test
     void getEdge() {
-        Edge edge = new Edge(123123L, 123123L, 123123L);
+        Edge edge = new Edge(UUID.randomUUID(), 123123L, 123123L);
         Object[] values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
         try {
             pdbController.insertQuery(TableType.EDGES, edgeFields, values);
@@ -276,8 +280,8 @@ class FacadeTest {
 
     @Test
     void testGetEdge() {
-        var edge = new Edge(1231234L, 123123L, 123123L);
-        var edge2 = new Edge(12312345L, 123123L, 123123L);
+        var edge = new Edge(UUID.randomUUID(), 123123L, 123123L);
+        var edge2 = new Edge(UUID.randomUUID(), 123123L, 123123L);
         var values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
         var values2 = new Object[]{edge2.getUuid(), edge2.getStartNode(), edge2.getEndNode()};
         try {
@@ -287,11 +291,11 @@ class FacadeTest {
             throw new RuntimeException(e);
         }
         var results = facade.getEdge(Edge.Field.START_NODE, 123123L);
-        var map = new HashMap<Long, Edge>();
+        var map = new HashMap<UUID, Edge>();
         try (var rs = pdbController.searchQuery(TableType.EDGES, Edge.Field.START_NODE.getColName(), 123123L)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.util.UUID) rs.getObject("uuid"),
                         (java.lang.Long) rs.getObject("startNode"),
                         (java.lang.Long) rs.getObject("endNode"));
                 if (req != null)
@@ -312,9 +316,9 @@ class FacadeTest {
 
     @Test
     void testGetEdge1() {
-        var edge = new Edge(1231234L, 1L, 2L);
-        var edge2 = new Edge(12312345L, 2L, 2L);
-        var edge3 = new Edge(123123456L, 2L, 0L);
+        var edge = new Edge(UUID.randomUUID(), 1L, 2L);
+        var edge2 = new Edge(UUID.randomUUID(), 2L, 2L);
+        var edge3 = new Edge(UUID.randomUUID(), 2L, 0L);
         var values = new Object[]{edge.getUuid(), edge.getStartNode(), edge.getEndNode()};
         var values2 = new Object[]{edge2.getUuid(), edge2.getStartNode(), edge2.getEndNode()};
         var values3 = new Object[]{edge3.getUuid(), edge3.getStartNode(), edge3.getEndNode()};
@@ -329,11 +333,11 @@ class FacadeTest {
         Object[] searchValues = new Object[]{2L, 2L};
         String[] searchFields = new String[]{"startNode", "endNode"};
         var results = facade.getEdge(fields, searchValues);
-        var map = new HashMap<Long, Edge>();
+        var map = new HashMap<UUID, Edge>();
         try (var rs = pdbController.searchQuery(TableType.EDGES, searchFields, searchValues)) {
             while (rs.next()) {
                 Edge req = new Edge(
-                        (java.lang.Long) rs.getObject("uuid"),
+                        (java.util.UUID) rs.getObject("uuid"),
                         (java.lang.Long) rs.getObject("startNode"),
                         (java.lang.Long) rs.getObject("endNode"));
                 if (req != null)
@@ -356,22 +360,22 @@ class FacadeTest {
 
     @Test
     void getAllEdge() {
-        var value0 = new Long[]{100L, 1005L, 1006L};
-        var value1 = new Long[]{101L, 1005L, 1007L};
-        var value2 = new Long[]{102L, 1005L, 1008L};
+        var value0 = new Object[]{UUID.randomUUID(), 1005L, 1006L};
+        var value1 = new Object[]{UUID.randomUUID(), 1005L, 1007L};
+        var value2 = new Object[]{UUID.randomUUID(), 1005L, 1008L};
         var valueSet = new Object[][]{value0, value1, value2};
-        var refMap = new HashMap<Long, Edge>();
+        var refMap = new HashMap<UUID, Edge>();
         for (Object[] values : valueSet) {
             try {
                 pdbController.insertQuery(TableType.EDGES, edgeFields, values);
             } catch (PdbController.DatabaseException e) {
                 assert false : "Failed to insert edge";
             }
-            Edge edge = new Edge((Long) values[0], (Long) values[1], (Long) values[2]);
+            Edge edge = new Edge((UUID) values[0], (Long) values[1], (Long) values[2]);
             refMap.put(edge.getUuid(), edge);
         }
 
-        Map<Long, Edge> resultMap = facade.getAllEdge();
+        Map<UUID, Edge> resultMap = facade.getAllEdge();
         assertEquals(refMap, resultMap);
         for (var uuid : refMap.keySet()) {
             try {
@@ -384,7 +388,7 @@ class FacadeTest {
 
     @Test
     void saveEdge() {
-        Edge edge = new Edge(100L, 1005L, 1006L);
+        Edge edge = new Edge(UUID.randomUUID(), 1005L, 1006L);
         facade.saveEdge(edge);
         Optional<Edge> results = facade.getEdge(edge.getUuid());
         Edge daoresult = results.get();
@@ -398,10 +402,10 @@ class FacadeTest {
 
     @Test
     void updateEdge() {
-        Edge edge = new Edge(100L, 1005L, 1006L);
+        Edge edge = new Edge(UUID.randomUUID(), 1005L, 1006L);
         facade.saveEdge(edge);
 
-        Edge updatedEdge = new Edge(100L, 2005L, 2006L);
+        Edge updatedEdge = new Edge(edge.getUuid(), 2005L, 2006L);
         Edge.Field[] fields = {Edge.Field.START_NODE, Edge.Field.END_NODE};
         facade.updateEdge(updatedEdge, fields);
 
@@ -417,11 +421,11 @@ class FacadeTest {
 
     @Test
     void deleteEdge() {
-        long uuid = 1111;
+        UUID uuid = UUID.randomUUID();
         long startNode = 2222;
         long endNode = 3333;
         Edge edge = new Edge(uuid, startNode, endNode);
-        var values = new Long[]{
+        var values = new Object[]{
                 edge.getUuid(),
                 edge.getStartNode(),
                 edge.getEndNode()
