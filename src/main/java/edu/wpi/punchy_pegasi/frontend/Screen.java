@@ -13,10 +13,10 @@ import java.util.function.Function;
 @Slf4j
 public enum Screen {
     HOME("Home", "frontend/views/HomePage.fxml", Account.AccountType.STAFF),
-    SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.NONE),
-    MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.NONE),
+    SIGNAGE("Signage", "frontend/views/Signage.fxml", Account.AccountType.NONE, true, true, false),
+    MAP_PAGE("Map", "frontend/views/PathfindingMap.fxml", Account.AccountType.NONE, true, true, false),
     EDIT_MAP_PAGE("Edit Map", "frontend/views/AdminMap.fxml", Account.AccountType.ADMIN),
-    LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE, false, false),
+    LOGIN("Login", "frontend/views/Login.fxml", Account.AccountType.NONE, false, false, true),
     ADMIN_PAGE("Admin Page", "frontend/requests/admin/AdminPage.fxml", Account.AccountType.ADMIN),
     ADMIN_TABLE_PAGE("Admin Table Page", "frontend/requests/admin/AdminTablePage.fxml", Account.AccountType.ADMIN),
     ADMIN_IMPORT_PAGE("Admin Import Page", "frontend/requests/admin/AdminImport.fxml", Account.AccountType.ADMIN),
@@ -37,25 +37,28 @@ public enum Screen {
     @Getter
     private final boolean sidebar;
     @Getter
+    private final boolean timeout;
+    @Getter
     private final Account.AccountType shield;
 
-    Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction, boolean header, boolean sidebar) {
+    Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction, boolean header, boolean sidebar, boolean timeout) {
         this.path = path;
         this.readable = readable;
         this.createFunction = createFunction;
         this.shield = shield;
         this.header = header;
         this.sidebar = sidebar;
+        this.timeout = timeout;
     }
     Screen(String readable, String path, Account.AccountType shield, Function<String, ? extends Parent> createFunction) {
-        this(readable, path, shield, createFunction, true, true);
+        this(readable, path, shield, createFunction, true, true, true);
     }
 
-    Screen(String readable, String path, Account.AccountType shield, boolean header, boolean sidebar) {
-        this(readable, path, shield, Screen::defaultCreate, header, sidebar);
+    Screen(String readable, String path, Account.AccountType shield, boolean header, boolean sidebar, boolean timeout) {
+        this(readable, path, shield, Screen::defaultCreate, header, sidebar, timeout);
     }
     Screen(String readable, String path, Account.AccountType shield) {
-        this(readable, path, shield, true, true);
+        this(readable, path, shield, true, true, true);
     }
 
     private static Parent defaultCreate(String path) {

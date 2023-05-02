@@ -151,6 +151,7 @@ public class App extends Application {
     @Override
     public void init() {
         singleton = this;
+        idleScreen = new IdleScreen(90);
         log.info("Starting Up");
     }
 
@@ -172,6 +173,7 @@ public class App extends Application {
         if (account.getAccountType().getShieldLevel() >= screen.getShield().getShieldLevel()) {
             getLayout().showTopLayout(screen.isHeader());
             getLayout().showLeftLayout(screen.isSidebar());
+            enableTimeout(screen.isTimeout());
             getViewPane().setCenter(new PageLoading());
             getViewPane().setCenter(screen.get());
             setCurrentScreen(screen);
@@ -227,9 +229,8 @@ public class App extends Application {
 
         // Idle Screen
 
-        idleScreen = new IdleScreen(15);
         var idleTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            if (!idleScreen.isIdle()) {
+            if (!idleScreen.isIdle() && idleScreen.isEnabled()) {
                 idleScreen.setIdle(true);
                 getLayout().showOverlay(idleScreen, false);
             }
@@ -238,12 +239,13 @@ public class App extends Application {
         idleTimeline.play();
 
         // Add event handling to show/hide the screensaver on user activity
+        scene.addEventHandler(MouseEvent.MOUSE_MOVED, e -> disableScreenSaver(idleTimeline));
+        scene.addEventHandler(KeyEvent.ANY, e -> disableScreenSaver(idleTimeline));
+        scene.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> disableScreenSaver(idleTimeline));
+    }
 
-        idleScreen.addEventFilter(MouseEvent.MOUSE_MOVED, e -> disableScreenSaver(idleTimeline));
-        idleScreen.addEventFilter(KeyEvent.KEY_PRESSED, e -> disableScreenSaver(idleTimeline));
-        idleScreen.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> disableScreenSaver(idleTimeline));
-        //idleScreen.addEventFilter(MouseEvent.ANY, e -> idleScreen.setIdle(false));
-        //idleScreen.addEventFilter(KeyEvent.ANY, e -> idleScreen.setIdle(false));
+    public void enableTimeout(boolean enable) {
+        idleScreen.setEnabled(enable);
     }
 
     private void initDatabaseTables() {

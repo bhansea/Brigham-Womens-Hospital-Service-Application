@@ -22,13 +22,18 @@ import lombok.Setter;
 public class IdleScreen extends VBox {
     private final double idleTimeSeconds;
     private boolean isIdle = false;
+    private boolean enabled = false;
 
     public IdleScreen(double idleTimeSeconds) {
         this.idleTimeSeconds = idleTimeSeconds;
 
         ImageView image = new ImageView(new Image(App.getSingleton().resolveResource("frontend/assets/BW-logo.png").get().toString()));
+        Label lab = new Label("Press Anywhere to Continue");
         setStyle("-fx-background-color: white");
+        //setStyle("-fx-text-fill: black");
+        lab.setStyle("-fx-font-size: 24");
         setAlignment(Pos.CENTER);
         getChildren().add(image);
+        getChildren().add(lab);
     }
 }
