@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi;
 import edu.wpi.punchy_pegasi.backend.AppSearch;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -21,8 +22,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -292,13 +295,12 @@ public class App extends Application {
 //        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
 //        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
 
-        Label screensaverLabel = new Label("Screensaver");
-        StackPane screensaverRoot = new StackPane(screensaverLabel);
+        ImageView image = new ImageView(new Image(resolveResource("frontend/assets/BW-logo.png").get().toString()));
+        VBox screensaverRoot = new VBox(image);
+        screensaverRoot.setAlignment(Pos.CENTER);
         Scene screensaverScene = new Scene(screensaverRoot);
         screensaverScene.setFill(Color.TRANSPARENT);
         Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
-        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
-        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
 
         Timeline idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleTimeSeconds), e -> {
             if (!isIdle) {
