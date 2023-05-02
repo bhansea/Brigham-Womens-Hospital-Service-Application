@@ -44,9 +44,11 @@ public class HomePageController {
     private PieChart piechart = new PieChart();
 
     @FXML
-    VBox alertsHolder = new VBox();
+    private VBox alertsHolder = new VBox();
     @FXML
-    VBox alertsContainer = new VBox();
+    private VBox alertsContainer = new VBox();
+    @FXML
+    private ScrollPane alertScrollPane = new ScrollPane();
     @FXML
     private Label timeLabel = new Label();
 

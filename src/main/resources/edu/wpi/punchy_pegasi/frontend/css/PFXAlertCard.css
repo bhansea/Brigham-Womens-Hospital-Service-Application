@@ -12,12 +12,16 @@
     -fx-font-size: 24;
     -fx-text-fill: white;
 }
-
+.pfx-alert-card-title-text{
+    -fx-font-size: 30;
+}
+.pfx-alert-card-type-text{
+    -fx-font-size: 12;
+}
 .pfx-alert-card-container-unread Label {
     -fx-font-family: "Nunito Sans Light";
     -fx-background-color: transparent;
     -fx-text-fill: white;
-    -fx-font-size: 20;
     -fx-font-spacing: 20;
 }
 

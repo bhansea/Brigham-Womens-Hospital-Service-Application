@@ -59,6 +59,7 @@ public class AdminAlertPageController {
     Facade facade = App.getSingleton().getFacade();
     LayoutController layout = new LayoutController();
 
+
     private final ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
             "2:00am", "2:30am",
             "3:00am", "3:30am",
@@ -86,6 +87,23 @@ public class AdminAlertPageController {
 
     public void initialize() {
         App.getSingleton().getExecutorService().execute( () -> {
+            ObservableList<Employee> employees = facade.getAllAsListEmployee();
+
+            var employeeToName = new StringConverter<Employee>() {
+
+                @Override
+                public String toString(Employee employee) {
+                    if (employee == null) return "";
+                    return employee.getFirstName() + " " + employee.getLastName();
+                }
+
+                @Override
+                public Employee fromString(String string) {
+                    return null;
+                }
+            };
+            employeeComboBox.setConverter(employeeToName);
+
             AdminTable alertTable = new AdminTable("Alert", TableType.ALERT, facade::getAllAsListAlert);
             alertTable.init();
 
@@ -163,6 +181,8 @@ public class AdminAlertPageController {
                     Instant dateTime = Instant.now();
                     Alert alert = new Alert();
                     Alert.AlertType alertType = Alert.AlertType.NONE;
+                    String time = "";
+                    String date = "";
                     if (alertTypeComboBox.getSelectedItem().equals("Map")) {
                         date = endDatePicker.getText();
                         time = endTimeComboBox.getText();
@@ -188,6 +208,8 @@ public class AdminAlertPageController {
                     } else {
                         alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.now()).employeeID(App.getSingleton().getAccount().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
                     }
+
+
 
 
                     facade.saveAlert(alert);

@@ -41,7 +41,10 @@ public class PFXAlertCard extends HBox {
 
 
         getChildren().addAll(textContainer, read);
-        textContainer.getChildren().addAll(titleLabel, description);
+        Label alertType = new Label(alert.getAlertType().toString());
+        textContainer.getChildren().addAll(titleLabel, alertType, description);
+        alertType.getStyleClass().add("pfx-alert-card-type-text");
+        titleLabel.getStyleClass().add("pfx-alert-card-title-text");
         HBox.setHgrow(read, Priority.ALWAYS);
         HBox.setHgrow(description, Priority.ALWAYS);
 

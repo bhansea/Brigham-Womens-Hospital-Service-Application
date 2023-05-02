@@ -13,7 +13,7 @@
     <center>
         <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent">
             <HBox spacing="10.0" alignment="CENTER" HBox.hgrow="ALWAYS">
-                <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent" spacing="15.0">
+                <VBox alignment="TOP_LEFT" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container-parent" spacing="15.0">
                     <Label styleClass="admin-container-title-text-size" text="Create Alert" VBox.vgrow="ALWAYS"/>
                     <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container" fx:id="alertsContainer" spacing="15.0">
                         <Label alignment="CENTER_LEFT" text="Alert Title" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
