@@ -7,17 +7,23 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Builder(toBuilder=true)
 public class Account {
     @SchemaID
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("uuid")
     private Long uuid;
     @Unique
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("username")
     private String username;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("password")
     private String password;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("employeeid")
     private Long employeeID;
+    @lombok.With
     @com.jsoniter.annotation.JsonProperty("accounttype")
     private AccountType accountType;
 
