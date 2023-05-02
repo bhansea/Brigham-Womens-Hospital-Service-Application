@@ -203,6 +203,7 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public EmployeeForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

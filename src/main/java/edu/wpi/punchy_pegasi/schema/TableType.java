@@ -481,11 +481,14 @@ CREATE OR REPLACE TRIGGER trigger_signage_update
 CREATE TABLE IF NOT EXISTS alert
 (
   uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  employeeID bigint,
+  alertType varchar NOT NULL,
   alertTitle varchar,
   description varchar,
-  dateTime timestamptz NOT NULL,
-  readStatus varchar NOT NULL
+  startDate timestamptz NOT NULL,
+  endDate timestamptz NOT NULL,
+  readStatus varchar NOT NULL,
+  employeeID bigint,
+  nodeID bigint
 );
 CREATE OR REPLACE FUNCTION notify_alert_update() RETURNS TRIGGER AS $$
     DECLARE

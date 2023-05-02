@@ -204,6 +204,7 @@ public class LocationNameCachedDaoImpl implements IDao<java.lang.Long, LocationN
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public LocationNameForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
