@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.AllArgsConstructor;
+import edu.wpi.punchy_pegasi.backend.SchemaID;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@lombok.Builder(toBuilder=true)
+@lombok.Builder(toBuilder = true)
 public class Alert {
     @SchemaID
     @lombok.With
@@ -38,33 +39,39 @@ public class Alert {
         READ,
         UNREAD
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Alert>{
-        UUID("uuid", true,false),
-        EMPLOYEE_ID("employeeID", false,false),
-        ALERT_TITLE("alertTitle", false,false),
-        DESCRIPTION("description", false,false),
-        DATE_TIME("dateTime", false,false),
-        READ_STATUS("readStatus", false,false);
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Alert> {
+        UUID("uuid", true, false),
+        EMPLOYEE_ID("employeeID", false, false),
+        ALERT_TITLE("alertTitle", false, false),
+        DESCRIPTION("description", false, false),
+        DATE_TIME("dateTime", false, false),
+        READ_STATUS("readStatus", false, false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Alert ref){
-    return ref.getFromField(this);
-}
-public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref){
-    return ref.getFromFieldAsString(this);
-}
-    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Alert ref, String value){
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Alert ref) {
+            return ref.getFromField(this);
+        }
+
+        public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref) {
+            return ref.getFromFieldAsString(this);
+        }
+
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Alert ref, String value) {
             ref.setFieldFromString(this, value);
         }
-        public int oridinal(){
+
+        public int oridinal() {
             return ordinal();
         }
     }
+
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -75,6 +82,7 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref){
             case READ_STATUS -> getReadStatus();
         };
     }
+
     public void setFieldFromString(Field field, String value) {
         switch (field) {
             case UUID -> setUuid(UUID.fromString(value));
@@ -83,8 +91,9 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Alert ref){
             case DESCRIPTION -> setDescription(value);
             case DATE_TIME -> setDateTime(Instant.parse(value));
             case READ_STATUS -> setReadStatus(ReadStatus.valueOf(value));
-        };
+        }
     }
+
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> getUuid().toString();
