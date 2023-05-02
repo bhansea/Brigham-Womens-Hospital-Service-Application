@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Flow;
 
 public class FoodServiceRequestController extends RequestController<FoodServiceRequestEntry> implements PropertyChangeListener {
     FoodServiceRequestEntry entry;
@@ -36,6 +37,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
 
     @FXML
     private BorderPane root;
+    FlowPane flowPane;
 
 
     public static BorderPane create(String path) {
@@ -52,7 +54,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
 
-        var flowPane = new FlowPane(card1, card2, card3, card4);
+        flowPane = new FlowPane(card1, card2, card3, card4);
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
@@ -72,11 +74,7 @@ public class FoodServiceRequestController extends RequestController<FoodServiceR
                 locationName.getSelectedItem().getUuid(),
                 staffAssignment.getSelectedItem().getEmployeeID(),
                 additionalNotes.getText(),
-                cardHolder.getChosenItems(),
-                "",
-                new ArrayList<>(List.of("")),
-                "",
-                "",
+                getSelectedItems(flowPane),
                 patientName.getText(), 1L);
         App.getSingleton().getFacade().saveFoodServiceRequestEntry(requestEntry);
         App.getSingleton().getFacade().saveAlert(new edu.wpi.punchy_pegasi.schema.Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Food Service Request", Instant.now(), Alert.ReadStatus.UNREAD));

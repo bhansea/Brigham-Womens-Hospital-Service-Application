@@ -17,16 +17,20 @@
  */
 
 .mfx-toggle-button {
-    -mfx-main: #6200EE;
+    -mfx-main: -pfx-accent;
     -mfx-secondary: #424242;
 
     -fx-padding: 10;
 }
 
+.mfx-circle-toggle-node .mfx-text-field {
+    -mfx-text-position: LEFT;
+}
+
 .mfx-toggle-button .mfx-ripple-generator {
     -mfx-animation-speed: 1.5;
     -mfx-ripple-radius: 10;
-    -mfx-ripple-color: -mfx-main;
+    -mfx-ripple-color: -pfx-accent;
     -mfx-ripple-opacity: 0.4;
 }
 

@@ -9,30 +9,18 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class FoodServiceRequestEntry extends RequestEntry {
-    private String foodSelection;
-    private String tempType;
-    private List<String> additionalItems;
-    private String dietaryRestrictions;
+    private List<String> selectedFoods;
     private String patientName;
-    private String beverage;
 
-    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName, Long employeeID) {
+    public FoodServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, List<String> selectedFoods, String patientName, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
-        this.foodSelection = foodSelection;
-        this.tempType = tempType;
-        this.additionalItems = additionalItems;
-        this.dietaryRestrictions = dietaryRestrictions;
+        this.selectedFoods = selectedFoods;
         this.patientName = patientName;
-        this.beverage = beverage;
     }
 
-    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, String foodSelection, String tempType, List<String> additionalItems, String beverage, String dietaryRestrictions, String patientName, Long employeeID) {
+    public FoodServiceRequestEntry(Long locationName, Long staffAssignment, String additionalNotes, List<String> selectedFoods, String patientName, Long employeeID) {
         super(UUID.randomUUID(), locationName, staffAssignment, additionalNotes, Status.PROCESSING, employeeID);
-        this.foodSelection = foodSelection;
-        this.tempType = tempType;
-        this.additionalItems = additionalItems;
-        this.dietaryRestrictions = dietaryRestrictions;
+        this.selectedFoods = selectedFoods;
         this.patientName = patientName;
-        this.beverage = beverage;
     }
 }
