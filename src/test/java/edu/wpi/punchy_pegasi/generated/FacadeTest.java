@@ -1467,7 +1467,7 @@ class FacadeTest {
         var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient1", locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, selectedFlowers0, 100L);
         var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient2", locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, selectedFlowers1, 100L);
         var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getSelectedFlowers(), flowers.getEmployeeID()};
-        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType(), flowers2.getEmployeeID()};
+        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getSelectedFlowers(), flowers2.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values);
             pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values2);
@@ -1488,9 +1488,7 @@ class FacadeTest {
                         (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("flowerSize"),
-                        (java.lang.String) rs.getObject("flowerAmount"),
-                        (java.lang.String) rs.getObject("flowerType"),
+                        (java.util.List) rs.getObject("selectedFlowers"),
                         (java.lang.Long) rs.getObject("employeeID"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
@@ -1516,6 +1514,12 @@ class FacadeTest {
         var staff1 = ThreadLocalRandom.current().nextLong();
         var locName2 = ThreadLocalRandom.current().nextLong();
         var staff2 = ThreadLocalRandom.current().nextLong();
+        List<String> selectedFlowers0 = new ArrayList<>();
+        selectedFlowers0.add("testFlowers0");
+        List<String> selectedFlowers1 = new ArrayList<>();
+        selectedFlowers1.add("testFlowers1");
+        List<String> selectedFlowers2 = new ArrayList<>();
+        selectedFlowers2.add("testFlowers2");
         var values0 = new Object[]{
                 UUID.randomUUID(),
                 "testPatient0",
@@ -1523,9 +1527,7 @@ class FacadeTest {
                 staff0,
                 "testNotes0",
                 RequestEntry.Status.PROCESSING,
-                "testSmall0",
-                "test0",
-                "testTulip0",
+                selectedFlowers0,
                 100L
         };
         var values1 = new Object[]{
@@ -1535,9 +1537,7 @@ class FacadeTest {
                 staff1,
                 "testNotes1",
                 RequestEntry.Status.PROCESSING,
-                "testSmall1",
-                "test1",
-                "testTulip1",
+                selectedFlowers1,
                 100L
         };
         var values2 = new Object[]{
@@ -1547,9 +1547,7 @@ class FacadeTest {
                 staff2,
                 "testNotes2",
                 RequestEntry.Status.PROCESSING,
-                "testSmall2",
-                "test2",
-                "testTulip2",
+                selectedFlowers2,
                 100L
         };
 
@@ -1568,11 +1566,9 @@ class FacadeTest {
             var staffAssignment = (Long) values[3];
             var additionalNotes = (String) values[4];
             var status = (RequestEntry.Status) values[5];
-            var flowerSize = (String) values[6];
-            var flowerAmount = (String) values[7];
-            var flowerType = (String) values[8];
-            var employeeID = (Long) values[9];
-            var entry = new FlowerDeliveryRequestEntry(uuid, patientName, locationName, staffAssignment, additionalNotes, status, flowerSize, flowerAmount, flowerType, employeeID);
+            var selectedFlowers = (List<String>) values[6];
+            var employeeID = (Long) values[7];
+            var entry = new FlowerDeliveryRequestEntry(uuid, patientName, locationName, staffAssignment, additionalNotes, status, selectedFlowers, employeeID);
             refMap.put(uuid, entry);
         }
         Map<UUID, FlowerDeliveryRequestEntry> resultMap = facade.getAllFlowerDeliveryRequestEntry();
@@ -1591,8 +1587,10 @@ class FacadeTest {
     void saveFlowerDeliveryRequestEntry() {
         var locName = ThreadLocalRandom.current().nextLong();
         var staff = ThreadLocalRandom.current().nextLong();
+        List<String> selectedFlowers = new ArrayList<>();
+        selectedFlowers.add("testFlowers");
         UUID uuid = UUID.randomUUID();
-        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers, 100L);
         facade.saveFlowerDeliveryRequestEntry(fdre);
         Optional<FlowerDeliveryRequestEntry> results = facade.getFlowerDeliveryRequestEntry(uuid);
         FlowerDeliveryRequestEntry daoresult = results.get();
@@ -1607,11 +1605,15 @@ class FacadeTest {
     @Test
     void updateFlowerDeliveryRequestEntry() {
         UUID uuid = UUID.randomUUID();
-        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", 100L, 200L, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
+        List<String> selectedFlowers0 = new ArrayList<>();
+        selectedFlowers0.add("testFlowers0");
+        List<String> selectedFlowers1 = new ArrayList<>();
+        selectedFlowers1.add("testFlowers1");
+        FlowerDeliveryRequestEntry fdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", 100L, 200L, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers0, 100L);
         facade.saveFlowerDeliveryRequestEntry(fdre);
 
-        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", 100L, 200L, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test2", "testTulip", 100L);
-        FlowerDeliveryRequestEntry.Field[] fields = {FlowerDeliveryRequestEntry.Field.FLOWER_AMOUNT};
+        FlowerDeliveryRequestEntry updatedFdre = new FlowerDeliveryRequestEntry(uuid, "testPatient", 100L, 200L, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers1, 100L);
+        FlowerDeliveryRequestEntry.Field[] fields = {FlowerDeliveryRequestEntry.Field.SELECTED_FLOWERS};
         facade.updateFlowerDeliveryRequestEntry(updatedFdre, fields);
 
         Optional<FlowerDeliveryRequestEntry> results = facade.getFlowerDeliveryRequestEntry(uuid);
@@ -1628,6 +1630,10 @@ class FacadeTest {
     void deleteFlowerDeliveryRequestEntry() {
         var locName = ThreadLocalRandom.current().nextLong();
         var staff = ThreadLocalRandom.current().nextLong();
+        List<String> selectedFlowers0 = new ArrayList<>();
+        selectedFlowers0.add("testFlowers0");
+        List<String> selectedFlowers1 = new ArrayList<>();
+        selectedFlowers1.add("testFlowers1");
         FlowerDeliveryRequestEntry flowerEntry =
                 new FlowerDeliveryRequestEntry(
                         UUID.randomUUID(),
@@ -1636,9 +1642,7 @@ class FacadeTest {
                         staff,
                         "testNotes",
                         RequestEntry.Status.PROCESSING,
-                        "testSmall",
-                        "test1",
-                        "testTulip",
+                        selectedFlowers0,
                         100L
                 );
         var values = new Object[]{
@@ -1648,9 +1652,7 @@ class FacadeTest {
                 flowerEntry.getStaffAssignment(),
                 flowerEntry.getAdditionalNotes(),
                 flowerEntry.getStatus(),
-                flowerEntry.getFlowerSize(),
-                flowerEntry.getFlowerAmount(),
-                flowerEntry.getFlowerType(),
+                flowerEntry.getSelectedFlowers(),
                 flowerEntry.getEmployeeID()
         };
         try {
@@ -2246,6 +2248,8 @@ class FacadeTest {
 
     @Test
     void getOfficeServiceRequestEntry() {
+        List<String> officeSupplies = new ArrayList<>();
+//        selectedFlowers0.add("testFlowers0");
         OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
         Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeID()};
         try {
