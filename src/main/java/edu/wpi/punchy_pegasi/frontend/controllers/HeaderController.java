@@ -59,6 +59,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                     var separator = new Separator();
                     var nameLabel = new Label(name);
                     nameLabel.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent; -fx-font-size: 16;");
+                    nameLabel.setWrapText(true);
                     nameLabel.setOnMouseClicked(e -> s.getNavigate().run());
                     items.put(name, item);
                     var description = new Label(s.getDescription());
@@ -69,6 +70,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
                 } else {
                     var description = new Label(s.getDescription());
                     description.setStyle("-fx-cursor: hand; -fx-fill: -pfx-accent;");
+                    description.setWrapText(true);
                     description.setOnMouseClicked(e -> s.getNavigate().run());
                     if (!item.getChildren().contains(description)) {
                         item.getChildren().add(description);
@@ -335,6 +337,7 @@ public class HeaderController extends HBox implements PropertyChangeListener {
 
         var scrollPane = new MFXScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setFitToWidth(true);
         var searchField = new TextField("");
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
