@@ -4,7 +4,8 @@
 }
 
 .label-header {
-    -fx-font-size: 20;
+    -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
 }
 
 .editing-overlay-box {
@@ -12,7 +13,7 @@
     -fx-max-width: 300;
     -fx-spacing: 10;
     -fx-padding: 10;
-    -fx-background-color: -pfx-background;
+    -fx-background-color: -pfx-primary;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
