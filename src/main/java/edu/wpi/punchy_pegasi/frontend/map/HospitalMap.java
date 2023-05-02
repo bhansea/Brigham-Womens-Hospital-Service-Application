@@ -27,6 +27,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
@@ -40,6 +41,8 @@ import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors> {
     private static final Image downArrow = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/double-chevron-down-512.png")));
@@ -114,13 +117,6 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
         zoomOut.setOnAction(e -> withAnimation().zoomBy(-gesturePane.getCurrentScale() * .5, gesturePane.targetPointAtViewportCentre()));
         zoomModal.getChildren().addAll(zoomIn, zoomOut);
         zoomModal.getStyleClass().add("hospital-map-zoom-modal");
-
-        // TODO: Figure out what point to set as target
-//        gesturePane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-//            if (e.getButton().equals(MouseButton.PRIMARY))
-//                if (e.getClickCount() == 2)
-//                    gesturePane.zoomBy(gesturePane.getCurrentScale() * .5, new Point2D(e.getX(), e.getY()));
-//        });
 
         overlayBottom.getChildren().addAll(floorContainer, separator, zoomModal);
         separator.setPickOnBounds(false);
@@ -216,7 +212,18 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
     }
 
     @Override
-    public void drawLine(List<Node> nodes) {
+    public void drawLine(HospitalFloor.Floors layer, List<Point2D> points, Color color, double stroke) {
+        var floor = floorMap.get(layer);
+        if (floor == null)
+            return;
+        var polyline = new Polyline();
+        polyline.getPoints().addAll(points.stream().flatMap(p-> Stream.of(p.getX(), p.getY())).toList());
+        polyline.setStroke(color);
+        polyline.setStrokeWidth(stroke);
+        floor.getLineCanvas().getChildren().add(polyline);
+    }
+    @Override
+    public void drawDirectedPath(List<Node> nodes) {
         if (nodes.size() < 2) return;
         var floor = floorMap.get(HospitalFloor.floorMap.get(nodes.get(0).getFloor()));
         if (floor == null || nodes.stream().map(Node::getFloor).collect(Collectors.toSet()).size() > 1)

@@ -18,7 +18,9 @@ import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -80,6 +82,8 @@ public class AdminMapController {
     private ObservableMap<Long, LocationName> locations;
     private ObservableMap<Long, Move> moves;
     private Node firstNode, secondNode;
+    private Point2D firstPoint, secondPoint;
+    private HospitalFloor.Floors firstFloor;
     private ObservableMap<Node, ObservableList<Move>> nodeToLocation;
 
     private Optional<Circle> drawNode(Node node, String color) {
@@ -186,8 +190,8 @@ public class AdminMapController {
         makeMove.setOnAction(a -> {
             if (locationDropdown.getValue() == null || date.getValue() == null) return;
             var newID = moves.values().stream().mapToLong(Move::getUuid).max().orElse(0) + 1;
-            var move = moves.values().stream().filter(m-> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
-            if(move.isPresent()){
+            var move = moves.values().stream().filter(m -> Objects.equals(m.getNodeID(), node.getNodeID()) && Objects.equals(m.getLocationID(), locationDropdown.getValue().getUuid())).findFirst();
+            if (move.isPresent()) {
                 mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_MOVE, move.get().withDate(date.getValue()), move.get().toBuilder().build()));
                 return;
             }
@@ -200,7 +204,7 @@ public class AdminMapController {
             var grow = new HBox();
             HBox.setHgrow(grow, Priority.ALWAYS);
             var deleteBtn = new PFXButton("", new PFXIcon(MaterialSymbols.DELETE_FOREVER));
-            hbox.setOnMouseClicked(e->{
+            hbox.setOnMouseClicked(e -> {
                 locationDropdown.setValue(locations.get(m.getLocationID()));
                 date.setValue(m.getDate());
             });
@@ -318,6 +322,27 @@ public class AdminMapController {
         return edgeLine;
     }
 
+    private final EventHandler<MouseEvent> alignNode = e -> {
+        if (!isLeftClick.test(e) || e.getClickCount() != 1 || e.getTarget().getClass() != ImageView.class) return;
+        if (firstPoint == null) {
+            firstPoint = new Point2D(e.getX(), e.getY());
+            firstFloor = map.getLayer();
+            return;
+        }
+        if(map.getLayer() != firstFloor) return;
+        if (secondPoint == null)
+            secondPoint = new Point2D(e.getX(), e.getY());
+        map.drawLine(firstFloor, Arrays.asList(firstPoint, secondPoint), Color.BLUE, 3);
+        firstPoint = secondPoint = null;
+    };
+    private void alignNodes() {
+        map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, alignNode);
+    }
+
+    private void cancelAlignNodes(){
+        map.get().removeEventFilter(MouseEvent.MOUSE_CLICKED, alignNode);
+    }
+
     private void editNodes() {
         map.clearMap();
         map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
@@ -327,11 +352,6 @@ public class AdminMapController {
             var node = new Node(nodes.values().stream().mapToLong(Node::getNodeID).max().orElse(0) + 5, (int) location.getX(), (int) location.getY(), map.getLayer().getIdentifier(), null);
             nodes.put(node.getNodeID(), node);
             mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_NODE, node.toBuilder().build()));
-//            var nodePoint = addEditableNode(node);
-//            if (nodePoint.isEmpty()) {
-//                new PFXAlert("Error, could not add node.");
-//            }
-//            nodeEditMenu(node).show(nodePoints.get(node.getNodeID()));
         });
         nodes.addListener((MapChangeListener<? super Long, ? super Node>) c -> {
             if (c.wasAdded() && c.wasRemoved()) {

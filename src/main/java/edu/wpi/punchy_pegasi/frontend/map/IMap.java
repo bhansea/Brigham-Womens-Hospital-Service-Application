@@ -2,13 +2,11 @@ package edu.wpi.punchy_pegasi.frontend.map;
 
 import edu.wpi.punchy_pegasi.schema.Edge;
 import edu.wpi.punchy_pegasi.schema.Node;
-import javafx.beans.Observable;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
-import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -39,7 +37,8 @@ public interface IMap<Layer> {
 
     void drawYouAreHere(Node node);
 
-    void drawLine(List<Node> nodes);
+    void drawLine(Layer layer, List<Point2D> points, Color color, double stroke);
+    void drawDirectedPath(List<Node> nodes);
 
     VBox makeTooltip(javafx.scene.Node parent, ObservableStringValue text);
 
