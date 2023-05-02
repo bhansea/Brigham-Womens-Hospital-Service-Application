@@ -60,6 +60,12 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Signage> generateTable(Consumer<Signage> onRowClick, Signage.Field[] hidden) {
         var table = new MFXTableView<Signage>();
         table.setItems(list);
@@ -204,6 +210,7 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public SignageForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

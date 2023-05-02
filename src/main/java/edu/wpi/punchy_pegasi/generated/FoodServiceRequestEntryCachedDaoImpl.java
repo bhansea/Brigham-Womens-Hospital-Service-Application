@@ -60,6 +60,12 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<FoodServiceRequestEntry> generateTable(Consumer<FoodServiceRequestEntry> onRowClick, FoodServiceRequestEntry.Field[] hidden) {
         var table = new MFXTableView<FoodServiceRequestEntry>();
         table.setItems(list);
@@ -212,6 +218,7 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public FoodServiceRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

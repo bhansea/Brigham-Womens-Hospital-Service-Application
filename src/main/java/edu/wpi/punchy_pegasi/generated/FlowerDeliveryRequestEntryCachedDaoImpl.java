@@ -60,6 +60,12 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<FlowerDeliveryRequestEntry> generateTable(Consumer<FlowerDeliveryRequestEntry> onRowClick, FlowerDeliveryRequestEntry.Field[] hidden) {
         var table = new MFXTableView<FlowerDeliveryRequestEntry>();
         table.setItems(list);
@@ -210,6 +216,7 @@ public class FlowerDeliveryRequestEntryCachedDaoImpl implements IDao<java.util.U
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public FlowerDeliveryRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

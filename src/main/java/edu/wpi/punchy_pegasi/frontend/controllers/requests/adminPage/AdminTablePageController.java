@@ -20,11 +20,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.*;
 
 
+@Slf4j
 public class AdminTablePageController {
 
     private final Facade facade = App.getSingleton().getFacade();
@@ -46,6 +49,10 @@ public class AdminTablePageController {
     public PFXButton clearButton;
     @FXML
     private MFXComboBox<String> displayTableTypeComboBox;
+    @FXML
+    private MFXComboBox<PdbController.Source> displayDatabaseComboBox;
+    @FXML
+    private Label databaseLabel;
     @FXML
     private VBox tableContainer;
     @FXML
@@ -80,6 +87,8 @@ public class AdminTablePageController {
         moves = facade.getAllMove();
         locations = facade.getAllLocationName();
         accounts = facade.getAllAccount();
+        databaseLabel.setText("Current Database: " + App.getSingleton().getPdb().source.toString());
+       // displayDatabaseComboBox.selectItem(App.getSingleton().getPdb().source);
 
         fileChooser.setTitle("File Chooser");
 
@@ -88,6 +97,10 @@ public class AdminTablePageController {
             displayTableTypeList.add(f.humanReadableName);
         });
         displayTableTypeComboBox.setItems(displayTableTypeList);
+
+        ObservableList<PdbController.Source> sources = FXCollections.observableArrayList(PdbController.Source.values());
+        //sources.remove(App.getSingleton().getPdb().source);
+        displayDatabaseComboBox.setItems(sources);
 
         initTables();
         showTable(null);
@@ -99,6 +112,25 @@ public class AdminTablePageController {
                 currentTable = f;
             });
             displayEditComponent();
+        });
+
+        displayDatabaseComboBox.setOnAction(e -> {
+            //sources.add(App.getSingleton().getPdb().source);
+            PdbController.Source source = displayDatabaseComboBox.getSelectedItem();
+            try {
+                App.getSingleton().getFacade().switchDatabase(source);
+            } catch (SQLException | PdbController.DatabaseException ex) {
+                log.error("Could not switch database");
+            }
+            for (var tt : TableType.values()) {
+                try {
+                    pdb.initTableByType(tt);
+                } catch (PdbController.DatabaseException err) {
+                    log.error("Could not init table " + tt.name());
+                }
+            }
+            //sources.remove(App.getSingleton().getPdb().source);
+            //displayDatabaseComboBox.setItems(sources);
         });
 
         tables.values().forEach(t -> t.setRowClicked(this::populateForm));

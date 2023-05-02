@@ -60,6 +60,12 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<java.util.UUID, Ge
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<GenericRequestEntry> generateTable(Consumer<GenericRequestEntry> onRowClick, GenericRequestEntry.Field[] hidden) {
         var table = new MFXTableView<GenericRequestEntry>();
         table.setItems(list);
@@ -206,6 +212,7 @@ public class GenericRequestEntryCachedDaoImpl implements IDao<java.util.UUID, Ge
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public GenericRequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
