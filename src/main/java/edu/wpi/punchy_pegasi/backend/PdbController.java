@@ -70,8 +70,13 @@ public class PdbController {
         this.source = source;
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
-        if (!getConnection())
-            throw new DatabaseException("Failed to connect to database");
+        if (schema.equals("test")) {
+            initConnectionTest();
+        } else {
+            if (!getConnection()) {
+                throw new DatabaseException("Failed to connect to database");
+            }
+        }
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
         connection.setSchema(this.schema);
@@ -173,6 +178,18 @@ public class PdbController {
             statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
         }
          statement.close();
+    }
+
+    private void initConnectionTest() throws SQLException {
+        DriverManager.setLoginTimeout(2);
+        connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
+        connection.addNotificationListener(listener);
+        connection.setSchema(schema);
+        var statement = connection.createStatement();
+        for (var tableType : TableType.values()) {
+            statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
+        }
+        statement.close();
     }
 
     public Connection exposeConnection() {
