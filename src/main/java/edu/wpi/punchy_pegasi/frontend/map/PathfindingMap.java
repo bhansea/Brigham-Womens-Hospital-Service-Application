@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.javatuples.Pair;
 
+import javax.xml.stream.Location;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
@@ -316,9 +317,6 @@ public class PathfindingMap {
     }
 
     private void pathDrawDirections() {
-//        VBox directions = new VBox();
-//        var allKeys = new ArrayList<>(directionMap.keySet());
-//        Collections.reverse(allKeys);
         for (var floor : directionMap.keySet()) {
             var dNodeList = directionMap.get(floor);
             if (dNodeList.isEmpty()) continue;
@@ -326,12 +324,23 @@ public class PathfindingMap {
             for (var dNode : dNodeList) {
                 var directionIcon = dNode.getDirection().getPFXIcon();
                 directionIcon.setSize(15.0);
-                if (dNode.getLocationName().getNodeType().equals(LocationName.NodeType.HALL)) {
-                    var directionText = new Label(getDirectionText(dNode.getDirection()) + "Hallway");
-                    directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
-                } else {
-                    var directionText = new Label(getDirectionText(dNode.getDirection()) + dNode.getLocationName().getLongName());
-                    directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
+                switch (dNode.getLocationName().getNodeType()) {
+                    case HALL -> {
+                        var directionText = new Label(getDirectionText(dNode.getDirection()) + "Hallway");
+                        directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
+                    }
+                    case STAI -> {
+                        var directionText = new Label(getDirectionText(dNode.getDirection()) + "using " + dNode.getLocationName().getLongName() + " to Floor " + dNode.getFloor());
+                        directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
+                    }
+                    case ELEV -> {
+                        var directionText = new Label(getDirectionText(dNode.getDirection()) + "taking " + dNode.getLocationName().getLongName() + "to Floor " + dNode.getFloor());
+                        directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
+                    }
+                    default -> {
+                        var directionText = new Label(getDirectionText(dNode.getDirection()) + dNode.getLocationName().getLongName());
+                        directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
+                    }
                 }
             }
             pathDirectionsBox.getChildren().add(directionsOnFloor);
@@ -345,26 +354,26 @@ public class PathfindingMap {
             case RIGHT -> "Turn Right at ";
             case UP -> "Go Straight at ";
             case DOWN -> "Go Back at ";
-            case UPSTAIRS -> "Go Upstairs at ";
-            case DOWNSTAIRS -> "Go Downstairs at ";
+            case UPSTAIRS -> "Go Upstairs ";
+            case DOWNSTAIRS -> "Go Downstairs ";
             case END -> "Arrive at ";
             default -> "";
         };
     }
 
     private void pathPutNodes(PathDirectionType direction, boolean floorChange, Node node) {
-
         var floor = node.getFloor();
-        LocationName currLocation = locations.get(nodeToMoves.get(node).get(0).getLocationID());
+        var moves =  nodeToMoves.get(node);
+        var currLocation = moves == null || moves.isEmpty() ? LocationName.builder().longName("Hallway").nodeType(LocationName.NodeType.HALL).build() : locations.get(moves.get(0).getLocationID());
         if (directionFloorIndex == 0) {
             directionFloorIndex++;
             directionMap.put(directionFloorIndex, new ArrayList<>());
             directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));
         }
         else if (floorChange) {
-            directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));
             directionFloorIndex++;
             directionMap.put(directionFloorIndex, new ArrayList<>());
+            directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));
         } else {
             if (directionMap.get(directionFloorIndex).isEmpty()) {
                 // if no previous location on this floor, then add the node
