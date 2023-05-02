@@ -35,15 +35,15 @@ public class PFXCardHolder extends BorderPane {
         }
     }
 
-    public String getChosenItems() {
-        StringBuilder items = new StringBuilder();
+    public List<String> getChosenItems() {
+        List<String> items = new ArrayList<String>();
         for(int i=0;i<numElements;i++) {
             PFXCardVertical ele = (PFXCardVertical) elements.getChildren().get(i);
             if(ele.getQuantity() > 0) {
-                items.append(ele.getTitle()).append(" ").append(ele.getQuantity()).append(", ");
+                items.add(ele.getTitle() + " " + ele.getQuantity());
             }
         }
-        return items.toString();
+        return items;
     }
 
     public void clear() {

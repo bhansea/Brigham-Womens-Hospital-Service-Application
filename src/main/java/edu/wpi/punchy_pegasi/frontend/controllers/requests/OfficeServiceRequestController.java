@@ -43,6 +43,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     private BorderPane root;
     ScrollPane scrollPane;
+    FlowPane flowPane;
 
 
     public static BorderPane create(String path) {
@@ -68,7 +69,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
         submit.setDisable(true);
         this.addPropertyChangeListener(this);
 
-        var flowPane = new FlowPane(pencils, pens, paper, stapler);
+        flowPane = new FlowPane(pencils, pens, paper, stapler);
         flowPane.setHgap(10);
         flowPane.setVgap(10);
         flowPane.setStyle("-fx-border-width: 0px; -fx-background-color: -pfx-background");
@@ -84,7 +85,7 @@ public class OfficeServiceRequestController extends RequestController<OfficeServ
     @FXML
     public void submitEntry() {
         //makes sure shared fields aren't empty
-        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), cardHolder.getChosenItems(), 1L);
+        requestEntry = new OfficeServiceRequestEntry(locationName.getSelectedItem().getUuid(), staffAssignment.getSelectedItem().getEmployeeID(), additionalNotes.getText(), getSelectedItems(flowPane), 1L);
         App.getSingleton().getFacade().saveOfficeServiceRequestEntry(requestEntry);
         App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Office Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));

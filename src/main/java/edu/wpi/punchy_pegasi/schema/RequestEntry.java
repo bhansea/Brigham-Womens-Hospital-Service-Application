@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import edu.wpi.punchy_pegasi.backend.SchemaID;import lombok.*;
+import edu.wpi.punchy_pegasi.backend.SchemaID;
+import lombok.*;
 
 import java.util.UUID;
 
