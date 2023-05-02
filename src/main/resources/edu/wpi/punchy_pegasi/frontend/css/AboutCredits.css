@@ -11,11 +11,18 @@
     -fx-font-size: 18;
 }
 
+.about-grid {
+    -fx-alignment: center-left;
+    -fx-vgap: 20;
+    -fx-hgap: 20;
+    -fx-padding: 0 0 0 0;
+}
+
 .about-grid Label {
     -fx-font-family: "Nunito Sans Regular";
     -fx-font-size: 18;
     -fx-text-fill: -pfx-text;
-    -fx-padding: 0 0 10 50;
+    -fx-padding: 0 0 0 50;
     -fx-wrap-text: true;
 }
 
