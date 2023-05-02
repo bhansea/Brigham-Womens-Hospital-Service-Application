@@ -90,9 +90,10 @@ public class AboutController {
             hiddenTextOverlay = new Label();
             Text nameText = new Text(this.name);
             Text positionText = new Text(this.position);
-            nameText.setStyle("-fx-font-weight: bold");
-            positionText.setStyle("-fx-font-style: italic");
+            nameText.setStyle("-fx-font-weight: bold; -fx-fill: -pfx-text;");
+            positionText.setStyle("-fx-font-style: italic; -fx-fill: -pfx-text;");
             Text description = new Text("____________________________\nMajor: " + this.major + "\nFun fact: " + this.funFact + "\nContact: " + this.email);
+            description.setStyle("-fx-fill: -pfx-text;");
             VBox vbox = new VBox(nameText, positionText, description);
             vbox.setPadding(new Insets(8));
             hiddenTextOverlay.setGraphic(vbox);
@@ -115,7 +116,7 @@ public class AboutController {
                 hiddenTextOverlay.setVisible(true);
                 textOverlay.setVisible(false);
                 hiddenTextOverlay.setVisible(true);
-                stackpane.setStyle("-fx-background-color: white;");
+                stackpane.setStyle("-fx-background-color: -pfx-primary;");
                 image.setOpacity(0.1);
             });
 

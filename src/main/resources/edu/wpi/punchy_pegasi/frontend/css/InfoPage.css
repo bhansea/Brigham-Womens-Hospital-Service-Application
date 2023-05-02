@@ -1,4 +1,4 @@
-.info-about-team-list{
+.info-about-team-list {
     -fx-alignment: center-left;
     -fx-vgap: 10;
     -fx-hgap: 10;
@@ -7,24 +7,24 @@
     -fx-font-size: 18;
 }
 
-.info-about-team-member-name{
+.info-about-team-member-name {
     -fx-text-alignment: left;
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
 
-.info-about-team-member-position{
+.info-about-team-member-position {
     -fx-text-alignment: left;
     -fx-font-family: "Nunito Sans Bold";
     -fx-font-size: 12;
     -fx-text-fill: #B5ECFF;
 }
 
-.info-about-hidden-text{
+.info-about-hidden-text {
     -fx-text-alignment: left;
     -fx-font-family: "Nunito Sans Regular";
     -fx-wrap-text: true;
     -fx-font-size: 14;
-    -fx-text-fill: black;
+    -fx-fill: -pfx-text;
 }
