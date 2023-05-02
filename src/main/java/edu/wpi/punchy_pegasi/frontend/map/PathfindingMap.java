@@ -445,8 +445,8 @@ public class PathfindingMap {
 
     private int getFloorNumm(String floor) {
         return switch (floor) {
-            case "L1" -> 1;
-            case "L2" -> 2;
+            case "L1" -> 2;
+            case "L2" -> 1;
             case "1" -> 3;
             case "2" -> 4;
             case "3" -> 5;
