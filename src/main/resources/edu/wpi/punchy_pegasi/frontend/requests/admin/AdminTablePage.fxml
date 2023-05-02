@@ -13,6 +13,12 @@
                 <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="admin-container">
                     <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                         <VBox VBox.vgrow="ALWAYS" spacing="10.0">
+                            <Label styleClass="admin-container-text-size" text="Current database: " fx:id="databaseLabel"
+                                   VBox.vgrow="ALWAYS"/>
+                            <MFXComboBox styleClass="admin-container-displayTable" fx:id="displayDatabaseComboBox"
+                                         promptText="Select Database"
+                                         HBox.hgrow="ALWAYS"
+                                         VBox.vgrow="ALWAYS"/>
                             <Label styleClass="admin-container-text-size" text="Select A Table Type to Display"
                                    VBox.vgrow="ALWAYS"/>
                             <MFXComboBox styleClass="admin-container-displayTable" fx:id="displayTableTypeComboBox"

@@ -7,7 +7,10 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.spi.JsoniterSpi;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.TableType;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -39,7 +42,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class PdbController {
-    public final Source source;
+    public Source source;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private final PGNotificationListener listener = new PGNotificationListener() {
         @Override
@@ -84,6 +87,19 @@ public class PdbController {
 
     public PdbController(Source source) throws SQLException, ClassNotFoundException, DatabaseException {
         this(source, "teamp");
+    }
+
+    public void switchSource(Source source) throws DatabaseException, SQLException {
+        this.source = source;
+        if (connection != null)
+            connection.close();
+        if (!getConnection())
+            throw new DatabaseException("Failed to connect to database");
+        var statement = connection.createStatement();
+        statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
+        connection.setSchema(this.schema);
+        statement.close();
+
     }
 
     private static String objectToPsqlString(Object o) {
@@ -154,14 +170,14 @@ public class PdbController {
             vC.getChildren().add(hC);
             var c = new VBox(text, refresh);
             c.setStyle("""
--fx-background-color: white;
--fx-background-radius: 12;
--fx-padding: 10;
--fx-spacing: 10;
--fx-alignment: CENTER;
-""");
+                    -fx-background-color: white;
+                    -fx-background-radius: 12;
+                    -fx-padding: 10;
+                    -fx-spacing: 10;
+                    -fx-alignment: CENTER;
+                    """);
             hC.getChildren().add(c);
-            App.getSingleton().getLayout().showOverlay(vC, false);
+            Platform.runLater(() -> App.getSingleton().getLayout().showOverlay(vC, false));
             return false;
         }
     }
@@ -176,7 +192,7 @@ public class PdbController {
         for (var tableType : TableType.values()) {
             statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
         }
-         statement.close();
+        statement.close();
     }
 
     private void initConnectionTest() throws SQLException {
@@ -478,9 +494,8 @@ public class PdbController {
     @Getter
     public enum Source {
         Wong("database.cs.wpi.edu", 5432, "teampdb", "teamp", "teamp130"),
-        Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130"),
-        AWS("softeng.cia6vosbcxst.us-east-2.rds.amazonaws.com", 5432, "teampdb", "teamp", "teamp130"),
-        Local("localhost", 5432, "postgres", "username", "password");
+        Blake("bruellcarlisle.dyndns.org", 54321, "softeng", "teamp", "teamp130");
+        //Local("localhost", 5432, "postgres", "username", "password");
         private String url;
         private int port;
         private String database;

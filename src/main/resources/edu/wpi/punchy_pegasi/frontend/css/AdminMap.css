@@ -3,6 +3,10 @@
     -fx-padding: 20;
 }
 
+.label-header {
+    -fx-font-size: 20;
+}
+
 .editing-overlay-box {
     -fx-alignment: CENTER;
     -fx-max-width: 300;
@@ -18,10 +22,14 @@
     -fx-max-height: 20;
 }
 
-#changes {
-
+#alignButton {
+    -pfx-button-background: -pfx-accent;
+    -pfx-button-text: white;
 }
-
+#cancelAlignButton {
+    -pfx-button-background: -pfx-danger;
+    -pfx-button-text: white;
+}
 .node-popover-date {
 
 }

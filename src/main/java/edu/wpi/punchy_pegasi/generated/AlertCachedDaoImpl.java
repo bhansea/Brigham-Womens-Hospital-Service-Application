@@ -60,6 +60,12 @@ public class AlertCachedDaoImpl implements IDao<java.util.UUID, Alert, Alert.Fie
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Alert> generateTable(Consumer<Alert> onRowClick, Alert.Field[] hidden) {
         var table = new MFXTableView<Alert>();
         table.setItems(list);

@@ -567,12 +567,17 @@ public class SleepThroughTheWinter {
 
         StringBuilder sbDaoDec = new StringBuilder();
         StringBuilder sbDaoInit = new StringBuilder();
+        StringBuilder sbDbSwitch = new StringBuilder();
+        sbDaoDec.append("\tprivate final PdbController dbController;\n");
+        sbDaoInit.append("\t\tthis.dbController = dbController;\n");
+        sbDbSwitch.append("\t\t this.dbController.switchSource(source);\n");
         for (var clazz : Arrays.stream(TableType.values()).map(TableType::getClazz).toList()) {
             try {
                 var ClassName = clazz.getSimpleName();
                 var className = firstLower(ClassName);
                 sbDaoDec.append("\tprivate final " + ClassName + daoImplSuffix() + " " + className + "Dao;\n");
-                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix() + "(dbController);\n");
+                sbDaoInit.append("\t\t" + className + "Dao = new " + ClassName + daoImplSuffix() + "(this.dbController);\n");
+                sbDbSwitch.append("\t\t" + className + "Dao.refresh();\n");
             } catch (Exception e) {
                 System.err.println("Failed to initialize Dao Impl for " + clazz.getCanonicalName() + ": " + e.getMessage());
             }
@@ -582,6 +587,7 @@ public class SleepThroughTheWinter {
                 .replaceAll("}\n*$", "")
                 .replaceAll("/\\*Dao Declarations\\*/", sbDaoDec.toString())
                 .replaceAll("/\\*Dao Initialization\\*/", sbDaoInit.toString())
+                .replaceAll("/\\*Dao Switch Database\\*/", sbDbSwitch.toString())
                 .replaceAll("\\*/", "")
                 .replaceAll("/\\*", "")
                 .replaceAll("package edu\\.wpi\\.punchy_pegasi\\.generator\\.schema;",

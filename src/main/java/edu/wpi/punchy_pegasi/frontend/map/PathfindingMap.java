@@ -495,7 +495,7 @@ public class PathfindingMap {
                 pathPutNodes(nodeDirection, floorChange, node);
 
                 if (floorChange) {
-                    map.drawLine(currentPath);
+                    map.drawDirectedPath(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
                     map.addNode(node, "red", Bindings.createStringBinding(() -> ""), Bindings.createStringBinding(() -> "From Here"));
                     //map.drawArrow(node, endNode.getFloorNum() > node.getFloorNum()).setOnMouseClicked(e -> Platform.runLater(() -> map.showLayer(floors.get(endNode.getFloor()))));
@@ -507,7 +507,7 @@ public class PathfindingMap {
                 nodeIndex++;
             }
             pathDrawDirections();
-            map.drawLine(currentPath);
+            map.drawDirectedPath(currentPath);
             map.drawYouAreHere(path.get(0));
             drawNode(path.get(path.size() - 1), "#3cb043");
             map.focusOn(path.get(0));

@@ -60,6 +60,12 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<ConferenceRoomEntry> generateTable(Consumer<ConferenceRoomEntry> onRowClick, ConferenceRoomEntry.Field[] hidden) {
         var table = new MFXTableView<ConferenceRoomEntry>();
         table.setItems(list);
