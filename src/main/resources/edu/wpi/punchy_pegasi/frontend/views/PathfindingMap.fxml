@@ -28,7 +28,6 @@
                     <Text fx:id="pathfindStatus" textAlignment="CENTER"/>
                 </VBox>
             </VBox>
-            <VBox fx:id="pathDirections" styleClass="pathfinding-overlay-box"/>
         </VBox>
     </left>
     <right>
@@ -41,6 +40,9 @@
             <VBox styleClass="pathfinding-overlay-box">
                 <MFXDatePicker floatingText="Current Date" fx:id="adminDatePicker"/>
             </VBox>
+        </VBox>
+        <VBox fx:id="pathDirections" styleClass="pathfinding-overlay">
+                <VBox fx:id="pathDirectionsBox" styleClass="pathfinding-overlay-box"/>
         </VBox>
     </right>
 </BorderPane>
