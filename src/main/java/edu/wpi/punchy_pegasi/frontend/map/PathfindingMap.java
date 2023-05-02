@@ -1,6 +1,7 @@
 package edu.wpi.punchy_pegasi.frontend.map;
 
 import com.fazecast.jSerialComm.SerialPort;
+import com.sun.javafx.geom.Vec3d;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.PathfindingSingleton;
@@ -31,8 +32,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.simple.SimpleMatrix;
 import org.javatuples.Pair;
 
+import javax.management.ValueExp;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
@@ -101,7 +106,7 @@ public class PathfindingMap {
     private String selectedAlgo;
     @FXML
     private Label batteryPercent;
-    private MultiValuedMap<String, directionalNode> directionMap = new ArrayListValuedHashMap<>();
+    private LinkedHashMap<String, List<DirectionalNode>> directionMap = new LinkedHashMap<>();
 
 
     public static byte[] generateMessage(String str, Integer startPos, Integer endPos) {
@@ -290,9 +295,9 @@ public class PathfindingMap {
         START(MaterialSymbols.STEP_OUT),
         LEFT(MaterialSymbols.KEYBOARD_ARROW_LEFT),
         RIGHT(MaterialSymbols.KEYBOARD_ARROW_RIGHT),
-        UP(MaterialSymbols.NORTH_EAST),
+        UP(MaterialSymbols.KEYBOARD_DOUBLE_ARROW_UP),
         DOWN(MaterialSymbols.SOUTH_WEST),
-        END(MaterialSymbols.PIN_DROP);
+        END(MaterialSymbols.ADJUST);
 
         @Getter
         private final MaterialSymbols icon;
@@ -303,13 +308,15 @@ public class PathfindingMap {
 
     @RequiredArgsConstructor
     @Data
-    class directionalNode {
-        private final Node node;
+    class DirectionalNode {
+        private final LocationName locationName;
         private final PathDirectionType directionIcon;
     }
 
     private void pathDrawDirections() {
 //        VBox directions = new VBox();
+//        var allKeys = new ArrayList<>(directionMap.keySet());
+//        Collections.reverse(allKeys);
         for (var floor : directionMap.keySet()) {
             var dNodeList = directionMap.get(floor);
             VBox directionsOnFloor = new VBox(new Label("Floor " + floor));
@@ -317,7 +324,7 @@ public class PathfindingMap {
 //                var directionEntry = new HBox();
                 var directionIcon = dNode.getDirectionIcon().getPFXIcon();
                 directionIcon.setSize(15.0);
-                var directionText = new Label(locationToString.toString(locations.get(nodeToMoves.get(dNode.getNode()).get(0).getLocationID())));
+                var directionText = new Label(dNode.getLocationName().getLongName());
 //                directionEntry.getChildren().addAll(directionIcon ,directionText);
                 directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
             }
@@ -326,12 +333,39 @@ public class PathfindingMap {
     }
 
     private void pathPutNodes(PathDirectionType direction, Node node) {
+        String hallwayName = "Follow the Hallway";
         var floor = node.getFloor();
-        var dNode = new directionalNode(node, direction);
-        if (directionMap.containsKey(floor))
-            directionMap.get(floor).add(dNode);
-        else
-            directionMap.put(floor, dNode);
+        LocationName currLocation = locations.get(nodeToMoves.get(node).get(0).getLocationID());
+        if (currLocation.getNodeType().equals(LocationName.NodeType.HALL)) {
+            currLocation.setLongName(hallwayName);
+            var hallwayDirection = direction;
+            var dNode = new DirectionalNode(currLocation, hallwayDirection);
+            if (directionMap.containsKey(floor)) {
+                var locationsOnFloor = directionMap.get(floor);
+                var prevLocation = locationsOnFloor.get(locationsOnFloor.size()-1);
+                if (prevLocation.getLocationName().getLongName().equals(hallwayName) && prevLocation.getDirectionIcon().equals(direction)) {
+                    // if the previous location is Hallway and no direction change, then don't add the hallway
+                } else {
+                    dNode.getLocationName().setLongName(hallwayName);
+                    directionMap.get(floor).add(dNode);
+                }
+            } else {
+                List<DirectionalNode> dNodes = new ArrayList<>() {{
+                    add(dNode);
+                }};
+                directionMap.put(floor, dNodes);
+            }
+        } else {
+            var dNode = new DirectionalNode(currLocation, direction);
+            if (directionMap.containsKey(floor)) {
+                directionMap.get(floor).add(dNode);
+            } else {
+                List<DirectionalNode> dNodes = new ArrayList<>() {{
+                    add(dNode);
+                }};
+                directionMap.put(floor, dNodes);
+            }
+        }
     }
 
     private void clearDirections() {
@@ -339,6 +373,67 @@ public class PathfindingMap {
         directionMap.clear();
     }
 
+    private PathDirectionType calculateDirection (Node prevNode, Node currNode, Node nextNode) {
+        if (currNode.equals(nextNode))
+            return PathDirectionType.END;
+        else if (prevNode.equals(currNode))
+            return PathDirectionType.START;
+
+//        Vec3d point1 = new Vec3d(prevNode.getXcoord().doubleValue(), prevNode.getYcoord().doubleValue(), 0.0);
+//        Vec3d point2 = new Vec3d(currNode.getXcoord().doubleValue(), currNode.getYcoord().doubleValue(), 0.0);
+//        Vec3d point3 = new Vec3d(nextNode.getXcoord().doubleValue(), nextNode.getYcoord().doubleValue(), 0.0);
+//        var displacement1 = new Vec3d();
+//        displacement1.sub(point1, point2);
+//        var displacement2 = new Vec3d();
+//        displacement2.sub(point2, point3);
+//        var dot = displacement1.dot(displacement2);
+//
+//        var cross = new Vec3d();
+//        cross.cross(displacement1, displacement2);
+//        if(dot > -.1 && dot < .1) {
+//            if (cross.z > 0)
+//                return PathDirectionType.LEFT;
+//            else
+//                return PathDirectionType.RIGHT;
+//        }
+        var prevX = prevNode.getXcoord().doubleValue();
+        var prevY = prevNode.getYcoord().doubleValue();
+        var currX = currNode.getXcoord().doubleValue();
+        var currY = currNode.getYcoord().doubleValue();
+        var nextX = nextNode.getXcoord().doubleValue();
+        var nextY = nextNode.getYcoord().doubleValue();
+        DMatrixRMaj prev = new DMatrixRMaj(2, 1);
+        prev.set(0, 0, prevX);
+        prev.set(1, 0, prevY);
+
+        DMatrixRMaj curr = new DMatrixRMaj(2, 1);
+        curr.set(0, 0, currX);
+        curr.set(1, 0, currY);
+
+        DMatrixRMaj next = new DMatrixRMaj(2, 1);
+        next.set(0, 0, nextX);
+        next.set(1, 0, nextY);
+
+        DMatrixRMaj vecPrevCurr = new DMatrixRMaj(2, 1);
+        CommonOps_DDRM.subtract(curr, prev, vecPrevCurr);
+
+        DMatrixRMaj vecCurrNext = new DMatrixRMaj(2, 1);
+        CommonOps_DDRM.subtract(next, curr, vecCurrNext);
+        double crossProduct = vecPrevCurr.data[0] * vecCurrNext.data[1] - vecPrevCurr.data[1] * vecCurrNext.data[0];
+
+        if (crossProduct > 1000) {
+            // Next point is on the left side of the line
+            return PathDirectionType.LEFT;
+        } else if (crossProduct < -1000) {
+            // Next point is on the right side of the line
+            return PathDirectionType.RIGHT;
+        } else {
+            // Three points are collinear
+            return PathDirectionType.UP;
+        }
+
+
+    }
 
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
@@ -349,8 +444,14 @@ public class PathfindingMap {
             map.clearMap();
             String currentFloor = path.get(0).getFloor();
             List<Node> currentPath = new ArrayList<>();
+            var pathSize = path.size();
+            var nodeIndex = 0;
             for (var node : path) {
-                pathPutNodes(PathDirectionType.START, node);
+                var prvNode = nodeIndex == 0 ? node : path.get(nodeIndex - 1);
+                var nxtNode = nodeIndex == pathSize - 1 ? node : path.get(nodeIndex + 1);
+                PathDirectionType nodeDirection = calculateDirection(prvNode, node, nxtNode);
+                pathPutNodes(nodeDirection, node);
+
                 if (!node.getFloor().equals(currentFloor)) {
                     map.drawLine(currentPath);
                     var endNode = currentPath.get(currentPath.size() - 1);
@@ -361,6 +462,7 @@ public class PathfindingMap {
                     currentFloor = node.getFloor();
                 }
                 currentPath.add(node);
+                nodeIndex++;
             }
             pathDrawDirections();
             map.drawLine(currentPath);

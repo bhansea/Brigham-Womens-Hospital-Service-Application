@@ -33,6 +33,8 @@ dependencies {
     api 'io.github.typhon0:AnimateFX:1.2.4-SNAPSHOT'
 
     implementation(
+//            'compile group: \'org.ejml\', name: \'ejml-all\', version: \'0.43\'',
+            'org.ejml:ejml-all:0.43',
             'io.github.palexdev:materialfx:11.15.0',
             'net.kurobako:gesturefx:0.7.1',
             'org.controlsfx:controlsfx:11.1.2',
