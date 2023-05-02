@@ -24,3 +24,11 @@
     -fx-text-fill: -pfx-text;
     -fx-font-weight: bold;
 }
+
+.about-disclaimer{
+    -fx-text-alignment: right;
+    -fx-font-family: "Nunito Sans Regular";
+    -fx-font-size: 18;
+    -fx-text-fill: -pfx-text;
+    -fx-padding: 25 50 25 0;
+}

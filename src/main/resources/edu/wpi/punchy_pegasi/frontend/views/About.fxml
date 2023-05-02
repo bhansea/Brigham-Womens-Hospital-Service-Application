@@ -3,7 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.AboutController">
     <center>
@@ -12,97 +13,6 @@
                 <Label text="ABOUT" styleClass="about-subtitles"/>
                 <TextFlow style="-fx-padding: 0 0 25 50" lineSpacing="10">
                     <Text styleClass="about-paragraphs">
-                        This application is in collaboration with Brigham &amp; Women's Hospital and represents the work
-                        of 10 WPI undergraduate students in partial fulfillment of the requirements for CS3733-D23
-                        Software Engineering.
-                        As a whole, our group worked together effectively to communicate, apply Agile development
-                        methodologies, and fulfill software requirements in Java. We shared ideas, provided constructive
-                        feedback to each other, and took on different roles and responsibilities in order to accomplish
-                        the objectives of the project.
-                        The software systems we created were used to inform the hospital representatives about potential
-                        features, user interfaces, or design approaches that they might consider implementing.
-                    </Text>
-                </TextFlow>
-            </VBox>
-            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
-                <Label text="MEET THE TEAM" styleClass="about-subtitles"/>
-                <GridPane style="-fx-padding: 0 0 25 0" vgap="5" hgap="20" alignment="CENTER_LEFT"
-                          styleClass="about-grid">
-                    <Label styleClass="about-grid-title" text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <Label styleClass="about-grid-title" text="Role" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                    <Label styleClass="about-grid-title" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-
-                    <Label text="Blake Bruell" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <Label text="Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                    <Label text="babruell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-
-                    <Label text="Charlotte Carter" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <Label text="Document Analyst" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                    <Label text="ccarter@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-
-                    <Label text="Brittany Ficarra" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                    <Label text="FE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                    <Label text="bcficarra@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-
-                    <Label text="Brandon Luong" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                    <Label text="BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-                    <Label text="bvluong@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-
-                    <Label text="Cooper Mann" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                    <Label text="Scrum Master" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                    <Label text="cpmann@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-
-                    <Label text="Arnav Mishra" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-                    <Label text="BE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-                    <Label text="amishra2@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
-
-                    <Label text="Ryan Nguyen" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-                    <Label text="FE Assistant Lead Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-                    <Label text="rnguyen@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
-
-                    <Label text="Piper O'Connell" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-                    <Label text="Project Manager" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
-                    <Label text="proconnell@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="8"/>
-
-                    <Label text="Gabe Ward" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-                    <Label text="Product Owner" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
-                    <Label text="gward@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="9"/>
-
-                    <Label text="Tommy Wang" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
-                    <Label text="FE and BE Software Engineer" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
-                    <Label text="wwang8@wpi.edu" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
-                </GridPane>
-            </VBox>
-            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
-                <Label text="ACKNOWLEDGEMENTS" styleClass="about-subtitles"/>
-                <TextFlow style="-fx-padding: 0 0 0 50">
-                    <Text styleClass="about-paragraphs">
-                        Our team would like to acknowledge the following people and organization for their contributions
-                        to this project:
-                    </Text>
-                </TextFlow>
-                <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" styleClass="about-grid">
-                    <Label text="-  The WPI Computer Science Department for providing us with this opportunity."
-                           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <Label text="-  Professor Wilson Wong for organizing this project and providing timely feedback for our numerous iterations."
-                           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <Label text="-  Our coach, Qui Nguyen, for providing us with valuable guidance."
-                           GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <Label text="-  Brigham &amp; Women's Hospital for the opportunity to work with them."
-                           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                    <Label text="-  The representative from Brigham &amp; Women's Hospital, Andrew Shinn, for their time and input."
-                           GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                    <padding>
-                        <Insets left="25" bottom="25"/>
-                    </padding>
-                </GridPane>
-            </VBox>
-        </VBox>
-        <VBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #F1F1F1">
-            <VBox style="-fx-background-color: -pfx-background" spacing="10">
-                <Label text="ABOUT" styleClass="info-title"/>
-                <TextFlow styleClass="info-text">
-                    <Text>
                         This application is in collaboration with Brigham &amp; Women's Hospital and represents the
                         work of 10 WPI undergraduate students in partial fulfillment of the requirements for
                         CS3733-D23 Software Engineering.
@@ -116,24 +26,19 @@
                     </Text>
                 </TextFlow>
             </VBox>
-            <VBox style="-fx-background-color: -pfx-background" spacing="10">
-                <Label text="MEET THE TEAM" styleClass="info-title"/>
-                <GridPane fx:id="sourceGrid" styleClass="info-about-team-list">
-                </GridPane>
+            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
+                <Label text="MEET THE TEAM" styleClass="about-subtitles"/>
+                <GridPane fx:id="sourceGrid" styleClass="info-about-team-list"/>
             </VBox>
-            <VBox style="-fx-background-color: -pfx-background" spacing="10">
-                <Label text="ACKNOWLEDGEMENTS" styleClass="info-title"/>
-                <TextFlow>
-                    <Text style="-fx-font-family: Nunito Sans Regular">
+            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: -pfx-background" spacing="10">
+                <Label text="ACKNOWLEDGEMENTS" styleClass="about-subtitles"/>
+                <TextFlow style="-fx-padding: 0 0 0 50">
+                    <Text styleClass="about-paragraphs">
                         Our team would like to acknowledge the following people and organization for their
                         contributions to this project:
                     </Text>
-                    <padding>
-                        <Insets top="5" left="50"/>
-                    </padding>
                 </TextFlow>
-                <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT"
-                          style="-fx-font-family: Nunito Sans; -fx-font-size: 16; -fx-text-fill: black;">
+                <GridPane vgap="5" hgap="20" alignment="CENTER_LEFT" styleClass="about-grid">
                     <Label text="-  The WPI Computer Science Department for providing us with this opportunity."
                            GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                     <Label text="-  Professor Wilson Wong for organizing this project and providing timely feedback for our numerous iterations."
@@ -144,13 +49,10 @@
                            GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                     <Label text="-  The representative from Brigham &amp; Women's Hospital, Andrew Shinn, for their time and input."
                            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                    <padding>
-                        <Insets top="5" left="50" bottom="25"/>
-                    </padding>
                 </GridPane>
                 <VBox alignment="BOTTOM_RIGHT">
                     <Label text="*The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes."
-                           styleClass="info-about-bottom-disclaimer">
+                           styleClass="about-disclaimer">
                     </Label>
                 </VBox>
             </VBox>
