@@ -232,6 +232,49 @@ public class App extends Application {
         primaryStage.show();
         navigate(Screen.LOGIN);
         App.getSingleton().getExecutorService().execute(this::initDatabaseTables);
+
+        // Idle Screen
+        // Create the screensaver content and timeline
+//        Label screensaverLabel = new Label("Screensaver");
+//        StackPane screensaverRoot = new StackPane(screensaverLabel);
+//        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+//        Scene screensaverScene = new Scene(screensaverRoot, 1280, 720);
+//        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
+//        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
+
+        ImageView image = new ImageView(new Image(resolveResource("frontend/assets/BW-logo.png").get().toString()));
+        VBox screensaverRoot = new VBox(image);
+        screensaverRoot.setAlignment(Pos.CENTER);
+        Scene screensaverScene = new Scene(screensaverRoot);
+        screensaverScene.setFill(Color.TRANSPARENT);
+        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+
+        Timeline idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleTimeSeconds), e -> {
+            if (!isIdle) {
+                this.primaryStage.setScene(screensaverScene);
+                isIdle = true;
+                if(this.primaryStage.isMaximized()) {
+                    screensaverScene.getWindow().setWidth(screenBounds.getWidth());
+                    screensaverScene.getWindow().setHeight(screenBounds.getHeight());
+                }
+                else {
+                    screensaverScene.getWindow().setWidth(1280);
+                    screensaverScene.getWindow().setHeight(720);
+                }
+
+            }
+        }));
+        idleTimeline.setCycleCount(Timeline.INDEFINITE);
+        idleTimeline.play();
+
+        // Add event handling to show/hide the screensaver on user activity
+        screensaverScene.setOnMouseMoved(e -> {
+            disableScreenSaver(idleTimeline);
+        });
+
+        screensaverScene.setOnKeyPressed(e -> {
+            disableScreenSaver(idleTimeline);
+        });
     }
 
     private void initDatabaseTables() {
@@ -286,48 +329,48 @@ public class App extends Application {
             });
         }
 
-        // Idle Screen
-        // Create the screensaver content and timeline
-//        Label screensaverLabel = new Label("Screensaver");
-//        StackPane screensaverRoot = new StackPane(screensaverLabel);
+//        // Idle Screen
+//        // Create the screensaver content and timeline
+////        Label screensaverLabel = new Label("Screensaver");
+////        StackPane screensaverRoot = new StackPane(screensaverLabel);
+////        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+////        Scene screensaverScene = new Scene(screensaverRoot, 1280, 720);
+////        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
+////        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
+//
+//        ImageView image = new ImageView(new Image(resolveResource("frontend/assets/BW-logo.png").get().toString()));
+//        VBox screensaverRoot = new VBox(image);
+//        screensaverRoot.setAlignment(Pos.CENTER);
+//        Scene screensaverScene = new Scene(screensaverRoot);
+//        screensaverScene.setFill(Color.TRANSPARENT);
 //        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
-//        Scene screensaverScene = new Scene(screensaverRoot, 1280, 720);
-//        screensaverLabel.setLayoutX((screenBounds.getWidth() - screensaverLabel.getWidth()) / 2);
-//        screensaverLabel.setLayoutY((screenBounds.getHeight() - screensaverLabel.getHeight()) / 2);
-
-        ImageView image = new ImageView(new Image(resolveResource("frontend/assets/BW-logo.png").get().toString()));
-        VBox screensaverRoot = new VBox(image);
-        screensaverRoot.setAlignment(Pos.CENTER);
-        Scene screensaverScene = new Scene(screensaverRoot);
-        screensaverScene.setFill(Color.TRANSPARENT);
-        Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
-
-        Timeline idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleTimeSeconds), e -> {
-            if (!isIdle) {
-                this.primaryStage.setScene(screensaverScene);
-                isIdle = true;
-                if(this.primaryStage.isMaximized()) {
-                    screensaverScene.getWindow().setWidth(screenBounds.getWidth());
-                    screensaverScene.getWindow().setHeight(screenBounds.getHeight());
-                }
-                else {
-                    screensaverScene.getWindow().setWidth(1280);
-                    screensaverScene.getWindow().setHeight(720);
-                }
-
-            }
-        }));
-        idleTimeline.setCycleCount(Timeline.INDEFINITE);
-        idleTimeline.play();
-
-        // Add event handling to show/hide the screensaver on user activity
-        screensaverScene.setOnMouseMoved(e -> {
-            disableScreenSaver(idleTimeline);
-        });
-
-        screensaverScene.setOnKeyPressed(e -> {
-            disableScreenSaver(idleTimeline);
-        });
+//
+//        Timeline idleTimeline = new Timeline(new KeyFrame(Duration.seconds(idleTimeSeconds), e -> {
+//            if (!isIdle) {
+//                this.primaryStage.setScene(screensaverScene);
+//                isIdle = true;
+//                if(this.primaryStage.isMaximized()) {
+//                    screensaverScene.getWindow().setWidth(screenBounds.getWidth());
+//                    screensaverScene.getWindow().setHeight(screenBounds.getHeight());
+//                }
+//                else {
+//                    screensaverScene.getWindow().setWidth(1280);
+//                    screensaverScene.getWindow().setHeight(720);
+//                }
+//
+//            }
+//        }));
+//        idleTimeline.setCycleCount(Timeline.INDEFINITE);
+//        idleTimeline.play();
+//
+//        // Add event handling to show/hide the screensaver on user activity
+//        screensaverScene.setOnMouseMoved(e -> {
+//            disableScreenSaver(idleTimeline);
+//        });
+//
+//        screensaverScene.setOnKeyPressed(e -> {
+//            disableScreenSaver(idleTimeline);
+//        });
 
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
