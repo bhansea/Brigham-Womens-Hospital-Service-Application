@@ -2,6 +2,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests;
 
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.Screen;
+import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardHolder;
 import edu.wpi.punchy_pegasi.frontend.components.PFXCardVertical;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlert;
@@ -130,7 +131,8 @@ public class FurnitureRequestController extends RequestController<FurnitureReque
                 getSelectedItems(flowPane),
                 1L);
         facade.saveFurnitureRequestEntry(requestEntry);
-        App.getSingleton().getFacade().saveAlert(new Alert(UUID.randomUUID(), staffAssignment.getSelectedItem().getEmployeeID(), "Service Request", "Furniture Service Request", Instant.now(), Alert.ReadStatus.UNREAD));
+        Alert alert = Alert.builder().uuid(UUID.randomUUID()).alertType(Alert.AlertType.SERVICE_REQUEST).alertTitle("Service Request").description("Office Room Request").startDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).employeeID(staffAssignment.getSelectedItem().getEmployeeID()).startDate(Instant.now()).endDate(Instant.now()).readStatus(Alert.ReadStatus.UNREAD).build();
+        App.getSingleton().getFacade().saveAlert(alert);
         PFXAlert pfxPopup = new PFXAlert("Your request has been submitted!", ()->App.getSingleton().navigate(Screen.HOME));
     }
 

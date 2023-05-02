@@ -60,6 +60,12 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Move> generateTable(Consumer<Move> onRowClick, Move.Field[] hidden) {
         var table = new MFXTableView<Move>();
         table.setItems(list);
@@ -204,6 +210,7 @@ public class MoveCachedDaoImpl implements IDao<java.lang.Long, Move, Move.Field>
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public MoveForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

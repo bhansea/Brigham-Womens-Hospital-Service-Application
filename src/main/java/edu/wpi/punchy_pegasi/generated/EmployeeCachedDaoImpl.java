@@ -60,6 +60,12 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<Employee> generateTable(Consumer<Employee> onRowClick, Employee.Field[] hidden) {
         var table = new MFXTableView<Employee>();
         table.setItems(list);
@@ -203,6 +209,7 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public EmployeeForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();

@@ -60,6 +60,12 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         this.dbController.addPropertyChangeListener(this);
     }
 
+    public void refresh(){
+        list.clear();
+        cache.clear();
+        initCache();
+    }
+
     public MFXTableView<RequestEntry> generateTable(Consumer<RequestEntry> onRowClick, RequestEntry.Field[] hidden) {
         var table = new MFXTableView<RequestEntry>();
         table.setItems(list);
@@ -206,6 +212,7 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         @Getter
         private final List<javafx.scene.Node> form;
         private final List<TextField> inputs;
+
         public RequestEntryForm() {
             form = new ArrayList<>();
             inputs = new ArrayList<>();
