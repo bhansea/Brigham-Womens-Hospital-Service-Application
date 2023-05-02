@@ -200,27 +200,29 @@ public class HospitalMap extends StackPane implements IMap<HospitalFloor.Floors>
     }
 
     @Override
-    public void drawYouAreHere(Node node) {
+    public Optional<javafx.scene.Node> drawYouAreHere(Node node) {
         var floor = floorMap.get(HospitalFloor.floorMap.get(node.getFloor()));
         if (floor == null)
-            return;
+            return Optional.empty();
         var icon = new PFXIcon(MaterialSymbols.LOCATION_ON, 60);
         icon.setFill(Color.valueOf("#f40000"));
         icon.setTranslateX(node.getXcoord() - 30);
         icon.setTranslateY(node.getYcoord());
         floor.getNodeCanvas().getChildren().add(icon);
+        return Optional.of(icon);
     }
 
     @Override
-    public void drawLine(HospitalFloor.Floors layer, List<Point2D> points, Color color, double stroke) {
+    public Optional<javafx.scene.Node> drawLine(HospitalFloor.Floors layer, List<Point2D> points, Color color, double stroke) {
         var floor = floorMap.get(layer);
         if (floor == null)
-            return;
+            return Optional.empty();
         var polyline = new Polyline();
         polyline.getPoints().addAll(points.stream().flatMap(p-> Stream.of(p.getX(), p.getY())).toList());
         polyline.setStroke(color);
         polyline.setStrokeWidth(stroke);
         floor.getLineCanvas().getChildren().add(polyline);
+        return Optional.of(polyline);
     }
     @Override
     public void drawDirectedPath(List<Node> nodes) {

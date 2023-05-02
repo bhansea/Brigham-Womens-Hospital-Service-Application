@@ -22,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -35,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +62,11 @@ public class AdminMapController {
     private final ObservableList<javafx.scene.Node> mapEditsNodes = FXCollections.observableArrayList(new javafx.scene.Group());
     private final Map<Long, Circle> nodePoints = new HashMap<>();
     private final MultiValuedMap<Long, UUID> edgeLines = new ArrayListValuedHashMap<>();
+    private AtomicBoolean aligning = new AtomicBoolean(false);
+    @FXML
+    private PFXButton alignButton;
+    @FXML
+    private PFXButton cancelAlignButton;
     @FXML
     private MFXDatePicker adminDatePicker;
     @FXML
@@ -83,6 +90,7 @@ public class AdminMapController {
     private ObservableMap<Long, Move> moves;
     private Node firstNode, secondNode;
     private Point2D firstPoint, secondPoint;
+    private Polyline alignmentLine;
     private HospitalFloor.Floors firstFloor;
     private ObservableMap<Node, ObservableList<Move>> nodeToLocation;
 
@@ -257,6 +265,23 @@ public class AdminMapController {
         return popOver;
     }
 
+    public static Point2D getClosestPointOnLine(Point2D p1, Point2D p2, Point2D p3) {
+        double x1 = p1.getX();
+        double y1 = p1.getY();
+        double x2 = p2.getX();
+        double y2 = p2.getY();
+        double x3 = p3.getX();
+        double y3 = p3.getY();
+
+        double slope = (y2 - y1) / (x2 - x1);
+        double perpendicularSlope = -1 / slope;
+
+        double x4 = (y3 - y1 + slope * x1 - perpendicularSlope * x3) / (slope - perpendicularSlope);
+        double y4 = slope * (x4 - x1) + y1;
+
+        return new Point2D(x4, y4);
+    }
+
     private Optional<Circle> addEditableNode(Long nodeID) {
         Supplier<Node> n = () -> nodes.get(nodeID);
         var pointOpt = drawNode(n.get(), "#FFFF00");
@@ -270,23 +295,39 @@ public class AdminMapController {
 
         point.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if (!isLeftClickAndShift.test(e)) return;
-            if (firstNode == null) {
-                firstNode = n.get();
-                point.setStroke(Color.valueOf("#FF00FF"));
-                return;
+            if (aligning.get()) {
+                if (alignmentLine == null || alignmentLine.getPoints().size() != 4) return;
+                //align node to line
+                var point1 = new Point2D(alignmentLine.getPoints().get(0), alignmentLine.getPoints().get(1));
+                var point2 = new Point2D(alignmentLine.getPoints().get(2), alignmentLine.getPoints().get(3));
+                var point3 = new Point2D(point.getLayoutX(), point.getLayoutY());
+                var newPoint = getClosestPointOnLine(point1, point2, point3);
+                point.setLayoutX(newPoint.getX());
+                point.setLayoutY(newPoint.getY());
+                var old = n.get().toBuilder().build();
+                n.get().setXcoord((int) point.getLayoutX());
+                n.get().setYcoord((int) point.getLayoutY());
+                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().build(), old));
+
+            } else {
+                if (firstNode == null) {
+                    firstNode = n.get();
+                    point.setStroke(Color.valueOf("#FF00FF"));
+                    return;
+                }
+                if (n.get() == firstNode)
+                    return;
+                if (secondNode == null)
+                    secondNode = n.get();
+                var newEdge = new Edge(UUID.randomUUID(), firstNode.getNodeID(), secondNode.getNodeID());
+                addEditableEdge(newEdge);
+                mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge.toBuilder().build()));
+                var startPoint = nodePoints.get(firstNode.getNodeID());
+                if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
+                var endPoint = nodePoints.get(secondNode.getNodeID());
+                if (endPoint != null) endPoint.setStroke(Color.valueOf("#000000"));
+                firstNode = secondNode = null;
             }
-            if (n.get() == firstNode)
-                return;
-            if (secondNode == null)
-                secondNode = n.get();
-            var newEdge = new Edge(UUID.randomUUID(), firstNode.getNodeID(), secondNode.getNodeID());
-            addEditableEdge(newEdge);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.ADD_EDGE, newEdge.toBuilder().build()));
-            var startPoint = nodePoints.get(firstNode.getNodeID());
-            if (startPoint != null) startPoint.setStroke(Color.valueOf("#000000"));
-            var endPoint = nodePoints.get(secondNode.getNodeID());
-            if (endPoint != null) endPoint.setStroke(Color.valueOf("#000000"));
-            firstNode = secondNode = null;
         });
         DragController dragController = new DragController(point, true);
         dragController.setScaleSupplier(() -> map.getZoom());
@@ -323,24 +364,41 @@ public class AdminMapController {
     }
 
     private final EventHandler<MouseEvent> alignNode = e -> {
+        if (alignmentLine != null) return;
         if (!isLeftClick.test(e) || e.getClickCount() != 1 || e.getTarget().getClass() != ImageView.class) return;
+        var location = map.getClickLocation(e);
         if (firstPoint == null) {
-            firstPoint = new Point2D(e.getX(), e.getY());
+            firstPoint = location;
             firstFloor = map.getLayer();
             return;
         }
-        if(map.getLayer() != firstFloor) return;
+        if (map.getLayer() != firstFloor) return;
         if (secondPoint == null)
-            secondPoint = new Point2D(e.getX(), e.getY());
-        map.drawLine(firstFloor, Arrays.asList(firstPoint, secondPoint), Color.BLUE, 3);
+            secondPoint = location;
+        var line = map.drawLine(firstFloor, Arrays.asList(firstPoint, secondPoint), Color.BLUE, 3);
         firstPoint = secondPoint = null;
+        alignmentLine = (Polyline) line.get();
     };
+
+    @FXML
     private void alignNodes() {
+        alignButton.setDisable(true);
+        if (!aligning.compareAndSet(false, true)) return;
         map.get().addEventFilter(MouseEvent.MOUSE_CLICKED, alignNode);
+        cancelAlignButton.setVisible(true);
+        cancelAlignButton.setManaged(true);
     }
 
-    private void cancelAlignNodes(){
+    @FXML
+    private void cancelAlignNodes() {
         map.get().removeEventFilter(MouseEvent.MOUSE_CLICKED, alignNode);
+        if (alignmentLine != null)
+            ((Group) alignmentLine.getParent()).getChildren().remove(alignmentLine);
+        cancelAlignButton.setVisible(false);
+        cancelAlignButton.setManaged(false);
+        alignmentLine = null;
+        aligning.set(false);
+        alignButton.setDisable(false);
     }
 
     private void editNodes() {

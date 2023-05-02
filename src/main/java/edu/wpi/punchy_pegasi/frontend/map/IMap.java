@@ -35,9 +35,9 @@ public interface IMap<Layer> {
 
     Layer getLayer();
 
-    void drawYouAreHere(Node node);
+    Optional<javafx.scene.Node> drawYouAreHere(Node node);
 
-    void drawLine(Layer layer, List<Point2D> points, Color color, double stroke);
+    Optional<javafx.scene.Node> drawLine(Layer layer, List<Point2D> points, Color color, double stroke);
     void drawDirectedPath(List<Node> nodes);
 
     VBox makeTooltip(javafx.scene.Node parent, ObservableStringValue text);
