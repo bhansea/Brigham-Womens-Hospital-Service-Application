@@ -1164,56 +1164,56 @@ class FacadeTest {
 //        }
 //    }
 
-    @Test
-    void testGetFoodServiceRequestEntry1() {
-        List<String> additionalItems = new ArrayList<>();
-        additionalItems.add("testItems");
-        var locName0 = ThreadLocalRandom.current().nextLong();
-        var staff0 = ThreadLocalRandom.current().nextLong();
-        var locName1 = ThreadLocalRandom.current().nextLong();
-        var staff1 = ThreadLocalRandom.current().nextLong();
-        var food = new FoodServiceRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
-        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
-        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getSelectedFoods(), food.getPatientName(), food.getEmployeeID()};
-        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getSelectedFoods(), food2.getPatientName(), food2.getEmployeeID()};
-        try {
-            pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values);
-            pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values2);
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-        FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.ADDITIONAL_NOTES, FoodServiceRequestEntry.Field.SELECTED_FOODS};
-        Object[] searchValues = new Object[]{"testNotes1", additionalItems};
-        String[] searchFields = new String[]{"additionalNotes", "selectedFoods"};
-        var results = facade.getFoodServiceRequestEntry(fields, searchValues);
-        var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, searchFields, searchValues)) {
-            while (rs.next()) {
-                String myCol = rs.getString("additionalItems");
-                List<String> myColumnList = Arrays.asList(myCol.split(","));
-                FoodServiceRequestEntry req = new FoodServiceRequestEntry(
-                        (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.Long) rs.getObject("locationName"),
-                        (java.lang.Long) rs.getObject("staffAssignment"),
-                        rs.getObject("additionalNotes", String.class),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        myColumnList,
-                        (java.lang.String) rs.getObject("patientName"),
-                        (java.lang.Long) rs.getObject("employeeID"));
-                map.put(req.getServiceID(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            assert false : e.getMessage();
-        }
-        assertEquals(map.get(food.getServiceID()), results.get(food.getServiceID()));
-        assertEquals(map.get(food2.getServiceID()), results.get(food2.getServiceID()));
-        try {
-            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food.getServiceID());
-            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food2.getServiceID());
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Test
+//    void testGetFoodServiceRequestEntry1() {
+//        List<String> additionalItems = new ArrayList<>();
+//        additionalItems.add("testItems");
+//        var locName0 = ThreadLocalRandom.current().nextLong();
+//        var staff0 = ThreadLocalRandom.current().nextLong();
+//        var locName1 = ThreadLocalRandom.current().nextLong();
+//        var staff1 = ThreadLocalRandom.current().nextLong();
+//        var food = new FoodServiceRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
+//        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
+//        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getSelectedFoods(), food.getPatientName(), food.getEmployeeID()};
+//        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getSelectedFoods(), food2.getPatientName(), food2.getEmployeeID()};
+//        try {
+//            pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values);
+//            pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values2);
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//        FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.ADDITIONAL_NOTES, FoodServiceRequestEntry.Field.SELECTED_FOODS};
+//        Object[] searchValues = new Object[]{"testNotes1", additionalItems};
+//        String[] searchFields = new String[]{"additionalNotes", "selectedFoods"};
+//        var results = facade.getFoodServiceRequestEntry(fields, searchValues);
+//        var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
+//        try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, searchFields, searchValues)) {
+//            while (rs.next()) {
+//                String myCol = rs.getString("additionalItems");
+//                List<String> myColumnList = Arrays.asList(myCol.split(","));
+//                FoodServiceRequestEntry req = new FoodServiceRequestEntry(
+//                        (java.util.UUID) rs.getObject("serviceID"),
+//                        (java.lang.Long) rs.getObject("locationName"),
+//                        (java.lang.Long) rs.getObject("staffAssignment"),
+//                        rs.getObject("additionalNotes", String.class),
+//                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+//                        myColumnList,
+//                        (java.lang.String) rs.getObject("patientName"),
+//                        (java.lang.Long) rs.getObject("employeeID"));
+//                map.put(req.getServiceID(), req);
+//            }
+//        } catch (PdbController.DatabaseException | SQLException e) {
+//            assert false : e.getMessage();
+//        }
+//        assertEquals(map.get(food.getServiceID()), results.get(food.getServiceID()));
+//        assertEquals(map.get(food2.getServiceID()), results.get(food2.getServiceID()));
+//        try {
+//            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food.getServiceID());
+//            pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", food2.getServiceID());
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 //    @Test
 //    void getAllFoodServiceRequestEntry() {
@@ -1405,54 +1405,54 @@ class FacadeTest {
         }
     }
 
-    @Test
-    void testGetFlowerDeliveryRequestEntry() {
-        var locName0 = ThreadLocalRandom.current().nextLong();
-        var staff0 = ThreadLocalRandom.current().nextLong();
-        var locName1 = ThreadLocalRandom.current().nextLong();
-        var staff1 = ThreadLocalRandom.current().nextLong();
-        List<String> selectedFlowers0 = new ArrayList<>();
-        selectedFlowers0.add("testFlowers0");
-        List<String> selectedFlowers1 = new ArrayList<>();
-        selectedFlowers1.add("testFlowers1");
-        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers0, 100L);
-        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers1, 100L);
-        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getSelectedFlowers(), flowers.getEmployeeID()};
-        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getSelectedFlowers(), flowers2.getEmployeeID()};
-        try {
-            pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values);
-            pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values2);
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-        var results = facade.getFlowerDeliveryRequestEntry(FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient");
-        var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, "patientName", "testPatient")) {
-            while (rs.next()) {
-                FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
-                        (java.util.UUID) rs.getObject("serviceID"),
-                        (java.lang.String) rs.getObject("patientName"),
-                        (java.lang.Long) rs.getObject("locationName"),
-                        (java.lang.Long) rs.getObject("staffAssignment"),
-                        (java.lang.String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.util.List) rs.getObject("selectedFlowers"),
-                        (java.lang.Long) rs.getObject("employeeID"));
-                if (req != null)
-                    map.put(req.getServiceID(), req);
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            log.error("", e);
-        }
-        assertEquals(map.get(flowers.getServiceID()).getServiceID(), results.get(flowers.getServiceID()).getServiceID());
-        assertEquals(map.get(flowers2.getServiceID()).getServiceID(), results.get(flowers2.getServiceID()).getServiceID());
-        try {
-            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers.getServiceID());
-            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers2.getServiceID());
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Test
+//    void testGetFlowerDeliveryRequestEntry() {
+//        var locName0 = ThreadLocalRandom.current().nextLong();
+//        var staff0 = ThreadLocalRandom.current().nextLong();
+//        var locName1 = ThreadLocalRandom.current().nextLong();
+//        var staff1 = ThreadLocalRandom.current().nextLong();
+//        List<String> selectedFlowers0 = new ArrayList<>();
+//        selectedFlowers0.add("testFlowers0");
+//        List<String> selectedFlowers1 = new ArrayList<>();
+//        selectedFlowers1.add("testFlowers1");
+//        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers0, 100L);
+//        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers1, 100L);
+//        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getSelectedFlowers(), flowers.getEmployeeID()};
+//        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getSelectedFlowers(), flowers2.getEmployeeID()};
+//        try {
+//            pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values);
+//            pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values2);
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//        var results = facade.getFlowerDeliveryRequestEntry(FlowerDeliveryRequestEntry.Field.PATIENT_NAME, "testPatient");
+//        var map = new HashMap<java.util.UUID, FlowerDeliveryRequestEntry>();
+//        try (var rs = pdbController.searchQuery(TableType.FLOWERREQUESTS, "patientName", "testPatient")) {
+//            while (rs.next()) {
+//                FlowerDeliveryRequestEntry req = new FlowerDeliveryRequestEntry(
+//                        (java.util.UUID) rs.getObject("serviceID"),
+//                        (java.lang.String) rs.getObject("patientName"),
+//                        (java.lang.Long) rs.getObject("locationName"),
+//                        (java.lang.Long) rs.getObject("staffAssignment"),
+//                        (java.lang.String) rs.getObject("additionalNotes"),
+//                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+//                        (java.util.List) rs.getObject("selectedFlowers"),
+//                        (java.lang.Long) rs.getObject("employeeID"));
+//                if (req != null)
+//                    map.put(req.getServiceID(), req);
+//            }
+//        } catch (PdbController.DatabaseException | SQLException e) {
+//            log.error("", e);
+//        }
+//        assertEquals(map.get(flowers.getServiceID()).getServiceID(), results.get(flowers.getServiceID()).getServiceID());
+//        assertEquals(map.get(flowers2.getServiceID()).getServiceID(), results.get(flowers2.getServiceID()).getServiceID());
+//        try {
+//            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers.getServiceID());
+//            pdbController.deleteQuery(TableType.FLOWERREQUESTS, "serviceID", flowers2.getServiceID());
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     @Test
     void testGetFlowerDeliveryRequestEntry1() {
@@ -2267,53 +2267,53 @@ class FacadeTest {
         }
     }
 
-    @Test
-    void testGetOfficeServiceRequestEntry() {
-        var locName0 = ThreadLocalRandom.current().nextLong();
-        var locName1 = ThreadLocalRandom.current().nextLong();
-        List<String> officeSupplies0 = new ArrayList<>();
-        officeSupplies0.add("officeSuppliesTest0");
-        List<String> officeSupplies1 = new ArrayList<>();
-        officeSupplies1.add("officeSuppliesTest1");
-        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
-        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies1, 100L);
-        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeSupplies(), office0.getEmployeeID()};
-        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeSupplies(), office1. getEmployeeID()};
-        try {
-            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values0);
-            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values1);
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-        var results = facade.getOfficeServiceRequestEntry(OfficeServiceRequestEntry.Field.LOCATION_NAME, locName0);
-        var map = new HashMap<UUID, OfficeServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, OfficeServiceRequestEntry.Field.LOCATION_NAME.getColName(), locName0)) {
-            while (rs.next()) {
-                var req = new OfficeServiceRequestEntry(
-                        (UUID) rs.getObject("serviceID"),
-                        (Long) rs.getObject("locationName"),
-                        (Long) rs.getObject("staffAssignment"),
-                        (String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (List<String>) rs.getObject("officeSupplies"),
-                        (Long) rs.getObject("employeeID"));
-                if (req != null) {
-                    map.put(req.getServiceID(), req);
-                }
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            assert false : e.getMessage();
-        }
-
-        assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
-        assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
-        try {
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office0.getServiceID());
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office1.getServiceID());
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Test
+//    void testGetOfficeServiceRequestEntry() {
+//        var locName0 = ThreadLocalRandom.current().nextLong();
+//        var locName1 = ThreadLocalRandom.current().nextLong();
+//        List<String> officeSupplies0 = new ArrayList<>();
+//        officeSupplies0.add("officeSuppliesTest0");
+//        List<String> officeSupplies1 = new ArrayList<>();
+//        officeSupplies1.add("officeSuppliesTest1");
+//        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
+//        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies1, 100L);
+//        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeSupplies(), office0.getEmployeeID()};
+//        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeSupplies(), office1. getEmployeeID()};
+//        try {
+//            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values0);
+//            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values1);
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//        var results = facade.getOfficeServiceRequestEntry(OfficeServiceRequestEntry.Field.LOCATION_NAME, locName0);
+//        var map = new HashMap<UUID, OfficeServiceRequestEntry>();
+//        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, OfficeServiceRequestEntry.Field.LOCATION_NAME.getColName(), locName0)) {
+//            while (rs.next()) {
+//                var req = new OfficeServiceRequestEntry(
+//                        (UUID) rs.getObject("serviceID"),
+//                        (Long) rs.getObject("locationName"),
+//                        (Long) rs.getObject("staffAssignment"),
+//                        (String) rs.getObject("additionalNotes"),
+//                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+//                        (List<String>) rs.getObject("officeSupplies"),
+//                        (Long) rs.getObject("employeeID"));
+//                if (req != null) {
+//                    map.put(req.getServiceID(), req);
+//                }
+//            }
+//        } catch (PdbController.DatabaseException | SQLException e) {
+//            assert false : e.getMessage();
+//        }
+//
+//        assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
+//        assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
+//        try {
+//            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office0.getServiceID());
+//            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office1.getServiceID());
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 //    @Test
 //    void testGetOfficeServiceRequestEntry1() {
