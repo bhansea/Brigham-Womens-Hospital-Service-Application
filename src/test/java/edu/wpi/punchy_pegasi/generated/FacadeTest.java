@@ -2249,9 +2249,9 @@ class FacadeTest {
     @Test
     void getOfficeServiceRequestEntry() {
         List<String> officeSupplies = new ArrayList<>();
-//        selectedFlowers0.add("testFlowers0");
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
-        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeID()};
+        officeSupplies.add("officeSuppliesTest");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies, 100L);
+        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeSupplies(), office.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values);
         } catch (PdbController.DatabaseException e) {
@@ -2271,10 +2271,14 @@ class FacadeTest {
     void testGetOfficeServiceRequestEntry() {
         var locName0 = ThreadLocalRandom.current().nextLong();
         var locName1 = ThreadLocalRandom.current().nextLong();
-        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
-        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
-        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeRequest(), office0.getEmployeeID()};
-        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeRequest(), office1. getEmployeeID()};
+        List<String> officeSupplies0 = new ArrayList<>();
+        officeSupplies0.add("officeSuppliesTest0");
+        List<String> officeSupplies1 = new ArrayList<>();
+        officeSupplies1.add("officeSuppliesTest1");
+        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
+        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies1, 100L);
+        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeSupplies(), office0.getEmployeeID()};
+        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeSupplies(), office1. getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values0);
             pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values1);
@@ -2291,7 +2295,7 @@ class FacadeTest {
                         (Long) rs.getObject("staffAssignment"),
                         (String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (String) rs.getObject("officeRequest"),
+                        (List<String>) rs.getObject("officeSupplies"),
                         (Long) rs.getObject("employeeID"));
                 if (req != null) {
                     map.put(req.getServiceID(), req);
@@ -2315,19 +2319,23 @@ class FacadeTest {
     void testGetOfficeServiceRequestEntry1() {
         var locName0 = ThreadLocalRandom.current().nextLong();
         var locName1 = ThreadLocalRandom.current().nextLong();
-        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices1", 100L);
-        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices2", 100L);
-        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeRequest(), office0.getEmployeeID()};
-        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeRequest(), office1.getEmployeeID()};
+        List<String> officeSupplies0 = new ArrayList<>();
+        officeSupplies0.add("officeSuppliesTest0");
+        List<String> officeSupplies1 = new ArrayList<>();
+        officeSupplies1.add("officeSuppliesTest1");
+        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
+        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies1, 100L);
+        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeSupplies(), office0.getEmployeeID()};
+        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeSupplies(), office1.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values0);
             pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values1);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.OFFICE_REQUEST, OfficeServiceRequestEntry.Field.EMPLOYEE_ID};
-        Object[] searchValues = new Object[]{"testOffices1", 200L};
-        String[] searchFields = new String[]{"officeRequest", "employeeID"};
+        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.OFFICE_SUPPLIES, OfficeServiceRequestEntry.Field.EMPLOYEE_ID};
+        Object[] searchValues = new Object[]{officeSupplies1, 200L};
+        String[] searchFields = new String[]{"officeSupplies", "employeeID"};
         var results = facade.getOfficeServiceRequestEntry(fields, searchValues);
         var map = new HashMap<UUID, OfficeServiceRequestEntry>();
         try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, searchFields, searchValues)) {
@@ -2338,7 +2346,7 @@ class FacadeTest {
                         (Long) rs.getObject("staffAssignment"),
                         (String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (String) rs.getObject("officeRequest"),
+                        (List<String>) rs.getObject("officeSupplies"),
                         (Long) rs.getObject("employeeID"));
                 if (req != null) {
                     map.put(req.getServiceID(), req);
@@ -2360,14 +2368,16 @@ class FacadeTest {
 
     @Test
     void getAllOfficeServiceRequestEntry() {
-        var value0 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L};
-        var value1 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L};
-        var value2 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L};
+        List<String> officeSupplies0 = new ArrayList<>();
+        officeSupplies0.add("officeSuppliesTest0");
+        var value0 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L};
+        var value1 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L};
+        var value2 = new Object[]{UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L};
         var valueSet = new Object[][]{value0, value1, value2};
 
         var refMap = new HashMap<UUID, OfficeServiceRequestEntry>();
         for (var value : valueSet) {
-            var office = new OfficeServiceRequestEntry((UUID) value[0], (Long) value[1], (Long) value[2], (String) value[3], (RequestEntry.Status) value[4], (String) value[5], (Long) value[6]);
+            var office = new OfficeServiceRequestEntry((UUID) value[0], (Long) value[1], (Long) value[2], (String) value[3], (RequestEntry.Status) value[4], (List<String>) value[5], (Long) value[6]);
             refMap.put(office.getServiceID(), office);
             try {
                 pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, value);
@@ -2391,7 +2401,9 @@ class FacadeTest {
     @Test
     void saveOfficeServiceRequestEntry() {
         UUID uuid = UUID.randomUUID();
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
+        List<String> officeSupplies0 = new ArrayList<>();
+        officeSupplies0.add("officeSuppliesTest0");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
         facade.saveOfficeServiceRequestEntry(office);
         Optional<OfficeServiceRequestEntry> results = facade.getOfficeServiceRequestEntry(office.getServiceID());
         OfficeServiceRequestEntry daoresult = results.get();
@@ -2406,10 +2418,14 @@ class FacadeTest {
     @Test
     void updateOfficeServiceRequestEntry() {
         UUID uuid = UUID.randomUUID();
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, 100L, 100L, "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
+        List<String> officeSupplies0 = new ArrayList<>();
+        officeSupplies0.add("officeSuppliesTest0");
+        List<String> officeSupplies1 = new ArrayList<>();
+        officeSupplies1.add("officeSuppliesTest1");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(uuid, 100L, 100L, "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
         facade.saveOfficeServiceRequestEntry(office);
 
-        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, 100L, 100L, "testNotes", RequestEntry.Status.DONE, "testOffices", 200L);
+        OfficeServiceRequestEntry updatedOffice = new OfficeServiceRequestEntry(uuid, 100L, 100L, "testNotes", RequestEntry.Status.DONE, officeSupplies1, 200L);
         OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.LOCATION_NAME, OfficeServiceRequestEntry.Field.STATUS, OfficeServiceRequestEntry.Field.EMPLOYEE_ID};
         facade.updateOfficeServiceRequestEntry(updatedOffice, fields);
 
@@ -2425,8 +2441,10 @@ class FacadeTest {
 
     @Test
     void deleteOfficeServiceRequestEntry() {
-        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, "testOffices", 100L);
-        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeRequest(), office.getEmployeeID()};
+        List<String> officeSupplies0 = new ArrayList<>();
+        officeSupplies0.add("officeSuppliesTest0");
+        OfficeServiceRequestEntry office = new OfficeServiceRequestEntry(UUID.randomUUID(), ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
+        Object[] values = new Object[]{office.getServiceID(), office.getLocationName(), office.getStaffAssignment(), office.getAdditionalNotes(), office.getStatus(), office.getOfficeSupplies(), office.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values);
         } catch (PdbController.DatabaseException e) {
