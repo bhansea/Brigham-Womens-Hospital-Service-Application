@@ -18,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName", "beverage"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "selectedFoods", "patientName"};
     private final PdbController dbController;
 
     public FoodServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -35,11 +35,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("selectedFoods").getArray()),
                     rs.getObject("patientName", java.lang.String.class),
                     rs.getObject("employeeID", java.lang.Long.class));
             return Optional.ofNullable(req);
@@ -65,11 +61,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("selectedFoods").getArray()),
                     rs.getObject("patientName", java.lang.String.class),
                     rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
@@ -92,11 +84,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("selectedFoods").getArray()),
                     rs.getObject("patientName", java.lang.String.class),
                     rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
@@ -115,7 +103,7 @@ public class FoodServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Food
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getEmployeeID(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getBeverage()};
+        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getEmployeeID(), foodServiceRequestEntry.getSelectedFoods(), foodServiceRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FOODREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

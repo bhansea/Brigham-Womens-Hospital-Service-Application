@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID, FoodServiceRequestEntry, FoodServiceRequestEntry.Field>, PropertyChangeListener {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "foodSelection", "tempType", "additionalItems", "dietaryRestrictions", "patientName", "beverage"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "selectedFoods", "patientName"};
 
     private final ObservableMap<java.util.UUID, FoodServiceRequestEntry> cache = FXCollections.observableMap(new LinkedHashMap<>());
     private final ObservableList<FoodServiceRequestEntry> list = FXCollections.observableArrayList();
@@ -120,11 +120,7 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("foodSelection", java.lang.String.class),
-                    rs.getObject("tempType", java.lang.String.class),
-                    java.util.Arrays.asList((String[])rs.getArray("additionalItems").getArray()),
-                    rs.getObject("beverage", java.lang.String.class),
-                    rs.getObject("dietaryRestrictions", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("selectedFoods").getArray()),
                     rs.getObject("patientName", java.lang.String.class),
                     rs.getObject("employeeID", java.lang.Long.class));
                 add(req);
@@ -170,7 +166,7 @@ public class FoodServiceRequestEntryCachedDaoImpl implements IDao<java.util.UUID
 
     @Override
     public void save(FoodServiceRequestEntry foodServiceRequestEntry) {
-        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getEmployeeID(), foodServiceRequestEntry.getFoodSelection(), foodServiceRequestEntry.getTempType(), foodServiceRequestEntry.getAdditionalItems(), foodServiceRequestEntry.getDietaryRestrictions(), foodServiceRequestEntry.getPatientName(), foodServiceRequestEntry.getBeverage()};
+        Object[] values = {foodServiceRequestEntry.getServiceID(), foodServiceRequestEntry.getLocationName(), foodServiceRequestEntry.getStaffAssignment(), foodServiceRequestEntry.getAdditionalNotes(), foodServiceRequestEntry.getStatus(), foodServiceRequestEntry.getEmployeeID(), foodServiceRequestEntry.getSelectedFoods(), foodServiceRequestEntry.getPatientName()};
         try {
             dbController.insertQuery(TableType.FOODREQUESTS, fields, values);
 //            add(foodServiceRequestEntry);
