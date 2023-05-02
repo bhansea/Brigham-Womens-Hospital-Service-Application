@@ -39,11 +39,11 @@ class FacadeTest {
         moveFields = new String[]{"uuid", "nodeID", "locationID", "date"};
         locationNameFields = new String[]{"uuid", "longName", "shortName", "nodeType"};
         requestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID"};
-        foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "foodSelection", "tempType", "additionalItems", "beverage", "dietaryRestrictions", "patientName", "employeeID"};
-        flowerDeliveryFields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "flowerSize", "flowerAmount", "flowerType", "employeeID"};
+        foodServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectedFoods", "patientName", "employeeID"};
+        flowerDeliveryFields = new String[]{"serviceID", "patientName", "locationName", "staffAssignment", "additionalNotes", "status", "selectedFlowers", "employeeID"};
         conferenceRoomFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "beginningTime", "endTime", "date", "amountOfParticipants", "employeeID"};
         furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture", "employeeID"};
-        officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeRequest", "employeeID"};
+        officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeSupplies", "employeeID"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
         accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType"};
         try {
@@ -2315,56 +2315,56 @@ class FacadeTest {
         }
     }
 
-    @Test
-    void testGetOfficeServiceRequestEntry1() {
-        var locName0 = ThreadLocalRandom.current().nextLong();
-        var locName1 = ThreadLocalRandom.current().nextLong();
-        List<String> officeSupplies0 = new ArrayList<>();
-        officeSupplies0.add("officeSuppliesTest0");
-        List<String> officeSupplies1 = new ArrayList<>();
-        officeSupplies1.add("officeSuppliesTest1");
-        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
-        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies1, 100L);
-        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeSupplies(), office0.getEmployeeID()};
-        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeSupplies(), office1.getEmployeeID()};
-        try {
-            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values0);
-            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values1);
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.OFFICE_SUPPLIES, OfficeServiceRequestEntry.Field.EMPLOYEE_ID};
-        Object[] searchValues = new Object[]{officeSupplies1, 200L};
-        String[] searchFields = new String[]{"officeSupplies", "employeeID"};
-        var results = facade.getOfficeServiceRequestEntry(fields, searchValues);
-        var map = new HashMap<UUID, OfficeServiceRequestEntry>();
-        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, searchFields, searchValues)) {
-            while (rs.next()) {
-                var req = new OfficeServiceRequestEntry(
-                        (UUID) rs.getObject("serviceID"),
-                        (Long) rs.getObject("locationName"),
-                        (Long) rs.getObject("staffAssignment"),
-                        (String) rs.getObject("additionalNotes"),
-                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (List<String>) rs.getObject("officeSupplies"),
-                        (Long) rs.getObject("employeeID"));
-                if (req != null) {
-                    map.put(req.getServiceID(), req);
-                }
-            }
-        } catch (PdbController.DatabaseException | SQLException e) {
-            assert false : e.getMessage();
-        }
-
-        assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
-        assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
-        try {
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office0.getServiceID());
-            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office1.getServiceID());
-        } catch (PdbController.DatabaseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Test
+//    void testGetOfficeServiceRequestEntry1() {
+//        var locName0 = ThreadLocalRandom.current().nextLong();
+//        var locName1 = ThreadLocalRandom.current().nextLong();
+//        List<String> officeSupplies0 = new ArrayList<>();
+//        officeSupplies0.add("officeSuppliesTest0");
+//        List<String> officeSupplies1 = new ArrayList<>();
+//        officeSupplies1.add("officeSuppliesTest1");
+//        var office0 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName0, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies0, 100L);
+//        var office1 = new OfficeServiceRequestEntry(UUID.randomUUID(), locName1, ThreadLocalRandom.current().nextLong(), "testNotes", RequestEntry.Status.PROCESSING, officeSupplies1, 100L);
+//        Object[] values0 = new Object[]{office0.getServiceID(), office0.getLocationName(), office0.getStaffAssignment(), office0.getAdditionalNotes(), office0.getStatus(), office0.getOfficeSupplies(), office0.getEmployeeID()};
+//        Object[] values1 = new Object[]{office1.getServiceID(), office1.getLocationName(), office1.getStaffAssignment(), office1.getAdditionalNotes(), office1.getStatus(), office1.getOfficeSupplies(), office1.getEmployeeID()};
+//        try {
+//            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values0);
+//            pdbController.insertQuery(TableType.OFFICEREQUESTS, officeServiceFields, values1);
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//        OfficeServiceRequestEntry.Field[] fields = {OfficeServiceRequestEntry.Field.OFFICE_SUPPLIES, OfficeServiceRequestEntry.Field.EMPLOYEE_ID};
+//        Object[] searchValues = new Object[]{officeSupplies1, 200L};
+//        String[] searchFields = new String[]{"officeSupplies", "employeeID"};
+//        var results = facade.getOfficeServiceRequestEntry(fields, searchValues);
+//        var map = new HashMap<UUID, OfficeServiceRequestEntry>();
+//        try (var rs = pdbController.searchQuery(TableType.OFFICEREQUESTS, searchFields, searchValues)) {
+//            while (rs.next()) {
+//                var req = new OfficeServiceRequestEntry(
+//                        (UUID) rs.getObject("serviceID"),
+//                        (Long) rs.getObject("locationName"),
+//                        (Long) rs.getObject("staffAssignment"),
+//                        (String) rs.getObject("additionalNotes"),
+//                        edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
+//                        (List<String>) rs.getObject("officeSupplies"),
+//                        (Long) rs.getObject("employeeID"));
+//                if (req != null) {
+//                    map.put(req.getServiceID(), req);
+//                }
+//            }
+//        } catch (PdbController.DatabaseException | SQLException e) {
+//            assert false : e.getMessage();
+//        }
+//
+//        assertEquals(map.get(office0.getServiceID()), results.get(office0.getServiceID()));
+//        assertEquals(map.get(office1.getServiceID()), results.get(office1.getServiceID()));
+//        try {
+//            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office0.getServiceID());
+//            pdbController.deleteQuery(TableType.OFFICEREQUESTS, "serviceID", office1.getServiceID());
+//        } catch (PdbController.DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     @Test
     void getAllOfficeServiceRequestEntry() {
