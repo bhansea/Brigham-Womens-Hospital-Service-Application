@@ -7,6 +7,8 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.spi.JsoniterSpi;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -93,6 +95,7 @@ public class PdbController {
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
         connection.setSchema(this.schema);
         statement.close();
+
     }
 
     private static String objectToPsqlString(Object o) {

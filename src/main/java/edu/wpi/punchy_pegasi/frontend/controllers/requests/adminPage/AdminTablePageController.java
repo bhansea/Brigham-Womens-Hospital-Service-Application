@@ -3,6 +3,8 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
+import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -12,12 +14,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
@@ -83,12 +88,13 @@ public class AdminTablePageController {
     PdbController pdb = App.getSingleton().getPdb();
 
     public void initialize() {
+        VBox vC = refreshInit();
         nodes = facade.getAllNode();
         moves = facade.getAllMove();
         locations = facade.getAllLocationName();
         accounts = facade.getAllAccount();
         databaseLabel.setText("Current Database: " + App.getSingleton().getPdb().source.toString());
-       // displayDatabaseComboBox.selectItem(App.getSingleton().getPdb().source);
+        // displayDatabaseComboBox.selectItem(App.getSingleton().getPdb().source);
 
         fileChooser.setTitle("File Chooser");
 
@@ -113,9 +119,10 @@ public class AdminTablePageController {
             });
             displayEditComponent();
         });
-
         displayDatabaseComboBox.setOnAction(e -> {
-            //sources.add(App.getSingleton().getPdb().source);
+            refreshInit();
+            App.getSingleton().getExecutorService().execute(() -> Platform.runLater(()->App.getSingleton().getLayout().showOverlay(vC, false)));
+
             PdbController.Source source = displayDatabaseComboBox.getSelectedItem();
             try {
                 App.getSingleton().getFacade().switchDatabase(source);
@@ -129,8 +136,7 @@ public class AdminTablePageController {
                     log.error("Could not init table " + tt.name());
                 }
             }
-            //sources.remove(App.getSingleton().getPdb().source);
-            //displayDatabaseComboBox.setItems(sources);
+            Platform.runLater(() -> App.getSingleton().getLayout().hideOverlay());
         });
 
         tables.values().forEach(t -> t.setRowClicked(this::populateForm));
@@ -443,5 +449,30 @@ public class AdminTablePageController {
         public InvalidArgumentException(String message) {
             super(message);
         }
+    }
+
+    public VBox refreshInit() {
+
+        var refresh = new PFXIcon(MaterialSymbols.REFRESH);
+        var text = new Label("Refreshing...");
+        text.setTextAlignment(TextAlignment.CENTER);
+        text.setTextFill(Color.BLACK);
+
+        var vC = new VBox();
+        vC.setAlignment(Pos.CENTER);
+        vC.setStyle("-fx-background-color: -pfx-secondary-transparent");
+        var hC = new HBox();
+        hC.setAlignment(Pos.CENTER);
+        vC.getChildren().add(hC);
+        var c = new VBox(text, refresh);
+        c.setStyle("""
+                -fx-background-color: white;
+                -fx-background-radius: 12;
+                -fx-padding: 10;
+                -fx-spacing: 10;
+                -fx-alignment: CENTER;
+                """);
+        hC.getChildren().add(c);
+        return vC;
     }
 }
