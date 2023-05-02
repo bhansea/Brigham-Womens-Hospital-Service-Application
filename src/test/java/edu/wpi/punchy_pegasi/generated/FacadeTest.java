@@ -1095,10 +1095,10 @@ class FacadeTest {
     void getFoodServiceRequestEntry() {
         var locName = ThreadLocalRandom.current().nextLong();
         var staff = ThreadLocalRandom.current().nextLong();
-        List<String> additionalItems = new ArrayList<>();
-        additionalItems.add("testItems");
-        FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient", 100L);
-        Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getBeverage(),food.getDietaryRestrictions(), food.getPatientName(), food.getEmployeeID()};
+        List<String> selectedFoods = new ArrayList<>();
+        selectedFoods.add("testItems");
+        FoodServiceRequestEntry food = new FoodServiceRequestEntry(UUID.randomUUID(), locName, staff, "testNotes", RequestEntry.Status.PROCESSING, selectedFoods, "testPatient", 100L);
+        Object[] values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getSelectedFoods(), food.getPatientName(), food.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values);
         } catch (PdbController.DatabaseException e) {
@@ -1172,19 +1172,19 @@ class FacadeTest {
         var staff0 = ThreadLocalRandom.current().nextLong();
         var locName1 = ThreadLocalRandom.current().nextLong();
         var staff1 = ThreadLocalRandom.current().nextLong();
-        var food = new FoodServiceRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, "testFood1", "testTemp1", additionalItems, "juice", "testRestrictions", "testPatient", 100L);
-        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, "testFood2", "testTemp2", additionalItems, "juice", "testRestrictions", "testPatient", 100L);
-        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getFoodSelection(), food.getTempType(), food.getAdditionalItems(), food.getBeverage(), food.getDietaryRestrictions(), food.getPatientName(), food.getEmployeeID()};
-        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getFoodSelection(), food2.getTempType(), food2.getAdditionalItems(), food2.getBeverage(), food2.getDietaryRestrictions(), food2.getPatientName(), food2.getEmployeeID()};
+        var food = new FoodServiceRequestEntry(UUID.randomUUID(), locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
+        var food2 = new FoodServiceRequestEntry(UUID.randomUUID(), locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
+        var values = new Object[]{food.getServiceID(), food.getLocationName(), food.getStaffAssignment(), food.getAdditionalNotes(), food.getStatus(), food.getSelectedFoods(), food.getPatientName(), food.getEmployeeID()};
+        var values2 = new Object[]{food2.getServiceID(), food2.getLocationName(), food2.getStaffAssignment(), food2.getAdditionalNotes(), food2.getStatus(), food2.getSelectedFoods(), food2.getPatientName(), food2.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values);
             pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, values2);
         } catch (PdbController.DatabaseException e) {
             throw new RuntimeException(e);
         }
-        FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.ADDITIONAL_NOTES, FoodServiceRequestEntry.Field.FOOD_SELECTION};
-        Object[] searchValues = new Object[]{"testNotes1", "testFood2"};
-        String[] searchFields = new String[]{"additionalNotes", "foodSelection"};
+        FoodServiceRequestEntry.Field[] fields = {FoodServiceRequestEntry.Field.ADDITIONAL_NOTES, FoodServiceRequestEntry.Field.SELECTED_FOODS};
+        Object[] searchValues = new Object[]{"testNotes1", additionalItems};
+        String[] searchFields = new String[]{"additionalNotes", "selectedFoods"};
         var results = facade.getFoodServiceRequestEntry(fields, searchValues);
         var map = new HashMap<java.util.UUID, FoodServiceRequestEntry>();
         try (var rs = pdbController.searchQuery(TableType.FOODREQUESTS, searchFields, searchValues)) {
@@ -1197,11 +1197,7 @@ class FacadeTest {
                         (java.lang.Long) rs.getObject("staffAssignment"),
                         rs.getObject("additionalNotes", String.class),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("foodSelection"),
-                        (java.lang.String) rs.getObject("tempType"),
                         myColumnList,
-                        (java.lang.String) rs.getObject("beverage"),
-                        (java.lang.String) rs.getObject("dietaryRestrictions"),
                         (java.lang.String) rs.getObject("patientName"),
                         (java.lang.Long) rs.getObject("employeeID"));
                 map.put(req.getServiceID(), req);
@@ -1276,7 +1272,7 @@ class FacadeTest {
         additionalItems.add("testItems");
         var locName = ThreadLocalRandom.current().nextLong();
         var staff = ThreadLocalRandom.current().nextLong();
-        FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testFood", "testTemp", additionalItems, "juice", "testRestrictions", "testPatient", 100L);
+        FoodServiceRequestEntry fsre = new FoodServiceRequestEntry(uuid, locName, staff, "testNotes", RequestEntry.Status.PROCESSING, additionalItems, "testPatient", 100L);
         facade.saveFoodServiceRequestEntry(fsre);
 
         Optional<FoodServiceRequestEntry> results = facade.getFoodServiceRequestEntry(uuid);
@@ -1299,11 +1295,7 @@ class FacadeTest {
                 100L,
                 "testNode0",
                 RequestEntry.Status.PROCESSING,
-                "testFood0",
-                "100",
                 List.of("item1", "item2"),
-                "Juice",
-                "restrictions0",
                 "patientName0",
                 100L
         );
@@ -1313,13 +1305,9 @@ class FacadeTest {
                 100L,
                 "testNode0",
                 RequestEntry.Status.PROCESSING,
-                "testFood0",
-                "100",
                 List.of("item1", "item2"),
-                "Apple Juice",
-                "restrictions0",
                 "patientName0",
-                100L
+                200L
         );
         try {
             pdbController.insertQuery(TableType.FOODREQUESTS, foodServiceFields, new Object[]{
@@ -1328,11 +1316,7 @@ class FacadeTest {
                     foodRequest.getStaffAssignment(),
                     foodRequest.getAdditionalNotes(),
                     foodRequest.getStatus(),
-                    foodRequest.getFoodSelection(),
-                    foodRequest.getTempType(),
-                    foodRequest.getAdditionalItems(),
-                    foodRequest.getBeverage(),
-                    foodRequest.getDietaryRestrictions(),
+                    foodRequest.getSelectedFoods(),
                     foodRequest.getPatientName(),
                     foodRequest.getEmployeeID()
             });
@@ -1340,12 +1324,12 @@ class FacadeTest {
             assert false : e.getMessage();
         }
         FoodServiceRequestEntry.Field[] updateFields = {
-                FoodServiceRequestEntry.Field.BEVERAGE
+                FoodServiceRequestEntry.Field.EMPLOYEE_ID
         };
         facade.updateFoodServiceRequestEntry(updateFoodRequest, updateFields);
         Optional<FoodServiceRequestEntry> fsrq = facade.getFoodServiceRequestEntry(uuid);
         FoodServiceRequestEntry daoresult = fsrq.get();
-        assertEquals(daoresult.getBeverage(), updateFoodRequest.getBeverage());
+        assertEquals(daoresult.getEmployeeID(), updateFoodRequest.getEmployeeID());
         try {
             pdbController.deleteQuery(TableType.FOODREQUESTS, "serviceID", uuid);
         } catch (PdbController.DatabaseException e) {
@@ -1361,11 +1345,7 @@ class FacadeTest {
                 ThreadLocalRandom.current().nextLong(),
                 "testNode",
                 RequestEntry.Status.PROCESSING,
-                "testFood",
-                "100",
                 List.of("item1", "item2"),
-                "juice",
-                "restrictions",
                 "patientName",
                 100L
         );
@@ -1377,11 +1357,7 @@ class FacadeTest {
                 foodRequest.getStaffAssignment(),
                 foodRequest.getAdditionalNotes(),
                 foodRequest.getStatus(),
-                foodRequest.getFoodSelection(),
-                foodRequest.getTempType(),
-                foodRequest.getAdditionalItems(),
-                foodRequest.getBeverage(),
-                foodRequest.getDietaryRestrictions(),
+                foodRequest.getSelectedFoods(),
                 foodRequest.getPatientName(),
                 foodRequest.getEmployeeID()
         };
@@ -1410,8 +1386,10 @@ class FacadeTest {
     void getFlowerDeliveryRequestEntry() {
         var locName = ThreadLocalRandom.current().nextLong();
         var staff = ThreadLocalRandom.current().nextLong();
-        FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
-        Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType(), flowers.getEmployeeID()};
+        List<String> selectedFlowers = new ArrayList<>();
+        selectedFlowers.add("testFlowers");
+        FlowerDeliveryRequestEntry flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName, staff, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers, 100L);
+        Object[] values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getSelectedFlowers(), flowers.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values);
         } catch (PdbController.DatabaseException e) {
@@ -1433,10 +1411,14 @@ class FacadeTest {
         var staff0 = ThreadLocalRandom.current().nextLong();
         var locName1 = ThreadLocalRandom.current().nextLong();
         var staff1 = ThreadLocalRandom.current().nextLong();
-        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
-        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
-        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType(), flowers.getEmployeeID()};
-        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType(), flowers2.getEmployeeID()};
+        List<String> selectedFlowers0 = new ArrayList<>();
+        selectedFlowers0.add("testFlowers0");
+        List<String> selectedFlowers1 = new ArrayList<>();
+        selectedFlowers1.add("testFlowers1");
+        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName0, staff0, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers0, 100L);
+        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient", locName1, staff1, "testNotes", RequestEntry.Status.PROCESSING, selectedFlowers1, 100L);
+        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getSelectedFlowers(), flowers.getEmployeeID()};
+        var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getSelectedFlowers(), flowers2.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values);
             pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values2);
@@ -1454,9 +1436,7 @@ class FacadeTest {
                         (java.lang.Long) rs.getObject("staffAssignment"),
                         (java.lang.String) rs.getObject("additionalNotes"),
                         edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf((String) rs.getObject("status")),
-                        (java.lang.String) rs.getObject("flowerSize"),
-                        (java.lang.String) rs.getObject("flowerAmount"),
-                        (java.lang.String) rs.getObject("flowerType"),
+                        (java.util.List) rs.getObject("selectedFlowers"),
                         (java.lang.Long) rs.getObject("employeeID"));
                 if (req != null)
                     map.put(req.getServiceID(), req);
@@ -1480,9 +1460,13 @@ class FacadeTest {
         var staff0 = ThreadLocalRandom.current().nextLong();
         var locName1 = ThreadLocalRandom.current().nextLong();
         var staff1 = ThreadLocalRandom.current().nextLong();
-        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient1", locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
-        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient2", locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, "testSmall", "test1", "testTulip", 100L);
-        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getFlowerSize(), flowers.getFlowerAmount(), flowers.getFlowerType(), flowers.getEmployeeID()};
+        List<String> selectedFlowers0 = new ArrayList<>();
+        selectedFlowers0.add("testFlowers0");
+        List<String> selectedFlowers1 = new ArrayList<>();
+        selectedFlowers1.add("testFlowers1");
+        var flowers = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient1", locName0, staff0, "testNotes1", RequestEntry.Status.PROCESSING, selectedFlowers0, 100L);
+        var flowers2 = new FlowerDeliveryRequestEntry(UUID.randomUUID(), "testPatient2", locName1, staff1, "testNotes2", RequestEntry.Status.PROCESSING, selectedFlowers1, 100L);
+        var values = new Object[]{flowers.getServiceID(), flowers.getPatientName(), flowers.getLocationName(), flowers.getStaffAssignment(), flowers.getAdditionalNotes(), flowers.getStatus(), flowers.getSelectedFlowers(), flowers.getEmployeeID()};
         var values2 = new Object[]{flowers2.getServiceID(), flowers2.getPatientName(), flowers2.getLocationName(), flowers2.getStaffAssignment(), flowers2.getAdditionalNotes(), flowers2.getStatus(), flowers2.getFlowerSize(), flowers2.getFlowerAmount(), flowers2.getFlowerType(), flowers2.getEmployeeID()};
         try {
             pdbController.insertQuery(TableType.FLOWERREQUESTS, flowerDeliveryFields, values);
