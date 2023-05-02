@@ -18,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, OfficeServiceRequestEntry, OfficeServiceRequestEntry.Field> {
 
-    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "officeRequest"};
+    static String[] fields = {"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "employeeID", "officeSupplies"};
     private final PdbController dbController;
 
     public OfficeServiceRequestEntryDaoImpl(PdbController dbController) {
@@ -35,7 +35,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("officeRequest", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("officeSupplies").getArray()),
                     rs.getObject("employeeID", java.lang.Long.class));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
@@ -60,7 +60,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("officeRequest", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("officeSupplies").getArray()),
                     rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
@@ -82,7 +82,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
                     rs.getObject("staffAssignment", java.lang.Long.class),
                     rs.getObject("additionalNotes", java.lang.String.class),
                     edu.wpi.punchy_pegasi.schema.RequestEntry.Status.valueOf(rs.getString("status")),
-                    rs.getObject("officeRequest", java.lang.String.class),
+                    java.util.Arrays.asList((String[])rs.getArray("officeSupplies").getArray()),
                     rs.getObject("employeeID", java.lang.Long.class));
                 if (req != null)
                     map.put(req.getServiceID(), req);
@@ -100,7 +100,7 @@ public class OfficeServiceRequestEntryDaoImpl implements IDao<java.util.UUID, Of
 
     @Override
     public void save(OfficeServiceRequestEntry officeServiceRequestEntry) {
-        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getEmployeeID(), officeServiceRequestEntry.getOfficeRequest()};
+        Object[] values = {officeServiceRequestEntry.getServiceID(), officeServiceRequestEntry.getLocationName(), officeServiceRequestEntry.getStaffAssignment(), officeServiceRequestEntry.getAdditionalNotes(), officeServiceRequestEntry.getStatus(), officeServiceRequestEntry.getEmployeeID(), officeServiceRequestEntry.getOfficeSupplies()};
         try {
             dbController.insertQuery(TableType.OFFICEREQUESTS, fields, values);
         } catch (PdbController.DatabaseException e) {

@@ -65,6 +65,7 @@ public class Facade {
 		alertDao = new AlertCachedDaoImpl(dbController);
 
     }
+
 	public MFXTableView<Node> generateTableNode(Consumer<Node> onRowClick, Node.Field[] hidden) {
 		return nodeDao.generateTable(onRowClick, hidden);
 	}
