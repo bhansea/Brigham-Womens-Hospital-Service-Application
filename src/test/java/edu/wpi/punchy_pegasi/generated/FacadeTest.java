@@ -45,7 +45,7 @@ class FacadeTest {
         furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture", "employeeID"};
         officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeSupplies", "employeeID"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
-        accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType, theme"};
+        accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType", "theme"};
         try {
             pdbController = new PdbController(Config.source, "test");
         } catch (PdbController.DatabaseException e) {
@@ -2709,8 +2709,8 @@ class FacadeTest {
     void testGetAccount1() {
         Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN, Account.Theme.DARK);
         Account account2 = new Account(101L, "testUsername1", "testPassword", 200L, Account.AccountType.STAFF, Account.Theme.DARK);
-        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType(), account.getAccountType()};
-        Object[] values2 = new Object[]{account2.getUuid(), account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType(), account2.getAccountType()};
+        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType(), account.getTheme()};
+        Object[] values2 = new Object[]{account2.getUuid(), account2.getUsername(), account2.getPassword(), account2.getEmployeeID(), account2.getAccountType(), account2.getTheme()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values2);
@@ -2814,7 +2814,7 @@ class FacadeTest {
     @Test
     void deleteAccount() {
         Account account = new Account(100L, "testUsername", "testPassword", 100L, Account.AccountType.ADMIN, Account.Theme.DARK);
-        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType(), Account.Theme.DARK};
+        Object[] values = new Object[]{account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType(), account.getTheme()};
         try {
             pdbController.insertQuery(TableType.ACCOUNTS, accountFields, values);
         } catch (PdbController.DatabaseException e) {
