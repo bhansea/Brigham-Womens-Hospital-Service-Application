@@ -7,8 +7,10 @@ import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.Account;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,11 +29,11 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
     private final EventHandler<? super MouseEvent> isAccount = e -> accountMenu.show(this);
     private final PFXIcon defaultIcon = new PFXIcon(MaterialSymbols.ACCOUNT_CIRCLE);
 
-    VBox accountInformation = new VBox();
-    Label nameLabel = new Label();
-    Label accountLevel = new Label();
+    private final VBox accountInformation = new VBox();
+    private final Label nameLabel = new Label();
+    private final Label accountLevel = new Label();
+    private final MFXToggleButton colorToggle = new MFXToggleButton();
 
-    MFXToggleButton colorToggle = new MFXToggleButton();
 
     public PFXAccount() {
         super();
@@ -58,13 +60,15 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
         });
 
         accountInformation.getChildren().add(nameLabel);
-        nameLabel.getStyleClass().add("pfx-account-information-label");
         accountInformation.getChildren().add(accountLevel);
-        accountLevel.getStyleClass().add("pfx-account-information-label");
         accountInformation.getStyleClass().add("pfx-account-information");
-        colorToggle.getStyleClass().add("pfx-account-information-toggle-button");
-        colorToggle.setText("Dark Mode");
 
+        nameLabel.setStyle("-fx-font-size: 14");
+
+        colorToggle.setText("Dark Mode");
+        colorToggle.setStyle("-fx-font-size: 12");
+//        ttsToggle.setText("Text to Speech");
+//        ttsToggle.setStyle("-fx-font-size: 12");
 
         content.setAlignment(Pos.CENTER_LEFT);
         content.getChildren().add(accountInformation);
@@ -103,5 +107,6 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
             setAccount((Account) evt.getNewValue());
         }
     }
+
 
 }

@@ -10,9 +10,6 @@
     -fx-padding: 10;
     -fx-min-width: 150;
     -fx-opacity: 1;
-    -fx-background-color: -pfx-background;
-    -fx-border-color: -pfx-secondary;
-    -fx-border-radius: 6;
 }
 
 
@@ -26,7 +23,7 @@
 }
 
 .pfx-default-account-icon {
-    -fx-fill: -pfx-text;
+    -fx-fill: -pfx-secondary;
 }
 
 .pfx-account-information {
@@ -34,20 +31,4 @@
     -fx-padding: 0 0 15 0;
     -fx-border-color: -pfx-secondary-light;
     -fx-border-width: 0 0 1 0;
-}
-
-.pfx-account-information-label{
-    -fx-font-size: 12;
-    -fx-text-fill: -pfx-text;
-}
-
-.pfx-account-information-toggle-button{
-    -fx-font-size: 12;
-    -fx-text-fill: -pfx-text;
-}
-
-.-pfx-account-information-logout{
-    -fx-font-size: 12;
-    -fx-text-fill: -pfx-text;
-    -fx-fill: -pfx-text;
 }
