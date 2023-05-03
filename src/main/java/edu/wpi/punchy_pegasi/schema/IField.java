@@ -1,13 +1,13 @@
 package edu.wpi.punchy_pegasi.schema;
 
-public interface IField<T> {
+public interface IField<T, B> {
     Object getValue(T ref);
 
     String getColName();
 
     String getValueAsString(T ref);
 
-    void setValueFromString(T ref, String value);
+    void setValueFromString(B builder, String value);
 
     int ordinal();
 

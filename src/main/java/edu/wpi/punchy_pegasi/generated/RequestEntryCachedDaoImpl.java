@@ -1,9 +1,8 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.schema.IForm;
+import edu.wpi.punchy_pegasi.schema.RequestEntry;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -14,12 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -27,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEntry, RequestEntry.Field>, PropertyChangeListener {
@@ -42,16 +38,16 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         cache.addListener((MapChangeListener<java.util.UUID, RequestEntry>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
-                    var index = list.indexOf(c.getValueRemoved());
-                    if (index != -1) {
-                        list.remove(index);
-                        list.add(index, c.getValueAdded());
-                    }
-                }
-                if (c.wasRemoved()) {
-                    list.remove(c.getValueRemoved());
-                }
-                if (c.wasAdded()) {
+                    IntStream.range(0, list.size())
+                            .boxed().filter(i -> list.get(i).getServiceID()
+                                    .equals(c.getValueRemoved().getServiceID())).findFirst().ifPresent(i -> {
+                                list.remove((int) i);
+                                list.add(i, c.getValueAdded());
+                            });
+                } else if (c.wasRemoved()) {
+                    list.removeIf(o -> o.getServiceID()
+                            .equals(c.getValueRemoved().getServiceID()));
+                } else if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
             });
@@ -166,8 +162,8 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
     public void save(RequestEntry requestEntry) {
         Object[] values = {requestEntry.getServiceID(), requestEntry.getLocationName(), requestEntry.getStaffAssignment(), requestEntry.getAdditionalNotes(), requestEntry.getStatus(), requestEntry.getEmployeeID()};
         try {
+            add(requestEntry);
             dbController.insertQuery(TableType.REQUESTS, fields, values);
-//            add(requestEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -178,8 +174,8 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         if (params.length < 1)
             return;
         try {
+            update(requestEntry);
             dbController.updateQuery(TableType.REQUESTS, "serviceID", requestEntry.getServiceID(), Arrays.stream(params).map(RequestEntry.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(requestEntry)).toArray());
-//            update(requestEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -188,8 +184,8 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
     @Override
     public void delete(RequestEntry requestEntry) {
         try {
+            remove(requestEntry);
             dbController.deleteQuery(TableType.REQUESTS, "serviceID", requestEntry.getServiceID());
-//            remove(requestEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -208,38 +204,38 @@ public class RequestEntryCachedDaoImpl implements IDao<java.util.UUID, RequestEn
         }
     }
 
-    public static class RequestEntryForm implements IForm<RequestEntry> {
-        @Getter
-        private final List<javafx.scene.Node> form;
-        private final List<TextField> inputs;
-
-        public RequestEntryForm() {
-            form = new ArrayList<>();
-            inputs = new ArrayList<>();
-            for (var field : RequestEntry.Field.values()) {
-                var hbox = new HBox();
-                var label = new Label(field.getColName());
-                var input = new TextField();
-                hbox.getChildren().addAll(label, input);
-                form.add(hbox);
-                inputs.add(input);
-            }
-        }
-
-        public void populateForm(RequestEntry entry) {
-            for (var field : RequestEntry.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                input.setText(field.getValueAsString(entry));
-            }
-        }
-
-        public RequestEntry commit() {
-            var entry = new RequestEntry();
-            for (var field : RequestEntry.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                field.setValueFromString(entry, input.getText());
-            }
-            return entry;
-        }
-    }
+//    public static class RequestEntryForm implements IForm<RequestEntry> {
+//        @Getter
+//        private final List<javafx.scene.Node> form;
+//        private final List<TextField> inputs;
+//
+//        public RequestEntryForm() {
+//            form = new ArrayList<>();
+//            inputs = new ArrayList<>();
+//            for (var field : RequestEntry.Field.values()) {
+//                var hbox = new HBox();
+//                var label = new Label(field.getColName());
+//                var input = new TextField();
+//                hbox.getChildren().addAll(label, input);
+//                form.add(hbox);
+//                inputs.add(input);
+//            }
+//        }
+//
+//        public void populateForm(RequestEntry entry) {
+//            for (var field : RequestEntry.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                input.setText(field.getValueAsString(entry));
+//            }
+//        }
+//
+//        public RequestEntry commit() {
+//            var entry = new RequestEntry();
+//            for (var field : RequestEntry.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                field.setValueFromString(entry, input.getText());
+//            }
+//            return entry;
+//        }
+//    }
 }

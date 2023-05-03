@@ -3,6 +3,7 @@ package edu.wpi.punchy_pegasi.frontend.controllers;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlertCard;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
+import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.*;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
@@ -10,9 +11,12 @@ import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,26 +40,28 @@ public class HomePageController {
     private final ObservableMap<Long, LocationName> locationNames = facade.getAllLocationName();
     private final Map<Long, Employee> employees = facade.getAllEmployee();
     @FXML
-    MFXTableView<RequestEntry> requestTable = new MFXTableView<>();
+    MFXTableView<RequestEntry> requestTable;
     @FXML
-    private VBox tableContainer = new VBox();
+    private VBox tableContainer;
     @FXML
-    private PieChart piechart = new PieChart();
+    private PieChart piechart;
 
     @FXML
-    private VBox alertsHolder = new VBox();
+    private VBox alertsContainer;
     @FXML
-    private VBox alertsContainer = new VBox();
+    private ScrollPane alertScrollPane;
     @FXML
-    private ScrollPane alertScrollPane = new ScrollPane();
+    private Label noAlertsLabel;
     @FXML
-    private Label timeLabel = new Label();
+    private Label timeLabel;
+    @FXML
+    private VBox dateTimeBox;
+    @FXML
+    private AnchorPane dateTimeAnchor;
 
-    @FXML
-    private VBox dateTimeBox = new VBox();
+    private ObservableList<Alert> alerts;
 
-    @FXML
-    private AnchorPane dateTimeAnchor = new AnchorPane();
+    private FilteredList<Alert> read;
 
     @FXML
     private void initialize() {
@@ -63,50 +69,34 @@ public class HomePageController {
 
         requestTable.prefWidthProperty().bind(tableContainer.widthProperty());
         requestTable.prefHeightProperty().bind(tableContainer.heightProperty());
-        List<RequestEntry> requestEntries = facade.getAllRequestEntry().values().stream().toList();
-        int done = requestEntries.stream().mapToInt(r -> r.getStatus() == RequestEntry.Status.DONE ? 1 : 0).sum();
-        int processing = requestEntries.stream().mapToInt(r -> r.getStatus() == RequestEntry.Status.PROCESSING ? 1 : 0).sum();
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Done", done),
-                new PieChart.Data("Processing", processing));
-        piechart.setData(pieChartData);
+        ObservableList<RequestEntry> requestEntries = facade.getAllAsListRequestEntry();
+        var doneSlice = new PieChart.Data("Done", 0);
+        var processingSlice =  new PieChart.Data("Processing", 0);
+        doneSlice.pieValueProperty().bind(Bindings.createDoubleBinding(() -> requestEntries.stream().mapToDouble(r -> r.getStatus() == RequestEntry.Status.DONE ? 1 : 0).sum(), requestEntries));
+        processingSlice.pieValueProperty().bind(Bindings.createDoubleBinding(() -> requestEntries.stream().mapToDouble(r -> r.getStatus() == RequestEntry.Status.PROCESSING ? 1 : 0).sum(), requestEntries));
+        piechart.setData(FXCollections.observableArrayList(doneSlice, processingSlice));
         piechart.setTitle("Service Request");
         piechart.setLegendVisible(false);
 
-        List<Alert> alerts = App.getSingleton().getFacade().getAllAsListAlert();
-        for (Alert alert : alerts) {
-            //var moves = this.moves.values().stream().filter(m -> m.getNodeID().equals(node.getNodeID())).toList();
-            alerts = alerts.stream().filter(a -> a.getEmployeeID().equals(App.getSingleton().getAccount().getEmployeeID())).toList();
-            alerts = alerts.stream().filter(e -> e.getAlertType().equals(Alert.AlertType.EMPLOYEE)).toList();
-
-            alertsContainer.setVisible(true);
-            alertsHolder.setVisible(true);
-            alertScrollPane.setVisible(true);
-
-            alertsContainer.setManaged(true);
-            alertScrollPane.setManaged(true);
-            alertsHolder.setManaged(true);
-
-            if (alerts.isEmpty() || alerts.size() == 0) {
-                alertsContainer.setVisible(false);
-                alertsHolder.setVisible(false);
-                alertScrollPane.setVisible(false);
-
-                alertsContainer.setManaged(false);
-                alertScrollPane.setManaged(false);
-                alertsHolder.setManaged(false);
-            }
-
-        }
-
-        for (Alert alert : alerts) {
-            PFXAlertCard card = new PFXAlertCard(alert);
-            alertsHolder.getChildren().add(card);
-        }
+        alerts = App.getSingleton().getFacade().getAllAsListAlert().filtered(a -> a.getEmployeeID().equals(App.getSingleton().getAccount().getEmployeeID()) && a.getAlertType().equals(Alert.AlertType.EMPLOYEE));
+        alerts.addListener((ListChangeListener<? super Alert>) e->{
+            System.out.println("");
+        });
+        read = alerts.filtered(a-> a.getReadStatus() == Alert.ReadStatus.READ);
+//        read.setPredicate(a-> a.getReadStatus() == Alert.ReadStatus.READ);
+        read.addListener((ListChangeListener<? super Alert>) e->{
+            System.out.println("");
+        });
+        var listViewUnread = new PFXListView<>(alerts.filtered(a-> a.getReadStatus() == Alert.ReadStatus.UNREAD), PFXAlertCard::new, a -> a.getUuid().toString());
+        var listViewRead = new PFXListView<>(alerts.filtered(a-> a.getReadStatus() == Alert.ReadStatus.READ), PFXAlertCard::new, a -> a.getUuid().toString());
+        alertScrollPane.setContent(new VBox(listViewUnread, listViewRead));
+        noAlertsLabel.visibleProperty().bind(Bindings.createBooleanBinding(alerts::isEmpty, alerts));
+        noAlertsLabel.managedProperty().bind(Bindings.createBooleanBinding(alerts::isEmpty, alerts));
+        alertScrollPane.visibleProperty().bind(Bindings.createBooleanBinding(()-> !alerts.isEmpty(), alerts));
+        alertScrollPane.managedProperty().bind(Bindings.createBooleanBinding(()-> !alerts.isEmpty(), alerts));
 
         initRequestTable();
         showServiceRequestTable(true);
-
     }
 
     private void showServiceRequestTable(boolean show) {
@@ -178,14 +168,12 @@ public class HomePageController {
                     if (button.getText().equalsIgnoreCase("change to done")) {
                         button.setText("Change To Processing");
                         button.setStyle("-fx-background-color: -pfx-danger");
-                        r.setStatus(RequestEntry.Status.DONE);
-                        facade.updateRequestEntry(r, new RequestEntry.Field[]{RequestEntry.Field.STATUS});
+                        facade.updateRequestEntry(r.withStatus(RequestEntry.Status.DONE), new RequestEntry.Field[]{RequestEntry.Field.STATUS});
                         requestTable.update();
                     } else if (button.getText().equalsIgnoreCase("change to processing")) {
                         button.setText("Change To Done");
                         button.setStyle("-fx-background-color: -pfx-success");
-                        r.setStatus(RequestEntry.Status.PROCESSING);
-                        facade.updateRequestEntry(r, new RequestEntry.Field[]{RequestEntry.Field.STATUS});
+                        facade.updateRequestEntry(r.withStatus(RequestEntry.Status.DONE), new RequestEntry.Field[]{RequestEntry.Field.STATUS});
                         requestTable.update();
                     }
                 });

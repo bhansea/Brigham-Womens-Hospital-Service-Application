@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.generator.Unique;
 import lombok.*;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder=true)
@@ -16,6 +17,11 @@ public class Account {
     private String password;
     private Long employeeID;
     private AccountType accountType;
+    private Theme theme;
+
+    public enum Theme {
+        LIGHT, DARK;
+    }
 
         @RequiredArgsConstructor
         public enum AccountType {

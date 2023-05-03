@@ -1,9 +1,8 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Signage;
 import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.schema.IForm;
+import edu.wpi.punchy_pegasi.schema.Signage;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -14,12 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -27,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signage.Field>, PropertyChangeListener {
@@ -42,16 +38,16 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
         cache.addListener((MapChangeListener<java.lang.Long, Signage>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
-                    var index = list.indexOf(c.getValueRemoved());
-                    if (index != -1) {
-                        list.remove(index);
-                        list.add(index, c.getValueAdded());
-                    }
-                }
-                if (c.wasRemoved()) {
-                    list.remove(c.getValueRemoved());
-                }
-                if (c.wasAdded()) {
+                    IntStream.range(0, list.size())
+                            .boxed().filter(i -> list.get(i).getUuid()
+                                    .equals(c.getValueRemoved().getUuid())).findFirst().ifPresent(i -> {
+                                list.remove((int) i);
+                                list.add(i, c.getValueAdded());
+                            });
+                } else if (c.wasRemoved()) {
+                    list.removeIf(o -> o.getUuid()
+                            .equals(c.getValueRemoved().getUuid()));
+                } else if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
             });
@@ -164,8 +160,8 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
     public void save(Signage signage) {
         Object[] values = {signage.getUuid(), signage.getSignName(), signage.getLongName(), signage.getDirectionType()};
         try {
+            add(signage);
             dbController.insertQuery(TableType.SIGNAGE, fields, values);
-//            add(signage);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -176,8 +172,8 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
         if (params.length < 1)
             return;
         try {
+            update(signage);
             dbController.updateQuery(TableType.SIGNAGE, "uuid", signage.getUuid(), Arrays.stream(params).map(Signage.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(signage)).toArray());
-//            update(signage);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -186,8 +182,8 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
     @Override
     public void delete(Signage signage) {
         try {
+            remove(signage);
             dbController.deleteQuery(TableType.SIGNAGE, "uuid", signage.getUuid());
-//            remove(signage);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -206,38 +202,38 @@ public class SignageCachedDaoImpl implements IDao<java.lang.Long, Signage, Signa
         }
     }
 
-    public static class SignageForm implements IForm<Signage> {
-        @Getter
-        private final List<javafx.scene.Node> form;
-        private final List<TextField> inputs;
-
-        public SignageForm() {
-            form = new ArrayList<>();
-            inputs = new ArrayList<>();
-            for (var field : Signage.Field.values()) {
-                var hbox = new HBox();
-                var label = new Label(field.getColName());
-                var input = new TextField();
-                hbox.getChildren().addAll(label, input);
-                form.add(hbox);
-                inputs.add(input);
-            }
-        }
-
-        public void populateForm(Signage entry) {
-            for (var field : Signage.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                input.setText(field.getValueAsString(entry));
-            }
-        }
-
-        public Signage commit() {
-            var entry = new Signage();
-            for (var field : Signage.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                field.setValueFromString(entry, input.getText());
-            }
-            return entry;
-        }
-    }
+//    public static class SignageForm implements IForm<Signage> {
+//        @Getter
+//        private final List<javafx.scene.Node> form;
+//        private final List<TextField> inputs;
+//
+//        public SignageForm() {
+//            form = new ArrayList<>();
+//            inputs = new ArrayList<>();
+//            for (var field : Signage.Field.values()) {
+//                var hbox = new HBox();
+//                var label = new Label(field.getColName());
+//                var input = new TextField();
+//                hbox.getChildren().addAll(label, input);
+//                form.add(hbox);
+//                inputs.add(input);
+//            }
+//        }
+//
+//        public void populateForm(Signage entry) {
+//            for (var field : Signage.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                input.setText(field.getValueAsString(entry));
+//            }
+//        }
+//
+//        public Signage commit() {
+//            var entry = new Signage();
+//            for (var field : Signage.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                field.setValueFromString(entry, input.getText());
+//            }
+//            return entry;
+//        }
+//    }
 }

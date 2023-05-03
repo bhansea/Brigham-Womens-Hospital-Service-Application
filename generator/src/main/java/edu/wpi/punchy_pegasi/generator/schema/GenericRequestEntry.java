@@ -1,13 +1,14 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
+@Setter(AccessLevel.NONE)
+@AllArgsConstructor
 public class GenericRequestEntry extends RequestEntry {
+    @lombok.Builder(toBuilder = true)
     public GenericRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
     }

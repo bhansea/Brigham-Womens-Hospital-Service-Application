@@ -1,13 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder = true)
@@ -24,7 +23,7 @@ public class Edge {
     private Long endNode;
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Edge, edu.wpi.punchy_pegasi.schema.Edge.EdgeBuilder> {
         UUID("uuid", true, false),
         START_NODE("startNode", false, false),
         END_NODE("endNode", false, false);
@@ -43,15 +42,18 @@ public class Edge {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Edge ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Edge.EdgeBuilder builder, String value) {
+            switch (this) {
+                case UUID -> builder.uuid(java.util.UUID.fromString(value));
+                case START_NODE -> builder.startNode(Long.parseLong(value));
+                case END_NODE -> builder.endNode(Long.parseLong(value));
+            }
         }
 
         public int oridinal() {
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -59,15 +61,6 @@ public class Edge {
             case END_NODE -> getEndNode();
         };
     }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case UUID -> setUuid(UUID.fromString(value));
-            case START_NODE -> setStartNode(Long.parseLong(value));
-            case END_NODE -> setEndNode(Long.parseLong(value));
-        }
-    }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> getUuid().toString();

@@ -37,7 +37,7 @@ public class AdminTable<T> {
         table.autosizeColumnsOnInitialization();
         // Create columns
         for (Object field : tableType.getFieldEnum().getEnumConstants()) {
-            var iField = (IField<T>) field;
+            var iField = (IField<T, Class<?>>) field;
             MFXTableColumn<T> col = new MFXTableColumn<>(iField.getColName(), true);
             col.setPickOnBounds(false);
 

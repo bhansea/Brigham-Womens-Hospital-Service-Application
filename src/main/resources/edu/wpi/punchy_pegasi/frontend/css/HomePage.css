@@ -32,6 +32,12 @@
     -fx-border-radius: 16;
 }
 
+.alert-listview {
+    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-background-color: transparent;
+}
+
 .home-alert-label {
     -fx-font-family: "Nunito Sans Regular";
     -fx-font-size: 20;

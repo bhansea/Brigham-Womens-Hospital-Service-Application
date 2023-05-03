@@ -1,11 +1,10 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder = true)
@@ -23,7 +22,6 @@ public class LocationName {
     @lombok.With
     @com.jsoniter.annotation.JsonProperty("nodetype")
     private NodeType nodeType;
-
     public enum NodeType {
         HALL,
         ELEV,
@@ -40,7 +38,7 @@ public class LocationName {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.LocationName, edu.wpi.punchy_pegasi.schema.LocationName.LocationNameBuilder> {
         UUID("uuid", true, false),
         LONG_NAME("longName", false, false),
         SHORT_NAME("shortName", false, false),
@@ -60,15 +58,19 @@ public class LocationName {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.LocationName ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.LocationName.LocationNameBuilder builder, String value) {
+            switch (this) {
+                case UUID -> builder.uuid(Long.parseLong(value));
+                case LONG_NAME -> builder.longName(value);
+                case SHORT_NAME -> builder.shortName(value);
+                case NODE_TYPE -> builder.nodeType(NodeType.valueOf(value));
+            }
         }
 
         public int oridinal() {
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -77,16 +79,6 @@ public class LocationName {
             case NODE_TYPE -> getNodeType();
         };
     }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case UUID -> setUuid(Long.parseLong(value));
-            case LONG_NAME -> setLongName(value);
-            case SHORT_NAME -> setShortName(value);
-            case NODE_TYPE -> setNodeType(NodeType.valueOf(value));
-        }
-    }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> Long.toString(getUuid());

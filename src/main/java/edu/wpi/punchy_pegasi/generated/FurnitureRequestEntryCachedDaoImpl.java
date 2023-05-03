@@ -3,7 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -14,12 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -27,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, FurnitureRequestEntry, FurnitureRequestEntry.Field>, PropertyChangeListener {
@@ -42,16 +38,16 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
         cache.addListener((MapChangeListener<java.util.UUID, FurnitureRequestEntry>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
-                    var index = list.indexOf(c.getValueRemoved());
-                    if (index != -1) {
-                        list.remove(index);
-                        list.add(index, c.getValueAdded());
-                    }
-                }
-                if (c.wasRemoved()) {
-                    list.remove(c.getValueRemoved());
-                }
-                if (c.wasAdded()) {
+                    IntStream.range(0, list.size())
+                            .boxed().filter(i -> list.get(i).getServiceID()
+                                    .equals(c.getValueRemoved().getServiceID())).findFirst().ifPresent(i -> {
+                                list.remove((int) i);
+                                list.add(i, c.getValueAdded());
+                            });
+                } else if (c.wasRemoved()) {
+                    list.removeIf(o -> o.getServiceID()
+                            .equals(c.getValueRemoved().getServiceID()));
+                } else if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
             });
@@ -167,8 +163,8 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
     public void save(FurnitureRequestEntry furnitureRequestEntry) {
         Object[] values = {furnitureRequestEntry.getServiceID(), furnitureRequestEntry.getLocationName(), furnitureRequestEntry.getStaffAssignment(), furnitureRequestEntry.getAdditionalNotes(), furnitureRequestEntry.getStatus(), furnitureRequestEntry.getEmployeeID(), furnitureRequestEntry.getSelectFurniture()};
         try {
+            add(furnitureRequestEntry);
             dbController.insertQuery(TableType.FURNITUREREQUESTS, fields, values);
-//            add(furnitureRequestEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -179,8 +175,8 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
         if (params.length < 1)
             return;
         try {
+            update(furnitureRequestEntry);
             dbController.updateQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequestEntry.getServiceID(), Arrays.stream(params).map(FurnitureRequestEntry.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(furnitureRequestEntry)).toArray());
-//            update(furnitureRequestEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -189,8 +185,8 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
     @Override
     public void delete(FurnitureRequestEntry furnitureRequestEntry) {
         try {
+            remove(furnitureRequestEntry);
             dbController.deleteQuery(TableType.FURNITUREREQUESTS, "serviceID", furnitureRequestEntry.getServiceID());
-//            remove(furnitureRequestEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -209,38 +205,38 @@ public class FurnitureRequestEntryCachedDaoImpl implements IDao<java.util.UUID, 
         }
     }
 
-    public static class FurnitureRequestEntryForm implements IForm<FurnitureRequestEntry> {
-        @Getter
-        private final List<javafx.scene.Node> form;
-        private final List<TextField> inputs;
-
-        public FurnitureRequestEntryForm() {
-            form = new ArrayList<>();
-            inputs = new ArrayList<>();
-            for (var field : FurnitureRequestEntry.Field.values()) {
-                var hbox = new HBox();
-                var label = new Label(field.getColName());
-                var input = new TextField();
-                hbox.getChildren().addAll(label, input);
-                form.add(hbox);
-                inputs.add(input);
-            }
-        }
-
-        public void populateForm(FurnitureRequestEntry entry) {
-            for (var field : FurnitureRequestEntry.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                input.setText(field.getValueAsString(entry));
-            }
-        }
-
-        public FurnitureRequestEntry commit() {
-            var entry = new FurnitureRequestEntry();
-            for (var field : FurnitureRequestEntry.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                field.setValueFromString(entry, input.getText());
-            }
-            return entry;
-        }
-    }
+//    public static class FurnitureRequestEntryForm implements IForm<FurnitureRequestEntry> {
+//        @Getter
+//        private final List<javafx.scene.Node> form;
+//        private final List<TextField> inputs;
+//
+//        public FurnitureRequestEntryForm() {
+//            form = new ArrayList<>();
+//            inputs = new ArrayList<>();
+//            for (var field : FurnitureRequestEntry.Field.values()) {
+//                var hbox = new HBox();
+//                var label = new Label(field.getColName());
+//                var input = new TextField();
+//                hbox.getChildren().addAll(label, input);
+//                form.add(hbox);
+//                inputs.add(input);
+//            }
+//        }
+//
+//        public void populateForm(FurnitureRequestEntry entry) {
+//            for (var field : FurnitureRequestEntry.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                input.setText(field.getValueAsString(entry));
+//            }
+//        }
+//
+//        public FurnitureRequestEntry commit() {
+//            var entry = new FurnitureRequestEntry();
+//            for (var field : FurnitureRequestEntry.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                field.setValueFromString(entry, input.getText());
+//            }
+//            return entry;
+//        }
+//    }
 }

@@ -1,16 +1,18 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
+@Setter(AccessLevel.NONE)
 @NoArgsConstructor
+@AllArgsConstructor
 public class OfficeServiceRequestEntry extends RequestEntry {
     private List<String> officeSupplies;
 
+    @lombok.Builder(toBuilder = true)
     public OfficeServiceRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, List<String> officeSupplies, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
         this.officeSupplies = officeSupplies;

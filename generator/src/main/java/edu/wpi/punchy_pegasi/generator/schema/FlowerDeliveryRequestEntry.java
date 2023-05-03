@@ -1,17 +1,18 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
+@Setter(AccessLevel.NONE)
 @NoArgsConstructor
 public class FlowerDeliveryRequestEntry extends RequestEntry {
     private List<String> selectedFlowers;
     private String patientName;
 
+    @lombok.Builder(toBuilder = true)
     public FlowerDeliveryRequestEntry(UUID serviceID, String patientName, Long locationName, Long staffAssignment, String additionalNotes, Status status, List<String> selectedFlowers, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
         this.selectedFlowers = selectedFlowers;

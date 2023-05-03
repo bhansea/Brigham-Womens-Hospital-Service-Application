@@ -1,11 +1,10 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder = true)
@@ -33,7 +32,7 @@ public class Signage {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Signage> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Signage, edu.wpi.punchy_pegasi.schema.Signage.SignageBuilder> {
         UUID("uuid", true, false),
         SIGN_NAME("signName", false, false),
         LONG_NAME("longName", false, false),
@@ -53,15 +52,19 @@ public class Signage {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Signage ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Signage.SignageBuilder builder, String value) {
+            switch (this) {
+                case UUID -> builder.uuid(Long.parseLong(value));
+                case SIGN_NAME -> builder.signName(value);
+                case LONG_NAME -> builder.longName(value);
+                case DIRECTION_TYPE -> builder.directionType(DirectionType.valueOf(value));
+            }
         }
 
         public int oridinal() {
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -70,16 +73,6 @@ public class Signage {
             case DIRECTION_TYPE -> getDirectionType();
         };
     }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case UUID -> setUuid(Long.parseLong(value));
-            case SIGN_NAME -> setSignName(value);
-            case LONG_NAME -> setLongName(value);
-            case DIRECTION_TYPE -> setDirectionType(DirectionType.valueOf(value));
-        }
-    }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> Long.toString(getUuid());

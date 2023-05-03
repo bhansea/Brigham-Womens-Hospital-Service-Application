@@ -3,7 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.ConferenceRoomEntry;
 import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -14,12 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -27,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, ConferenceRoomEntry, ConferenceRoomEntry.Field>, PropertyChangeListener {
@@ -42,16 +38,16 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         cache.addListener((MapChangeListener<java.util.UUID, ConferenceRoomEntry>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
-                    var index = list.indexOf(c.getValueRemoved());
-                    if (index != -1) {
-                        list.remove(index);
-                        list.add(index, c.getValueAdded());
-                    }
-                }
-                if (c.wasRemoved()) {
-                    list.remove(c.getValueRemoved());
-                }
-                if (c.wasAdded()) {
+                    IntStream.range(0, list.size())
+                            .boxed().filter(i -> list.get(i).getServiceID()
+                                    .equals(c.getValueRemoved().getServiceID())).findFirst().ifPresent(i -> {
+                                list.remove((int) i);
+                                list.add(i, c.getValueAdded());
+                            });
+                } else if (c.wasRemoved()) {
+                    list.removeIf(o -> o.getServiceID()
+                            .equals(c.getValueRemoved().getServiceID()));
+                } else if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
             });
@@ -170,8 +166,8 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
     public void save(ConferenceRoomEntry conferenceRoomEntry) {
         Object[] values = {conferenceRoomEntry.getServiceID(), conferenceRoomEntry.getLocationName(), conferenceRoomEntry.getStaffAssignment(), conferenceRoomEntry.getAdditionalNotes(), conferenceRoomEntry.getStatus(), conferenceRoomEntry.getEmployeeID(), conferenceRoomEntry.getBeginningTime(), conferenceRoomEntry.getEndTime(), conferenceRoomEntry.getDate(), conferenceRoomEntry.getAmountOfParticipants()};
         try {
+            add(conferenceRoomEntry);
             dbController.insertQuery(TableType.CONFERENCEREQUESTS, fields, values);
-//            add(conferenceRoomEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -182,8 +178,8 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         if (params.length < 1)
             return;
         try {
+            update(conferenceRoomEntry);
             dbController.updateQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoomEntry.getServiceID(), Arrays.stream(params).map(ConferenceRoomEntry.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(conferenceRoomEntry)).toArray());
-//            update(conferenceRoomEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -192,8 +188,8 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
     @Override
     public void delete(ConferenceRoomEntry conferenceRoomEntry) {
         try {
+            remove(conferenceRoomEntry);
             dbController.deleteQuery(TableType.CONFERENCEREQUESTS, "serviceID", conferenceRoomEntry.getServiceID());
-//            remove(conferenceRoomEntry);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -212,38 +208,38 @@ public class ConferenceRoomEntryCachedDaoImpl implements IDao<java.util.UUID, Co
         }
     }
 
-    public static class ConferenceRoomEntryForm implements IForm<ConferenceRoomEntry> {
-        @Getter
-        private final List<javafx.scene.Node> form;
-        private final List<TextField> inputs;
-
-        public ConferenceRoomEntryForm() {
-            form = new ArrayList<>();
-            inputs = new ArrayList<>();
-            for (var field : ConferenceRoomEntry.Field.values()) {
-                var hbox = new HBox();
-                var label = new Label(field.getColName());
-                var input = new TextField();
-                hbox.getChildren().addAll(label, input);
-                form.add(hbox);
-                inputs.add(input);
-            }
-        }
-
-        public void populateForm(ConferenceRoomEntry entry) {
-            for (var field : ConferenceRoomEntry.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                input.setText(field.getValueAsString(entry));
-            }
-        }
-
-        public ConferenceRoomEntry commit() {
-            var entry = new ConferenceRoomEntry();
-            for (var field : ConferenceRoomEntry.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                field.setValueFromString(entry, input.getText());
-            }
-            return entry;
-        }
-    }
+//    public static class ConferenceRoomEntryForm implements IForm<ConferenceRoomEntry> {
+//        @Getter
+//        private final List<javafx.scene.Node> form;
+//        private final List<TextField> inputs;
+//
+//        public ConferenceRoomEntryForm() {
+//            form = new ArrayList<>();
+//            inputs = new ArrayList<>();
+//            for (var field : ConferenceRoomEntry.Field.values()) {
+//                var hbox = new HBox();
+//                var label = new Label(field.getColName());
+//                var input = new TextField();
+//                hbox.getChildren().addAll(label, input);
+//                form.add(hbox);
+//                inputs.add(input);
+//            }
+//        }
+//
+//        public void populateForm(ConferenceRoomEntry entry) {
+//            for (var field : ConferenceRoomEntry.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                input.setText(field.getValueAsString(entry));
+//            }
+//        }
+//
+//        public ConferenceRoomEntry commit() {
+//            var entry = new ConferenceRoomEntry();
+//            for (var field : ConferenceRoomEntry.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                field.setValueFromString(entry, input.getText());
+//            }
+//            return entry;
+//        }
+//    }
 }

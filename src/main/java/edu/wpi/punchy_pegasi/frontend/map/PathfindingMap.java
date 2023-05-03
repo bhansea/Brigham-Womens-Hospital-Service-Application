@@ -367,11 +367,11 @@ public class PathfindingMap {
             directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));
         }
         else if (floorWillChange) {
-            switch (currLocation.getNodeType()) {
-                case ELEV -> currLocation.setLongName("Elevator to Floor " + nextNode.getFloor());
-                case STAI -> currLocation.setLongName("Stairs to Floor " + nextNode.getFloor());
-                default -> currLocation.setLongName(currLocation.getLongName() + " to Floor " + nextNode.getFloor());
-            }
+//            switch (currLocation.getNodeType()) {
+//                case ELEV -> currLocation.setLongName("Elevator to Floor " + nextNode.getFloor());
+//                case STAI -> currLocation.setLongName("Stairs to Floor " + nextNode.getFloor());
+//                default -> currLocation.setLongName(currLocation.getLongName() + " to Floor " + nextNode.getFloor());
+//            }
             directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));  // put current node as the last entry of this floor
             directionFloorIndex++;
             directionMap.put(directionFloorIndex, new ArrayList<>());
