@@ -85,17 +85,15 @@ public class App extends Application {
     @Getter
     private Scene scene;
     @Getter
-    private Account account = new Account(0L, "", "", 0L, Account.AccountType.NONE);
-
+    private Account account = new Account(0L, "", "", 0L, Account.AccountType.NONE, Account.Theme.LIGHT);
     @Getter
     private LayoutController layout;
     @Getter
     private boolean development = false;
+
+
     private final Debouncer<String> cssDebouncer = new Debouncer<>(s -> {
-        Platform.runLater(() -> {
-            scene.getStylesheets().clear();
-            loadStylesheet("frontend/css/DefaultTheme.css");
-        });
+        Platform.runLater(this::loadTheme);
         System.out.println("Hot-loaded CSS: " + s);
     }, 250);
     private IdleScreen idleScreen;
@@ -124,13 +122,25 @@ public class App extends Application {
         }
     }
 
+    public void loadTheme() {
+        var colorsPath = switch (getAccount().getTheme()) {
+            case LIGHT -> "frontend/css/PFXColors.css";
+            case DARK -> "frontend/css/PFXColorsDark.css";
+        };
+        scene.getStylesheets().clear();
+        loadStylesheet(colorsPath);
+        loadStylesheet("frontend/css/DefaultTheme.css");
+    }
+
     public void setAccount(Account account) {
         if (account == null) {
             navigate(Screen.LOGIN);
-            account = new Account(0L, "", "", 0L, Account.AccountType.NONE);
+            account = new Account(0L, "", "", 0L, Account.AccountType.NONE, Account.Theme.LIGHT);
         }
+        var changeTheme = this.account.getTheme() != account.getTheme();
         support.firePropertyChange("account", this.account, account);
         this.account = account;
+        if(changeTheme) loadTheme();
     }
 
     public void exit() {
@@ -232,7 +242,7 @@ public class App extends Application {
         layout = new LayoutController();
         viewPane = layout.getViewPane();
         scene = new Scene(layout, 1280, 720);
-        loadStylesheet("frontend/css/DefaultTheme.css");
+        loadTheme();
         primaryStage.setScene(scene);
         primaryStage.show();
         navigate(Screen.LOGIN);
@@ -286,7 +296,7 @@ public class App extends Application {
         //var testComponent = new PFXCard();
         //scene = new Scene(new BorderPane(new VBox(new HBox(testComponent))), 600, 400);
 
-        loadStylesheet("frontend/css/DefaultTheme.css");
+        loadTheme();
         primaryStage.getIcons().add(new Image(resolveResource("frontend/assets/bwhlogo.png").get().toString()));
 
         if (development) {

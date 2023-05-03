@@ -4,7 +4,7 @@
     -fx-cursor: hand;
 }
 .pfx-account:hover .pfx-default-account-icon {
-    -fx-fill: -pfx-primary;
+    -fx-fill: -pfx-secondary-light;
 }
 .pfx-account-menu {
     -fx-padding: 10;

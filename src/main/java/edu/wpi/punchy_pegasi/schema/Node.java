@@ -1,11 +1,10 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder=true)
@@ -42,29 +41,40 @@ public class Node implements INode {
             default -> -1;
         };
     }
-@lombok.RequiredArgsConstructor
-public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node>{
-        NODE_ID("nodeID", true,false),
-        XCOORD("xcoord", false,false),
-        YCOORD("ycoord", false,false),
-        FLOOR("floor", false,false),
-        BUILDING("building", false,false);
+
+    @lombok.RequiredArgsConstructor
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Node, edu.wpi.punchy_pegasi.schema.Node.NodeBuilder> {
+        NODE_ID("nodeID", true, false),
+        XCOORD("xcoord", false, false),
+        YCOORD("ycoord", false, false),
+        FLOOR("floor", false, false),
+        BUILDING("building", false, false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
         private final boolean primaryKey;
         @lombok.Getter
         private final boolean unique;
-        public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref){
-    return ref.getFromField(this);
-}
-public String getValueAsString(edu.wpi.punchy_pegasi.schema.Node ref){
-    return ref.getFromFieldAsString(this);
-}
-    public void setValueFromString(edu.wpi.punchy_pegasi.schema.Node ref, String value){
-            ref.setFieldFromString(this, value);
+
+        public Object getValue(edu.wpi.punchy_pegasi.schema.Node ref) {
+            return ref.getFromField(this);
         }
-        public int oridinal(){
+
+        public String getValueAsString(edu.wpi.punchy_pegasi.schema.Node ref) {
+            return ref.getFromFieldAsString(this);
+        }
+
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Node.NodeBuilder builder, String value) {
+            switch (this) {
+                case NODE_ID -> builder.nodeID(Long.parseLong(value));
+                case XCOORD -> builder.xcoord(Integer.parseInt(value));
+                case YCOORD -> builder.ycoord(Integer.parseInt(value));
+                case FLOOR -> builder.floor(value);
+                case BUILDING -> builder.building(value);
+            }
+        }
+
+        public int oridinal() {
             return ordinal();
         }
     }
@@ -75,15 +85,6 @@ public String getValueAsString(edu.wpi.punchy_pegasi.schema.Node ref){
             case YCOORD -> getYcoord();
             case FLOOR -> getFloor();
             case BUILDING -> getBuilding();
-        };
-    }
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case NODE_ID -> setNodeID(Long.parseLong(value));
-            case XCOORD -> setXcoord(Integer.parseInt(value));
-            case YCOORD -> setYcoord(Integer.parseInt(value));
-            case FLOOR -> setFloor(value);
-            case BUILDING -> setBuilding(value);
         };
     }
     public String getFromFieldAsString(Field field) {

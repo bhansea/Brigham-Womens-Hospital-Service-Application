@@ -1,13 +1,12 @@
 package edu.wpi.punchy_pegasi.schema;
 
 import edu.wpi.punchy_pegasi.backend.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder = true)
@@ -27,7 +26,7 @@ public class Move {
     private LocalDate date;
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Move, edu.wpi.punchy_pegasi.schema.Move.MoveBuilder> {
         UUID("uuid", true, false),
         NODE_ID("nodeID", false, false),
         LOCATION_ID("locationID", false, false),
@@ -47,15 +46,19 @@ public class Move {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Move ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Move.MoveBuilder builder, String value) {
+            switch (this) {
+                case UUID -> builder.uuid(Long.parseLong(value));
+                case NODE_ID -> builder.nodeID(Long.parseLong(value));
+                case LOCATION_ID -> builder.locationID(Long.parseLong(value));
+                case DATE -> builder.date(LocalDate.parse(value));
+            }
         }
 
         public int oridinal() {
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case UUID -> getUuid();
@@ -64,16 +67,6 @@ public class Move {
             case DATE -> getDate();
         };
     }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case UUID -> setUuid(Long.parseLong(value));
-            case NODE_ID -> setNodeID(Long.parseLong(value));
-            case LOCATION_ID -> setLocationID(Long.parseLong(value));
-            case DATE -> setDate(LocalDate.parse(value));
-        }
-    }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case UUID -> Long.toString(getUuid());

@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Separator?>
 <BorderPane stylesheets="@../css/HomePage.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wpi.punchy_pegasi.frontend.controllers.HomePageController">
     <center>
@@ -18,11 +19,10 @@
                 <VBox VBox.vgrow="ALWAYS" fx:id="alertsContainer">
                     <VBox alignment="CENTER">
                         <Label text="Alerts" styleClass="home-alert-label"/>
-                        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" fx:id="alertScrollPane"
-                                    styleClass="home-alert-scrollpane">
-                            <VBox VBox.vgrow="ALWAYS" fx:id="alertsHolder"
-                                  style="-fx-padding:20; -fx-spacing: 10; -fx-background-color: transparent;"/>
-                        </ScrollPane>
+                        <Separator/>
+                        <Label text="No Alerts!" styleClass="home-alert-label" fx:id="noAlertsLabel"/>
+                        <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true" fx:id="alertScrollPane"
+                                    styleClass="home-alert-scrollpane" hbarPolicy="NEVER"/>
                     </VBox>
                 </VBox>
             </HBox>
