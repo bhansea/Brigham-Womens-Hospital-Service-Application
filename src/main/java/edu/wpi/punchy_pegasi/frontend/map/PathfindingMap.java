@@ -89,7 +89,7 @@ public class PathfindingMap {
     @FXML
     private PFXButton pathfindButton;
     @FXML
-    private Text pathfindStatus;
+    private Label pathfindStatus;
     private ObservableMap<Long, Node> nodes;
     private ObservableMap<UUID, Edge> edges;
     private ObservableMap<Long, LocationName> locations;
