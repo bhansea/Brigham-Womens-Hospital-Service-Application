@@ -7,11 +7,8 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.spi.JsoniterSpi;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
-import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -72,12 +69,8 @@ public class PdbController {
         this.source = source;
         this.schema = schema;
         Class.forName("com.impossibl.postgres.jdbc.PGDriver");
-        if (schema.equals("test")) {
-            initConnection();
-        } else {
-            if (!getConnection()) {
-                throw new DatabaseException("Failed to connect to database");
-            }
+        if (!getConnection()) {
+            throw new DatabaseException("Failed to connect to database");
         }
         var statement = connection.createStatement();
         statement.execute("CREATE SCHEMA IF NOT EXISTS " + this.schema + ";");
@@ -187,7 +180,9 @@ public class PdbController {
         connection = DriverManager.getConnection("jdbc:pgsql://" + source.url + ":" + source.port + "/" + source.database, source.username, source.password).unwrap(PGConnection.class);
         connection.addNotificationListener(listener);
         connection.setSchema(schema);
-        connection.setNetworkTimeout(App.getSingleton().getExecutorService(), 4000);
+        if (!(App.getSingleton() == null)) {
+            connection.setNetworkTimeout(App.getSingleton().getExecutorService(), 4000);
+        }
         var statement = connection.createStatement();
         for (var tableType : TableType.values()) {
             statement.executeUpdate("LISTEN " + tableType.name().toLowerCase() + "_update;");
