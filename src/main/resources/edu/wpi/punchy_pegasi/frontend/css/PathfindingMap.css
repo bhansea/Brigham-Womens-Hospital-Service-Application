@@ -17,6 +17,11 @@
     -fx-text-fill: -pfx-text;
 }
 
+.pathfinding-overlay-box PFXButton {
+    -fx-text-fill: white;
+}
+
+
 .pathfinding-overlay-box > HBox {
     -fx-spacing: 10;
     -fx-alignment: CENTER;
@@ -32,8 +37,6 @@
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.40), 20, 0, 0.0, 0.0);
 }
-
-
 
 /*.pathfinding-direction-box > HBox {*/
 /*    -fx-spacing: 10;*/
@@ -80,10 +83,10 @@
     -fx-background-color: -pfx-background-transparent;
 }
 .pathfinding-direction-box:hover Label {
-    -fx-text-fill: black;
+    -fx-text-fill: -pfx-text;
 }
 .pathfinding-direction-box:hover PFXIcon {
-    -fx-fill: black;
+    -fx-fill: -pfx-text;
 }
 
 .pathfinding-overlay .pfx-button {
