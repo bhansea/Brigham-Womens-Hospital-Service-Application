@@ -1,9 +1,8 @@
 package edu.wpi.punchy_pegasi.generated;
 
 import edu.wpi.punchy_pegasi.backend.PdbController;
-import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.schema.IForm;
+import edu.wpi.punchy_pegasi.schema.Node;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -14,12 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -27,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>, PropertyChangeListener {
@@ -42,16 +38,16 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         cache.addListener((MapChangeListener<java.lang.Long, Node>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
-                    var index = list.indexOf(c.getValueRemoved());
-                    if (index != -1) {
-                        list.remove(index);
-                        list.add(index, c.getValueAdded());
-                    }
-                }
-                if (c.wasRemoved()) {
-                    list.remove(c.getValueRemoved());
-                }
-                if (c.wasAdded()) {
+                    IntStream.range(0, list.size())
+                            .boxed().filter(i -> list.get(i).getNodeID()
+                                    .equals(c.getValueRemoved().getNodeID())).findFirst().ifPresent(i -> {
+                                list.remove((int) i);
+                                list.add(i, c.getValueAdded());
+                            });
+                } else if (c.wasRemoved()) {
+                    list.removeIf(o -> o.getNodeID()
+                            .equals(c.getValueRemoved().getNodeID()));
+                } else if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
             });
@@ -165,8 +161,8 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
     public void save(Node node) {
         Object[] values = {node.getNodeID(), node.getXcoord(), node.getYcoord(), node.getFloor(), node.getBuilding()};
         try {
+            add(node);
             dbController.insertQuery(TableType.NODES, fields, values);
-//            add(node);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -177,8 +173,8 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         if (params.length < 1)
             return;
         try {
+            update(node);
             dbController.updateQuery(TableType.NODES, "nodeID", node.getNodeID(), Arrays.stream(params).map(Node.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(node)).toArray());
-//            update(node);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -187,8 +183,8 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
     @Override
     public void delete(Node node) {
         try {
+            remove(node);
             dbController.deleteQuery(TableType.NODES, "nodeID", node.getNodeID());
-//            remove(node);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -207,38 +203,38 @@ public class NodeCachedDaoImpl implements IDao<java.lang.Long, Node, Node.Field>
         }
     }
 
-    public static class NodeForm implements IForm<Node> {
-        @Getter
-        private final List<javafx.scene.Node> form;
-        private final List<TextField> inputs;
-
-        public NodeForm() {
-            form = new ArrayList<>();
-            inputs = new ArrayList<>();
-            for (var field : Node.Field.values()) {
-                var hbox = new HBox();
-                var label = new Label(field.getColName());
-                var input = new TextField();
-                hbox.getChildren().addAll(label, input);
-                form.add(hbox);
-                inputs.add(input);
-            }
-        }
-
-        public void populateForm(Node entry) {
-            for (var field : Node.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                input.setText(field.getValueAsString(entry));
-            }
-        }
-
-        public Node commit() {
-            var entry = new Node();
-            for (var field : Node.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                field.setValueFromString(entry, input.getText());
-            }
-            return entry;
-        }
-    }
+//    public static class NodeForm implements IForm<Node> {
+//        @Getter
+//        private final List<javafx.scene.Node> form;
+//        private final List<TextField> inputs;
+//
+//        public NodeForm() {
+//            form = new ArrayList<>();
+//            inputs = new ArrayList<>();
+//            for (var field : Node.Field.values()) {
+//                var hbox = new HBox();
+//                var label = new Label(field.getColName());
+//                var input = new TextField();
+//                hbox.getChildren().addAll(label, input);
+//                form.add(hbox);
+//                inputs.add(input);
+//            }
+//        }
+//
+//        public void populateForm(Node entry) {
+//            for (var field : Node.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                input.setText(field.getValueAsString(entry));
+//            }
+//        }
+//
+//        public Node commit() {
+//            var entry = new Node();
+//            for (var field : Node.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                field.setValueFromString(entry, input.getText());
+//            }
+//            return entry;
+//        }
+//    }
 }

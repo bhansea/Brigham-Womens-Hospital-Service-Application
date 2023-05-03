@@ -1,9 +1,7 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import java.sql.SQLException;
-
 public class Facade {
-    /*Dao Declarations*/
+/*Dao Declarations*/
     public Facade(/*PdbController dbController*/) {
         /*Dao Initialization*/
     }

@@ -1,10 +1,10 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
-public interface IField<T> {
+public interface IField<T, B> {
     public Object getValue(T ref);
     public String getColName();
     String getValueAsString(T ref);
-    void setValueFromString(T ref, String value);
+    void setValueFromString(B builder, String value);
     int ordinal();
     boolean isUnique();
     boolean isPrimaryKey();

@@ -3,7 +3,6 @@ package edu.wpi.punchy_pegasi.generated;
 import edu.wpi.punchy_pegasi.backend.PdbController;
 import edu.wpi.punchy_pegasi.schema.Employee;
 import edu.wpi.punchy_pegasi.schema.IDao;
-import edu.wpi.punchy_pegasi.schema.IForm;
 import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
@@ -14,12 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.beans.PropertyChangeEvent;
@@ -27,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Employee.Field>, PropertyChangeListener {
@@ -42,16 +38,16 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         cache.addListener((MapChangeListener<java.lang.Long, Employee>) c -> {
             Platform.runLater(() -> {
                 if (c.wasRemoved() && c.wasAdded()) {
-                    var index = list.indexOf(c.getValueRemoved());
-                    if (index != -1) {
-                        list.remove(index);
-                        list.add(index, c.getValueAdded());
-                    }
-                }
-                if (c.wasRemoved()) {
-                    list.remove(c.getValueRemoved());
-                }
-                if (c.wasAdded()) {
+                    IntStream.range(0, list.size())
+                            .boxed().filter(i -> list.get(i).getEmployeeID()
+                                    .equals(c.getValueRemoved().getEmployeeID())).findFirst().ifPresent(i -> {
+                                list.remove((int) i);
+                                list.add(i, c.getValueAdded());
+                            });
+                } else if (c.wasRemoved()) {
+                    list.removeIf(o -> o.getEmployeeID()
+                            .equals(c.getValueRemoved().getEmployeeID()));
+                } else if (c.wasAdded()) {
                     list.add(c.getValueAdded());
                 }
             });
@@ -163,8 +159,8 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
     public void save(Employee employee) {
         Object[] values = {employee.getEmployeeID(), employee.getFirstName(), employee.getLastName()};
         try {
+            add(employee);
             dbController.insertQuery(TableType.EMPLOYEES, fields, values);
-//            add(employee);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -175,8 +171,8 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         if (params.length < 1)
             return;
         try {
+            update(employee);
             dbController.updateQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID(), Arrays.stream(params).map(Employee.Field::getColName).toList().toArray(new String[params.length]), Arrays.stream(params).map(p -> p.getValue(employee)).toArray());
-//            update(employee);
         } catch (PdbController.DatabaseException e) {
             log.error("Error saving", e);
         }
@@ -185,8 +181,8 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
     @Override
     public void delete(Employee employee) {
         try {
+            remove(employee);
             dbController.deleteQuery(TableType.EMPLOYEES, "employeeID", employee.getEmployeeID());
-//            remove(employee);
         } catch (PdbController.DatabaseException e) {
             log.error("Error deleting", e);
         }
@@ -205,38 +201,38 @@ public class EmployeeCachedDaoImpl implements IDao<java.lang.Long, Employee, Emp
         }
     }
 
-    public static class EmployeeForm implements IForm<Employee> {
-        @Getter
-        private final List<javafx.scene.Node> form;
-        private final List<TextField> inputs;
-
-        public EmployeeForm() {
-            form = new ArrayList<>();
-            inputs = new ArrayList<>();
-            for (var field : Employee.Field.values()) {
-                var hbox = new HBox();
-                var label = new Label(field.getColName());
-                var input = new TextField();
-                hbox.getChildren().addAll(label, input);
-                form.add(hbox);
-                inputs.add(input);
-            }
-        }
-
-        public void populateForm(Employee entry) {
-            for (var field : Employee.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                input.setText(field.getValueAsString(entry));
-            }
-        }
-
-        public Employee commit() {
-            var entry = new Employee();
-            for (var field : Employee.Field.values()) {
-                var input = (TextField) form.get(field.ordinal());
-                field.setValueFromString(entry, input.getText());
-            }
-            return entry;
-        }
-    }
+//    public static class EmployeeForm implements IForm<Employee> {
+//        @Getter
+//        private final List<javafx.scene.Node> form;
+//        private final List<TextField> inputs;
+//
+//        public EmployeeForm() {
+//            form = new ArrayList<>();
+//            inputs = new ArrayList<>();
+//            for (var field : Employee.Field.values()) {
+//                var hbox = new HBox();
+//                var label = new Label(field.getColName());
+//                var input = new TextField();
+//                hbox.getChildren().addAll(label, input);
+//                form.add(hbox);
+//                inputs.add(input);
+//            }
+//        }
+//
+//        public void populateForm(Employee entry) {
+//            for (var field : Employee.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                input.setText(field.getValueAsString(entry));
+//            }
+//        }
+//
+//        public Employee commit() {
+//            var entry = new Employee();
+//            for (var field : Employee.Field.values()) {
+//                var input = (TextField) form.get(field.ordinal());
+//                field.setValueFromString(entry, input.getText());
+//            }
+//            return entry;
+//        }
+//    }
 }

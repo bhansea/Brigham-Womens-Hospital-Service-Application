@@ -178,10 +178,9 @@ public class AdminMapController {
                 e -> {
             var old = node.toBuilder().build();
             if (Objects.equals(old.getBuilding(), buildingDropdown.getValue())) return;
-            node.setBuilding(buildingDropdown.getValue());
             nodePoints.get(node.getNodeID()).setFill(Color.YELLOW);
             popOver.setOnCloseRequest(null);
-            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, node.toBuilder().build(), old));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, node.toBuilder().building(buildingDropdown.getValue()).build(), old));
         });
 
         // make move
@@ -327,9 +326,7 @@ public class AdminMapController {
                 point.setLayoutX(newPoint.getX());
                 point.setLayoutY(newPoint.getY());
                 var old = n.get().toBuilder().build();
-                n.get().setXcoord((int) point.getLayoutX());
-                n.get().setYcoord((int) point.getLayoutY());
-                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().build(), old));
+                mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().xcoord((int) point.getLayoutX()).ycoord((int) point.getLayoutY()).build(), old));
             } else {
                 if (firstNode == null || nodes.get(firstNode.getNodeID()) == null) {
                     firstNode = n.get();
@@ -357,9 +354,7 @@ public class AdminMapController {
             if (n.get().getXcoord() == (int) node.getLayoutX() && n.get().getYcoord() == (int) node.getLayoutY())
                 return;
             var old = n.get().toBuilder().build();
-            n.get().setXcoord((int) node.getLayoutX());
-            n.get().setYcoord((int) node.getLayoutY());
-            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().build(), old));
+            mapEdits.add(new MapEdit(MapEdit.ActionType.EDIT_NODE, n.get().toBuilder().xcoord((int) point.getLayoutX()).ycoord((int) point.getLayoutY()).build(), old));
         });
         dragController.setOnEnd(node -> map.enableMove(true));
         dragController.setOnStart(node -> map.enableMove(false));

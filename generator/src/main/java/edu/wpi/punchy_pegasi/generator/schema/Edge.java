@@ -1,13 +1,12 @@
 package edu.wpi.punchy_pegasi.generator.schema;
 
 import edu.wpi.punchy_pegasi.generator.SchemaID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder=true)

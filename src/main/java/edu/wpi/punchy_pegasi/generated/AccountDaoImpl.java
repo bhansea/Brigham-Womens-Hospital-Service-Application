@@ -18,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Field> {
 
-    static String[] fields = {"uuid", "username", "password", "employeeID", "accountType"};
+    static String[] fields = {"uuid", "username", "password", "employeeID", "accountType", "theme"};
     private final PdbController dbController;
 
     public AccountDaoImpl(PdbController dbController) {
@@ -34,7 +34,8 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
                     rs.getObject("username", java.lang.String.class),
                     rs.getObject("password", java.lang.String.class),
                     rs.getObject("employeeID", java.lang.Long.class),
-                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                    edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")),
+                    edu.wpi.punchy_pegasi.schema.Account.Theme.valueOf(rs.getString("theme")));
             return Optional.ofNullable(req);
         } catch (PdbController.DatabaseException | SQLException e) {
             log.error("", e);
@@ -57,7 +58,8 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
                         rs.getObject("username", java.lang.String.class),
                         rs.getObject("password", java.lang.String.class),
                         rs.getObject("employeeID", java.lang.Long.class),
-                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")),
+                        edu.wpi.punchy_pegasi.schema.Account.Theme.valueOf(rs.getString("theme")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -77,7 +79,8 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
                         rs.getObject("username", java.lang.String.class),
                         rs.getObject("password", java.lang.String.class),
                         rs.getObject("employeeID", java.lang.Long.class),
-                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")));
+                        edu.wpi.punchy_pegasi.schema.Account.AccountType.valueOf(rs.getString("accountType")),
+                        edu.wpi.punchy_pegasi.schema.Account.Theme.valueOf(rs.getString("theme")));
                 if (req != null)
                     map.put(req.getUuid(), req);
             }
@@ -94,7 +97,7 @@ public class AccountDaoImpl implements IDao<java.lang.Long, Account, Account.Fie
 
     @Override
     public void save(Account account) {
-        Object[] values = {account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType()};
+        Object[] values = {account.getUuid(), account.getUsername(), account.getPassword(), account.getEmployeeID(), account.getAccountType(), account.getTheme()};
         try {
             dbController.insertQuery(TableType.ACCOUNTS, fields, values);
         } catch (PdbController.DatabaseException e) {

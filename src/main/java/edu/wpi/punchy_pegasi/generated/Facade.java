@@ -6,12 +6,10 @@ import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-
-import java.sql.SQLException;
 
 public class Facade {
 	private final PdbController dbController;
@@ -89,7 +87,6 @@ public class Facade {
 		alertDao.refresh();
 
     }
-
 	public MFXTableView<Node> generateTableNode(Consumer<Node> onRowClick, Node.Field[] hidden) {
 		return nodeDao.generateTable(onRowClick, hidden);
 	}

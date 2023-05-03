@@ -39,7 +39,7 @@ public class SleepThroughTheWinter {
         put(Long.class, "Long.parseLong(value)");
         put(Integer.class, "Integer.parseInt(value)");
         put(String.class, "value");
-        put(UUID.class, "UUID.fromString(value)");
+        put(UUID.class, "java.util.UUID.fromString(value)");
         put(List.class, "new java.util.ArrayList<>(java.util.Arrays.asList(value.split(\"\\\\s*,\\\\s*\")))");
         put(LocalDate.class, "LocalDate.parse(value)");
         put(Instant.class, "Instant.parse(value)");
@@ -197,10 +197,11 @@ public class SleepThroughTheWinter {
     }
 
     private static String generateEnum(Class<?> clazz, List<Field> fields) {
+        var builder = findAllClassesUsingClassLoader("edu.wpi.punchy_pegasi.generator.schema").stream().filter(c-> c.getSimpleName().equals(clazz.getSimpleName() + "Builder")).map(Class::getCanonicalName).findFirst();
         return
                 """
                         @lombok.RequiredArgsConstructor
-                        public enum Field implements IField< """ + clazz.getCanonicalName() + """
+                        public enum Field implements IField< """ + clazz.getCanonicalName() + ", " + builder.orElse("Class<?>") + """
                         >{
                         """ + "        " + String.join(",\n        ", fields.stream().map(f -> camelToSnake(f.getName()).toUpperCase() + "(\"" + f.getName() + "\", " + fieldIsID(f)  + "," + fieldIsUnique(f) + ")").toList()) + """
                         ;
@@ -218,9 +219,15 @@ public class SleepThroughTheWinter {
                          ref){
                             return ref.getFromFieldAsString(this);
                         }
-                            public void setValueFromString(""" + clazz.getCanonicalName() + """
-                         ref, String value){
-                                    ref.setFieldFromString(this, value);
+                            public void setValueFromString(""" + builder.orElse("Class<?>") + """
+                         builder, String value){
+                        """ + (builder.isEmpty() ? "return;" :
+                        """
+                                    switch (this) {
+                        """ + "            " + String.join("            ",
+                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> builder." + firstLower(f.getName()) + "(" + objectFromString(f.getType()) + ");\n").toList()) + """
+                                    }
+                        """) + """
                                 }
                                 public int oridinal(){
                                     return ordinal();
@@ -230,12 +237,6 @@ public class SleepThroughTheWinter {
                                 return switch (field) {
                         """ + "            " + String.join("            ",
                         fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> get" + firstUpper(f.getName()) + "();\n").toList()) + """
-                                };
-                            }
-                            public void setFieldFromString(Field field, String value) {
-                                switch (field) {
-                        """ + "            " + String.join("            ",
-                        fields.stream().map(f -> "case " + camelToSnake(f.getName()).toUpperCase() + " -> set" + firstUpper(f.getName()) + "(" + objectFromString(f.getType()) + ");\n").toList()) + """
                                 };
                             }
                             public String getFromFieldAsString(Field field) {
