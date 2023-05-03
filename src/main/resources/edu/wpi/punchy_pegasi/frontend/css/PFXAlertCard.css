@@ -11,14 +11,18 @@
     -fx-background-radius: 12;
     -fx-font-size: 24;
     -fx-text-fill: white;
+    -fx-wrap-text: true;
+    -fx-max-width: 780;
 }
 .pfx-alert-card-title-text{
     -fx-font-size: 30;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: -pfx-accent-light;
+    -fx-wrap-text: true;
 }
 .pfx-alert-card-type-text{
     -fx-font-size: 12;
+    -fx-wrap-text: true;
 }
 .pfx-alert-card-container-unread Label {
     -fx-font-family: "Nunito Sans Light";
@@ -50,6 +54,8 @@
     -fx-font-size: 24;
     -fx-text-fill: -pfx-accent;
     -fx-border-radius: 12;
+    -fx-wrap-text: true;
+    -fx-max-width: 780;
 }
 
 .pfx-alert-card-container-read Label {
