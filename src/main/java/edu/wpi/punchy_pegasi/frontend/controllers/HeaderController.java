@@ -342,13 +342,15 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         var searchBox = new HBox();
         searchBox.setPadding(new Insets(0, 0, 0, 18));
         searchBox.setStyle("-fx-background-radius: 40; -fx-background-color: -pfx-background; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 40");
-        searchBox.setPrefHeight(35);
-        searchBox.setMaxHeight(35);
-        searchBox.setMinHeight(35);
+        searchBox.prefHeightProperty().bind(headerSearch.heightProperty());
+        searchBox.maxHeightProperty().bind(headerSearch.heightProperty());
+        searchBox.minHeightProperty().bind(headerSearch.heightProperty());
         searchBox.prefWidthProperty().bind(headerSearch.widthProperty());
         searchBox.maxWidthProperty().bind(headerSearch.widthProperty());
         searchBox.minWidthProperty().bind(headerSearch.widthProperty());
         resultScrollContainer.setMaxHeight(500);
+        resultScrollContainer.paddingProperty().setValue(new Insets(5,5,5,5));
+        resultScrollContainer.setStyle(" -fx-background-color: -pfx-background;");
         searchField.setStyle(" -fx-background-color: -pfx-background;");
         searchBox.getStyleClass().add("search-box");
         searchField.setStyle("-fx-font-size: 18; -fx-text-fill: -pfx-text; -fx-background-color: -pfx-primary;");
@@ -356,7 +358,8 @@ public class HeaderController extends HBox implements PropertyChangeListener {
         searchField.setMaxHeight(30);
         searchField.setMinHeight(30);
         var icon = new PFXIcon();
-        icon.setTranslateY(-2);
+        icon.setTranslateY(-1);
+        icon.setTranslateX(1);
         icon.setIcon(MaterialSymbols.SEARCH);
         icon.setSize(30.0);
         icon.setStyle("-fx-fill: -pfx-text; -fx-font-size: 30;");
