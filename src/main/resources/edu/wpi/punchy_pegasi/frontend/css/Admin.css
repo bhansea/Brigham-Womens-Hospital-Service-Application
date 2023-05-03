@@ -136,7 +136,7 @@
 }
 
 .admin-scrollpane {
-    -fx-background-color: -pfx-background;
+    -fx-background-color: transparent;
 }
 
 .admin-MFXComboBox {

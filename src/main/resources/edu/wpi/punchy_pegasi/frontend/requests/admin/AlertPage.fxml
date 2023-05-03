@@ -34,7 +34,6 @@
                             <Label text="Assign Employee" styleClass="admin-container-text-size" VBox.vgrow="ALWAYS"/>
                             <MFXFilterComboBox styleClass="conference-dropDown" fx:id="employeeComboBox" floatMode="DISABLED"/>
                         </HBox>
-                        <MFXComboBox promptText="Select Alert Type" fx:id="alertTypeComboBox"/>
                         <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS">
                             <PFXButton styleClass="admin-container-buttons" text="Send" fx:id="sendButton"/>
                             <PFXButton styleClass="admin-container-buttons-remove"  text="Remove" fx:id="removeButton"/>
@@ -43,9 +42,9 @@
                 </VBox>
                 <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                     <Label styleClass="admin-container-title-text-size" text="Active Alerts" VBox.vgrow="ALWAYS"/>
-                    <ScrollPane styleClass= "admin-container" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="500">
+                    <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="500" styleClass="admin-scrollpane">
                         <HBox spacing="15.0" alignment="CENTER" HBox.hgrow="ALWAYS">
-                            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="activeAlertsContainer" spacing="15" styleClass="admin-scrollpane">
+                            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" fx:id="activeAlertsContainer" spacing="15" styleClass="admin-container">
                             </VBox>
                         </HBox>
                     </ScrollPane>
