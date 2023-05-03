@@ -4,6 +4,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.backend.pathfinding.Graph;
 import edu.wpi.punchy_pegasi.backend.pathfinding.PathfindingSingleton;
+import edu.wpi.punchy_pegasi.backend.pathfinding.TypedNode;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
 import edu.wpi.punchy_pegasi.frontend.icons.MaterialSymbols;
 import edu.wpi.punchy_pegasi.frontend.icons.PFXIcon;
@@ -37,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static edu.wpi.punchy_pegasi.frontend.utils.FacadeUtils.isDestination;
 
@@ -426,9 +428,10 @@ public class PathfindingMap {
 
     private String pathFind(Node start, Node end) {
         var edgeList = edges.values().stream().map(v -> new Pair<>(v.getStartNode(), v.getEndNode())).toList();
-        var graph = new Graph<>(nodes, edgeList);
+        var typedNodes = nodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, n -> new TypedNode(n.getValue(), nodeToMoves.get(n.getValue()).stream().map(m->locations.get(m.getLocationID()).getNodeType()).toList())));
+        var graph = new Graph<>(typedNodes, edgeList);
         try {
-            var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, start, end);
+            var path = PathfindingSingleton.SINGLETON.getAlgorithm().findPath(graph, typedNodes.get(start.getNodeID()), typedNodes.get(end.getNodeID()));
             map.clearMap();
             clearDirections();
             String currentFloor = path.get(0).getFloor();
