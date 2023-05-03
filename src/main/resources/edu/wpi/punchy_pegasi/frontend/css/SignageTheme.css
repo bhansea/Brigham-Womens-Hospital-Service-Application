@@ -48,6 +48,10 @@
     -pfx-button-background: transparent;
 }
 
+.signage-fullscreen-button PFXIcon {
+    -fx-fill: -pfx-text;
+}
+
 .signage-delete-btn PFXIcon {
     -fx-cursor: hand;
 }
