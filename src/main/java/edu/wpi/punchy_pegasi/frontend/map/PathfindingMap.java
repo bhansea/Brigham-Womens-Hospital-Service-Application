@@ -332,11 +332,11 @@ public class PathfindingMap {
                 directionIcon.setSize(15.0);
                 if (Objects.requireNonNull(dNode.getNodeType()) == LocationName.NodeType.HALL) {
                     var directionText = new Label(getDirectionText(dNode.getDirection()) + "Hallway");
-                    directionText.setWrapText(false);
+                    directionText.setWrapText(true);
                     directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
                 } else {
                     var directionText = new Label(getDirectionText(dNode.getDirection()) + dNode.getLocationLongName());
-                    directionText.setWrapText(false);
+                    directionText.setWrapText(true);
                     directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
                 }
             }
