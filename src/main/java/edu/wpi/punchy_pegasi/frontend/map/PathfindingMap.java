@@ -383,10 +383,7 @@ public class PathfindingMap {
             }
             // when floor doesn't change, check if the direction ever changes
             var prevDirection = directionMap.get(directionFloorIndex).get(directionMap.get(directionFloorIndex).size()-1).getDirection();
-            if (prevDirection.equals(direction)) {
-                // if the previous location has no direction change, then don't add the node
-                return;
-            } else {
+            if (!prevDirection.equals(direction)) {
                 // if the previous location has direction change, then add the node
                 var dNode = new DirectionalNode(currLocation.getLongName(), currLocation.getNodeType(), floor, direction);
                 directionMap.get(directionFloorIndex).add(dNode);
@@ -444,9 +441,8 @@ public class PathfindingMap {
                 var thisFloor = node.getFloor();
                 var nextFloor = nxtNode.getFloor();
                 var willFloorChange = !thisFloor.equals(nextFloor);
-                PathDirectionType nodeDirection = null;
+                PathDirectionType nodeDirection;
                 if (willFloorChange)
-                    // TODO info user the next floor and elevator/staircase
                     if (node.getFloorNum() < nxtNode.getFloorNum()) {
                         // if the next floor is above the current floor
                         nodeDirection = PathDirectionType.UPSTAIRS;
