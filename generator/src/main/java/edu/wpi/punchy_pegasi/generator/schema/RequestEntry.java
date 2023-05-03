@@ -6,16 +6,15 @@ import lombok.*;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
+@Setter(AccessLevel.NONE)
 @NoArgsConstructor
-@lombok.Builder(toBuilder=true)
+@AllArgsConstructor
 public class RequestEntry {
     @SchemaID
     protected UUID serviceID;
     protected Long locationName;
     protected Long staffAssignment;
     protected String additionalNotes;
-    @Setter
     protected Status status;
     protected Long employeeID;
 

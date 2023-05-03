@@ -18,8 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -316,7 +314,8 @@ public class PathfindingMap {
     @RequiredArgsConstructor
     @Data
     private class DirectionalNode {
-        private final LocationName locationName;
+        private final String locationLongName;
+        private final LocationName.NodeType nodeType;
         private final String floor;
         private final PathDirectionType direction;
     }
@@ -331,17 +330,17 @@ public class PathfindingMap {
             for (var dNode : dNodeList) {
                 var directionIcon = dNode.getDirection().getPFXIcon();
                 directionIcon.setSize(15.0);
-                if (Objects.requireNonNull(dNode.getLocationName().getNodeType()) == LocationName.NodeType.HALL) {
+                if (Objects.requireNonNull(dNode.getNodeType()) == LocationName.NodeType.HALL) {
                     var directionText = new Label(getDirectionText(dNode.getDirection()) + "Hallway");
-                    directionText.setWrapText(true);
+                    directionText.setWrapText(false);
                     directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
                 } else {
-                    var directionText = new Label(getDirectionText(dNode.getDirection()) + dNode.getLocationName().getLongName());
-                    directionText.setWrapText(true);
+                    var directionText = new Label(getDirectionText(dNode.getDirection()) + dNode.getLocationLongName());
+                    directionText.setWrapText(false);
                     directionsOnFloor.getChildren().add(new HBox(directionIcon, directionText));
                 }
             }
-            pathDirectionsBox.getChildren().addAll(directionsOnFloor);
+            pathDirectionsBox.getChildren().add(directionsOnFloor);
         }
     }
 
@@ -364,31 +363,29 @@ public class PathfindingMap {
         if (directionFloorIndex == 0) {
             directionFloorIndex++;
             directionMap.put(directionFloorIndex, new ArrayList<>());
-            directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));
+            directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation.getLongName(), currLocation.getNodeType(), floor, direction));
         }
         else if (floorWillChange) {
+            String alterLocName;
             switch (currLocation.getNodeType()) {
-                case ELEV -> currLocation.setLongName("Elevator to Floor " + nextNode.getFloor());
-                case STAI -> currLocation.setLongName("Stairs to Floor " + nextNode.getFloor());
-                default -> currLocation.setLongName(currLocation.getLongName() + " to Floor " + nextNode.getFloor());
+                case ELEV -> alterLocName = ("Elevator to Floor " + nextNode.getFloor());
+                case STAI -> alterLocName = ("Stairs to Floor " + nextNode.getFloor());
+                default -> alterLocName = (currLocation.getLongName() + " to Floor " + nextNode.getFloor());
             }
-            directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));  // put current node as the last entry of this floor
+            directionMap.get(directionFloorIndex).add(new DirectionalNode(alterLocName, currLocation.getNodeType(), floor, direction));  // put current node as the last entry of this floor
             directionFloorIndex++;
             directionMap.put(directionFloorIndex, new ArrayList<>());
         } else {
             if (directionMap.get(directionFloorIndex).isEmpty()) {
                 // if no previous location on this floor, then add the node
-                directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation, floor, direction));
+                directionMap.get(directionFloorIndex).add(new DirectionalNode(currLocation.getLongName(), currLocation.getNodeType(), floor, direction));
                 return;
             }
             // when floor doesn't change, check if the direction ever changes
             var prevDirection = directionMap.get(directionFloorIndex).get(directionMap.get(directionFloorIndex).size()-1).getDirection();
-            if (prevDirection.equals(direction)) {
-                // if the previous location has no direction change, then don't add the node
-                return;
-            } else {
+            if (!prevDirection.equals(direction)) {
                 // if the previous location has direction change, then add the node
-                var dNode = new DirectionalNode(currLocation, floor, direction);
+                var dNode = new DirectionalNode(currLocation.getLongName(), currLocation.getNodeType(), floor, direction);
                 directionMap.get(directionFloorIndex).add(dNode);
             }
         }
@@ -444,9 +441,8 @@ public class PathfindingMap {
                 var thisFloor = node.getFloor();
                 var nextFloor = nxtNode.getFloor();
                 var willFloorChange = !thisFloor.equals(nextFloor);
-                PathDirectionType nodeDirection = null;
+                PathDirectionType nodeDirection;
                 if (willFloorChange)
-                    // TODO info user the next floor and elevator/staircase
                     if (node.getFloorNum() < nxtNode.getFloorNum()) {
                         // if the next floor is above the current floor
                         nodeDirection = PathDirectionType.UPSTAIRS;

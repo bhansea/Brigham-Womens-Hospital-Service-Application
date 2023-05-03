@@ -1,18 +1,20 @@
 package edu.wpi.punchy_pegasi.schema;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
+@Setter(AccessLevel.NONE)
 @NoArgsConstructor
+@AllArgsConstructor
 public class FurnitureRequestEntry extends RequestEntry {
 
     @com.jsoniter.annotation.JsonProperty("selectfurniture")
     private List<String> selectFurniture;
 
+    @lombok.Builder(toBuilder = true)
     public FurnitureRequestEntry(UUID serviceID, Long locationName, Long staffAssignment, String additionalNotes, Status status, List<String> selectFurniture, Long employeeID) {
         super(serviceID, locationName, staffAssignment, additionalNotes, status, employeeID);
         this.selectFurniture = selectFurniture;
@@ -24,7 +26,7 @@ public class FurnitureRequestEntry extends RequestEntry {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry, edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.FurnitureRequestEntryBuilder> {
         SERVICE_ID("serviceID", true, false),
         LOCATION_NAME("locationName", false, false),
         STAFF_ASSIGNMENT("staffAssignment", false, false),
@@ -47,15 +49,23 @@ public class FurnitureRequestEntry extends RequestEntry {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.FurnitureRequestEntry.FurnitureRequestEntryBuilder builder, String value) {
+            switch (this) {
+                case SERVICE_ID -> builder.serviceID(java.util.UUID.fromString(value));
+                case LOCATION_NAME -> builder.locationName(Long.parseLong(value));
+                case STAFF_ASSIGNMENT -> builder.staffAssignment(Long.parseLong(value));
+                case ADDITIONAL_NOTES -> builder.additionalNotes(value);
+                case STATUS -> builder.status(Status.valueOf(value));
+                case EMPLOYEE_ID -> builder.employeeID(Long.parseLong(value));
+                case SELECT_FURNITURE ->
+                        builder.selectFurniture(new java.util.ArrayList<>(java.util.Arrays.asList(value.split("\\s*,\\s*"))));
+            }
         }
 
         public int oridinal() {
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -67,20 +77,6 @@ public class FurnitureRequestEntry extends RequestEntry {
             case SELECT_FURNITURE -> getSelectFurniture();
         };
     }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case SERVICE_ID -> setServiceID(UUID.fromString(value));
-            case LOCATION_NAME -> setLocationName(Long.parseLong(value));
-            case STAFF_ASSIGNMENT -> setStaffAssignment(Long.parseLong(value));
-            case ADDITIONAL_NOTES -> setAdditionalNotes(value);
-            case STATUS -> setStatus(Status.valueOf(value));
-            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
-            case SELECT_FURNITURE ->
-                    setSelectFurniture(new java.util.ArrayList<>(java.util.Arrays.asList(value.split("\\s*,\\s*"))));
-        }
-    }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID().toString();

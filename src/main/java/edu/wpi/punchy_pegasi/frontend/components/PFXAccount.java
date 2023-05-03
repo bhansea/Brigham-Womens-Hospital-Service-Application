@@ -21,7 +21,6 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
 public class PFXAccount extends HBox implements PropertyChangeListener {
-    private final Image defaultImage = new Image(Objects.requireNonNull(App.class.getResourceAsStream("frontend/assets/bwhlogo.png")));
     private final EventHandler<? super MouseEvent> noAccount = e -> App.getSingleton().navigate(Screen.LOGIN);
     private final Label label = new Label("Login");
     private final PFXIcon loginIcon = new PFXIcon(MaterialSymbols.LOGIN);
@@ -30,9 +29,11 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
     private final EventHandler<? super MouseEvent> isAccount = e -> accountMenu.show(this);
     private final PFXIcon defaultIcon = new PFXIcon(MaterialSymbols.ACCOUNT_CIRCLE);
 
-    VBox accountInformation = new VBox();
-    Label nameLabel = new Label();
-    Label accountLevel = new Label();
+    private final VBox accountInformation = new VBox();
+    private final Label nameLabel = new Label();
+    private final Label accountLevel = new Label();
+    private final MFXToggleButton colorToggle = new MFXToggleButton();
+
 
     public PFXAccount() {
         super();
@@ -52,9 +53,11 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
         setAccount(App.getSingleton().getAccount());
         App.getSingleton().addPropertyChangeListener(this);
 
-
-        MFXToggleButton colorToggle = new MFXToggleButton();
-//        MFXToggleButton ttsToggle = new MFXToggleButton();
+        colorToggle.setOnAction(e->{
+            App.getSingleton().loadTheme();
+            App.getSingleton().setAccount(App.getSingleton().getAccount().withTheme(colorToggle.isSelected() ? Account.Theme.DARK : Account.Theme.LIGHT));
+            App.getSingleton().getFacade().updateAccount(App.getSingleton().getAccount(), new Account.Field[]{Account.Field.THEME});
+        });
 
         accountInformation.getChildren().add(nameLabel);
         accountInformation.getChildren().add(accountLevel);
@@ -89,9 +92,13 @@ public class PFXAccount extends HBox implements PropertyChangeListener {
             getChildren().addAll(defaultIcon);
             accountInformation.setVisible(true);
             accountInformation.setManaged(true);
-            nameLabel.setText(account.getUsername());
-            accountLevel.setText(account.getAccountType().toString());
         }
+        nameLabel.setText(account.getUsername());
+        accountLevel.setText(account.getAccountType().toString());
+        colorToggle.setSelected(switch (account.getTheme()) {
+            case LIGHT -> false;
+            case DARK -> true;
+        });
     }
 
     @Override

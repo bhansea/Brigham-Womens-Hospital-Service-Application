@@ -5,6 +5,7 @@ import edu.wpi.punchy_pegasi.backend.Unique;
 import lombok.*;
 
 @Data
+@Setter(AccessLevel.NONE)
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Builder(toBuilder = true)
@@ -26,6 +27,20 @@ public class Account {
     @lombok.With
     @com.jsoniter.annotation.JsonProperty("accounttype")
     private AccountType accountType;
+    @lombok.With
+    @com.jsoniter.annotation.JsonProperty("theme")
+    private Theme theme;
+
+    public Object getFromField(Field field) {
+        return switch (field) {
+            case UUID -> getUuid();
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> getEmployeeID();
+            case ACCOUNT_TYPE -> getAccountType();
+            case THEME -> getTheme();
+        };
+    }
 
     @RequiredArgsConstructor
     public enum AccountType {
@@ -36,13 +51,27 @@ public class Account {
         private final int shieldLevel;
     }
 
+    public String getFromFieldAsString(Field field) {
+        return switch (field) {
+            case UUID -> Long.toString(getUuid());
+            case USERNAME -> getUsername();
+            case PASSWORD -> getPassword();
+            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
+            case ACCOUNT_TYPE -> getAccountType().name();
+            case THEME -> getTheme().name();
+        };
+    }
+    public enum Theme {
+        LIGHT, DARK
+    }
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.Account, edu.wpi.punchy_pegasi.schema.Account.AccountBuilder> {
         UUID("uuid", true, false),
         USERNAME("username", false, true),
         PASSWORD("password", false, false),
         EMPLOYEE_ID("employeeID", false, false),
-        ACCOUNT_TYPE("accountType", false, false);
+        ACCOUNT_TYPE("accountType", false, false),
+        THEME("theme", false, false);
         @lombok.Getter
         private final String colName;
         @lombok.Getter
@@ -58,43 +87,20 @@ public class Account {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Account ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(edu.wpi.punchy_pegasi.schema.Account.AccountBuilder builder, String value) {
+            switch (this) {
+                case UUID -> builder.uuid(Long.parseLong(value));
+                case USERNAME -> builder.username(value);
+                case PASSWORD -> builder.password(value);
+                case EMPLOYEE_ID -> builder.employeeID(Long.parseLong(value));
+                case ACCOUNT_TYPE -> builder.accountType(AccountType.valueOf(value));
+                case THEME -> builder.theme(Theme.valueOf(value));
+            }
         }
 
         public int oridinal() {
             return ordinal();
         }
-    }
-
-    public Object getFromField(Field field) {
-        return switch (field) {
-            case UUID -> getUuid();
-            case USERNAME -> getUsername();
-            case PASSWORD -> getPassword();
-            case EMPLOYEE_ID -> getEmployeeID();
-            case ACCOUNT_TYPE -> getAccountType();
-        };
-    }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case UUID -> setUuid(Long.parseLong(value));
-            case USERNAME -> setUsername(value);
-            case PASSWORD -> setPassword(value);
-            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
-            case ACCOUNT_TYPE -> setAccountType(AccountType.valueOf(value));
-        }
-    }
-
-    public String getFromFieldAsString(Field field) {
-        return switch (field) {
-            case UUID -> Long.toString(getUuid());
-            case USERNAME -> getUsername();
-            case PASSWORD -> getPassword();
-            case EMPLOYEE_ID -> Long.toString(getEmployeeID());
-            case ACCOUNT_TYPE -> getAccountType().name();
-        };
     }
 
 }

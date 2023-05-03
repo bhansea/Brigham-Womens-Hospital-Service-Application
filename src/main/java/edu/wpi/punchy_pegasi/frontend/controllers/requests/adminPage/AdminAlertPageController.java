@@ -3,11 +3,10 @@ package edu.wpi.punchy_pegasi.frontend.controllers.requests.adminPage;
 import edu.wpi.punchy_pegasi.App;
 import edu.wpi.punchy_pegasi.frontend.components.PFXAlertCard;
 import edu.wpi.punchy_pegasi.frontend.components.PFXButton;
-import edu.wpi.punchy_pegasi.frontend.controllers.LayoutController;
+import edu.wpi.punchy_pegasi.frontend.components.PFXListView;
 import edu.wpi.punchy_pegasi.generated.Facade;
 import edu.wpi.punchy_pegasi.schema.Alert;
 import edu.wpi.punchy_pegasi.schema.Employee;
-import edu.wpi.punchy_pegasi.schema.TableType;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
@@ -25,8 +24,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class AdminAlertPageController {
@@ -41,23 +38,23 @@ public class AdminAlertPageController {
     @FXML
     private VBox alertsContainer;
     @FXML
-        private PFXButton sendButton;
-    @FXML
-    private VBox activeAlertsContainer;
+    private PFXButton sendButton;
+    private PFXListView<Alert> activeAlertsContainer;
     @FXML
     private BorderPane container;
     @FXML
     private PFXButton removeButton;
     @FXML
-    private MFXComboBox alertTypeComboBox;
+    private MFXComboBox<Alert.AlertType> alertTypeComboBox;
     @FXML
-    private MFXComboBox endTimeComboBox;
+    private MFXComboBox<String> endTimeComboBox;
     @FXML
     private HBox employeePickerContainer;
     @FXML
     private MFXFilterComboBox<Employee> employeeComboBox;
-    Facade facade = App.getSingleton().getFacade();
-    LayoutController layout = new LayoutController();
+    private final Facade facade = App.getSingleton().getFacade();
+    private ObservableList<Alert> alerts;
+    private ObservableList<Employee> employees;
 
 
     private final ObservableList<String> timeList = FXCollections.observableArrayList("12:00am", "12:30am", "1:00am", "1:30am",
@@ -86,157 +83,92 @@ public class AdminAlertPageController {
             "11:00pm", "11:30pm");
 
     public void initialize() {
-        App.getSingleton().getExecutorService().execute( () -> {
-            ObservableList<Employee> employees = facade.getAllAsListEmployee();
+        var employeeToName = new StringConverter<Employee>() {
 
-            var employeeToName = new StringConverter<Employee>() {
+            @Override
+            public String toString(Employee employee) {
+                if (employee == null) return "";
+                return employee.getFirstName() + " " + employee.getLastName();
+            }
 
-                @Override
-                public String toString(Employee employee) {
-                    if (employee == null) return "";
-                    return employee.getFirstName() + " " + employee.getLastName();
-                }
+            @Override
+            public Employee fromString(String string) {
+                return null;
+            }
+        };
+        employeeComboBox.setConverter(employeeToName);
 
-                @Override
-                public Employee fromString(String string) {
-                    return null;
-                }
-            };
-            employeeComboBox.setConverter(employeeToName);
-
-            AdminTable alertTable = new AdminTable("Alert", TableType.ALERT, facade::getAllAsListAlert);
-            alertTable.init();
-
-            List<Alert> allAlerts = App.getSingleton().getFacade().getAllAsListAlert();
-            List<Alert> alerts = new ArrayList<>();
-            ArrayList<PFXAlertCard> alertCards = new ArrayList<>();
-            ArrayList<Integer> indexes = new ArrayList<>();
-            ObservableList<String> alertTypeList = FXCollections.observableArrayList();
-
-            alertTypeList.addAll("None", "Map", "Map Disabled", "Employee", "Admin", "Service Request");
-            alertTypeComboBox.setItems(alertTypeList);
-            endTimeComboBox.setItems(timeList);
-            employeeComboBox.setItems(employees);
-            timePickerContainer.setVisible(false);
-            timePickerContainer.setManaged(false);
-            employeePickerContainer.setVisible(false);
-            employeePickerContainer.setManaged(false);
-
-            activeAlertsContainer.setStyle("-fx-spacing: 15");
-
-            alertTypeComboBox.setOnAction(e -> {
-                alerts.clear();
-                alertCards.clear();
-                activeAlertsContainer.getChildren().clear();
-                for(Alert alert: allAlerts)
-                {
-                    if (alert.getAlertType().toString().toLowerCase().replace('_', ' ').equals(alertTypeComboBox.getSelectedItem().toString().toLowerCase())) {
-                        PFXAlertCard alertCard = new PFXAlertCard(alert);
-                        activeAlertsContainer.getChildren().add(alertCard);
-                        alertCards.add(alertCard);
-                        alerts.add(alert);
-                    }
-
-                    timePickerContainer.setVisible(false);
-                    timePickerContainer.setManaged(false);
-
-                    if (alertTypeComboBox.getSelectedItem().equals("Map") || alertTypeComboBox.getSelectedItem().equals("Map Disabled")) {
-                        timePickerContainer.setVisible(true);
-                        timePickerContainer.setManaged(true);
-                    }
-                    if (alertTypeComboBox.getSelectedItem().equals("Employee")){
-                        employeePickerContainer.setVisible(true);
-                        employeePickerContainer.setManaged(true);
-                    }
-                }});
+        timePickerContainer.setVisible(false);
+        timePickerContainer.setManaged(false);
+        employeePickerContainer.setVisible(false);
+        employeePickerContainer.setManaged(false);
+        endTimeComboBox.setItems(timeList);
 
 
+        App.getSingleton().getExecutorService().execute(() -> {
+            alerts = facade.getAllAsListAlert();
+            employees = facade.getAllAsListEmployee();
+            Platform.runLater(() -> {
+                alertTypeComboBox.setItems(FXCollections.observableArrayList(Alert.AlertType.values()));
+                employeeComboBox.setItems(employees);
 
+                var filteredAlerts = alerts.filtered(a -> true);
+                activeAlertsContainer = new PFXListView<>(filteredAlerts, PFXAlertCard::new, a -> a.getUuid().toString());
+                activeAlertsContainer.setStyle("-fx-spacing: 15");
 
+                alertTypeComboBox.setOnAction(e -> {
+                    filteredAlerts.setPredicate(a -> a.getAlertType() == alertTypeComboBox.getValue());
 
-
-            Platform.runLater( () -> {
-
-
-                removeButton.setOnAction(e -> {
-                    int i = 0;
-                    for (PFXAlertCard card: alertCards) {
-                        if (card.getIsRead()) {
-                            activeAlertsContainer.getChildren().remove(card);
-                            indexes.add(i);
-                        }
-
-                        for (Integer num : indexes) {
-                            allAlerts.remove(alertCards.get(i).getAlert());
-                            facade.deleteAlert(alertCards.get(i).getAlert());
-                            alertCards.remove(num);
-                            alerts.remove(num);
-                        }
-                        i++;
-                    }
+                    var mapType = alertTypeComboBox.getValue().equals(Alert.AlertType.MAP) || alertTypeComboBox.getValue().equals(Alert.AlertType.MAP_DISABLED);
+                    timePickerContainer.setVisible(mapType);
+                    timePickerContainer.setManaged(mapType);
+                    var employeeType = alertTypeComboBox.getValue().equals(Alert.AlertType.EMPLOYEE);
+                    employeePickerContainer.setVisible(employeeType);
+                    employeePickerContainer.setManaged(employeeType);
                 });
-
+                removeButton.setOnAction(e -> {
+//                    facade.deleteAlert();
+                });
                 sendButton.setOnAction(e -> {
-                    Instant dateTime = Instant.now();
-                    Alert alert = new Alert();
-                    Alert.AlertType alertType = Alert.AlertType.NONE;
-                    String time = "";
-                    String date = "";
-                    if (alertTypeComboBox.getSelectedItem().equals("Map")) {
-                        date = endDatePicker.getText();
-                        time = endTimeComboBox.getText();
-                        alertType = Alert.AlertType.MAP;
-                        alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.parse(convertDateTime(date, time))).employeeID(App.getSingleton().getAccount().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
-
-                    } else if (alertTypeComboBox.getSelectedItem().equals("Map Disabled")) {
-                        alertType = Alert.AlertType.MAP_DISABLED;
-                        alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.now()).employeeID(App.getSingleton().getAccount().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
-
-                    } else if (alertTypeComboBox.getSelectedItem().equals("Employee")) {
-                        alertType = Alert.AlertType.EMPLOYEE;
-                        alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.now()).employeeID(employeeComboBox.getSelectedItem().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
-
-                    } else if (alertTypeComboBox.getSelectedItem().equals("Admin")) {
-                        alertType = Alert.AlertType.ADMIN;
-                        alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.now()).employeeID(App.getSingleton().getAccount().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
-
-                    } else if (alertTypeComboBox.getSelectedItem().equals("Service Request")) {
-                        alertType = Alert.AlertType.SERVICE_REQUEST;
-                        alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.now()).employeeID(App.getSingleton().getAccount().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
-
-                    } else {
-                        alert = Alert.builder().uuid(UUID.randomUUID()).alertType(alertType).alertTitle(alertTitle.getText()).description(alertDescription.getText()).startDate(dateTime).readStatus(Alert.ReadStatus.UNREAD).startDate(Instant.now()).endDate(Instant.now()).employeeID(App.getSingleton().getAccount().getEmployeeID()).readStatus(Alert.ReadStatus.UNREAD).build();
+                    if (alertTypeComboBox.getValue() == null) return;
+                    Alert.AlertBuilder builder = Alert.builder()
+                            .uuid(UUID.randomUUID())
+                            .alertType(alertTypeComboBox.getValue())
+                            .alertTitle(alertTitle.getText())
+                            .description(alertDescription.getText())
+                            .readStatus(Alert.ReadStatus.UNREAD)
+                            .startDate(Instant.now())
+                            .endDate(Instant.now())
+                            .employeeID(App.getSingleton().getAccount().getEmployeeID());
+                    var alert = switch (alertTypeComboBox.getSelectedItem()) {
+                        case MAP -> {
+                            String time = endTimeComboBox.getText();
+                            yield endDatePicker.getValue() == null || time.isBlank() ? null : builder.endDate(Instant.parse(convertDateTime(endDatePicker.getValue(), time))).build();
+                        }
+                        case EMPLOYEE -> {
+                            var employee = employeeComboBox.getSelectedItem();
+                            yield employee == null ? null : builder.alertType(Alert.AlertType.EMPLOYEE).employeeID(employee.getEmployeeID()).build();
+                        }
+                        default -> builder.build();
+                    };
+                    if (alert == null) {
+                        // TODO: Let use know that the alert couldn't be added as required fields weren't set
+                        return;
                     }
-
-
-
-
                     facade.saveAlert(alert);
                     alerts.add(alert);
-                    PFXAlertCard alertCard = new PFXAlertCard(alert);
-                    activeAlertsContainer.getChildren().add(alertCard);
-                    alertCards.add(alertCard);
                 });
             });
         });
     }
 
-    public String convertDateTime(String date, String time) {
-        String returnString;
-        DateTimeFormatter dateInputFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
-        DateTimeFormatter dateOutputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        LocalDate tempDate = LocalDate.parse(date, dateInputFormatter);
-        returnString = tempDate.format(dateOutputFormatter);
-
+    public String convertDateTime(LocalDate date, String time) {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("h:mma");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         LocalTime tempTime = LocalTime.parse(time.toUpperCase(), inputFormatter);
         String tempTimeS = tempTime.format(outputFormatter);
 
-        returnString = returnString + "T" + tempTimeS + ".00Z";
-
-        return returnString;
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "T" + tempTimeS + ".00Z";
     }
 }

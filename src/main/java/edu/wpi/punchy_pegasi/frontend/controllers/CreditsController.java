@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,9 @@ public class CreditsController {
     private void initialize(){
         sourceGrid.getColumnConstraints().add(new ColumnConstraints(150));
         sourceGrid.getColumnConstraints().add(new ColumnConstraints(150));
+//        sourceGrid.getColumnConstraints().add(new ColumnConstraints(500));
+
+
         resources.add(new Resource("Google Fonts", "icons", new Hyperlink("https://fonts.google.com/icons")));
         resources.add(new Resource("jSerialComm", "Java library", new Hyperlink("https://fazecast.github.io/jSerialComm/")));
         resources.add(new Resource("daisy", "an image", new Hyperlink("https://cdn.shopify.com/s/files/1/2319/4521/files/pexels-pixabay-67857_0fd12879-bc6e-4699-a969-812cf1386085.jpg?v=1651115165&width=3840")));
@@ -73,21 +77,26 @@ public class CreditsController {
         int rowIndex = 1;
         for (Resource resource : resources) {
             Label nameLabel = new Label(resource.getName());
-            nameLabel.setWrapText(true);
             nameLabel.setAlignment(Pos.CENTER_LEFT);
+            nameLabel.setWrapText(true);
+            //nameLabel.setMaxWidth(150);
 
             Label description = new Label(resource.getDescription());
+            description.setAlignment(Pos.CENTER_LEFT);
             description.setWrapText(true);
-            description.setAlignment(Pos.CENTER);
+            //description.setMaxWidth(150);
 
             Label link = new Label(resource.getLink().getText());
+            link.setAlignment(Pos.CENTER_LEFT);
             link.setWrapText(true);
-            link.setAlignment(Pos.CENTER_RIGHT);
+            //link.setMaxWidth(200);
+
 
             sourceGrid.addRow(rowIndex, nameLabel, description, link);
             rowIndex++;
         }
     }
+
 
     @Getter@Setter
     private static class Resource {

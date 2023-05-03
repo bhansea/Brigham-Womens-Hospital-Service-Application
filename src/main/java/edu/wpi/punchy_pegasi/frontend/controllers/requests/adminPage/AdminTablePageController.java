@@ -181,41 +181,41 @@ public class AdminTablePageController {
             try {
                 switch (currentTable.getTableType()) {
                     case NODES:
-                        facade.updateNode(commit(new edu.wpi.punchy_pegasi.schema.Node()), Arrays.stream(edu.wpi.punchy_pegasi.schema.Node.Field.values()).filter(f -> f != edu.wpi.punchy_pegasi.schema.Node.Field.NODE_ID).toArray(edu.wpi.punchy_pegasi.schema.Node.Field[]::new));
+                        facade.updateNode(commit(edu.wpi.punchy_pegasi.schema.Node.builder()).build(), Arrays.stream(edu.wpi.punchy_pegasi.schema.Node.Field.values()).filter(f -> f != edu.wpi.punchy_pegasi.schema.Node.Field.NODE_ID).toArray(edu.wpi.punchy_pegasi.schema.Node.Field[]::new));
                         break;
                     case LOCATIONNAMES:
-                        facade.updateLocationName(commit(new LocationName()), Arrays.stream(LocationName.Field.values()).filter(f -> f != LocationName.Field.UUID).toArray(LocationName.Field[]::new));
+                        facade.updateLocationName(commit(LocationName.builder()).build(), Arrays.stream(LocationName.Field.values()).filter(f -> f != LocationName.Field.UUID).toArray(LocationName.Field[]::new));
                         break;
                     case EDGES:
-                        facade.updateEdge(commit(new Edge()), Arrays.stream(Edge.Field.values()).filter(f -> f != Edge.Field.UUID).toArray(Edge.Field[]::new));
+                        facade.updateEdge(commit(Edge.builder()).build(), Arrays.stream(Edge.Field.values()).filter(f -> f != Edge.Field.UUID).toArray(Edge.Field[]::new));
                         break;
                     case MOVES:
-                        facade.updateMove(commit(new Move()), Arrays.stream(Move.Field.values()).filter(f -> f != Move.Field.UUID).toArray(Move.Field[]::new));
+                        facade.updateMove(commit(Move.builder()).build(), Arrays.stream(Move.Field.values()).filter(f -> f != Move.Field.UUID).toArray(Move.Field[]::new));
                         break;
                     case EMPLOYEES:
-                        facade.updateEmployee(commit(new Employee()), Arrays.stream(Employee.Field.values()).filter(f -> f != Employee.Field.EMPLOYEE_ID).toArray(Employee.Field[]::new));
+                        facade.updateEmployee(commit(Employee.builder()).build(), Arrays.stream(Employee.Field.values()).filter(f -> f != Employee.Field.EMPLOYEE_ID).toArray(Employee.Field[]::new));
                         break;
                     case ACCOUNTS:
-                        facade.updateAccount(commit(new Account()), Arrays.stream(Account.Field.values()).filter(f -> f != Account.Field.UUID).toArray(Account.Field[]::new));
+                        facade.updateAccount(commit(Account.builder()).build(), Arrays.stream(Account.Field.values()).filter(f -> f != Account.Field.UUID).toArray(Account.Field[]::new));
                         break;
                     case CONFERENCEREQUESTS:
-                        facade.updateConferenceRoomEntry(commit(new ConferenceRoomEntry()), Arrays.stream(ConferenceRoomEntry.Field.values()).filter(f -> f != ConferenceRoomEntry.Field.SERVICE_ID).toArray(ConferenceRoomEntry.Field[]::new));
+                        facade.updateConferenceRoomEntry(commit(ConferenceRoomEntry.builder()).build(), Arrays.stream(ConferenceRoomEntry.Field.values()).filter(f -> f != ConferenceRoomEntry.Field.SERVICE_ID).toArray(ConferenceRoomEntry.Field[]::new));
                         break;
                     case OFFICEREQUESTS:
-                        facade.updateOfficeServiceRequestEntry(commit(new OfficeServiceRequestEntry()), Arrays.stream(OfficeServiceRequestEntry.Field.values()).filter(f -> f != OfficeServiceRequestEntry.Field.SERVICE_ID).toArray(OfficeServiceRequestEntry.Field[]::new));
+                        facade.updateOfficeServiceRequestEntry(commit(OfficeServiceRequestEntry.builder()).build(), Arrays.stream(OfficeServiceRequestEntry.Field.values()).filter(f -> f != OfficeServiceRequestEntry.Field.SERVICE_ID).toArray(OfficeServiceRequestEntry.Field[]::new));
                         break;
                     case FURNITUREREQUESTS:
-                        facade.updateFurnitureRequestEntry(commit(new FurnitureRequestEntry()), Arrays.stream(FurnitureRequestEntry.Field.values()).filter(f -> f != FurnitureRequestEntry.Field.SERVICE_ID).toArray(FurnitureRequestEntry.Field[]::new));
+                        facade.updateFurnitureRequestEntry(commit(FurnitureRequestEntry.builder()).build(), Arrays.stream(FurnitureRequestEntry.Field.values()).filter(f -> f != FurnitureRequestEntry.Field.SERVICE_ID).toArray(FurnitureRequestEntry.Field[]::new));
                         break;
                     case FOODREQUESTS:
-                        facade.updateFoodServiceRequestEntry(commit(new FoodServiceRequestEntry()), Arrays.stream(FoodServiceRequestEntry.Field.values()).filter(f -> f != FoodServiceRequestEntry.Field.SERVICE_ID).toArray(FoodServiceRequestEntry.Field[]::new));
+                        facade.updateFoodServiceRequestEntry(commit(FoodServiceRequestEntry.builder()).build(), Arrays.stream(FoodServiceRequestEntry.Field.values()).filter(f -> f != FoodServiceRequestEntry.Field.SERVICE_ID).toArray(FoodServiceRequestEntry.Field[]::new));
                         break;
                     case FLOWERREQUESTS:
-                        facade.updateFlowerDeliveryRequestEntry(commit(new FlowerDeliveryRequestEntry()), Arrays.stream(FlowerDeliveryRequestEntry.Field.values()).filter(f -> f != FlowerDeliveryRequestEntry.Field.SERVICE_ID).toArray(FlowerDeliveryRequestEntry.Field[]::new));
+                        facade.updateFlowerDeliveryRequestEntry(commit(FlowerDeliveryRequestEntry.builder()).build(), Arrays.stream(FlowerDeliveryRequestEntry.Field.values()).filter(f -> f != FlowerDeliveryRequestEntry.Field.SERVICE_ID).toArray(FlowerDeliveryRequestEntry.Field[]::new));
                         break;
                 }
             } catch (InvalidArgumentException ex) {
-                System.out.println("Invalid Argument Exception");
+                App.getSingleton().getLayout().notify("One of the fields is not valid", "");
             }
         });
 
@@ -223,37 +223,37 @@ public class AdminTablePageController {
             try {
                 switch (currentTable.getTableType()) {
                     case NODES:
-                        facade.deleteNode(commit(new edu.wpi.punchy_pegasi.schema.Node()));
+                        facade.deleteNode(commit(edu.wpi.punchy_pegasi.schema.Node.builder()).build());
                         break;
                     case LOCATIONNAMES:
-                        facade.deleteLocationName(commit(new LocationName()));
+                        facade.deleteLocationName(commit(LocationName.builder()).build());
                         break;
                     case EDGES:
-                        facade.deleteEdge(commit(new Edge()));
+                        facade.deleteEdge(commit(Edge.builder()).build());
                         break;
                     case MOVES:
-                        facade.deleteMove(commit(new Move()));
+                        facade.deleteMove(commit(Move.builder()).build());
                         break;
                     case EMPLOYEES:
-                        facade.deleteEmployee(commit(new Employee()));
+                        facade.deleteEmployee(commit(Employee.builder()).build());
                         break;
                     case ACCOUNTS:
-                        facade.deleteAccount(commit(new Account()));
+                        facade.deleteAccount(commit(Account.builder()).build());
                         break;
                     case CONFERENCEREQUESTS:
-                        facade.deleteConferenceRoomEntry(commit(new ConferenceRoomEntry()));
+                        facade.deleteConferenceRoomEntry(commit(ConferenceRoomEntry.builder()).build());
                         break;
                     case OFFICEREQUESTS:
-                        facade.deleteOfficeServiceRequestEntry(commit(new OfficeServiceRequestEntry()));
+                        facade.deleteOfficeServiceRequestEntry(commit(OfficeServiceRequestEntry.builder()).build());
                         break;
                     case FURNITUREREQUESTS:
-                        facade.deleteFurnitureRequestEntry(commit(new FurnitureRequestEntry()));
+                        facade.deleteFurnitureRequestEntry(commit(FurnitureRequestEntry.builder()).build());
                         break;
                     case FOODREQUESTS:
-                        facade.deleteFoodServiceRequestEntry(commit(new FoodServiceRequestEntry()));
+                        facade.deleteFoodServiceRequestEntry(commit(FoodServiceRequestEntry.builder()).build());
                         break;
                     case FLOWERREQUESTS:
-                        facade.deleteFlowerDeliveryRequestEntry(commit(new FlowerDeliveryRequestEntry()));
+                        facade.deleteFlowerDeliveryRequestEntry(commit(FlowerDeliveryRequestEntry.builder()).build());
                         break;
                 }
             } catch (InvalidArgumentException ex) {
@@ -266,64 +266,64 @@ public class AdminTablePageController {
             try {
                 switch (currentTable.getTableType()) {
                     case NODES:
-                        edu.wpi.punchy_pegasi.schema.Node node = new edu.wpi.punchy_pegasi.schema.Node();
+                        var node = Node.builder();
                         var newNodeId = nodes.values().stream().mapToLong(edu.wpi.punchy_pegasi.schema.Node::getNodeID).max().orElse(1) + 1;
                         idCommit(node);
-                        node.setNodeID(newNodeId);
-                        facade.saveNode(node);
+                        node.nodeID(newNodeId);
+                        facade.saveNode(node.build());
                         break;
                     case LOCATIONNAMES:
-                        LocationName locationName = new LocationName();
+                        var locationName = LocationName.builder();
                         var newLocationId = locations.values().stream().mapToLong(LocationName::getUuid).max().orElse(1) + 1;
                         idCommit(locationName);
-                        locationName.setUuid(newLocationId);
-                        facade.saveLocationName(locationName);
+                        locationName.uuid(newLocationId);
+                        facade.saveLocationName(locationName.build());
                         break;
                     case EDGES:
-                        Edge edge = new Edge();
+                        var edge = Edge.builder();
                         idCommit(edge);
-                        edge.setUuid(UUID.randomUUID());
-                        facade.saveEdge(edge);
+                        edge.uuid(UUID.randomUUID());
+                        facade.saveEdge(edge.build());
                         break;
                     case MOVES:
-                        Move move = new Move();
+                        var move = Move.builder();
                         var newMovevId = moves.values().stream().mapToLong(Move::getUuid).max().orElse(1) + 1;
                         idCommit(move);
-                        move.setUuid(newMovevId);
-                        facade.saveMove(move);
+                        move.uuid(newMovevId);
+                        facade.saveMove(move.build());
                         break;
                     case EMPLOYEES:
-                        Employee employee = new Employee();
+                        var employee = Employee.builder();
                         var newEmployeeId = facade.getAllEmployee().values().stream().mapToLong(Employee::getEmployeeID).max().orElse(0) + 1;
                         idCommit(employee);
-                        employee.setEmployeeID(newEmployeeId);
-                        facade.saveEmployee(employee);
+                        employee.employeeID(newEmployeeId);
+                        facade.saveEmployee(employee.build());
                         break;
                     case ACCOUNTS:
-                        Account account = new Account();
+                        var account = Account.builder();
                         var newAccountId = accounts.values().stream().mapToLong(Account::getUuid).max().orElse(1) + 1;
                         idCommit(account);
-                        account.setUuid(newAccountId);
-                        facade.saveAccount(account);
+                        account.uuid(newAccountId);
+                        facade.saveAccount(account.build());
                         break;
                     case CONFERENCEREQUESTS:
-                        facade.saveConferenceRoomEntry(serviceIdCommit(new ConferenceRoomEntry()));
+                        facade.saveConferenceRoomEntry(serviceIdCommit(ConferenceRoomEntry.builder()).build());
                         break;
                     case OFFICEREQUESTS:
-                        facade.saveOfficeServiceRequestEntry(serviceIdCommit(new OfficeServiceRequestEntry()));
+                        facade.saveOfficeServiceRequestEntry(serviceIdCommit(OfficeServiceRequestEntry.builder()).build());
                         break;
                     case FURNITUREREQUESTS:
-                        facade.saveFurnitureRequestEntry(serviceIdCommit(new FurnitureRequestEntry()));
+                        facade.saveFurnitureRequestEntry(serviceIdCommit(FurnitureRequestEntry.builder()).build());
                         break;
                     case FOODREQUESTS:
-                        facade.saveFoodServiceRequestEntry(serviceIdCommit(new FoodServiceRequestEntry()));
+                        facade.saveFoodServiceRequestEntry(serviceIdCommit(FoodServiceRequestEntry.builder()).build());
                         break;
                     case FLOWERREQUESTS:
-                        facade.saveFlowerDeliveryRequestEntry(serviceIdCommit(new FlowerDeliveryRequestEntry()));
+                        facade.saveFlowerDeliveryRequestEntry(serviceIdCommit(FlowerDeliveryRequestEntry.builder()).build());
                         break;
                 }
             } catch (InvalidArgumentException ex) {
-                System.out.println("Invalid Argument Exception");
+                App.getSingleton().getLayout().notify("One of the fields is not valid", "");
             }
         });
     }
@@ -401,52 +401,51 @@ public class AdminTablePageController {
         }
     }
 
-    public <T> T commit(T entry) throws InvalidArgumentException {
+    public <T> T commit(T builder) throws InvalidArgumentException {
         for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
             var input = inputs.get(field.ordinal());
             try {
-                field.setValueFromString(entry, input.getText());
+                field.setValueFromString(builder, input.getText());
             } catch (Exception e) {
                 //alert the user that the input is invalid
                 throw new InvalidArgumentException("Invalid input for field " + field.getColName());
             }
         }
-        return entry;
+        return builder;
     }
 
-    public <T> T idCommit(T entry) throws InvalidArgumentException {
+    public <T> T idCommit(T builder) throws InvalidArgumentException {
         for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
             var input = inputs.get(field.ordinal());
             try {
                 if (!field.getColName().toLowerCase().contains("id")) {
-
-                    field.setValueFromString(entry, input.getText());
+                    field.setValueFromString(builder, input.getText());
                 } else {
-                    field.setValueFromString(entry, "1");
+                    field.setValueFromString(builder, "1");
                 }
             } catch (Exception e) {
                 //alert the user that the input is invalid
                 throw new InvalidArgumentException("Invalid input for field " + field.getColName());
             }
         }
-        return entry;
+        return builder;
     }
 
-    public <T> T serviceIdCommit(T entry) throws InvalidArgumentException {
+    public <T> T serviceIdCommit(T builder) throws InvalidArgumentException {
         for (var field : Arrays.stream(currentTable.tableType.getFieldEnum().getEnumConstants()).map(f -> (IField) f).toList()) {
             var input = inputs.get(field.ordinal());
             try {
                 if (!field.getColName().toLowerCase().contains("serviceid")) {
-                    field.setValueFromString(entry, input.getText());
+                    field.setValueFromString(builder, input.getText());
                 } else {
-                    field.setValueFromString(entry, (UUID.randomUUID()).toString());
+                    field.setValueFromString(builder, (UUID.randomUUID()).toString());
                 }
             } catch (Exception e) {
                 //alert the user that the input is invalid
                 throw new InvalidArgumentException("Invalid input for field " + field.getColName());
             }
         }
-        return entry;
+        return builder;
     }
 
     // create an new exception class for this

@@ -402,26 +402,27 @@ CREATE OR REPLACE TRIGGER trigger_employees_update
 """, edu.wpi.punchy_pegasi.schema.Employee.Field.class),
     ACCOUNTS(edu.wpi.punchy_pegasi.schema.Account.class, """
 DO $$
-BEGIN
-  IF to_regclass('accounts') IS NULL THEN
-    CREATE SEQUENCE accounts_id_seq;
-    CREATE TABLE accounts
-    (
-      uuid bigint DEFAULT nextval('accounts_id_seq') PRIMARY KEY,
-      username varchar UNIQUE,
-      password varchar,
-      employeeID bigint,
-      accountType varchar NOT NULL
-    );
-    ALTER SEQUENCE accounts_id_seq OWNED BY accounts.uuid;
-  END IF;
-END $$;
-CREATE OR REPLACE FUNCTION notify_accounts_update() RETURNS TRIGGER AS $$
-    DECLARE
-        row RECORD;
-    output JSONB;
-    BEGIN
-    IF (TG_OP = 'DELETE') THEN
+            BEGIN
+              IF to_regclass('accounts') IS NULL THEN
+                CREATE SEQUENCE accounts_id_seq;
+                CREATE TABLE accounts
+                (
+                  uuid bigint DEFAULT nextval('accounts_id_seq') PRIMARY KEY,
+                  username varchar UNIQUE,
+                  password varchar,
+                  employeeID bigint,
+                  accountType varchar NOT NULL,
+                  theme varchar NOT NULL
+                );
+                ALTER SEQUENCE accounts_id_seq OWNED BY accounts.uuid;
+              END IF;
+            END $$;
+            CREATE OR REPLACE FUNCTION notify_accounts_update() RETURNS TRIGGER AS $$
+                DECLARE
+                    row RECORD;
+                output JSONB;
+                BEGIN
+                IF (TG_OP = 'DELETE') THEN
       row = OLD;
     ELSE
       row = NEW;

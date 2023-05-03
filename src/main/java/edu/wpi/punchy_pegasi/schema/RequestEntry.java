@@ -6,9 +6,9 @@ import lombok.*;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
+@Setter(AccessLevel.NONE)
 @NoArgsConstructor
-@lombok.Builder(toBuilder = true)
+@AllArgsConstructor
 public class RequestEntry {
     @SchemaID
     @lombok.With
@@ -23,7 +23,6 @@ public class RequestEntry {
     @lombok.With
     @com.jsoniter.annotation.JsonProperty("additionalnotes")
     protected String additionalNotes;
-    @Setter
     @lombok.With
     @com.jsoniter.annotation.JsonProperty("status")
     protected Status status;
@@ -38,7 +37,7 @@ public class RequestEntry {
     }
 
     @lombok.RequiredArgsConstructor
-    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry> {
+    public enum Field implements IField<edu.wpi.punchy_pegasi.schema.RequestEntry, Class<?>> {
         SERVICE_ID("serviceID", true, false),
         LOCATION_NAME("locationName", false, false),
         STAFF_ASSIGNMENT("staffAssignment", false, false),
@@ -60,15 +59,13 @@ public class RequestEntry {
             return ref.getFromFieldAsString(this);
         }
 
-        public void setValueFromString(edu.wpi.punchy_pegasi.schema.RequestEntry ref, String value) {
-            ref.setFieldFromString(this, value);
+        public void setValueFromString(Class<?> builder, String value) {
         }
 
         public int oridinal() {
             return ordinal();
         }
     }
-
     public Object getFromField(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID();
@@ -79,18 +76,6 @@ public class RequestEntry {
             case EMPLOYEE_ID -> getEmployeeID();
         };
     }
-
-    public void setFieldFromString(Field field, String value) {
-        switch (field) {
-            case SERVICE_ID -> setServiceID(UUID.fromString(value));
-            case LOCATION_NAME -> setLocationName(Long.parseLong(value));
-            case STAFF_ASSIGNMENT -> setStaffAssignment(Long.parseLong(value));
-            case ADDITIONAL_NOTES -> setAdditionalNotes(value);
-            case STATUS -> setStatus(Status.valueOf(value));
-            case EMPLOYEE_ID -> setEmployeeID(Long.parseLong(value));
-        }
-    }
-
     public String getFromFieldAsString(Field field) {
         return switch (field) {
             case SERVICE_ID -> getServiceID().toString();
