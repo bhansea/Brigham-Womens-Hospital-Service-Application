@@ -45,7 +45,7 @@ class FacadeTest {
         furnitureRequestFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "selectFurniture", "employeeID"};
         officeServiceFields = new String[]{"serviceID", "locationName", "staffAssignment", "additionalNotes", "status", "officeSupplies", "employeeID"};
         employeeFields = new String[]{"employeeID", "firstName", "lastName"};
-        accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType"};
+        accountFields = new String[]{"uuid", "username", "password", "employeeID", "accountType, theme"};
         try {
             pdbController = new PdbController(Config.source, "test");
         } catch (PdbController.DatabaseException e) {
